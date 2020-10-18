@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="navigation_menu_item1">item1</string>
+    <string name="navigation_menu_item2">item2</string>
+    <string name="navigation_menu_item3">item3</string>
+
+</resources>

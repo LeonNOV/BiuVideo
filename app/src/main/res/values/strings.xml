@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">BiuVideo</string>
+
+    <string name="main_button_start">开始获取</string>
+    <string name="main_editText_hint">输入视频的bvid或avid</string>
+</resources>
