@@ -41,6 +41,12 @@ public class MediaParseUtils {
             //删除1080P+
             play.accept_description.remove("高清 1080P+");
 
+            //删除高清 1080P60
+            play.accept_description.remove("高清 1080P60");
+
+            //删除高清 720P60
+            play.accept_description.remove("高清 720P60");
+
             JSONObject dash = data.getJSONObject("dash");
 
             //获取video

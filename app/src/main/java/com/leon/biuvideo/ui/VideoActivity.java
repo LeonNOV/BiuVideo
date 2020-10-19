@@ -28,7 +28,7 @@ import java.util.*;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class VideoActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class VideoActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, AnthologyAdapter.OnItemClickListener {
     private CircleImageView video_circleImageView_face;
     private RecyclerView video_recyclerView_singleVideoList;
     private Spinner video_spinner_quality;
@@ -55,6 +55,9 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
     //选择的画质索引
     private int qualityIndex;
+
+    //当前webView中播放的选集cid
+    private long nowCid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +143,8 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
         //设置上传时间
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        video_textView_upTime.setText(sdf.format(new Date(viewPage.upTime)));
+        //秒转毫秒
+        video_textView_upTime.setText(sdf.format(new Date(viewPage.upTime * 1000)));
 
         //设置点赞数
         video_textView_like.setText(viewPage.videoInfo.like + "点赞");
@@ -168,6 +172,9 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         video_recyclerView_singleVideoList.setLayoutManager(layoutManager);
         video_recyclerView_singleVideoList.setAdapter(anthologyAdapter);
 
+        //设置RecyclerView的监听事件
+        anthologyAdapter.setOnItemClickListener(this);
+
         //获取视频清晰度
         List<String> accept_description = play.accept_description;
 
@@ -177,11 +184,41 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         video_spinner_quality.setAdapter(arrayAdapter);
         video_spinner_quality.setOnItemSelectedListener(this);
 
+        //设置默认的选集
+        setWebViewUrl(viewPage.singleVideoInfoList.get(0).cid, 0);
+    }
+
+    /**
+     * 选集列表监听事件
+     *
+     * @param position  选集索引
+     */
+    @Override
+    public void onImageViewClicked(int position) {
+        //获取对应的选集cid
+        long selectedCid = viewPage.singleVideoInfoList.get(position).cid;
+
+        //判断当前观看的视频cid是否和选择的一样
+        if (nowCid != selectedCid) {
+            //设置webView的链接
+            setWebViewUrl(selectedCid, position);
+
+            //重置nowCid
+            nowCid = selectedCid;
+        } else {
+            Toast.makeText(VideoActivity.this, "选择的视频已经在播放了~~", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //设置webView的链接
+    private void setWebViewUrl(long cid, int pageIndex) {
         //配置webView地址
-        //默认第一个视频为singleVideoInfoList中的第一个，page为选集列表中的第一个视频的索引（从1开始）
-        String aid = "aid=" + viewPage.aid;
-        String cid = "cid=" + viewPage.singleVideoInfoList.get(0).cid;
-        String videoPath = Paths.videoBaeUrl + aid + "&" + cid + "&" + "page=1";
+        String parameter_aid = "aid=" + viewPage.aid;
+        String parameter_cid = "cid=" + cid;
+        this.nowCid = viewPage.singleVideoInfoList.get(0).cid;
+
+        //默认第一个视频为singleVideoInfoList中的第一个，page为选集列表中的第一个视频的索引（从1开始,所以要进行加1）
+        String videoPath = Paths.videoBaeUrl + parameter_aid + "&" + parameter_cid + "&" + "page=" + pageIndex + 1;
         configWebView(videoPath);
     }
 
