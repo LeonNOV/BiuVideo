@@ -114,23 +114,25 @@
         android:id="@+id/expand_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        expandableTextView:maxCollapsedLines="2"
-        expandableTextView:animDuration="200">
+        expandableTextView:animDuration="200"
+        expandableTextView:maxCollapsedLines="2">
+
         <TextView
             android:id="@id/expandable_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:textSize="12sp"
-            android:textColor="#666666" />
+            android:textColor="#666666"
+            android:textSize="12sp" />
+
         <ImageButton
             android:id="@id/expand_collapse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
             android:layout_gravity="right|bottom"
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/transparent"
+            android:padding="10dp" />
     </com.ms.square.android.expandabletextview.ExpandableTextView>
 
     <LinearLayout
@@ -145,10 +147,13 @@
             android:layout_marginStart="10dp"
             android:text="@string/video_textView_choiceSingleVideo_str" />
 
-        <ListView
-            android:id="@+id/video_listView_singleVideoList"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/video_recyclerView_singleVideoList"
             android:layout_width="match_parent"
-            android:layout_height="50dp" />
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="10dp" />
 
     </LinearLayout>
 

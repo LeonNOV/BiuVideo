@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.AnthologyAdapter;
@@ -28,7 +30,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class VideoActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     private CircleImageView video_circleImageView_face;
-    private ListView video_listView_singleVideoList;
+    private RecyclerView video_recyclerView_singleVideoList;
     private Spinner video_spinner_quality;
     private ExpandableTextView expand_text_view;
     private TextView
@@ -71,7 +73,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
      */
     private void initView() {
         video_circleImageView_face = findViewById(R.id.video_circleImageView_face);
-        video_listView_singleVideoList = findViewById(R.id.video_listView_singleVideoList);
+        video_recyclerView_singleVideoList = findViewById(R.id.video_recyclerView_singleVideoList);
 
         video_spinner_quality = findViewById(R.id.video_spinner_quality);
 
@@ -157,13 +159,14 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
         //设置布局管理器
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);//设置为水平方向
 
         //创建adapter
         AnthologyAdapter anthologyAdapter = new AnthologyAdapter(getApplicationContext(), viewPage);
 
-        //设置ListView
-        video_listView_singleVideoList.setAdapter(anthologyAdapter);
+        //设置RecyclerView
+        video_recyclerView_singleVideoList.setLayoutManager(layoutManager);
+        video_recyclerView_singleVideoList.setAdapter(anthologyAdapter);
 
         //获取视频清晰度
         List<String> accept_description = play.accept_description;
