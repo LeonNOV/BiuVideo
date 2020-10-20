@@ -9,7 +9,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_margin="20dp"
-        android:onClick="onClick"
         android:src="@drawable/navigation_back"
         android:background="@color/noneColor"/>
 
@@ -26,6 +25,5 @@
             android:src="@mipmap/marvel_ironman" />
 
     </LinearLayout>
-
 
 </RelativeLayout>
