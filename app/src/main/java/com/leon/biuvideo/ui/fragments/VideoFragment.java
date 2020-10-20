@@ -120,6 +120,10 @@ public class VideoFragment extends Fragment implements View.OnClickListener {
 
                 break;
             case R.id.main_button_confirm:
+
+                //判断是否有网
+
+
                 String value = main_editText_value.getText().toString();
 
                 Map<String, Object> map = new HashMap<>();

@@ -1,9 +1,13 @@
 package com.leon.biuvideo.ui;
 
+import android.content.Context;
 import android.view.*;
 import android.widget.ImageButton;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.os.Bundle;
@@ -12,21 +16,23 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
 import com.google.android.material.navigation.NavigationView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.fragments.FavoriteFragment;
 import com.leon.biuvideo.ui.fragments.VideoFragment;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, Toolbar.OnMenuItemClickListener {
     private static final String TAG = "LeonLogCat-blue";
 
     private DrawerLayout drawer_layout;
     private NavigationView navigation_view;
+    private Toolbar main_toolBar;
     private ImageButton toolBar_imageButton_menu, navigation_imageButton_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
@@ -41,6 +47,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         navigation_view = findViewById(R.id.navigation_view);
         navigation_view.setNavigationItemSelectedListener(this);
+
+        main_toolBar = findViewById(R.id.main_toolBar);
+        main_toolBar.inflateMenu(R.menu.more_menu);
+        main_toolBar.setOnMenuItemClickListener(this);
+        main_toolBar.setOverflowIcon(ContextCompat.getDrawable(this,R.drawable.more_icon));
 
         toolBar_imageButton_menu = findViewById(R.id.toolBar_imageButton_menu);
         toolBar_imageButton_menu.setOnClickListener(this);
@@ -80,23 +91,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (item.getItemId()) {
             case R.id.item1:
                 fragment = new VideoFragment();
-
-                Toast.makeText(getApplicationContext(), "点击了item1", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.item2:
                 fragment = new FavoriteFragment();
-
-                Toast.makeText(getApplicationContext(), "点击了item2", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.item3:
                 fragment = new FavoriteFragment();
-
-                Toast.makeText(getApplicationContext(), "点击了item3", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "点击率第三个条目", Toast.LENGTH_SHORT).show();
                 break;
-            default:break;
+            default:
+                break;
         }
         drawer_layout.closeDrawer(navigation_view);
-
 
         transaction.replace(R.id.main_fragment, fragment);
         transaction.commit();
@@ -113,5 +119,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 drawer_layout.closeDrawer(navigation_view);
                 break;
         }
+    }
+
+    /**
+     * 选项菜单栏监听
+     */
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.more_menu_about:
+                Toast.makeText(this, "点击了菜单栏的关于", Toast.LENGTH_SHORT).show();
+
+                //显示Dialog
+
+                break;
+        }
+
+        return true;
     }
 }
