@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/up_media_imageView_cover"
+            android:layout_width="250dp"
+            android:layout_height="160dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_launcher_background"
+        />
+
+        <!-- 如果Upmedias中的isUnionmedia的值为0则该控件不显示 -->
+        <!-- 如果为音频则不显示该控件 -->
+        <TextView
+            android:id="@+id/up_media_textView_isUnionmedia"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_alignEnd="@id/up_media_imageView_cover"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_shape"
+            android:gravity="center"
+            android:text="合作"
+            android:textColor="#282828"/>
+
+        <TextView
+            android:id="@+id/up_media_textView_mediaLength"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_alignEnd="@id/up_media_imageView_cover"
+            android:layout_alignBottom="@id/up_media_imageView_cover"
+            android:layout_margin="10dp"
+            android:background="@drawable/shape_gray"
+            android:gravity="center"
+            android:text="02:49"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/up_media_textView_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_toEndOf="@id/up_media_imageView_cover"
+            android:text="介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍"
+            android:textSize="17sp"/>
+        <TextView
+            android:id="@+id/up_media_textView_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/up_media_imageView_cover"
+            android:layout_alignStart="@id/up_media_imageView_cover"
+            android:text="1502130次播放"
+            android:textSize="15sp"/>
+        <TextView
+            android:id="@+id/up_media_textView_ctime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/up_media_imageView_cover"
+            android:layout_alignEnd="@id/up_media_imageView_cover"
+            android:text="2020-10-21 19:15"
+            android:textSize="15sp"/>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

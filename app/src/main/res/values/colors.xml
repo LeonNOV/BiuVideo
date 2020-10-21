@@ -8,8 +8,11 @@
 
     <color name="origin_color">#019788</color>
     <color name="bilibilib_pink">#fb7299</color>
+    <color name="bilibilib_pink_lite">#F48FAC</color>
     <color name="guy_purple">#673bb7</color>
     <color name="ji_an_green">#109d58</color>
     <color name="gray">#607d8b</color>
+
+    <color name="normal">#000</color>
 
 </resources>

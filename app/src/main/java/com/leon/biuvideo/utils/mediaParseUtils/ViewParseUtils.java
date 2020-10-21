@@ -1,14 +1,14 @@
-package com.leon.biuvideo.utils.parseUtils;
+package com.leon.biuvideo.utils.mediaParseUtils;
 
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.view.SingleVideoInfo;
-import com.leon.biuvideo.beans.view.UpInfo;
-import com.leon.biuvideo.beans.view.VideoInfo;
-import com.leon.biuvideo.beans.view.ViewPage;
+import com.leon.biuvideo.beans.videoBean.view.SingleVideoInfo;
+import com.leon.biuvideo.beans.videoBean.view.UpInfo;
+import com.leon.biuvideo.beans.videoBean.view.VideoInfo;
+import com.leon.biuvideo.beans.videoBean.view.ViewPage;
 
 import java.util.ArrayList;
 import java.util.List;

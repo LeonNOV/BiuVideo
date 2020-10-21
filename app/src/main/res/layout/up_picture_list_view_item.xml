@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/up_picture_imageView_cover"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_launcher_background"
+        />
+
+        <!-- 根据UpPicture的count来显示 -->
+        <TextView
+            android:id="@+id/up_picture_textView_count"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_alignEnd="@id/up_picture_imageView_cover"
+            android:layout_alignBottom="@id/up_picture_imageView_cover"
+            android:layout_margin="10dp"
+            android:background="@drawable/shape_gray"
+            android:gravity="center"
+            android:text="9P"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/up_picture_textView_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_alignStart="@id/up_picture_imageView_cover"
+            android:layout_alignEnd="@id/up_picture_imageView_cover"
+            android:layout_below="@id/up_picture_imageView_cover"
+            android:text="介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍"
+            android:textSize="15sp"/>
+        <TextView
+            android:id="@+id/up_picture_textView_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/up_picture_textView_desc"
+            android:layout_alignStart="@id/up_picture_textView_desc"
+            android:text="150次查看"
+            android:textSize="15sp"/>
+        <TextView
+            android:id="@+id/up_picture_textView_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/up_picture_textView_desc"
+            android:layout_alignEnd="@id/up_picture_textView_desc"
+            android:text="10次喜欢"
+            android:textSize="15sp"/>
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

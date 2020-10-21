@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.leon.biuvideo">
-
     <!-- 请求网络权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -12,15 +11,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ui.activitys.UpMasterActivity"></activity>
         <activity
-            android:name=".ui.VideoActivity"
+            android:name=".ui.activitys.VideoActivity"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
-
-        </activity>
+            android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.activitys.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>

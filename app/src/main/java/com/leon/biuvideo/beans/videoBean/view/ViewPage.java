@@ -1,4 +1,4 @@
-package com.leon.biuvideo.beans.view;
+package com.leon.biuvideo.beans.videoBean.view;
 
 import java.io.Serializable;
 import java.util.List;

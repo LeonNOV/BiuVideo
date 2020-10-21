@@ -1,6 +1,5 @@
-package com.leon.biuvideo.ui;
+package com.leon.biuvideo.ui.activitys;
 
-import android.content.Context;
 import android.view.*;
 import android.widget.ImageButton;
 
@@ -19,8 +18,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.beans.AboutBean;
+import com.leon.biuvideo.ui.dialogs.AboutDialog;
 import com.leon.biuvideo.ui.fragments.FavoriteFragment;
-import com.leon.biuvideo.ui.fragments.VideoFragment;
+import com.leon.biuvideo.ui.fragments.HomeFragment;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, Toolbar.OnMenuItemClickListener {
     private static final String TAG = "LeonLogCat-blue";
@@ -49,8 +52,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigation_view.setNavigationItemSelectedListener(this);
 
         main_toolBar = findViewById(R.id.main_toolBar);
+
+        //添加菜单栏
         main_toolBar.inflateMenu(R.menu.more_menu);
+
+        //设置菜单栏条目
         main_toolBar.setOnMenuItemClickListener(this);
+
+        //设置菜单按钮图标
         main_toolBar.setOverflowIcon(ContextCompat.getDrawable(this,R.drawable.more_icon));
 
         toolBar_imageButton_menu = findViewById(R.id.toolBar_imageButton_menu);
@@ -83,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .build());
     }
 
+    //侧滑菜单栏的监听
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -90,14 +100,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (item.getItemId()) {
             case R.id.item1:
-                fragment = new VideoFragment();
+                fragment = new HomeFragment();
                 break;
             case R.id.item2:
                 fragment = new FavoriteFragment();
                 break;
             case R.id.item3:
                 fragment = new FavoriteFragment();
-                Toast.makeText(this, "点击率第三个条目", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "点击了第三个条目", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
@@ -109,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
+    //设置main中的打开侧滑菜单按钮的监听和侧滑菜单中的返回按钮
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -131,8 +142,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.more_menu_about:
                 Toast.makeText(this, "点击了菜单栏的关于", Toast.LENGTH_SHORT).show();
 
-                //显示Dialog
+                //设置Dialog显示内容
+                ArrayList<AboutBean> aboutBeans = new ArrayList<>();
+                for (int i = 1; i <= 10; i++) {
+                    AboutBean aboutBean = new AboutBean();
 
+                    aboutBean.title = "标题" + i;
+                    aboutBean.license = "许可许可许可" + i;
+                    aboutBean.desc = "内容内容内容内容内容内容内容内容" + i;
+
+                    aboutBeans.add(aboutBean);
+                }
+
+                //显示Dialog
+                AboutDialog aboutDialog = new AboutDialog(MainActivity.this, aboutBeans);
+                aboutDialog.setOnClickBottomListener(new AboutDialog.OnClickBottomListener() {
+                    @Override
+                    public void onCloseClick() {
+                        aboutDialog.dismiss();
+                    }
+                });
+
+                aboutDialog.show();
                 break;
         }
 

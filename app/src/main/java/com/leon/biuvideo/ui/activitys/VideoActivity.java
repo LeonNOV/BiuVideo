@@ -1,4 +1,4 @@
-package com.leon.biuvideo.ui;
+package com.leon.biuvideo.ui.activitys;
 
 import android.view.*;
 import android.webkit.WebSettings;
@@ -15,12 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.AnthologyAdapter;
-import com.leon.biuvideo.beans.play.Play;
-import com.leon.biuvideo.beans.view.ViewPage;
+import com.leon.biuvideo.beans.videoBean.play.Play;
+import com.leon.biuvideo.beans.videoBean.view.ViewPage;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.Paths;
 import com.leon.biuvideo.utils.WebpSizes;
-import com.leon.biuvideo.utils.parseUtils.MediaParseUtils;
+import com.leon.biuvideo.utils.mediaParseUtils.MediaParseUtils;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.text.SimpleDateFormat;

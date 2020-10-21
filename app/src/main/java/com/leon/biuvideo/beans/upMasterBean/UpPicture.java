@@ -1,0 +1,18 @@
+package com.leon.biuvideo.beans.upMasterBean;
+
+import java.util.List;
+
+/**
+ * 相簿
+ */
+public class UpPicture {
+    public long docId;
+    public long posterUid;
+    public String title;
+    public String description;
+    public int count;//图片数量
+    public long view;
+    public long like;
+//    public long ctime;
+    public List<String> pictureUrls;
+}
