@@ -7,7 +7,7 @@ public class UpVideo {
     public long mid;
     public String author;
     public String cover;
-    public int bvid;
+    public String bvid;
     public long aid;
     public long play;
     public long create;

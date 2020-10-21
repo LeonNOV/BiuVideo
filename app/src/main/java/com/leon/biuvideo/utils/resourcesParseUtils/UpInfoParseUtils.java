@@ -12,6 +12,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UpInfoParseUtils {
+    /**
+     * 获取up基本信息
+     *
+     * @param mid   up主id
+     * @return  返回UpInfo对象
+     */
     public static UpInfo parseUpInfo(long mid) {
         Map<String, Object> values = new HashMap<>();
         values.put("mid", mid);
