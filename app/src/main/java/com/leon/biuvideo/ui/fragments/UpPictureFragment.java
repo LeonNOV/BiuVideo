@@ -21,7 +21,7 @@ public class UpPictureFragment extends Fragment {
     private Context context;
 
     private View view;
-    private RecyclerView recyclerView;
+    private RecyclerView up_picture_recyclerView;
 
     public UpPictureFragment(List<UpPicture> upPictures, Context context) {
         this.upPictures = upPictures;
@@ -31,7 +31,7 @@ public class UpPictureFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_up_space, container, false);
+        view = inflater.inflate(R.layout.fragment_up_picture, container, false);
 
         initView();
         initValue();
@@ -40,14 +40,14 @@ public class UpPictureFragment extends Fragment {
     }
 
     private void initView() {
-        recyclerView  = view.findViewById(R.id.up_space_recyclerView);
+        up_picture_recyclerView  = view.findViewById(R.id.up_picture_recyclerView);
     }
 
     private void initValue() {
         StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(gridLayoutManager);
+        up_picture_recyclerView.setLayoutManager(gridLayoutManager);
 
         UpPictureAdapter upPictureAdapter = new UpPictureAdapter(upPictures, context);
-        recyclerView.setAdapter(upPictureAdapter);
+        up_picture_recyclerView.setAdapter(upPictureAdapter);
     }
 }

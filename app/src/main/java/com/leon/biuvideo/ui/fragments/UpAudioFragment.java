@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UpAudioAdapter;
@@ -20,7 +21,7 @@ public class UpAudioFragment extends Fragment {
     private Context context;
 
     private View view;
-    private RecyclerView recyclerView;
+    private RecyclerView up_audio_recyclerView;
 
     public UpAudioFragment(List<UpAudio> upAudios, Context context) {
         this.upAudios = upAudios;
@@ -30,7 +31,7 @@ public class UpAudioFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_up_space, container, false);
+        view = inflater.inflate(R.layout.fragment_up_picture, container, false);
 
         initView();
         initValue();
@@ -39,11 +40,14 @@ public class UpAudioFragment extends Fragment {
     }
 
     private void initView() {
-        recyclerView  = view.findViewById(R.id.up_space_recyclerView);
+        up_audio_recyclerView  = view.findViewById(R.id.up_audio_recyclerView);
     }
 
     private void initValue() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        up_audio_recyclerView.setLayoutManager(layoutManager);
+
         UpAudioAdapter upAudioAdapter = new UpAudioAdapter(upAudios, context);
-        recyclerView.setAdapter(upAudioAdapter);
+        up_audio_recyclerView.setAdapter(upAudioAdapter);
     }
 }

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/up_space_recyclerView"
+        android:id="@+id/up_video_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </RelativeLayout>
