@@ -87,6 +87,7 @@ public class UpPictureParseUtils {
             return upPictures;
         }
 
+
         Log.e(LogTip.red, "doc_list接口数据获取失败", new NullPointerException("doc_list接口数据获取失败"));
         return null;
     }
