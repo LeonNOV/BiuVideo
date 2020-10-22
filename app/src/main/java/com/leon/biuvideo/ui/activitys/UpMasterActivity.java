@@ -10,11 +10,17 @@ import androidx.viewpager.widget.ViewPager;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UpMasterViewPageAdapter;
+import com.leon.biuvideo.beans.upMasterBean.UpAudio;
 import com.leon.biuvideo.beans.upMasterBean.UpInfo;
+import com.leon.biuvideo.beans.upMasterBean.UpPicture;
+import com.leon.biuvideo.beans.upMasterBean.UpVideo;
 import com.leon.biuvideo.ui.fragments.UpAudioFragment;
 import com.leon.biuvideo.ui.fragments.UpPictureFragment;
 import com.leon.biuvideo.ui.fragments.UpVideoFragment;
+import com.leon.biuvideo.utils.resourcesParseUtils.UpAudioParseUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpInfoParseUtils;
+import com.leon.biuvideo.utils.resourcesParseUtils.UpPictureParseUtils;
+import com.leon.biuvideo.utils.resourcesParseUtils.UpVideoParseUtils;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -32,6 +38,8 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
     private TextView up_textView_item1, up_textView_item2, up_textView_item3;
     private ViewPager up_viewPage;
 
+    private long mid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +50,7 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
         initValue();
     }
 
+    //初始化控件
     private void initView() {
         up_imageView_cover = findViewById(R.id.up_imageView_cover);
 
@@ -65,15 +74,14 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
         up_viewPage.addOnPageChangeListener(this);
     }
 
+    //初始化数据
     private void initValue() {
         //获取mid
         Intent intent = getIntent();
-        long mid = intent.getExtras().getLong("mid");
+        mid = intent.getExtras().getLong("mid");
 
-        //设置控件数据
         setValue(mid);
-
-        setViewPage();
+        initViewPage();
     }
 
     //设置控件的数据
@@ -94,11 +102,20 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
     }
 
     //设置ViewPage
-    private void setViewPage() {
+    private void initViewPage() {
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new UpAudioFragment(null, getApplicationContext()));
-        fragments.add(new UpVideoFragment(null, getApplicationContext()));
-        fragments.add(new UpPictureFragment(null, getApplicationContext()));
+
+        //获取音频数据
+        List<UpAudio> upAudios = UpAudioParseUtils.parseAudio(mid, 1);
+        fragments.add(new UpAudioFragment(upAudios, getApplicationContext()));
+
+        //获取视频数据
+        List<UpVideo> upVideos = UpVideoParseUtils.parseVideo(mid, 1);
+        fragments.add(new UpVideoFragment(upVideos, getApplicationContext()));
+
+        //获取相簿数据
+        List<UpPicture> upPictures = UpPictureParseUtils.parsePicture(mid, 0);
+        fragments.add(new UpPictureFragment(upPictures, getApplicationContext()));
 
         UpMasterViewPageAdapter viewPageAdapter = new UpMasterViewPageAdapter(getSupportFragmentManager(), fragments);
         up_viewPage.setAdapter(viewPageAdapter);

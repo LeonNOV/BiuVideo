@@ -11,6 +11,9 @@ import com.leon.biuvideo.utils.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * up基础信息接口解析
+ */
 public class UpInfoParseUtils {
     /**
      * 获取up基本信息

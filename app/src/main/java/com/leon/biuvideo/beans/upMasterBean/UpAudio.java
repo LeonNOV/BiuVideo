@@ -9,5 +9,5 @@ public class UpAudio {
     public int duration;//音频时长（秒）
     public String title;
     public long play;
-    public long ctime;
+    public long ctime;//发布时间（毫秒）
 }

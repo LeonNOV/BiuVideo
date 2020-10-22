@@ -1,6 +1,7 @@
 package com.leon.biuvideo.ui.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.*;
@@ -9,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.ui.activitys.UpMasterActivity;
 import com.leon.biuvideo.utils.HeroImages;
 
 import java.text.ParseException;
@@ -142,7 +144,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                     case 1:
 
                         //获取mid
+                        String mid = main_editText_value.getText().toString();
 
+                        if (mid != null) {
+                            Intent intent = new Intent(context, UpMasterActivity.class);
+                            intent.putExtra("mid", Long.parseLong(mid));
+
+                            startActivity(intent);
+                        }
 
                         Toast.makeText(context, "UP", Toast.LENGTH_SHORT).show();
                         break;

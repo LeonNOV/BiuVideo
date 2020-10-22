@@ -15,8 +15,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 视频接口解析
+ */
 public class UpVideoParseUtils {
-    public static List<UpVideo> parseUpVideo(long mid, int pageNum) {
+
+    /**
+     * 视频接口解析
+     *
+     * @param mid   up主id
+     * @param pageNum   页码，从1开始
+     * @return  返回UpVideo类型集合
+     */
+    public static List<UpVideo> parseVideo(long mid, int pageNum) {
         Map<String, Object> values = new HashMap<>();
         values.put("mid", mid);
         values.put("ps", 30);

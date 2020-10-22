@@ -36,12 +36,12 @@ public class UpPictureAdapter extends RecyclerView.Adapter<UpPictureAdapter.View
         UpPicture upPicture = upPictures.get(position);
 
         //设置相簿封面
-        Glide.with(context).load(upPicture.pictureUrls.get(0)).into(holder.up_picture_imageView_cover);
+        Glide.with(context).load(upPicture.pictureUrl).into(holder.up_picture_imageView_cover);
 
         //设置相簿count
         //总数大于2则进行显示
-        if (upPicture.pictureUrls.size() > 1) {
-            holder.up_picture_textView_count.setText(upPicture.pictureUrls.size() + "P");
+        if (upPicture.count > 1) {
+            holder.up_picture_textView_count.setText(upPicture.count + "P");
         } else {
             holder.up_picture_textView_count.setVisibility(View.INVISIBLE);
         }

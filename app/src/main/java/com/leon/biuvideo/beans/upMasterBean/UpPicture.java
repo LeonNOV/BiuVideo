@@ -14,5 +14,5 @@ public class UpPicture {
     public long view;
     public long like;
 //    public long ctime;
-    public List<String> pictureUrls;
+    public String pictureUrl;//只获取第一张图片的地址
 }

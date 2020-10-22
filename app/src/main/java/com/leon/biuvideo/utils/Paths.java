@@ -1,5 +1,8 @@
 package com.leon.biuvideo.utils;
 
+/**
+ * 接口请求地址
+ */
 public class Paths {
     public static String view = "https://api.bilibili.com/x/web-interface/view";
     public static String playUrl = "https://api.bilibili.com/x/player/playurl";
@@ -44,4 +47,17 @@ public class Paths {
      *          order：排序，默认为1
      */
     public static String music = "https://api.bilibili.com/audio/music-service/web/song/upper";
+
+    /**
+     * 获取up相簿列表
+     *  uid：up主id
+     *  page_num：页码
+     *  page_size：每页个数
+     *  biz：获取类型
+     *  	类型：
+     *  	  photo（摄影）
+     *  	  daily（日常）
+     *  	  all（所有）
+     */
+    public static String picture = "https://api.vc.bilibili.com/link_draw/v1/doc/doc_list";
 }
