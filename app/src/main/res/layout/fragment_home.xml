@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
-        android:background="@drawable/button_shape"
+        android:background="@drawable/shape_bilibili_pink"
         android:text="@string/main_button_start" />
 
 </LinearLayout>

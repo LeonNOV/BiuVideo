@@ -49,6 +49,14 @@ dependencies {
     //折叠TextView
     implementation 'com.ms-square:expandableTextView:0.1.4'
 
+    //QMUI
+    implementation 'com.qmuiteam:qmui:2.0.0-alpha10'
+
+    //SmartRefreshLayout
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.5.1'//没有使用特殊Header，可以不加这行
+    implementation 'androidx.appcompat:appcompat:1.2.0'//版本 23以上（必须）
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

@@ -2,7 +2,7 @@
 <resources>
 
     <string name="up_item_videos">视频</string>
-    <string name="up_item_pictures">相簿</string>
     <string name="up_item_audios">音频</string>
+    <string name="up_item_pictures">相簿</string>
 
 </resources>

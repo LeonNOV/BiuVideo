@@ -181,7 +181,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:background="@drawable/button_shape"
+            android:background="@drawable/shape_bilibili_pink"
             android:text="@string/video_button_saveVideo_str" />
 
     </LinearLayout>
@@ -204,7 +204,7 @@
             android:id="@+id/video_button_saveCover"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_shape"
+            android:background="@drawable/shape_bilibili_pink"
             android:text="@string/video_button_saveCover_str" />
 
         <Button
@@ -212,7 +212,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:background="@drawable/button_shape"
+            android:background="@drawable/shape_bilibili_pink"
             android:text="@string/video_button_saveFace_str" />
 
     </LinearLayout>

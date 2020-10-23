@@ -18,6 +18,7 @@ import java.util.Map;
  * 音频接口解析
  */
 public class UpAudioParseUtils {
+    public static int count;
 
     /**
      * 音频接口解析
@@ -40,39 +41,45 @@ public class UpAudioParseUtils {
 
         JSONObject data = jsonObject.getJSONObject("data");
         if (data != null) {
+            //获取数据总数
+            count = getAudioCount(data);
+
             List<UpAudio> upAudios = new ArrayList<>();
 
             JSONArray innerData = data.getJSONArray("data");
-            for (Object innerDatum : innerData) {
-                UpAudio upAudio = new UpAudio();
 
-                JSONObject datumObject = (JSONObject) innerDatum;
+            if (innerData != null) {
+                for (Object innerDatum : innerData) {
+                    UpAudio upAudio = new UpAudio();
 
-                //获取音频id
-                Long sid = datumObject.getLong("id");
-                upAudio.sid = sid;
+                    JSONObject datumObject = (JSONObject) innerDatum;
 
-                //获取封面
-                String cover = datumObject.getString("cover");
-                upAudio.cover = cover;
+                    //获取音频id
+                    Long sid = datumObject.getLong("id");
+                    upAudio.sid = sid;
 
-                //获取音频时长
-                int duration = datumObject.getIntValue("duration");
-                upAudio.duration = duration;
+                    //获取封面
+                    String cover = datumObject.getString("cover");
+                    upAudio.cover = cover;
 
-                //获取标题
-                String title = datumObject.getString("title");
-                upAudio.title = title;
+                    //获取音频时长
+                    int duration = datumObject.getIntValue("duration");
+                    upAudio.duration = duration;
 
-                //获取播放量
-                Long play = datumObject.getJSONObject("statistic").getLong("play");
-                upAudio.play = play;
+                    //获取标题
+                    String title = datumObject.getString("title");
+                    upAudio.title = title;
 
-                //获取发布时间
-                Long ctime = datumObject.getLong("ctime");
-                upAudio.ctime = ctime;
+                    //获取播放量
+                    Long play = datumObject.getJSONObject("statistic").getLong("play");
+                    upAudio.play = play;
 
-                upAudios.add(upAudio);
+                    //获取发布时间
+                    Long ctime = datumObject.getLong("ctime");
+                    upAudio.ctime = ctime;
+
+                    upAudios.add(upAudio);
+                }
             }
 
             return upAudios;
@@ -80,5 +87,9 @@ public class UpAudioParseUtils {
 
         Log.e(LogTip.red, "upper接口数据获取失败", new NullPointerException("upper接口数据获取失败"));
         return null;
+    }
+
+    private static int getAudioCount(JSONObject data) {
+        return data.getIntValue("pageSize");
     }
 }

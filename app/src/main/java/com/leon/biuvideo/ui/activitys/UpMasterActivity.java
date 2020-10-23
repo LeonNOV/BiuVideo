@@ -2,13 +2,13 @@ package com.leon.biuvideo.ui.activitys;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
@@ -20,6 +20,7 @@ import com.leon.biuvideo.beans.upMasterBean.UpVideo;
 import com.leon.biuvideo.ui.fragments.UpAudioFragment;
 import com.leon.biuvideo.ui.fragments.UpPictureFragment;
 import com.leon.biuvideo.ui.fragments.UpVideoFragment;
+import com.leon.biuvideo.utils.WebpSizes;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpAudioParseUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpInfoParseUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpPictureParseUtils;
@@ -72,9 +73,9 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
 //        up_textView_like = findViewById(R.id.up_textView_like);
 //        up_textView_view = findViewById(R.id.up_textView_view);
 
-        up_textView_item1 = findViewById(R.id.up_textView_item1);
-        up_textView_item2 = findViewById(R.id.up_textView_item2);
-        up_textView_item3 = findViewById(R.id.up_textView_item3);
+        up_textView_item1 = findViewById(R.id.up_textView_video);
+        up_textView_item2 = findViewById(R.id.up_textView_audio);
+        up_textView_item3 = findViewById(R.id.up_textView_picture);
 
         up_viewPage = findViewById(R.id.up_viewPage);
         up_viewPage.addOnPageChangeListener(this);
@@ -98,7 +99,7 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
         Glide.with(getApplicationContext()).load(upInfo.topPhoto).into(up_imageView_cover);
 
         //设置头像
-        Glide.with(getApplicationContext()).load(upInfo.face).into(up_circleImageView_face);
+        Glide.with(getApplicationContext()).load(upInfo.face + WebpSizes.face).into(up_circleImageView_face);
 
         //设置昵称
         up_textView_name.setText(upInfo.name);
@@ -107,21 +108,21 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
         up_textView_sign.setText(upInfo.sign);
     }
 
+    private List<UpAudio> upAudios;
+    private List<UpPicture> upPictures;
+
     //设置ViewPage
     private void initViewPage() {
         List<Fragment> fragments = new ArrayList<>();
 
-        //获取音频数据
-        List<UpAudio> upAudios = UpAudioParseUtils.parseAudio(mid, 1);
-        fragments.add(new UpAudioFragment(upAudios, getApplicationContext()));
-
         //获取视频数据
-        List<UpVideo> upVideos = UpVideoParseUtils.parseVideo(mid, 1);
-        fragments.add(new UpVideoFragment(upVideos, getApplicationContext()));
+        fragments.add(new UpVideoFragment(mid, 1, getApplicationContext()));
+
+        //获取音频数据
+        fragments.add(new UpAudioFragment(mid, 1, getApplicationContext()));
 
         //获取相簿数据
-        List<UpPicture> upPictures = UpPictureParseUtils.parsePicture(mid, 0);
-        fragments.add(new UpPictureFragment(upPictures, getApplicationContext()));
+        fragments.add(new UpPictureFragment(mid, 0, getApplicationContext()));
 
         UpMasterViewPageAdapter viewPageAdapter = new UpMasterViewPageAdapter(getSupportFragmentManager(), fragments);
         up_viewPage.setAdapter(viewPageAdapter);
@@ -131,21 +132,21 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
     public void onPageSelected(int position) {
         switch (position) {
             case 0:
-                up_textView_item1.setTextColor(R.color.bilibilib_pink);
-                up_textView_item2.setTextColor(R.color.normal);
-                up_textView_item3.setTextColor(R.color.normal);
+                up_textView_item1.setTextColor(getResources().getColor(R.color.bilibilib_pink));
+                up_textView_item2.setTextColor(getResources().getColor(R.color.normal));
+                up_textView_item3.setTextColor(getResources().getColor(R.color.normal));
 
                 break;
             case 1:
-                up_textView_item1.setTextColor(R.color.normal);
-                up_textView_item2.setTextColor(R.color.bilibilib_pink);
-                up_textView_item3.setTextColor(R.color.normal);
+                up_textView_item1.setTextColor(getResources().getColor(R.color.normal));
+                up_textView_item2.setTextColor(getResources().getColor(R.color.bilibilib_pink));
+                up_textView_item3.setTextColor(getResources().getColor(R.color.normal));
 
                 break;
             case 2:
-                up_textView_item1.setTextColor(R.color.normal);
-                up_textView_item2.setTextColor(R.color.normal);
-                up_textView_item3.setTextColor(R.color.bilibilib_pink);
+                up_textView_item1.setTextColor(getResources().getColor(R.color.normal));
+                up_textView_item2.setTextColor(getResources().getColor(R.color.normal));
+                up_textView_item3.setTextColor(getResources().getColor(R.color.bilibilib_pink));
 
                 break;
             default:break;

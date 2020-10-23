@@ -81,6 +81,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:textColor="#666666"
+            android:text="介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍"
             android:textSize="12sp"/>
 
         <ImageButton
@@ -128,30 +129,30 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/up_textView_item1"
+            android:id="@+id/up_textView_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="item1"
+            android:text="@string/up_item_videos"
             android:textColor="@color/bilibilib_pink"
-            android:textSize="30dp"/>
+            android:textSize="30sp"/>
 
         <TextView
-            android:id="@+id/up_textView_item2"
+            android:id="@+id/up_textView_audio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
-            android:text="item2"
+            android:text="@string/up_item_audios"
             android:textColor="@color/normal"
-            android:textSize="30dp"/>
+            android:textSize="30sp"/>
 
         <TextView
-            android:id="@+id/up_textView_item3"
+            android:id="@+id/up_textView_picture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
-            android:text="item3"
+            android:text="@string/up_item_pictures"
             android:textColor="@color/normal"
-            android:textSize="30dp"/>
+            android:textSize="30sp"/>
     </LinearLayout>
 
     <androidx.viewpager.widget.ViewPager

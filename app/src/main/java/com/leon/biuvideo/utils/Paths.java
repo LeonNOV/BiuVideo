@@ -51,7 +51,7 @@ public class Paths {
     /**
      * 获取up相簿列表
      *  uid：up主id
-     *  page_num：页码
+     *  page_num：页码，从0开始
      *  page_size：每页个数
      *  biz：获取类型
      *  	类型：
@@ -60,4 +60,11 @@ public class Paths {
      *  	  all（所有）
      */
     public static String picture = "https://api.vc.bilibili.com/link_draw/v1/doc/doc_list";
+
+    /**
+     * 获取相簿总数
+     *      参数
+     *          uid：up主id
+     */
+    public static String pictureCount = "https://api.vc.bilibili.com/link_draw/v1/doc/upload_count";
 }

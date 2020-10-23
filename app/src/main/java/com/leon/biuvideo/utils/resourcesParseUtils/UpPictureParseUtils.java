@@ -90,4 +90,17 @@ public class UpPictureParseUtils {
         Log.e(LogTip.red, "doc_list接口数据获取失败", new NullPointerException("doc_list接口数据获取失败"));
         return null;
     }
+
+    public static int getPictureCount(long mid) {
+        Map<String, Object> values = new HashMap<>();
+        values.put("mid", mid);
+
+        String response = HttpUtils.GETByParam(Paths.pictureCount, values);
+
+        JSONObject jsonObject = JSON.parseObject(response);
+
+        JSONObject data = jsonObject.getJSONObject("data");
+
+        return data.getIntValue("all_count");
+    }
 }

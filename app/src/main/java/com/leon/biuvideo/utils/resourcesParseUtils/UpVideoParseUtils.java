@@ -5,6 +5,7 @@ import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.leon.biuvideo.beans.upMasterBean.PageInfo;
 import com.leon.biuvideo.beans.upMasterBean.UpVideo;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.LogTip;
@@ -19,6 +20,7 @@ import java.util.Map;
  * 视频接口解析
  */
 public class UpVideoParseUtils {
+    public static int count;
 
     /**
      * 视频接口解析
@@ -42,6 +44,9 @@ public class UpVideoParseUtils {
 
         JSONObject dataObject = jsonObject.getJSONObject("data");
         if (dataObject != null) {
+            //获取数据总数
+            count = getPageInfo(dataObject);
+
             JSONObject listObject = dataObject.getJSONObject("list");
             JSONArray vlistArray = listObject.getJSONArray("vlist");
 
@@ -103,5 +108,14 @@ public class UpVideoParseUtils {
 
         Log.e(LogTip.red, "search接口数据获取失败", new NullPointerException("search接口数据获取失败"));
         return null;
+    }
+
+    //获取数据总数
+    private static int getPageInfo(JSONObject dataObject) {
+        JSONObject page = dataObject.getJSONObject("page");
+
+        int count = page.getIntValue("count");
+
+        return count;
     }
 }

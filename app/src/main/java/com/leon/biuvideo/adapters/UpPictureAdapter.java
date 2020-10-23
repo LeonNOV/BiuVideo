@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
+import com.leon.biuvideo.beans.upMasterBean.UpVideo;
+import com.leon.biuvideo.utils.WebpSizes;
 
 import java.util.List;
 
@@ -36,7 +38,7 @@ public class UpPictureAdapter extends RecyclerView.Adapter<UpPictureAdapter.View
         UpPicture upPicture = upPictures.get(position);
 
         //设置相簿封面
-        Glide.with(context).load(upPicture.pictureUrl).into(holder.up_picture_imageView_cover);
+        Glide.with(context).load(upPicture.pictureUrl + WebpSizes.cover).into(holder.up_picture_imageView_cover);
 
         //设置相簿count
         //总数大于2则进行显示
@@ -78,5 +80,13 @@ public class UpPictureAdapter extends RecyclerView.Adapter<UpPictureAdapter.View
             up_picture_textView_view = itemView.findViewById(R.id.up_picture_textView_view);
             up_picture_textView_like = itemView.findViewById(R.id.up_picture_textView_like);
         }
+    }
+
+    //加载数据使用
+    public void refresh(List<UpPicture> addOns) {
+        int position = upPictures.size();
+
+        upPictures.addAll(position, addOns);
+        notifyDataSetChanged();
     }
 }
