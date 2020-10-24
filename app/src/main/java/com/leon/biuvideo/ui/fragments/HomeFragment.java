@@ -11,11 +11,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.activitys.UpMasterActivity;
+import com.leon.biuvideo.ui.activitys.VideoActivity;
+import com.leon.biuvideo.utils.BvidUtils;
 import com.leon.biuvideo.utils.HeroImages;
+import com.leon.biuvideo.utils.InternetUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class HomeFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     private ImageView hero_imageView;
@@ -29,16 +33,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     //spinner索引
     private int spinnerIndex;
 
+    //闹着玩儿专用
+    int nullCount = 0;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_home, container, false);
-        context = view.getContext();
+        return inflater.inflate(R.layout.fragment_home, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        view = getView();
+        context = getActivity();
 
         initView();
         initValues();
-
-        return view;
     }
 
     private void initView() {
@@ -100,7 +112,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     private long getTime() {
         Date nowDate = new Date(System.currentTimeMillis());
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.CHINA);
         String ymd = sdf.format(nowDate);
 
         try {
@@ -118,39 +130,93 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.home_imageView_hero:
+
+                //判断是否有网
+                InternetUtils.InternetState internetState = InternetUtils.InternetState(context);
+                switch (internetState) {
+                    case INTERNET_NoAvailable:
+                        Toast.makeText(context, "无网络", Toast.LENGTH_SHORT).show();
+                        break;
+                    case INTERNET_WIFI:
+                        Toast.makeText(context, "WIFI", Toast.LENGTH_SHORT).show();
+                        break;
+                    case INTERNET_MOBILE:
+                        Toast.makeText(context, "移动网络", Toast.LENGTH_SHORT).show();
+                    default:
+                        Toast.makeText(context, "未知类型", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+
                 //抖一抖！！！
                 break;
             case R.id.home_button_confirm:
 
-                //判断是否有网
-
                 switch (spinnerIndex) {
                     //获取数据，进入VideoActivity
                     case 0:
-//                        String value = main_editText_value.getText().toString();
-//
-//                        Map<String, Object> map = new HashMap<>();
-//                        map.put("bvid", value);
-//
-//                        String response = HttpUtils.GETByParam(Paths.view, map);
-//                        ViewPage viewPage = ViewParseUtils.parseView(response);
-//
-//                        Intent intent = new Intent(context, VideoActivity.class);
-//                        intent.putExtra("viewPage", viewPage);
-//                        startActivity(intent);
+                        String value_bvid = main_editText_value.getText().toString();
+
+                        if (value_bvid.length() != 0) {
+
+                            String bvid = BvidUtils.getBvid(value_bvid);
+
+                            if (bvid != null) {
+                                Intent intent = new Intent(context, VideoActivity.class);
+                                intent.putExtra("bvid", bvid);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(context, "ERROR~~~\n可通过右上角中的帮助来了解正确的获取方式", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+
+                            switch (nullCount) {
+                                case 0:
+                                    Toast.makeText(context, "咋滴?搁这儿闹着玩儿呢?", Toast.LENGTH_SHORT).show();
+                                    break;
+                                case 1:
+                                case 2:
+                                case 3:
+                                case 4:
+                                case 5:
+                                    Toast.makeText(context, nullCount + "次了啊!", Toast.LENGTH_SHORT).show();
+                                    break;
+                                default:
+                                    Toast.makeText(context, "嫩可长点儿心吧~~~", Toast.LENGTH_SHORT).show();
+
+                                    for (int i = 3; i > 0; i--) {
+                                        try {
+                                            Thread.sleep(1000);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+                                    int pid = android.os.Process.myPid();
+                                    android.os.Process.killProcess(pid);
+                            }
+
+                            nullCount++;
+                        }
+
                         Toast.makeText(context, "Video", Toast.LENGTH_SHORT).show();
                         break;
                     //获取数据，进入UpMasterActivity
                     case 1:
 
                         //获取mid
-                        String mid = main_editText_value.getText().toString();
+                        String value_mid = main_editText_value.getText().toString();
 
-                        if (mid != null) {
-                            Intent intent = new Intent(context, UpMasterActivity.class);
-                            intent.putExtra("mid", Long.parseLong(mid));
+                        if (value_mid.length() != 0) {
 
-                            startActivity(intent);
+                            long mid = BvidUtils.getMid(value_mid);
+
+                            if (mid != 0) {
+                                Intent intent = new Intent(context, UpMasterActivity.class);
+                                intent.putExtra("mid", mid);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(context, "ERROR~~~\n可通过右上角中的帮助来了解正确的获取方式", Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         Toast.makeText(context, "UP", Toast.LENGTH_SHORT).show();
@@ -169,10 +235,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
 
         switch (i) {
             case 0:
-                main_editText_value.setHint(R.string.main_editText_video_hint);
+                main_editText_value.setHint(R.string.main_editText_hint);
                 break;
             case 1:
-                main_editText_value.setHint(R.string.main_editText_up_hint);
+                main_editText_value.setHint(R.string.main_editText_hint);
                 break;
             default:break;
         }

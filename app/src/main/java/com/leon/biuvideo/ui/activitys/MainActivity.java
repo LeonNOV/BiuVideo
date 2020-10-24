@@ -4,6 +4,7 @@ import android.view.*;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -15,6 +16,9 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.navigation.NavigationView;
 import com.leon.biuvideo.R;
@@ -22,16 +26,17 @@ import com.leon.biuvideo.beans.AboutBean;
 import com.leon.biuvideo.ui.dialogs.AboutDialog;
 import com.leon.biuvideo.ui.fragments.FavoriteFragment;
 import com.leon.biuvideo.ui.fragments.HomeFragment;
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, Toolbar.OnMenuItemClickListener {
-    private static final String TAG = "LeonLogCat-blue";
-
     private DrawerLayout drawer_layout;
     private NavigationView navigation_view;
     private Toolbar main_toolBar;
     private ImageButton toolBar_imageButton_menu, navigation_imageButton_back;
+
+    private Fragment currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +46,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_start);
 
         initView();
-        initValues();
+
+        //设置网络
+        initInternet();
     }
 
     private void initView() {
-
         drawer_layout = findViewById(R.id.drawer_layout);
 
         navigation_view = findViewById(R.id.navigation_view);
@@ -56,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //添加菜单栏
         main_toolBar.inflateMenu(R.menu.more_menu);
 
-        //设置菜单栏条目
+        //设置菜单栏条目的监听
         main_toolBar.setOnMenuItemClickListener(this);
 
         //设置菜单按钮图标
@@ -69,15 +75,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigation_imageButton_back.setOnClickListener(this);
     }
 
-    private void initValues() {
-        //设置网络
-        setInternet();
-    }
-
     /**
      * 设置网络
      */
-    private void setInternet() {
+    private void initInternet() {
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                 .detectDiskReads()
                 .detectDiskWrites()
@@ -95,28 +96,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //侧滑菜单栏的监听
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        Fragment fragment = null;
-
         switch (item.getItemId()) {
             case R.id.item1:
-                fragment = new HomeFragment();
+                switchFragment(new HomeFragment());
                 break;
             case R.id.item2:
-                fragment = new FavoriteFragment();
+                switchFragment(new FavoriteFragment());
                 break;
-            case R.id.item3:
-                fragment = new FavoriteFragment();
-                Toast.makeText(this, "点击了第三个条目", Toast.LENGTH_SHORT).show();
-                break;
-            default:
-                break;
+//            case R.id.item3:
+//                switchFragment(new HomeFragment());
+//                Toast.makeText(this, "点击了第三个条目", Toast.LENGTH_SHORT).show();
+//                break;
+            default: break;
         }
         drawer_layout.closeDrawer(navigation_view);
 
-        transaction.replace(R.id.main_fragment, fragment);
-        transaction.commit();
         return true;
+    }
+
+    /**
+     * fragment的切换
+     *
+     * @param targetFragment    要切换到的fragment
+     */
+    private void switchFragment(Fragment targetFragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        if (!targetFragment.isAdded()) {
+            //第一次使用switchFragment()时currentFragment为null，所以要判断一下
+            if(currentFragment != null) {
+                transaction.hide(currentFragment);
+            }
+            transaction.add(R.id.main_fragment, targetFragment);
+            transaction.commit();
+        } else {
+            transaction.hide(currentFragment).show(targetFragment).commit();
+        }
+
+        currentFragment = targetFragment;
     }
 
     //设置main中的打开侧滑菜单按钮的监听和侧滑菜单中的返回按钮

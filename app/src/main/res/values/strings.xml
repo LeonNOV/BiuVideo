@@ -2,8 +2,7 @@
     <string name="app_name">BiuVideo</string>
 
     <string name="main_button_start">开始获取</string>
-    <string name="main_editText_video_hint">输入视频的bvid或avid</string>
-    <string name="main_editText_up_hint">输入UP主的ID或昵称</string>
+    <string name="main_editText_hint">输入链接或id</string>
     <array name="home_spinner">
         <item>视频</item>
         <item>UP主</item>

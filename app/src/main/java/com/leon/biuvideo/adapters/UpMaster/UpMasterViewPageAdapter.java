@@ -1,4 +1,4 @@
-package com.leon.biuvideo.adapters;
+package com.leon.biuvideo.adapters.UpMaster;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

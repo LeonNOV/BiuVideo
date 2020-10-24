@@ -22,10 +22,13 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <!-- 使用侧滑栏切换fragment的话一定要指定navGraph -->
     <fragment
         android:id="@+id/main_fragment"
-        android:name="com.leon.biuvideo.ui.fragments.HomeFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/main_navigation" />
 
 </LinearLayout>

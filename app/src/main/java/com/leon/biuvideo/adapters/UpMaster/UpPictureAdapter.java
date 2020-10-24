@@ -1,4 +1,4 @@
-package com.leon.biuvideo.adapters;
+package com.leon.biuvideo.adapters.UpMaster;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
-import com.leon.biuvideo.beans.upMasterBean.UpVideo;
 import com.leon.biuvideo.utils.WebpSizes;
 
 import java.util.List;
@@ -87,6 +86,7 @@ public class UpPictureAdapter extends RecyclerView.Adapter<UpPictureAdapter.View
         int position = upPictures.size();
 
         upPictures.addAll(position, addOns);
+
         notifyDataSetChanged();
     }
 }

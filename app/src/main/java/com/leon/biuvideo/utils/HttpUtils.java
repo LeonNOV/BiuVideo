@@ -1,9 +1,17 @@
 package com.leon.biuvideo.utils;
 
+import org.apache.http.Header;
+import org.apache.http.HttpHeaders;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpHead;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -61,5 +69,42 @@ public class HttpUtils {
         }
 
         return null;
+    }
+
+    /**
+     * 短链解析
+     *
+     * @param shortUrl  短链
+     * @return  返回url后面的path
+     */
+    public static String parseShortUrl(String shortUrl) {
+        CloseableHttpClient client = HttpClientBuilder.create().disableRedirectHandling().build();
+
+        HttpHead request = null;
+        try {
+            request = new HttpHead(shortUrl);
+            HttpResponse httpResponse = client.execute(request);
+
+            int statusCode = httpResponse.getStatusLine().getStatusCode();
+            if (statusCode != 301 && statusCode != 302) {
+                return shortUrl;
+            }
+
+            //获取响应头中的location的值
+            Header[] headers = httpResponse.getHeaders(HttpHeaders.LOCATION);
+            String location = headers[0].getValue();
+
+            //使用uri对象来获取path
+            URI uri = URI.create(location);
+            String path = uri.getPath();
+
+            return path;
+        } catch (IllegalArgumentException | IOException uriEx) {
+            return null;
+        } finally {
+            if (request != null) {
+                request.releaseConnection();
+            }
+        }
     }
 }

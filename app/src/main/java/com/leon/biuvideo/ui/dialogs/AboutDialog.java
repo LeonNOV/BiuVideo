@@ -38,14 +38,14 @@ public class AboutDialog extends AlertDialog {
     }
 
     private void initView() {
+        aboutDialog_recyclerView = findViewById(R.id.aboutDialog_recyclerView);
+        aboutDialog_button = findViewById(R.id.aboutDialog_button);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         AboutDialogAdapter dialogAdapter = new AboutDialogAdapter(aboutBeans, context);
 
-        aboutDialog_recyclerView = findViewById(R.id.aboutDialog_recyclerView);
         aboutDialog_recyclerView.setLayoutManager(layoutManager);
         aboutDialog_recyclerView.setAdapter(dialogAdapter);
-
-        aboutDialog_button = findViewById(R.id.aboutDialog_button);
     }
 
     private void initEvent() {

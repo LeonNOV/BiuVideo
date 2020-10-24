@@ -1,48 +1,51 @@
 package com.leon.biuvideo.ui.activitys;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Handler;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
+
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.UpMasterViewPageAdapter;
-import com.leon.biuvideo.beans.upMasterBean.UpAudio;
+import com.leon.biuvideo.adapters.UpMaster.UpMasterViewPageAdapter;
 import com.leon.biuvideo.beans.upMasterBean.UpInfo;
-import com.leon.biuvideo.beans.upMasterBean.UpPicture;
-import com.leon.biuvideo.beans.upMasterBean.UpVideo;
-import com.leon.biuvideo.ui.fragments.UpAudioFragment;
-import com.leon.biuvideo.ui.fragments.UpPictureFragment;
-import com.leon.biuvideo.ui.fragments.UpVideoFragment;
+import com.leon.biuvideo.ui.fragments.UpMasterFragments.UpAudioFragment;
+import com.leon.biuvideo.ui.fragments.UpMasterFragments.UpPictureFragment;
+import com.leon.biuvideo.ui.fragments.UpMasterFragments.UpVideoFragment;
+import com.leon.biuvideo.utils.SQLiteHelper;
 import com.leon.biuvideo.utils.WebpSizes;
-import com.leon.biuvideo.utils.resourcesParseUtils.UpAudioParseUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpInfoParseUtils;
-import com.leon.biuvideo.utils.resourcesParseUtils.UpPictureParseUtils;
-import com.leon.biuvideo.utils.resourcesParseUtils.UpVideoParseUtils;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
     private ImageView up_imageView_cover;
     private CircleImageView up_circleImageView_face;
     private TextView up_textView_name;
     private ImageView up_imageView_favoriteIconState;
     private TextView up_textView_favoriteStrState;
     private ExpandableTextView up_textView_sign;
-//    private TextView up_textView_follower, up_textView_like, up_textView_view;
-    private TextView up_textView_item1, up_textView_item2, up_textView_item3;
+    //    private TextView up_textView_follower, up_textView_like, up_textView_view;
+    private TextView up_textView_video, up_textView_audio, up_textView_picture;
     private ViewPager up_viewPage;
 
     private long mid;
+    private UpInfo upInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,8 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
         up_textView_name = findViewById(R.id.up_textView_name);
 
         up_imageView_favoriteIconState = findViewById(R.id.up_imageView_favoriteIconState);
+        up_imageView_favoriteIconState.setOnClickListener(this);
+
         up_textView_favoriteStrState = findViewById(R.id.up_textView_favoriteStrState);
 
         up_textView_sign = findViewById(R.id.up_textView_sign);
@@ -73,9 +78,14 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
 //        up_textView_like = findViewById(R.id.up_textView_like);
 //        up_textView_view = findViewById(R.id.up_textView_view);
 
-        up_textView_item1 = findViewById(R.id.up_textView_video);
-        up_textView_item2 = findViewById(R.id.up_textView_audio);
-        up_textView_item3 = findViewById(R.id.up_textView_picture);
+        up_textView_video = findViewById(R.id.up_textView_video);
+        up_textView_video.setOnClickListener(this);
+
+        up_textView_audio = findViewById(R.id.up_textView_audio);
+        up_textView_audio.setOnClickListener(this);
+
+        up_textView_picture = findViewById(R.id.up_textView_picture);
+        up_textView_picture.setOnClickListener(this);
 
         up_viewPage = findViewById(R.id.up_viewPage);
         up_viewPage.addOnPageChangeListener(this);
@@ -85,7 +95,12 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
     private void initValue() {
         //获取mid
         Intent intent = getIntent();
-        mid = intent.getExtras().getLong("mid");
+        mid = intent.getLongExtra("mid", -1);
+
+        if (mid == -1) {
+            Toast.makeText(this, "信息获取失败", Toast.LENGTH_SHORT).show();
+            onDestroy();
+        }
 
         setValue(mid);
         initViewPage();
@@ -93,7 +108,7 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
 
     //设置控件的数据
     private void setValue(long mid) {
-        UpInfo upInfo = UpInfoParseUtils.parseUpInfo(mid);
+        upInfo = UpInfoParseUtils.parseUpInfo(mid);
 
         //设置顶部图片
         Glide.with(getApplicationContext()).load(upInfo.topPhoto).into(up_imageView_cover);
@@ -106,10 +121,15 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
 
         //设置签名
         up_textView_sign.setText(upInfo.sign);
-    }
 
-    private List<UpAudio> upAudios;
-    private List<UpPicture> upPictures;
+        //设置关注状态
+        boolean favorite_state = queryFavoriteState(mid);
+
+        if (favorite_state) {
+            up_imageView_favoriteIconState.setImageResource(R.drawable.favorite);
+            up_textView_favoriteStrState.setText("已关注");
+        }
+    }
 
     //设置ViewPage
     private void initViewPage() {
@@ -132,25 +152,93 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
     public void onPageSelected(int position) {
         switch (position) {
             case 0:
-                up_textView_item1.setTextColor(getResources().getColor(R.color.bilibilib_pink));
-                up_textView_item2.setTextColor(getResources().getColor(R.color.normal));
-                up_textView_item3.setTextColor(getResources().getColor(R.color.normal));
+                up_textView_video.setTextColor(getResources().getColor(R.color.bilibilib_pink));
+                up_textView_audio.setTextColor(getResources().getColor(R.color.normal));
+                up_textView_picture.setTextColor(getResources().getColor(R.color.normal));
 
                 break;
             case 1:
-                up_textView_item1.setTextColor(getResources().getColor(R.color.normal));
-                up_textView_item2.setTextColor(getResources().getColor(R.color.bilibilib_pink));
-                up_textView_item3.setTextColor(getResources().getColor(R.color.normal));
+                up_textView_video.setTextColor(getResources().getColor(R.color.normal));
+                up_textView_audio.setTextColor(getResources().getColor(R.color.bilibilib_pink));
+                up_textView_picture.setTextColor(getResources().getColor(R.color.normal));
 
                 break;
             case 2:
-                up_textView_item1.setTextColor(getResources().getColor(R.color.normal));
-                up_textView_item2.setTextColor(getResources().getColor(R.color.normal));
-                up_textView_item3.setTextColor(getResources().getColor(R.color.bilibilib_pink));
+                up_textView_video.setTextColor(getResources().getColor(R.color.normal));
+                up_textView_audio.setTextColor(getResources().getColor(R.color.normal));
+                up_textView_picture.setTextColor(getResources().getColor(R.color.bilibilib_pink));
 
                 break;
-            default:break;
+            default:
+                break;
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.up_imageView_favoriteIconState:
+                up_imageView_favoriteIconState.setImageResource(R.drawable.favorite);
+                //将up的基本信息存入数据库
+                addFavorite();
+                break;
+            case R.id.up_textView_video:
+                up_viewPage.setCurrentItem(0);
+                break;
+            case R.id.up_textView_audio:
+                up_viewPage.setCurrentItem(1);
+                break;
+            case R.id.up_textView_picture:
+                up_viewPage.setCurrentItem(2);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 将UP的数据导入favorite_up库中
+     */
+    private void addFavorite() {
+        SQLiteHelper sqLiteHelper = new SQLiteHelper(getApplicationContext(), 1);
+        SQLiteDatabase database = sqLiteHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("mid", mid);
+        values.put("name", upInfo.name);
+        values.put("faceUrl", upInfo.face);
+        values.put("desc", upInfo.sign);
+        values.put("isFavorite", 1);//1：正在关注；0：已取消关注
+
+        database.insert("favorite_up", null, values);
+
+        Toast.makeText(getApplicationContext(), upInfo.name + " 已加入到“我的收藏”中", Toast.LENGTH_SHORT).show();
+
+        sqLiteHelper.close();
+        database.close();
+    }
+
+    private boolean queryFavoriteState(long mid) {
+        SQLiteHelper sqLiteHelper = new SQLiteHelper(getApplicationContext(), 1);
+        SQLiteDatabase database = sqLiteHelper.getReadableDatabase();
+
+        boolean state;
+
+        Cursor favoriteUp = database.query("favorite_up", new String[]{"isFavorite"}, "mid=?", new String[]{mid + ""}, null, null, null);
+
+        if (!favoriteUp.moveToNext()) {
+            state = false;
+        } else {
+            int isFavorite = favoriteUp.getInt(0);
+            state = isFavorite == 1;
+        }
+
+        favoriteUp.close();
+        database.close();
+        sqLiteHelper.close();
+
+        return state;
     }
 
     @Override

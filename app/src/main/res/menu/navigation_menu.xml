@@ -7,7 +7,7 @@
             android:title="@string/navigation_menu_item1"/>
         <item android:id="@+id/item2"
             android:title="@string/navigation_menu_item2"/>
-        <item android:id="@+id/item3"
-            android:title="@string/navigation_menu_item3"/>
+<!--        <item android:id="@+id/item3"-->
+<!--            android:title="@string/navigation_menu_item3"/>-->
     </group>
 </menu>

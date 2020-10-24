@@ -1,5 +1,6 @@
 package com.leon.biuvideo.ui.activitys;
 
+import android.annotation.SuppressLint;
 import android.view.*;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -21,6 +22,7 @@ import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.Paths;
 import com.leon.biuvideo.utils.WebpSizes;
 import com.leon.biuvideo.utils.mediaParseUtils.MediaParseUtils;
+import com.leon.biuvideo.utils.mediaParseUtils.ViewParseUtils;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.text.SimpleDateFormat;
@@ -76,6 +78,8 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
      */
     private void initView() {
         video_circleImageView_face = findViewById(R.id.video_circleImageView_face);
+        video_circleImageView_face.setOnClickListener(this);
+
         video_recyclerView_singleVideoList = findViewById(R.id.video_recyclerView_singleVideoList);
 
         video_spinner_quality = findViewById(R.id.video_spinner_quality);
@@ -108,9 +112,15 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
      * 初始化数据
      */
     private void initValues() {
-        //获取ViewPage实体类（视频基本信息）
+        //获取视频bvid
         Intent intent = getIntent();
-        viewPage = (ViewPage) intent.getExtras().getSerializable("viewPage");
+        String bvid = intent.getStringExtra("bvid");
+
+        //获取ViewPage实体类（视频基本信息）
+        Map<String, Object> map = new HashMap<>();
+        map.put("bvid", bvid);
+        String response_viewPage = HttpUtils.GETByParam(Paths.view, map);
+        viewPage = ViewParseUtils.parseView(response_viewPage);
 
         //获取视频选集信息
         Map<String, Object> param = new HashMap<>();
@@ -123,8 +133,8 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         param.put("fnver", 0);
         param.put("fnval", 80);
 
-        String response = HttpUtils.GETByParam(Paths.playUrl, param);
-        play = MediaParseUtils.parseMedia(response);
+        String response_media = HttpUtils.GETByParam(Paths.playUrl, param);
+        play = MediaParseUtils.parseMedia(response_media);
 
         //设置显示头像
         Glide.with(getApplicationContext()).load(viewPage.upInfo.faceUrl + WebpSizes.face).into(video_circleImageView_face);
@@ -141,8 +151,9 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         //设置弹幕数
         video_textView_danmaku.setText(viewPage.videoInfo.danmaku + "弹幕");
 
-        //设置上传时间
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        //设置上传时间(UTC+8)
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
+
         //秒转毫秒
         video_textView_upTime.setText(sdf.format(new Date(viewPage.upTime * 1000)));
 
@@ -236,8 +247,10 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
      * 配置网页控件
      * @param videoUrl  设置网页地址
      */
+    @SuppressLint("SetJavaScriptEnabled")//忽略SetJavaScriptEnabled的警告
     private void configWebView (String videoUrl) {
         WebSettings settings = webView.getSettings();
+
         settings.setJavaScriptEnabled(true);
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
         settings.setDatabaseEnabled(true);
@@ -255,6 +268,14 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.video_circleImageView_face:
+                //跳转到up主界面
+                Intent intent = new Intent(this, UpMasterActivity.class);
+                intent.putExtra("mid", viewPage.upInfo.mid);
+                startActivity(intent);
+
+                this.finish();
+                break;
             case R.id.video_button_saveVideo:
                 Toast.makeText(getApplicationContext(), "选择的画质为" + play.accept_description.get(qualityIndex), Toast.LENGTH_SHORT).show();
                 break;

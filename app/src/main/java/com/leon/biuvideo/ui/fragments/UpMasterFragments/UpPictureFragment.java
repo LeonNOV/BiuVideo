@@ -1,4 +1,4 @@
-package com.leon.biuvideo.ui.fragments;
+package com.leon.biuvideo.ui.fragments.UpMasterFragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,12 +14,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.UpPictureAdapter;
+import com.leon.biuvideo.adapters.UpMaster.UpPictureAdapter;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
-import com.leon.biuvideo.beans.upMasterBean.UpVideo;
-import com.leon.biuvideo.utils.resourcesParseUtils.UpAudioParseUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpPictureParseUtils;
-import com.leon.biuvideo.utils.resourcesParseUtils.UpVideoParseUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
