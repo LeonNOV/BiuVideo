@@ -5,16 +5,25 @@ import com.leon.biuvideo.R;
 public class HeroImages {
     //heroId
     public static int[] heroImages = {
-            R.mipmap.marvel_thor,
-            R.mipmap.marvel_cap,
-            R.mipmap.marvel_hulk,
-            R.mipmap.dc_superman,
-            R.mipmap.marvel_deadpool,
-            R.mipmap.marvel_spiderman,
-            R.mipmap.marvel_ironman,
-            R.mipmap.dc_batman,
-            R.mipmap.marvel_antman,
-            R.mipmap.dc_flashman,
-            R.mipmap.marvel_wolverine
+            R.drawable.vector_hero_dc_atom,
+            R.drawable.vector_hero_dc_batman,
+            R.drawable.vector_hero_dc_divingman,
+            R.drawable.vector_hero_dc_flash,
+            R.drawable.vector_hero_dc_greenlantern,
+            R.drawable.vector_hero_dc_martianhunter,
+            R.drawable.vector_hero_dc_redwhirlwind,
+            R.drawable.vector_hero_dc_superman,
+            R.drawable.vector_hero_marvel_antman,
+            R.drawable.vector_hero_marvel_blackbatking,
+            R.drawable.vector_hero_marvel_cap,
+            R.drawable.vector_hero_marvel_capuk,
+            R.drawable.vector_hero_marvel_deadpool,
+            R.drawable.vector_hero_marvel_fantastic,
+            R.drawable.vector_hero_marvel_hulk,
+            R.drawable.vector_hero_marvel_ironman,
+            R.drawable.vector_hero_marvel_lasereye,
+            R.drawable.vector_hero_marvel_spiderman,
+            R.drawable.vector_hero_marvel_thor,
+            R.drawable.vector_hero_marvel_wolverine
     };
 }

@@ -7,4 +7,9 @@
         <item>视频</item>
         <item>UP主</item>
     </array>
+
+    <!-- hero尺寸 -->
+    <dimen name="hero_width">96dp</dimen>
+    <dimen name="hero_height">96dp</dimen>
+    <!-- hero尺寸 -->
 </resources>

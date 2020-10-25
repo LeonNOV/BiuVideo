@@ -1,6 +1,7 @@
 package com.leon.biuvideo.ui.activitys;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.*;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -17,8 +18,11 @@ import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.AnthologyAdapter;
 import com.leon.biuvideo.beans.videoBean.play.Play;
+import com.leon.biuvideo.beans.videoBean.view.SingleVideoInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
+import com.leon.biuvideo.utils.GeneralNotification;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.MediaUtils;
 import com.leon.biuvideo.utils.Paths;
 import com.leon.biuvideo.utils.WebpSizes;
 import com.leon.biuvideo.utils.mediaParseUtils.MediaParseUtils;
@@ -58,8 +62,11 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
     //选择的画质索引
     private int qualityIndex;
 
-    //当前webView中播放的选集cid
-    private long nowCid;
+    //当前webView中播放的选集索引，默认为0
+    private int nowPosition = 0;
+
+    //视频保存状态
+    boolean saveState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,16 +213,13 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
      */
     @Override
     public void onImageViewClicked(int position) {
-        //获取对应的选集cid
-        long selectedCid = viewPage.singleVideoInfoList.get(position).cid;
-
         //判断当前观看的视频cid是否和选择的一样
-        if (nowCid != selectedCid) {
+        if (nowPosition != position) {
             //设置webView的链接
-            setWebViewUrl(selectedCid, position);
+            setWebViewUrl(viewPage.singleVideoInfoList.get(position).cid, position);
 
-            //重置nowCid
-            nowCid = selectedCid;
+            //重置nowPosition
+            nowPosition = position;
         } else {
             Toast.makeText(VideoActivity.this, "选择的视频已经在播放了~~", Toast.LENGTH_SHORT).show();
         }
@@ -226,7 +230,6 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         //配置webView地址
         String parameter_aid = "aid=" + viewPage.aid;
         String parameter_cid = "cid=" + cid;
-        this.nowCid = viewPage.singleVideoInfoList.get(0).cid;
 
         //默认第一个视频为singleVideoInfoList中的第一个，page为选集列表中的第一个视频的索引（从1开始,所以要进行加1）
         String videoPath = Paths.videoBaeUrl + parameter_aid + "&" + parameter_cid + "&" + "page=" + pageIndex + 1;
@@ -273,11 +276,60 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 Intent intent = new Intent(this, UpMasterActivity.class);
                 intent.putExtra("mid", viewPage.upInfo.mid);
                 startActivity(intent);
-
-                this.finish();
                 break;
-            case R.id.video_button_saveVideo:
-                Toast.makeText(getApplicationContext(), "选择的画质为" + play.accept_description.get(qualityIndex), Toast.LENGTH_SHORT).show();
+            case R.id.video_button_saveVideo://保存选定画质的视频
+
+                //判断当前的选集个数是否大于1
+                if (viewPage.singleVideoInfoList.size() > 1) {
+                    //获取当前选集的信息
+                    Map<String, Object> param = new HashMap<>();
+                    param.put("avid", viewPage.aid);
+                    param.put("bvid", viewPage.bvid);
+                    param.put("cid", viewPage.singleVideoInfoList.get(nowPosition).cid);
+                    param.put("qn", 0);
+                    param.put("otype", "json");
+                    param.put("fourk", 1);
+                    param.put("fnver", 0);
+                    param.put("fnval", 80);
+
+                    String response_media = HttpUtils.GETByParam(Paths.playUrl, param);
+                    play = MediaParseUtils.parseMedia(response_media);
+                }
+
+                //获取视频路径
+                String videoUrlBase = play.videos.get(qualityIndex).baseUrl;
+
+                //获取音频路径,默认只获取品质最高的
+                String audioUrlBase = play.audios.get(0).baseUrl;
+
+                //获取保存路径
+                String videoPath = MediaUtils.folderState(MediaUtils.ResourcesFolder.VIDEOS);
+
+                //文件名组成,以视频bvid为基本名称
+                String fileName = MediaUtils.generateFileName(viewPage.bvid);
+
+                Toast.makeText(this, "已加入缓存队列中", Toast.LENGTH_SHORT).show();
+
+                //262144
+                //1048576
+                //51809695
+                //获取视频线程
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //获取对应nowPosition的选集信息
+                        SingleVideoInfo nowSingleVideoInfo = viewPage.singleVideoInfoList.get(nowPosition);
+
+                        //获取视频
+                        saveState = MediaUtils.ComposeTrack(videoUrlBase, audioUrlBase, videoPath + "/" + fileName + ".mp4");
+
+                        //创建推送通知
+                        GeneralNotification notification = new GeneralNotification(getApplicationContext(), getSystemService(Context.NOTIFICATION_SERVICE), viewPage.bvid + "", "SaveVideo", (int) nowSingleVideoInfo.cid);
+
+                        String title = saveState ? "视频已缓存完成" : "视频缓存失败";
+                        notification.setNotificationOnSDK26(title, viewPage.title + "\t" + nowSingleVideoInfo.part, R.drawable.ic_menu_camera);
+                    }
+                }).start();
                 break;
             case R.id.video_button_saveCover:
                 Toast.makeText(getApplicationContext(), "点击了保存封面", Toast.LENGTH_SHORT).show();

@@ -1,15 +1,19 @@
 package com.leon.biuvideo;
 
+import android.os.Environment;
+
 import com.leon.biuvideo.beans.upMasterBean.UpAudio;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
 import com.leon.biuvideo.beans.upMasterBean.UpVideo;
-import com.leon.biuvideo.utils.BvidUtils;
+import com.leon.biuvideo.utils.IDUtils;
+import com.leon.biuvideo.utils.MediaUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpAudioParseUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpPictureParseUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpVideoParseUtils;
 
 import org.junit.Test;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -99,6 +103,35 @@ public class ExampleUnitTest {
 
         //mid的获取
 //        long mid = BvidUtils.getMid("https://space.bilibili.com/357612002");
-        long mid = BvidUtils.getMid("https://space.bilibili.com/43707221?share_medium=android&share_source=copy_link&bbid=XY6E7E663EF9E1BF2EDD5BD83C77E9B1C33CE&ts=1603558072014\n");
+        long mid = IDUtils.getMid("https://space.bilibili.com/43707221?share_medium=android&share_source=copy_link&bbid=XY6E7E663EF9E1BF2EDD5BD83C77E9B1C33CE&ts=1603558072014\n");
+    }
+
+    @Test
+    public void thredTest() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                forTest1(1);
+            }
+        }).start();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                forTest2(2);
+            }
+        }).start();
+    }
+
+    private void forTest1(int num) {
+        for (int i = 0; i < 10; i++) {
+            System.out.println("线程" + num + "："  + i);
+        }
+    }
+
+    private void forTest2(int num) {
+        for (int i = 0; i < 10; i++) {
+            System.out.println("线程" + num + "："  + i);
+        }
     }
 }

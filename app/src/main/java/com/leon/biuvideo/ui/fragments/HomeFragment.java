@@ -3,23 +3,33 @@ package com.leon.biuvideo.ui.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.ui.activitys.MainActivity;
 import com.leon.biuvideo.ui.activitys.UpMasterActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
-import com.leon.biuvideo.utils.BvidUtils;
+import com.leon.biuvideo.utils.GeneralNotification;
+import com.leon.biuvideo.utils.IDUtils;
 import com.leon.biuvideo.utils.HeroImages;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.LogTip;
+import com.leon.biuvideo.utils.MediaUtils;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 public class HomeFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     private ImageView hero_imageView;
@@ -126,26 +136,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         return 0;
     }
 
+    boolean b;
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.home_imageView_hero:
 
                 //判断是否有网
-                InternetUtils.InternetState internetState = InternetUtils.InternetState(context);
-                switch (internetState) {
-                    case INTERNET_NoAvailable:
-                        Toast.makeText(context, "无网络", Toast.LENGTH_SHORT).show();
-                        break;
-                    case INTERNET_WIFI:
-                        Toast.makeText(context, "WIFI", Toast.LENGTH_SHORT).show();
-                        break;
-                    case INTERNET_MOBILE:
-                        Toast.makeText(context, "移动网络", Toast.LENGTH_SHORT).show();
-                    default:
-                        Toast.makeText(context, "未知类型", Toast.LENGTH_SHORT).show();
-                        break;
-                }
+//                InternetUtils.InternetState internetState = InternetUtils.InternetState(context);
+//                switch (internetState) {
+//                    case INTERNET_NoAvailable:
+//                        Toast.makeText(context, "无网络", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    case INTERNET_WIFI:
+//                        Toast.makeText(context, "WIFI", Toast.LENGTH_SHORT).show();
+//                        break;
+//                    case INTERNET_MOBILE:
+//                        Toast.makeText(context, "移动网络", Toast.LENGTH_SHORT).show();
+//                    default:
+//                        Toast.makeText(context, "未知类型", Toast.LENGTH_SHORT).show();
+//                        break;
+//                }
+
+                ActivityCompat.requestPermissions(requireActivity(), new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 1024);
 
                 //抖一抖！！！
                 break;
@@ -158,7 +172,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
 
                         if (value_bvid.length() != 0) {
 
-                            String bvid = BvidUtils.getBvid(value_bvid);
+                            String bvid = IDUtils.getBvid(value_bvid);
 
                             if (bvid != null) {
                                 Intent intent = new Intent(context, VideoActivity.class);
@@ -208,7 +222,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
 
                         if (value_mid.length() != 0) {
 
-                            long mid = BvidUtils.getMid(value_mid);
+                            long mid = IDUtils.getMid(value_mid);
 
                             if (mid != 0) {
                                 Intent intent = new Intent(context, UpMasterActivity.class);
@@ -232,18 +246,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         spinnerIndex = i;
+    }
 
-        switch (i) {
-            case 0:
-                main_editText_value.setHint(R.string.main_editText_hint);
-                break;
-            case 1:
-                main_editText_value.setHint(R.string.main_editText_hint);
-                break;
-            default:break;
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1024) {
+            for (int i = 0; i < permissions.length; i++) {
+                if (permissions[i].equals("android.permission.WRITE_EXTERNAL_STORAGE") && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(context, "权限" + permissions[i] + "申请成功", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, "权限" + permissions[i] + "申请失败", Toast.LENGTH_SHORT).show();
+                }
+            }
         }
-
-        Toast.makeText(context, "选择了spinner的第" + spinnerIndex + "个", Toast.LENGTH_SHORT).show();
     }
 
     @Override

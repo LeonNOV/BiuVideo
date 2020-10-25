@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class BvidUtils {
+public class IDUtils {
     private static String str = "fZodR9XQDSUm21yCkr6zBqiveYah8bt4xsWpHnJE7jL5VG3guMTKNPAwcF";
     private static int[] ints = {11, 10, 3, 8, 4, 6};
 
