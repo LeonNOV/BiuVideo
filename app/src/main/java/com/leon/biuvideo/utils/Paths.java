@@ -67,4 +67,18 @@ public class Paths {
      *          uid：up主id
      */
     public static String pictureCount = "https://api.vc.bilibili.com/link_draw/v1/doc/upload_count";
+
+    /**
+     * 歌曲基本信息接口
+     *      参数：
+     *          sid：音频id
+     */
+    public static String musicInfo = "https://www.bilibili.com/audio/music-service-c/web/song/info";
+
+    /**
+     *  获取歌曲播放列表
+     *      参数：
+     *          sid：音频sid，必须
+     */
+    public static String musicUrl = "https://www.bilibili.com/audio/music-service-c/web/url";
 }

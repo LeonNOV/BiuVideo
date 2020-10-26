@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
@@ -17,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class UpAudioAdapter extends RecyclerView.Adapter<UpAudioAdapter.ViewHolder> {
+public class UpAudioAdapter extends RecyclerView.Adapter<UpAudioAdapter.ViewHolder> implements View.OnClickListener {
     private List<UpAudio> upAudios;
     private Context context;
 
@@ -30,8 +31,24 @@ public class UpAudioAdapter extends RecyclerView.Adapter<UpAudioAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.up_media_list_view_item, parent, false);
-
         return new ViewHolder(view);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (onItemClickListener != null) {
+            onItemClickListener.onItemClickListener(view, view.getVerticalScrollbarPosition());
+        }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClickListener(View view, int position);
+    }
+
+    private OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -40,6 +57,7 @@ public class UpAudioAdapter extends RecyclerView.Adapter<UpAudioAdapter.ViewHold
 
         //设置封面
         Glide.with(context).load(upAudio.cover + WebpSizes.cover).into(holder.up_media_imageView_cover);
+        holder.up_media_imageView_cover.setOnClickListener(this);
 
         //设置播放时长
         int minute = upAudio.duration / 60;

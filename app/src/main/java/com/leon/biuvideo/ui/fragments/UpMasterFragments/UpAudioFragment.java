@@ -82,6 +82,14 @@ public class UpAudioFragment extends Fragment {
         UpAudioAdapter upAudioAdapter = new UpAudioAdapter(upAudios, context);
         up_audio_recyclerView.setAdapter(upAudioAdapter);
 
+        //设置item点击事件
+        upAudioAdapter.setOnItemClickListener(new UpAudioAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClickListener(View view, int position) {
+                Toast.makeText(context, "点击了" + position, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         //添加加载更多监听事件
         up_smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
