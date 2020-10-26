@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6AAC0"
+    android:background="@color/bilibilib_pink_lite"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".ui.activitys.UpMasterActivity">
@@ -12,41 +11,49 @@
     <ImageView
         android:id="@+id/up_imageView_cover"
         android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_launcher_background"/>
+        android:layout_height="120dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher_background" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/up_circleImageView_face"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_margin="5dp"
-            android:src="@drawable/ic_launcher_background"
-            app:civ_border_color="#FF000000"
-            app:civ_border_width="2dp"/>
-
-        <TextView
-            android:id="@+id/up_textView_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:text="我是name"
-            android:textColor="@color/bilibilib_pink"
-            android:textSize="30sp"
-            android:textStyle="bold"/>
+        android:gravity="center">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
             android:gravity="center"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/up_circleImageView_face"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/ic_launcher_background"
+                app:civ_border_color="#FF000000"
+                app:civ_border_width="2dp" />
+
+            <TextView
+                android:id="@+id/up_textView_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="我是name"
+                android:textColor="@color/bilibilib_pink"
+                android:textSize="23sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <ImageView
@@ -54,20 +61,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/noneColor"
-                android:src="@drawable/no_favorite"/>
+                android:src="@drawable/no_favorite" />
 
             <TextView
                 android:id="@+id/up_textView_favoriteStrState"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="未关注"/>
+                android:text="未关注" />
 
         </LinearLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
-    <com.ms.square.android.expandabletextview.ExpandableTextView
-        xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
+    <com.ms.square.android.expandabletextview.ExpandableTextView xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
         android:id="@+id/up_textView_sign"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -80,9 +86,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:textColor="#666666"
             android:text="介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍"
-            android:textSize="12sp"/>
+            android:textColor="#171717"
+            android:textSize="15sp" />
 
         <ImageButton
             android:id="@id/expand_collapse"
@@ -90,7 +96,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right|bottom"
             android:background="@android:color/transparent"
-            android:padding="10dp"/>
+            android:padding="10dp" />
     </com.ms.square.android.expandabletextview.ExpandableTextView>
 
     <!--<LinearLayout
@@ -121,43 +127,48 @@
 
     </LinearLayout>-->
 
-    <LinearLayout
+    <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:stretchColumns="*">
 
-        <TextView
-            android:id="@+id/up_textView_video"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/up_item_videos"
-            android:textColor="@color/bilibilib_pink"
-            android:textSize="30sp"/>
+        <TableRow>
 
-        <TextView
-            android:id="@+id/up_textView_audio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:text="@string/up_item_audios"
-            android:textColor="@color/normal"
-            android:textSize="30sp"/>
+            <TextView
+                android:id="@+id/up_textView_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/up_item_videos"
+                android:textColor="@color/bilibilib_pink"
+                android:textSize="30sp" />
 
-        <TextView
-            android:id="@+id/up_textView_picture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:text="@string/up_item_pictures"
-            android:textColor="@color/normal"
-            android:textSize="30sp"/>
-    </LinearLayout>
+            <TextView
+                android:id="@+id/up_textView_audio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/up_item_audios"
+                android:textColor="@color/normal"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/up_textView_picture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/up_item_pictures"
+                android:textColor="@color/normal"
+                android:textSize="30sp" />
+
+        </TableRow>
+
+    </TableLayout>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/up_viewPage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

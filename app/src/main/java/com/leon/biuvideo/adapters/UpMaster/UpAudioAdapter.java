@@ -12,13 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.upMasterBean.UpAudio;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.WebpSizes;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class UpAudioAdapter extends RecyclerView.Adapter<UpAudioAdapter.ViewHolder> implements View.OnClickListener {
+public class UpAudioAdapter extends RecyclerView.Adapter<UpAudioAdapter.ViewHolder> {
     private List<UpAudio> upAudios;
     private Context context;
 
@@ -35,29 +36,11 @@ public class UpAudioAdapter extends RecyclerView.Adapter<UpAudioAdapter.ViewHold
     }
 
     @Override
-    public void onClick(View view) {
-        if (onItemClickListener != null) {
-            onItemClickListener.onItemClickListener(view, view.getVerticalScrollbarPosition());
-        }
-    }
-
-    public interface OnItemClickListener {
-        void onItemClickListener(View view, int position);
-    }
-
-    private OnItemClickListener onItemClickListener;
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
-
-    @Override
     public void onBindViewHolder(@NonNull UpAudioAdapter.ViewHolder holder, int position) {
         UpAudio upAudio = upAudios.get(position);
 
         //设置封面
         Glide.with(context).load(upAudio.cover + WebpSizes.cover).into(holder.up_media_imageView_cover);
-        holder.up_media_imageView_cover.setOnClickListener(this);
 
         //设置播放时长
         int minute = upAudio.duration / 60;
@@ -68,13 +51,23 @@ public class UpAudioAdapter extends RecyclerView.Adapter<UpAudioAdapter.ViewHold
         holder.up_media_textView_isUnionmedia.setVisibility(View.INVISIBLE);
 
         //设置播放次数
-        holder.up_media_textView_play.setText(upAudio.play + "次播放");
+        holder.up_media_textView_play.setText(ValueUtils.generateCN(upAudio.play));
 
         //设置上传日期
         holder.up_media_textView_ctime.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(upAudio.ctime)));
 
         //设置标题
         holder.up_media_textView_title.setText(upAudio.title);
+    }
+
+    public interface OnItemClickListener {
+        void onItemClickListener(View view, int position);
+    }
+
+    private OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -96,6 +89,16 @@ public class UpAudioAdapter extends RecyclerView.Adapter<UpAudioAdapter.ViewHold
 
             up_media_textView_isUnionmedia = itemView.findViewById(R.id.up_media_textView_isUnionmedia);
             up_media_imageView_cover = itemView.findViewById(R.id.up_media_imageView_cover);
+            up_media_imageView_cover.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    if (onItemClickListener != null) {
+                        onItemClickListener.onItemClickListener(v, getAdapterPosition());
+                    }
+                }
+            });
+
             up_media_textView_mediaLength = itemView.findViewById(R.id.up_media_textView_mediaLength);
             up_media_textView_title = itemView.findViewById(R.id.up_media_textView_title);
             up_media_textView_play = itemView.findViewById(R.id.up_media_textView_play);

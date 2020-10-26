@@ -7,6 +7,7 @@ import com.leon.biuvideo.beans.upMasterBean.UpPicture;
 import com.leon.biuvideo.beans.upMasterBean.UpVideo;
 import com.leon.biuvideo.utils.IDUtils;
 import com.leon.biuvideo.utils.MediaUtils;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpAudioParseUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpPictureParseUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpVideoParseUtils;
@@ -107,31 +108,9 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void thredTest() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                forTest1(1);
-            }
-        }).start();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                forTest2(2);
-            }
-        }).start();
-    }
-
-    private void forTest1(int num) {
-        for (int i = 0; i < 10; i++) {
-            System.out.println("线程" + num + "："  + i);
-        }
-    }
-
-    private void forTest2(int num) {
-        for (int i = 0; i < 10; i++) {
-            System.out.println("线程" + num + "："  + i);
-        }
+    public void numTest() {
+        //12345.6万
+        String s = ValueUtils.generateCN(12345678);
+        System.out.println(s);
     }
 }

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.upMasterBean.UpVideo;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.WebpSizes;
 
 import java.text.SimpleDateFormat;
@@ -44,7 +45,7 @@ public class UpVideoAdapter extends RecyclerView.Adapter {
         UpVideo upVideo = upVideos.get(position);
 
         //设置封面
-        Glide.with(context).load(upVideo.cover + WebpSizes.cover).into(innerHolder.up_media_imageView_cover);
+        Glide.with(context).load("http:" + upVideo.cover + WebpSizes.cover).into(innerHolder.up_media_imageView_cover);
 
         //判断是否是和其他人进行合作
         //1为合作
@@ -60,13 +61,23 @@ public class UpVideoAdapter extends RecyclerView.Adapter {
         innerHolder.up_media_textView_mediaLength.setText(upVideo.length);
 
         //设置播放次数
-        innerHolder.up_media_textView_play.setText(upVideo.play + "次播放");
+        innerHolder.up_media_textView_play.setText(ValueUtils.generateCN(upVideo.play));
 
         //设置上传日期
         innerHolder.up_media_textView_ctime.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(upVideo.create * 1000)));
 
         //设置标题部分
         innerHolder.up_media_textView_title.setText(upVideo.title);
+    }
+
+    public interface OnItemClickListener {
+        void onItemClickListener(View view, int position);
+    }
+
+    private OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -88,6 +99,16 @@ public class UpVideoAdapter extends RecyclerView.Adapter {
             super(itemView);
 
             up_media_imageView_cover = itemView.findViewById(R.id.up_media_imageView_cover);
+            up_media_imageView_cover.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    if (onItemClickListener != null) {
+                        onItemClickListener.onItemClickListener(v, getAdapterPosition());
+                    }
+                }
+            });
+
             up_media_textView_isUnionmedia = itemView.findViewById(R.id.up_media_textView_isUnionmedia);
             up_media_textView_mediaLength = itemView.findViewById(R.id.up_media_textView_mediaLength);
             up_media_textView_title = itemView.findViewById(R.id.up_media_textView_title);

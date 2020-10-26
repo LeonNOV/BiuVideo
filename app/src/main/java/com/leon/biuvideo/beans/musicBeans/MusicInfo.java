@@ -1,13 +1,17 @@
 package com.leon.biuvideo.beans.musicBeans;
 
+import java.util.List;
+
 public class MusicInfo {
+    public long uid;
+    public String uname;
     public String bvid;
     public long aid;
     public long cid;
-    public String author;
+    public List<String> authors;
     public String cover;
+    public int duration;//长度（秒）
     public long passtime;//上传时间（秒）
-    public String uname;
     public String title;
     public String intro;//简介
     public String lyric;//歌词地址

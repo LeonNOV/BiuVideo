@@ -76,7 +76,7 @@ public class Paths {
     public static String musicInfo = "https://www.bilibili.com/audio/music-service-c/web/song/info";
 
     /**
-     *  获取歌曲播放列表
+     *  获取歌曲链接
      *      参数：
      *          sid：音频sid，必须
      */

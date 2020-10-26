@@ -1,6 +1,7 @@
 package com.leon.biuvideo.ui.fragments.UpMasterFragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UpMaster.UpVideoAdapter;
 import com.leon.biuvideo.beans.upMasterBean.UpVideo;
+import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.utils.LogTip;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpVideoParseUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -34,6 +36,7 @@ public class UpVideoFragment extends Fragment {
 
     //记录数据是否已全部获取完
     private boolean dataState;
+
     private int valueCount;
     private int total = -1;
 
@@ -85,6 +88,19 @@ public class UpVideoFragment extends Fragment {
 
         UpVideoAdapter upVideoAdapter = new UpVideoAdapter(upVideos, context);
         up_video_recyclerView.setAdapter(upVideoAdapter);
+        upVideoAdapter.setOnItemClickListener(new UpVideoAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClickListener(View view, int position) {
+                //获取对应的bvid
+                UpVideo upVideo = upVideos.get(position);
+                String bvid = upVideo.bvid;
+
+                //跳转到VideoActivity
+                Intent intent = new Intent(context, VideoActivity.class);
+                intent.putExtra("bvid", bvid);
+                startActivity(intent);
+            }
+        });
 
         //添加加载更多监听事件
         up_smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {

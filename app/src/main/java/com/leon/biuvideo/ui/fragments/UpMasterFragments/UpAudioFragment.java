@@ -1,6 +1,7 @@
 package com.leon.biuvideo.ui.fragments.UpMasterFragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UpMaster.UpAudioAdapter;
 import com.leon.biuvideo.beans.upMasterBean.UpAudio;
+import com.leon.biuvideo.ui.activitys.UpSongActivity;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpAudioParseUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -86,7 +88,11 @@ public class UpAudioFragment extends Fragment {
         upAudioAdapter.setOnItemClickListener(new UpAudioAdapter.OnItemClickListener() {
             @Override
             public void onItemClickListener(View view, int position) {
-                Toast.makeText(context, "点击了" + position, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, UpSongActivity.class);
+
+                long sid = upAudios.get(position).sid;
+                intent.putExtra("sid", sid);
+                startActivity(intent);
             }
         });
 

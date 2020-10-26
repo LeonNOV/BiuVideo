@@ -7,12 +7,13 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
+        android:background="#F3A1B9"
         android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/up_media_imageView_cover"
-            android:layout_width="250dp"
-            android:layout_height="160dp"
+            android:layout_width="230dp"
+            android:layout_height="150dp"
             android:scaleType="fitXY"
             android:src="@drawable/ic_launcher_background" />
 
@@ -50,23 +51,56 @@
             android:text="介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍"
             android:textSize="17sp" />
 
-        <TextView
-            android:id="@+id/up_media_textView_play"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/up_media_imageView_cover"
-            android:layout_alignStart="@id/up_media_imageView_cover"
-            android:text="1502130次播放"
-            android:textSize="15sp" />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_alignBottom="@id/up_media_imageView_cover"
+            android:layout_toEndOf="@id/up_media_imageView_cover">
 
-        <TextView
-            android:id="@+id/up_media_textView_ctime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/up_media_imageView_cover"
-            android:layout_alignEnd="@id/up_media_imageView_cover"
-            android:text="2020-10-21 19:15"
-            android:textSize="15sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/up_media_imageView_play"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_video_play"/>
+
+                <TextView
+                    android:id="@+id/up_media_textView_play"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginStart="5dp"
+                    android:text="1502130次播放"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_video_time"/>
+                <TextView
+                    android:id="@+id/up_media_textView_ctime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2020-10-21 19:15"
+                    android:layout_marginStart="5dp"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </RelativeLayout>
 

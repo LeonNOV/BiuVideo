@@ -1,5 +1,6 @@
 package com.leon.biuvideo.ui.fragments;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +9,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.*;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -66,6 +70,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     private void initView() {
         hero_imageView = view.findViewById(R.id.home_imageView_hero);
         hero_imageView.setOnClickListener(this);
+
 
         home_spinner = view.findViewById(R.id.home_spinner);
         home_spinner.setOnItemSelectedListener(this);
@@ -135,8 +140,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
 
         return 0;
     }
-
-    boolean b;
 
     @Override
     public void onClick(View view) {
