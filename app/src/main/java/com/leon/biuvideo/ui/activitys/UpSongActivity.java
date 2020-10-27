@@ -21,6 +21,9 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.musicBeans.MusicInfo;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.resourcesParseUtils.MusicParseUtils;
+import com.leon.biuvideo.utils.resourcesParseUtils.MusicUrlParseUtils;
+
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -64,7 +67,10 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
 
     //music信息
     private MusicInfo musicInfo;
-    
+
+    //music文件
+    Map<String, Object> musicUrl;
+
     //music状态：0：停止、1：暂停、2：继续
     private int musicState = 0;
     
@@ -93,7 +99,11 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
         long sid = intent.getLongExtra("sid", -1);
 
         if (sid != -1) {
+            //获取music信息
             musicInfo = MusicParseUtils.parseMusic(sid);
+
+            //获取music文件
+            musicUrl = MusicUrlParseUtils.parseMusicUrl(sid);
         } else {
             Toast.makeText(this, "获取数据失败~~~", Toast.LENGTH_SHORT).show();
             finish();
