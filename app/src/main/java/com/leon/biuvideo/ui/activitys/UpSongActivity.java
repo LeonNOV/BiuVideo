@@ -1,12 +1,18 @@
 package com.leon.biuvideo.ui.activitys;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.ObjectAnimator;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -20,12 +26,11 @@ import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.musicBeans.MusicInfo;
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
+import com.leon.biuvideo.service.MusicService;
 import com.leon.biuvideo.ui.dialogs.MusicListDialog;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.resourcesParseUtils.MusicParseUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.MusicUrlParseUtils;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +38,7 @@ import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class UpSongActivity extends AppCompatActivity implements View.OnClickListener {
+public class UpSongActivity extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     //顶部控件
     private Toolbar music_toolBar;
 
@@ -74,27 +79,41 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
     //music信息
     private MusicInfo musicInfo;
 
-    //music文件
-    Map<String, Object> musicUrl;
+    private Map<String, Object> musicUrl;
 
     //music状态：0：停止、1：暂停、2：继续
     private int musicState = 0;
-    
+
     //旋转动画
     private ObjectAnimator rotation;
 
-    //歌词显示的状态；0：显示、1：隐藏
+    //歌词显示状态
     private int lyricsState = 0;
+
+    //控制music
+    private MusicService.MusicControl musicControl;
+
+    private Intent musicIntent;
+
+    //服务连接对象
+    private MusicConnection musicConnection;
+
+    //消息处理器
+    public static Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_up_song);
 
         init();
+
+        //开启服务
+        startService(musicIntent);
+
         initView();
         initValue();
     }
@@ -114,6 +133,41 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
             Toast.makeText(this, "获取数据失败~~~", Toast.LENGTH_SHORT).show();
             finish();
         }
+
+        musicConnection = new MusicConnection();
+
+        musicIntent = new Intent(this, MusicService.class);
+
+        //处理消息
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                Bundle bundle = msg.getData();
+
+                //获取总长度
+                int duration = bundle.getInt("duration");
+
+                //获取当前进度
+                int currentPosition = bundle.getInt("currentPosition");
+
+                //设置进度条最大值
+                music_seekBar.setMax(duration);
+
+                //设置进度条当前进度
+                music_seekBar.setProgress(currentPosition);
+
+                int minute = currentPosition / 1000 / 60;
+                int second = currentPosition / 1000 % 60;
+
+                String minuteStr = minute < 10 ? "0" + minute : minute + "";
+                String secondStr = second < 10 ? "0" + second : second + "";
+
+                //设置时间进度
+                music_textView_nowProgress.setText(minuteStr + ":" + secondStr);
+
+                return true;
+            }
+        });
     }
 
     private void initView() {
@@ -151,6 +205,7 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
         music_textView_length = findViewById(R.id.music_textView_length);
 
         music_seekBar = findViewById(R.id.music_seekBar);
+        music_seekBar.setOnSeekBarChangeListener(this);
 
         music_imageView_up = findViewById(R.id.music_imageView_up);
         music_imageView_up.setOnClickListener(this);
@@ -250,29 +305,101 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
                         rotation.start();
                         musicState = 1;
                         music_imageView_control.setImageResource(R.drawable.music_icon_play);
+
+
+                        List<String> urls = (List<String>) musicUrl.get("urls");
+
+                        //设置播放地址并播放音乐
+                        musicControl.play(urls.get(0));
+
                         break;
                     case 1:
                         //动画暂停
                         rotation.pause();
                         musicState = 2;
                         music_imageView_control.setImageResource(R.drawable.music_icon_pause);
+
+                        //暂停音乐
+                        musicControl.pause();
+
                         break;
                     case 2:
                         //动画继续
                         rotation.resume();
                         musicState = 1;
                         music_imageView_control.setImageResource(R.drawable.music_icon_play);
+
+                        //继续播放音乐
+                        musicControl.continuePlay();
+
                         break;
                     default:
                         break;
                 }
-                
+
                 break;
             case R.id.music_imageView_next:
                 Toast.makeText(this, "点击了\"下一曲\"", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
+        }
+    }
+
+    //停止服务
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbind();
+    }
+
+    //解绑服务
+    public void unbind() {
+        musicControl.pause();
+
+        //解绑服务
+        unbindService(musicConnection);
+
+        //停止服务
+        stopService(musicIntent);
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if (progress == seekBar.getMax()) {
+            music_imageView_control.setImageResource(R.drawable.music_icon_pause);
+            rotation.pause();
+        }
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        int progress = seekBar.getProgress();
+
+        musicControl.seekPlayProgress(progress);
+    }
+
+    //服务连接类
+    class MusicConnection implements ServiceConnection {
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            musicControl = (MusicService.MusicControl) service;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
         }
     }
 }

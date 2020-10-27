@@ -15,6 +15,13 @@ import java.util.List;
 import java.util.Map;
 
 public class MusicUrlParseUtils {
+
+    /**
+     * 获取音频播放地址
+     *
+     * @param sid   音频ID
+     * @return  返回一个结果集
+     */
     public static Map<String, Object> parseMusicUrl(long sid) {
         Map<String, Object> values = new HashMap<>();
         values.put("sid", sid);

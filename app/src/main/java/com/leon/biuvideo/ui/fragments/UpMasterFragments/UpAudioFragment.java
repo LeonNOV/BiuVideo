@@ -20,8 +20,6 @@ import com.leon.biuvideo.beans.upMasterBean.UpAudio;
 import com.leon.biuvideo.ui.activitys.UpSongActivity;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpAudioParseUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.List;
 
