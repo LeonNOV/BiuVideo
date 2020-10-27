@@ -1,9 +1,10 @@
 package com.leon.biuvideo.ui.dialogs;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -46,6 +47,13 @@ public class AboutDialog extends AlertDialog {
 
         aboutDialog_recyclerView.setLayoutManager(layoutManager);
         aboutDialog_recyclerView.setAdapter(dialogAdapter);
+
+        //获取window
+        Window window = this.getWindow();
+
+        //添加缩放动画
+        window.setGravity(Gravity.RIGHT | Gravity.TOP); //对话框显示的位置
+        window.setWindowAnimations(R.style.music_list_dialog);
     }
 
     private void initEvent() {

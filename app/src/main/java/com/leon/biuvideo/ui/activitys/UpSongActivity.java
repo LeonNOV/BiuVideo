@@ -19,10 +19,16 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.musicBeans.MusicInfo;
+import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
+import com.leon.biuvideo.ui.dialogs.MusicListDialog;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.resourcesParseUtils.MusicParseUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.MusicUrlParseUtils;
 
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -38,7 +44,7 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
     private CircleImageView music_circleImageView_cover;
 
     //lyrics
-    private RecyclerView music_recyclerView_lyrics;
+    private TextView music_lyrics;
 
     //喜欢按钮
     private ImageView music_imageView_addFavorite;
@@ -121,7 +127,7 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
         music_circleImageView_cover = findViewById(R.id.music_circleImageView_cover);
         music_circleImageView_cover.setOnClickListener(this);
 
-        music_recyclerView_lyrics = findViewById(R.id.music_recyclerView_lyrics);
+        music_lyrics = findViewById(R.id.music_lyrics);
 
         //设置旋转动画
         rotation = ObjectAnimator.ofFloat(music_circleImageView_cover, "rotation", 0.0f, 360.0f);
@@ -189,17 +195,40 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.music_imageView_musicList:
                 Toast.makeText(this, "点击了播放列表", Toast.LENGTH_SHORT).show();
+
+                //获取播放列表数据
+                List<MusicPlayList> musicPlayLists = new ArrayList<>();
+
+
+                for (int i = 1; i <= 10; i++) {
+                    MusicPlayList musicPlayList = new MusicPlayList();
+                    musicPlayList.musicName = "歌曲名称" + i;
+                    musicPlayList.musicAuthor = "作者" + i;
+
+                    musicPlayLists.add(musicPlayList);
+                }
+
+                MusicListDialog musicListDialog = new MusicListDialog(UpSongActivity.this, musicPlayLists);
+                musicListDialog.show();
+
+                musicListDialog.setOnDialogClickListener(new MusicListDialog.OnDialogClickListener() {
+                    @Override
+                    public void onCloseDialog() {
+                        musicListDialog.dismiss();
+                    }
+                });
+
                 break;
             case R.id.item_imageView_cover:
                 Toast.makeText(this, "点击了music封面", Toast.LENGTH_SHORT).show();
 
                 if (lyricsState == 0) {
                     music_circleImageView_cover.setVisibility(View.INVISIBLE);
-                    music_recyclerView_lyrics.setVisibility(View.VISIBLE);
+                    music_lyrics.setVisibility(View.VISIBLE);
                     lyricsState = 1;
                 } else {
                     music_circleImageView_cover.setVisibility(View.VISIBLE);
-                    music_recyclerView_lyrics.setVisibility(View.INVISIBLE);
+                    music_lyrics.setVisibility(View.INVISIBLE);
                     lyricsState = 0;
                 }
 

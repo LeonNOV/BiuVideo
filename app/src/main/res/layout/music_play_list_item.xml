@@ -1,29 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:background="#74474747"
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="MUSIC_NAME" />
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:id="@+id/music_relativeLayout">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=" - " />
+        <TextView
+            android:id="@+id/music_textView_playList_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:text="MUSIC_NAME"
+            android:textSize="25sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:text="AUTHOR" />
+        <TextView
+            android:id="@+id/music_textView_playList_separate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/music_textView_playList_name"
+            android:text=" - "
+            android:textSize="20sp" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/music_textView_playList_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/music_textView_playList_separate"
+            android:text="AUTawdawdawdadawdawdHOR"
+            android:maxLength="10"
+            android:ellipsize="end"
+            android:textSize="18sp" />
 
+        <ImageView
+            android:id="@+id/music_imageView_playList_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/icon_delete" />
 
-</LinearLayout>
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

@@ -12,4 +12,6 @@
     <dimen name="hero_width">96dp</dimen>
     <dimen name="hero_height">96dp</dimen>
     <!-- hero尺寸 -->
+
+    <string name="close">关闭</string>
 </resources>

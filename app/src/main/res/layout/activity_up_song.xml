@@ -54,11 +54,13 @@
             app:civ_border_overlay="true"
             app:civ_border_width="2dp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/music_recyclerView_lyrics"
+        <TextView
+            android:id="@+id/music_lyrics"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="invisible"
             android:layout_centerInParent="true"
+            android:text="歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词"
             android:layout_marginTop="30dp" />
 
     </RelativeLayout>
