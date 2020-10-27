@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    app:cardCornerRadius="8dp"
     app:cardUseCompatPadding="true">
 
     <RelativeLayout
@@ -15,6 +16,7 @@
             android:id="@+id/favorite_circleImageView_face"
             android:layout_width="96dp"
             android:layout_height="96dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:src="@drawable/ic_launcher_background" />
@@ -22,7 +24,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
             android:layout_toEndOf="@id/favorite_circleImageView_face"
             android:orientation="vertical">

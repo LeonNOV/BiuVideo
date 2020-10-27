@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -52,8 +53,16 @@ public class AboutDialog extends AlertDialog {
         Window window = this.getWindow();
 
         //添加缩放动画
-        window.setGravity(Gravity.RIGHT | Gravity.TOP); //对话框显示的位置
         window.setWindowAnimations(R.style.music_list_dialog);
+        window.setBackgroundDrawableResource(android.R.color.transparent);
+
+        //获取屏幕宽高
+        int widthPixels = context.getResources().getDisplayMetrics().widthPixels;
+        int heightPixels = context.getResources().getDisplayMetrics().heightPixels;
+
+        WindowManager.LayoutParams attributes = window.getAttributes();
+        attributes.width = (int) (widthPixels * 0.8f);
+        attributes.height = (int) (heightPixels * 0.8f);
     }
 
     private void initEvent() {
