@@ -85,42 +85,33 @@ public class UpAudioFragment extends Fragment {
         up_audio_recyclerView.setAdapter(upAudioAdapter);
 
         //设置item点击事件
-        upAudioAdapter.setOnItemClickListener(new UpAudioAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClickListener(View view, int position) {
-                Intent intent = new Intent(context, UpSongActivity.class);
+        upAudioAdapter.setOnItemClickListener((view, position) -> {
+            Intent intent = new Intent(context, UpSongActivity.class);
 
-                long sid = upAudios.get(position).sid;
-                intent.putExtra("sid", sid);
-                startActivity(intent);
-            }
+            long sid = upAudios.get(position).sid;
+            intent.putExtra("sid", sid);
+            startActivity(intent);
         });
 
         //添加加载更多监听事件
-        up_smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout refreshLayout) {
+        up_smartRefresh.setOnLoadMoreListener(refreshLayout -> {
 
-                if (dataState) {
-                    pageNum++;
+            if (dataState) {
+                pageNum++;
 
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            //获取新数据
-                            List<UpAudio> addOns = getUpAudios(mid, pageNum);
+                new Handler().postDelayed(() -> {
+                    //获取新数据
+                    List<UpAudio> addOns = getUpAudios(mid, pageNum);
 
-                            //添加新数据
-                            upAudioAdapter.refresh(addOns);
-                        }
-                    }, 2000);
-                } else {
-                    Toast.makeText(context, "只有这么多数据了~~~", Toast.LENGTH_SHORT).show();
-                }
-
-                //结束加载更多动画
-                up_smartRefresh.finishLoadMore();
+                    //添加新数据
+                    upAudioAdapter.refresh(addOns);
+                }, 2000);
+            } else {
+                Toast.makeText(context, "只有这么多数据了~~~", Toast.LENGTH_SHORT).show();
             }
+
+            //结束加载更多动画
+            up_smartRefresh.finishLoadMore();
         });
     }
 

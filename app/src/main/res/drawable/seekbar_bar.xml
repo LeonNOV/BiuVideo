@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape>
+            <solid android:color="#A39D9D" />
+        </shape>
+    </item>
+    <item>
+        <clip>
+            <shape>
+                <solid android:color="#FFFFFFFF" />
+            </shape>
+        </clip>
+    </item>
+    <item>
+        <clip>
+            <shape>
+                <solid android:color="@color/bilibilib_pink" />
+            </shape>
+        </clip>
+    </item>
+
+</layer-list>

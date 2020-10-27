@@ -14,8 +14,8 @@
         android:textColor="#000"
         android:textSize="30sp" />
 
-    <ListView
-        android:id="@+id/favorite_listView"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favorite_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

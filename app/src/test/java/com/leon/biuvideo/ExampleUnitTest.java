@@ -1,20 +1,16 @@
 package com.leon.biuvideo;
 
-import android.os.Environment;
-
 import com.leon.biuvideo.beans.upMasterBean.UpAudio;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
 import com.leon.biuvideo.beans.upMasterBean.UpVideo;
 import com.leon.biuvideo.utils.IDUtils;
-import com.leon.biuvideo.utils.MediaUtils;
-import com.leon.biuvideo.utils.ValueUtils;
+import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpAudioParseUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpPictureParseUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpVideoParseUtils;
 
 import org.junit.Test;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -110,7 +106,7 @@ public class ExampleUnitTest {
     @Test
     public void numTest() {
         //12345.6万
-        String s = ValueUtils.generateCN(12345678);
+        String s = ValueFormat.generateCN(12345678);
         System.out.println(s);
     }
 }

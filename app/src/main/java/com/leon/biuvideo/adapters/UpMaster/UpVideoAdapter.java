@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.upMasterBean.UpVideo;
-import com.leon.biuvideo.utils.ValueUtils;
+import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.WebpSizes;
 
 import java.text.SimpleDateFormat;
@@ -61,7 +61,7 @@ public class UpVideoAdapter extends RecyclerView.Adapter {
         innerHolder.up_media_textView_mediaLength.setText(upVideo.length);
 
         //设置播放次数
-        innerHolder.up_media_textView_play.setText(ValueUtils.generateCN(upVideo.play));
+        innerHolder.up_media_textView_play.setText(ValueFormat.generateCN(upVideo.play));
 
         //设置上传日期
         innerHolder.up_media_textView_ctime.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(upVideo.create * 1000)));

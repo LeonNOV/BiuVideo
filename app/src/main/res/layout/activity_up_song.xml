@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#FFFFFF"
+    android:orientation="vertical"
     tools:context=".ui.activitys.UpSongActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -22,40 +22,46 @@
                 android:id="@+id/music_imageView_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
                 android:src="@drawable/icon_back" />
 
             <ImageView
                 android:id="@+id/music_imageView_musicList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
                 android:src="@drawable/music_icon_playlist" />
 
         </RelativeLayout>
 
     </androidx.appcompat.widget.Toolbar>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/music_linearLayout_cover"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="115dp"
-        android:gravity="center"
+        android:layout_height="400dp"
         android:orientation="vertical">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/music_circleImageView_cover"
             android:layout_width="200dp"
             android:layout_height="200dp"
+            android:layout_centerInParent="true"
             android:src="@drawable/ic_launcher_background"
             app:civ_border_color="#979797"
             app:civ_border_overlay="true"
             app:civ_border_width="2dp" />
 
-    </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/music_recyclerView_lyrics"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="30dp" />
+
+    </RelativeLayout>
 
     <TableLayout
         android:layout_width="match_parent"
@@ -63,7 +69,7 @@
         android:orientation="horizontal"
         android:stretchColumns="*">
 
-        <TableRow android:layout_marginTop="120dp">
+        <TableRow android:layout_marginTop="60dp">
 
             <ImageView
                 android:id="@+id/music_imageView_addFavorite"
@@ -87,8 +93,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:textColor="#707070"
-                    android:text="1234" />
+                    android:text="1234"
+                    android:textColor="#707070" />
 
             </LinearLayout>
 
@@ -108,8 +114,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:textColor="#707070"
-                    android:text="123" />
+                    android:text="123"
+                    android:textColor="#707070" />
 
             </LinearLayout>
 
@@ -130,8 +136,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:textColor="#707070"
-                    android:text="4561" />
+                    android:text="4561"
+                    android:textColor="#707070" />
 
             </LinearLayout>
 
@@ -152,31 +158,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:textColor="#707070"
-                    android:text="123" />
+                    android:text="123"
+                    android:textColor="#707070" />
 
             </LinearLayout>
 
-            <LinearLayout
+            <ImageView
+                android:id="@+id/music_imageView_download"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/icon_share" />
-
-                <TextView
-                    android:id="@+id/music_imageView_share"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textColor="#707070"
-                    android:text="123" />
-
-            </LinearLayout>
+                android:src="@drawable/icon_download" />
 
         </TableRow>
 
@@ -193,22 +184,26 @@
             android:id="@+id/music_textView_nowProgress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#515151"
-            android:text="01:23"/>
+            android:gravity="center"
+            android:text="01:23"
+            android:textColor="#515151" />
 
         <SeekBar
             android:id="@+id/music_seekBar"
             android:layout_width="300dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginEnd="3dp"
+            android:maxHeight="3.0dp"
+            android:minHeight="3.0dp"
+            android:progressDrawable="@drawable/seekbar_bar" />
 
         <TextView
             android:id="@+id/music_textView_length"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#515151"
-            android:text="03:45"/>
+            android:text="03:45"
+            android:textColor="#515151" />
 
     </LinearLayout>
 

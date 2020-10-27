@@ -6,10 +6,13 @@
 ## 📘开发日志
 
 ### 2020/10/27
-- 音频界面及数据的获取已完成，FavoriteFragment的监听事件还未修改完
-- "终于"想起来加入了README了:)
 - Favorite的表控件需要更改为RecyclerView（到现在为止所有的表控件都为RecyclerView）
 - 修改的话明天再说，ListView太垃圾了
+- Favorite的表控件已更改为RecyclerView
+
+### 2020/10/27
+- 音频界面及数据的获取已完成，FavoriteFragment的监听事件还未修改完
+- "终于"想起来加入了README了:)
 
 ### 2020/10/26
 - 缓存视频功能已完成，所有的hero都已更换为Vector类型文件

@@ -9,15 +9,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.FavoriteAdapter;
 import com.leon.biuvideo.beans.Favorite;
@@ -27,8 +27,8 @@ import com.leon.biuvideo.utils.SQLiteHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FavoriteFragment extends Fragment implements AdapterView.OnItemClickListener {
-    private ListView favorite_listView;
+public class FavoriteFragment extends Fragment {
+    private RecyclerView favorite_recyclerView;
     private TextView favorite_textView_noDataStr;
     private Context context;
 
@@ -55,8 +55,7 @@ public class FavoriteFragment extends Fragment implements AdapterView.OnItemClic
     }
 
     private void initView() {
-        favorite_listView = view.findViewById(R.id.favorite_listView);
-        favorite_listView.setOnItemClickListener(this);
+        favorite_recyclerView = view.findViewById(R.id.favorite_recyclerView);
 
         favorite_textView_noDataStr = view.findViewById(R.id.favorite_textView_noDataStr);
     }
@@ -68,30 +67,33 @@ public class FavoriteFragment extends Fragment implements AdapterView.OnItemClic
         //判断数据是否为0
         if (favorites.size() == 0) {
             favorite_textView_noDataStr.setVisibility(View.VISIBLE);
-            favorite_listView.setVisibility(View.INVISIBLE);
+            favorite_recyclerView.setVisibility(View.INVISIBLE);
         } else {
             favorite_textView_noDataStr.setVisibility(View.INVISIBLE);
-            favorite_listView.setVisibility(View.VISIBLE);
+            favorite_recyclerView.setVisibility(View.VISIBLE);
         }
 
         favoriteAdapter = new FavoriteAdapter(favorites, context);
-        favorite_listView.setAdapter(favoriteAdapter);
-    }
+        favoriteAdapter.setOnItemClickListener((view, position) -> {
+            switch (view.getId()) {
+                case R.id.favorite_circleImageView_face:
+                    //跳转到UpMasterActivity中
+                    Intent intent = new Intent(context, UpMasterActivity.class);
+                    intent.putExtra("mid", favorites.get(position).mid);
+                    startActivity(intent);
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        switch (view.getId()) {
-            case R.id.favorite_circleImageView_face:
-                //跳转到UpMasterActivity中
-                Intent intent = new Intent(context, UpMasterActivity.class);
-                intent.putExtra("mid", favorites.get(position).mid);
-                startActivity(intent);
+                    break;
+                case R.id.favorite_imageView_cancel_favoriteIcon:
+                    removeFavorite(position);
+                    break;
+                default:
+                    break;
+            }
+        });
 
-                break;
-            case R.id.favorite_imageView_cancel_favoriteIcon:
-                removeFavorite(position);
-                break;
-        }
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        favorite_recyclerView.setLayoutManager(layoutManager);
+        favorite_recyclerView.setAdapter(favoriteAdapter);
     }
 
     //获取favorite_up库中isFavorite为1的数据

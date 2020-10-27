@@ -2,6 +2,7 @@ package com.leon.biuvideo.ui.activitys;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
@@ -18,7 +19,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.musicBeans.MusicInfo;
-import com.leon.biuvideo.utils.ValueUtils;
+import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.resourcesParseUtils.MusicParseUtils;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -33,6 +34,9 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
     //music封面
     private CircleImageView music_circleImageView_cover;
 
+    //lyrics
+    private RecyclerView music_recyclerView_lyrics;
+
     //喜欢按钮
     private ImageView music_imageView_addFavorite;
 
@@ -41,8 +45,10 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
             music_imageView_play,
             music_imageView_coin,
             music_imageView_comment,
-            music_imageView_favorite,
-            music_imageView_share;
+            music_imageView_favorite;
+
+    //缓存歌曲
+    private ImageView music_imageView_download;
 
     //当前播放进度、总长度
     private TextView music_textView_nowProgress, music_textView_length;
@@ -64,6 +70,9 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
     
     //旋转动画
     private ObjectAnimator rotation;
+
+    //歌词显示的状态；0：显示、1：隐藏
+    private int lyricsState = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +111,8 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
         music_circleImageView_cover = findViewById(R.id.music_circleImageView_cover);
         music_circleImageView_cover.setOnClickListener(this);
 
+        music_recyclerView_lyrics = findViewById(R.id.music_recyclerView_lyrics);
+
         //设置旋转动画
         rotation = ObjectAnimator.ofFloat(music_circleImageView_cover, "rotation", 0.0f, 360.0f);
         rotation.setDuration(45000);//一圈的时间
@@ -116,7 +127,9 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
         music_imageView_coin = findViewById(R.id.music_imageView_coin);
         music_imageView_comment = findViewById(R.id.music_imageView_comment);
         music_imageView_favorite = findViewById(R.id.music_imageView_favorite);
-        music_imageView_share = findViewById(R.id.music_imageView_share);
+
+        music_imageView_download = findViewById(R.id.music_imageView_download);
+        music_imageView_download.setOnClickListener(this);
 
         music_textView_nowProgress = findViewById(R.id.music_textView_nowProgress);
         music_textView_length = findViewById(R.id.music_textView_length);
@@ -140,29 +153,22 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
         //判断是否在播放列表中
 
         //设置播放量
-        music_imageView_play.setText(ValueUtils.generateCN(musicInfo.play));
+        music_imageView_play.setText(ValueFormat.generateCN(musicInfo.play));
 
         //设置投币数
-        music_imageView_coin.setText(ValueUtils.generateCN(musicInfo.coinNum));
+        music_imageView_coin.setText(ValueFormat.generateCN(musicInfo.coinNum));
 
         //设置评论数
-        music_imageView_comment.setText(ValueUtils.generateCN(musicInfo.comment));
+        music_imageView_comment.setText(ValueFormat.generateCN(musicInfo.comment));
 
         //设置收藏数
-        music_imageView_favorite.setText(ValueUtils.generateCN(musicInfo.collect));
-
-        //设置分享数
-        music_imageView_share.setText(ValueUtils.generateCN(musicInfo.share));
+        music_imageView_favorite.setText(ValueFormat.generateCN(musicInfo.collect));
 
         //初始化当前播放进度
         music_textView_nowProgress.setText("00:00");
 
         //设置music总长度
-        int minute = musicInfo.duration / 60;
-        int second = musicInfo.duration % 60;
-        String minuteStr = (minute >= 10 ? "" : "0" + minute) + ":" + (second >= 10 ? "" : "0" + second);
-        String secondStr = second >= 10 ? "" : "0" + second;
-        music_textView_length.setText("06:23");
+        music_textView_length.setText(ValueFormat.lengthGenerate(musicInfo.duration));
     }
 
     @Override
@@ -176,6 +182,20 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.item_imageView_cover:
                 Toast.makeText(this, "点击了music封面", Toast.LENGTH_SHORT).show();
+
+                if (lyricsState == 0) {
+                    music_circleImageView_cover.setVisibility(View.INVISIBLE);
+                    music_recyclerView_lyrics.setVisibility(View.VISIBLE);
+                    lyricsState = 1;
+                } else {
+                    music_circleImageView_cover.setVisibility(View.VISIBLE);
+                    music_recyclerView_lyrics.setVisibility(View.INVISIBLE);
+                    lyricsState = 0;
+                }
+
+                break;
+            case R.id.music_imageView_download:
+                Toast.makeText(this, "点击了\"缓存歌曲\"", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.music_imageView_addFavorite:
                 Toast.makeText(this, "点击了\"添加至播放列表\"", Toast.LENGTH_SHORT).show();
