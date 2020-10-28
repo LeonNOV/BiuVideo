@@ -3,7 +3,6 @@ package com.leon.biuvideo.utils;
 import android.media.MediaCodec;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
-import android.media.MediaMetadataRetriever;
 import android.media.MediaMuxer;
 import android.util.Log;
 
@@ -11,8 +10,6 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
@@ -176,30 +173,27 @@ public class MediaUtils {
     /**
      * 保存音乐/图片
      *
-     * @param musicUrl
-     * @param path
-     * @param fileName
-     * @return
+     * @param resourceUrl  资源链接
+     * @param path  保存路径
+     * @param fileName  文件名称
+     * @return  返回保存状态
      */
-    public static boolean saveMusic(String musicUrl, String path, String fileName) {
+    public static boolean saveMusic(String resourceUrl, String path, String fileName) {
         try {
-            URL url = new URL(musicUrl);
+            URL url = new URL(resourceUrl);
 
             URLConnection urlConnection = url.openConnection();
 
             //设置头信息
-            for (Map.Entry<String, String> entry : getHeaders().entrySet()) {
-                String key = entry.getKey();
-                String value = entry.getValue();
-
-                urlConnection.setRequestProperty(key, value);
-            }
+            HashMap<String, String> headers = getHeaders();
+            urlConnection.setRequestProperty("User-Agent", headers.get("User-Agent"));
+            urlConnection.setRequestProperty("Referer", headers.get("Referer"));
 
             urlConnection.connect();
 
             int length = urlConnection.getContentLength();
 
-            BufferedInputStream bufferedInputStream = new BufferedInputStream(url.openStream());
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(urlConnection.getInputStream());
             FileOutputStream fileOutputStream = new FileOutputStream(path + "/" + fileName);
 
             byte[] bytes = new byte[1024 * 10];
@@ -207,12 +201,9 @@ public class MediaUtils {
             long total = 0;
             int len;
             while ((len = bufferedInputStream.read(bytes)) != -1) {
-
                 total += len;
 
                 Log.d(LogTip.blue, "保存进度: " + total * 100 / length);
-
-//                publishProgress((int)(total*100/lenghtOfFile));
 
                 fileOutputStream.write(bytes, 0, len);
             }
@@ -221,8 +212,6 @@ public class MediaUtils {
             bufferedInputStream.close();
 
             return true;
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

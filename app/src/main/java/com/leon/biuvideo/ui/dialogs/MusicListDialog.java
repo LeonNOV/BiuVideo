@@ -65,12 +65,13 @@ public class MusicListDialog extends AlertDialog {
                 //将当前播放的歌曲切换为在播放列表中选中的歌曲
 
                 Toast.makeText(context, "选择了歌单中的第" + position + "首歌", Toast.LENGTH_SHORT).show();
+
+                dismiss();
             }
 
             @Override
             public void onItemDeleteListener(int position) {
                 //删除播放列表中的对应条目
-
                 Toast.makeText(context, "点击了第" + position + "条的删除", Toast.LENGTH_SHORT).show();
             }
         });

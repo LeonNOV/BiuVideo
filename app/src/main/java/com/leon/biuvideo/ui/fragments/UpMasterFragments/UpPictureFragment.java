@@ -39,6 +39,9 @@ public class UpPictureFragment extends Fragment {
     private RecyclerView up_picture_recyclerView;
     private SmartRefreshLayout up_smartRefresh;
 
+    public UpPictureFragment() {
+    }
+
     public UpPictureFragment(long mid, int pageNum, Context context) {
         this.mid = mid;
         this.pageNum = pageNum;

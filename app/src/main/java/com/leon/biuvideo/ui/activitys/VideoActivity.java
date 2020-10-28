@@ -311,9 +311,6 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
                 Toast.makeText(this, "已加入缓存队列中", Toast.LENGTH_SHORT).show();
 
-                //262144
-                //1048576
-                //51809695
                 //获取视频线程
                 new Thread(new Runnable() {
                     @Override

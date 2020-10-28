@@ -1,8 +1,12 @@
 package com.leon.biuvideo.beans.musicBeans;
 
-import java.util.List;
-
 public class MusicPlayList {
+    public MusicPlayList() {
+        super();
+    }
+
+    public int id;
+    public int sid;
     public String musicName;
-    public String musicAuthor;
+    public String author;
 }

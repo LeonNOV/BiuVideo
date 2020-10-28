@@ -39,6 +39,9 @@ public class UpAudioFragment extends Fragment {
     private RecyclerView up_audio_recyclerView;
     private SmartRefreshLayout up_smartRefresh;
 
+    public UpAudioFragment() {
+    }
+
     public UpAudioFragment(long mid, int pageNum, Context context) {
         this.mid = mid;
         this.pageNum = pageNum;

@@ -18,6 +18,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "\"desc\"  TEXT,\n" +
             "\"isFavorite\"  INTEGER DEFAULT 1\n" +
             ");";
+    private static final String musicPlayList = "CREATE TABLE musicPlayList (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, sid INTEGER, author TEXT, musicName TEXT, isDelete INTEGER);";
 
     public SQLiteHelper(@Nullable Context context, int version) {
         super(context, "biu_video.db", null, version);

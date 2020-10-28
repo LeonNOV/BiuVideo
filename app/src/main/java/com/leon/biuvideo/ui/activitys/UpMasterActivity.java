@@ -47,6 +47,10 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
     private long mid;
     private UpInfo upInfo;
 
+    public UpMasterActivity() {
+        super();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);

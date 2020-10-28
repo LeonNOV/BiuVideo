@@ -15,4 +15,6 @@
 
     <color name="normal">#000</color>
 
+    <color name="light_gray">#707070</color>
+
 </resources>

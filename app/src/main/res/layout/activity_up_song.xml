@@ -26,6 +26,42 @@
                 android:layout_centerVertical="true"
                 android:src="@drawable/icon_back" />
 
+            <!--            <TextView-->
+            <!--                android:id="@+id/music_textView_name"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_toEndOf="@id/music_imageView_back"-->
+            <!--                android:textColor="#4E4E4E"-->
+            <!--                android:layout_centerVertical="true"-->
+            <!--                android:maxLength="20"-->
+            <!--                android:layout_marginStart="17dp"-->
+            <!--                android:text="name - author"-->
+            <!--                android:textSize="20sp"/>-->
+
+            <com.sunfusheng.marqueeview.MarqueeView
+                android:id="@+id/music_marqueeView"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/music_imageView_back"
+                app:mvAnimDuration="3000"
+                app:mvInterval="3000"
+                app:mvDirection="right_to_left"
+                app:mvSingleLine="false"
+                app:mvTextColor="#4E4E4E"
+                app:mvTextSize="14sp" />
+
+            <ImageView
+                android:id="@+id/music_imageView_isHaveVideo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:layout_toEndOf="@id/music_marqueeView"
+                android:src="@drawable/icon_video"
+                android:layout_marginEnd="20dp"
+                android:visibility="invisible" />
+
             <ImageView
                 android:id="@+id/music_imageView_musicList"
                 android:layout_width="wrap_content"
@@ -58,10 +94,10 @@
             android:id="@+id/music_lyrics"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="invisible"
             android:layout_centerInParent="true"
+            android:layout_marginTop="30dp"
             android:text="歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词"
-            android:layout_marginTop="30dp" />
+            android:visibility="invisible" />
 
     </RelativeLayout>
 

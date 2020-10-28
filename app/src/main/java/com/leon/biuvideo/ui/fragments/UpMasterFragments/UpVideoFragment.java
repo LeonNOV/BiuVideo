@@ -44,6 +44,9 @@ public class UpVideoFragment extends Fragment {
     private RecyclerView up_video_recyclerView;
     private SmartRefreshLayout up_smartRefresh;
 
+    public UpVideoFragment() {
+    }
+
     public UpVideoFragment(long mid, int pageNum, Context context) {
         this.mid = mid;
         this.pageNum = pageNum;
