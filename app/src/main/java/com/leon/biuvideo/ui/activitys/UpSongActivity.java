@@ -6,9 +6,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.animation.ObjectAnimator;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -28,11 +28,14 @@ import com.leon.biuvideo.beans.musicBeans.MusicInfo;
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
 import com.leon.biuvideo.service.MusicService;
 import com.leon.biuvideo.ui.dialogs.MusicListDialog;
+import com.leon.biuvideo.utils.FileUtils;
+import com.leon.biuvideo.utils.MediaUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.resourcesParseUtils.MusicParseUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.MusicUrlParseUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -110,10 +113,6 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_up_song);
 
         init();
-
-        //开启服务
-        startService(musicIntent);
-
         initView();
         initValue();
     }
@@ -135,8 +134,13 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         musicConnection = new MusicConnection();
-
         musicIntent = new Intent(this, MusicService.class);
+
+        //开启服务
+//        startService(musicIntent);
+
+        //绑定服务
+        bindService(musicIntent, musicConnection, Context.BIND_AUTO_CREATE);
 
         //处理消息
         handler = new Handler(new Handler.Callback() {
@@ -240,6 +244,7 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
 
         //设置music总长度
         music_textView_length.setText(ValueFormat.lengthGenerate(musicInfo.duration));
+//        music_seekBar.setMax(musicInfo.duration);
     }
 
     @Override
@@ -253,7 +258,6 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
 
                 //获取播放列表数据
                 List<MusicPlayList> musicPlayLists = new ArrayList<>();
-
 
                 for (int i = 1; i <= 10; i++) {
                     MusicPlayList musicPlayList = new MusicPlayList();
@@ -289,7 +293,15 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
 
                 break;
             case R.id.music_imageView_download:
-                Toast.makeText(this, "点击了\"缓存歌曲\"", Toast.LENGTH_SHORT).show();
+                String songPath = FileUtils.folderState(FileUtils.ResourcesFolder.SONGS);
+
+                //获取url
+                List<String> musicUrls = (List<String>) musicUrl.get("urls");
+
+                //保存歌曲
+                saveResurces(musicUrls.get(0), songPath, musicInfo.title + "-" + musicInfo.uname + ".mp3");
+
+//                Toast.makeText(this, saveState ? "歌曲缓存成功" : "歌曲缓存失败", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.music_imageView_addFavorite:
                 Toast.makeText(this, "点击了\"添加至播放列表\"", Toast.LENGTH_SHORT).show();
@@ -305,7 +317,6 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
                         rotation.start();
                         musicState = 1;
                         music_imageView_control.setImageResource(R.drawable.music_icon_play);
-
 
                         List<String> urls = (List<String>) musicUrl.get("urls");
 
@@ -346,27 +357,17 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    //停止服务
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unbind();
-    }
+    private void saveResurces(String path, String songPath, String fileName) {
 
-    //解绑服务
-    public void unbind() {
-        musicControl.pause();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                boolean saveState = MediaUtils.saveMusic(path, songPath, fileName);
 
-        //解绑服务
-        unbindService(musicConnection);
-
-        //停止服务
-        stopService(musicIntent);
+                Toast.makeText(UpSongActivity.this, saveState ? "歌曲缓存成功" : "歌曲缓存失败", Toast.LENGTH_SHORT).show();
+            }
+        }).start();
     }
 
     @Override
@@ -387,6 +388,23 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
         int progress = seekBar.getProgress();
 
         musicControl.seekPlayProgress(progress);
+    }
+
+    @Override
+    protected void onDestroy() {
+        unbind();
+        super.onDestroy();
+    }
+
+    //解绑服务
+    public void unbind() {
+        musicControl.pause();
+
+        //解绑服务
+        unbindService(musicConnection);
+
+        //停止服务
+        stopService(musicIntent);
     }
 
     //服务连接类

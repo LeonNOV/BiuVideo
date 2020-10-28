@@ -35,6 +35,9 @@ public class MusicParseUtils {
         if (dataObject != null) {
             MusicInfo musicInfo = new MusicInfo();
 
+            //放入当前的sid
+            musicInfo.sid = sid;
+
             //获取发布者id
             Long uid = dataObject.getLong("uid");
             musicInfo.uid = uid;

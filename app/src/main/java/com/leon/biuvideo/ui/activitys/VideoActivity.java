@@ -20,6 +20,7 @@ import com.leon.biuvideo.adapters.AnthologyAdapter;
 import com.leon.biuvideo.beans.videoBean.play.Play;
 import com.leon.biuvideo.beans.videoBean.view.SingleVideoInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
+import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.GeneralNotification;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.MediaUtils;
@@ -303,10 +304,10 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 String audioUrlBase = play.audios.get(0).baseUrl;
 
                 //获取保存路径
-                String videoPath = MediaUtils.folderState(MediaUtils.ResourcesFolder.VIDEOS);
+                String videoPath = FileUtils.folderState(FileUtils.ResourcesFolder.VIDEOS);
 
                 //文件名组成,以视频bvid为基本名称
-                String fileName = MediaUtils.generateFileName(viewPage.bvid);
+                String fileName = FileUtils.generateFileName(viewPage.bvid);
 
                 Toast.makeText(this, "已加入缓存队列中", Toast.LENGTH_SHORT).show();
 

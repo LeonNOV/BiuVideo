@@ -3,6 +3,7 @@ package com.leon.biuvideo.beans.musicBeans;
 import java.util.List;
 
 public class MusicInfo {
+    public long sid;
     public long uid;
     public String uname;
     public String bvid;
