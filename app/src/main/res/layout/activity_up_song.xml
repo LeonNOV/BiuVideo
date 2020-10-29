@@ -90,15 +90,6 @@
             app:civ_border_overlay="true"
             app:civ_border_width="2dp" />
 
-        <TextView
-            android:id="@+id/music_lyrics"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="30dp"
-            android:text="歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词歌词"
-            android:visibility="invisible" />
-
     </RelativeLayout>
 
     <TableLayout
@@ -107,7 +98,7 @@
         android:orientation="horizontal"
         android:stretchColumns="*">
 
-        <TableRow android:layout_marginTop="60dp">
+        <TableRow android:layout_marginTop="50dp">
 
             <ImageView
                 android:id="@+id/music_imageView_addFavorite"
@@ -179,27 +170,11 @@
 
             </LinearLayout>
 
-
-            <LinearLayout
+            <ImageView
+                android:id="@+id/music_imageView_link"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/icon_video_favorite" />
-
-                <TextView
-                    android:id="@+id/music_imageView_favorite"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="123"
-                    android:textColor="#707070" />
-
-            </LinearLayout>
+                android:src="@drawable/icon_link" />
 
             <ImageView
                 android:id="@+id/music_imageView_download"

@@ -2,10 +2,8 @@ package com.leon.biuvideo.ui.dialogs;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -17,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.MusicPlayListAdapter;
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
+import com.leon.biuvideo.utils.MusicDatabaseUtils;
 
 import java.util.List;
 
@@ -28,11 +27,13 @@ public class MusicListDialog extends AlertDialog {
     private Button music_button_close;
 
     private OnDialogClickListener onDialogClickListener;
+    private PriorityListener priorityListener;
 
-    public MusicListDialog(@NonNull Context context, List<MusicPlayList> musicPlayLists) {
+    public MusicListDialog(@NonNull Context context, List<MusicPlayList> musicPlayLists, PriorityListener priorityListener) {
         super(context);
         this.context = context;
         this.musicPlayLists = musicPlayLists;
+        this.priorityListener = priorityListener;
     }
 
     @Override
@@ -63,8 +64,8 @@ public class MusicListDialog extends AlertDialog {
             @Override
             public void onItemClickListener(int position) {
                 //将当前播放的歌曲切换为在播放列表中选中的歌曲
-
-                Toast.makeText(context, "选择了歌单中的第" + position + "首歌", Toast.LENGTH_SHORT).show();
+                MusicPlayList musicPlayList = musicPlayLists.get(position);
+                priorityListener.refreshMusic(musicPlayList.sid);
 
                 dismiss();
             }
@@ -72,7 +73,15 @@ public class MusicListDialog extends AlertDialog {
             @Override
             public void onItemDeleteListener(int position) {
                 //删除播放列表中的对应条目
-                Toast.makeText(context, "点击了第" + position + "条的删除", Toast.LENGTH_SHORT).show();
+                MusicDatabaseUtils musicDatabaseUtils = new MusicDatabaseUtils(context);
+                MusicPlayList musicPlayList = musicPlayLists.get(position);
+                musicDatabaseUtils.removeMusicItem(musicPlayList.sid);
+
+                musicPlayLists.remove(position);
+                musicPlayListAdapter.notifyDataSetChanged();
+
+                //刷新UpSongActivity红心的状态
+                priorityListener.refreshFavoriteIcon();
             }
         });
 
@@ -83,7 +92,7 @@ public class MusicListDialog extends AlertDialog {
         Window window = this.getWindow();
 
         //添加缩放动画
-        window.setGravity(Gravity.END | Gravity.TOP); //对话框显示的位置
+//        window.setGravity(Gravity.END | Gravity.TOP); //对话框显示的位置
         window.setWindowAnimations(R.style.music_list_dialog);
     }
 
@@ -98,5 +107,14 @@ public class MusicListDialog extends AlertDialog {
 
     public void setOnDialogClickListener(OnDialogClickListener onDialogClickListener) {
         this.onDialogClickListener = onDialogClickListener;
+    }
+
+    public interface PriorityListener {
+
+        //回调函数，用于刷新UpSongActivity
+        void refreshFavoriteIcon();
+
+        //回调函数，用于切换歌曲
+        void refreshMusic(long sid);
     }
 }

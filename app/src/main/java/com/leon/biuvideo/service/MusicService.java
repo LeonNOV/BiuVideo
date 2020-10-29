@@ -34,6 +34,7 @@ public class MusicService extends Service {
         mediaPlayer = new MediaPlayer();
     }
 
+    //退出UpSongActivity后，Music在后台播放
     /*@Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         handler = new Handler(new Handler.Callback() {
@@ -119,7 +120,7 @@ public class MusicService extends Service {
 
             playMusic(url);
 
-            mediaPlayer.start();
+//            mediaPlayer.start();
 
             addTimer();
         }
@@ -152,9 +153,31 @@ public class MusicService extends Service {
         headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36 Edg/86.0.622.51");
 
         try {
+
+            //处理java对象和native对象不一致的情况
+            if (mediaPlayer == null) {
+                mediaPlayer = new MediaPlayer();
+            }
+
+            if (mediaPlayer.isPlaying()) {
+                onDestroy();
+
+                mediaPlayer = new MediaPlayer();
+            }
+            //处理java对象和native对象不一致的情况
+
             //设置数据源
             mediaPlayer.setDataSource(getApplicationContext(), uri, headers);
-            mediaPlayer.prepare();
+
+            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mp.start();
+                }
+            });
+
+            mediaPlayer.prepareAsync();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

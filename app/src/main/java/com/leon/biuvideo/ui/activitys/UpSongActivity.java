@@ -2,9 +2,9 @@ package com.leon.biuvideo.ui.activitys;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,10 +12,10 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -36,6 +36,7 @@ import com.leon.biuvideo.ui.dialogs.MusicListDialog;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.LogTip;
 import com.leon.biuvideo.utils.MediaUtils;
+import com.leon.biuvideo.utils.MusicDatabaseUtils;
 import com.leon.biuvideo.utils.SQLiteHelper;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.resourcesParseUtils.MusicParseUtils;
@@ -43,13 +44,12 @@ import com.leon.biuvideo.utils.resourcesParseUtils.MusicUrlParseUtils;
 import com.sunfusheng.marqueeview.MarqueeView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class UpSongActivity extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
+public class UpSongActivity extends Activity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
     //返回、播放列表
     private ImageView music_imageView_back, music_imageView_musicList;
@@ -63,9 +63,6 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
     //music封面
     private CircleImageView music_circleImageView_cover;
 
-    //lyrics
-    private TextView music_lyrics;
-
     //喜欢按钮
     private ImageView music_imageView_addFavorite;
 
@@ -73,8 +70,8 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
     private TextView
             music_imageView_play,
             music_imageView_coin,
-            music_imageView_comment,
-            music_imageView_favorite;
+            music_imageView_comment;
+    private ImageView music_imageView_link;
 
     //缓存歌曲
     private ImageView music_imageView_download;
@@ -91,19 +88,23 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
             music_imageView_control,
             music_imageView_next;
 
+    //所有的sid
+    private long[] sids;
+
+    //当前sid在sids中的索引位置
+    private int position;
+
     //music信息
     private MusicInfo musicInfo;
 
-    private Map<String, Object> musicUrl;
+    //musicUrl链接
+    private String musicUrl;
 
     //music状态：0：停止、1：暂停、2：继续
     private int musicState = 0;
 
     //旋转动画
     private ObjectAnimator rotation;
-
-    //歌词显示状态
-    private int lyricsState = 0;
 
     //存在于于播放列中的状态
     boolean isHavePlayList;
@@ -119,6 +120,9 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
     //消息处理器
     public static Handler handler;
 
+    //music数据库的helper对象
+    private MusicDatabaseUtils musicDatabaseUtils;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -132,12 +136,22 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
         initValue();
     }
 
+    /**
+     * 初始化
+     */
     private void init() {
         //获取music信息
         Intent intent = getIntent();
-        long sid = intent.getLongExtra("sid", -1);
 
-        if (sid != -1) {
+        //获取sid的position
+        position = intent.getIntExtra("position", -1);
+
+        //获取所有的sid
+        sids = intent.getLongArrayExtra("sids");
+
+        if (position != -1) {
+            long sid = sids[position];
+
             //获取music信息
             musicInfo = MusicParseUtils.parseMusic(sid);
 
@@ -152,6 +166,7 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
         musicIntent = new Intent(this, MusicService.class);
 
         //开启服务
+        //退出UpSongActivity后，Music在后台播放
 //        startService(musicIntent);
 
         //绑定服务
@@ -187,8 +202,14 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
                 return true;
             }
         });
+
+        //创建sqLiteHelper对象
+        musicDatabaseUtils = new MusicDatabaseUtils(getApplicationContext());
     }
 
+    /**
+     * 初始化控件
+     */
     private void initView() {
         music_imageView_back = findViewById(R.id.music_imageView_back);
         music_imageView_back.setOnClickListener(this);
@@ -197,13 +218,11 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
         music_imageView_musicList.setOnClickListener(this);
 
         music_marqueeView = findViewById(R.id.music_marqueeView);
+
         music_imageView_isHaveVideo = findViewById(R.id.music_imageView_isHaveVideo);
         music_imageView_isHaveVideo.setOnClickListener(this);
 
         music_circleImageView_cover = findViewById(R.id.music_circleImageView_cover);
-        music_circleImageView_cover.setOnClickListener(this);
-
-        music_lyrics = findViewById(R.id.music_lyrics);
 
         //设置旋转动画
         rotation = ObjectAnimator.ofFloat(music_circleImageView_cover, "rotation", 0.0f, 360.0f);
@@ -218,7 +237,9 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
         music_imageView_play = findViewById(R.id.music_imageView_play);
         music_imageView_coin = findViewById(R.id.music_imageView_coin);
         music_imageView_comment = findViewById(R.id.music_imageView_comment);
-        music_imageView_favorite = findViewById(R.id.music_imageView_favorite);
+
+        music_imageView_link = findViewById(R.id.music_imageView_link);
+        music_imageView_link.setOnClickListener(this);
 
         music_imageView_download = findViewById(R.id.music_imageView_download);
         music_imageView_download.setOnClickListener(this);
@@ -239,6 +260,9 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
         music_imageView_next.setOnClickListener(this);
     }
 
+    /**
+     * 初始化数据
+     */
     private void initValue() {
         //设置封面
         Glide.with(getApplicationContext()).load(musicInfo.cover).into(music_circleImageView_cover);
@@ -248,16 +272,14 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
         music_marqueeView.startWithText(title);
 
         //判断是否有MV
-        if (musicInfo.bvid != null || musicInfo.bvid.equals("")) {
+        if (!musicInfo.bvid.equals("")) {
             music_imageView_isHaveVideo.setVisibility(View.VISIBLE);
         }
 
-        //判断是否在播放列表中,更改addFavoriteIcon为no_favorite
-        boolean state = queryMusic((int) musicInfo.sid);
-
-        if (state) {
+        //判断是否在播放列表中,更改addFavoriteIcon
+        isHavePlayList = musicDatabaseUtils.queryMusic(musicInfo.sid);
+        if (isHavePlayList) {
             music_imageView_addFavorite.setImageResource(R.drawable.favorite);
-            isHavePlayList = true;
         }
 
         //设置播放量
@@ -269,9 +291,6 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
         //设置评论数
         music_imageView_comment.setText(ValueFormat.generateCN(musicInfo.comment));
 
-        //设置收藏数
-        music_imageView_favorite.setText(ValueFormat.generateCN(musicInfo.collect));
-
         //初始化当前播放进度
         music_textView_nowProgress.setText("00:00");
 
@@ -279,6 +298,11 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
         music_textView_length.setText(ValueFormat.lengthGenerate(musicInfo.duration));
     }
 
+    /**
+     * 点击事件
+     *
+     * @param v 控件
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -294,10 +318,31 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.music_imageView_musicList:
                 //获取播放列表数据
-                List<MusicPlayList> musicPlayLists = queryPlayList();
+                List<MusicPlayList> musicPlayLists = musicDatabaseUtils.queryPlayList();
                 Log.d(LogTip.blue, "onClick: " + musicPlayLists.size());
 
-                MusicListDialog musicListDialog = new MusicListDialog(UpSongActivity.this, musicPlayLists);
+                MusicListDialog musicListDialog = new MusicListDialog(UpSongActivity.this, musicPlayLists, new MusicListDialog.PriorityListener() {
+
+                    //刷新当前music_imageView_addFavorite的状态
+                    @Override
+                    public void refreshFavoriteIcon() {
+                        //判断当前歌曲是否从playList中删除
+                        boolean state = musicDatabaseUtils.queryMusic(musicInfo.sid);
+
+                        if (state) {
+                            music_imageView_addFavorite.setImageResource(R.drawable.favorite);
+                        } else {
+                            music_imageView_addFavorite.setImageResource(R.drawable.no_favorite);
+                            isHavePlayList = false;
+                        }
+                    }
+
+                    //切换当前歌曲
+                    @Override
+                    public void refreshMusic(long sid) {
+                        switchMusic(sid);
+                    }
+                });
                 musicListDialog.show();
 
                 musicListDialog.setOnDialogClickListener(new MusicListDialog.OnDialogClickListener() {
@@ -308,32 +353,15 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
                 });
 
                 break;
-            case R.id.item_imageView_cover:
-                Toast.makeText(this, "点击了music封面", Toast.LENGTH_SHORT).show();
-
-                if (lyricsState == 0) {
-                    music_circleImageView_cover.setVisibility(View.INVISIBLE);
-                    music_lyrics.setVisibility(View.VISIBLE);
-                    lyricsState = 1;
-                } else {
-                    music_circleImageView_cover.setVisibility(View.VISIBLE);
-                    music_lyrics.setVisibility(View.INVISIBLE);
-                    lyricsState = 0;
-                }
-
-                break;
             case R.id.music_imageView_download:
                 String songPath = FileUtils.folderState(FileUtils.ResourcesFolder.SONGS);
-
-                //获取url
-                List<String> musicUrls = (List<String>) musicUrl.get("urls");
-
                 //保存歌曲线程
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        boolean saveState = MediaUtils.saveMusic(musicUrls.get(0), songPath, musicInfo.title + "-" + musicInfo.uname + ".mp3");
+                        boolean saveState = MediaUtils.saveMusic(musicUrl, songPath, musicInfo.title + "-" + musicInfo.uname + ".mp3");
 
+                        //添加到下载任务界面中
                     }
                 }).start();
                 break;
@@ -341,28 +369,25 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
 
                 if (isHavePlayList) {
                     //从playList中移除
-                    removeMusicItem((int) musicInfo.sid);
+                    musicDatabaseUtils.removeMusicItem(musicInfo.sid);
 
                     music_imageView_addFavorite.setImageResource(R.drawable.no_favorite);
 
                     isHavePlayList = false;
                 } else {
                     MusicPlayList musicPlayList = new MusicPlayList();
-                    musicPlayList.sid = (int) musicInfo.sid;
+                    musicPlayList.sid = musicInfo.sid;
                     musicPlayList.musicName = musicInfo.title;
                     musicPlayList.author = musicInfo.uname;
 
                     //添加至播放列表
-                    addPlayList(musicPlayList);
+                    musicDatabaseUtils.addPlayList(musicPlayList);
 
                     music_imageView_addFavorite.setImageResource(R.drawable.favorite);
 
                     isHavePlayList = true;
                 }
 
-                break;
-            case R.id.music_imageView_up:
-                Toast.makeText(this, "点击了\"上一曲\"", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.music_imageView_control:
 
@@ -373,10 +398,8 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
                         musicState = 1;
                         music_imageView_control.setImageResource(R.drawable.music_icon_play);
 
-                        List<String> urls = (List<String>) musicUrl.get("urls");
-
                         //设置播放地址并播放音乐
-                        musicControl.play(urls.get(0));
+                        musicControl.play(musicUrl);
 
                         break;
                     case 1:
@@ -404,14 +427,96 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
                 }
 
                 break;
+            case R.id.music_imageView_up:
+                //判断当前播放的歌曲是否处于第一个
+                if (position != 0) {
+                    //获取上一个music的sid
+                    position--;
+                    long sid = sids[position];
+
+                    Log.d(LogTip.blue, "上一首：" + position);
+
+                    //切换歌曲
+                    switchMusic(sid);
+                } else {
+                    Toast.makeText(this, "当前播放的就是第一个了~~~", Toast.LENGTH_SHORT).show();
+                }
+                break;
             case R.id.music_imageView_next:
-                Toast.makeText(this, "点击了\"下一曲\"", Toast.LENGTH_SHORT).show();
+                //判断当前播放的歌曲是否处于最后一个
+                if (position != sids.length - 1) {
+                    //获取下一个music的sid
+                    position++;
+                    long sid = sids[position];
+
+                    Log.d(LogTip.blue, "下一首：" + position);
+
+                    //切换歌曲
+                    switchMusic(sid);
+                } else {
+                    Toast.makeText(this, "当前播放的就是最后一个了~~~", Toast.LENGTH_SHORT).show();
+                }
+
+                break;
+            case R.id.music_imageView_link:
+
+                //跳转到源网站收听
+                Intent intentOriginUrl = new Intent();
+                intentOriginUrl.setAction("android.intent.action.VIEW");
+                Uri uri = Uri.parse("https://www.bilibili.com/audio/au" + musicInfo.sid);
+                intentOriginUrl.setData(uri);
+                startActivity(intentOriginUrl);
+
                 break;
             default:
                 break;
         }
     }
 
+    /**
+     * 切换歌曲
+     *
+     * @param sid   下一首歌曲的sid
+     */
+    private void switchMusic(long sid) {
+        //暂停音乐
+        musicControl.pause();
+
+        //重置当前动画
+        rotation.cancel();
+
+        //设置当前歌曲状态为正在播放
+        musicState = 1;
+        music_imageView_control.setImageResource(R.drawable.music_icon_play);
+
+        musicInfo = MusicParseUtils.parseMusic(sid);
+
+        //切换当前歌曲
+        musicUrl = MusicUrlParseUtils.parseMusicUrl(sid);
+
+        //缓一下
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        musicControl.play(musicUrl);
+
+        //刷新当前activity上的数据
+        initValue();
+
+        //开始动画
+        rotation.start();
+    }
+
+    /**
+     * seekBar变化监听
+     *
+     * @param seekBar  seekBar对象
+     * @param progress 进度
+     * @param fromUser
+     */
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (progress == seekBar.getMax()) {
@@ -425,6 +530,11 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    /**
+     * 离开seekBar时的监听
+     *
+     * @param seekBar seekBar对象
+     */
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
         int progress = seekBar.getProgress();
@@ -432,25 +542,36 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
         musicControl.seekPlayProgress(progress);
     }
 
+    /**
+     * 开启服务
+     */
     @Override
     public void onStart() {
         super.onStart();
         music_marqueeView.startFlipping();
     }
 
+    /**
+     * 停止服务
+     */
     @Override
     public void onStop() {
         super.onStop();
         music_marqueeView.stopFlipping();
     }
 
+    /**
+     * Activity的销毁
+     */
     @Override
     protected void onDestroy() {
         unbind();
         super.onDestroy();
     }
 
-    //解绑服务
+    /**
+     * 解绑服务
+     */
     public void unbind() {
         musicControl.pause();
 
@@ -473,102 +594,5 @@ public class UpSongActivity extends AppCompatActivity implements View.OnClickLis
         public void onServiceDisconnected(ComponentName name) {
 
         }
-    }
-
-    /**
-     * 查询播放列表，且isDelete为0的条目
-     *
-     * @return  返回MusicPlayList集合
-     */
-    private List<MusicPlayList> queryPlayList() {
-        SQLiteHelper sqLiteHelper = new SQLiteHelper(getApplicationContext(), 1);
-        SQLiteDatabase database = sqLiteHelper.getReadableDatabase();
-
-        Cursor cursor = database.query("musicPlayList", null, "isDelete=?", new String[]{"0"}, null, null, null);
-
-        List<MusicPlayList> musicPlayLists = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            MusicPlayList musicPlayList = new MusicPlayList();
-
-            int sid = cursor.getInt(1);
-            musicPlayList.sid = sid;
-
-            String musicName = cursor.getString(2);
-            musicPlayList.musicName = musicName;
-
-            String author = cursor.getString(3);
-            musicPlayList.author = author;
-
-            musicPlayLists.add(musicPlayList);
-        }
-
-        sqLiteHelper.close();
-        database.close();
-        cursor.close();
-
-        return musicPlayLists;
-    }
-
-    /**
-     * 向播放列表中添加条目
-     *
-     * @param musicPlayList musicPlayList对象
-     */
-    private void addPlayList(MusicPlayList musicPlayList) {
-        SQLiteHelper sqLiteHelper = new SQLiteHelper(getApplicationContext(), 1);
-        SQLiteDatabase database = sqLiteHelper.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put("sid", musicPlayList.sid);
-        values.put("musicName", musicPlayList.musicName);
-        values.put("author", musicPlayList.author);
-        values.put("isDelete", 1);
-
-        long insert = database.insert("musicPlayList", null, values);
-
-        Toast.makeText(this, insert > 0 ? musicPlayList.musicName + "已加入到播放列表" : "添加失败~~~", Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * 查询对应sid的条目
-     *
-     * @param sid   sid
-     * @return  返回查询结果；true：存在、false：不存在
-     */
-    private boolean queryMusic(int sid) {
-        SQLiteHelper sqLiteHelper = new SQLiteHelper(getApplicationContext(), 1);
-        SQLiteDatabase database = sqLiteHelper.getReadableDatabase();
-
-        Cursor cursor = database.query("musicPlayList", null, "sid=? and isDelete=?", new String[]{String.valueOf(sid), String.valueOf(1)}, null, null, null);
-
-        int count = cursor.getCount();
-
-        Log.d(LogTip.blue, "queryMusic: " + count);
-
-        cursor.close();
-        database.close();
-        sqLiteHelper.close();
-
-        return count > 0;
-    }
-
-    /**
-     * 从播放列表中移除对应music
-     *
-     * @param sid   sid
-     */
-    public void removeMusicItem(int sid) {
-        SQLiteHelper sqLiteHelper = new SQLiteHelper(getApplicationContext(), 1);
-        SQLiteDatabase database = sqLiteHelper.getReadableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("isDelete", 0);
-
-        int state = database.update("musicPlayList", contentValues, "sid=?", new String[]{String.valueOf(sid)});
-
-        Toast.makeText(this, state > 0 ? "已将" + musicInfo.title + "从播放列表中移除" : "移除失败~~~", Toast.LENGTH_SHORT).show();
-
-        sqLiteHelper.close();
-        database.close();
     }
 }

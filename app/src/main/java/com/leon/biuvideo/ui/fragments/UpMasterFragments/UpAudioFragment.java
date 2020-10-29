@@ -21,6 +21,7 @@ import com.leon.biuvideo.ui.activitys.UpSongActivity;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpAudioParseUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UpAudioFragment extends Fragment {
@@ -85,12 +86,24 @@ public class UpAudioFragment extends Fragment {
         UpAudioAdapter upAudioAdapter = new UpAudioAdapter(upAudios, context);
         up_audio_recyclerView.setAdapter(upAudioAdapter);
 
-        //设置item点击事件
+        //设置item点击事件，跳转到音乐播放界面
         upAudioAdapter.setOnItemClickListener((view, position) -> {
+
+            //获取所有sid
+            long[] sids = new long[upAudios.size()];
+
+            for (int i = 0; i < upAudios.size(); i++) {
+                sids[i] = (upAudios.get(i).sid);
+            }
+
             Intent intent = new Intent(context, UpSongActivity.class);
 
-            long sid = upAudios.get(position).sid;
-            intent.putExtra("sid", sid);
+            //传递sid在upAudios中的position
+            intent.putExtra("position", position);
+
+            //传递所有的sid
+            intent.putExtra("sids", sids);
+
             startActivity(intent);
         });
 

@@ -7,7 +7,10 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
+
 import java.lang.reflect.Field;
+import java.util.List;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
     private static final String favorite_up = "CREATE TABLE \"favorite_up\" (\n" +

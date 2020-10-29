@@ -20,9 +20,9 @@ public class MusicUrlParseUtils {
      * 获取音频播放地址
      *
      * @param sid   音频ID
-     * @return  返回一个结果集
+     * @return  返回第一个music链接
      */
-    public static Map<String, Object> parseMusicUrl(long sid) {
+    public static String parseMusicUrl(long sid) {
         Map<String, Object> values = new HashMap<>();
         values.put("sid", sid);
 
@@ -33,12 +33,6 @@ public class MusicUrlParseUtils {
         JSONObject dataObject = jsonObject.getJSONObject("data");
 
         if (dataObject != null) {
-            Map<String, Object> map = new HashMap<>();
-
-            //获取文件大小
-            long size = dataObject.getLongValue("size");
-            map.put("size", size);
-
             JSONArray cdns = dataObject.getJSONArray("cdns");
 
             //获取music文件地址
@@ -46,9 +40,9 @@ public class MusicUrlParseUtils {
             for (Object cdn : cdns) {
                 urls.add(cdn.toString());
             }
-            map.put("urls", urls);
 
-            return map;
+            //只返回第一个链接
+            return urls.get(0);
         }
 
         Log.e(LogTip.red, "musicUrl接口数据获取失败", new NullPointerException("musicUrl接口数据获取失败"));

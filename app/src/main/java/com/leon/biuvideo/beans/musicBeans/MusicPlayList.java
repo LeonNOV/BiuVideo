@@ -6,7 +6,7 @@ public class MusicPlayList {
     }
 
     public int id;
-    public int sid;
+    public long sid;
     public String musicName;
     public String author;
 }
