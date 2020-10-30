@@ -100,7 +100,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
     //musicUrl链接
     private String musicUrl;
 
-    //music状态：0：停止、1：暂停、2：继续
+    //music状态：0：停止（初始化状态，不包括切换歌曲）、1：暂停、2：继续
     private int musicState = 0;
 
     //旋转动画
@@ -171,37 +171,6 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
 
         //绑定服务
         bindService(musicIntent, musicConnection, Context.BIND_AUTO_CREATE);
-
-        //处理消息
-        handler = new Handler(new Handler.Callback() {
-            @Override
-            public boolean handleMessage(@NonNull Message msg) {
-                Bundle bundle = msg.getData();
-
-                //获取总长度
-                int duration = bundle.getInt("duration");
-
-                //获取当前进度
-                int currentPosition = bundle.getInt("currentPosition");
-
-                //设置进度条最大值
-                music_seekBar.setMax(duration);
-
-                //设置进度条当前进度
-                music_seekBar.setProgress(currentPosition);
-
-                int minute = currentPosition / 1000 / 60;
-                int second = currentPosition / 1000 % 60;
-
-                String minuteStr = minute < 10 ? "0" + minute : minute + "";
-                String secondStr = second < 10 ? "0" + second : second + "";
-
-                //设置时间进度
-                music_textView_nowProgress.setText(minuteStr + ":" + secondStr);
-
-                return true;
-            }
-        });
 
         //创建sqLiteHelper对象
         musicDatabaseUtils = new MusicDatabaseUtils(getApplicationContext());
@@ -280,6 +249,8 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
         isHavePlayList = musicDatabaseUtils.queryMusic(musicInfo.sid);
         if (isHavePlayList) {
             music_imageView_addFavorite.setImageResource(R.drawable.favorite);
+        } else {
+            music_imageView_addFavorite.setImageResource(R.drawable.no_favorite);
         }
 
         //设置播放量
@@ -291,11 +262,45 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
         //设置评论数
         music_imageView_comment.setText(ValueFormat.generateCN(musicInfo.comment));
 
+        //初始化seekBar
+        music_seekBar.setProgress(0);
+
         //初始化当前播放进度
         music_textView_nowProgress.setText("00:00");
 
         //设置music总长度
         music_textView_length.setText(ValueFormat.lengthGenerate(musicInfo.duration));
+
+        //处理消息
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                Bundle bundle = msg.getData();
+
+                //获取总长度
+                int duration = bundle.getInt("duration");
+
+                //获取当前进度
+                int currentPosition = bundle.getInt("currentPosition");
+
+                //设置进度条最大值
+                music_seekBar.setMax(duration);
+
+                //设置进度条当前进度
+                music_seekBar.setProgress(currentPosition);
+
+                int minute = currentPosition / 1000 / 60;
+                int second = currentPosition / 1000 % 60;
+
+                String minuteStr = minute < 10 ? "0" + minute : minute + "";
+                String secondStr = second < 10 ? "0" + second : second + "";
+
+                //设置时间进度
+                music_textView_nowProgress.setText(minuteStr + ":" + secondStr);
+
+                return true;
+            }
+        });
     }
 
     /**
@@ -431,8 +436,8 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                 //判断当前播放的歌曲是否处于第一个
                 if (position != 0) {
                     //获取上一个music的sid
-                    position--;
-                    long sid = sids[position];
+//                    position--;
+                    long sid = sids[--position];
 
                     Log.d(LogTip.blue, "上一首：" + position);
 
@@ -446,8 +451,8 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                 //判断当前播放的歌曲是否处于最后一个
                 if (position != sids.length - 1) {
                     //获取下一个music的sid
-                    position++;
-                    long sid = sids[position];
+//                    position++;
+                    long sid = sids[++position];
 
                     Log.d(LogTip.blue, "下一首：" + position);
 
@@ -479,9 +484,6 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
      * @param sid   下一首歌曲的sid
      */
     private void switchMusic(long sid) {
-        //暂停音乐
-        musicControl.pause();
-
         //重置当前动画
         rotation.cancel();
 

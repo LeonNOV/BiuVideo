@@ -159,11 +159,16 @@ public class MusicService extends Service {
                 mediaPlayer = new MediaPlayer();
             }
 
-            if (mediaPlayer.isPlaying()) {
-                onDestroy();
+//            if (mediaPlayer.isLooping()) {
+//                onDestroy();
+//
+//                mediaPlayer = new MediaPlayer();
+//            }
 
-                mediaPlayer = new MediaPlayer();
-            }
+
+            onDestroy();
+
+            mediaPlayer = new MediaPlayer();
             //处理java对象和native对象不一致的情况
 
             //设置数据源
