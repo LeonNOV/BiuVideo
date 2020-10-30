@@ -10,7 +10,7 @@
         android:id="@+id/main_toolBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bilibilib_pink"
+        android:background="@color/bilibili_pink"
         app:popupTheme="@style/OverflowMenuStyle">
 
         <ImageButton

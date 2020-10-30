@@ -2,7 +2,7 @@
 <resources>
 
     <string name="navigation_menu_item1">主页</string>
-    <string name="navigation_menu_item2">查看已关注的UP主</string>
-    <string name="navigation_menu_item3">关于</string>
+    <string name="navigation_menu_item2">收藏</string>
+    <string name="navigation_menu_item3">播放列表</string>
 
 </resources>

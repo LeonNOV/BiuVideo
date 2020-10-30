@@ -6,14 +6,14 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.activitys.UpSongActivity;
 import com.leon.biuvideo.utils.LogTip;
 
@@ -26,6 +26,9 @@ import java.util.TimerTask;
 public class MusicService extends Service {
     private MediaPlayer mediaPlayer;
     private Timer timer;
+
+    //播放停止时的数值与长度之间的差值
+    private int differenceRange = 100;
 
     @Override
     public void onCreate() {
@@ -120,8 +123,6 @@ public class MusicService extends Service {
 
             playMusic(url);
 
-//            mediaPlayer.start();
-
             addTimer();
         }
 
@@ -169,10 +170,42 @@ public class MusicService extends Service {
             //设置数据源
             mediaPlayer.setDataSource(getApplicationContext(), uri, headers);
 
+            //准备数据监听
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     mp.start();
+                }
+            });
+
+            //播放完毕监听
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    int duration = mp.getDuration();
+                    int currentPosition = mp.getCurrentPosition();
+
+                    if (duration != 0 && currentPosition != 0) {
+                        //确定范围
+                        if (mp.getDuration() - mp.getCurrentPosition() <= differenceRange) {
+                            UpSongActivity.music_imageView_control.setImageResource(R.drawable.music_icon_pause);
+                            UpSongActivity.rotation.pause();
+                            UpSongActivity.musicState = 2;
+                        }
+                    }
+
+                }
+            });
+
+            mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                @Override
+                public boolean onError(MediaPlayer mp, int what, int extra) {
+
+                    if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                            mediaPlayer.seekTo(0);
+                            Toast.makeText(MusicService.this, "重新播放中", Toast.LENGTH_SHORT).show();
+                        }
+                    return false;
                 }
             });
 

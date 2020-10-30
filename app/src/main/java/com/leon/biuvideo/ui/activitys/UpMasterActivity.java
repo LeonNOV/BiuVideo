@@ -156,21 +156,21 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
     public void onPageSelected(int position) {
         switch (position) {
             case 0:
-                up_textView_video.setTextColor(getResources().getColor(R.color.bilibilib_pink));
+                up_textView_video.setTextColor(getResources().getColor(R.color.bilibili_pink));
                 up_textView_audio.setTextColor(getResources().getColor(R.color.normal));
                 up_textView_picture.setTextColor(getResources().getColor(R.color.normal));
 
                 break;
             case 1:
                 up_textView_video.setTextColor(getResources().getColor(R.color.normal));
-                up_textView_audio.setTextColor(getResources().getColor(R.color.bilibilib_pink));
+                up_textView_audio.setTextColor(getResources().getColor(R.color.bilibili_pink));
                 up_textView_picture.setTextColor(getResources().getColor(R.color.normal));
 
                 break;
             case 2:
                 up_textView_video.setTextColor(getResources().getColor(R.color.normal));
                 up_textView_audio.setTextColor(getResources().getColor(R.color.normal));
-                up_textView_picture.setTextColor(getResources().getColor(R.color.bilibilib_pink));
+                up_textView_picture.setTextColor(getResources().getColor(R.color.bilibili_pink));
 
                 break;
             default:

@@ -1,17 +1,13 @@
 package com.leon.biuvideo.ui.activitys;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.ComponentName;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,15 +33,12 @@ import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.LogTip;
 import com.leon.biuvideo.utils.MediaUtils;
 import com.leon.biuvideo.utils.MusicDatabaseUtils;
-import com.leon.biuvideo.utils.SQLiteHelper;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.resourcesParseUtils.MusicParseUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.MusicUrlParseUtils;
 import com.sunfusheng.marqueeview.MarqueeView;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -85,8 +78,9 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
     //上一曲、music总控、下一曲
     private ImageView
             music_imageView_up,
-            music_imageView_control,
             music_imageView_next;
+
+    public static ImageView music_imageView_control;
 
     //所有的sid
     private long[] sids;
@@ -100,11 +94,11 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
     //musicUrl链接
     private String musicUrl;
 
-    //music状态：0：停止、1：暂停、2：继续
-    private int musicState = 0;
+    //music状态：0：停止(初始化状态)、1：正在播放、2：暂停状态
+    public static int musicState = 0;
 
     //旋转动画
-    private ObjectAnimator rotation;
+    public static ObjectAnimator rotation;
 
     //存在于于播放列中的状态
     boolean isHavePlayList;
@@ -193,11 +187,10 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                 int minute = currentPosition / 1000 / 60;
                 int second = currentPosition / 1000 % 60;
 
-                String minuteStr = minute < 10 ? "0" + minute : minute + "";
-                String secondStr = second < 10 ? "0" + second : second + "";
+                String length = (minute < 10 ? "0" + minute : minute + "") + ":" + (second < 10 ? "0" + second : second + "");
 
                 //设置时间进度
-                music_textView_nowProgress.setText(minuteStr + ":" + secondStr);
+                music_textView_nowProgress.setText(length);
 
                 return true;
             }
@@ -280,6 +273,8 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
         isHavePlayList = musicDatabaseUtils.queryMusic(musicInfo.sid);
         if (isHavePlayList) {
             music_imageView_addFavorite.setImageResource(R.drawable.favorite);
+        } else {
+            music_imageView_addFavorite.setImageResource(R.drawable.no_favorite);
         }
 
         //设置播放量
@@ -296,6 +291,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
 
         //设置music总长度
         music_textView_length.setText(ValueFormat.lengthGenerate(musicInfo.duration));
+
     }
 
     /**
@@ -431,8 +427,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                 //判断当前播放的歌曲是否处于第一个
                 if (position != 0) {
                     //获取上一个music的sid
-                    position--;
-                    long sid = sids[position];
+                    long sid = sids[--position];
 
                     Log.d(LogTip.blue, "上一首：" + position);
 
@@ -446,8 +441,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                 //判断当前播放的歌曲是否处于最后一个
                 if (position != sids.length - 1) {
                     //获取下一个music的sid
-                    position++;
-                    long sid = sids[position];
+                    long sid = sids[++position];
 
                     Log.d(LogTip.blue, "下一首：" + position);
 
@@ -482,8 +476,8 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
         //暂停音乐
         musicControl.pause();
 
-        //重置当前动画
-        rotation.cancel();
+        //暂停当前动画
+        rotation.pause();
 
         //设置当前歌曲状态为正在播放
         musicState = 1;
@@ -494,13 +488,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
         //切换当前歌曲
         musicUrl = MusicUrlParseUtils.parseMusicUrl(sid);
 
-        //缓一下
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        //播放音乐
         musicControl.play(musicUrl);
 
         //刷新当前activity上的数据
@@ -515,14 +503,10 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
      *
      * @param seekBar  seekBar对象
      * @param progress 进度
-     * @param fromUser
+     * @param fromUser  是否由用户自己控制的
      */
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if (progress == seekBar.getMax()) {
-            music_imageView_control.setImageResource(R.drawable.music_icon_pause);
-            rotation.pause();
-        }
     }
 
     @Override
@@ -537,6 +521,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
      */
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
+
         int progress = seekBar.getProgress();
 
         musicControl.seekPlayProgress(progress);

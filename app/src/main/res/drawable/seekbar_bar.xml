@@ -16,7 +16,7 @@
     <item>
         <clip>
             <shape>
-                <solid android:color="@color/bilibilib_pink" />
+                <solid android:color="@color/bilibili_pink" />
             </shape>
         </clip>
     </item>
