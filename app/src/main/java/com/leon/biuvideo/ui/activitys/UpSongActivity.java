@@ -101,7 +101,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
     public static ObjectAnimator rotation;
 
     //存在于于播放列中的状态
-    boolean isHavePlayList;
+    private boolean isHavePlayList;
 
     //控制music
     private MusicService.MusicControl musicControl;
@@ -143,6 +143,13 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
         //获取所有的sid
         sids = intent.getLongArrayExtra("sids");
 
+        Log.d(LogTip.blue, "init: position:" + position + "----sids:" + sids.length);
+//        Log.d(LogTip.blue, "init: rotation is Running:" + rotation.isRunning());
+//        Log.d(LogTip.blue, "init: rotation is Paused:" + rotation.isPaused());
+//        Log.d(LogTip.blue, "init: rotation is Started:" + rotation.isStarted());
+        Log.d(LogTip.blue, "init: musicState:" + musicState);
+
+
         if (position != -1) {
             long sid = sids[position];
 
@@ -177,6 +184,8 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
 
                 //获取当前进度
                 int currentPosition = bundle.getInt("currentPosition");
+
+                Log.d(LogTip.blue, "UpSongActivity--------------duration:" + duration + "------currentPosition:" + currentPosition);
 
                 //设置进度条最大值
                 music_seekBar.setMax(duration);
@@ -551,6 +560,8 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
     @Override
     protected void onDestroy() {
         unbind();
+        musicState = 0;
+        Log.d(LogTip.blue, "onDestroy: UpSongActivity is destroy");
         super.onDestroy();
     }
 

@@ -160,17 +160,16 @@ public class MusicService extends Service {
                 mediaPlayer = new MediaPlayer();
             }
 
-//            if (mediaPlayer.isLooping()) {
-//                onDestroy();
+            if (mediaPlayer.isPlaying()) {
+                onDestroy();
+
+                mediaPlayer = new MediaPlayer();
+            }
+
+
+//            onDestroy();
 //
-//                mediaPlayer = new MediaPlayer();
-//            }
-
-
-            onDestroy();
-
-            mediaPlayer = new MediaPlayer();
-            //处理java对象和native对象不一致的情况
+//            mediaPlayer = new MediaPlayer();
 
             //设置数据源
             mediaPlayer.setDataSource(getApplicationContext(), uri, headers);
@@ -198,7 +197,6 @@ public class MusicService extends Service {
                             UpSongActivity.musicState = 2;
                         }
                     }
-
                 }
             });
 
