@@ -20,7 +20,7 @@ public class MusicDatabaseUtils {
     }
 
     /**
-     * 查询播放列表，且isDelete为0的条目
+     * 查询播放列表，且isDelete为1的条目
      *
      * @return 返回MusicPlayList集合
      */
@@ -81,6 +81,7 @@ public class MusicDatabaseUtils {
      * @param sid sid
      * @return 返回查询结果；true：存在、false：不存在
      */
+    //43199
     public boolean queryMusic(long sid) {
         SQLiteHelper sqLiteHelper = new SQLiteHelper(context, 1);
         SQLiteDatabase database = sqLiteHelper.getReadableDatabase();
