@@ -7,6 +7,7 @@ public class SingleVideoInfo implements Serializable {
     public long cid;
     public int page;
     public String part;
+    public int duration;//视频长度
 
     @Override
     public String toString() {

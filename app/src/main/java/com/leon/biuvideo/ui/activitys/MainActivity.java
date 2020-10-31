@@ -4,7 +4,6 @@ import android.view.*;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -16,9 +15,6 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.navigation.NavigationView;
 import com.leon.biuvideo.R;
@@ -26,10 +22,13 @@ import com.leon.biuvideo.beans.AboutBean;
 import com.leon.biuvideo.ui.dialogs.AboutDialog;
 import com.leon.biuvideo.ui.fragments.FavoriteFragment;
 import com.leon.biuvideo.ui.fragments.HomeFragment;
-import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
+import com.leon.biuvideo.ui.fragments.PlayListFragment;
 
 import java.util.ArrayList;
 
+/**
+ * 主activity
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, Toolbar.OnMenuItemClickListener {
     private DrawerLayout drawer_layout;
     private NavigationView navigation_view;
@@ -103,10 +102,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.item2:
                 switchFragment(new FavoriteFragment());
                 break;
-//            case R.id.item3:
-//                switchFragment(new HomeFragment());
-//                Toast.makeText(this, "点击了第三个条目", Toast.LENGTH_SHORT).show();
-//                break;
+            case R.id.item3:
+                switchFragment(new PlayListFragment());
+                break;
             default: break;
         }
         drawer_layout.closeDrawer(navigation_view);
@@ -127,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(currentFragment != null) {
                 transaction.hide(currentFragment);
             }
-            transaction.add(R.id.main_fragment, targetFragment);
+            transaction.replace(R.id.main_fragment, targetFragment);
             transaction.commit();
         } else {
             transaction.hide(currentFragment).show(targetFragment).commit();

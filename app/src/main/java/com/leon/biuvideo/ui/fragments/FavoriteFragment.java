@@ -27,6 +27,9 @@ import com.leon.biuvideo.utils.SQLiteHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * MainActivity中的收藏片段
+ */
 public class FavoriteFragment extends Fragment {
     private RecyclerView favorite_recyclerView;
     private TextView favorite_textView_noDataStr;
@@ -40,7 +43,7 @@ public class FavoriteFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_favorite, container, false);
+        return inflater.inflate(R.layout.fragment_recycler_view, container, false);
     }
 
     @Override
@@ -55,9 +58,9 @@ public class FavoriteFragment extends Fragment {
     }
 
     private void initView() {
-        favorite_recyclerView = view.findViewById(R.id.favorite_recyclerView);
+        favorite_recyclerView = view.findViewById(R.id.recyclerView);
 
-        favorite_textView_noDataStr = view.findViewById(R.id.favorite_textView_noDataStr);
+        favorite_textView_noDataStr = view.findViewById(R.id.textView_noDataStr);
     }
 
     private void initValue() {

@@ -9,9 +9,13 @@ import com.leon.biuvideo.beans.videoBean.view.SingleVideoInfo;
 import com.leon.biuvideo.beans.videoBean.view.UpInfo;
 import com.leon.biuvideo.beans.videoBean.view.VideoInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
+import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.Paths;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * view接口解析工具
@@ -23,65 +27,72 @@ public class ViewParseUtils {
     /**
      * 解析view接口响应的数据
      *
-     * @param response
-     * @return
+     * @param bvid  视频bvid
+     * @return  返回viewPage对象
      */
-    public static ViewPage parseView(String response) {
+    public static ViewPage parseView(String bvid) {
         try {
+            Map<String, Object> values = new HashMap<>();
+            values.put("bvid", bvid);
+
+            String response = HttpUtils.GETByParam(Paths.view, values);
+
             JSONObject jsonObject = JSON.parseObject(response);
             JSONObject dataObject = jsonObject.getJSONObject("data");
 
-            ViewPage viewPage = new ViewPage();
+            if (dataObject != null) {
+                ViewPage viewPage = new ViewPage();
 
-            //视频bvid
-            String bvid = dataObject.getString("bvid");
-            viewPage.bvid = bvid;
+                //视频bvid
+                String data_bvid = dataObject.getString("bvid");
+                viewPage.bvid = data_bvid;
 
-            //视频aid
-            long aid = dataObject.getLong("aid");
-            viewPage.aid = aid;
+                //视频aid
+                long aid = dataObject.getLong("aid");
+                viewPage.aid = aid;
 
-            //选集个数
-            int videos = dataObject.getIntValue("videos");
-            viewPage.videos = videos;
+                //选集个数
+                int videos = dataObject.getIntValue("videos");
+                viewPage.videos = videos;
 
-            //视频分类id
-            int tid = dataObject.getIntValue("tid");
-            viewPage.tid = tid;
+                //视频分类id
+                int tid = dataObject.getIntValue("tid");
+                viewPage.tid = tid;
 
-            //分类名称
-            String tname = dataObject.getString("tname");
-            viewPage.tname = tname;
+                //分类名称
+                String tname = dataObject.getString("tname");
+                viewPage.tname = tname;
 
-            //视频封面
-            String pic = dataObject.getString("pic");
-            viewPage.coverUrl = pic;
+                //视频封面
+                String pic = dataObject.getString("pic");
+                viewPage.coverUrl = pic;
 
-            //视频标题
-            String title = dataObject.getString("title");
-            viewPage.title = title;
+                //视频标题
+                String title = dataObject.getString("title");
+                viewPage.title = title;
 
-            //视频上传日期（秒）
-            Long pubdate = dataObject.getLong("pubdate");
-            viewPage.upTime = pubdate;
+                //视频上传日期（秒）
+                Long pubdate = dataObject.getLong("pubdate");
+                viewPage.upTime = pubdate;
 
-            //视频说明
-            String desc = dataObject.getString("desc");
-            viewPage.desc = desc;
+                //视频说明
+                String desc = dataObject.getString("desc");
+                viewPage.desc = desc;
 
-            //获取up主信息
-            UpInfo owner = parseUpInfo(dataObject.getJSONObject("owner"));
-            viewPage.upInfo = owner;
+                //获取up主信息
+                UpInfo owner = parseUpInfo(dataObject.getJSONObject("owner"));
+                viewPage.upInfo = owner;
 
-            //获取视频信息
-            VideoInfo videoInfo = parseVideoInfo(dataObject.getJSONObject("stat"));
-            viewPage.videoInfo = videoInfo;
+                //获取视频信息
+                VideoInfo videoInfo = parseVideoInfo(dataObject.getJSONObject("stat"));
+                viewPage.videoInfo = videoInfo;
 
-            //获取选集信息
-            List<SingleVideoInfo> singleVideoInfoList = parseSingleVideoInfo(dataObject.getJSONArray("pages"));
-            viewPage.singleVideoInfoList = singleVideoInfoList;
+                //获取选集信息
+                List<SingleVideoInfo> singleVideoInfoList = parseSingleVideoInfo(dataObject.getJSONArray("pages"));
+                viewPage.singleVideoInfoList = singleVideoInfoList;
 
-            return viewPage;
+                return viewPage;
+            }
         } catch (NullPointerException e) {
             Log.e(TAG, "parseView: 数据解析出错");
             e.printStackTrace();
@@ -116,6 +127,10 @@ public class ViewParseUtils {
             //选集标题
             String part = jsonObject.getString("part");
             singleVideoInfo.part = part;
+
+            //视频长度
+            int duration = jsonObject.getIntValue("duration");
+            singleVideoInfo.duration = duration;
 
             singleVideoInfoList.add(singleVideoInfo);
         }

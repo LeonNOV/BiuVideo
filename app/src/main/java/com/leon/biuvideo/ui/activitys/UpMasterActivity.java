@@ -18,7 +18,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.UpMaster.UpMasterViewPageAdapter;
+import com.leon.biuvideo.adapters.ViewPageAdapter;
 import com.leon.biuvideo.beans.upMasterBean.UpInfo;
 import com.leon.biuvideo.ui.fragments.UpMasterFragments.UpAudioFragment;
 import com.leon.biuvideo.ui.fragments.UpMasterFragments.UpPictureFragment;
@@ -33,6 +33,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 用户界面activity
+ */
 public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
     private ImageView up_imageView_cover;
     private CircleImageView up_circleImageView_face;
@@ -148,7 +151,7 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
         //获取相簿数据
         fragments.add(new UpPictureFragment(mid, 0, getApplicationContext()));
 
-        UpMasterViewPageAdapter viewPageAdapter = new UpMasterViewPageAdapter(getSupportFragmentManager(), fragments);
+        ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), fragments);
         up_viewPage.setAdapter(viewPageAdapter);
     }
 

@@ -32,7 +32,7 @@ import com.leon.biuvideo.ui.dialogs.MusicListDialog;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.LogTip;
 import com.leon.biuvideo.utils.MediaUtils;
-import com.leon.biuvideo.utils.MusicDatabaseUtils;
+import com.leon.biuvideo.utils.MusicListDatabaseUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.resourcesParseUtils.MusicParseUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.MusicUrlParseUtils;
@@ -42,6 +42,9 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * 音乐/音频Activity
+ */
 public class UpSongActivity extends Activity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
     //返回、播放列表
@@ -115,7 +118,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
     public static Handler handler;
 
     //music数据库的helper对象
-    private MusicDatabaseUtils musicDatabaseUtils;
+    private MusicListDatabaseUtils musicDatabaseUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,13 +145,6 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
 
         //获取所有的sid
         sids = intent.getLongArrayExtra("sids");
-
-        Log.d(LogTip.blue, "init: position:" + position + "----sids:" + sids.length);
-//        Log.d(LogTip.blue, "init: rotation is Running:" + rotation.isRunning());
-//        Log.d(LogTip.blue, "init: rotation is Paused:" + rotation.isPaused());
-//        Log.d(LogTip.blue, "init: rotation is Started:" + rotation.isStarted());
-        Log.d(LogTip.blue, "init: musicState:" + musicState);
-
 
         if (position != -1) {
             long sid = sids[position];
@@ -206,7 +202,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
         });
 
         //创建sqLiteHelper对象
-        musicDatabaseUtils = new MusicDatabaseUtils(getApplicationContext());
+        musicDatabaseUtils = new MusicListDatabaseUtils(getApplicationContext());
     }
 
     /**
@@ -382,8 +378,10 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                 } else {
                     MusicPlayList musicPlayList = new MusicPlayList();
                     musicPlayList.sid = musicInfo.sid;
-                    musicPlayList.musicName = musicInfo.title;
+                    musicPlayList.bvid = musicInfo.bvid.equals("") ? "" : musicInfo.bvid;
                     musicPlayList.author = musicInfo.uname;
+                    musicPlayList.musicName = musicInfo.title;
+                    musicPlayList.isHaveVideo = musicInfo.bvid.equals("");
 
                     //添加至播放列表
                     musicDatabaseUtils.addPlayList(musicPlayList);

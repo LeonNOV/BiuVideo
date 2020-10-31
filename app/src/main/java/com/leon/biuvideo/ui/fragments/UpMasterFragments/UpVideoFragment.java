@@ -27,6 +27,9 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.List;
 
+/**
+ * UpMasterActivity中的video片段
+ */
 public class UpVideoFragment extends Fragment {
     private long mid;
     private int pageNum;

@@ -8,6 +8,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:id="@+id/music_relativeLayout">
 
         <TextView
@@ -16,6 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
+            android:textColor="#000"
             android:text="MUSIC_NAME - AUTHORyujyujyujy"
             android:lines="1"
             android:ellipsize="end"

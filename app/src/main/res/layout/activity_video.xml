@@ -45,6 +45,13 @@
                     android:text="我是name"
                     android:textSize="25sp" />
 
+                <ImageView
+                    android:id="@+id/video_imageView_addFavorite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/no_favorite"/>
+
             </LinearLayout>
 
             <TextView
@@ -231,6 +238,5 @@
         </LinearLayout>
 
     </ScrollView>
-
 
 </LinearLayout>

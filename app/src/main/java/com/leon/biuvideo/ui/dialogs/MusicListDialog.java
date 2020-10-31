@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -15,10 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.MusicPlayListAdapter;
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
-import com.leon.biuvideo.utils.MusicDatabaseUtils;
+import com.leon.biuvideo.utils.MusicListDatabaseUtils;
 
 import java.util.List;
 
+/**
+ * music播放列表弹窗，只在UpSongActivity中出现
+ */
 public class MusicListDialog extends AlertDialog {
     private List<MusicPlayList> musicPlayLists;
     private Context context;
@@ -73,7 +75,7 @@ public class MusicListDialog extends AlertDialog {
             @Override
             public void onItemDeleteListener(int position) {
                 //删除播放列表中的对应条目
-                MusicDatabaseUtils musicDatabaseUtils = new MusicDatabaseUtils(context);
+                MusicListDatabaseUtils musicDatabaseUtils = new MusicListDatabaseUtils(context);
                 MusicPlayList musicPlayList = musicPlayLists.get(position);
                 musicDatabaseUtils.removeMusicItem(musicPlayList.sid);
 

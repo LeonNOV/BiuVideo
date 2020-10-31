@@ -1,40 +1,30 @@
 package com.leon.biuvideo.ui.fragments;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.*;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.ui.activitys.MainActivity;
 import com.leon.biuvideo.ui.activitys.UpMasterActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
-import com.leon.biuvideo.utils.GeneralNotification;
 import com.leon.biuvideo.utils.IDUtils;
 import com.leon.biuvideo.utils.HeroImages;
-import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.LogTip;
-import com.leon.biuvideo.utils.MediaUtils;
 
-import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 
+/**
+ * MainActivity中的主页片段
+ */
 public class HomeFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     private ImageView hero_imageView;
     private Spinner home_spinner;

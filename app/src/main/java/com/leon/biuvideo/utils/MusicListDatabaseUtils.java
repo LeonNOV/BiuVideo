@@ -12,10 +12,10 @@ import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MusicDatabaseUtils {
+public class MusicListDatabaseUtils {
     private final Context context;
 
-    public MusicDatabaseUtils(Context context) {
+    public MusicListDatabaseUtils(Context context) {
         this.context = context;
     }
 
@@ -34,13 +34,13 @@ public class MusicDatabaseUtils {
         while (cursor.moveToNext()) {
             MusicPlayList musicPlayList = new MusicPlayList();
 
-            int sid = cursor.getInt(1);
+            int sid = cursor.getInt(cursor.getColumnIndex("sid"));
             musicPlayList.sid = sid;
 
-            String musicName = cursor.getString(2);
+            String musicName = cursor.getString(cursor.getColumnIndex("musicName"));
             musicPlayList.musicName = musicName;
 
-            String author = cursor.getString(3);
+            String author = cursor.getString(cursor.getColumnIndex("author"));
             musicPlayList.author = author;
 
             musicPlayLists.add(musicPlayList);
@@ -64,8 +64,10 @@ public class MusicDatabaseUtils {
 
         ContentValues values = new ContentValues();
         values.put("sid", musicPlayList.sid);
-        values.put("musicName", musicPlayList.musicName);
+        values.put("bvid", musicPlayList.bvid);
         values.put("author", musicPlayList.author);
+        values.put("musicName", musicPlayList.musicName);
+        values.put("isHaveVideo", musicPlayList.isHaveVideo ? 1 : 0);
         values.put("isDelete", 1);
 
         long insert = database.insert("musicPlayList", null, values);

@@ -9,4 +9,6 @@ public class MusicPlayList {
     public long sid;
     public String musicName;
     public String author;
+    public String bvid;
+    public boolean isHaveVideo;
 }

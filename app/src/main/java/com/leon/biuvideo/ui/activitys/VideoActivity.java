@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.AnthologyAdapter;
+import com.leon.biuvideo.beans.upMasterBean.VideoPlayList;
 import com.leon.biuvideo.beans.videoBean.play.Play;
 import com.leon.biuvideo.beans.videoBean.view.SingleVideoInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
@@ -25,6 +26,7 @@ import com.leon.biuvideo.utils.GeneralNotification;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.MediaUtils;
 import com.leon.biuvideo.utils.Paths;
+import com.leon.biuvideo.utils.VideoListDatabaseUtils;
 import com.leon.biuvideo.utils.WebpSizes;
 import com.leon.biuvideo.utils.mediaParseUtils.MediaParseUtils;
 import com.leon.biuvideo.utils.mediaParseUtils.ViewParseUtils;
@@ -35,8 +37,12 @@ import java.util.*;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * 视频观看activity
+ */
 public class VideoActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, AnthologyAdapter.OnItemClickListener {
     private CircleImageView video_circleImageView_face;
+    private ImageView video_imageView_addFavorite;
     private RecyclerView video_recyclerView_singleVideoList;
     private Spinner video_spinner_quality;
     private ExpandableTextView expand_text_view;
@@ -67,7 +73,12 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
     private int nowPosition = 0;
 
     //视频保存状态
-    boolean saveState;
+    private boolean saveState;
+
+    private VideoListDatabaseUtils videoListDatabaseUtils;
+
+    //视频在videoPlayList库中的状态
+    private boolean videoState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +98,9 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
     private void initView() {
         video_circleImageView_face = findViewById(R.id.video_circleImageView_face);
         video_circleImageView_face.setOnClickListener(this);
+
+        video_imageView_addFavorite = findViewById(R.id.video_imageView_addFavorite);
+        video_imageView_addFavorite.setOnClickListener(this);
 
         video_recyclerView_singleVideoList = findViewById(R.id.video_recyclerView_singleVideoList);
 
@@ -125,10 +139,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         String bvid = intent.getStringExtra("bvid");
 
         //获取ViewPage实体类（视频基本信息）
-        Map<String, Object> map = new HashMap<>();
-        map.put("bvid", bvid);
-        String response_viewPage = HttpUtils.GETByParam(Paths.view, map);
-        viewPage = ViewParseUtils.parseView(response_viewPage);
+        viewPage = ViewParseUtils.parseView(bvid);
 
         //获取视频选集信息
         Map<String, Object> param = new HashMap<>();
@@ -149,6 +160,16 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
         //设置up主昵称
         video_textView_name.setText(viewPage.upInfo.name);
+
+        videoListDatabaseUtils = new VideoListDatabaseUtils(getApplicationContext());
+
+        //查询是否已添加至播放列表
+        videoState = videoListDatabaseUtils.queryFavoriteVideo(viewPage.bvid);
+        if (videoState) {
+            video_imageView_addFavorite.setImageResource(R.drawable.favorite);
+        } else {
+            video_imageView_addFavorite.setImageResource(R.drawable.no_favorite);
+        }
 
         //设置标题
         video_textView_title.setText(viewPage.title);
@@ -277,6 +298,40 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 Intent intent = new Intent(this, UpMasterActivity.class);
                 intent.putExtra("mid", viewPage.upInfo.mid);
                 startActivity(intent);
+                break;
+            case R.id.video_imageView_addFavorite:
+                //根据videoState判断是否保存获取删除该video
+                if (videoState) {
+                    //从videoPlayList中删除此video
+                    boolean state = videoListDatabaseUtils.removeVideo(viewPage.bvid);
+
+                    Toast.makeText(this, state ? "已从播放列表中删除" : "删除失败~~~", Toast.LENGTH_SHORT).show();
+
+                    if (state) {
+                        video_imageView_addFavorite.setImageResource(R.drawable.no_favorite);
+                    }
+                } else {
+                    //添加该video至videoPlayList中
+                    VideoPlayList videoPlayList = new VideoPlayList();
+
+                    videoPlayList.bvid = viewPage.bvid;
+                    videoPlayList.uname = viewPage.upInfo.name;
+                    videoPlayList.desc = viewPage.desc;
+                    videoPlayList.coverUrl = viewPage.coverUrl;
+                    videoPlayList.length = viewPage.singleVideoInfoList.get(0).duration;//只获取第一个视频的长度
+                    videoPlayList.play = viewPage.videoInfo.view;
+                    videoPlayList.danmaku = viewPage.videoInfo.danmaku;
+
+
+                    boolean state = videoListDatabaseUtils.addFavoriteVideo(videoPlayList);
+
+                    Toast.makeText(this, state ? "已成功添加到播放列表中" : "添加失败~~~", Toast.LENGTH_SHORT).show();
+
+                    if (state) {
+                        video_imageView_addFavorite.setImageResource(R.drawable.favorite);
+                    }
+                }
+
                 break;
             case R.id.video_button_saveVideo://保存选定画质的视频
 

@@ -7,12 +7,22 @@ public class Paths {
     public static String view = "https://api.bilibili.com/x/web-interface/view";
     public static String playUrl = "https://api.bilibili.com/x/player/playurl";
 
-    //视频播放请求地址
+    /**
+     * 获取每个选集的基本信息
+     *
+     */
+    public static String pageList = "https://api.bilibili.com/x/player/pagelist?bvid=BV1mt4y1q7LT&jsonp=jsonp";
+
+    /**
+     * 视频播放请求地址
+     */
     public static String videoBaeUrl = "https://www.bilibili.com/blackboard/html5mobileplayer.html?";
 
-    //UP主基本信息接口
-    //参数：
-    // mid：up主id
+    /**
+     * UP主基本信息接口
+     * 参数：
+     *  mid：up主id
+     */
     public static String info = "https://api.bilibili.com/x/space/acc/info";
 
     /**

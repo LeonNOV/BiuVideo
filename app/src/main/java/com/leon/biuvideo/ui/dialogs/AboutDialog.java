@@ -17,6 +17,9 @@ import com.leon.biuvideo.beans.AboutBean;
 
 import java.util.List;
 
+/**
+ * 关于弹窗
+ */
 public class AboutDialog extends AlertDialog {
     private RecyclerView aboutDialog_recyclerView;
     private Button aboutDialog_button;

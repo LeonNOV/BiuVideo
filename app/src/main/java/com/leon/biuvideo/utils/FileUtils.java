@@ -8,6 +8,9 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
+/**
+ * 关于文件操作的工具类
+ */
 public class FileUtils {
     /**
      * 写入文件前，检查文件夹状态的方法

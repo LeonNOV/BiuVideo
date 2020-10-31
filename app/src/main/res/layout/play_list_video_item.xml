@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/play_list_video_relativeLayout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <com.shehuan.niv.NiceImageView
+        android:id="@+id/play_list_video_imageView_cover"
+        android:layout_width="150dp"
+        android:layout_height="125dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher_background"
+        app:corner_radius="10dp" />
+
+    <TextView
+        android:id="@+id/play_list_video_textView_length"
+        android:layout_width="40dp"
+        android:layout_height="20dp"
+        android:layout_alignEnd="@id/play_list_video_imageView_cover"
+        android:layout_alignBottom="@id/play_list_video_imageView_cover"
+        android:layout_margin="10dp"
+        android:background="@drawable/shape_gray"
+        android:gravity="center"
+        android:text="02:49"
+        android:textSize="11sp" />
+
+    <TextView
+        android:id="@+id/play_list_video_textView_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@id/play_list_video_imageView_cover"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="alskdfjdslkghfdjkghdfkgdfhkgdjkhdgkljfdhkdgkghdkgkfdgkdhdfkgdkghkdgkdhgkdghfdkfdkgdh"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/play_list_video_textView_desc"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@id/play_list_video_imageView_cover"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/play_list_user" />
+
+            <TextView
+                android:id="@+id/play_list_video_imageView_userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:text="UserName"
+                android:textColor="@color/light_gray"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_video_play" />
+
+            <TextView
+                android:id="@+id/play_list_video_textView_play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:text="14d8.2万"
+                android:textColor="@color/light_gray"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/play_list_video_danmaku" />
+
+            <TextView
+                android:id="@+id/play_list_video_textView_danmaku"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:text="1.2万"
+                android:textColor="@color/light_gray"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

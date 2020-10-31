@@ -23,6 +23,9 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.List;
 
+/**
+ * UpMasterActivity中的pic片段
+ */
 public class UpPictureFragment extends Fragment {
     private long mid;
     private int pageNum;

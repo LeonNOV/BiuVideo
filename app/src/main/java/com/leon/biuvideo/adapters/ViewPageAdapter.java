@@ -1,4 +1,4 @@
-package com.leon.biuvideo.adapters.UpMaster;
+package com.leon.biuvideo.adapters;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -7,10 +7,10 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import java.util.List;
 
-public class UpMasterViewPageAdapter extends FragmentPagerAdapter {
+public class ViewPageAdapter extends FragmentPagerAdapter {
     private List<Fragment> fragments;
 
-    public UpMasterViewPageAdapter(@NonNull FragmentManager fm, List<Fragment> fragments) {
+    public ViewPageAdapter(@NonNull FragmentManager fm, List<Fragment> fragments) {
         super(fm);
         this.fragments = fragments;
     }

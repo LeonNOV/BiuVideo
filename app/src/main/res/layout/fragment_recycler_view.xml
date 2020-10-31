@@ -6,16 +6,16 @@
     android:background="@color/bilibili_pink_lite">
 
     <TextView
-        android:id="@+id/favorite_textView_noDataStr"
+        android:id="@+id/textView_noDataStr"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="啥都没有哎~~~"
+        android:text="@string/noneData"
         android:textColor="#000"
         android:textSize="30sp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/favorite_recyclerView"
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
