@@ -1,11 +1,15 @@
 package com.leon.biuvideo.ui.activitys;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.util.Log;
 import android.view.*;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -23,13 +27,15 @@ import com.leon.biuvideo.ui.dialogs.AboutDialog;
 import com.leon.biuvideo.ui.fragments.FavoriteFragment;
 import com.leon.biuvideo.ui.fragments.HomeFragment;
 import com.leon.biuvideo.ui.fragments.PlayListFragment;
+import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.LogTip;
 
 import java.util.ArrayList;
 
 /**
  * 主activity
  */
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, Toolbar.OnMenuItemClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, Toolbar.OnMenuItemClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
     private DrawerLayout drawer_layout;
     private NavigationView navigation_view;
     private Toolbar main_toolBar;
@@ -44,12 +50,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
+        //初始化
+        init();
+
         initView();
 
-        //设置网络
+        //初始化网络
         initInternet();
     }
 
+    /**
+     * app参数初始化
+     */
+    private void init() {
+        //获取权限
+        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1024);
+            ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+
+//        ActivityCompat.requestPermissions(MainActivity.this, new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 1024);
+
+        //检查网络状态
+        InternetUtils.InternetState internetState = InternetUtils.InternetState(getApplicationContext());
+        switch (internetState) {
+            case INTERNET_NoAvailable:
+                Toast.makeText(getApplicationContext(), "无网络", Toast.LENGTH_SHORT).show();
+                break;
+            case INTERNET_WIFI:
+                Toast.makeText(getApplicationContext(), "WIFI", Toast.LENGTH_SHORT).show();
+                break;
+            case INTERNET_MOBILE:
+                Toast.makeText(getApplicationContext(), "移动网络", Toast.LENGTH_SHORT).show();
+            default:
+                Toast.makeText(getApplicationContext(), "未知类型", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
+    /**
+     * 初始化控件
+     */
     private void initView() {
         drawer_layout = findViewById(R.id.drawer_layout);
 
@@ -75,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * 设置网络
+     * 初始化网络
      */
     private void initInternet() {
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
@@ -92,7 +135,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .build());
     }
 
-    //侧滑菜单栏的监听
+    /**
+     * 侧滑菜单栏的监听
+     *
+     * @param item  监听的item
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -125,8 +172,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(currentFragment != null) {
                 transaction.hide(currentFragment);
             }
-            transaction.replace(R.id.main_fragment, targetFragment);
-            transaction.commit();
+            transaction.replace(R.id.main_fragment, targetFragment).commit();
+//            transaction.commit();
         } else {
             transaction.hide(currentFragment).show(targetFragment).commit();
         }
@@ -183,5 +230,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         return true;
+    }
+
+    /**
+     * 权限回调
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 1024) {
+            if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                Toast.makeText(getApplicationContext(), "权限申请成功", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "权限申请失败", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

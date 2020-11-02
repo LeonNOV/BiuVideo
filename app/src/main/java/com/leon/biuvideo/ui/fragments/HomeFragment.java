@@ -135,26 +135,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.home_imageView_hero:
-
-                //判断是否有网
-//                InternetUtils.InternetState internetState = InternetUtils.InternetState(context);
-//                switch (internetState) {
-//                    case INTERNET_NoAvailable:
-//                        Toast.makeText(context, "无网络", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case INTERNET_WIFI:
-//                        Toast.makeText(context, "WIFI", Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case INTERNET_MOBILE:
-//                        Toast.makeText(context, "移动网络", Toast.LENGTH_SHORT).show();
-//                    default:
-//                        Toast.makeText(context, "未知类型", Toast.LENGTH_SHORT).show();
-//                        break;
-//                }
-
+                //抖一抖！！！
                 ActivityCompat.requestPermissions(requireActivity(), new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 1024);
 
-                //抖一抖！！！
                 break;
             case R.id.home_button_confirm:
 
@@ -239,20 +222,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         spinnerIndex = i;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1024) {
-            for (int i = 0; i < permissions.length; i++) {
-                if (permissions[i].equals("android.permission.WRITE_EXTERNAL_STORAGE") && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(context, "权限" + permissions[i] + "申请成功", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(context, "权限" + permissions[i] + "申请失败", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
     }
 
     @Override
