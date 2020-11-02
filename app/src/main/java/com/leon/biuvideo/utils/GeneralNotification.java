@@ -6,14 +6,17 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Build;
 
+/**
+ * 创建通知推送
+ */
 public class GeneralNotification {
-    private Context context;
-    private NotificationManager manager;    //getSystemService(Context.NOTIFICATION_SERVICE);
+    private final Context context;
+    private final NotificationManager manager;
     public Notification notification;
 
-    private String channelId;   //channel的ID
-    private String description; //描述
-    private int tag;    //该通知的id，用于取消通知的推送
+    private final String channelId;   //channel的ID
+    private final String description; //描述
+    private final int tag;    //该通知的id，用于取消通知的推送
 
     public GeneralNotification(Context context, Object manager, String channelId, String description, int tag) {
         this.context = context;

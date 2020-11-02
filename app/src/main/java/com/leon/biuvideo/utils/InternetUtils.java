@@ -2,13 +2,11 @@ package com.leon.biuvideo.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.net.Network;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 public class InternetUtils {
 
-    //判断网络连接
+    //判断网络状态
     public static InternetState InternetState(Context context) {
         if (context != null) {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

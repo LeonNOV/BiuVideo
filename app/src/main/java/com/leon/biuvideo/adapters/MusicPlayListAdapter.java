@@ -17,9 +17,12 @@ import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
 
 import java.util.List;
 
+/**
+ * 音乐播放界面中播放列表的适配器
+ */
 public class MusicPlayListAdapter extends RecyclerView.Adapter<MusicPlayListAdapter.ViewHolder> {
-    List<MusicPlayList> musicPlayLists;
-    private Context context;
+    public List<MusicPlayList> musicPlayLists;
+    private final Context context;
 
     public MusicPlayListAdapter(List<MusicPlayList> musicPlayLists, Context context) {
         this.musicPlayLists = musicPlayLists;

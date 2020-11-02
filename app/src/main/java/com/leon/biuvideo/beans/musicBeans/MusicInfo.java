@@ -2,6 +2,9 @@ package com.leon.biuvideo.beans.musicBeans;
 
 import java.util.List;
 
+/**
+ * 音频/音乐实体类
+ */
 public class MusicInfo {
     public long sid;
     public long uid;

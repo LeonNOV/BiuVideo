@@ -19,9 +19,12 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * 收藏fragment适配器
+ */
 public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHolder> {
     private List<Favorite> favorites;
-    private Context context;
+    private final Context context;
 
     public FavoriteAdapter(List<Favorite> favorites, Context context) {
         this.favorites = favorites;

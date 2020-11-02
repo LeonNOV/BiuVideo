@@ -15,9 +15,12 @@ import com.leon.biuvideo.utils.WebpSizes;
 
 import java.util.List;
 
+/**
+ * 用户界面，相簿fragment适配器
+ */
 public class UpPictureAdapter extends RecyclerView.Adapter<UpPictureAdapter.ViewHolder> {
     private List<UpPicture> upPictures;
-    private Context context;
+    private final Context context;
 
     public UpPictureAdapter(List<UpPicture> upPictures, Context context) {
         this.upPictures = upPictures;
@@ -42,7 +45,8 @@ public class UpPictureAdapter extends RecyclerView.Adapter<UpPictureAdapter.View
         //设置相簿count
         //总数大于2则进行显示
         if (upPicture.count > 1) {
-            holder.up_picture_textView_count.setText(upPicture.count + "P");
+            String p = upPicture.count + "P";
+            holder.up_picture_textView_count.setText(p);
         } else {
             holder.up_picture_textView_count.setVisibility(View.INVISIBLE);
         }
@@ -51,10 +55,12 @@ public class UpPictureAdapter extends RecyclerView.Adapter<UpPictureAdapter.View
         holder.up_picture_textView_desc.setText(upPicture.description);
 
         //设置查看次数
-        holder.up_picture_textView_view.setText(upPicture.view + "次观看");
+        String view = upPicture.view + "次观看";
+        holder.up_picture_textView_view.setText(view);
 
         //设置喜欢数
-        holder.up_picture_textView_like.setText(upPicture.like + "次喜欢");
+        String like = upPicture.like + "次喜欢";
+        holder.up_picture_textView_like.setText(like);
     }
 
     @Override
@@ -62,7 +68,7 @@ public class UpPictureAdapter extends RecyclerView.Adapter<UpPictureAdapter.View
         return upPictures.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         ImageView up_picture_imageView_cover;
         TextView
                 up_picture_textView_count,

@@ -16,7 +16,7 @@ import com.leon.biuvideo.beans.videoBean.view.ViewPage;
 import com.leon.biuvideo.utils.WebpSizes;
 
 /**
- * video_listView_singleVideoList控件的适配器
+ * videoActivity播放列表控件的适配器
  */
 public class AnthologyAdapter extends RecyclerView.Adapter<AnthologyAdapter.ViewHolder> {
     private final Context context;
@@ -56,7 +56,7 @@ public class AnthologyAdapter extends RecyclerView.Adapter<AnthologyAdapter.View
         this.onItemClickListener = clickListener;
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         ImageView item_imageView_cover;
         TextView item_textView_title;
 
@@ -75,6 +75,7 @@ public class AnthologyAdapter extends RecyclerView.Adapter<AnthologyAdapter.View
                         int position = getAdapterPosition();
 
                         if (position != RecyclerView.NO_POSITION) {
+
                             //singleVideoIndex的值和position是同一个
                             onItemClickListener.onImageViewClicked(position);
                         }

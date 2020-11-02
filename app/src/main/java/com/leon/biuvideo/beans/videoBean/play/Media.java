@@ -7,10 +7,12 @@ import java.util.List;
 public class Media implements Serializable {
     public String baseUrl;
     public List<String> backupUrl;
+
+    //暂不使用
     public String codecs;
 
     /**
-     * 获取视频帧数
+     * 获取视频帧数，暂不使用
      */
     public int getFrameRate(String framerate) {
         String[] split = framerate.split("/");

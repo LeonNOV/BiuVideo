@@ -7,6 +7,9 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import java.util.List;
 
+/**
+ * viewPage通用适配器
+ */
 public class ViewPageAdapter extends FragmentPagerAdapter {
     private List<Fragment> fragments;
 

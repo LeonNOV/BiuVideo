@@ -91,6 +91,12 @@ public class UpPictureParseUtils {
         return null;
     }
 
+    /**
+     * 获取相簿总数
+     *
+     * @param mid   用户ID
+     * @return  返回相簿数量
+     */
     public static int getPictureCount(long mid) {
         Map<String, Object> values = new HashMap<>();
         values.put("mid", mid);

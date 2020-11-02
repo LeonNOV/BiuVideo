@@ -35,6 +35,7 @@ import java.util.List;
 
 /**
  * 用户界面activity
+ * 由于用户粉丝数、获赞数和观看数的获取需要使用cookie获取，所以暂不添加该三项
  */
 public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
     private ImageView up_imageView_cover;
@@ -226,6 +227,12 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
         database.close();
     }
 
+    /**
+     * 查询对应用户是否存在于favorite_up库中
+     *
+     * @param mid   用户id
+     * @return  true：存在；false：不存在
+     */
     private boolean queryFavoriteState(long mid) {
         SQLiteHelper sqLiteHelper = new SQLiteHelper(getApplicationContext(), 1);
         SQLiteDatabase database = sqLiteHelper.getReadableDatabase();

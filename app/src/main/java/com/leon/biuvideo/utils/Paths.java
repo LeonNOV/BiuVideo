@@ -15,6 +15,9 @@ public class Paths {
 
     /**
      * 视频播放请求地址
+     * 参数：
+     *      aid
+     *      cid
      */
     public static String videoBaeUrl = "https://www.bilibili.com/blackboard/html5mobileplayer.html?";
 
@@ -38,7 +41,7 @@ public class Paths {
     public static String videos = "https://api.bilibili.com/x/space/arc/search";
 
     /**
-     * 该接口需要知道动态的类型，百度找不到，所以，弃坑。。。
+     * 该接口需要知道用户所发动态的类型，百度找不到，所以，弃坑。。。
      * 获取相簿列表
      *      参数：
      *          visitor_uid：查看者id，默认为0

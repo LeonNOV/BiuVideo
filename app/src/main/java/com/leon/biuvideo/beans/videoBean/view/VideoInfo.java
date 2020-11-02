@@ -2,7 +2,9 @@ package com.leon.biuvideo.beans.videoBean.view;
 
 import java.io.Serializable;
 
-//视频信息
+/**
+ * 视频信息
+ */
 public class VideoInfo implements Serializable {
     public int view;
     public int danmaku;

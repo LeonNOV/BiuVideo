@@ -10,6 +10,7 @@ import com.leon.biuvideo.beans.videoBean.view.UpInfo;
 import com.leon.biuvideo.beans.videoBean.view.VideoInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.LogTip;
 import com.leon.biuvideo.utils.Paths;
 
 import java.util.ArrayList;
@@ -21,8 +22,6 @@ import java.util.Map;
  * view接口解析工具
  */
 public class ViewParseUtils {
-
-    private static final String TAG = "LeonLogCat-red";
 
     /**
      * 解析view接口响应的数据
@@ -94,7 +93,7 @@ public class ViewParseUtils {
                 return viewPage;
             }
         } catch (NullPointerException e) {
-            Log.e(TAG, "parseView: 数据解析出错");
+            Log.e(LogTip.red, "parseView: 数据解析出错");
             e.printStackTrace();
         }
 

@@ -1,7 +1,7 @@
 package com.leon.biuvideo.beans.upMasterBean;
 
 /**
- * 音频具体信息
+ * 音频/音乐具体信息实体类
  */
 public class AudioInfo {
     public long sid;//音频id

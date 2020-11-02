@@ -19,10 +19,14 @@ import com.leon.biuvideo.utils.WebpSizes;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+/**
+ * 用户界面，视频fragment适配器
+ */
 public class UpVideoAdapter extends RecyclerView.Adapter {
     private List<UpVideo> upVideos;
-    private Context context;
+    private final Context context;
 
     public UpVideoAdapter(List<UpVideo> upVideos, Context context) {
         this.upVideos = upVideos;
@@ -64,7 +68,7 @@ public class UpVideoAdapter extends RecyclerView.Adapter {
         innerHolder.up_media_textView_play.setText(ValueFormat.generateCN(upVideo.play));
 
         //设置上传日期
-        innerHolder.up_media_textView_ctime.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date(upVideo.create * 1000)));
+        innerHolder.up_media_textView_ctime.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA).format(new Date(upVideo.create * 1000)));
 
         //设置标题部分
         innerHolder.up_media_textView_title.setText(upVideo.title);
@@ -85,7 +89,7 @@ public class UpVideoAdapter extends RecyclerView.Adapter {
         return upVideos.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         ImageView up_media_imageView_cover;
         TextView
                 up_media_textView_isUnionmedia,

@@ -1,7 +1,7 @@
 package com.leon.biuvideo.beans.upMasterBean;
 
 /**
- * up上传的视频
+ * 用户上传的视频的基本信息
  */
 public class UpVideo {
     public long mid;

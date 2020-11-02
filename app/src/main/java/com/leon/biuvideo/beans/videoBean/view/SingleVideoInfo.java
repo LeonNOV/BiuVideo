@@ -2,7 +2,9 @@ package com.leon.biuvideo.beans.videoBean.view;
 
 import java.io.Serializable;
 
-//单个视频选集信息
+/**
+ * 单个视频选集信息
+ */
 public class SingleVideoInfo implements Serializable {
     public long cid;
     public int page;

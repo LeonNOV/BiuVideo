@@ -46,7 +46,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
-        //创建数据库表格
+        //创建数据库表格，通过反射获取SQL语句
         Class<SQLiteHelper> sqLiteHelperClass = SQLiteHelper.class;
         Field[] fields = sqLiteHelperClass.getDeclaredFields();
         for (Field field : fields) {

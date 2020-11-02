@@ -1,7 +1,5 @@
 package com.leon.biuvideo.beans.upMasterBean;
 
-import java.util.List;
-
 /**
  * 相簿
  */

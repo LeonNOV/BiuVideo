@@ -3,7 +3,7 @@ package com.leon.biuvideo.beans.upMasterBean;
 import java.io.Serializable;
 
 /**
- * 音频基本信息
+ * 音频/音乐基本信息实体类
  */
 public class UpAudio implements Serializable {
     public long sid;//音频id

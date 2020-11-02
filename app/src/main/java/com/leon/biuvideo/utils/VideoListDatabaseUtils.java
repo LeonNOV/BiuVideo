@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VideoListDatabaseUtils {
-    private Context context;
+    private final Context context;
 
     public VideoListDatabaseUtils(Context context) {
         this.context = context;

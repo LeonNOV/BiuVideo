@@ -3,7 +3,6 @@ package com.leon.biuvideo.ui.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
@@ -50,13 +49,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        view = getView();
-        context = getActivity();
-
+        init();
         initView();
         initValues();
     }
 
+    /**
+     * 初始化
+     */
+    private void init() {
+        view = getView();
+        context = getActivity();
+    }
+
+    /**
+     * 初始化控件
+     */
     private void initView() {
         hero_imageView = view.findViewById(R.id.home_imageView_hero);
         hero_imageView.setOnClickListener(this);

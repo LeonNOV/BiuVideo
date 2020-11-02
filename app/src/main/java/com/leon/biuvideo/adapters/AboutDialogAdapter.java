@@ -12,10 +12,12 @@ import com.leon.biuvideo.beans.AboutBean;
 
 import java.util.List;
 
+/**
+ * 关于dialog适配器
+ */
 public class AboutDialogAdapter extends RecyclerView.Adapter<AboutDialogAdapter.ViewHolder> {
     private List<AboutBean> aboutBeans;
-    private Context context;
-    private View view;
+    private final Context context;
 
     public AboutDialogAdapter(List<AboutBean> aboutBeans, Context context) {
         this.aboutBeans = aboutBeans;
@@ -25,7 +27,7 @@ public class AboutDialogAdapter extends RecyclerView.Adapter<AboutDialogAdapter.
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        view = LayoutInflater.from(context).inflate(R.layout.about_dialog_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.about_dialog_item, parent, false);
 
         return new ViewHolder(view);
     }
@@ -44,7 +46,7 @@ public class AboutDialogAdapter extends RecyclerView.Adapter<AboutDialogAdapter.
         return aboutBeans.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         TextView
                 about_dialog_item_textView_title,
                 about_dialog_item_textView_license,

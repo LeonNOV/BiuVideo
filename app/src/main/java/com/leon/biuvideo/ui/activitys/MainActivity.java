@@ -1,12 +1,13 @@
 package com.leon.biuvideo.ui.activitys;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.util.Log;
 import android.view.*;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -28,9 +29,9 @@ import com.leon.biuvideo.ui.fragments.FavoriteFragment;
 import com.leon.biuvideo.ui.fragments.HomeFragment;
 import com.leon.biuvideo.ui.fragments.PlayListFragment;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.LogTip;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 主activity
@@ -41,7 +42,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Toolbar main_toolBar;
     private ImageButton toolBar_imageButton_menu, navigation_imageButton_back;
 
-    private Fragment currentFragment;
+    private List<Fragment> fragmentList;
+
+    private Fragment homeFragment;
+    private Fragment favoriteFragment;
+    private Fragment playListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,31 +68,58 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * app参数初始化
      */
     private void init() {
-        //获取权限
-        int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        //检查权限有没有获取
+        int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1024);
-            ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
+            //如果应用之前请求过此权限但用户拒绝了请求，此方法将返回 true
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                //创建对话框
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("读写权限");
+                builder.setMessage("由于保存媒体资源时需要用到\"读写权限\"，否则将无法正常使用");
+                builder.setPositiveButton("开启", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1024);
+                    }
+                });
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(MainActivity.this, "请自行开启对应权限，否则应用将无法正常使用", Toast.LENGTH_SHORT).show();
+                        builder.create().dismiss();
+                    }
+                });
 
-//        ActivityCompat.requestPermissions(MainActivity.this, new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 1024);
+                builder.create().show();
+            } else {
+                //申请读写权限
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1024);
+            }
+        }
 
         //检查网络状态
         InternetUtils.InternetState internetState = InternetUtils.InternetState(getApplicationContext());
         switch (internetState) {
             case INTERNET_NoAvailable:
-                Toast.makeText(getApplicationContext(), "无网络", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "没有网络哦~~~", Toast.LENGTH_SHORT).show();
                 break;
-            case INTERNET_WIFI:
-                Toast.makeText(getApplicationContext(), "WIFI", Toast.LENGTH_SHORT).show();
-                break;
+//            case INTERNET_WIFI:
+//                Toast.makeText(getApplicationContext(), "WIFI", Toast.LENGTH_SHORT).show();
+//                break;
             case INTERNET_MOBILE:
-                Toast.makeText(getApplicationContext(), "移动网络", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "现处于移动网络状态下，请注意流量的使用", Toast.LENGTH_SHORT).show();
+                break;
             default:
-                Toast.makeText(getApplicationContext(), "未知类型", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "未知类型", Toast.LENGTH_SHORT).show();
                 break;
         }
+
+        //初始化fragment
+        fragmentList = new ArrayList<>();
+        //默认显示HomeFragment
+        fragmentList.add(new HomeFragment());
     }
 
     /**
@@ -144,13 +176,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item1:
-                switchFragment(new HomeFragment());
+
+                if (homeFragment == null) {
+                    homeFragment = new HomeFragment();
+                }
+
+                switchFragment(homeFragment);
                 break;
             case R.id.item2:
-                switchFragment(new FavoriteFragment());
+
+                if (favoriteFragment == null) {
+                    favoriteFragment = new FavoriteFragment();
+                }
+
+                switchFragment(favoriteFragment);
                 break;
             case R.id.item3:
-                switchFragment(new PlayListFragment());
+
+                if (playListFragment == null) {
+                    playListFragment = new PlayListFragment();
+                }
+
+                switchFragment(playListFragment);
                 break;
             default: break;
         }
@@ -162,23 +209,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * fragment的切换
      *
-     * @param targetFragment    要切换到的fragment
+     * @param fragment  要添加的fragment
      */
-    private void switchFragment(Fragment targetFragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+    private void switchFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
-        if (!targetFragment.isAdded()) {
-            //第一次使用switchFragment()时currentFragment为null，所以要判断一下
-            if(currentFragment != null) {
-                transaction.hide(currentFragment);
-            }
-            transaction.replace(R.id.main_fragment, targetFragment).commit();
-//            transaction.commit();
+        //判断该fragment是否已经被添加过
+        if (!fragment.isAdded()) {
+            //添加到 fragmentList
+            fragmentList.add(fragment);
+            fragmentTransaction.add(R.id.main_fragment, fragment).commit();
         } else {
-            transaction.hide(currentFragment).show(targetFragment).commit();
-        }
+            for (Fragment frag : fragmentList) {
+                if (frag != fragment) {
+                    //隐藏其他fragment
+                    fragmentTransaction.hide(frag);
+                } else {
+                    fragmentTransaction.show(fragment);
+                }
+            }
 
-        currentFragment = targetFragment;
+            fragmentTransaction.commit();
+        }
     }
 
     //设置main中的打开侧滑菜单按钮的监听和侧滑菜单中的返回按钮
@@ -235,9 +287,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 权限回调
      *
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
+     * @param requestCode   请求码
+     * @param permissions   文件读写权限
+     * @param grantResults  授权结果
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

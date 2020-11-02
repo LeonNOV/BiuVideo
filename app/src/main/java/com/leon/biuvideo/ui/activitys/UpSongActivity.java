@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -46,7 +47,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * 音乐/音频Activity
  */
 public class UpSongActivity extends Activity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
-
     //返回、播放列表
     private ImageView music_imageView_back, music_imageView_musicList;
 
@@ -67,6 +67,8 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
             music_imageView_play,
             music_imageView_coin,
             music_imageView_comment;
+
+    //音乐原链接
     private ImageView music_imageView_link;
 
     //缓存歌曲
@@ -83,6 +85,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
             music_imageView_up,
             music_imageView_next;
 
+    //暂停/播放icon
     public static ImageView music_imageView_control;
 
     //所有的sid
@@ -100,10 +103,10 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
     //music状态：0：停止(初始化状态)、1：正在播放、2：暂停状态
     public static int musicState = 0;
 
-    //旋转动画
+    //封面旋转动画
     public static ObjectAnimator rotation;
 
-    //存在于于播放列中的状态
+    //存在于播放列表中的状态
     private boolean isHavePlayList;
 
     //控制music

@@ -49,7 +49,7 @@ public class MediaUtils {
             /**
              * 出现：A/libc: Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR),
              *      fault addr 0xc in tid 2843 (Thread-12), pid 2430 (m.leon.biuvideo)
-             * 这样的错误可能是缓冲区太小的缘故
+             * 这样的错误可能是缓冲区太小的缘故，设置sampleSize的大小即可
              */
             int sampleSize = 1024 * 1000;
             ByteBuffer videoBuffer = ByteBuffer.allocate(sampleSize);
@@ -124,6 +124,7 @@ public class MediaUtils {
 
     /**
      * 设置头信息
+     * 属于冗余，待清理
      *
      * @return  返回头信息
      */

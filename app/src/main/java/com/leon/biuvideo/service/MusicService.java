@@ -23,6 +23,13 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * 音乐后台播放服务
+ * 该服务暂属于Bound状态，即该服务的生命周期和UpSongActivity一样
+ * 如果需要该服务的生命周期不和UpSongActivity一样的话则只需要在
+ * UpSongActivity中使用onStart()，和在该服务中使用onStartCommand()即可
+ * 以上两个方法都已完成，只需取消对应的注释
+ */
 public class MusicService extends Service {
     private MediaPlayer mediaPlayer;
     private Timer timer;
@@ -154,8 +161,6 @@ public class MusicService extends Service {
         headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36 Edg/86.0.622.51");
 
         try {
-
-            //处理java对象和native对象不一致的情况
             if (mediaPlayer == null) {
                 mediaPlayer = new MediaPlayer();
             }
@@ -165,11 +170,6 @@ public class MusicService extends Service {
 
                 mediaPlayer = new MediaPlayer();
             }
-
-
-//            onDestroy();
-//
-//            mediaPlayer = new MediaPlayer();
 
             //设置数据源
             mediaPlayer.setDataSource(getApplicationContext(), uri, headers);

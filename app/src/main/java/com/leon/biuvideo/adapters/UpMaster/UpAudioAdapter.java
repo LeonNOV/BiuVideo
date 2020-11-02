@@ -20,9 +20,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * 用户界面，音频/音乐fragment适配器
+ */
 public class UpAudioAdapter extends RecyclerView.Adapter<UpAudioAdapter.ViewHolder> {
     private List<UpAudio> upAudios;
-    private Context context;
+    private final Context context;
 
     public UpAudioAdapter(List<UpAudio> upAudios, Context context) {
         this.upAudios = upAudios;

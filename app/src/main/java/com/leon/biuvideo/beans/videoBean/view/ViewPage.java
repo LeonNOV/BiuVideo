@@ -3,7 +3,9 @@ package com.leon.biuvideo.beans.videoBean.view;
 import java.io.Serializable;
 import java.util.List;
 
-//view接口bean
+/**
+ * view接口实体类
+ */
 public class ViewPage implements Serializable {
     public String bvid;
     public long aid;

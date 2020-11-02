@@ -175,10 +175,12 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         video_textView_title.setText(viewPage.title);
 
         //设置观看数
-        video_textView_view.setText(viewPage.videoInfo.view + "次观看");
+        String view = viewPage.videoInfo.view + "次观看";
+        video_textView_view.setText(view);
 
         //设置弹幕数
-        video_textView_danmaku.setText(viewPage.videoInfo.danmaku + "弹幕");
+        String danmaku = viewPage.videoInfo.danmaku + "弹幕";
+        video_textView_danmaku.setText(danmaku);
 
         //设置上传时间(UTC+8)
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
@@ -187,16 +189,20 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         video_textView_upTime.setText(sdf.format(new Date(viewPage.upTime * 1000)));
 
         //设置点赞数
-        video_textView_like.setText(viewPage.videoInfo.like + "点赞");
+        String like = viewPage.videoInfo.like + "点赞";
+        video_textView_like.setText(like);
 
         //设置投币数
-        video_textView_coin.setText(viewPage.videoInfo.coin + "投币");
+        String coin = viewPage.videoInfo.coin + "投币";
+        video_textView_coin.setText(coin);
 
         //设置收藏数
-        video_textView_favorite.setText(viewPage.videoInfo.favorite + "收藏");
+        String favorite = viewPage.videoInfo.favorite + "收藏";
+        video_textView_favorite.setText(favorite);
 
         //设置分享数
-        video_textView_share.setText(viewPage.videoInfo.share + "分享");
+        String share = viewPage.videoInfo.share + "分享";
+        video_textView_share.setText(share);
 
         //设置视频说明
         expand_text_view.setText(viewPage.desc);

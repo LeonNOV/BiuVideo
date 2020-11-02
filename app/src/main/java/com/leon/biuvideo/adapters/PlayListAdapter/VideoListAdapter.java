@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.ViewHolder> {
     private List<VideoPlayList> videoPlayLists;
-    private Context context;
+    private final Context context;
 
     public VideoListAdapter(List<VideoPlayList> videoPlayLists, Context context) {
         this.videoPlayLists = videoPlayLists;
