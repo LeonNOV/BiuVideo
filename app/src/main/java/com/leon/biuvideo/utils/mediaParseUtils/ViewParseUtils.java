@@ -43,52 +43,40 @@ public class ViewParseUtils {
                 ViewPage viewPage = new ViewPage();
 
                 //视频bvid
-                String data_bvid = dataObject.getString("bvid");
-                viewPage.bvid = data_bvid;
+                viewPage.bvid = dataObject.getString("bvid");
 
                 //视频aid
-                long aid = dataObject.getLong("aid");
-                viewPage.aid = aid;
+                viewPage.aid = dataObject.getLong("aid");
 
                 //选集个数
-                int videos = dataObject.getIntValue("videos");
-                viewPage.videos = videos;
+                viewPage.videos = dataObject.getIntValue("videos");
 
                 //视频分类id
-                int tid = dataObject.getIntValue("tid");
-                viewPage.tid = tid;
+                viewPage.tid = dataObject.getIntValue("tid");
 
                 //分类名称
-                String tname = dataObject.getString("tname");
-                viewPage.tname = tname;
+                viewPage.tname = dataObject.getString("tname");
 
                 //视频封面
-                String pic = dataObject.getString("pic");
-                viewPage.coverUrl = pic;
+                viewPage.coverUrl = dataObject.getString("pic");
 
                 //视频标题
-                String title = dataObject.getString("title");
-                viewPage.title = title;
+                viewPage.title = dataObject.getString("title");
 
                 //视频上传日期（秒）
-                Long pubdate = dataObject.getLong("pubdate");
-                viewPage.upTime = pubdate;
+                viewPage.upTime = dataObject.getLong("pubdate");
 
                 //视频说明
-                String desc = dataObject.getString("desc");
-                viewPage.desc = desc;
+                viewPage.desc = dataObject.getString("desc");
 
                 //获取up主信息
-                UpInfo owner = parseUpInfo(dataObject.getJSONObject("owner"));
-                viewPage.upInfo = owner;
+                viewPage.upInfo = parseUpInfo(dataObject.getJSONObject("owner"));
 
                 //获取视频信息
-                VideoInfo videoInfo = parseVideoInfo(dataObject.getJSONObject("stat"));
-                viewPage.videoInfo = videoInfo;
+                viewPage.videoInfo = parseVideoInfo(dataObject.getJSONObject("stat"));
 
                 //获取选集信息
-                List<SingleVideoInfo> singleVideoInfoList = parseSingleVideoInfo(dataObject.getJSONArray("pages"));
-                viewPage.singleVideoInfoList = singleVideoInfoList;
+                viewPage.singleVideoInfoList = parseSingleVideoInfo(dataObject.getJSONArray("pages"));
 
                 return viewPage;
             }
@@ -116,20 +104,16 @@ public class ViewParseUtils {
             JSONObject jsonObject = (JSONObject) object;
 
             //选集cid
-            Long cid = jsonObject.getLong("cid");
-            singleVideoInfo.cid = cid;
+            singleVideoInfo.cid = jsonObject.getLong("cid");
 
             //选集索引
-            int page = jsonObject.getIntValue("page");
-            singleVideoInfo.page = page;
+            singleVideoInfo.page = jsonObject.getIntValue("page");
 
             //选集标题
-            String part = jsonObject.getString("part");
-            singleVideoInfo.part = part;
+            singleVideoInfo.part = jsonObject.getString("part");
 
             //视频长度
-            int duration = jsonObject.getIntValue("duration");
-            singleVideoInfo.duration = duration;
+            singleVideoInfo.duration = jsonObject.getIntValue("duration");
 
             singleVideoInfoList.add(singleVideoInfo);
         }
@@ -148,32 +132,25 @@ public class ViewParseUtils {
         VideoInfo videoInfo = new VideoInfo();
 
         //观看数
-        int view = stat.getIntValue("view");
-        videoInfo.view = view;
+        videoInfo.view = stat.getIntValue("view");
 
         //弹幕数
-        int danmaku = stat.getIntValue("danmaku");
-        videoInfo.danmaku = danmaku;
+        videoInfo.danmaku = stat.getIntValue("danmaku");
 
         //评论数
-        int replay = stat.getIntValue("replay");
-        videoInfo.reply = replay;
+        videoInfo.reply = stat.getIntValue("replay");
 
         //收藏数
-        int favorite = stat.getIntValue("favorite");
-        videoInfo.favorite = favorite;
+        videoInfo.favorite = stat.getIntValue("favorite");
 
         //点赞数
-        int like = stat.getIntValue("like");
-        videoInfo.like = like;
+        videoInfo.like = stat.getIntValue("like");
 
         //投币数
-        int coin = stat.getIntValue("coin");
-        videoInfo.coin = coin;
+        videoInfo.coin = stat.getIntValue("coin");
 
         //分享数
-        int share = stat.getIntValue("share");
-        videoInfo.share = share;
+        videoInfo.share = stat.getIntValue("share");
 
         return videoInfo;
     }
@@ -188,16 +165,13 @@ public class ViewParseUtils {
         UpInfo upInfo = new UpInfo();
 
         //up主mid（b站ID）
-        Long mid = owner.getLong("mid");
-        upInfo.mid = mid;
+        upInfo.mid = owner.getLong("mid");
 
         //up主昵称
-        String name = owner.getString("name");
-        upInfo.name = name;
+        upInfo.name = owner.getString("name");
 
         //up主头像
-        String face = owner.getString("face");
-        upInfo.faceUrl = face;
+        upInfo.faceUrl = owner.getString("face");
 
         return upInfo;
     }

@@ -1,6 +1,16 @@
 package com.leon.biuvideo.utils;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.util.Log;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -12,40 +22,66 @@ import java.util.UUID;
  * 关于文件操作的工具类
  */
 public class FileUtils {
-    /**
-     * 写入文件前，检查文件夹状态的方法
-     *
-     * @return
-     */
-    public static String folderState(ResourcesFolder resourcesFolder ) {
-        //获取根路径
-        File rootDirectory = Environment.getExternalStorageDirectory();
-
-        //在根目录创建名为BiuVideo的文件夹
-        File biuVideoFolder = new File(rootDirectory, "BiuVideo");
-        if (!biuVideoFolder.exists()) {
-            biuVideoFolder.mkdirs();
-        }
-
-        String biuVideoDirectory = biuVideoFolder.getAbsolutePath();
-
-        //创建对应文件夹并返回其绝对路径
-        return createFolder(biuVideoDirectory, resourcesFolder);
-    }
 
     /**
-     * 创建文件夹
+     * 创建文件夹，默认再系统根目录中创建
      *
-     * @param parent    父路径
      * @param folderName    子文件夹名称
      */
-    private static String createFolder(String parent, ResourcesFolder folderName) {
-        File file = new File(parent, folderName.value);
+    public static String createFolder(ResourcesFolder folderName) {
+        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/BiuVideo";
+
+        Log.d(LogTip.blue, "createFolder: " + rootPath);
+
+        String resourcesPath = folderName.value;
+        File file = new File(rootPath, resourcesPath);
+
         if (!file.exists()) {
             file.mkdirs();
         }
 
+        Log.d(LogTip.blue, "createFolder:------Path:" + file.getPath() + "------" + file.getAbsolutePath());
+
         return file.getAbsolutePath();
+    }
+
+    /**
+     * 每次保存需要提前检查读写权限
+     *
+     * @param activity  申请权限的Activity
+     */
+    public static void verifyPermissions(Activity activity) {
+        //检查权限有没有获取
+        int permissionCheck = ContextCompat.checkSelfPermission(activity.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            //如果应用之前请求过此权限但用户拒绝了请求，此方法将返回 true
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                //创建对话框
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setTitle("读写权限");
+                builder.setMessage("由于保存资源文件时需要用到\"读写权限\"，否则将无法正常使用");
+                builder.setPositiveButton("开启", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1024);
+                    }
+                });
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(activity.getApplicationContext(), "请自行开启对应权限，否则应用将无法正常使用", Toast.LENGTH_SHORT).show();
+                        builder.create().dismiss();
+                    }
+                });
+
+                builder.create().show();
+            } else {
+                //申请读写权限
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1024);
+            }
+        }
     }
 
     /**
@@ -66,7 +102,7 @@ public class FileUtils {
     public enum ResourcesFolder {
         VIDEOS("Videos"),
         PICTURES("Pictures"),
-        SONGS("Songs");
+        MUSIC("Music");
 
         public String value;
 

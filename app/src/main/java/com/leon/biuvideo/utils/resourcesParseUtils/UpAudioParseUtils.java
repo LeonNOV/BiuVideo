@@ -55,28 +55,22 @@ public class UpAudioParseUtils {
                     JSONObject datumObject = (JSONObject) innerDatum;
 
                     //获取音频id
-                    Long sid = datumObject.getLong("id");
-                    upAudio.sid = sid;
+                    upAudio.sid = datumObject.getLong("id");
 
                     //获取封面
-                    String cover = datumObject.getString("cover");
-                    upAudio.cover = cover;
+                    upAudio.cover = datumObject.getString("cover");
 
                     //获取音频时长
-                    int duration = datumObject.getIntValue("duration");
-                    upAudio.duration = duration;
+                    upAudio.duration = datumObject.getIntValue("duration");
 
                     //获取标题
-                    String title = datumObject.getString("title");
-                    upAudio.title = title;
+                    upAudio.title = datumObject.getString("title");
 
                     //获取播放量
-                    Long play = datumObject.getJSONObject("statistic").getLong("play");
-                    upAudio.play = play;
+                    upAudio.play = datumObject.getJSONObject("statistic").getLong("play");
 
                     //获取发布时间
-                    Long ctime = datumObject.getLong("ctime");
-                    upAudio.ctime = ctime;
+                    upAudio.ctime = datumObject.getLong("ctime");
 
                     upAudios.add(upAudio);
                 }

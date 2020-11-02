@@ -5,14 +5,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class IDUtils {
-    private static String str = "fZodR9XQDSUm21yCkr6zBqiveYah8bt4xsWpHnJE7jL5VG3guMTKNPAwcF";
-    private static int[] ints = {11, 10, 3, 8, 4, 6};
-
-    private static long xor = 177451812;
-    private static long add = 8728348608L;
-    private static char[] chars = new char[58];
+    private static final int[] ints = {11, 10, 3, 8, 4, 6};
+    private static final char[] chars = new char[58];
 
     static {
+        String str = "fZodR9XQDSUm21yCkr6zBqiveYah8bt4xsWpHnJE7jL5VG3guMTKNPAwcF";
         for (int i = 0; i < str.length(); i++) {
             chars[i] = str.charAt(i);
         }
@@ -39,8 +36,7 @@ public class IDUtils {
 
         //判断是否为url
         if (verifyUrl(value)) {
-            String bvid = parseUrl(value);
-            return bvid;
+            return parseUrl(value);
         } else {
             long avid;
 
@@ -99,6 +95,8 @@ public class IDUtils {
      * @return  返回bvid
      */
     private static String avidToBvid(long avid) {
+        long xor = 177451812;
+        long add = 8728348608L;
         long avid2 = (avid ^ xor) + add;
         char[] baseArray = {'B', 'V', '1', ' ', ' ', '4', ' ', '1', ' ', '7', ' ', ' '};
 
@@ -166,9 +164,7 @@ public class IDUtils {
             String str = id.substring(2);
             long avid = Long.parseLong(str);
 
-            String bvid = avidToBvid(avid);
-
-            return bvid;
+            return avidToBvid(avid);
         } else {
             String str = path.split("/")[2];
 

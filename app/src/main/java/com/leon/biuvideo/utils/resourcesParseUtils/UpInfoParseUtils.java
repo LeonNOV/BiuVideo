@@ -36,20 +36,16 @@ public class UpInfoParseUtils {
             UpInfo upInfo = new UpInfo();
 
             //获取name
-            String name = dataObject.getString("name");
-            upInfo.name = name;
+            upInfo.name = dataObject.getString("name");
 
             //获取头像地址
-            String face = dataObject.getString("face");
-            upInfo.face = face;
+            upInfo.face = dataObject.getString("face");
 
             //获取个人签名
-            String sign = dataObject.getString("sign");
-            upInfo.sign = sign;
+            upInfo.sign = dataObject.getString("sign");
 
             //获取顶部图片
-            String top_photo = dataObject.getString("top_photo");
-            upInfo.topPhoto = top_photo;
+            upInfo.topPhoto = dataObject.getString("top_photo");
 
             return upInfo;
         }

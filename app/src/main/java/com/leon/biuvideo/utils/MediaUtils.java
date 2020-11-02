@@ -1,20 +1,28 @@
 package com.leon.biuvideo.utils;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaCodec;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.media.MediaMuxer;
+import android.net.Uri;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class MediaUtils {
     /**
@@ -22,15 +30,20 @@ public class MediaUtils {
      *
      * @param videoPath 视频路径
      * @param audioPath 音频路径
-     * @param outPath   存放路径
+     * @param fileName   文件名称
      * @return  返回获取状态
      */
-    public static boolean ComposeTrack(String videoPath, String audioPath, String outPath) {
+    public static boolean saveVideo(Context context, String videoPath, String audioPath, String fileName) {
+
+        String folderPath = FileUtils.createFolder(FileUtils.ResourcesFolder.VIDEOS);
+
+        String outPath = folderPath + "/" + fileName + ".mp4";
+
         long begin = System.currentTimeMillis();
 
         try {
             //设置头信息
-            HashMap<String, String> headers = getHeaders();
+            HashMap<String, String> headers = HttpUtils.getHeaders();
 
             //创建视频Extractor
             MediaExtractor videoExtractor = getVideoExtractor(videoPath, headers);
@@ -114,27 +127,15 @@ public class MediaUtils {
             Log.d(LogTip.blue, "耗时：" + (end - begin) + "ms");
             Log.d(LogTip.blue, "--------------------------------------------");
 
+            //通知刷新，进行显示
+            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(outPath)));
+
             return true;
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         return false;
-    }
-
-    /**
-     * 设置头信息
-     * 属于冗余，待清理
-     *
-     * @return  返回头信息
-     */
-    private static HashMap<String, String> getHeaders() {
-        HashMap<String, String> headers = new HashMap<>();
-        headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36 Edg/86.0.622.51");
-        headers.put("Connection", "keep-alive");
-        headers.put("Referer", "https://www.bilibili.com/");
-
-        return headers;
     }
 
     /**
@@ -172,21 +173,20 @@ public class MediaUtils {
     }
 
     /**
-     * 保存音乐/图片
+     * 保存音乐
      *
      * @param resourceUrl  资源链接
-     * @param path  保存路径
      * @param fileName  文件名称
      * @return  返回保存状态
      */
-    public static boolean saveMusic(String resourceUrl, String path, String fileName) {
+    public static boolean saveMusic(Context context, String resourceUrl, String fileName) {
         try {
             URL url = new URL(resourceUrl);
 
             URLConnection urlConnection = url.openConnection();
 
             //设置头信息
-            HashMap<String, String> headers = getHeaders();
+            HashMap<String, String> headers = HttpUtils.getHeaders();
             urlConnection.setRequestProperty("User-Agent", headers.get("User-Agent"));
             urlConnection.setRequestProperty("Referer", headers.get("Referer"));
 
@@ -195,7 +195,11 @@ public class MediaUtils {
             int length = urlConnection.getContentLength();
 
             BufferedInputStream bufferedInputStream = new BufferedInputStream(urlConnection.getInputStream());
-            FileOutputStream fileOutputStream = new FileOutputStream(path + "/" + fileName);
+
+            //创建musicFile对象
+            File musicFile = new File(FileUtils.createFolder(FileUtils.ResourcesFolder.MUSIC), fileName + ".mp3");
+
+            FileOutputStream fileOutputStream = new FileOutputStream(musicFile);
 
             byte[] bytes = new byte[1024 * 10];
 
@@ -212,7 +216,60 @@ public class MediaUtils {
             fileOutputStream.close();
             bufferedInputStream.close();
 
+            //发送广播，通知刷新显示
+            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(musicFile)));
+
             return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    /**
+     * 保存图片资源至系统相册
+     *
+     * @param context   上下文对象
+     * @param picUrl    图片链接
+     * @return  返回保存成功状态
+     */
+    public static boolean savePicture(Context context, String picUrl) {
+        try {
+            URL url = new URL(picUrl);
+
+            HttpURLConnection connection = (HttpURLConnection)  url.openConnection();
+
+            //获取&设置请求头
+            HashMap<String, String> headers = HttpUtils.getHeaders();
+            connection.setRequestProperty("User-Agent", headers.get("User-Agent"));
+            connection.setRequestProperty("Referer", headers.get("Referer"));
+
+            connection.setDoInput(true);
+            connection.connect();
+
+            InputStream inputStream = connection.getInputStream();
+
+            //获取bitmap对象
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+
+            //创建保存picFile类
+            //图片文件名称使用UUID进行命名
+            File picFile = new File(FileUtils.createFolder(FileUtils.ResourcesFolder.PICTURES), UUID.randomUUID().toString() + ".jpeg");
+
+            //获取输出流
+            FileOutputStream fileOutputStream = new FileOutputStream(picFile);
+
+            boolean isSuccess = bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+
+            fileOutputStream.close();
+            inputStream.close();
+            connection.disconnect();
+
+            //保存图片后发送广播，通知刷新图库的显示
+            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(picFile)));
+
+            return isSuccess;
         } catch (IOException e) {
             e.printStackTrace();
         }

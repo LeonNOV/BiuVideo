@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bilibili_pink_lite"
     android:orientation="vertical">
 
     <LinearLayout
@@ -14,8 +15,8 @@
             android:id="@+id/play_list_textView_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/bilibili_pink"
             android:text="Video"
+            android:textColor="@color/bilibili_pink"
             android:textSize="30dp" />
 
         <TextView

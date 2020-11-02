@@ -57,48 +57,37 @@ public class UpVideoParseUtils {
                 JSONObject videoObject = (JSONObject) o;
 
                 //获取视频作者mid
-                Long vmid = videoObject.getLong("mid");
-                upVideo.mid = vmid;
+                upVideo.mid = videoObject.getLong("mid");
 
                 //获取作者名称
-                String author = videoObject.getString("author");
-                upVideo.author = author;
+                upVideo.author = videoObject.getString("author");
 
                 //获取封面地址
-                String cover = videoObject.getString("pic");
-                upVideo.cover = cover;
+                upVideo.cover = videoObject.getString("pic");
 
                 //获取视频bvid
-                String bvid = videoObject.getString("bvid");
-                upVideo.bvid = bvid;
+                upVideo.bvid = videoObject.getString("bvid");
 
                 //获取视频aid
-                Long aid = videoObject.getLong("aid");
-                upVideo.aid = aid;
+                upVideo.aid = videoObject.getLong("aid");
 
                 //获取视频播放量
-                Long play = videoObject.getLong("play");
-                upVideo.play = play;
+                upVideo.play = videoObject.getLong("play");
 
                 //获取视频上传日期
-                Long created = videoObject.getLong("created");
-                upVideo.create = created;
+                upVideo.create = videoObject.getLong("created");
 
                 //获取是否为合作视频
-                int isUnionVideo = videoObject.getIntValue("is_union_video");
-                upVideo.isUnionVideo = isUnionVideo;
+                upVideo.isUnionVideo = videoObject.getIntValue("is_union_video");
 
                 //获取视频长度
-                String length = videoObject.getString("length");
-                upVideo.length = length;
+                upVideo.length = videoObject.getString("length");
 
                 //获取视频标题
-                String title = videoObject.getString("title");
-                upVideo.title = title;
+                upVideo.title = videoObject.getString("title");
 
                 //获取视频说明
-                String description = videoObject.getString("description");
-                upVideo.description = description;
+                upVideo.description = videoObject.getString("description");
 
                 upVideos.add(upVideo);
             }
@@ -114,8 +103,6 @@ public class UpVideoParseUtils {
     private static int getPageInfo(JSONObject dataObject) {
         JSONObject page = dataObject.getJSONObject("page");
 
-        int count = page.getIntValue("count");
-
-        return count;
+        return page.getIntValue("count");
     }
 }

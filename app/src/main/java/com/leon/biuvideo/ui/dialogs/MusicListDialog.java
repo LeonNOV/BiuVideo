@@ -23,13 +23,13 @@ import java.util.List;
  */
 public class MusicListDialog extends AlertDialog {
     private List<MusicPlayList> musicPlayLists;
-    private Context context;
+    private final Context context;
 
     private RecyclerView music_recyclerView_playList;
     private Button music_button_close;
 
     private OnDialogClickListener onDialogClickListener;
-    private PriorityListener priorityListener;
+    private final PriorityListener priorityListener;
 
     public MusicListDialog(@NonNull Context context, List<MusicPlayList> musicPlayLists, PriorityListener priorityListener) {
         super(context);

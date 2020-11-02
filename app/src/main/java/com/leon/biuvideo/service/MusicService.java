@@ -35,7 +35,7 @@ public class MusicService extends Service {
     private Timer timer;
 
     //播放停止时的数值与长度之间的差值
-    private int differenceRange = 100;
+    private final int differenceRange = 100;
 
     @Override
     public void onCreate() {

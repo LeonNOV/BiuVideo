@@ -1,7 +1,5 @@
 package com.leon.biuvideo.utils;
 
-import android.widget.Toast;
-
 import org.apache.http.Header;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
@@ -17,6 +15,7 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 
 public class HttpUtils {
@@ -35,9 +34,9 @@ public class HttpUtils {
                 Object value = entry.getValue();
 
                 builder
-                        .append(URLEncoder.encode(key))
+                        .append(URLEncoder.encode(key, "utf-8"))
                         .append("=")
-                        .append(URLEncoder.encode(String.valueOf(value)))
+                        .append(URLEncoder.encode(value.toString(), "utf-8"))
                         .append("&");
             }
 
@@ -74,6 +73,21 @@ public class HttpUtils {
     }
 
     /**
+     * 设置头信息
+     * 属于冗余，待清理
+     *
+     * @return  返回头信息
+     */
+    public static HashMap<String, String> getHeaders() {
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36 Edg/86.0.622.51");
+        headers.put("Connection", "keep-alive");
+        headers.put("Referer", "https://www.bilibili.com/");
+
+        return headers;
+    }
+
+    /**
      * 短链解析
      *
      * @param shortUrl  短链
@@ -98,9 +112,8 @@ public class HttpUtils {
 
             //使用uri对象来获取path
             URI uri = URI.create(location);
-            String path = uri.getPath();
 
-            return path;
+            return uri.getPath();
         } catch (IllegalArgumentException | IOException uriEx) {
             return null;
         } finally {

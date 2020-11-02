@@ -23,7 +23,7 @@ import java.util.List;
 public class AboutDialog extends AlertDialog {
     private RecyclerView aboutDialog_recyclerView;
     private Button aboutDialog_button;
-    private Context context;
+    private final Context context;
 
     private List<AboutBean> aboutBeans;
 

@@ -34,14 +34,11 @@ public class MusicListDatabaseUtils {
         while (cursor.moveToNext()) {
             MusicPlayList musicPlayList = new MusicPlayList();
 
-            int sid = cursor.getInt(cursor.getColumnIndex("sid"));
-            musicPlayList.sid = sid;
+            musicPlayList.sid = cursor.getInt(cursor.getColumnIndex("sid"));
 
-            String musicName = cursor.getString(cursor.getColumnIndex("musicName"));
-            musicPlayList.musicName = musicName;
+            musicPlayList.musicName = cursor.getString(cursor.getColumnIndex("musicName"));
 
-            String author = cursor.getString(cursor.getColumnIndex("author"));
-            musicPlayList.author = author;
+            musicPlayList.author = cursor.getString(cursor.getColumnIndex("author"));
 
             musicPlayLists.add(musicPlayList);
         }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- dialog进入动画 -->
     <scale
         android:duration="550"
         android:fillAfter="false"

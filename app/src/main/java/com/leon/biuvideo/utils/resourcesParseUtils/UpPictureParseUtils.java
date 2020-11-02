@@ -50,32 +50,25 @@ public class UpPictureParseUtils {
                 UpPicture upPicture = new UpPicture();
 
                 //获取音频id
-                Long docId = itemObject.getLong("doc_id");
-                upPicture.docId = docId;
+                upPicture.docId = itemObject.getLong("doc_id");
 
                 //获取上传者id
-                Long posterUid = itemObject.getLong("poster_uid");
-                upPicture.posterUid = posterUid;
+                upPicture.posterUid = itemObject.getLong("poster_uid");
 
                 //获取标题
-                String title = itemObject.getString("title");
-                upPicture.title = title;
+                upPicture.title = itemObject.getString("title");
 
                 //获取介绍信息
-                String description = itemObject.getString("description");
-                upPicture.description = description;
+                upPicture.description = itemObject.getString("description");
 
                 //获取图片数量
-                int count = itemObject.getIntValue("count");
-                upPicture.count = count;
+                upPicture.count = itemObject.getIntValue("count");
 
                 //获取查看量
-                Long view = itemObject.getLong("view");
-                upPicture.view = view;
+                upPicture.view = itemObject.getLong("view");
 
                 //获取点赞量
-                Long like = itemObject.getLong("like");
-                upPicture.like = like;
+                upPicture.like = itemObject.getLong("like");
 
                 //获取第一张图片的链接
                 JSONObject picObject = (JSONObject) itemObject.getJSONArray("pictures").get(0);

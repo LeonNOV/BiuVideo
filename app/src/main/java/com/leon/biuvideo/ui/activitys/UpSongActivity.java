@@ -8,17 +8,18 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
-import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -358,13 +359,20 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
 
                 break;
             case R.id.music_imageView_download:
-                String songPath = FileUtils.folderState(FileUtils.ResourcesFolder.SONGS);
+                //获取权限
+                FileUtils.verifyPermissions(this);
+
+                Toast.makeText(this, "已添加至缓存队列", Toast.LENGTH_SHORT).show();
+
                 //保存歌曲线程
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        boolean saveState = MediaUtils.saveMusic(musicUrl, songPath, musicInfo.title + "-" + musicInfo.uname + ".mp3");
+                        boolean saveState = MediaUtils.saveMusic(getApplicationContext(), musicUrl, musicInfo.title + "-" + musicInfo.uname);
 
+                        Looper.prepare();
+                        Toast.makeText(UpSongActivity.this, saveState ? "缓存成功" : "缓存失败", Toast.LENGTH_SHORT).show();
+                        Looper.loop();
                         //添加到下载任务界面中
                     }
                 }).start();
@@ -590,6 +598,26 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
         @Override
         public void onServiceDisconnected(ComponentName name) {
 
+        }
+    }
+
+    /**
+     * 权限回调
+     *
+     * @param requestCode   请求码
+     * @param permissions   文件读写权限
+     * @param grantResults  授权结果
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 1024) {
+            if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                Toast.makeText(getApplicationContext(), "权限申请成功", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "权限申请失败", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

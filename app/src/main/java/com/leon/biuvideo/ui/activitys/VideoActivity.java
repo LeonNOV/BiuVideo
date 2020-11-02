@@ -2,10 +2,14 @@ package com.leon.biuvideo.ui.activitys;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Looper;
 import android.view.*;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.*;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -340,6 +344,8 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
                 break;
             case R.id.video_button_saveVideo://保存选定画质的视频
+                //获取权限
+                FileUtils.verifyPermissions(this);
 
                 //判断当前的选集个数是否大于1
                 if (viewPage.singleVideoInfoList.size() > 1) {
@@ -361,14 +367,8 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 //获取视频路径
                 String videoUrlBase = play.videos.get(qualityIndex).baseUrl;
 
-                //获取音频路径,默认只获取品质最高的
+                //获取音频路径,默认只获取第一个
                 String audioUrlBase = play.audios.get(0).baseUrl;
-
-                //获取保存路径
-                String videoPath = FileUtils.folderState(FileUtils.ResourcesFolder.VIDEOS);
-
-                //文件名组成,以视频bvid为基本名称
-                String fileName = FileUtils.generateFileName(viewPage.bvid);
 
                 Toast.makeText(this, "已加入缓存队列中", Toast.LENGTH_SHORT).show();
 
@@ -380,7 +380,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                         SingleVideoInfo nowSingleVideoInfo = viewPage.singleVideoInfoList.get(nowPosition);
 
                         //获取视频
-                        saveState = MediaUtils.ComposeTrack(videoUrlBase, audioUrlBase, videoPath + "/" + fileName + ".mp4");
+                        saveState = MediaUtils.saveVideo(getApplicationContext(), videoUrlBase, audioUrlBase, FileUtils.generateFileName(viewPage.bvid));
 
                         //创建推送通知
                         GeneralNotification notification = new GeneralNotification(getApplicationContext(), getSystemService(Context.NOTIFICATION_SERVICE), viewPage.bvid + "", "SaveVideo", (int) nowSingleVideoInfo.cid);
@@ -391,10 +391,47 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 }).start();
                 break;
             case R.id.video_button_saveCover:
-                Toast.makeText(getApplicationContext(), "点击了保存封面", Toast.LENGTH_SHORT).show();
+                //获取权限
+                FileUtils.verifyPermissions(this);
+
+                //获取视频封面地址
+                String coverUrl = viewPage.coverUrl;
+
+                //进行保存
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean coverSaveState = MediaUtils.savePicture(getApplicationContext(), coverUrl);
+
+                        Looper.prepare();
+                        Toast.makeText(getApplicationContext(), coverSaveState ? "保存成功" : "保存失败", Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                    }
+                }).start();
+
                 break;
             case R.id.video_button_saveFace:
-                Toast.makeText(getApplicationContext(), "点击了保存UP头像", Toast.LENGTH_SHORT).show();
+                //获取权限
+                FileUtils.verifyPermissions(this);
+
+                //获取链接
+                String faceUrl = viewPage.upInfo.faceUrl;
+
+                //进行保存
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        boolean faceSaveState = MediaUtils.savePicture(getApplicationContext(), faceUrl);
+
+                        Looper.prepare();
+                        Toast.makeText(getApplicationContext(), faceSaveState ? "保存成功" : "保存失败", Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+
+                    }
+                }).start();
+
+
                 break;
             default:break;
         }
@@ -419,5 +456,25 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         //该Activity销毁时，清除缓存
         webView.clearCache(true);
         webView.destroy();
+    }
+
+    /**
+     * 权限回调
+     *
+     * @param requestCode   请求码
+     * @param permissions   文件读写权限
+     * @param grantResults  授权结果
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 1024) {
+            if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                Toast.makeText(getApplicationContext(), "权限申请成功", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "权限申请失败", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

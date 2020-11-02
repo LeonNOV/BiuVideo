@@ -52,14 +52,12 @@ public class MediaParseUtils {
             //获取video
             play.videos = new ArrayList<>();
             JSONArray video = dash.getJSONArray("video");
-            List<Media> videos = parseVideo(video);
-            play.videos = videos;
+            play.videos = parseVideo(video);
 
             //获取audios
             play.audios = new ArrayList<>();
             JSONArray audio = dash.getJSONArray("audio");
-            List<Media> audios = parseAudio(audio);
-            play.audios = audios;
+            play.audios = parseAudio(audio);
 
 
             return play;
@@ -102,8 +100,7 @@ public class MediaParseUtils {
             media.backupUrl = new ArrayList<>();
 
             //获取视频链接
-            String baseUrl = videoObject.getString("baseUrl");
-            media.baseUrl = baseUrl;
+            media.baseUrl = videoObject.getString("baseUrl");
 
             //获取备用视频链接
             JSONArray backupUrl = videoObject.getJSONArray("backupUrl");

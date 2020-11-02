@@ -39,12 +39,10 @@ public class MusicParseUtils {
             musicInfo.sid = sid;
 
             //获取发布者id
-            Long uid = dataObject.getLong("uid");
-            musicInfo.uid = uid;
+            musicInfo.uid = dataObject.getLong("uid");
 
             //获取发布者昵称
-            String uname = dataObject.getString("uname");
-            musicInfo.uname = uname;
+            musicInfo.uname = dataObject.getString("uname");
 
             //获取作者,可能存在多个作者的情况所以需要进行分割
             String authorStr = dataObject.getString("author");
@@ -58,63 +56,49 @@ public class MusicParseUtils {
             musicInfo.authors = authors;
 
             //获取歌曲标题
-            String title = dataObject.getString("title");
-            musicInfo.title = title;
+            musicInfo.title = dataObject.getString("title");
 
             //获取歌曲封面
-            String cover = dataObject.getString("cover");
-            musicInfo.cover = cover;
+            musicInfo.cover = dataObject.getString("cover");
 
             //获取歌曲简介
-            String intro = dataObject.getString("intro");
-            musicInfo.intro = intro;
+            musicInfo.intro = dataObject.getString("intro");
 
             //获取歌词链接
-            String lyric = dataObject.getString("lyric");
-            musicInfo.lyric = lyric;
+            musicInfo.lyric = dataObject.getString("lyric");
 
             //获取歌曲长度（秒）
-            int duration = dataObject.getIntValue("duration");
-            musicInfo.duration = duration;
+            musicInfo.duration = dataObject.getIntValue("duration");
 
             //获取发布时间
-            Long passtime = dataObject.getLong("passtime");
-            musicInfo.passtime = passtime;
+            musicInfo.passtime = dataObject.getLong("passtime");
 
             //获取对应视频的aid
-            Long aid = dataObject.getLong("aid");
-            musicInfo.aid = aid;
+            musicInfo.aid = dataObject.getLong("aid");
 
             //获取对应视频bvid
-            String bvid = dataObject.getString("bvid");
-            musicInfo.bvid = bvid;
+            musicInfo.bvid = dataObject.getString("bvid");
 
             //获取对应视频的cid
-            Long cid = dataObject.getLong("cid");
-            musicInfo.cid = cid;
+            musicInfo.cid = dataObject.getLong("cid");
 
             //获取投币数
-            int coinNum = dataObject.getIntValue("coin_num");
-            musicInfo.coinNum = coinNum;
+            musicInfo.coinNum = dataObject.getIntValue("coin_num");
 
             //statisticJSON对象
             JSONObject statistic = dataObject.getJSONObject("statistic");
 
             //获取播放量
-            int play = statistic.getIntValue("play");
-            musicInfo.play = play;
+            musicInfo.play = statistic.getIntValue("play");
 
             //获取收藏数
-            int collect = statistic.getIntValue("collect");
-            musicInfo.collect = collect;
+            musicInfo.collect = statistic.getIntValue("collect");
 
             //获取评论数
-            int comment = statistic.getIntValue("comment");
-            musicInfo.comment = comment;
+            musicInfo.comment = statistic.getIntValue("comment");
 
             //获取分享数
-            int share = statistic.getIntValue("share");
-            musicInfo.share = share;
+            musicInfo.share = statistic.getIntValue("share");
 
             return musicInfo;
         }

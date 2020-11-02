@@ -1,13 +1,9 @@
 package com.leon.biuvideo.ui.activitys;
 
-import android.Manifest;
-import android.content.DialogInterface;
-import android.content.pm.PackageManager;
 import android.view.*;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -68,37 +64,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * app参数初始化
      */
     private void init() {
-        //检查权限有没有获取
-        int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            //如果应用之前请求过此权限但用户拒绝了请求，此方法将返回 true
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                //创建对话框
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("读写权限");
-                builder.setMessage("由于保存媒体资源时需要用到\"读写权限\"，否则将无法正常使用");
-                builder.setPositiveButton("开启", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1024);
-                    }
-                });
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(MainActivity.this, "请自行开启对应权限，否则应用将无法正常使用", Toast.LENGTH_SHORT).show();
-                        builder.create().dismiss();
-                    }
-                });
-
-                builder.create().show();
-            } else {
-                //申请读写权限
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1024);
-            }
-        }
-
         //检查网络状态
         InternetUtils.InternetState internetState = InternetUtils.InternetState(getApplicationContext());
         switch (internetState) {
@@ -282,25 +247,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         return true;
-    }
-
-    /**
-     * 权限回调
-     *
-     * @param requestCode   请求码
-     * @param permissions   文件读写权限
-     * @param grantResults  授权结果
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == 1024) {
-            if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                Toast.makeText(getApplicationContext(), "权限申请成功", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(getApplicationContext(), "权限申请失败", Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 }
