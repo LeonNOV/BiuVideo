@@ -54,6 +54,9 @@ public class VideoListFragment extends Fragment {
         if (videoPlayLists.size() == 0) {
             textView_noDataStr.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.INVISIBLE);
+        } else {
+            textView_noDataStr.setVisibility(View.INVISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
         }
 
         VideoListAdapter videoListAdapter = new VideoListAdapter(videoPlayLists, getContext());

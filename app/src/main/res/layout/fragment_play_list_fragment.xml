@@ -14,6 +14,7 @@
             android:id="@+id/play_list_textView_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/bilibili_pink"
             android:text="Video"
             android:textSize="30dp" />
 

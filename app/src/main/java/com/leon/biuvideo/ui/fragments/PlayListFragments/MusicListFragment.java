@@ -55,6 +55,9 @@ public class MusicListFragment extends Fragment {
         if (musicPlayLists.size() == 0) {
             textView_noDataStr.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.INVISIBLE);
+        } else {
+            textView_noDataStr.setVisibility(View.INVISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
         }
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);

@@ -13,7 +13,7 @@
         android:layout_height="125dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_launcher_background"
-        app:corner_radius="10dp" />
+        app:corner_radius="13dp" />
 
     <TextView
         android:id="@+id/play_list_video_textView_length"
