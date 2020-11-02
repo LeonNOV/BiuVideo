@@ -47,14 +47,10 @@
 ### 2020/10/27
 - Favorite的表控件需要更改为RecyclerView（到现在为止所有的表控件都为RecyclerView）
 - 修改的话明天再说，ListView太垃圾了
-- Favorite的表控件已更改为RecyclerView
 - 修改了Favorite的表控件
-- 添加了播放列表界面
 - 添加了播放列表页面，对Dialog添加了动画
 - 修改了一些控件的圆角样式
 - 添加了服务，但服务的注册一直搞不定！！！
-
-### 2020/10/27
 - 音频界面及数据的获取已完成，FavoriteFragment的监听事件还未修改完
 - "终于"想起来加入了README了:)
 
