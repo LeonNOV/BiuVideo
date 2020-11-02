@@ -1,6 +1,7 @@
 package com.leon.biuvideo.ui.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.ViewPageAdapter;
 import com.leon.biuvideo.ui.fragments.PlayListFragments.MusicListFragment;
 import com.leon.biuvideo.ui.fragments.PlayListFragments.VideoListFragment;
+import com.leon.biuvideo.utils.LogTip;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +44,9 @@ public class PlayListFragment extends Fragment implements ViewPager.OnPageChange
     private void initView() {
         play_list_textView_video = view.findViewById(R.id.play_list_textView_video);
         play_list_textView_music = view.findViewById(R.id.play_list_textView_music);
+
         play_list_viewPage = view.findViewById(R.id.play_list_viewPage);
+        play_list_viewPage.addOnPageChangeListener(this);
     }
 
     private void initFragments() {
@@ -57,6 +61,9 @@ public class PlayListFragment extends Fragment implements ViewPager.OnPageChange
 
     @Override
     public void onPageSelected(int position) {
+
+        Log.d(LogTip.blue, "page position:" + position);
+
         switch (position) {
             case 0:
                 play_list_textView_video.setTextColor(getResources().getColor(R.color.bilibili_pink));
