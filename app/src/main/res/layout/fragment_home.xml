@@ -7,6 +7,12 @@
     android:gravity="center"
     android:orientation="vertical">
 
+    <Button
+        android:id="@+id/toWebView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ToWebView"/>
+
     <ImageView
         android:id="@+id/home_imageView_hero"
         android:layout_width="wrap_content"

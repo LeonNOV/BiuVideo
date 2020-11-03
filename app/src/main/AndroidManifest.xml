@@ -3,15 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.leon.biuvideo">
     <!-- 请求网络权限 -->
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <!-- 网络状态权限 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <!-- 文件写入和读取权限 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 网络状态权限 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 文件写入和读取权限 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
 
     <application
         android:allowBackup="true"
@@ -22,13 +17,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
+        <activity android:name=".ui.activitys.ArticleActivity"></activity>
         <activity
             android:name=".ui.activitys.UpSongActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
-
-        <!-- 10以上需要使用requestLegacyExternalStorage属性 -->
+            android:theme="@style/Theme.AppCompat.NoActionBar" /> <!-- 10以上需要使用requestLegacyExternalStorage属性 -->
         <activity
             android:name=".ui.activitys.UpMasterActivity"
             android:screenOrientation="portrait"
@@ -49,8 +42,10 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".service.MusicService" android:enabled="true" android:exported="true"></service>
-
+        <service
+            android:name=".service.MusicService"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>

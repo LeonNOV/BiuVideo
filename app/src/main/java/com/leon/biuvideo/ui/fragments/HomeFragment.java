@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.ui.activitys.ArticleActivity;
 import com.leon.biuvideo.ui.activitys.UpMasterActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.utils.IDUtils;
@@ -77,6 +78,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
 
         main_button_confirm = view.findViewById(R.id.home_button_confirm);
         main_button_confirm.setOnClickListener(this);
+
+        Button button = view.findViewById(R.id.toWebView);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ArticleActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initValues() {
