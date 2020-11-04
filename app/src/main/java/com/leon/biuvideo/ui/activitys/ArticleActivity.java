@@ -3,7 +3,10 @@ package com.leon.biuvideo.ui.activitys;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
@@ -13,9 +16,14 @@ import android.webkit.WebViewClient;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.LogTip;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import static com.leon.biuvideo.R.layout.activity_article;
 
@@ -57,27 +65,106 @@ public class ArticleActivity extends AppCompatActivity {
 
         article_webView.loadUrl("https://www.bilibili.com/read/mobile/8107744", HttpUtils.getHeaders());
 
-        //加载本地JS文件对网页进行修改
-        article_webView.setWebViewClient(new WebViewClient() {
-
+        article_webView.setWebViewClient(new WebViewClient(){
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
 
-                return true;
-            }
+                article_webView.loadUrl("javascript:" +
+                        "<script>\n" +
+                        "function removeTags(tagname){\n" +
+                        "    var remove = document.getElementsByTagName(tagname);\n" +
+                        "    for( var i = 0 ; i < remove.length ; i++ ){\n" +
+                        "        if( remove[i].className ==\"h5-download-bar\"||\"clearfix\"||\"attention-animation-holder\" ||\"new-iteration-list\"||\"unselectable\"||\"new-border\"||\"info-bar\"||\"tag-container\"||\"article-action clearfix\"){\n" +
+                        "            remove[i].parentNode.removeChild( remove[i] );\n" +
+                        "        }\n" +
+                        "    }\n" +
+                        "}\n" +
+                        "\n" +
+                        "function removeID(IDname){\n" +
+                        "    var remove = document.getElementById(IDname);\n" +
+                        "        if( remove.id ==\"app\"){\n" +
+                        "            remove.parentNode.removeChild(remove);\n" +
+                        "    }\n" +
+                        "} \n" +
+                        "\n" +
+                        "function removehref(Name){\n" +
+                        "    var remove=document.getElementsByTagName(Name)\n" +
+                        "    for(var i=0;i<remove.length;i++){\n" +
+                        "        if(remove[i].classList==\"author-face\" ||\"author-name\"){\n" +
+                        "            remove[i].removeAttribute(\"href\")\n" +
+                        "        }\n" +
+                        "    }\n" +
+                        "}" +
+                        "</script>");
 
-            @Nullable
-            @Override
-            public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-                try {
-                    return new WebResourceResponse("application/x-javascript", "utf-8", getApplicationContext().getAssets().open("removeElements.js"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                return null;
+//                article_webView.loadUrl("javascript:deleteElements()");
+//                article_webView.evaluateJavascript("javascript:deleteElements()", new ValueCallback<String>() {
+//                    @Override
+//                    public void onReceiveValue(String value) {
+//                        Log.d(LogTip.blue, "onReceiveValue: " + value);
+//                    }
+//                });
             }
         });
+    }
+
+
+    /*
+    Webpage not available
+    The webpage at bilibili://article/8107744 could not be loaded because:
+
+    net::ERR_UNKNOWN_URL_SCHEME
+    */
+
+    private void HtmlContent() {
+        article_webView.loadUrl("javascript:" +
+                "function deleteElements() {\n" +
+                "    // 删除class名的div 功能\n" +
+                "    var remove = document.getElementsByTagName(\"div\");\n" +
+                "    for (var i = 0; i < remove.length; i++) {\n" +
+                "        if (remove[i].className == \"h5-download-bar\" || \"clearfix\" || \"attention-animation-holder\" || \"new-iteration-list\" || \"unselectable\" || \"new-border\" || \"info-bar\" || \"tag-container\" || \"article-action clearfix\") {\n" +
+                "            remove[i].parentNode.removeChild(remove[i]);\n" +
+                "        }\n" +
+                "    }\n" +
+                "\n" +
+                "    // 删除ID名的div 功能\n" +
+                "    var remove1 = document.getElementById(\"id\");\n" +
+                "    if (remove1 != null) {\n" +
+                "        remove1.parentNode.removeChild(remove);\n" +
+                "    }\n" +
+                "\n" +
+                "    // 删除class名 的href属性\n" +
+                "    var remove2 = document.getElementsByTagName(\"div\")\n" +
+                "    for (var i = 0; i < remove2.length; i++) {\n" +
+                "        if (remove2[i].classList == \"author-face\" || \"author-name\") {\n" +
+                "            remove2[i].removeAttribute(\"href\")\n" +
+                "        }\n" +
+                "    }\n" +
+                "}\n");
+
+        article_webView.loadUrl("javascript:deleteElements()");
+    }
+
+    private String readJS() {
+        try {
+            InputStream inputStream = getApplicationContext().getAssets().open("removeElements.js");
+
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+            String temp;
+            StringBuilder js = new StringBuilder();
+            while ((temp = bufferedReader.readLine()) != null) {
+                js.append(temp);
+            }
+
+            bufferedReader.close();
+            inputStream.close();
+            return js.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
