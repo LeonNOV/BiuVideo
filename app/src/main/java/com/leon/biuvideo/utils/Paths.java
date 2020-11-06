@@ -94,4 +94,12 @@ public class Paths {
      *          sid：音频sid，必须
      */
     public static String musicUrl = "https://www.bilibili.com/audio/music-service-c/web/url";
+
+    /**
+     * 专栏页面链接
+     *      参数
+     *          后跟专栏ID（CVxxxxxxx）
+     *          from:默认值:category_0,可选
+     */
+    public static String article = "https://www.bilibili.com/read/mobile/";
 }

@@ -17,6 +17,7 @@ import android.webkit.WebViewClient;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.LogTip;
+import com.leon.biuvideo.utils.Paths;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -109,13 +110,13 @@ public class ArticleActivity extends AppCompatActivity {
         });
     }
 
+    private String parseHTML() {
 
-    /*
-    Webpage not available
-    The webpage at bilibili://article/8107744 could not be loaded because:
+        String html = HttpUtils.GetHtmlSrc(Paths.article + "8201179");
 
-    net::ERR_UNKNOWN_URL_SCHEME
-    */
+
+        return null;
+    }
 
     private void HtmlContent() {
         article_webView.loadUrl("javascript:" +

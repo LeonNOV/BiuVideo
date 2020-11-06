@@ -3,9 +3,14 @@ package com.leon.biuvideo.utils;
 import org.apache.http.Header;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,15 +34,18 @@ public class HttpUtils {
     public static String GETByParam(String path, Map<String, Object> params) {
         try {
             StringBuilder builder = new StringBuilder(path + "?");
-            for (Map.Entry<String, Object> entry : params.entrySet()) {
-                String key = entry.getKey();
-                Object value = entry.getValue();
 
-                builder
-                        .append(URLEncoder.encode(key, "utf-8"))
-                        .append("=")
-                        .append(URLEncoder.encode(value.toString(), "utf-8"))
-                        .append("&");
+            if (params != null) {
+                for (Map.Entry<String, Object> entry : params.entrySet()) {
+                    String key = entry.getKey();
+                    Object value = entry.getValue();
+
+                    builder
+                            .append(URLEncoder.encode(key, "utf-8"))
+                            .append("=")
+                            .append(URLEncoder.encode(value.toString(), "utf-8"))
+                            .append("&");
+                }
             }
 
             builder.deleteCharAt(builder.length() - 1);
@@ -121,5 +129,39 @@ public class HttpUtils {
                 request.releaseConnection();
             }
         }
+    }
+
+    /**
+     * 网页源代码获取
+     *
+     * @param path  链接
+     * @return  返回HTML源码
+     */
+    public static String GetHtmlSrc(String path) {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+
+        HttpGet httpGet = new HttpGet(path);
+
+        //设置请求头
+        for (Map.Entry<String, String> entry : getHeaders().entrySet()) {
+            httpGet.setHeader(entry.getKey(), entry.getValue());
+        }
+
+        CloseableHttpResponse response;
+        try {
+            response = httpClient.execute(httpGet);
+
+            if (response.getStatusLine().getStatusCode() == 200) {
+                if (response.getEntity() != null) {
+                    String html = EntityUtils.toString(response.getEntity());
+
+                    return html;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

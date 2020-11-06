@@ -3,7 +3,9 @@ package com.leon.biuvideo;
 import com.leon.biuvideo.beans.upMasterBean.UpAudio;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
 import com.leon.biuvideo.beans.upMasterBean.UpVideo;
+import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.IDUtils;
+import com.leon.biuvideo.utils.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpAudioParseUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpPictureParseUtils;
@@ -11,6 +13,10 @@ import com.leon.biuvideo.utils.resourcesParseUtils.UpVideoParseUtils;
 
 import org.junit.Test;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -108,5 +114,23 @@ public class ExampleUnitTest {
         //12345.6万
         String s = ValueFormat.generateCN(12345678);
         System.out.println(s);
+    }
+
+    //网页源码获取测试
+    @Test
+    public void HtmlSpurce() {
+//        String html = HttpUtils.GetHtmlSrc(Paths.article + "8107744");
+
+        try {
+            URL url = new URL("http://i0.hdslb.com/bfs/face/f8184772707c9fdad72012d074276abac3f93299.jpg");
+            URI uri = url.toURI();
+
+            System.out.println(url);
+            System.out.println(uri);
+        } catch (URISyntaxException | MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+//        System.out.println(html);
     }
 }
