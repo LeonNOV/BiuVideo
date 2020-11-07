@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.upMasterBean.UpInfo;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.utils.LogTip;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.Paths;
 
 import java.util.HashMap;
@@ -50,7 +50,7 @@ public class UpInfoParseUtils {
             return upInfo;
         }
 
-        Log.e(LogTip.red, "响应体为空，解析失败", new NullPointerException("响应体为空，解析失败"));
+        Log.e(Fuck.red, "响应体为空，解析失败", new NullPointerException("响应体为空，解析失败"));
         return null;
     }
 }

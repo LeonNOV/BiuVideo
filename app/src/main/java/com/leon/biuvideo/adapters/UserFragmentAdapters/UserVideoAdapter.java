@@ -1,4 +1,4 @@
-package com.leon.biuvideo.adapters.UpMaster;
+package com.leon.biuvideo.adapters.UserFragmentAdapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -24,11 +24,11 @@ import java.util.Locale;
 /**
  * 用户界面，视频fragment适配器
  */
-public class UpVideoAdapter extends RecyclerView.Adapter {
+public class UserVideoAdapter extends RecyclerView.Adapter {
     private List<UpVideo> upVideos;
     private final Context context;
 
-    public UpVideoAdapter(List<UpVideo> upVideos, Context context) {
+    public UserVideoAdapter(List<UpVideo> upVideos, Context context) {
         this.upVideos = upVideos;
         this.context = context;
     }
@@ -36,7 +36,7 @@ public class UpVideoAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.up_media_list_view_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.user_media_list_view_item, parent, false);
 
         return new ViewHolder(view);
     }
@@ -75,7 +75,7 @@ public class UpVideoAdapter extends RecyclerView.Adapter {
     }
 
     public interface OnItemClickListener {
-        void onItemClickListener(View view, int position);
+        void onItemClickListener(int position);
     }
 
     private OnItemClickListener onItemClickListener;
@@ -108,7 +108,7 @@ public class UpVideoAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     if (onItemClickListener != null) {
-                        onItemClickListener.onItemClickListener(v, getAdapterPosition());
+                        onItemClickListener.onItemClickListener(getAdapterPosition());
                     }
                 }
             });

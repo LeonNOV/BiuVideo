@@ -120,12 +120,12 @@ public class MediaUtils {
 
             long end = System.currentTimeMillis();
 
-            Log.d(LogTip.blue, "--------------------------------------------");
-            Log.d(LogTip.blue, "Video:" + videoPath.split("\\?")[0]);
-            Log.d(LogTip.blue, "Audio:" + audioPath.split("\\?")[0]);
-            Log.d(LogTip.blue, "isExists:" + new File(outPath).exists());
-            Log.d(LogTip.blue, "耗时：" + (end - begin) + "ms");
-            Log.d(LogTip.blue, "--------------------------------------------");
+            Log.d(Fuck.blue, "--------------------------------------------");
+            Log.d(Fuck.blue, "Video:" + videoPath.split("\\?")[0]);
+            Log.d(Fuck.blue, "Audio:" + audioPath.split("\\?")[0]);
+            Log.d(Fuck.blue, "isExists:" + new File(outPath).exists());
+            Log.d(Fuck.blue, "耗时：" + (end - begin) + "ms");
+            Log.d(Fuck.blue, "--------------------------------------------");
 
             //通知刷新，进行显示
             context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(outPath)));
@@ -208,7 +208,7 @@ public class MediaUtils {
             while ((len = bufferedInputStream.read(bytes)) != -1) {
                 total += len;
 
-                Log.d(LogTip.blue, "保存进度: " + total * 100 / length);
+                Log.d(Fuck.blue, "保存进度: " + total * 100 / length);
 
                 fileOutputStream.write(bytes, 0, len);
             }

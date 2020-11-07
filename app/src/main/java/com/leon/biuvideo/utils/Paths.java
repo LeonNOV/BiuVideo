@@ -101,5 +101,14 @@ public class Paths {
      *          后跟专栏ID（CVxxxxxxx）
      *          from:默认值:category_0,可选
      */
-    public static String article = "https://www.bilibili.com/read/mobile/";
+    public static String articleWebPage = "https://www.bilibili.com/read/mobile/";
+//    public static String article = "https://www.bilibili.com/read/cv";
+
+    /**
+     * 专栏列表接口
+     *      参数：
+     *          mid：用户id，必须
+     *          pn：页码，必须
+     */
+    public static String article = "https://api.bilibili.com/x/space/article";
 }

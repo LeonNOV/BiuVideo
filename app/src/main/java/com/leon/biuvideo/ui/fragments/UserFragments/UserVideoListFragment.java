@@ -1,4 +1,4 @@
-package com.leon.biuvideo.ui.fragments.UpMasterFragments;
+package com.leon.biuvideo.ui.fragments.UserFragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,10 +16,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.UpMaster.UpVideoAdapter;
+import com.leon.biuvideo.adapters.UserFragmentAdapters.UserVideoAdapter;
 import com.leon.biuvideo.beans.upMasterBean.UpVideo;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
-import com.leon.biuvideo.utils.LogTip;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpVideoParseUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * UpMasterActivity中的video片段
  */
-public class UpVideoFragment extends Fragment {
+public class UserVideoListFragment extends Fragment {
     private long mid;
     private int pageNum;
     private Context context;
@@ -47,10 +47,10 @@ public class UpVideoFragment extends Fragment {
     private RecyclerView up_video_recyclerView;
     private SmartRefreshLayout up_smartRefresh;
 
-    public UpVideoFragment() {
+    public UserVideoListFragment() {
     }
 
-    public UpVideoFragment(long mid, int pageNum, Context context) {
+    public UserVideoListFragment(long mid, int pageNum, Context context) {
         this.mid = mid;
         this.pageNum = pageNum;
         this.context = context;
@@ -70,8 +70,8 @@ public class UpVideoFragment extends Fragment {
 
     //初始化控件
     private void initView() {
-        up_video_recyclerView  = view.findViewById(R.id.up_recyclerView_space);
-        up_smartRefresh = view.findViewById(R.id.up_smartRefresh);
+        up_video_recyclerView  = view.findViewById(R.id.user_recyclerView_space);
+        up_smartRefresh = view.findViewById(R.id.user_smartRefresh);
 
         //关闭下拉刷新
         up_smartRefresh.setEnableRefresh(false);
@@ -79,6 +79,8 @@ public class UpVideoFragment extends Fragment {
 
     //初始化数据
     private void initValue() {
+        valueCount = UpVideoParseUtils.count;
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         up_video_recyclerView.setLayoutManager(layoutManager);
 
@@ -92,18 +94,19 @@ public class UpVideoFragment extends Fragment {
             view = inflater.inflate(R.layout.fragment_up_no_data, null);
         }
 
-        UpVideoAdapter upVideoAdapter = new UpVideoAdapter(upVideos, context);
-        up_video_recyclerView.setAdapter(upVideoAdapter);
-        upVideoAdapter.setOnItemClickListener(new UpVideoAdapter.OnItemClickListener() {
+        UserVideoAdapter userVideoAdapter = new UserVideoAdapter(upVideos, context);
+        up_video_recyclerView.setAdapter(userVideoAdapter);
+        userVideoAdapter.setOnItemClickListener(new UserVideoAdapter.OnItemClickListener() {
             @Override
-            public void onItemClickListener(View view, int position) {
+            public void onItemClickListener(int position) {
                 //获取对应的bvid
                 UpVideo upVideo = upVideos.get(position);
-                String bvid = upVideo.bvid;
+
+                Log.d(Fuck.blue, "size:" + upVideos.size());
 
                 //跳转到VideoActivity
                 Intent intent = new Intent(context, VideoActivity.class);
-                intent.putExtra("bvid", bvid);
+                intent.putExtra("bvid", upVideo.bvid);
                 startActivity(intent);
             }
         });
@@ -122,12 +125,12 @@ public class UpVideoFragment extends Fragment {
                             //获取新数据
                             List<UpVideo> addOns = getUpVideos(mid, pageNum);
 
-                            Log.d(LogTip.blue, "成功获取了" + mid + "的第" + pageNum + "页的" + addOns.size() + "条数据");
+                            Log.d(Fuck.blue, "成功获取了" + mid + "的第" + pageNum + "页的" + addOns.size() + "条数据");
 
                             //添加新数据
-                            upVideoAdapter.refresh(addOns);
+                            userVideoAdapter.refresh(addOns);
                         }
-                    }, 2000);
+                    }, 1000);
                 } else {
                     Toast.makeText(context, "只有这么多数据了~~~", Toast.LENGTH_SHORT).show();
                 }
@@ -150,11 +153,6 @@ public class UpVideoFragment extends Fragment {
 
         //记录获取的总数
         valueCount += temp.size();
-
-        //初始化数据总数目
-        if (total == -1) {
-            valueCount = UpVideoParseUtils.count;
-        }
 
         //判断是否已获取完所有的数据
         if (temp.size() < 30 || valueCount == total) {

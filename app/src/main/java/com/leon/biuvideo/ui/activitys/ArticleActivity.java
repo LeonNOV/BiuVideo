@@ -1,38 +1,44 @@
 package com.leon.biuvideo.ui.activitys;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.Bitmap;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.webkit.ValueCallback;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.widget.ImageView;
 
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.utils.LogTip;
 import com.leon.biuvideo.utils.Paths;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Attributes;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 
 import static com.leon.biuvideo.R.layout.activity_article;
 
-public class ArticleActivity extends AppCompatActivity {
+public class ArticleActivity extends AppCompatActivity implements View.OnClickListener {
+    private ImageView article_imageView_back;
     private WebView article_webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         super.onCreate(savedInstanceState);
         setContentView(activity_article);
 
@@ -41,10 +47,11 @@ public class ArticleActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        article_webView = findViewById(R.id.article_webView);
-    }
+        article_imageView_back = findViewById(R.id.article_imageView_back);
+        article_imageView_back.setOnClickListener(this);
 
-    private void initValue() {
+        article_webView = findViewById(R.id.article_webView);
+
         WebSettings settings = article_webView.getSettings();
 
         settings.setJavaScriptEnabled(true);
@@ -60,96 +67,117 @@ public class ArticleActivity extends AppCompatActivity {
         settings.setDefaultTextEncodingName("utf-8");//设置编码格式
 
         settings.setCacheMode(WebSettings.LOAD_DEFAULT);
-        settings.setLoadWithOverviewMode(true);
+//        settings.setLoadWithOverviewMode(true);
 
-        settings.setDefaultFontSize(40);
-
-        article_webView.loadUrl("https://www.bilibili.com/read/mobile/8107744", HttpUtils.getHeaders());
-
-        article_webView.setWebViewClient(new WebViewClient(){
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-
-                article_webView.loadUrl("javascript:" +
-                        "<script>\n" +
-                        "function removeTags(tagname){\n" +
-                        "    var remove = document.getElementsByTagName(tagname);\n" +
-                        "    for( var i = 0 ; i < remove.length ; i++ ){\n" +
-                        "        if( remove[i].className ==\"h5-download-bar\"||\"clearfix\"||\"attention-animation-holder\" ||\"new-iteration-list\"||\"unselectable\"||\"new-border\"||\"info-bar\"||\"tag-container\"||\"article-action clearfix\"){\n" +
-                        "            remove[i].parentNode.removeChild( remove[i] );\n" +
-                        "        }\n" +
-                        "    }\n" +
-                        "}\n" +
-                        "\n" +
-                        "function removeID(IDname){\n" +
-                        "    var remove = document.getElementById(IDname);\n" +
-                        "        if( remove.id ==\"app\"){\n" +
-                        "            remove.parentNode.removeChild(remove);\n" +
-                        "    }\n" +
-                        "} \n" +
-                        "\n" +
-                        "function removehref(Name){\n" +
-                        "    var remove=document.getElementsByTagName(Name)\n" +
-                        "    for(var i=0;i<remove.length;i++){\n" +
-                        "        if(remove[i].classList==\"author-face\" ||\"author-name\"){\n" +
-                        "            remove[i].removeAttribute(\"href\")\n" +
-                        "        }\n" +
-                        "    }\n" +
-                        "}" +
-                        "</script>");
-
-//                article_webView.loadUrl("javascript:deleteElements()");
-//                article_webView.evaluateJavascript("javascript:deleteElements()", new ValueCallback<String>() {
-//                    @Override
-//                    public void onReceiveValue(String value) {
-//                        Log.d(LogTip.blue, "onReceiveValue: " + value);
-//                    }
-//                });
-            }
-        });
+        settings.setDefaultFontSize(20);
     }
 
-    private String parseHTML() {
+    private void initValue() {
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        Article article = (Article) extras.getSerializable("article");
 
-        String html = HttpUtils.GetHtmlSrc(Paths.article + "8201179");
+        String path = Paths.articleWebPage + article.articleID;
 
+        //获取文章页面
+        String html = parseHTMLonPhone(path);
+
+        //加载文章内容
+        article_webView.loadData(html, "text/html", "utf-8");
+    }
+
+    /**
+     * 获取文章内容
+     *
+     * @param path  文章地址
+     * @return  返回文章HTML源码
+     */
+    public String parseHTMLonPhone(String path) {
+        String html = HttpUtils.GetHtmlSrc(path);
+        Document document = Jsoup.parse(html);
+
+        //获取头部份
+        Elements headContainer = document.getElementsByClass("head-container");
+        Element first = headContainer.first();
+
+        //删除文章基本参数
+        first.childNode(5).childNode(3).remove();
+
+        //删除部分数据
+        first.childNode(1).remove();
+        first.childNode(2).remove();
+        first.childNode(5).remove();
+
+        String head = headContainer.first().toString();
+
+        //====================================================================
+
+        //获取文章主要部分
+        Elements articleHolder = document.getElementsByClass("article-holder");
+
+        //获取所有类名为img-box的内容(即所有figure标签)
+        Elements figures = articleHolder.first().getElementsByTag("figure");
+        String str = "http:";
+
+        for (Element figure : figures) {
+            //获取figure中的img标签
+            Element img = figure.child(0);
+
+            //获取img中的所有属性
+            Attributes attributes = img.attributes();
+
+            //修改图片的链接
+            attributes.put("src", str + attributes.get("data-src"));
+            attributes.remove("data-src");
+        }
+
+        String body = articleHolder.first().toString();
+
+        //合并html
+        return combineWebPage(head + body);
+    }
+
+    /**
+     * 组合文章HTML源码
+     *
+     * @param content  文章主题源码
+     * @return  返回组合后的源码
+     */
+    private String combineWebPage(String content) {
+        if (content != null) {
+
+            StringBuilder webPage = new StringBuilder();
+
+            String head = "<!DOCTYPE html>\n" +
+                    "<html lang=\"zh\">\n" +
+                    "<head>\n" +
+                    "    <meta charset=\"UTF-8\">\n" +
+                    "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0 ,user-scalable=no\">\n";
+
+            String css = "<style>" + readCSS() + "</style>";
+
+            webPage.append(head + css + "</head>" + "<body>" + content + "</body>\n</html>");
+
+            webPage.append("<div class=\"head-container\">\n" +
+                    "        <div class=\"banner-img-holder\">\n" +
+                    "            <img src=\"https://i0.hdslb.com/bfs/article/07fe15783a2ef177ccf8ea6b0ddc0514ec7d1d10.jpg@860w_482h.webp\">\n" +
+                    "        </div>\n" +
+                    "    </div>");
+
+            return webPage.toString();
+        }
 
         return null;
     }
 
-    private void HtmlContent() {
-        article_webView.loadUrl("javascript:" +
-                "function deleteElements() {\n" +
-                "    // 删除class名的div 功能\n" +
-                "    var remove = document.getElementsByTagName(\"div\");\n" +
-                "    for (var i = 0; i < remove.length; i++) {\n" +
-                "        if (remove[i].className == \"h5-download-bar\" || \"clearfix\" || \"attention-animation-holder\" || \"new-iteration-list\" || \"unselectable\" || \"new-border\" || \"info-bar\" || \"tag-container\" || \"article-action clearfix\") {\n" +
-                "            remove[i].parentNode.removeChild(remove[i]);\n" +
-                "        }\n" +
-                "    }\n" +
-                "\n" +
-                "    // 删除ID名的div 功能\n" +
-                "    var remove1 = document.getElementById(\"id\");\n" +
-                "    if (remove1 != null) {\n" +
-                "        remove1.parentNode.removeChild(remove);\n" +
-                "    }\n" +
-                "\n" +
-                "    // 删除class名 的href属性\n" +
-                "    var remove2 = document.getElementsByTagName(\"div\")\n" +
-                "    for (var i = 0; i < remove2.length; i++) {\n" +
-                "        if (remove2[i].classList == \"author-face\" || \"author-name\") {\n" +
-                "            remove2[i].removeAttribute(\"href\")\n" +
-                "        }\n" +
-                "    }\n" +
-                "}\n");
-
-        article_webView.loadUrl("javascript:deleteElements()");
-    }
-
-    private String readJS() {
+    /**
+     * 读取assets下的css文件
+     *
+     * @return  返回css源代码
+     */
+    private String readCSS() {
         try {
-            InputStream inputStream = getApplicationContext().getAssets().open("removeElements.js");
+            InputStream inputStream = getApplicationContext().getAssets().open("index.css");
 
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -161,11 +189,17 @@ public class ArticleActivity extends AppCompatActivity {
 
             bufferedReader.close();
             inputStream.close();
+
             return js.toString();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         return null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        this.finish();
     }
 }

@@ -20,9 +20,9 @@ import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.ViewPageAdapter;
 import com.leon.biuvideo.beans.upMasterBean.UpInfo;
-import com.leon.biuvideo.ui.fragments.UpMasterFragments.UpAudioFragment;
-import com.leon.biuvideo.ui.fragments.UpMasterFragments.UpPictureFragment;
-import com.leon.biuvideo.ui.fragments.UpMasterFragments.UpVideoFragment;
+import com.leon.biuvideo.ui.fragments.UserFragments.UserAudioListFragment;
+import com.leon.biuvideo.ui.fragments.UserFragments.UserPictureListFragment;
+import com.leon.biuvideo.ui.fragments.UserFragments.UserVideoListFragment;
 import com.leon.biuvideo.utils.SQLiteHelper;
 import com.leon.biuvideo.utils.WebpSizes;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpInfoParseUtils;
@@ -144,13 +144,13 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
         List<Fragment> fragments = new ArrayList<>();
 
         //获取视频数据
-        fragments.add(new UpVideoFragment(mid, 1, getApplicationContext()));
+        fragments.add(new UserVideoListFragment(mid, 1, getApplicationContext()));
 
         //获取音频数据
-        fragments.add(new UpAudioFragment(mid, 1, getApplicationContext()));
+        fragments.add(new UserAudioListFragment(mid, 1, getApplicationContext()));
 
         //获取相簿数据
-        fragments.add(new UpPictureFragment(mid, 0, getApplicationContext()));
+        fragments.add(new UserPictureListFragment(mid, 0, getApplicationContext()));
 
         ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), fragments);
         up_viewPage.setAdapter(viewPageAdapter);

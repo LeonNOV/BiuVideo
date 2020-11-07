@@ -1,5 +1,7 @@
 package com.leon.biuvideo.utils;
 
+import android.view.textclassifier.ConversationActions;
+
 import org.apache.http.Header;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
@@ -11,6 +13,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,6 +25,15 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Headers;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+import okio.BufferedSource;
 
 public class HttpUtils {
     /**
@@ -137,8 +149,9 @@ public class HttpUtils {
      * @param path  链接
      * @return  返回HTML源码
      */
+    private static String result;
     public static String GetHtmlSrc(String path) {
-        CloseableHttpClient httpClient = HttpClients.createDefault();
+        /*CloseableHttpClient httpClient = HttpClientBuilder.create().disableRedirectHandling().build();
 
         HttpGet httpGet = new HttpGet(path);
 
@@ -160,8 +173,35 @@ public class HttpUtils {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }*/
+
+        OkHttpClient okHttpClient = new OkHttpClient();
+
+        Request.Builder builder = new Request.Builder();
+        builder.url(path);
+        builder.get();
+
+        //设置请求头
+        Headers headers = Headers.of(getHeaders());
+        builder.headers(headers);
+
+        Request request = builder.build();
+        Call call = okHttpClient.newCall(request);
+
+        try {
+            Response response = response = call.execute();
+
+            if (response.code() == 200) {
+                result = response.body().string();
+            }
+
+            response.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        return null;
+
+
+        return result;
     }
 }

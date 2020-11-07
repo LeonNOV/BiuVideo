@@ -89,7 +89,7 @@ public class MusicListDatabaseUtils {
 
         int count = cursor.getCount();
 
-        Log.d(LogTip.blue, "queryMusic: " + count);
+        Log.d(Fuck.blue, "queryMusic: " + count);
 
         cursor.close();
         database.close();

@@ -31,7 +31,7 @@ public class FileUtils {
     public static String createFolder(ResourcesFolder folderName) {
         String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/BiuVideo";
 
-        Log.d(LogTip.blue, "createFolder: " + rootPath);
+        Log.d(Fuck.blue, "createFolder: " + rootPath);
 
         String resourcesPath = folderName.value;
         File file = new File(rootPath, resourcesPath);
@@ -40,7 +40,7 @@ public class FileUtils {
             file.mkdirs();
         }
 
-        Log.d(LogTip.blue, "createFolder:------Path:" + file.getPath() + "------" + file.getAbsolutePath());
+        Log.d(Fuck.blue, "createFolder:------Path:" + file.getPath() + "------" + file.getAbsolutePath());
 
         return file.getAbsolutePath();
     }

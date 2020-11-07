@@ -1,4 +1,4 @@
-package com.leon.biuvideo.ui.fragments.UpMasterFragments;
+package com.leon.biuvideo.ui.fragments.UserFragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,19 +15,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.UpMaster.UpAudioAdapter;
+import com.leon.biuvideo.adapters.UserFragmentAdapters.UserAudioAdapter;
 import com.leon.biuvideo.beans.upMasterBean.UpAudio;
 import com.leon.biuvideo.ui.activitys.UpSongActivity;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpAudioParseUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * UpMasterActivity中的audio/music片段
  */
-public class UpAudioFragment extends Fragment {
+public class UserAudioListFragment extends Fragment {
     private long mid;
     private int pageNum;
     private Context context;
@@ -43,10 +42,10 @@ public class UpAudioFragment extends Fragment {
     private RecyclerView up_audio_recyclerView;
     private SmartRefreshLayout up_smartRefresh;
 
-    public UpAudioFragment() {
+    public UserAudioListFragment() {
     }
 
-    public UpAudioFragment(long mid, int pageNum, Context context) {
+    public UserAudioListFragment(long mid, int pageNum, Context context) {
         this.mid = mid;
         this.pageNum = pageNum;
         this.context = context;
@@ -65,8 +64,8 @@ public class UpAudioFragment extends Fragment {
     }
 
     private void initView() {
-        up_audio_recyclerView  = view.findViewById(R.id.up_recyclerView_space);
-        up_smartRefresh = view.findViewById(R.id.up_smartRefresh);
+        up_audio_recyclerView  = view.findViewById(R.id.user_recyclerView_space);
+        up_smartRefresh = view.findViewById(R.id.user_smartRefresh);
 
         //关闭下拉刷新
         up_smartRefresh.setEnableRefresh(false);
@@ -86,11 +85,11 @@ public class UpAudioFragment extends Fragment {
             view = inflater.inflate(R.layout.fragment_up_no_data, null);
         }
 
-        UpAudioAdapter upAudioAdapter = new UpAudioAdapter(upAudios, context);
-        up_audio_recyclerView.setAdapter(upAudioAdapter);
+        UserAudioAdapter userAudioAdapter = new UserAudioAdapter(upAudios, context);
+        up_audio_recyclerView.setAdapter(userAudioAdapter);
 
         //设置item点击事件，跳转到音乐播放界面
-        upAudioAdapter.setOnItemClickListener((view, position) -> {
+        userAudioAdapter.setOnItemClickListener((view, position) -> {
 
             //获取所有sid
             long[] sids = new long[upAudios.size()];
@@ -121,7 +120,7 @@ public class UpAudioFragment extends Fragment {
                     List<UpAudio> addOns = getUpAudios(mid, pageNum);
 
                     //添加新数据
-                    upAudioAdapter.refresh(addOns);
+                    userAudioAdapter.refresh(addOns);
                 }, 2000);
             } else {
                 Toast.makeText(context, "只有这么多数据了~~~", Toast.LENGTH_SHORT).show();

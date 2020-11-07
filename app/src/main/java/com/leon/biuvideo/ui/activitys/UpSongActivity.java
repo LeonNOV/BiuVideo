@@ -32,7 +32,7 @@ import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
 import com.leon.biuvideo.service.MusicService;
 import com.leon.biuvideo.ui.dialogs.MusicListDialog;
 import com.leon.biuvideo.utils.FileUtils;
-import com.leon.biuvideo.utils.LogTip;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.MediaUtils;
 import com.leon.biuvideo.utils.MusicListDatabaseUtils;
 import com.leon.biuvideo.utils.ValueFormat;
@@ -185,7 +185,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                 //获取当前进度
                 int currentPosition = bundle.getInt("currentPosition");
 
-                Log.d(LogTip.blue, "UpSongActivity--------------duration:" + duration + "------currentPosition:" + currentPosition);
+                Log.d(Fuck.blue, "UpSongActivity--------------duration:" + duration + "------currentPosition:" + currentPosition);
 
                 //设置进度条最大值
                 music_seekBar.setMax(duration);
@@ -324,7 +324,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
             case R.id.music_imageView_musicList:
                 //获取播放列表数据
                 List<MusicPlayList> musicPlayLists = musicDatabaseUtils.queryPlayList();
-                Log.d(LogTip.blue, "onClick: " + musicPlayLists.size());
+                Log.d(Fuck.blue, "onClick: " + musicPlayLists.size());
 
                 MusicListDialog musicListDialog = new MusicListDialog(UpSongActivity.this, musicPlayLists, new MusicListDialog.PriorityListener() {
 
@@ -447,7 +447,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                     //获取上一个music的sid
                     long sid = sids[--position];
 
-                    Log.d(LogTip.blue, "上一首：" + position);
+                    Log.d(Fuck.blue, "上一首：" + position);
 
                     //切换歌曲
                     switchMusic(sid);
@@ -461,7 +461,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                     //获取下一个music的sid
                     long sid = sids[++position];
 
-                    Log.d(LogTip.blue, "下一首：" + position);
+                    Log.d(Fuck.blue, "下一首：" + position);
 
                     //切换歌曲
                     switchMusic(sid);
@@ -570,7 +570,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
     protected void onDestroy() {
         unbind();
         musicState = 0;
-        Log.d(LogTip.blue, "onDestroy: UpSongActivity is destroy");
+        Log.d(Fuck.blue, "onDestroy: UpSongActivity is destroy");
         super.onDestroy();
     }
 

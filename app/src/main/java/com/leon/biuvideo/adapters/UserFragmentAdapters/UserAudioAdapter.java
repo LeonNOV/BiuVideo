@@ -1,4 +1,4 @@
-package com.leon.biuvideo.adapters.UpMaster;
+package com.leon.biuvideo.adapters.UserFragmentAdapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -23,11 +23,11 @@ import java.util.Locale;
 /**
  * 用户界面，音频/音乐fragment适配器
  */
-public class UpAudioAdapter extends RecyclerView.Adapter<UpAudioAdapter.ViewHolder> {
+public class UserAudioAdapter extends RecyclerView.Adapter<UserAudioAdapter.ViewHolder> {
     private List<UpAudio> upAudios;
     private final Context context;
 
-    public UpAudioAdapter(List<UpAudio> upAudios, Context context) {
+    public UserAudioAdapter(List<UpAudio> upAudios, Context context) {
         this.upAudios = upAudios;
         this.context = context;
     }
@@ -35,12 +35,12 @@ public class UpAudioAdapter extends RecyclerView.Adapter<UpAudioAdapter.ViewHold
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.up_media_list_view_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.user_media_list_view_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull UpAudioAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull UserAudioAdapter.ViewHolder holder, int position) {
         UpAudio upAudio = upAudios.get(position);
 
         //设置封面

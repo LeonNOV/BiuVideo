@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.utils.LogTip;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.Paths;
 
 import java.util.ArrayList;
@@ -80,7 +80,7 @@ public class UpPictureParseUtils {
             return upPictures;
         }
 
-        Log.e(LogTip.red, "doc_list接口数据获取失败", new NullPointerException("doc_list接口数据获取失败"));
+        Log.e(Fuck.red, "doc_list接口数据获取失败", new NullPointerException("doc_list接口数据获取失败"));
         return null;
     }
 

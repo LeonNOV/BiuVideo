@@ -16,7 +16,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.ViewPageAdapter;
 import com.leon.biuvideo.ui.fragments.PlayListFragments.MusicListFragment;
 import com.leon.biuvideo.ui.fragments.PlayListFragments.VideoListFragment;
-import com.leon.biuvideo.utils.LogTip;
+import com.leon.biuvideo.utils.Fuck;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +62,7 @@ public class PlayListFragment extends Fragment implements ViewPager.OnPageChange
     @Override
     public void onPageSelected(int position) {
 
-        Log.d(LogTip.blue, "page position:" + position);
+        Log.d(Fuck.blue, "page position:" + position);
 
         switch (position) {
             case 0:

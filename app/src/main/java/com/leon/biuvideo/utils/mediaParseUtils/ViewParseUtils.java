@@ -10,7 +10,7 @@ import com.leon.biuvideo.beans.videoBean.view.UpInfo;
 import com.leon.biuvideo.beans.videoBean.view.VideoInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.utils.LogTip;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.Paths;
 
 import java.util.ArrayList;
@@ -81,7 +81,7 @@ public class ViewParseUtils {
                 return viewPage;
             }
         } catch (NullPointerException e) {
-            Log.e(LogTip.red, "parseView: 数据解析出错");
+            Log.e(Fuck.red, "parseView: 数据解析出错");
             e.printStackTrace();
         }
 

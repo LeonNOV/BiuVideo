@@ -1,4 +1,4 @@
-package com.leon.biuvideo.adapters.UpMaster;
+package com.leon.biuvideo.adapters.UserFragmentAdapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -18,11 +18,11 @@ import java.util.List;
 /**
  * 用户界面，相簿fragment适配器
  */
-public class UpPictureAdapter extends RecyclerView.Adapter<UpPictureAdapter.ViewHolder> {
+public class UserPictureAdapter extends RecyclerView.Adapter<UserPictureAdapter.ViewHolder> {
     private List<UpPicture> upPictures;
     private final Context context;
 
-    public UpPictureAdapter(List<UpPicture> upPictures, Context context) {
+    public UserPictureAdapter(List<UpPicture> upPictures, Context context) {
         this.upPictures = upPictures;
         this.context = context;
     }
@@ -30,13 +30,13 @@ public class UpPictureAdapter extends RecyclerView.Adapter<UpPictureAdapter.View
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.up_picture_list_view_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.user_picture_list_view_item, parent, false);
 
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull UpPictureAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull UserPictureAdapter.ViewHolder holder, int position) {
         UpPicture upPicture = upPictures.get(position);
 
         //设置相簿封面

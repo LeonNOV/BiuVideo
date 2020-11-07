@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.activitys.UpSongActivity;
-import com.leon.biuvideo.utils.LogTip;
+import com.leon.biuvideo.utils.Fuck;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -71,7 +71,7 @@ public class MusicService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
 
-        Log.d(LogTip.blue, "onBind: " + "服务已绑定");
+        Log.d(Fuck.blue, "onBind: " + "服务已绑定");
 
         return new MusicControl();
     }
@@ -232,7 +232,7 @@ public class MusicService extends Service {
             timer.cancel();
         }
 
-        Log.d(LogTip.blue, "onDestroy: " + "解绑服务");
+        Log.d(Fuck.blue, "onDestroy: " + "解绑服务");
 
         super.onDestroy();
     }

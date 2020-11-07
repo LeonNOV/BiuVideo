@@ -1,4 +1,4 @@
-package com.leon.biuvideo.ui.fragments.UpMasterFragments;
+package com.leon.biuvideo.ui.fragments.UserFragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.UpMaster.UpPictureAdapter;
+import com.leon.biuvideo.adapters.UserFragmentAdapters.UserPictureAdapter;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpPictureParseUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * UpMasterActivity中的pic片段
  */
-public class UpPictureFragment extends Fragment {
+public class UserPictureListFragment extends Fragment {
     private long mid;
     private int pageNum;
     private Context context;
@@ -42,10 +42,10 @@ public class UpPictureFragment extends Fragment {
     private RecyclerView up_picture_recyclerView;
     private SmartRefreshLayout up_smartRefresh;
 
-    public UpPictureFragment() {
+    public UserPictureListFragment() {
     }
 
-    public UpPictureFragment(long mid, int pageNum, Context context) {
+    public UserPictureListFragment(long mid, int pageNum, Context context) {
         this.mid = mid;
         this.pageNum = pageNum;
         this.context = context;
@@ -64,8 +64,8 @@ public class UpPictureFragment extends Fragment {
     }
 
     private void initView() {
-        up_picture_recyclerView  = view.findViewById(R.id.up_recyclerView_space);
-        up_smartRefresh = view.findViewById(R.id.up_smartRefresh);
+        up_picture_recyclerView  = view.findViewById(R.id.user_recyclerView_space);
+        up_smartRefresh = view.findViewById(R.id.user_smartRefresh);
 
         //关闭下拉刷新
         up_smartRefresh.setEnableRefresh(false);
@@ -85,8 +85,8 @@ public class UpPictureFragment extends Fragment {
             view = inflater.inflate(R.layout.fragment_up_no_data, null);
         }
 
-        UpPictureAdapter upPictureAdapter = new UpPictureAdapter(upPictures, context);
-        up_picture_recyclerView.setAdapter(upPictureAdapter);
+        UserPictureAdapter userPictureAdapter = new UserPictureAdapter(upPictures, context);
+        up_picture_recyclerView.setAdapter(userPictureAdapter);
 
         //添加加载更多监听事件
         up_smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -103,7 +103,7 @@ public class UpPictureFragment extends Fragment {
                             List<UpPicture> addOns = getUpPictures(mid, pageNum);
 
                             //添加新数据
-                            upPictureAdapter.refresh(addOns);
+                            userPictureAdapter.refresh(addOns);
                         }
                     }, 2000);
                 } else {

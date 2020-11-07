@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.musicBeans.MusicInfo;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.utils.LogTip;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.Paths;
 
 import java.util.ArrayList;
@@ -103,7 +103,7 @@ public class MusicParseUtils {
             return musicInfo;
         }
 
-        Log.e(LogTip.red, "musicInfo接口数据获取失败", new NullPointerException("musicInfo接口数据获取失败"));
+        Log.e(Fuck.red, "musicInfo接口数据获取失败", new NullPointerException("musicInfo接口数据获取失败"));
         return null;
     }
 }
