@@ -76,10 +76,9 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
 
         article_webView = findViewById(R.id.article_webView);
         WebSettings settings = article_webView.getSettings();
-//        settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
         settings.setAppCacheEnabled(true);
-        settings.setUseWideViewPort(true); //将图片调整到适合webview的大小
+        settings.setUseWideViewPort(true); //将图片调整到适合webView的大小
         settings.setLoadsImagesAutomatically(true); //支持自动加载图片
         settings.setDefaultTextEncodingName("utf-8");//设置编码格式
         settings.setCacheMode(WebSettings.LOAD_DEFAULT);

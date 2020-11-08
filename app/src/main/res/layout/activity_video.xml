@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#F48FAC"
     tools:context=".ui.activitys.VideoActivity">
 
     <WebView
@@ -14,12 +15,11 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#F48FAC"
             android:orientation="vertical">
 
             <LinearLayout
@@ -222,6 +222,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
+                    android:padding="10dp"
                     android:background="@drawable/shape_bilibili_pink"
                     android:text="@string/video_button_saveCover_str" />
 
@@ -230,6 +231,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
+                    android:padding="10dp"
                     android:background="@drawable/shape_bilibili_pink"
                     android:text="@string/video_button_saveFace_str" />
 

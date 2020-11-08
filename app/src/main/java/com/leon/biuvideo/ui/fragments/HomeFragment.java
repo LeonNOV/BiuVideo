@@ -8,7 +8,6 @@ import android.view.*;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.activitys.UpMasterActivity;

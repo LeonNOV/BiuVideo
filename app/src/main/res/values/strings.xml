@@ -15,6 +15,4 @@
 
     <string name="close">关闭</string>
     <string name="noneData">啥都没有哎~~~</string>
-
-    <string name="screenshot">图片生成中…</string>
 </resources>
