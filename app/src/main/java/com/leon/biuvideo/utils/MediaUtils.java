@@ -4,12 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.media.MediaCodec;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.media.MediaMuxer;
 import android.net.Uri;
 import android.util.Log;
+import android.webkit.WebView;
+import android.widget.Toast;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -271,6 +274,38 @@ public class MediaUtils {
 
             return isSuccess;
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    /**
+     * 将webView中的内容转换为图片
+     *
+     * @param webView   webView对象
+     * @param context   context
+     * @return 返回截图保存状态
+     */
+    public static boolean saveArticle(WebView webView, Context context) {
+        Bitmap bitmap = Bitmap.createBitmap(webView.getWidth(), webView.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        webView.draw(canvas);
+
+        try {
+            File articlePic = new File(FileUtils.createFolder(FileUtils.ResourcesFolder.PICTURES), FileUtils.generateFileName("article") + ".jpeg");
+
+            FileOutputStream fos = new FileOutputStream(articlePic);
+            if (fos != null) {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fos);
+
+                context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(articlePic)));
+
+                fos.close();
+
+                return true;
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

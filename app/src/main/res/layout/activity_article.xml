@@ -3,16 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#fff"
     android:layout_height="match_parent"
-    android:id="@+id/article_relativeLayout"
+    android:background="#fff"
     tools:context=".ui.activitys.ArticleActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/article_toolBar"
-        android:background="@color/bilibili_pink"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/bilibili_pink">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -27,27 +26,102 @@
                 app:tint="#E3E3E3" />
 
             <TextView
+                android:id="@+id/article_textView_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_marginStart="50dp"
                 android:layout_marginEnd="50dp"
-                android:text="Titawasfjksdhfksdfhsdkfhsdkfjshfksdhfksdfhsdkfle"
-                android:textColor="#E3E3E3"
-                android:maxLines="1"
                 android:ellipsize="end"
-                android:layout_centerVertical="true"
+                android:maxLines="1"
+                android:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitle"
+                android:textColor="#E3E3E3"
                 android:textSize="18sp" />
+
+            <ImageView
+                android:id="@+id/article_imageView_more"
+                android:layout_width="27dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/more_icon"
+                app:tint="#E3E3E3" />
 
         </RelativeLayout>
 
     </androidx.appcompat.widget.Toolbar>
 
-    <WebView
-        android:id="@+id/article_webView"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/article_toolBar"
+    <ScrollView
+        android:id="@+id/article_relativeLayout"
         android:layout_width="match_parent"
-        android:background="#fff"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/article_toolBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/article_textView_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="单机游戏"
+                    android:textColor="@color/light_gray"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/article_textView_ctime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="2020-11-08-16:35"
+                    android:textColor="@color/light_gray"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/article_textView_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="16.3万阅读"
+                    android:textColor="@color/light_gray"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/article_textView_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="915点赞"
+                    android:textColor="@color/light_gray"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/article_textView_replay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="436评论"
+                    android:textColor="@color/light_gray"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <WebView
+                android:id="@+id/article_webView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </RelativeLayout>

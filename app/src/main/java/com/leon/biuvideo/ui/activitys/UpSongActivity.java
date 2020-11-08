@@ -472,7 +472,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                 break;
             case R.id.music_imageView_link:
 
-                //跳转到源网站收听
+                //跳转到源网站
                 Intent intentOriginUrl = new Intent();
                 intentOriginUrl.setAction("android.intent.action.VIEW");
                 Uri uri = Uri.parse("https://www.bilibili.com/audio/au" + musicInfo.sid);

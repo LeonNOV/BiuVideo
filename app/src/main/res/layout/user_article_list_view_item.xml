@@ -33,8 +33,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/article_textView_title"
-            android:layout_margin="10dp"
+            android:layout_alignBottom="@id/article_imageView_cover"
             android:layout_toEndOf="@id/article_imageView_cover"
             android:orientation="vertical">
 
@@ -46,7 +45,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_lable" />
+                    android:src="@drawable/ic_label" />
 
                 <TextView
                     android:id="@+id/article_textView_category"
@@ -60,7 +59,6 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -72,7 +70,7 @@
                     android:id="@+id/article_textView_ctime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="5dp"
                     android:text="2020-11-08 13:45" />
 
             </LinearLayout>

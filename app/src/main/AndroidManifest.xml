@@ -23,7 +23,7 @@
         <activity
             android:name=".ui.activitys.ArticleActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/ArticleStyle" />
         <activity
             android:name=".ui.activitys.UpSongActivity"
             android:screenOrientation="portrait"

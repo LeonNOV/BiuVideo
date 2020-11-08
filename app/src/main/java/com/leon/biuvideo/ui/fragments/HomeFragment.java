@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.ui.activitys.ArticleActivity;
 import com.leon.biuvideo.ui.activitys.UpMasterActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.utils.IDUtils;
@@ -70,7 +69,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         hero_imageView = view.findViewById(R.id.home_imageView_hero);
         hero_imageView.setOnClickListener(this);
 
-
         home_spinner = view.findViewById(R.id.home_spinner);
         home_spinner.setOnItemSelectedListener(this);
 
@@ -78,15 +76,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
 
         main_button_confirm = view.findViewById(R.id.home_button_confirm);
         main_button_confirm.setOnClickListener(this);
-
-        Button button = view.findViewById(R.id.toWebView);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, ArticleActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     private void initValues() {
@@ -154,7 +143,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         switch (view.getId()) {
             case R.id.home_imageView_hero:
                 //抖一抖！！！
-                ActivityCompat.requestPermissions(requireActivity(), new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 1024);
 
                 break;
             case R.id.home_button_confirm:
@@ -205,8 +193,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
 
                             nullCount++;
                         }
-
-                        Toast.makeText(context, "Video", Toast.LENGTH_SHORT).show();
                         break;
                     //获取数据，进入UpMasterActivity
                     case 1:
@@ -226,8 +212,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                                 Toast.makeText(context, "ERROR~~~\n可通过右上角中的帮助来了解正确的获取方式", Toast.LENGTH_SHORT).show();
                             }
                         }
-
-                        Toast.makeText(context, "UP", Toast.LENGTH_SHORT).show();
                         break;
                     default:break;
                 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="article_screenshot">保存为图片</string>
+    <string name="article_jumpToOrigin">跳转到原网站</string>
+
+</resources>

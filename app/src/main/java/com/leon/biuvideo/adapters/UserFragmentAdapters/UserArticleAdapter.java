@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.articleBeans.Article;
-import com.leon.biuvideo.beans.upMasterBean.UpVideo;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

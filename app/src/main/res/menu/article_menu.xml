@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/article_menu_screenshot"
+        android:icon="@color/bilibili_pink_lite"
+        android:title="@string/article_screenshot"/>
+    <item
+        android:id="@+id/article_menu_jumpToOrigin"
+        android:icon="@color/bilibili_pink_lite"
+        android:title="@string/article_jumpToOrigin"/>
+
+</menu>

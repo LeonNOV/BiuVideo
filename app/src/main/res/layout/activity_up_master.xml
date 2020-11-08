@@ -136,7 +136,7 @@
         <TableRow>
 
             <TextView
-                android:id="@+id/up_textView_video"
+                android:id="@+id/user_textView_video"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -145,7 +145,7 @@
                 android:textSize="30sp" />
 
             <TextView
-                android:id="@+id/up_textView_audio"
+                android:id="@+id/user_textView_audio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -154,7 +154,16 @@
                 android:textSize="30sp" />
 
             <TextView
-                android:id="@+id/up_textView_picture"
+                android:id="@+id/user_textView_articles"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/up_item_articles"
+                android:textColor="@color/normal"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/user_textView_picture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"

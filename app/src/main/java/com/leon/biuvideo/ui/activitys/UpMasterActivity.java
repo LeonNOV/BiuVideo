@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.ViewPageAdapter;
 import com.leon.biuvideo.beans.upMasterBean.UpInfo;
+import com.leon.biuvideo.ui.fragments.UserFragments.UserArticlesFragment;
 import com.leon.biuvideo.ui.fragments.UserFragments.UserAudioListFragment;
 import com.leon.biuvideo.ui.fragments.UserFragments.UserPictureListFragment;
 import com.leon.biuvideo.ui.fragments.UserFragments.UserVideoListFragment;
@@ -45,7 +46,7 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
     private TextView up_textView_favoriteStrState;
     private ExpandableTextView up_textView_sign;
     //    private TextView up_textView_follower, up_textView_like, up_textView_view;
-    private TextView up_textView_video, up_textView_audio, up_textView_picture;
+    private TextView user_textView_video, user_textView_audio, user_textView_articles, user_textView_picture;
     private ViewPager up_viewPage;
 
     private long mid;
@@ -86,14 +87,17 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
 //        up_textView_like = findViewById(R.id.up_textView_like);
 //        up_textView_view = findViewById(R.id.up_textView_view);
 
-        up_textView_video = findViewById(R.id.up_textView_video);
-        up_textView_video.setOnClickListener(this);
+        user_textView_video = findViewById(R.id.user_textView_video);
+        user_textView_video.setOnClickListener(this);
 
-        up_textView_audio = findViewById(R.id.up_textView_audio);
-        up_textView_audio.setOnClickListener(this);
+        user_textView_audio = findViewById(R.id.user_textView_audio);
+        user_textView_audio.setOnClickListener(this);
 
-        up_textView_picture = findViewById(R.id.up_textView_picture);
-        up_textView_picture.setOnClickListener(this);
+        user_textView_articles = findViewById(R.id.user_textView_articles);
+        user_textView_articles.setOnClickListener(this);
+
+        user_textView_picture = findViewById(R.id.user_textView_picture);
+        user_textView_picture.setOnClickListener(this);
 
         up_viewPage = findViewById(R.id.up_viewPage);
         up_viewPage.addOnPageChangeListener(this);
@@ -149,6 +153,9 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
         //获取音频数据
         fragments.add(new UserAudioListFragment(mid, 1, getApplicationContext()));
 
+        //获取文章数据
+        fragments.add(new UserArticlesFragment(mid, 1, getApplicationContext()));
+
         //获取相簿数据
         fragments.add(new UserPictureListFragment(mid, 0, getApplicationContext()));
 
@@ -160,21 +167,31 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
     public void onPageSelected(int position) {
         switch (position) {
             case 0:
-                up_textView_video.setTextColor(getResources().getColor(R.color.bilibili_pink));
-                up_textView_audio.setTextColor(getResources().getColor(R.color.normal));
-                up_textView_picture.setTextColor(getResources().getColor(R.color.normal));
+                user_textView_video.setTextColor(getResources().getColor(R.color.bilibili_pink));
+                user_textView_audio.setTextColor(getResources().getColor(R.color.normal));
+                user_textView_articles.setTextColor(getResources().getColor(R.color.normal));
+                user_textView_picture.setTextColor(getResources().getColor(R.color.normal));
 
                 break;
             case 1:
-                up_textView_video.setTextColor(getResources().getColor(R.color.normal));
-                up_textView_audio.setTextColor(getResources().getColor(R.color.bilibili_pink));
-                up_textView_picture.setTextColor(getResources().getColor(R.color.normal));
+                user_textView_video.setTextColor(getResources().getColor(R.color.normal));
+                user_textView_audio.setTextColor(getResources().getColor(R.color.bilibili_pink));
+                user_textView_articles.setTextColor(getResources().getColor(R.color.normal));
+                user_textView_picture.setTextColor(getResources().getColor(R.color.normal));
 
                 break;
             case 2:
-                up_textView_video.setTextColor(getResources().getColor(R.color.normal));
-                up_textView_audio.setTextColor(getResources().getColor(R.color.normal));
-                up_textView_picture.setTextColor(getResources().getColor(R.color.bilibili_pink));
+                user_textView_video.setTextColor(getResources().getColor(R.color.normal));
+                user_textView_audio.setTextColor(getResources().getColor(R.color.normal));
+                user_textView_articles.setTextColor(getResources().getColor(R.color.bilibili_pink));
+                user_textView_picture.setTextColor(getResources().getColor(R.color.normal));
+
+                break;
+            case 3:
+                user_textView_video.setTextColor(getResources().getColor(R.color.normal));
+                user_textView_audio.setTextColor(getResources().getColor(R.color.normal));
+                user_textView_articles.setTextColor(getResources().getColor(R.color.normal));
+                user_textView_picture.setTextColor(getResources().getColor(R.color.bilibili_pink));
 
                 break;
             default:
@@ -191,14 +208,17 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
                 //将up的基本信息存入数据库
                 addFavorite();
                 break;
-            case R.id.up_textView_video:
+            case R.id.user_textView_video:
                 up_viewPage.setCurrentItem(0);
                 break;
-            case R.id.up_textView_audio:
+            case R.id.user_textView_audio:
                 up_viewPage.setCurrentItem(1);
                 break;
-            case R.id.up_textView_picture:
+            case R.id.user_textView_articles:
                 up_viewPage.setCurrentItem(2);
+                break;
+            case R.id.user_textView_picture:
+                up_viewPage.setCurrentItem(3);
                 break;
             default:
                 break;

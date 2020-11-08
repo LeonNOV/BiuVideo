@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,11 +24,14 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public class UserArticlesFragment extends Fragment {
     private long mid;
-    private int pageNum = 1;
+    private int pageNum;
+    private Context context;
 
 
     //总条目数
@@ -40,20 +44,20 @@ public class UserArticlesFragment extends Fragment {
     private boolean dataState;
 
     private View view;
-    private Context context;
 
     private RecyclerView user_article_recyclerView;
     private SmartRefreshLayout user_smartRefresh;
 
-    public UserArticlesFragment(long mid, int pageNum) {
+    public UserArticlesFragment(long mid, int pageNum, Context context) {
         this.mid = mid;
         this.pageNum = pageNum;
+        this.context = context;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_up_space, container, false);
+        view = inflater.inflate(R.layout.fragment_up_space, container, false);
 
         initView();
         initValue();
@@ -62,9 +66,6 @@ public class UserArticlesFragment extends Fragment {
     }
 
     private void initView() {
-        view = getView();
-        context = getActivity();
-
         user_article_recyclerView = view.findViewById(R.id.user_recyclerView_space);
 
         user_smartRefresh = view.findViewById(R.id.user_smartRefresh);
@@ -74,15 +75,17 @@ public class UserArticlesFragment extends Fragment {
     }
 
     private void initValue() {
-        count = ArticleParseUtils.getCount(646456);
-
-        //获取初始数据
-        List<Article> initArticles = getArticles(213123, pageNum);
+        count = ArticleParseUtils.getCount(mid);
 
         //判断条目是否为0
-        if (initArticles.size() == 0) {
+        if (count == 0) {
             //显示无数据提示
+
+            return;
         }
+
+        //获取初始数据
+        List<Article> initArticles = getArticles(mid, pageNum);
 
         UserArticleAdapter articleAdapter = new UserArticleAdapter(initArticles, context);
         articleAdapter.setOnItemClickListener(new UserArticleAdapter.OnItemClickListener() {
@@ -113,11 +116,14 @@ public class UserArticlesFragment extends Fragment {
                 if (dataState) {
                     pageNum++;
 
-                    List<Article> addOns = getArticles(1231, pageNum);
+                    List<Article> addOns = getArticles(mid, pageNum);
                     articleAdapter.refresh(addOns);
                 } else {
                     Toast.makeText(context, "只有这么多数据了~~~", Toast.LENGTH_SHORT).show();
                 }
+
+                //结束加载更多动画
+                user_smartRefresh.finishLoadMore();
             }
         });
     }

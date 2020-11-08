@@ -8,8 +8,8 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:background="#F3A1B9"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#F3A1B9">
 
         <ImageView
             android:id="@+id/up_media_imageView_cover"
@@ -48,37 +48,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:maxLines="3"
-            android:ellipsize="end"
             android:layout_toEndOf="@id/up_media_imageView_cover"
+            android:ellipsize="end"
+            android:maxLines="3"
             android:text="介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍"
             android:textSize="17sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
             android:layout_alignBottom="@id/up_media_imageView_cover"
-            android:layout_toEndOf="@id/up_media_imageView_cover">
+            android:layout_toEndOf="@id/up_media_imageView_cover"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/up_media_imageView_play"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/icon_video_play"/>
+                    android:src="@drawable/icon_video_play" />
 
                 <TextView
                     android:id="@+id/up_media_textView_play"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginStart="5dp"
+                    android:layout_marginBottom="10dp"
                     android:text="1502130次播放"
                     android:textSize="15sp" />
 
@@ -86,19 +86,20 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/icon_video_time"/>
+                    android:src="@drawable/icon_video_time" />
+
                 <TextView
                     android:id="@+id/up_media_textView_ctime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2020-10-21 19:15"
                     android:layout_marginStart="5dp"
+                    android:text="2020-10-21 19:15"
                     android:textSize="15sp" />
 
             </LinearLayout>
