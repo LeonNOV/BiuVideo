@@ -10,8 +10,7 @@
         android:id="@+id/main_toolBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bilibili_pink"
-        app:popupTheme="@style/OverflowMenuStyle">
+        android:background="@color/bilibili_pink">
 
         <RelativeLayout
             android:layout_width="wrap_content"

@@ -1,13 +1,11 @@
 package com.leon.biuvideo.ui.activitys;
 
 import android.view.*;
-import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.os.Bundle;
@@ -33,11 +31,10 @@ import java.util.List;
 /**
  * 主activity
  */
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, Toolbar.OnMenuItemClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, ActivityCompat.OnRequestPermissionsResultCallback {
     private DrawerLayout drawer_layout;
     private NavigationView navigation_view;
-    private Toolbar main_toolBar;
-    private ImageView toolBar_imageView_menu, toolBar_imageView_more, navigation_imageView_back;
+    private ImageView toolBar_imageView_menu, navigation_imageView_back, toolBar_imageView_more;
 
     private List<Fragment> fragmentList;
 
@@ -97,17 +94,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigation_view = findViewById(R.id.navigation_view);
         navigation_view.setNavigationItemSelectedListener(this);
 
-        main_toolBar = findViewById(R.id.main_toolBar);
-
-//        //添加菜单栏
-//        main_toolBar.inflateMenu(R.menu.more_menu);
-//
-//        //设置菜单栏条目的监听
-//        main_toolBar.setOnMenuItemClickListener(this);
-//
-//        //设置菜单按钮图标
-//        main_toolBar.setOverflowIcon(ContextCompat.getDrawable(this,R.drawable.more_icon));
-
         toolBar_imageView_menu = findViewById(R.id.toolBar_imageView_menu);
         toolBar_imageView_menu.setOnClickListener(this);
 
@@ -139,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 侧滑菜单栏的监听
      *
-     * @param item  监听的item
+     * @param item 监听的item
      */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -168,7 +154,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 switchFragment(playListFragment);
                 break;
-            default: break;
+            default:
+                break;
         }
         drawer_layout.closeDrawer(navigation_view);
 
@@ -178,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * fragment的切换
      *
-     * @param fragment  要添加的fragment
+     * @param fragment 要添加的fragment
      */
     private void switchFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -211,6 +198,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.toolBar_imageView_more:
                 //显示popupMenu
+                PopupMenu popupMenu = new PopupMenu(MainActivity.this, view);
+
+                //获取布局文件
+                popupMenu.getMenuInflater().inflate(R.menu.more_menu, popupMenu.getMenu());
+                popupMenu.show();
+
+                //选项菜单栏监听
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.more_menu_help:
+                                break;
+                            case R.id.more_menu_about:
+                                break;
+                            case R.id.more_menu_thanks:
+                                //设置Dialog显示内容
+                                ArrayList<AboutBean> aboutBeans = new ArrayList<>();
+                                for (int i = 1; i <= 10; i++) {
+                                    AboutBean aboutBean = new AboutBean();
+
+                                    aboutBean.title = "标题" + i;
+                                    aboutBean.license = "许可许可许可" + i;
+                                    aboutBean.desc = "内容内容内容内容内容内容内容内容" + i;
+
+                                    aboutBeans.add(aboutBean);
+                                }
+
+                                //显示Dialog
+                                AboutDialog aboutDialog = new AboutDialog(MainActivity.this, aboutBeans);
+                                aboutDialog.setOnClickBottomListener(new AboutDialog.OnClickBottomListener() {
+                                    @Override
+                                    public void onCloseClick() {
+                                        aboutDialog.dismiss();
+                                    }
+                                });
+
+                                aboutDialog.show();
+                                break;
+                            default:
+                                break;
+                        }
+
+                        return true;
+                    }
+                });
 
 
                 break;
@@ -218,43 +251,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 drawer_layout.closeDrawer(navigation_view);
                 break;
         }
-    }
-
-    /**
-     * 选项菜单栏监听
-     */
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.more_menu_about:
-                Toast.makeText(this, "点击了菜单栏的关于", Toast.LENGTH_SHORT).show();
-
-                //设置Dialog显示内容
-                ArrayList<AboutBean> aboutBeans = new ArrayList<>();
-                for (int i = 1; i <= 10; i++) {
-                    AboutBean aboutBean = new AboutBean();
-
-                    aboutBean.title = "标题" + i;
-                    aboutBean.license = "许可许可许可" + i;
-                    aboutBean.desc = "内容内容内容内容内容内容内容内容" + i;
-
-                    aboutBeans.add(aboutBean);
-                }
-
-                //显示Dialog
-                AboutDialog aboutDialog = new AboutDialog(MainActivity.this, aboutBeans);
-                aboutDialog.setOnClickBottomListener(new AboutDialog.OnClickBottomListener() {
-                    @Override
-                    public void onCloseClick() {
-                        aboutDialog.dismiss();
-                    }
-                });
-
-                aboutDialog.show();
-                break;
-        }
-
-        return true;
     }
 }

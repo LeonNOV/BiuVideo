@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="MoreMenuStyle" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:popupMenuStyle">@style/MorePopMenuStyle</item>
+        <item name="android:dropDownListViewStyle">@style/MorePopMenuDivier</item>
+        <item name="android:textAppearanceSmallPopupMenu">@style/MorePopMeuText</item>
+        <item name="android:textAppearanceLargePopupMenu">@style/MorePopMeuText</item>
+    </style>
+
+    <!--popMenu Style-->
+    <style name="MorePopMenuStyle" parent="@android:style/Widget.PopupMenu">
+        <!-- popMenu的背景色-->
+        <item name="android:popupBackground">#FFFFFF</item>
+    </style>
+
+    <!--字体颜色-->
+    <style name="MorePopMeuText">
+        <item name="android:textColor">#0E0E0E</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!--分割线颜色-->
+    <style name="MorePopMenuDivier">
+        <item name="android:divider">#000</item>
+        <item name="android:dividerHeight">1sp</item>
+    </style>
+
+</resources>
