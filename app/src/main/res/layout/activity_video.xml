@@ -1,17 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#F48FAC"
+    android:orientation="vertical"
     tools:context=".ui.activitys.VideoActivity">
 
-    <WebView
-        android:id="@+id/webView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:hardwareAccelerated="true" />
+        android:layout_height="250dp">
+
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:hardwareAccelerated="true" />
+
+        <ImageView
+            android:id="@+id/video_imageView_back"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/icon_back"
+            app:tint="#FAF6F6" />
+
+    </RelativeLayout>
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -50,7 +66,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:src="@drawable/no_favorite"/>
+                    android:src="@drawable/no_favorite" />
 
             </LinearLayout>
 
@@ -94,36 +110,93 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/video_textView_like"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2.5万点赞" />
+                    android:layout_marginStart="10dp"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/video_textView_coin"
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/icon_video_like"
+                        app:tint="#353334" />
+
+                    <TextView
+                        android:id="@+id/video_textView_like"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3dp"
+                        android:text="2.5万点赞" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:text="1.8万投币" />
+                    android:layout_marginStart="10dp"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/video_textView_favorite"
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/icon_coin"
+                        app:tint="#353334" />
+
+                    <TextView
+                        android:id="@+id/video_textView_coin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3dp"
+                        android:text="1.8万投币" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:text="2.1万收藏" />
+                    android:layout_marginStart="10dp"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/video_textView_share"
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/icon_video_favorite"
+                        app:tint="#353334" />
+
+                    <TextView
+                        android:id="@+id/video_textView_favorite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3dp"
+                        android:text="2.1万收藏" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:text="3671分享" />
+                    android:layout_marginStart="10dp"
+                    android:orientation="horizontal">
 
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/icon_video_share"
+                        app:tint="#353334" />
+
+                    <TextView
+                        android:id="@+id/video_textView_share"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3dp"
+                        android:text="3671分享" />
+
+                </LinearLayout>
             </LinearLayout>
 
             <com.ms.square.android.expandabletextview.ExpandableTextView xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
@@ -154,7 +227,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -168,7 +241,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="3dp"
+                    android:layout_marginTop="7dp"
                     android:layout_marginEnd="10dp" />
 
             </LinearLayout>
@@ -180,27 +253,6 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="@string/video_textView_choiceQuality_str" />
-
-                <Spinner
-                    android:id="@+id/video_spinner_quality"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp" />
-
-                <Button
-                    android:id="@+id/video_button_saveVideo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="6dp"
-                    android:layout_marginStart="10dp"
-                    android:background="@drawable/shape_bilibili_pink"
-                    android:text="@string/video_button_saveVideo_str" />
-
             </LinearLayout>
 
             <TextView
@@ -211,29 +263,38 @@
                 android:text="@string/video_textView_saveOther_str" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="7dp"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/video_button_saveCover"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:padding="10dp"
+                    android:layout_marginBottom="5dp"
                     android:background="@drawable/shape_bilibili_pink"
+                    android:padding="10dp"
                     android:text="@string/video_button_saveCover_str" />
 
                 <Button
                     android:id="@+id/video_button_saveFace"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:padding="10dp"
+                    android:layout_marginStart="30dp"
                     android:background="@drawable/shape_bilibili_pink"
+                    android:padding="10dp"
                     android:text="@string/video_button_saveFace_str" />
+
+                <Button
+                    android:id="@+id/video_button_saveVideo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:background="@drawable/shape_bilibili_pink"
+                    android:padding="10dp"
+                    android:text="@string/video_button_saveVideo_str" />
 
             </LinearLayout>
 

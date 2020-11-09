@@ -32,15 +32,18 @@ public class AnthologyAdapter extends RecyclerView.Adapter<AnthologyAdapter.View
     @NonNull
     @Override
     public AnthologyAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.listview_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.single_video_listview_item, parent, false);
 
         return new ViewHolder(view, onItemClickListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Glide.with(context).load(viewPage.coverUrl + WebpSizes.cover).into(holder.item_imageView_cover);
-        holder.item_textView_title.setText(viewPage.singleVideoInfoList.get(position).part);
+        Glide.with(context).load(viewPage.coverUrl + WebpSizes.cover).into(holder.single_video_item_imageView_cover);
+
+        String singleVideoIndexStr = "P" + (position + 1);
+        holder.single_video_item_textView_index.setText(singleVideoIndexStr);
+        holder.single_video_item_textView_title.setText(viewPage.singleVideoInfoList.get(position).part);
     }
 
     @Override
@@ -49,7 +52,7 @@ public class AnthologyAdapter extends RecyclerView.Adapter<AnthologyAdapter.View
     }
 
     public interface OnItemClickListener {
-        void onImageViewClicked(int position);
+        void onSingleVideoClick(int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener clickListener) {
@@ -57,17 +60,18 @@ public class AnthologyAdapter extends RecyclerView.Adapter<AnthologyAdapter.View
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView item_imageView_cover;
-        TextView item_textView_title;
+        ImageView single_video_item_imageView_cover;
+        TextView single_video_item_textView_index, single_video_item_textView_title;
 
         public ViewHolder(@NonNull View itemView, OnItemClickListener onItemClickListener) {
             super(itemView);
 
-            item_imageView_cover = itemView.findViewById(R.id.item_imageView_cover);
-            item_textView_title = itemView.findViewById(R.id.item_textView_title);
+            single_video_item_imageView_cover = itemView.findViewById(R.id.single_video_item_imageView_cover);
+            single_video_item_textView_index = itemView.findViewById(R.id.single_video_item_textView_index);
+            single_video_item_textView_title = itemView.findViewById(R.id.single_video_item_textView_title);
 
             //设置点击事件
-            item_imageView_cover.setOnClickListener(new View.OnClickListener(){
+            single_video_item_imageView_cover.setOnClickListener(new View.OnClickListener(){
 
                 @Override
                 public void onClick(View view) {
@@ -77,7 +81,7 @@ public class AnthologyAdapter extends RecyclerView.Adapter<AnthologyAdapter.View
                         if (position != RecyclerView.NO_POSITION) {
 
                             //singleVideoIndex的值和position是同一个
-                            onItemClickListener.onImageViewClicked(position);
+                            onItemClickListener.onSingleVideoClick(position);
                         }
                     }
                 }

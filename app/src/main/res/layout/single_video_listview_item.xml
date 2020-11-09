@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardUseCompatPadding="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/single_video_item_imageView_cover"
+            android:layout_width="150dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_background" />
+
+        <TextView
+            android:id="@+id/single_video_item_textView_index"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_gray"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:text="P1"
+            android:layout_margin="5dp"
+            android:textColor="@color/normal"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/single_video_item_textView_title"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="我是标题dshfjksdadskgjdfalgjdflgdflgdfhgldfhgfdhfk"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textColor="#000000"
+            android:layout_alignStart="@id/single_video_item_imageView_cover"
+            android:layout_alignBottom="@id/single_video_item_imageView_cover" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

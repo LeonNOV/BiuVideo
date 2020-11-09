@@ -8,6 +8,10 @@
         <item>UP主</item>
     </array>
 
+    <string name="cancel">取消</string>
+    <string name="confirm">确定</string>
+    <string name="choose_quality_str">选择要缓存的清晰度</string>
+
     <!-- hero尺寸 -->
     <dimen name="hero_width">96dp</dimen>
     <dimen name="hero_height">96dp</dimen>

@@ -12,6 +12,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DrawerLayout drawer_layout;
     private NavigationView navigation_view;
     private Toolbar main_toolBar;
-    private ImageButton toolBar_imageButton_menu, navigation_imageButton_back;
+    private ImageView toolBar_imageView_menu, toolBar_imageView_more, navigation_imageView_back;
 
     private List<Fragment> fragmentList;
 
@@ -98,20 +99,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         main_toolBar = findViewById(R.id.main_toolBar);
 
-        //添加菜单栏
-        main_toolBar.inflateMenu(R.menu.more_menu);
+//        //添加菜单栏
+//        main_toolBar.inflateMenu(R.menu.more_menu);
+//
+//        //设置菜单栏条目的监听
+//        main_toolBar.setOnMenuItemClickListener(this);
+//
+//        //设置菜单按钮图标
+//        main_toolBar.setOverflowIcon(ContextCompat.getDrawable(this,R.drawable.more_icon));
 
-        //设置菜单栏条目的监听
-        main_toolBar.setOnMenuItemClickListener(this);
+        toolBar_imageView_menu = findViewById(R.id.toolBar_imageView_menu);
+        toolBar_imageView_menu.setOnClickListener(this);
 
-        //设置菜单按钮图标
-        main_toolBar.setOverflowIcon(ContextCompat.getDrawable(this,R.drawable.more_icon));
+        toolBar_imageView_more = findViewById(R.id.toolBar_imageView_more);
+        toolBar_imageView_more.setOnClickListener(this);
 
-        toolBar_imageButton_menu = findViewById(R.id.toolBar_imageButton_menu);
-        toolBar_imageButton_menu.setOnClickListener(this);
-
-        navigation_imageButton_back = navigation_view.getHeaderView(0).findViewById(R.id.navigation_imageButton_back);
-        navigation_imageButton_back.setOnClickListener(this);
+        navigation_imageView_back = navigation_view.getHeaderView(0).findViewById(R.id.navigation_imageView_back);
+        navigation_imageView_back.setOnClickListener(this);
     }
 
     /**
@@ -202,10 +206,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.toolBar_imageButton_menu:
+            case R.id.toolBar_imageView_menu:
                 drawer_layout.openDrawer(Gravity.LEFT);
                 break;
-            case R.id.navigation_imageButton_back:
+            case R.id.toolBar_imageView_more:
+                //显示popupMenu
+
+
+                break;
+            case R.id.navigation_imageView_back:
                 drawer_layout.closeDrawer(navigation_view);
                 break;
         }

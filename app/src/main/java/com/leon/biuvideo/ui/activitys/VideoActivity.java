@@ -21,13 +21,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.AnthologyAdapter;
+import com.leon.biuvideo.adapters.SingleVideoQualityAdapter;
 import com.leon.biuvideo.beans.upMasterBean.VideoPlayList;
 import com.leon.biuvideo.beans.videoBean.play.Play;
 import com.leon.biuvideo.beans.videoBean.view.SingleVideoInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
+import com.leon.biuvideo.ui.dialogs.SingleVideoQualityDialog;
 import com.leon.biuvideo.utils.FileUtils;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.GeneralNotification;
-import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.MediaUtils;
 import com.leon.biuvideo.utils.Paths;
 import com.leon.biuvideo.utils.VideoListDatabaseUtils;
@@ -44,11 +46,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * 视频观看activity
  */
-public class VideoActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, AnthologyAdapter.OnItemClickListener {
+public class VideoActivity extends AppCompatActivity implements View.OnClickListener, AnthologyAdapter.OnItemClickListener {
     private CircleImageView video_circleImageView_face;
-    private ImageView video_imageView_addFavorite;
+    private ImageView video_imageView_back, video_imageView_addFavorite;
     private RecyclerView video_recyclerView_singleVideoList;
-    private Spinner video_spinner_quality;
     private ExpandableTextView expand_text_view;
     private TextView
             video_textView_name,
@@ -70,11 +71,11 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
     private WebView webView;
 
-    //选择的画质索引
-    private int qualityIndex;
+    //选择的画质dialog
+    private SingleVideoQualityDialog singleVideoQualityDialog;
 
     //当前webView中播放的选集索引，默认为0
-    private int nowPosition = 0;
+    private int singleVideoSelectedIndex = 0;
 
     //视频保存状态
     private boolean saveState;
@@ -103,12 +104,13 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         video_circleImageView_face = findViewById(R.id.video_circleImageView_face);
         video_circleImageView_face.setOnClickListener(this);
 
+        video_imageView_back = findViewById(R.id.video_imageView_back);
+        video_imageView_back.setOnClickListener(this);
+
         video_imageView_addFavorite = findViewById(R.id.video_imageView_addFavorite);
         video_imageView_addFavorite.setOnClickListener(this);
 
         video_recyclerView_singleVideoList = findViewById(R.id.video_recyclerView_singleVideoList);
-
-        video_spinner_quality = findViewById(R.id.video_spinner_quality);
 
         video_textView_name = findViewById(R.id.video_textView_name);
         video_textView_title = findViewById(R.id.video_textView_title);
@@ -146,18 +148,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         viewPage = ViewParseUtils.parseView(bvid);
 
         //获取视频选集信息
-        Map<String, Object> param = new HashMap<>();
-        param.put("avid", viewPage.aid);
-        param.put("bvid", viewPage.bvid);
-        param.put("cid", viewPage.singleVideoInfoList.get(0).cid);
-        param.put("qn", 0);
-        param.put("otype", "json");
-        param.put("fourk", 1);
-        param.put("fnver", 0);
-        param.put("fnval", 80);
-
-        String response_media = HttpUtils.GETByParam(Paths.playUrl, param);
-        play = MediaParseUtils.parseMedia(response_media);
+        play = MediaParseUtils.parseMedia(viewPage.bvid, viewPage.aid, viewPage.singleVideoInfoList.get(0).cid);
 
         //设置显示头像
         Glide.with(getApplicationContext()).load(viewPage.upInfo.faceUrl + WebpSizes.face).into(video_circleImageView_face);
@@ -225,15 +216,6 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         //设置RecyclerView的监听事件
         anthologyAdapter.setOnItemClickListener(this);
 
-        //获取视频清晰度
-        List<String> accept_description = play.accept_description;
-
-        //设置spinner适配器
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, accept_description);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        video_spinner_quality.setAdapter(arrayAdapter);
-        video_spinner_quality.setOnItemSelectedListener(this);
-
         //设置默认的选集
         setWebViewUrl(viewPage.singleVideoInfoList.get(0).cid, 0);
     }
@@ -244,14 +226,17 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
      * @param position  选集索引
      */
     @Override
-    public void onImageViewClicked(int position) {
+    public void onSingleVideoClick(int position) {
         //判断当前观看的视频cid是否和选择的一样
-        if (nowPosition != position) {
+        if (singleVideoSelectedIndex != position) {
             //设置webView的链接
             setWebViewUrl(viewPage.singleVideoInfoList.get(position).cid, position);
 
             //重置nowPosition
-            nowPosition = position;
+            singleVideoSelectedIndex = position;
+
+            //重置当前play变量
+            play = MediaParseUtils.parseMedia(viewPage.bvid, viewPage.aid, viewPage.singleVideoInfoList.get(position).cid);
         } else {
             Toast.makeText(VideoActivity.this, "选择的视频已经在播放了~~", Toast.LENGTH_SHORT).show();
         }
@@ -268,16 +253,6 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         configWebView(videoPath);
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        qualityIndex = i;
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
-
     /**
      * 配置网页控件
      * @param videoUrl  设置网页地址
@@ -291,7 +266,6 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         settings.setDatabaseEnabled(true);
         settings.setAppCacheEnabled(true);
         settings.setCacheMode(WebSettings.LOAD_DEFAULT);
-        settings.setPluginState(WebSettings.PluginState.ON);
         settings.setAllowFileAccess(true);
         settings.setLoadWithOverviewMode(true);
         settings.setDomStorageEnabled(true);
@@ -303,6 +277,9 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.video_imageView_back:
+                this.finish();
+                break;
             case R.id.video_circleImageView_face:
                 //跳转到up主界面
                 Intent intent = new Intent(this, UpMasterActivity.class);
@@ -344,51 +321,54 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
                 break;
             case R.id.video_button_saveVideo://保存选定画质的视频
-                //获取权限
-                FileUtils.verifyPermissions(this);
 
-                //判断当前的选集个数是否大于1
-                if (viewPage.singleVideoInfoList.size() > 1) {
-                    //获取当前选集的信息
-                    Map<String, Object> param = new HashMap<>();
-                    param.put("avid", viewPage.aid);
-                    param.put("bvid", viewPage.bvid);
-                    param.put("cid", viewPage.singleVideoInfoList.get(nowPosition).cid);
-                    param.put("qn", 0);
-                    param.put("otype", "json");
-                    param.put("fourk", 1);
-                    param.put("fnver", 0);
-                    param.put("fnval", 80);
-
-                    String response_media = HttpUtils.GETByParam(Paths.playUrl, param);
-                    play = MediaParseUtils.parseMedia(response_media);
+                Fuck.blue("===============quality===============");
+                for (String s : play.videoQualitys) {
+                    Fuck.blue(s);
                 }
+                Fuck.blue("===============quality===============");
 
-                //获取视频路径
-                String videoUrlBase = play.videos.get(qualityIndex).baseUrl;
-
-                //获取音频路径,默认只获取第一个
-                String audioUrlBase = play.audios.get(0).baseUrl;
-
-                Toast.makeText(this, "已加入缓存队列中", Toast.LENGTH_SHORT).show();
-
-                //获取视频线程
-                new Thread(new Runnable() {
+                //创建清晰度选择dialog
+                singleVideoQualityDialog = new SingleVideoQualityDialog(VideoActivity.this, play.videoQualitys, new SingleVideoQualityAdapter.OnQualityItemListener() {
                     @Override
-                    public void run() {
-                        //获取对应nowPosition的选集信息
-                        SingleVideoInfo nowSingleVideoInfo = viewPage.singleVideoInfoList.get(nowPosition);
+                    public void onItemListener(int position) {
+                        //获取权限
+                        FileUtils.verifyPermissions(VideoActivity.this);
 
-                        //获取视频
-                        saveState = MediaUtils.saveVideo(getApplicationContext(), videoUrlBase, audioUrlBase, FileUtils.generateFileName(viewPage.bvid));
+                        //获取视频路径
+                        String videoUrlBase = play.videos.get(position).baseUrl;
 
-                        //创建推送通知
-                        GeneralNotification notification = new GeneralNotification(getApplicationContext(), getSystemService(Context.NOTIFICATION_SERVICE), viewPage.bvid + "", "SaveVideo", (int) nowSingleVideoInfo.cid);
+                        //获取音频路径,默认只获取第一个
+                        String audioUrlBase = play.audios.get(0).baseUrl;
 
-                        String title = saveState ? "视频已缓存完成" : "视频缓存失败";
-                        notification.setNotificationOnSDK26(title, viewPage.title + "\t" + nowSingleVideoInfo.part, R.drawable.ic_menu_camera);
+                        Toast.makeText(getApplicationContext(), "已加入缓存队列中", Toast.LENGTH_SHORT).show();
+
+                        //隐藏dialog
+                        singleVideoQualityDialog.dismiss();
+
+                        //获取视频线程
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                //获取对应选集的信息
+                                SingleVideoInfo nowSingleVideoInfo = viewPage.singleVideoInfoList.get(singleVideoSelectedIndex);
+
+                                //缓存视频
+                                saveState = MediaUtils.saveVideo(getApplicationContext(), videoUrlBase, audioUrlBase, FileUtils.generateFileName(viewPage.bvid));
+
+                                //创建推送通知
+                                GeneralNotification notification = new GeneralNotification(getApplicationContext(), getSystemService(Context.NOTIFICATION_SERVICE), viewPage.bvid + "", "SaveVideo", (int) nowSingleVideoInfo.cid);
+
+                                String title = saveState ? "视频已缓存完成" : "视频缓存失败";
+                                notification.setNotificationOnSDK26(title, viewPage.title + "\t" + nowSingleVideoInfo.part, R.drawable.ic_menu_camera);
+                            }
+                        }).start();
                     }
-                }).start();
+                });
+
+                //显示选择清晰度dialog
+                singleVideoQualityDialog.show();
+
                 break;
             case R.id.video_button_saveCover:
                 //获取权限

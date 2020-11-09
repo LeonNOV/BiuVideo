@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/play_list_video_relativeLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/play_list_video_relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -25,7 +25,8 @@
         android:background="@drawable/shape_gray"
         android:gravity="center"
         android:text="02:49"
-        android:textSize="11sp" />
+        android:textSize="11sp"
+        app:tint="#515151" />
 
     <TextView
         android:id="@+id/play_list_video_textView_desc"
@@ -36,6 +37,7 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:text="alskdfjdslkghfdjkghdfkgdfhkgdjkhdgkljfdhkdgkghdkgkfdgkdhdfkgdkghkdgkdhgkdghfdkfdkgdh"
+        android:textColor="#101010"
         android:textSize="20sp" />
 
     <LinearLayout
@@ -63,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:text="UserName"
-                android:textColor="@color/light_gray"
+                android:textColor="#515151"
                 android:textSize="15sp" />
 
         </LinearLayout>
@@ -77,7 +79,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_video_play" />
+                android:src="@drawable/icon_video_play"
+                app:tint="#515151" />
 
             <TextView
                 android:id="@+id/play_list_video_textView_play"
@@ -85,14 +88,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:text="14d8.2万"
-                android:textColor="@color/light_gray"
+                android:textColor="#515151"
                 android:textSize="15sp" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:src="@drawable/play_list_video_danmaku" />
+                android:src="@drawable/play_list_video_danmaku"
+                app:tint="#515151" />
 
             <TextView
                 android:id="@+id/play_list_video_textView_danmaku"
@@ -100,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:text="1.2万"
-                android:textColor="@color/light_gray"
+                android:textColor="#515151"
                 android:textSize="15sp" />
 
         </LinearLayout>

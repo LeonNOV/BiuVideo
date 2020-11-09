@@ -39,7 +39,7 @@ import java.util.List;
  * 由于用户粉丝数、获赞数和观看数的获取需要使用cookie获取，所以暂不添加该三项
  */
 public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
-    private ImageView up_imageView_cover;
+    private ImageView up_imageView_cover, up_imageView_back;
     private CircleImageView up_circleImageView_face;
     private TextView up_textView_name;
     private ImageView up_imageView_favoriteIconState;
@@ -72,6 +72,9 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
     //初始化控件
     private void initView() {
         up_imageView_cover = findViewById(R.id.up_imageView_cover);
+
+        up_imageView_back = findViewById(R.id.up_imageView_back);
+        up_imageView_back.setOnClickListener(this);
 
         up_circleImageView_face = findViewById(R.id.up_circleImageView_face);
         up_textView_name = findViewById(R.id.up_textView_name);
@@ -203,6 +206,9 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
     public void onClick(View v) {
 
         switch (v.getId()) {
+            case R.id.up_imageView_back:
+                this.finish();
+                break;
             case R.id.up_imageView_favoriteIconState:
                 up_imageView_favoriteIconState.setImageResource(R.drawable.favorite);
                 //将up的基本信息存入数据库

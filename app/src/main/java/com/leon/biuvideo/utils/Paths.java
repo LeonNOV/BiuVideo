@@ -4,14 +4,22 @@ package com.leon.biuvideo.utils;
  * 接口请求地址
  */
 public class Paths {
+    /**
+     * 获取视频基本信息和所有选集信息
+     *      参数：
+     *          bvid：视频ID，必须
+     */
     public static String view = "https://api.bilibili.com/x/web-interface/view";
-    public static String playUrl = "https://api.bilibili.com/x/player/playurl";
 
     /**
-     * 获取每个选集的基本信息
-     *
+     * 获取选集信息，返回视频和音频原链接
+     *      参数：
+     *          aid：aid，必须
+     *          cid：cid，必须
+     *          bvid：视频id，必须
+     *          其他参数默认即可
      */
-    public static String pageList = "https://api.bilibili.com/x/player/pagelist?bvid=BV1mt4y1q7LT&jsonp=jsonp";
+    public static String playUrl = "https://api.bilibili.com/x/player/playurl";
 
     /**
      * 视频播放请求地址
