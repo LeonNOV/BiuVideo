@@ -12,6 +12,7 @@
 - 修改了VideoActivity中响应体的获取方式
 - ~~**主页面"more"中的popupMenu需要进行更改**~~
 - 主页面的popupMenu已更改，但就是有点'丑'
+- **注意,如果`AndroidManifest`中的MainActivity的Theme使用`more_menu_style`的话，则输入框旁边的`spinner`的样式会失效**
 
 ### 2020/11/08
 - 文章以长图的方式进行保存的功能已完成
