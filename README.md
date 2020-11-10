@@ -5,6 +5,10 @@
 
 ## 📘开发日志
 
+### 2020/11/10
+- 主界面的弹窗问题已解决
+- 对部分按钮加入的ripple效果
+
 ### 2020/11/09
 - 修改了VideoActivity的样式和视频清晰度选择的方式
 - 修复了下载视频时选择清晰度不全或多余的情况
@@ -12,7 +16,7 @@
 - 修改了VideoActivity中响应体的获取方式
 - ~~**主页面"more"中的popupMenu需要进行更改**~~
 - 主页面的popupMenu已更改，但就是有点'丑'
-- **注意,如果`AndroidManifest`中的MainActivity的Theme使用`more_menu_style`的话，则输入框旁边的`spinner`的样式会失效**
+- ~~**注意,如果`AndroidManifest`中的MainActivity的Theme使用`more_menu_style`的话，则输入框旁边的`spinner`的样式会失效**~~
 
 ### 2020/11/08
 - 文章以长图的方式进行保存的功能已完成

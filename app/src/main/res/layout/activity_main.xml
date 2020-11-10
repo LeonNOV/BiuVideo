@@ -20,7 +20,7 @@
                 android:id="@+id/toolBar_imageView_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/noneColor"
+                android:background="?selectableItemBackgroundBorderless"
                 android:src="@drawable/main_menu"
                 app:tint="#FF515151" />
 
@@ -29,6 +29,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
+                android:background="?selectableItemBackgroundBorderless"
                 android:layout_marginEnd="20dp"
                 android:src="@drawable/more_icon" />
 

@@ -1,16 +1,22 @@
 package com.leon.biuvideo.ui.activitys;
 
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.view.*;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.MenuPopupWindow;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -35,6 +41,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DrawerLayout drawer_layout;
     private NavigationView navigation_view;
     private ImageView toolBar_imageView_menu, navigation_imageView_back, toolBar_imageView_more;
+
+    private PopupWindow popupWindow;
+    private Button main_more_help, main_more_about, main_more_thanks;
 
     private List<Fragment> fragmentList;
 
@@ -197,58 +206,66 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 drawer_layout.openDrawer(Gravity.LEFT);
                 break;
             case R.id.toolBar_imageView_more:
-                //显示popupMenu
-                PopupMenu popupMenu = new PopupMenu(MainActivity.this, view);
+                View popupView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.main_popup_window, null);
+                main_more_help = popupView.findViewById(R.id.main_more_help);
+                main_more_help.setOnClickListener(this);
 
-                //获取布局文件
-                popupMenu.getMenuInflater().inflate(R.menu.more_menu, popupMenu.getMenu());
-                popupMenu.show();
+                main_more_about = popupView.findViewById(R.id.main_more_about);
+                main_more_about.setOnClickListener(this);
 
-                //选项菜单栏监听
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.more_menu_help:
-                                break;
-                            case R.id.more_menu_about:
-                                break;
-                            case R.id.more_menu_thanks:
-                                //设置Dialog显示内容
-                                ArrayList<AboutBean> aboutBeans = new ArrayList<>();
-                                for (int i = 1; i <= 10; i++) {
-                                    AboutBean aboutBean = new AboutBean();
+                main_more_thanks = popupView.findViewById(R.id.main_more_thanks);
+                main_more_thanks.setOnClickListener(this);
 
-                                    aboutBean.title = "标题" + i;
-                                    aboutBean.license = "许可许可许可" + i;
-                                    aboutBean.desc = "内容内容内容内容内容内容内容内容" + i;
+                popupWindow = new PopupWindow(popupView, ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
+                popupWindow.setFocusable(true);
+                popupWindow.setOutsideTouchable(true);
+                popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
 
-                                    aboutBeans.add(aboutBean);
-                                }
-
-                                //显示Dialog
-                                AboutDialog aboutDialog = new AboutDialog(MainActivity.this, aboutBeans);
-                                aboutDialog.setOnClickBottomListener(new AboutDialog.OnClickBottomListener() {
-                                    @Override
-                                    public void onCloseClick() {
-                                        aboutDialog.dismiss();
-                                    }
-                                });
-
-                                aboutDialog.show();
-                                break;
-                            default:
-                                break;
-                        }
-
-                        return true;
-                    }
-                });
-
+                popupWindow.showAsDropDown(view, -10, 0);
 
                 break;
             case R.id.navigation_imageView_back:
                 drawer_layout.closeDrawer(navigation_view);
+                break;
+            case R.id.main_more_help:
+                Toast.makeText(MainActivity.this, "help", Toast.LENGTH_SHORT).show();
+                popupWindow.dismiss();
+
+                break;
+            case R.id.main_more_about:
+                Toast.makeText(MainActivity.this, "about", Toast.LENGTH_SHORT).show();
+                popupWindow.dismiss();
+
+                break;
+            case R.id.main_more_thanks:
+
+                //设置Dialog显示内容
+                ArrayList<AboutBean> aboutBeans = new ArrayList<>();
+                for (int i = 1; i <= 10; i++) {
+                    AboutBean aboutBean = new AboutBean();
+
+                    aboutBean.title = "标题" + i;
+                    aboutBean.license = "许可许可许可" + i;
+                    aboutBean.desc = "内容内容内容内容内容内容内容内容" + i;
+
+                    aboutBeans.add(aboutBean);
+                }
+
+                //显示Dialog
+                AboutDialog aboutDialog = new AboutDialog(MainActivity.this, aboutBeans);
+                aboutDialog.setOnClickBottomListener(new AboutDialog.OnClickBottomListener() {
+                    @Override
+                    public void onCloseClick() {
+                        aboutDialog.dismiss();
+                    }
+                });
+
+                aboutDialog.show();
+
+                popupWindow.dismiss();
+
+                break;
+            default:
                 break;
         }
     }
