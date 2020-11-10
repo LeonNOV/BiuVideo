@@ -5,9 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -90,6 +92,7 @@ public class UserVideoAdapter extends RecyclerView.Adapter {
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+        RelativeLayout user_media_relativeLayout;
         ImageView up_media_imageView_cover;
         TextView
                 up_media_textView_isUnionmedia,
@@ -102,8 +105,8 @@ public class UserVideoAdapter extends RecyclerView.Adapter {
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            up_media_imageView_cover = itemView.findViewById(R.id.up_media_imageView_cover);
-            up_media_imageView_cover.setOnClickListener(new View.OnClickListener(){
+            user_media_relativeLayout = itemView.findViewById(R.id.user_media_relativeLayout);
+            user_media_relativeLayout.setOnClickListener(new View.OnClickListener(){
 
                 @Override
                 public void onClick(View v) {
@@ -112,6 +115,8 @@ public class UserVideoAdapter extends RecyclerView.Adapter {
                     }
                 }
             });
+
+            up_media_imageView_cover = itemView.findViewById(R.id.up_media_imageView_cover);
 
             up_media_textView_isUnionmedia = itemView.findViewById(R.id.up_media_textView_isUnionmedia);
             up_media_textView_mediaLength = itemView.findViewById(R.id.up_media_textView_mediaLength);

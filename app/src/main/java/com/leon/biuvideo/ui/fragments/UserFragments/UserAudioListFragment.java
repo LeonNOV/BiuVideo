@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +15,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UserFragmentAdapters.UserAudioAdapter;
 import com.leon.biuvideo.beans.upMasterBean.UpAudio;
 import com.leon.biuvideo.ui.activitys.UpSongActivity;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpAudioParseUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
@@ -40,7 +43,7 @@ public class UserAudioListFragment extends Fragment {
 
     private View view;
     private RecyclerView up_audio_recyclerView;
-    private SmartRefreshLayout up_smartRefresh;
+    private SmartRefreshLayout audio_smartRefresh;
 
     public UserAudioListFragment() {
     }
@@ -64,11 +67,11 @@ public class UserAudioListFragment extends Fragment {
     }
 
     private void initView() {
-        up_audio_recyclerView  = view.findViewById(R.id.user_recyclerView_space);
-        up_smartRefresh = view.findViewById(R.id.user_smartRefresh);
+        up_audio_recyclerView = view.findViewById(R.id.user_recyclerView_space);
+        audio_smartRefresh = view.findViewById(R.id.user_smartRefresh);
 
         //关闭下拉刷新
-        up_smartRefresh.setEnableRefresh(false);
+        audio_smartRefresh.setEnableRefresh(false);
     }
 
     private void initValue() {
@@ -110,33 +113,41 @@ public class UserAudioListFragment extends Fragment {
         });
 
         //添加加载更多监听事件
-        up_smartRefresh.setOnLoadMoreListener(refreshLayout -> {
+        audio_smartRefresh.setOnLoadMoreListener(refreshLayout -> {
 
             if (dataState) {
                 pageNum++;
 
-                new Handler().postDelayed(() -> {
-                    //获取新数据
-                    List<UpAudio> addOns = getUpAudios(mid, pageNum);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //获取新数据
+                        List<UpAudio> addOns = getUpAudios(mid, pageNum);
 
-                    //添加新数据
-                    userAudioAdapter.refresh(addOns);
-                }, 2000);
+                        Log.d(Fuck.blue, "成功获取了" + mid + "的第" + pageNum + "页的" + addOns.size() + "条数据");
+
+                        //添加新数据
+                        userAudioAdapter.refresh(addOns);
+                    }
+                }, 1000);
             } else {
+                //关闭上滑刷新
+                audio_smartRefresh.setEnabled(false);
+
                 Toast.makeText(context, "只有这么多数据了~~~", Toast.LENGTH_SHORT).show();
             }
 
             //结束加载更多动画
-            up_smartRefresh.finishLoadMore();
+            audio_smartRefresh.finishLoadMore();
         });
     }
 
     /**
      * 获取数据
      *
-     * @param mid   up主id
-     * @param pageNum   页码
-     * @return  返回UpAudio集合
+     * @param mid     up主id
+     * @param pageNum 页码
+     * @return 返回UpAudio集合
      */
     private List<UpAudio> getUpAudios(long mid, int pageNum) {
         List<UpAudio> temp = UpAudioParseUtils.parseAudio(mid, pageNum);

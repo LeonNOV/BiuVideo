@@ -3,6 +3,7 @@ package com.leon.biuvideo.ui.fragments.UserFragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +12,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UserFragmentAdapters.UserPictureAdapter;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpPictureParseUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -31,16 +34,15 @@ public class UserPictureListFragment extends Fragment {
     private int pageNum;
     private Context context;
 
-    private  LayoutInflater inflater;
+    private LayoutInflater inflater;
 
     //记录数据是否已全部获取完
     private boolean dataState;
     private int valueCount;
-    private int total = -1;
 
     private View view;
-    private RecyclerView up_picture_recyclerView;
-    private SmartRefreshLayout up_smartRefresh;
+    private RecyclerView picture_recyclerView;
+    private SmartRefreshLayout picture_smartRefresh;
 
     public UserPictureListFragment() {
     }
@@ -64,16 +66,18 @@ public class UserPictureListFragment extends Fragment {
     }
 
     private void initView() {
-        up_picture_recyclerView  = view.findViewById(R.id.user_recyclerView_space);
-        up_smartRefresh = view.findViewById(R.id.user_smartRefresh);
+        picture_recyclerView = view.findViewById(R.id.user_recyclerView_space);
+        picture_smartRefresh = view.findViewById(R.id.user_smartRefresh);
 
         //关闭下拉刷新
-        up_smartRefresh.setEnableRefresh(false);
+        picture_smartRefresh.setEnableRefresh(false);
     }
 
     private void initValue() {
-        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        up_picture_recyclerView.setLayoutManager(gridLayoutManager);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+
+        picture_recyclerView.setLayoutManager(gridLayoutManager);
 
         //获取初始数据
         List<UpPicture> upPictures = getUpPictures(mid, pageNum);
@@ -86,10 +90,10 @@ public class UserPictureListFragment extends Fragment {
         }
 
         UserPictureAdapter userPictureAdapter = new UserPictureAdapter(upPictures, context);
-        up_picture_recyclerView.setAdapter(userPictureAdapter);
+        picture_recyclerView.setAdapter(userPictureAdapter);
 
         //添加加载更多监听事件
-        up_smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {
+        picture_smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
 
@@ -102,16 +106,21 @@ public class UserPictureListFragment extends Fragment {
                             //获取新数据
                             List<UpPicture> addOns = getUpPictures(mid, pageNum);
 
+                            Log.d(Fuck.blue, "成功获取了" + mid + "的第" + pageNum + "页的" + addOns.size() + "条数据");
+
                             //添加新数据
                             userPictureAdapter.refresh(addOns);
                         }
                     }, 2000);
                 } else {
+                    //关闭上滑刷新
+                    picture_smartRefresh.setEnabled(false);
+
                     Toast.makeText(context, "只有这么多数据了~~~", Toast.LENGTH_SHORT).show();
                 }
 
                 //结束加载更多动画
-                up_smartRefresh.finishLoadMore();
+                picture_smartRefresh.finishLoadMore();
             }
         });
     }
@@ -119,9 +128,9 @@ public class UserPictureListFragment extends Fragment {
     /**
      * 获取数据
      *
-     * @param mid   up主id
-     * @param pageNum   页码
-     * @return  返回UpVideo集合
+     * @param mid     up主id
+     * @param pageNum 页码
+     * @return 返回UpVideo集合
      */
     private List<UpPicture> getUpPictures(long mid, int pageNum) {
         List<UpPicture> temp = UpPictureParseUtils.parsePicture(mid, pageNum);
@@ -129,13 +138,8 @@ public class UserPictureListFragment extends Fragment {
         //记录获取的总数
         valueCount += temp.size();
 
-        //初始化数据总数目
-        if (total == -1) {
-            valueCount = UpPictureParseUtils.getPictureCount(mid);
-        }
-
         //判断是否已获取完所有的数据
-        if (temp.size() < 30 || valueCount == total) {
+        if (temp.size() < 30 || valueCount == valueCount) {
             dataState = false;
         } else {
             dataState = true;

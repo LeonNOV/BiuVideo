@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UserFragmentAdapters.UserVideoAdapter;
 import com.leon.biuvideo.beans.upMasterBean.UpVideo;
@@ -45,7 +46,7 @@ public class UserVideoListFragment extends Fragment {
 
     private View view;
     private RecyclerView up_video_recyclerView;
-    private SmartRefreshLayout up_smartRefresh;
+    private SmartRefreshLayout video_smartRefresh;
 
     public UserVideoListFragment() {
     }
@@ -70,11 +71,11 @@ public class UserVideoListFragment extends Fragment {
 
     //初始化控件
     private void initView() {
-        up_video_recyclerView  = view.findViewById(R.id.user_recyclerView_space);
-        up_smartRefresh = view.findViewById(R.id.user_smartRefresh);
+        up_video_recyclerView = view.findViewById(R.id.user_recyclerView_space);
+        video_smartRefresh = view.findViewById(R.id.user_smartRefresh);
 
         //关闭下拉刷新
-        up_smartRefresh.setEnableRefresh(false);
+        video_smartRefresh.setEnableRefresh(false);
     }
 
     //初始化数据
@@ -112,7 +113,7 @@ public class UserVideoListFragment extends Fragment {
         });
 
         //添加加载更多监听事件
-        up_smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {
+        video_smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
 
@@ -132,11 +133,14 @@ public class UserVideoListFragment extends Fragment {
                         }
                     }, 1000);
                 } else {
+                    //关闭上滑刷新
+                    video_smartRefresh.setEnabled(false);
+
                     Toast.makeText(context, "只有这么多数据了~~~", Toast.LENGTH_SHORT).show();
                 }
 
                 //结束加载更多动画
-                up_smartRefresh.finishLoadMore();
+                video_smartRefresh.finishLoadMore();
             }
         });
     }
@@ -144,9 +148,9 @@ public class UserVideoListFragment extends Fragment {
     /**
      * 获取数据
      *
-     * @param mid   up主id
-     * @param pageNum   页码
-     * @return  返回UpVideo集合
+     * @param mid     up主id
+     * @param pageNum 页码
+     * @return 返回UpVideo集合
      */
     private List<UpVideo> getUpVideos(long mid, int pageNum) {
         List<UpVideo> temp = UpVideoParseUtils.parseVideo(mid, pageNum);

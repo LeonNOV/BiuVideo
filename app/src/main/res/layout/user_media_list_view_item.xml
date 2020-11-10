@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/user_media_cardView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     app:cardCornerRadius="18dp"
     app:cardUseCompatPadding="true">
 
     <RelativeLayout
+        android:id="@+id/user_media_relativeLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/bilibili_pink_lite">
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/ripple_item_bilibili_lite">
 
         <ImageView
             android:id="@+id/up_media_imageView_cover"
-            android:layout_width="230dp"
-            android:layout_height="150dp"
-            android:scaleType="fitXY"
+            android:layout_width="150dp"
+            android:layout_height="125dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher_background" />
 
         <!-- 如果Upmedias中的isUnionmedia的值为0则该控件不显示 -->

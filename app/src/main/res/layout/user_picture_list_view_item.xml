@@ -3,11 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    app:cardCornerRadius="15dp"
     app:cardUseCompatPadding="true">
 
     <RelativeLayout
+        android:id="@+id/picture_relativeLayout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/ripple_item_bilibili_lite"
+        android:clickable="true"
+        android:focusable="true">
 
         <ImageView
             android:id="@+id/up_picture_imageView_cover"
@@ -19,13 +24,15 @@
         <!-- 根据UpPicture的count来显示 -->
         <TextView
             android:id="@+id/up_picture_textView_count"
-            android:layout_width="60dp"
-            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignEnd="@id/up_picture_imageView_cover"
             android:layout_alignBottom="@id/up_picture_imageView_cover"
             android:layout_margin="10dp"
             android:background="@drawable/shape_gray"
-            android:gravity="center"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:scaleType="centerCrop"
             android:text="9P"
             android:textSize="15sp" />
 
@@ -37,30 +44,63 @@
             android:layout_alignStart="@id/up_picture_imageView_cover"
             android:layout_alignEnd="@id/up_picture_imageView_cover"
             android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
             android:ellipsize="end"
             android:maxLines="2"
             android:text="介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍"
             android:textSize="15sp" />
 
-        <TextView
-            android:id="@+id/up_picture_textView_view"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/up_picture_textView_desc"
-            android:layout_alignStart="@id/up_picture_textView_desc"
-            android:layout_marginTop="10dp"
-            android:text="150次查看"
-            android:textSize="15sp" />
+            android:layout_margin="10dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/up_picture_textView_like"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/up_picture_textView_desc"
-            android:layout_alignEnd="@id/up_picture_textView_desc"
-            android:layout_marginTop="10dp"
-            android:text="10次喜欢"
-            android:textSize="15sp" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_view"
+                    app:tint="#474747"/>
+
+                <TextView
+                    android:id="@+id/up_picture_textView_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="150次查看"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_video_like"
+                    app:tint="#474747" />
+
+                <TextView
+                    android:id="@+id/up_picture_textView_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="10次喜欢"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

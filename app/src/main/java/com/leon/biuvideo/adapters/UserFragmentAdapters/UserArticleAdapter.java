@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -73,7 +74,7 @@ public class UserArticleAdapter extends RecyclerView.Adapter<UserArticleAdapter.
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        CardView article_cardView;
+        RelativeLayout article_relativeLayout;
         ImageView article_imageView_cover;
         TextView
                 article_textView_title,
@@ -83,8 +84,8 @@ public class UserArticleAdapter extends RecyclerView.Adapter<UserArticleAdapter.
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            article_cardView = itemView.findViewById(R.id.article_cardView);
-            article_cardView.setOnClickListener(new View.OnClickListener() {
+            article_relativeLayout = itemView.findViewById(R.id.article_relativeLayout);
+            article_relativeLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onItemClickListener != null) {

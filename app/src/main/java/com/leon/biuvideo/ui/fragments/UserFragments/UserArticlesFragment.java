@@ -3,10 +3,11 @@ package com.leon.biuvideo.ui.fragments.UserFragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,12 +20,11 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UserFragmentAdapters.UserArticleAdapter;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.ui.activitys.ArticleActivity;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.articleParseUtils.ArticleParseUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ public class UserArticlesFragment extends Fragment {
     private View view;
 
     private RecyclerView user_article_recyclerView;
-    private SmartRefreshLayout user_smartRefresh;
+    private SmartRefreshLayout article_smartRefresh;
 
     public UserArticlesFragment(long mid, int pageNum, Context context) {
         this.mid = mid;
@@ -68,10 +68,10 @@ public class UserArticlesFragment extends Fragment {
     private void initView() {
         user_article_recyclerView = view.findViewById(R.id.user_recyclerView_space);
 
-        user_smartRefresh = view.findViewById(R.id.user_smartRefresh);
+        article_smartRefresh = view.findViewById(R.id.user_smartRefresh);
 
         //关闭下拉刷新
-        user_smartRefresh.setEnableRefresh(false);
+        article_smartRefresh.setEnableRefresh(false);
     }
 
     private void initValue() {
@@ -110,20 +110,34 @@ public class UserArticlesFragment extends Fragment {
         user_article_recyclerView.setAdapter(articleAdapter);
         user_article_recyclerView.setLayoutManager(layoutManager);
 
-        user_smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {
+        article_smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
                 if (dataState) {
                     pageNum++;
 
-                    List<Article> addOns = getArticles(mid, pageNum);
-                    articleAdapter.refresh(addOns);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //获取新数据
+                            List<Article> addOns = getArticles(mid, pageNum);
+
+                            Log.d(Fuck.blue, "成功获取了" + mid + "的第" + pageNum + "页的" + addOns.size() + "条数据");
+
+                            //添加新数据
+                            articleAdapter.refresh(addOns);
+                        }
+                    }, 1000);
+
                 } else {
+                    //关闭上滑刷新
+                    article_smartRefresh.setEnabled(false);
+
                     Toast.makeText(context, "只有这么多数据了~~~", Toast.LENGTH_SHORT).show();
                 }
 
                 //结束加载更多动画
-                user_smartRefresh.finishLoadMore();
+                article_smartRefresh.finishLoadMore();
             }
         });
     }

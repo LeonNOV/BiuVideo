@@ -5,9 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
@@ -78,6 +80,7 @@ public class UserAudioAdapter extends RecyclerView.Adapter<UserAudioAdapter.View
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        RelativeLayout user_media_relativeLayout;
         ImageView up_media_imageView_cover;
         TextView
                 up_media_textView_isUnionmedia,
@@ -89,14 +92,18 @@ public class UserAudioAdapter extends RecyclerView.Adapter<UserAudioAdapter.View
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            up_media_textView_isUnionmedia = itemView.findViewById(R.id.up_media_textView_isUnionmedia);
-            up_media_imageView_cover = itemView.findViewById(R.id.up_media_imageView_cover);
-            up_media_imageView_cover.setOnClickListener(v -> {
-                if (onItemClickListener != null) {
-                    onItemClickListener.onItemClickListener(v, getAdapterPosition());
+            user_media_relativeLayout = itemView.findViewById(R.id.user_media_relativeLayout);
+            user_media_relativeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onItemClickListener != null) {
+                        onItemClickListener.onItemClickListener(v, getAdapterPosition());
+                    }
                 }
             });
 
+            up_media_textView_isUnionmedia = itemView.findViewById(R.id.up_media_textView_isUnionmedia);
+            up_media_imageView_cover = itemView.findViewById(R.id.up_media_imageView_cover);
             up_media_textView_mediaLength = itemView.findViewById(R.id.up_media_textView_mediaLength);
             up_media_textView_title = itemView.findViewById(R.id.up_media_textView_title);
             up_media_textView_play = itemView.findViewById(R.id.up_media_textView_play);

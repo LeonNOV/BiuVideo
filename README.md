@@ -9,10 +9,14 @@
 - 主界面的弹窗问题已解决
 - 对部分按钮加入的`ripple`效果
 - 对大部分控件添加了`ripple`效果
-  - **RecyclerView的item的ripple效果尚未添加成功**
+  - ~~**RecyclerView的item的ripple效果尚未添加成功**~~
   - 减少了部分冗余代码
 - 修复了musicPlayList的video图标显示的问题
 - 修复了videoPlayList的cover圆角显示的问题
+- 所有`item`的`ripple`效果都已添加
+- 修复了所有数据已加载完，但刷新控件还在开启的情况
+- 修复了一部分的问题
+- **查看`picture`界面还未添加**
 
 ### 2020/11/09
 - 修改了VideoActivity的样式和视频清晰度选择的方式

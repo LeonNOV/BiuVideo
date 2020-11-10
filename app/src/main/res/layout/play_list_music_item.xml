@@ -6,7 +6,7 @@
     android:orientation="horizontal"
     android:clickable="true"
     android:focusable="true"
-    android:background="@color/bilibili_pink_lite">
+    android:background="?android:selectableItemBackground">
 
     <TextView
         android:id="@+id/play_list_music_textView_serial"
