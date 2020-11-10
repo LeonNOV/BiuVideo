@@ -40,8 +40,8 @@ public class MusicPlayListAdapter extends RecyclerView.Adapter<MusicPlayListAdap
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         MusicPlayList musicPlayList = musicPlayLists.get(position);
 
-        String title = musicPlayList.musicName + " - " + musicPlayList.author;
-        holder.music_textView_playList_title.setText(title);
+        holder.music_textView_playList_title.setText(musicPlayList.musicName);
+        holder.music_textView_playList_author.setText(musicPlayList.author);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class MusicPlayListAdapter extends RecyclerView.Adapter<MusicPlayListAdap
 
     class ViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout music_relativeLayout;
-        TextView music_textView_playList_title;
+        TextView music_textView_playList_title, music_textView_playList_author;
         ImageView music_imageView_playList_delete;
 
         public ViewHolder(@NonNull View itemView) {
@@ -77,6 +77,8 @@ public class MusicPlayListAdapter extends RecyclerView.Adapter<MusicPlayListAdap
             });
 
             music_textView_playList_title = itemView.findViewById(R.id.music_textView_playList_title);
+            music_textView_playList_author = itemView.findViewById(R.id.music_textView_playList_author);
+
             music_imageView_playList_delete = itemView.findViewById(R.id.music_imageView_playList_delete);
             music_imageView_playList_delete.setOnClickListener(new View.OnClickListener() {
                 @Override

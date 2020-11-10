@@ -7,33 +7,46 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <com.shehuan.niv.NiceImageView
-        android:id="@+id/play_list_video_imageView_cover"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/play_list_video_cardView"
         android:layout_width="150dp"
         android:layout_height="125dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher_background"
-        app:corner_radius="13dp" />
+        app:cardCornerRadius="15dp">
 
-    <TextView
-        android:id="@+id/play_list_video_textView_length"
-        android:layout_width="40dp"
-        android:layout_height="20dp"
-        android:layout_alignEnd="@id/play_list_video_imageView_cover"
-        android:layout_alignBottom="@id/play_list_video_imageView_cover"
-        android:layout_margin="10dp"
-        android:background="@drawable/shape_gray"
-        android:gravity="center"
-        android:text="02:49"
-        android:textSize="11sp"
-        app:tint="#515151" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/play_list_video_imageView_cover"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher_background" />
+
+            <TextView
+                android:id="@+id/play_list_video_textView_length"
+                android:layout_width="40dp"
+                android:layout_height="20dp"
+                android:layout_alignEnd="@id/play_list_video_imageView_cover"
+                android:layout_alignBottom="@id/play_list_video_imageView_cover"
+                android:layout_margin="10dp"
+                android:background="@drawable/shape_gray"
+                android:gravity="center"
+                android:text="02:49"
+                android:textSize="12sp"
+                app:tint="#515151" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/play_list_video_textView_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_toEndOf="@id/play_list_video_imageView_cover"
+        android:layout_toEndOf="@id/play_list_video_cardView"
         android:ellipsize="end"
         android:maxLines="2"
         android:text="alskdfjdslkghfdjkghdfkgdfhkgdjkhdgkljfdhkdgkghdkgkfdgkdhdfkgdkghkdgkdhgkdghfdkfdkgdh"
@@ -44,9 +57,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/play_list_video_textView_desc"
+        android:layout_alignBottom="@id/play_list_video_cardView"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
-        android:layout_toEndOf="@id/play_list_video_imageView_cover"
+        android:layout_toEndOf="@id/play_list_video_cardView"
         android:orientation="vertical">
 
         <LinearLayout

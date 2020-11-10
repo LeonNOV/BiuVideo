@@ -11,6 +11,8 @@
 - 对大部分控件添加了`ripple`效果
   - **RecyclerView的item的ripple效果尚未添加成功**
   - 减少了部分冗余代码
+- 修复了musicPlayList的video图标显示的问题
+- 修复了videoPlayList的cover圆角显示的问题
 
 ### 2020/11/09
 - 修改了VideoActivity的样式和视频清晰度选择的方式

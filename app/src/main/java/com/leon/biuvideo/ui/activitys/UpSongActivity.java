@@ -392,7 +392,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                     musicPlayList.bvid = musicInfo.bvid.equals("") ? "" : musicInfo.bvid;
                     musicPlayList.author = musicInfo.uname;
                     musicPlayList.musicName = musicInfo.title;
-                    musicPlayList.isHaveVideo = musicInfo.bvid.equals("");
+                    musicPlayList.isHaveVideo = !musicInfo.bvid.equals("");
 
                     //添加至播放列表
                     musicDatabaseUtils.addPlayList(musicPlayList);

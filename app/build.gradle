@@ -76,8 +76,8 @@ dependencies {
     //文字滚动依赖
     implementation 'com.sunfusheng:marqueeview:1.3.8'
 
-    //圆角图片依赖
-    implementation 'com.github.SheHuan:NiceImageView:1.0.5'
+    /*//圆角图片依赖
+    implementation 'com.github.SheHuan:NiceImageView:1.0.5'*/
 
     // https://mvnrepository.com/artifact/org.jsoup/jsoup
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.13.1'

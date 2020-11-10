@@ -35,10 +35,10 @@ public class MusicListDatabaseUtils {
             MusicPlayList musicPlayList = new MusicPlayList();
 
             musicPlayList.sid = cursor.getInt(cursor.getColumnIndex("sid"));
-
+            musicPlayList.bvid = cursor.getString(cursor.getColumnIndex("bvid"));
             musicPlayList.musicName = cursor.getString(cursor.getColumnIndex("musicName"));
-
             musicPlayList.author = cursor.getString(cursor.getColumnIndex("author"));
+            musicPlayList.isHaveVideo = cursor.getInt(cursor.getColumnIndex("isHaveVideo"))  == 0;
 
             musicPlayLists.add(musicPlayList);
         }
