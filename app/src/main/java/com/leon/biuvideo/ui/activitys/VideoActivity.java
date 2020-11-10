@@ -32,6 +32,7 @@ import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.GeneralNotification;
 import com.leon.biuvideo.utils.MediaUtils;
 import com.leon.biuvideo.utils.Paths;
+import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.VideoListDatabaseUtils;
 import com.leon.biuvideo.utils.WebpSizes;
 import com.leon.biuvideo.utils.mediaParseUtils.MediaParseUtils;
@@ -170,11 +171,11 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         video_textView_title.setText(viewPage.title);
 
         //设置观看数
-        String view = viewPage.videoInfo.view + "次观看";
+        String view = ValueFormat.generateCN(viewPage.videoInfo.view) + "次观看";
         video_textView_view.setText(view);
 
         //设置弹幕数
-        String danmaku = viewPage.videoInfo.danmaku + "弹幕";
+        String danmaku = ValueFormat.generateCN(viewPage.videoInfo.danmaku) + "弹幕";
         video_textView_danmaku.setText(danmaku);
 
         //设置上传时间(UTC+8)
@@ -184,19 +185,19 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         video_textView_upTime.setText(sdf.format(new Date(viewPage.upTime * 1000)));
 
         //设置点赞数
-        String like = viewPage.videoInfo.like + "点赞";
+        String like = ValueFormat.generateCN(viewPage.videoInfo.like) + "点赞";
         video_textView_like.setText(like);
 
         //设置投币数
-        String coin = viewPage.videoInfo.coin + "投币";
+        String coin = ValueFormat.generateCN(viewPage.videoInfo.coin) + "投币";
         video_textView_coin.setText(coin);
 
         //设置收藏数
-        String favorite = viewPage.videoInfo.favorite + "收藏";
+        String favorite = ValueFormat.generateCN(viewPage.videoInfo.favorite) + "收藏";
         video_textView_favorite.setText(favorite);
 
         //设置分享数
-        String share = viewPage.videoInfo.share + "分享";
+        String share = ValueFormat.generateCN(viewPage.videoInfo.share) + "分享";
         video_textView_share.setText(share);
 
         //设置视频说明

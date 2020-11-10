@@ -75,7 +75,7 @@
                 android:id="@+id/up_imageView_favoriteIconState"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/noneColor"
+                android:background="?selectableItemBackgroundBorderless"
                 android:src="@drawable/no_favorite" />
 
             <TextView

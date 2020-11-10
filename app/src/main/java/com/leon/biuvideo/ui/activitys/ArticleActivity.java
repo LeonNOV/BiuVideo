@@ -1,20 +1,23 @@
 package com.leon.biuvideo.ui.activitys;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.PopupMenu;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Base64;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,7 +52,9 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
             article_textView_view,
             article_textView_like,
             article_textView_replay;
+    private Button article_more_menu_screenshot, article_more_menu_jumpToOrigin;
 
+    private PopupWindow popupWindow;
     private Article article;
     private String encodedHtml;
 
@@ -257,52 +262,60 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                 this.finish();
                 break;
             case R.id.article_imageView_more:
-
                 //显示弹出菜单
                 createPopupMenu(v);
+
+                break;
+            case R.id.article_more_menu_screenshot:
+                //进行保存
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean saveState = MediaUtils.saveArticle(article_webView, getApplicationContext());
+
+                        Looper.prepare();
+                        Toast.makeText(ArticleActivity.this, saveState ? "保存成功" : "保存失败", Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                    }
+                }).start();
+
+                popupWindow.dismiss();
+
+                break;
+            case R.id.article_more_menu_jumpToOrigin:
+                //跳转到源网站收听
+                Intent intentOriginUrl = new Intent();
+                intentOriginUrl.setAction("android.intent.action.VIEW");
+                Uri uri = Uri.parse(Paths.articleWebPage + article.articleID);
+                intentOriginUrl.setData(uri);
+                startActivity(intentOriginUrl);
+
+                popupWindow.dismiss();
+
+                break;
+            default:
                 break;
         }
     }
 
+    /**
+     * 创建弹出窗口
+     *
+     * @param view  View对象
+     */
     private void createPopupMenu(View view) {
-        PopupMenu popupMenu = new PopupMenu(ArticleActivity.this, view);
+        View popupView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.article_more_menu, null);
+        article_more_menu_screenshot = popupView.findViewById(R.id.article_more_menu_screenshot);
+        article_more_menu_screenshot.setOnClickListener(this);
 
-        //获取布局文件
-        popupMenu.getMenuInflater().inflate(R.menu.article_menu, popupMenu.getMenu());
-        popupMenu.show();
+        article_more_menu_jumpToOrigin = popupView.findViewById(R.id.article_more_menu_jumpToOrigin);
+        article_more_menu_jumpToOrigin.setOnClickListener(this);
 
-        //item点击事件
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
+        popupWindow = new PopupWindow(popupView, ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
+        popupWindow.setFocusable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
 
-                switch (item.getItemId()) {
-                    case R.id.article_menu_screenshot:
-                        //进行保存
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                boolean saveState = MediaUtils.saveArticle(article_webView, getApplicationContext());
-
-                                Looper.prepare();
-                                Toast.makeText(ArticleActivity.this, saveState ? "保存成功" : "保存失败", Toast.LENGTH_SHORT).show();
-                                Looper.loop();
-                            }
-                        }).start();
-
-                        break;
-                    case R.id.article_menu_jumpToOrigin:
-                        //跳转到源网站收听
-                        Intent intentOriginUrl = new Intent();
-                        intentOriginUrl.setAction("android.intent.action.VIEW");
-                        Uri uri = Uri.parse(Paths.articleWebPage + article.articleID);
-                        intentOriginUrl.setData(uri);
-                        startActivity(intentOriginUrl);
-                        break;
-                }
-
-                return true;
-            }
-        });
+        popupWindow.showAsDropDown(view, -10, 0);
     }
 }

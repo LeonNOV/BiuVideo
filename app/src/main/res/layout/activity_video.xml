@@ -59,13 +59,16 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
                     android:text="我是name"
-                    android:textSize="25sp" />
+                    android:textColor="#2B2B2B"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/video_imageView_addFavorite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
+                    android:background="?selectableItemBackgroundBorderless"
                     android:src="@drawable/no_favorite" />
 
             </LinearLayout>
@@ -76,6 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:text="我是标题"
+                android:textColor="#FFFFFF"
                 android:textSize="20sp" />
 
             <LinearLayout
@@ -117,12 +121,12 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:orientation="horizontal">
+                    android:gravity="center"
+                    android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:src="@drawable/icon_video_like"
                         app:tint="#353334" />
 
@@ -130,7 +134,7 @@
                         android:id="@+id/video_textView_like"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="5dp"
                         android:text="2.5万点赞" />
 
                 </LinearLayout>
@@ -138,12 +142,13 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:orientation="horizontal">
+                    android:layout_marginStart="20dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:src="@drawable/icon_coin"
                         app:tint="#353334" />
 
@@ -151,7 +156,7 @@
                         android:id="@+id/video_textView_coin"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="5dp"
                         android:text="1.8万投币" />
 
                 </LinearLayout>
@@ -159,12 +164,13 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:orientation="horizontal">
+                    android:layout_marginStart="20dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:src="@drawable/icon_video_favorite"
                         app:tint="#353334" />
 
@@ -172,7 +178,7 @@
                         android:id="@+id/video_textView_favorite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="5dp"
                         android:text="2.1万收藏" />
 
                 </LinearLayout>
@@ -180,12 +186,13 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:orientation="horizontal">
+                    android:layout_marginStart="20dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:src="@drawable/icon_video_share"
                         app:tint="#353334" />
 
@@ -193,7 +200,7 @@
                         android:id="@+id/video_textView_share"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="5dp"
                         android:text="3671分享" />
 
                 </LinearLayout>
@@ -227,14 +234,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="@string/video_textView_choiceSingleVideo_str" />
+                    android:text="@string/video_textView_choiceSingleVideo_str"
+                    android:textColor="#2B2B2B" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/video_recyclerView_singleVideoList"
@@ -259,8 +266,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:text="@string/video_textView_saveOther_str" />
+                android:layout_marginTop="20dp"
+                android:text="@string/video_textView_saveOther_str"
+                android:textColor="#2B2B2B" />
 
             <LinearLayout
                 android:layout_width="wrap_content"

@@ -10,20 +10,14 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="20dp"
         android:src="@drawable/navigation_back"
-        android:background="@color/noneColor"/>
+        android:background="?selectableItemBackgroundBorderless"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <ImageView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:gravity="center">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/vector_hero_marvel_ironman" />
-
-    </LinearLayout>
+        android:src="@drawable/vector_hero_marvel_ironman" />
 
 </RelativeLayout>

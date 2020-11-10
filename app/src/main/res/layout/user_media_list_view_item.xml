@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#F3A1B9">
+        android:background="@color/bilibili_pink_lite">
 
         <ImageView
             android:id="@+id/up_media_imageView_cover"
