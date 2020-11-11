@@ -12,12 +12,21 @@ public class WebpSizes {
     //@468w_292h_1c.png
     public static String cover = "@160w_100h.webp";
 
-    //图片个数为3的倍数
-    public static String picture_more = "@375w_375h_1c.webp";
+    public enum PicturePixelSize {
+        //图片个数为3的倍数
+        MORE("@375w_375h_1c.webp"),
 
-    //图片个数为2的倍数
-    public static String picture_normal = "@564w_564h_1c.webp";
+        //图片个数为2的倍数
+        DOUBLE("@564w_564h_1c.webp"),
 
-    //只有一张图片
-    public static String picture_single = "@1125w_1125h_1e.webp";
+        //只有一张图片
+        SINGLE("@1125w_1125h_1e.webp");
+
+        public String value;
+
+        PicturePixelSize(String value) {
+            this.value = value;
+        }
+    }
+
 }

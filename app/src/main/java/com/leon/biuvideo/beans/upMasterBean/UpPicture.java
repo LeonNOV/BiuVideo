@@ -18,5 +18,5 @@ public class UpPicture implements Serializable {
     public long ctime;
 
     //map只存储图片url和图片size
-    public List<Map<String, Object>> pictures;
+    public List<String> pictures;
 }

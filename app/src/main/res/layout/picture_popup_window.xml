@@ -6,27 +6,30 @@
     app:cardCornerRadius="15dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingTop="10dp"
         android:paddingBottom="10dp">
 
         <Button
-            android:id="@+id/article_more_menu_screenshot"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ripple_button_rectangle"
-            android:text="@string/article_screenshot" />
-
-        <Button
-            android:id="@+id/article_more_menu_jumpToOrigin"
+            android:id="@+id/picture_more_saveAll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/ripple_button_rectangle"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
-            android:text="@string/article_jumpToOrigin" />
+            android:text="@string/picture_menu_saveAll" />
+
+        <Button
+            android:id="@+id/picture_more_jumpToOrigin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ripple_button_rectangle"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:text="@string/picture_menu_jumpToOrigin" />
+
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

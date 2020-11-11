@@ -5,6 +5,14 @@
 
 ## 📘开发日志
 
+### 2020/11/11
+- 又到了一年一度的光棍节！！！
+- 加入了PictureActivity
+- 添加了PictureActivity的初始化代码
+- 修改了PictureActivity的部分代码
+- PictureActivity部分的代码已大部分完成
+  - **图片查看器还在着手准备中**
+
 ### 2020/11/10
 - 主界面的弹窗问题已解决
 - 对部分按钮加入的`ripple`效果

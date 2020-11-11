@@ -78,12 +78,11 @@ public class UpPictureParseUtils {
                 for (Object picture : itemObject.getJSONArray("pictures")) {
                     JSONObject tempJSONObject = (JSONObject) picture;
 
-                    Map<String, Object> tempMap = new HashMap<>();
+                    //如果需要使用图片大小，则需要更改UpPicture中的pictures的泛型为Map类型
+                    //注意，如果泛型不为String，则UserPictureAdapter中显示图片地方的参数也要进行更改
+                    //tempMap.put("imgSize", tempJSONObject.getIntValue("img_size"));
 
-                    tempMap.put("imgSrc", tempJSONObject.getString("img_src"));
-                    tempMap.put("imgSize", tempJSONObject.getIntValue("img_size"));
-
-                    upPicture.pictures.add(tempMap);
+                    upPicture.pictures.add(tempJSONObject.getString("img_src"));
                 }
 
                 upPictures.add(upPicture);

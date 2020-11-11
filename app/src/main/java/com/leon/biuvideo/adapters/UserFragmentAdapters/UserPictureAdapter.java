@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
+import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.WebpSizes;
 
 import java.util.List;
@@ -56,12 +57,10 @@ public class UserPictureAdapter extends RecyclerView.Adapter<UserPictureAdapter.
         holder.up_picture_textView_desc.setText(upPicture.description);
 
         //设置查看次数
-        String view = upPicture.view + "次观看";
-        holder.up_picture_textView_view.setText(view);
+        holder.up_picture_textView_view.setText(ValueFormat.generateCN(upPicture.view));
 
         //设置喜欢数
-        String like = upPicture.like + "次喜欢";
-        holder.up_picture_textView_like.setText(like);
+        holder.up_picture_textView_like.setText(ValueFormat.generateCN(upPicture.like));
     }
 
     @Override

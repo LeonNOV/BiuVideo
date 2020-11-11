@@ -83,6 +83,15 @@ public class Paths {
     public static String picture = "https://api.vc.bilibili.com/link_draw/v1/doc/doc_list";
 
     /**
+     * 相簿原链接
+     *      参数：后跟相簿ID
+     */
+//    public static String pictureWebPage = "https://h.bilibili.com/";
+    public static String pictureWebPage = "https://t.bilibili.com/h5/dynamic/detail/";
+    //https://t.bilibili.com/h5/dynamic/detail/97176992?tab=1&type=2
+
+
+    /**
      * 获取相簿总数
      *      参数
      *          uid：up主id
