@@ -18,7 +18,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.activitys.PictureActivity"></activity>
+        <activity
+            android:name=".ui.activitys.PictureActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".ui.activitys.ArticleActivity"
             android:screenOrientation="portrait"

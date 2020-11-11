@@ -74,6 +74,7 @@ public class UpPictureParseUtils {
                 upPicture.like = itemObject.getLong("like");
 
                 //获取图片信息
+                upPicture.pictures = new ArrayList<>();
                 for (Object picture : itemObject.getJSONArray("pictures")) {
                     JSONObject tempJSONObject = (JSONObject) picture;
 
