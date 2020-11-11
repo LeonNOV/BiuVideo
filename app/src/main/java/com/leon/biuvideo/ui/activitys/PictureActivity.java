@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Picture;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.PictureListAdapter;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
 import com.leon.biuvideo.layoutManager.PictureLayoutManager;
+import com.leon.biuvideo.ui.views.PictureViewer;
 import com.leon.biuvideo.utils.MediaUtils;
 import com.leon.biuvideo.utils.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
@@ -131,6 +134,9 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onItemClick(int position) {
                 Toast.makeText(PictureActivity.this, "点击了第" + (position + 1) + "张图片", Toast.LENGTH_SHORT).show();
+                PictureViewer pictureViewer = new PictureViewer(PictureActivity.this, position, picture.pictures);
+                pictureViewer.showAtLocation(PictureActivity.this.findViewById(R.id.picture_toolBar),
+                        Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
             }
         });
         PictureLayoutManager pictureLayoutManager = new PictureLayoutManager(getApplicationContext(), spanCount);
