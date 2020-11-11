@@ -72,9 +72,9 @@ public class Paths {
     /**
      * 获取up相簿列表
      *  uid：up主id
-     *  page_num：页码，从0开始
-     *  page_size：每页个数
-     *  biz：获取类型
+     *  page_num：页码，从0开始，必须
+     *  page_size：每页个数，建议30，必须
+     *  biz：获取类型，默认为all，必须
      *  	类型：
      *  	  photo（摄影）
      *  	  daily（日常）

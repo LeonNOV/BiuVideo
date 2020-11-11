@@ -64,15 +64,26 @@ public class UpPictureParseUtils {
                 //获取图片数量
                 upPicture.count = itemObject.getIntValue("count");
 
+                //获取上传日期
+                upPicture.ctime = itemObject.getLongValue("ctime");
+
                 //获取查看量
                 upPicture.view = itemObject.getLong("view");
 
                 //获取点赞量
                 upPicture.like = itemObject.getLong("like");
 
-                //获取第一张图片的链接
-                JSONObject picObject = (JSONObject) itemObject.getJSONArray("pictures").get(0);
-                upPicture.pictureUrl = picObject.getString("img_src");
+                //获取图片信息
+                for (Object picture : itemObject.getJSONArray("pictures")) {
+                    JSONObject tempJSONObject = (JSONObject) picture;
+
+                    Map<String, Object> tempMap = new HashMap<>();
+
+                    tempMap.put("imgSrc", tempJSONObject.getString("img_src"));
+                    tempMap.put("imgSize", tempJSONObject.getIntValue("img_size"));
+
+                    upPicture.pictures.add(tempMap);
+                }
 
                 upPictures.add(upPicture);
             }
