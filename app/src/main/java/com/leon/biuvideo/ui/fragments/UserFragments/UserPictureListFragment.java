@@ -1,6 +1,7 @@
 package com.leon.biuvideo.ui.fragments.UserFragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UserFragmentAdapters.UserPictureAdapter;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
+import com.leon.biuvideo.ui.activitys.PictureActivity;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpPictureParseUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -90,6 +92,20 @@ public class UserPictureListFragment extends Fragment {
         }
 
         UserPictureAdapter userPictureAdapter = new UserPictureAdapter(upPictures, context);
+        userPictureAdapter.setOnPictureItemClickListener(new UserPictureAdapter.OnPictureItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                //跳转到PictureActivity
+                Intent intent = new Intent(context, PictureActivity.class);
+
+                //传递整个UpPicture对象
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("picture", upPictures.get(position));
+                intent.putExtras(bundle);
+
+                startActivity(intent);
+            }
+        });
         picture_recyclerView.setAdapter(userPictureAdapter);
 
         //添加加载更多监听事件

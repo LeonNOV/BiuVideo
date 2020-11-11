@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,8 +40,8 @@ public class UserPictureAdapter extends RecyclerView.Adapter<UserPictureAdapter.
     public void onBindViewHolder(@NonNull UserPictureAdapter.ViewHolder holder, int position) {
         UpPicture upPicture = upPictures.get(position);
 
-        //设置相簿封面
-        Glide.with(context).load(upPicture.pictureUrl + WebpSizes.cover).into(holder.up_picture_imageView_cover);
+        //设置相簿封面，即pics中的第一个
+        Glide.with(context).load(upPicture.pictures.get(0) + WebpSizes.cover).into(holder.up_picture_imageView_cover);
 
         //设置相簿count
         //总数大于2则进行显示
@@ -68,7 +69,18 @@ public class UserPictureAdapter extends RecyclerView.Adapter<UserPictureAdapter.
         return upPictures.size();
     }
 
+    private OnPictureItemClickListener onPictureItemClickListener;
+
+    public interface OnPictureItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnPictureItemClickListener(OnPictureItemClickListener onPictureItemClickListener) {
+        this.onPictureItemClickListener = onPictureItemClickListener;
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
+        RelativeLayout picture_relativeLayout;
         ImageView up_picture_imageView_cover;
         TextView
                 up_picture_textView_count,
@@ -78,6 +90,16 @@ public class UserPictureAdapter extends RecyclerView.Adapter<UserPictureAdapter.
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            picture_relativeLayout = itemView.findViewById(R.id.picture_relativeLayout);
+            picture_relativeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onPictureItemClickListener != null) {
+                        onPictureItemClickListener.onItemClick(getAdapterPosition());
+                    }
+                }
+            });
 
             up_picture_imageView_cover = itemView.findViewById(R.id.up_picture_imageView_cover);
             up_picture_textView_count = itemView.findViewById(R.id.up_picture_textView_count);

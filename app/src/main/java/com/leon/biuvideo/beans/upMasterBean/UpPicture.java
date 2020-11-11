@@ -1,12 +1,13 @@
 package com.leon.biuvideo.beans.upMasterBean;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 /**
  * 相簿
  */
-public class UpPicture {
+public class UpPicture implements Serializable {
     public long docId;
     public long posterUid;//用户ID
     public String title;

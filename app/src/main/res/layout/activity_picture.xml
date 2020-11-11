@@ -8,25 +8,29 @@
     tools:context=".ui.activitys.PictureActivity">
 
     <androidx.appcompat.widget.Toolbar
+        android:id="@+id/picture_toolBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <RelativeLayout
-            android:id="@+id/picture_toolBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/picture_back"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_centerVertical="true"
+                android:background="?selectableItemBackgroundBorderless"
                 android:src="@drawable/icon_back" />
 
             <ImageView
+                android:id="@+id/picture_more"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="20dp"
+                android:background="?selectableItemBackgroundBorderless"
                 android:src="@drawable/more_icon" />
 
         </RelativeLayout>
@@ -53,7 +57,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -92,6 +98,13 @@
 
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/picture_textView_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="DescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDesc" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/picture_recyclerView"
