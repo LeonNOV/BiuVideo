@@ -8,6 +8,7 @@
 ### 2020/11/12
 - PictureViewer已完成
   - ~~**该控件的进入和退出动画还未添加**~~
+- PictureViewer的进入/退出动画已完成
 - 更改了UpMasterActivity中的控件
   - **其他的ViewPage顶部的`指示栏`还未进行相同的更改**
 
