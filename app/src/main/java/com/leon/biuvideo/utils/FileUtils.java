@@ -31,16 +31,12 @@ public class FileUtils {
     public static String createFolder(ResourcesFolder folderName) {
         String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/BiuVideo";
 
-        Log.d(Fuck.blue, "createFolder: " + rootPath);
-
         String resourcesPath = folderName.value;
         File file = new File(rootPath, resourcesPath);
 
         if (!file.exists()) {
             file.mkdirs();
         }
-
-        Log.d(Fuck.blue, "createFolder:------Path:" + file.getPath() + "------" + file.getAbsolutePath());
 
         return file.getAbsolutePath();
     }

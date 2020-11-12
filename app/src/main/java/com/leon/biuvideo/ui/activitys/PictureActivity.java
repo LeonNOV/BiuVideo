@@ -133,7 +133,7 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
         pictureListAdapter.setOnPictureItemClickListener(new PictureListAdapter.OnPictureItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Toast.makeText(PictureActivity.this, "点击了第" + (position + 1) + "张图片", Toast.LENGTH_SHORT).show();
+                //创建图片查看器
                 PictureViewer pictureViewer = new PictureViewer(PictureActivity.this, position, picture.pictures);
                 pictureViewer.showAtLocation(PictureActivity.this.findViewById(R.id.picture_toolBar),
                         Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
@@ -175,7 +175,6 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
                         Toast.makeText(getApplicationContext(),
                                 "保存成功" + saveCounts + "张,失败" + (picture.pictures.size() - saveCounts) + "张",
                                 Toast.LENGTH_SHORT).show();
-
                         Looper.loop();
                     }
                 }).start();

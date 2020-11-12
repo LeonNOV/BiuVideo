@@ -20,7 +20,10 @@ public class WebpSizes {
         DOUBLE("@564w_564h_1c.webp"),
 
         //只有一张图片
-        SINGLE("@1125w_1125h_1e.webp");
+        SINGLE("@1125w_1125h_1e.webp"),
+
+        //图片查看器
+        VIEWER("@2000w_1e.webp");
 
         public String value;
 

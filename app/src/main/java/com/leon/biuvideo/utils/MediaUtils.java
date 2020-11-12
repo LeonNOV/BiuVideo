@@ -296,15 +296,13 @@ public class MediaUtils {
             File articlePic = new File(FileUtils.createFolder(FileUtils.ResourcesFolder.PICTURES), FileUtils.generateFileName("article") + ".jpeg");
 
             FileOutputStream fos = new FileOutputStream(articlePic);
-            if (fos != null) {
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fos);
 
-                context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(articlePic)));
+            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(articlePic)));
 
-                fos.close();
+            fos.close();
 
-                return true;
-            }
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
         }

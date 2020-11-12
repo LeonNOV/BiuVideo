@@ -2,7 +2,7 @@ package com.leon.biuvideo.ui.views;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,23 +12,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
+import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.PictureViewerAdapter;
-import com.leon.biuvideo.adapters.ViewPageAdapter;
+import com.leon.biuvideo.utils.MediaUtils;
+import com.leon.biuvideo.utils.WebpSizes;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PictureViewer extends PopupWindow implements View.OnClickListener, ViewPager.OnPageChangeListener {
-    private int position;
-    private List<String> pictuires;
+    private final int selectedPosition;
+    private final List<String> pictures;
     private List<ImageView> imageViews;
 
-    private Context context;
+    private final Context context;
     private View pictureViewerView;
     private ImageView picture_viewer_imageView_back, picture_viewer_imageView_savePic;
     private ViewPager picture_viewer_viewPager;
@@ -36,26 +36,26 @@ public class PictureViewer extends PopupWindow implements View.OnClickListener, 
 
     private PictureViewerAdapter pictureViewerAdapter;
 
-    public PictureViewer(Context context, int position, List<String> pictures) {
+    public PictureViewer(Context context, int selectedPosition, List<String> pictures) {
         super(context);
         this.context = context;
-        this.position = position;
-        this.pictuires = pictures;
+        this.selectedPosition = selectedPosition;
+        this.pictures = pictures;
 
         init();
-        initView(context);
+        initView();
         initValue();
     }
 
     private void init() {
         imageViews = new ArrayList<>();
 
-        for (int i = 0; i < pictuires.size(); i++) {
+        for (int i = 0; i < pictures.size(); i++) {
             imageViews.add(new ImageView(context));
         }
     }
 
-    private void initView(Context context) {
+    private void initView() {
         pictureViewerView = LayoutInflater.from(context).inflate(R.layout.picture_viewer, null);
 
         picture_viewer_imageView_back = pictureViewerView.findViewById(R.id.picture_viewer_imageView_back);
@@ -72,11 +72,13 @@ public class PictureViewer extends PopupWindow implements View.OnClickListener, 
     }
 
     private void initValue() {
-        String indexStr = (position + 1) + "/" + pictuires.size();
+        String indexStr = (selectedPosition + 1) + "/" + pictures.size();
         picture_viewer_textView_index.setText(indexStr);
 
-        pictureViewerAdapter = new PictureViewerAdapter(context, pictuires, imageViews);
+        pictureViewerAdapter = new PictureViewerAdapter(context, pictures, imageViews);
         picture_viewer_viewPager.setAdapter(pictureViewerAdapter);
+        picture_viewer_viewPager.setCurrentItem(selectedPosition);
+        picture_viewer_viewPager.setPageMargin(40);
 
         this.setContentView(pictureViewerView);
         this.setWidth(ViewGroup.MarginLayoutParams.MATCH_PARENT);
@@ -93,7 +95,18 @@ public class PictureViewer extends PopupWindow implements View.OnClickListener, 
                 this.dismiss();
                 break;
             case R.id.picture_viewer_imageView_savePic:
-                Toast.makeText(context, "保存第" + pictureViewerAdapter.getPosition() + "张图片", Toast.LENGTH_SHORT).show();
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean saveState = MediaUtils.savePicture(context, pictures.get(picture_viewer_viewPager.getCurrentItem()));
+
+                        Looper.prepare();
+                        Toast.makeText(context, saveState ? "保存成功" : "保存失败", Toast.LENGTH_SHORT).show();
+                        Looper.loop();
+                    }
+                }).start();
+
                 break;
             default:
                 break;
@@ -102,7 +115,7 @@ public class PictureViewer extends PopupWindow implements View.OnClickListener, 
 
     @Override
     public void onPageSelected(int position) {
-        String indexStr = (position + 1) + "/" + pictuires.size();
+        String indexStr = (position + 1) + "/" + pictures.size();
         picture_viewer_textView_index.setText(indexStr);
     }
 
@@ -113,6 +126,57 @@ public class PictureViewer extends PopupWindow implements View.OnClickListener, 
 
     @Override
     public void onPageScrollStateChanged(int state) {
+    }
 
+    /**
+     * PictureViewer适配器
+     */
+    static class PictureViewerAdapter extends PagerAdapter {
+        private final Context context;
+        private final List<String> pictures;
+        private final List<ImageView> imageViews;
+
+        public PictureViewerAdapter(Context context, List<String> pictures, List<ImageView> imageViews) {
+            this.context = context;
+            this.pictures = pictures;
+            this.imageViews = imageViews;
+        }
+
+        @NonNull
+        @Override
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
+            container.addView(imageViews.get(position));
+            Glide.with(context).load(pictures.get(position) + WebpSizes.PicturePixelSize.VIEWER.value).into(imageViews.get(position));
+
+            return imageViews.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return pictures.size();
+        }
+
+        @Override
+        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+            if (position == 0 && imageViews.size() == 0) {
+                return;
+            }
+            if (position == imageViews.size()) {
+                container.removeView(imageViews.get(--position));
+            } else {
+                container.removeView(imageViews.get(position));
+            }
+
+        }
+
+        @Override
+        public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+            return view == object;
+        }
+
+        @Override
+        public int getItemPosition(@NonNull Object object) {
+            return super.getItemPosition(object);
+        }
     }
 }
