@@ -4,8 +4,8 @@ import android.content.Context;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 
-public class PictureLayoutManager extends GridLayoutManager {
-    public PictureLayoutManager(Context context, int spanCount) {
+public class PictureGridLayoutManager extends GridLayoutManager {
+    public PictureGridLayoutManager(Context context, int spanCount) {
         super(context, spanCount);
     }
 

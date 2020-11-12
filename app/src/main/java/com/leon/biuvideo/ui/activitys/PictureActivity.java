@@ -23,7 +23,7 @@ import android.widget.Toast;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.PictureListAdapter;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
-import com.leon.biuvideo.layoutManager.PictureLayoutManager;
+import com.leon.biuvideo.layoutManager.PictureGridLayoutManager;
 import com.leon.biuvideo.ui.views.PictureViewer;
 import com.leon.biuvideo.utils.MediaUtils;
 import com.leon.biuvideo.utils.Paths;
@@ -138,9 +138,9 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
                         Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
             }
         });
-        PictureLayoutManager pictureLayoutManager = new PictureLayoutManager(getApplicationContext(), spanCount);
+        PictureGridLayoutManager pictureGridLayoutManager = new PictureGridLayoutManager(getApplicationContext(), spanCount);
 
-        picture_recyclerView.setLayoutManager(pictureLayoutManager);
+        picture_recyclerView.setLayoutManager(pictureGridLayoutManager);
         picture_recyclerView.setAdapter(pictureListAdapter);
     }
 

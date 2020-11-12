@@ -24,11 +24,14 @@ import java.util.List;
 /**
  * MainActivity中的播放列表片段
  */
-public class PlayListFragment extends Fragment implements ViewPager.OnPageChangeListener {
+public class PlayListFragment extends Fragment implements ViewPager.OnPageChangeListener, View.OnClickListener {
     private TextView play_list_textView_video, play_list_textView_music;
     private ViewPager play_list_viewPage;
 
     private View view;
+
+    private int point_bilibili_pink = R.drawable.shape_bilibili_pink;
+    private int point_bilibili_pink_lite = R.drawable.ripple_user_bilibili_pink_lite;
 
     @Nullable
     @Override
@@ -43,7 +46,10 @@ public class PlayListFragment extends Fragment implements ViewPager.OnPageChange
 
     private void initView() {
         play_list_textView_video = view.findViewById(R.id.play_list_textView_video);
+        play_list_textView_video.setOnClickListener(this);
+
         play_list_textView_music = view.findViewById(R.id.play_list_textView_music);
+        play_list_textView_music.setOnClickListener(this);
 
         play_list_viewPage = view.findViewById(R.id.play_list_viewPage);
         play_list_viewPage.addOnPageChangeListener(this);
@@ -66,18 +72,33 @@ public class PlayListFragment extends Fragment implements ViewPager.OnPageChange
 
         switch (position) {
             case 0:
-                play_list_textView_video.setTextColor(getResources().getColor(R.color.bilibili_pink));
-                play_list_textView_music.setTextColor(getResources().getColor(R.color.normal));
+                play_list_textView_video.setBackgroundResource(point_bilibili_pink);
+                play_list_textView_music.setBackgroundResource(point_bilibili_pink_lite);
 
                 break;
             case 1:
-                play_list_textView_video.setTextColor(getResources().getColor(R.color.normal));
-                play_list_textView_music.setTextColor(getResources().getColor(R.color.bilibili_pink));
+                play_list_textView_video.setBackgroundResource(point_bilibili_pink_lite);
+                play_list_textView_music.setBackgroundResource(point_bilibili_pink);
 
                 break;
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.play_list_textView_video:
+                play_list_viewPage.setCurrentItem(0);
+                break;
+            case R.id.play_list_textView_music:
+                play_list_viewPage.setCurrentItem(1);
+                break;
+            default:
+                break;
+        }
+
     }
 
     @Override

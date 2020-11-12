@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="play_list_video">视频</string>
+    <string name="play_list_audio">音频</string>
+
+</resources>

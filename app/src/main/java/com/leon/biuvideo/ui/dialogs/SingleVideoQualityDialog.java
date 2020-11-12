@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.SingleVideoQualityAdapter;
+import com.leon.biuvideo.layoutManager.SingleQualityLinearLayoutManager;
 
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class SingleVideoQualityDialog extends AlertDialog implements View.OnClic
     }
 
     private void initValue() {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        SingleQualityLinearLayoutManager linearLayoutManager = new SingleQualityLinearLayoutManager(context);
         SingleVideoQualityAdapter videoQualityAdapter = new SingleVideoQualityAdapter(qualitys, context);
         videoQualityAdapter.setOnQualityItemListener(onQualityItemListener);
 

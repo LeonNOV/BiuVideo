@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="200dp"
+    android:layout_width="170dp"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@color/bilibili_pink_lite"
     android:layout_gravity="center"
@@ -13,7 +13,9 @@
         android:text="@string/choose_quality_str"
         android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"
-        android:textSize="15sp"
+        android:textSize="13sp"
+        android:textColor="@color/normal"
+        android:textStyle="bold"
         android:layout_above="@id/single_video_recyclerView_quality" />
 
     <RelativeLayout
@@ -23,9 +25,9 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/single_video_recyclerView_quality"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="40dp"
             android:layout_centerHorizontal="true" />
 
         <Button
@@ -34,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/single_video_recyclerView_quality"
             android:layout_centerHorizontal="true"
-            android:layout_margin="25dp"
+            android:layout_margin="10dp"
             android:background="@drawable/shape_bilibili_pink"
             android:text="@string/cancel" />
 
