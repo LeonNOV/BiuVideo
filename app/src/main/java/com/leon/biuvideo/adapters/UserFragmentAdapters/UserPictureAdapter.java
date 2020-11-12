@@ -15,7 +15,10 @@ import com.leon.biuvideo.beans.upMasterBean.UpPicture;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.WebpSizes;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * 用户界面，相簿fragment适配器
@@ -59,8 +62,9 @@ public class UserPictureAdapter extends RecyclerView.Adapter<UserPictureAdapter.
         //设置查看次数
         holder.up_picture_textView_view.setText(ValueFormat.generateCN(upPicture.view));
 
-        //设置喜欢数
-        holder.up_picture_textView_like.setText(ValueFormat.generateCN(upPicture.like));
+        //设置时间
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
+        holder.up_picture_textView_ctime.setText(sdf.format(new Date( upPicture.ctime * 1000)));
     }
 
     @Override
@@ -85,7 +89,7 @@ public class UserPictureAdapter extends RecyclerView.Adapter<UserPictureAdapter.
                 up_picture_textView_count,
                 up_picture_textView_desc,
                 up_picture_textView_view,
-                up_picture_textView_like;
+                up_picture_textView_ctime;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -104,7 +108,7 @@ public class UserPictureAdapter extends RecyclerView.Adapter<UserPictureAdapter.
             up_picture_textView_count = itemView.findViewById(R.id.up_picture_textView_count);
             up_picture_textView_desc = itemView.findViewById(R.id.up_picture_textView_desc);
             up_picture_textView_view = itemView.findViewById(R.id.up_picture_textView_view);
-            up_picture_textView_like = itemView.findViewById(R.id.up_picture_textView_like);
+            up_picture_textView_ctime = itemView.findViewById(R.id.up_picture_textView_ctime);
         }
     }
 

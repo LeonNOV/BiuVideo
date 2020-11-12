@@ -25,6 +25,13 @@
         <item name="android:windowExitAnimation">@anim/music_play_list_scale_exit</item>
     </style>
 
-    <!-- music标题动画 -->
+    <!-- PictureViewer动画 -->
+    <style name="picture_viewer_anim_style">
+        <!-- 进入 -->
+        <item name="android:windowEnterAnimation">@anim/picture_viewer_enter</item>
+
+        <!-- 退出 -->
+        <item name="android:windowExitAnimation">@anim/picture_viewer_exit</item>
+    </style>
 
 </resources>

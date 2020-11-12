@@ -45,12 +45,14 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
     private ImageView up_imageView_favoriteIconState;
     private TextView up_textView_favoriteStrState;
     private ExpandableTextView up_textView_sign;
-    //    private TextView up_textView_follower, up_textView_like, up_textView_view;
     private TextView user_textView_video, user_textView_audio, user_textView_articles, user_textView_picture;
     private ViewPager up_viewPage;
 
     private long mid;
     private UpInfo upInfo;
+
+    private int point_bilibili_pink = R.drawable.shape_bilibili_pink;
+    private int point_bilibili_pink_lite = R.drawable.ripple_user_bilibili_pink_lite;
 
     public UpMasterActivity() {
         super();
@@ -85,10 +87,6 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
         up_textView_favoriteStrState = findViewById(R.id.up_textView_favoriteStrState);
 
         up_textView_sign = findViewById(R.id.up_textView_sign);
-
-//        up_textView_follower = findViewById(R.id.up_textView_follower);
-//        up_textView_like = findViewById(R.id.up_textView_like);
-//        up_textView_view = findViewById(R.id.up_textView_view);
 
         user_textView_video = findViewById(R.id.user_textView_video);
         user_textView_video.setOnClickListener(this);
@@ -170,31 +168,31 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
     public void onPageSelected(int position) {
         switch (position) {
             case 0:
-                user_textView_video.setTextColor(getResources().getColor(R.color.bilibili_pink));
-                user_textView_audio.setTextColor(getResources().getColor(R.color.normal));
-                user_textView_articles.setTextColor(getResources().getColor(R.color.normal));
-                user_textView_picture.setTextColor(getResources().getColor(R.color.normal));
+                user_textView_video.setBackgroundResource(point_bilibili_pink);
+                user_textView_audio.setBackgroundResource(point_bilibili_pink_lite);
+                user_textView_articles.setBackgroundResource(point_bilibili_pink_lite);
+                user_textView_picture.setBackgroundResource(point_bilibili_pink_lite);
 
                 break;
             case 1:
-                user_textView_video.setTextColor(getResources().getColor(R.color.normal));
-                user_textView_audio.setTextColor(getResources().getColor(R.color.bilibili_pink));
-                user_textView_articles.setTextColor(getResources().getColor(R.color.normal));
-                user_textView_picture.setTextColor(getResources().getColor(R.color.normal));
+                user_textView_video.setBackgroundResource(point_bilibili_pink_lite);
+                user_textView_audio.setBackgroundResource(point_bilibili_pink);
+                user_textView_articles.setBackgroundResource(point_bilibili_pink_lite);
+                user_textView_picture.setBackgroundResource(point_bilibili_pink_lite);
 
                 break;
             case 2:
-                user_textView_video.setTextColor(getResources().getColor(R.color.normal));
-                user_textView_audio.setTextColor(getResources().getColor(R.color.normal));
-                user_textView_articles.setTextColor(getResources().getColor(R.color.bilibili_pink));
-                user_textView_picture.setTextColor(getResources().getColor(R.color.normal));
+                user_textView_video.setBackgroundResource(point_bilibili_pink_lite);
+                user_textView_audio.setBackgroundResource(point_bilibili_pink_lite);
+                user_textView_articles.setBackgroundResource(point_bilibili_pink);
+                user_textView_picture.setBackgroundResource(point_bilibili_pink_lite);
 
                 break;
             case 3:
-                user_textView_video.setTextColor(getResources().getColor(R.color.normal));
-                user_textView_audio.setTextColor(getResources().getColor(R.color.normal));
-                user_textView_articles.setTextColor(getResources().getColor(R.color.normal));
-                user_textView_picture.setTextColor(getResources().getColor(R.color.bilibili_pink));
+                user_textView_video.setBackgroundResource(point_bilibili_pink_lite);
+                user_textView_audio.setBackgroundResource(point_bilibili_pink_lite);
+                user_textView_articles.setBackgroundResource(point_bilibili_pink_lite);
+                user_textView_picture.setBackgroundResource(point_bilibili_pink);
 
                 break;
             default:
@@ -256,8 +254,8 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
     /**
      * 查询对应用户是否存在于favorite_up库中
      *
-     * @param mid   用户id
-     * @return  true：存在；false：不存在
+     * @param mid 用户id
+     * @return true：存在；false：不存在
      */
     private boolean queryFavoriteState(long mid) {
         SQLiteHelper sqLiteHelper = new SQLiteHelper(getApplicationContext(), 1);
@@ -282,12 +280,10 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
     }
 
     @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+    public void onPageScrollStateChanged(int state) {
     }
 
     @Override
-    public void onPageScrollStateChanged(int state) {
-
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
     }
 }

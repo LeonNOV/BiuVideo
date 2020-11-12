@@ -66,14 +66,14 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/icon_view"
-                    app:tint="#474747"/>
+                    app:tint="#707070"/>
 
                 <TextView
                     android:id="@+id/up_picture_textView_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="150次查看"
+                    android:text="150"
                     android:textSize="15sp" />
 
             </LinearLayout>
@@ -87,15 +87,15 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/icon_video_like"
-                    app:tint="#474747" />
+                    android:src="@drawable/icon_video_time"
+                    app:tint="#707070" />
 
                 <TextView
-                    android:id="@+id/up_picture_textView_like"
+                    android:id="@+id/up_picture_textView_ctime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="10次喜欢"
+                    android:text="2020-11-12 13:46"
                     android:textSize="15sp" />
 
             </LinearLayout>

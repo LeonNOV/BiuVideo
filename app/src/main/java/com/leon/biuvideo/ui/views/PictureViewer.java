@@ -86,6 +86,7 @@ public class PictureViewer extends PopupWindow implements View.OnClickListener, 
         this.setFocusable(true);
         this.setOutsideTouchable(true);
         this.setBackgroundDrawable(new ColorDrawable(0xfff));
+        this.setAnimationStyle(R.style.picture_viewer_anim_style);
     }
 
     @Override

@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.utils.Fuck;
 
 import java.util.List;
 

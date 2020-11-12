@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:text="我是name"
-                android:textColor="@color/bilibili_pink"
+                android:textColor="@color/normal"
                 android:textSize="23sp"
                 android:textStyle="bold" />
 
@@ -114,77 +114,54 @@
             android:padding="10dp" />
     </com.ms.square.android.expandabletextview.ExpandableTextView>
 
-    <!--<LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/up_textView_follower"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="336万粉丝" />
-
-        <TextView
-            android:id="@+id/up_textView_like"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:text="133.4万获赞" />
-
-        <TextView
-            android:id="@+id/up_textView_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:text="2703万播放" />
-
-    </LinearLayout>-->
-
     <TableLayout
+        android:id="@+id/user_tableLayout_tab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_margin="5dp"
         android:stretchColumns="*">
 
         <TableRow>
 
             <TextView
                 android:id="@+id/user_textView_video"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/shape_bilibili_pink"
                 android:gravity="center"
                 android:text="@string/up_item_videos"
-                android:textColor="@color/bilibili_pink"
-                android:textSize="30sp" />
+                android:textColor="@color/normal"
+                android:textSize="23sp" />
 
             <TextView
                 android:id="@+id/user_textView_audio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/ripple_user_bilibili_pink_lite"
                 android:gravity="center"
                 android:text="@string/up_item_audios"
                 android:textColor="@color/normal"
-                android:textSize="30sp" />
+                android:textSize="23sp" />
 
             <TextView
                 android:id="@+id/user_textView_articles"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/ripple_user_bilibili_pink_lite"
                 android:gravity="center"
                 android:text="@string/up_item_articles"
                 android:textColor="@color/normal"
-                android:textSize="30sp" />
+                android:textSize="23sp" />
 
             <TextView
                 android:id="@+id/user_textView_picture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/ripple_user_bilibili_pink_lite"
                 android:gravity="center"
                 android:text="@string/up_item_pictures"
                 android:textColor="@color/normal"
-                android:textSize="30sp" />
+                android:textSize="23sp" />
 
         </TableRow>
 
