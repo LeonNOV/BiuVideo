@@ -25,7 +25,9 @@ import com.leon.biuvideo.ui.dialogs.AboutDialog;
 import com.leon.biuvideo.ui.fragments.FavoriteFragment;
 import com.leon.biuvideo.ui.fragments.HomeFragment;
 import com.leon.biuvideo.ui.fragments.PlayListFragment;
+import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.SQLiteHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +90,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fragmentList = new ArrayList<>();
         //默认显示HomeFragment
         fragmentList.add(new HomeFragment());
+
+        // 获取权限
+        FileUtils.verifyPermissions(this);
     }
 
     /**

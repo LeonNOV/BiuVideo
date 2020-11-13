@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.adapters.PlayListAdapter.MusicListAdapter;
 import com.leon.biuvideo.beans.musicBeans.MusicInfo;
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
 import com.leon.biuvideo.service.MusicService;
@@ -34,7 +35,7 @@ import com.leon.biuvideo.ui.dialogs.MusicListDialog;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.MediaUtils;
-import com.leon.biuvideo.utils.MusicListDatabaseUtils;
+import com.leon.biuvideo.utils.dataUtils.MusicListDatabaseUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.resourcesParseUtils.MusicParseUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.MusicUrlParseUtils;
@@ -401,6 +402,9 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
 
                     isHavePlayList = true;
                 }
+
+                //通知数据已发生改变
+                new MusicListAdapter(musicDatabaseUtils.queryPlayList(), getApplicationContext()).notifyDataSetChanged();
 
                 break;
             case R.id.music_imageView_control:

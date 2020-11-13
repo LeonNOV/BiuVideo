@@ -19,7 +19,8 @@ import com.leon.biuvideo.adapters.PlayListAdapter.MusicListAdapter;
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
 import com.leon.biuvideo.ui.activitys.UpSongActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
-import com.leon.biuvideo.utils.MusicListDatabaseUtils;
+import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.dataUtils.MusicListDatabaseUtils;
 
 import java.util.List;
 
@@ -27,42 +28,41 @@ import java.util.List;
  * PlayListFragment中的music片段
  */
 public class MusicListFragment extends Fragment {
+    private RecyclerView recyclerView;
+    private TextView textView_noDataStr;
+
+    private Context context;
     private View view;
+
+    private List<MusicPlayList> musicPlayLists;
+    private MusicListAdapter musicListAdapter;
+    private MusicListDatabaseUtils musicListDatabaseUtils;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_recycler_view, container, false);
-        view.setBackgroundResource(R.color.bilibili_pink_lite);
+        return inflater.inflate(R.layout.fragment_recycler_view, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
         initView();
-
-        return view;
     }
 
     private void initView() {
-        Context context = getContext();
+        context = getContext();
+        view = getView();
 
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-        TextView textView_noDataStr = view.findViewById(R.id.textView_noDataStr);
+        musicListDatabaseUtils = new MusicListDatabaseUtils(context);
 
-        MusicListDatabaseUtils musicListDatabaseUtils = new MusicListDatabaseUtils(context);
+        recyclerView = view.findViewById(R.id.recyclerView);
+        textView_noDataStr = view.findViewById(R.id.textView_noDataStr);
 
-        //获取所有喜欢的music
-        List<MusicPlayList> musicPlayLists = musicListDatabaseUtils.queryPlayList();
-
-        //判断是否有数据
-        if (musicPlayLists.size() == 0) {
-            textView_noDataStr.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.INVISIBLE);
-        } else {
-            textView_noDataStr.setVisibility(View.INVISIBLE);
-            recyclerView.setVisibility(View.VISIBLE);
-        }
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-        MusicListAdapter musicListAdapter = new MusicListAdapter(musicPlayLists, context);
-        musicListAdapter.setOnMuiscItemClickListener(new MusicListAdapter.OnMuiscItemClickListener() {
+        musicPlayLists = musicListDatabaseUtils.queryPlayList();
+        musicListAdapter = new MusicListAdapter(musicPlayLists, context);
+        musicListAdapter.setOnMusicItemClickListener(new MusicListAdapter.OnMusicItemClickListener() {
             @Override
             public void onMusicItemClickListener(int position, long[] sids) {
                 //跳转到UpSongActivity
@@ -83,7 +83,28 @@ public class MusicListFragment extends Fragment {
             }
         });
 
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(musicListAdapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //处理music播放列表数据
+        musicPlayLists = musicListDatabaseUtils.queryPlayList();
+
+        Fuck.blue("MusicListFragment:onResume");
+
+        if (musicPlayLists.size() > 0) {
+            textView_noDataStr.setVisibility(View.INVISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
+
+            musicListAdapter.refresh(musicPlayLists);
+        } else {
+            textView_noDataStr.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.INVISIBLE);
+        }
     }
 }

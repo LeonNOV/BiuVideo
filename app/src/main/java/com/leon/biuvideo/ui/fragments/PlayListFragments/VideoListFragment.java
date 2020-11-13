@@ -18,7 +18,8 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.PlayListAdapter.VideoListAdapter;
 import com.leon.biuvideo.beans.upMasterBean.VideoPlayList;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
-import com.leon.biuvideo.utils.VideoListDatabaseUtils;
+import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.dataUtils.VideoListDatabaseUtils;
 
 import java.util.List;
 
@@ -26,40 +27,41 @@ import java.util.List;
  * PlayListFragment中的video片段
  */
 public class VideoListFragment extends Fragment {
+    private RecyclerView recyclerView;
+    private TextView textView_noDataStr;
+
+    private Context context;
     private View view;
+
+    private VideoListAdapter videoListAdapter;
+    private List<VideoPlayList> videoPlayLists;
+
+    private VideoListDatabaseUtils videoListDatabaseUtils;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_recycler_view, container, false);
-        view.setBackgroundResource(R.color.bilibili_pink_lite);
+        return inflater.inflate(R.layout.fragment_recycler_view, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
         initView();
-
-        return view;
     }
 
     private void initView() {
-        Context context = getContext();
+        context = getContext();
+        view = getView();
 
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-        TextView textView_noDataStr = view.findViewById(R.id.textView_noDataStr);
+        videoListDatabaseUtils = new VideoListDatabaseUtils(context);
 
-        VideoListDatabaseUtils videoListDatabaseUtils = new VideoListDatabaseUtils(context);
+        recyclerView = view.findViewById(R.id.recyclerView);
+        textView_noDataStr = view.findViewById(R.id.textView_noDataStr);
 
-        //获取所有的喜欢的video
-        List<VideoPlayList> videoPlayLists = videoListDatabaseUtils.queryFavoriteVideos();
-
-        //判断是否有数据
-        if (videoPlayLists.size() == 0) {
-            textView_noDataStr.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.INVISIBLE);
-        } else {
-            textView_noDataStr.setVisibility(View.INVISIBLE);
-            recyclerView.setVisibility(View.VISIBLE);
-        }
-
-        VideoListAdapter videoListAdapter = new VideoListAdapter(videoPlayLists, getContext());
+        videoPlayLists = videoListDatabaseUtils.queryFavoriteVideos();
+        videoListAdapter = new VideoListAdapter(videoPlayLists, getContext());
         videoListAdapter.setOnVideoItemClickListener(new VideoListAdapter.OnVideoItemClickListener() {
             @Override
             public void onVideoItemClickListener(int position) {
@@ -72,8 +74,28 @@ public class VideoListFragment extends Fragment {
         });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(videoListAdapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //处理video播放列表数据
+        videoPlayLists = videoListDatabaseUtils.queryFavoriteVideos();
+
+        Fuck.blue("VideoListFragment:onResume");
+
+        if (videoPlayLists.size() > 0) {
+            //隐藏无数据提示，显示item数据
+            textView_noDataStr.setVisibility(View.INVISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
+
+            videoListAdapter.refresh(videoPlayLists);
+        } else {
+            textView_noDataStr.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.INVISIBLE);
+        }
     }
 }

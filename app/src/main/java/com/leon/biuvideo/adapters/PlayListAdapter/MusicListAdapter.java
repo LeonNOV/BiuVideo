@@ -48,8 +48,8 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
         holder.play_list_music_imageView_isHaveVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onMuiscItemClickListener != null) {
-                    onMuiscItemClickListener.onMusicVideoClickListener(position);
+                if (onMusicItemClickListener != null) {
+                    onMusicItemClickListener.onMusicVideoClickListener(position);
                 }
             }
         });
@@ -57,13 +57,13 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
         holder.play_list_music_relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onMuiscItemClickListener != null) {
+                if (onMusicItemClickListener != null) {
                     long[] sids = new long[musicPlayLists.size()];
                     for (int i = 0; i < musicPlayLists.size(); i++) {
                         sids[i] = musicPlayLists.get(i).sid;
                     }
 
-                    onMuiscItemClickListener.onMusicItemClickListener(position, sids);
+                    onMusicItemClickListener.onMusicItemClickListener(position, sids);
                 }
             }
         });
@@ -74,15 +74,15 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
         return musicPlayLists.size();
     }
 
-    private OnMuiscItemClickListener onMuiscItemClickListener;
+    private OnMusicItemClickListener onMusicItemClickListener;
 
-    public interface OnMuiscItemClickListener {
+    public interface OnMusicItemClickListener {
         void onMusicItemClickListener(int position, long[] sids);
         void onMusicVideoClickListener(int position);
     }
 
-    public void setOnMuiscItemClickListener(OnMuiscItemClickListener onMuiscItemClickListener) {
-        this.onMuiscItemClickListener = onMuiscItemClickListener;
+    public void setOnMusicItemClickListener(OnMusicItemClickListener onMusicItemClickListener) {
+        this.onMusicItemClickListener = onMusicItemClickListener;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -101,6 +101,19 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
             play_list_music_textView_musicName = itemView.findViewById(R.id.play_list_music_textView_musicName);
             play_list_video_author = itemView.findViewById(R.id.play_list_video_author);
             play_list_music_imageView_isHaveVideo = itemView.findViewById(R.id.play_list_music_imageView_isHaveVideo);
+        }
+    }
+
+    //加载数据使用
+    public void refresh(List<MusicPlayList> addOns) {
+        //清空原有数据
+        if (addOns.size() > 0) {
+            if (musicPlayLists.size() > 0) {
+                musicPlayLists.clear();
+            }
+
+            musicPlayLists.addAll(addOns);
+            notifyDataSetChanged();
         }
     }
 }

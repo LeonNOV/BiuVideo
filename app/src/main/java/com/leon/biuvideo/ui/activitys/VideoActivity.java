@@ -33,7 +33,7 @@ import com.leon.biuvideo.utils.GeneralNotification;
 import com.leon.biuvideo.utils.MediaUtils;
 import com.leon.biuvideo.utils.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
-import com.leon.biuvideo.utils.VideoListDatabaseUtils;
+import com.leon.biuvideo.utils.dataUtils.VideoListDatabaseUtils;
 import com.leon.biuvideo.utils.WebpSizes;
 import com.leon.biuvideo.utils.mediaParseUtils.MediaParseUtils;
 import com.leon.biuvideo.utils.mediaParseUtils.ViewParseUtils;
@@ -144,6 +144,8 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         //获取视频bvid
         Intent intent = getIntent();
         String bvid = intent.getStringExtra("bvid");
+
+        Fuck.blue("query-----bvid:" + bvid);
 
         //获取ViewPage实体类（视频基本信息）
         viewPage = ViewParseUtils.parseView(bvid);
@@ -304,16 +306,15 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
                     videoPlayList.bvid = viewPage.bvid;
                     videoPlayList.uname = viewPage.upInfo.name;
-                    videoPlayList.desc = viewPage.desc;
+                    videoPlayList.title = viewPage.title;
                     videoPlayList.coverUrl = viewPage.coverUrl;
                     videoPlayList.length = viewPage.singleVideoInfoList.get(0).duration;//只获取第一个视频的长度
                     videoPlayList.play = viewPage.videoInfo.view;
                     videoPlayList.danmaku = viewPage.videoInfo.danmaku;
 
-
                     boolean state = videoListDatabaseUtils.addFavoriteVideo(videoPlayList);
 
-                    Toast.makeText(this, state ? "已成功添加到播放列表中" : "添加失败~~~", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), state ? "已成功添加到播放列表中" : "添加失败~~~", Toast.LENGTH_SHORT).show();
 
                     if (state) {
                         video_imageView_addFavorite.setImageResource(R.drawable.favorite);
@@ -408,13 +409,13 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                         Looper.prepare();
                         Toast.makeText(getApplicationContext(), faceSaveState ? "保存成功" : "保存失败", Toast.LENGTH_SHORT).show();
                         Looper.loop();
-
                     }
                 }).start();
 
 
                 break;
-            default:break;
+            default:
+                break;
         }
     }
 

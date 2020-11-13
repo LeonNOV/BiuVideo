@@ -15,7 +15,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "\"name\"  TEXT,\n" +
             "\"faceUrl\"  TEXT,\n" +
             "\"desc\"  TEXT,\n" +
-            "\"isFavorite\"  INTEGER DEFAULT 1\n" +
+            "\"isDelete\"  INTEGER DEFAULT 1\n" +
             ");";
     private static final String musicPlayList = "CREATE TABLE \"musicPlayList\" (\n" +
             "\"id\"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
@@ -31,7 +31,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "\"id\"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
             "\"bvid\"  TEXT,\n" +
             "\"uname\"  TEXT,\n" +
-            "\"desc\"  TEXT,\n" +
+            "\"title\"  TEXT,\n" +
             "\"coverUrl\"  TEXT,\n" +
             "\"length\"  INTEGER,\n" +
             "\"play\"  INTEGER,\n" +
@@ -66,8 +66,3 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 }
 
-class Tables {
-    public static final String FavoriteUp = "favorite_up";
-    public static final String MusicPlayList = "musicPlayList";
-    public static final String VideoPlayList = "videoPlayList";
-}

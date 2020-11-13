@@ -54,7 +54,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
 
         Glide.with(context).load(videoPlayList.coverUrl + WebpSizes.cover).into(holder.play_list_video_imageView_cover);
         holder.play_list_video_textView_length.setText(ValueFormat.lengthGenerate(videoPlayList.length));
-        holder.play_list_video_textView_desc.setText(videoPlayList.desc);
+        holder.play_list_video_textView_desc.setText(videoPlayList.title);
         holder.play_list_video_imageView_userName.setText(videoPlayList.uname);
         holder.play_list_video_textView_play.setText(ValueFormat.generateCN(videoPlayList.play));
         holder.play_list_video_textView_danmaku.setText(ValueFormat.generateCN(videoPlayList.danmaku));
@@ -98,6 +98,19 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
             play_list_video_imageView_userName = itemView.findViewById(R.id.play_list_video_imageView_userName);
             play_list_video_textView_play = itemView.findViewById(R.id.play_list_video_textView_play);
             play_list_video_textView_danmaku = itemView.findViewById(R.id.play_list_video_textView_danmaku);
+        }
+    }
+
+    //加载数据使用
+    public void refresh(List<VideoPlayList> addOns) {
+        //清空原有数据
+        if (addOns.size() > 0) {
+            if (videoPlayLists.size() > 0) {
+                videoPlayLists.clear();
+            }
+
+            videoPlayLists.addAll(addOns);
+            notifyDataSetChanged();
         }
     }
 }

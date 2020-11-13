@@ -13,8 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.MusicPlayListAdapter;
+import com.leon.biuvideo.adapters.PlayListAdapter.MusicListAdapter;
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
-import com.leon.biuvideo.utils.MusicListDatabaseUtils;
+import com.leon.biuvideo.utils.dataUtils.MusicListDatabaseUtils;
 
 import java.util.List;
 
@@ -76,10 +77,12 @@ public class MusicListDialog extends AlertDialog {
             public void onItemDeleteListener(int position) {
                 //删除播放列表中的对应条目
                 MusicListDatabaseUtils musicDatabaseUtils = new MusicListDatabaseUtils(context);
-                MusicPlayList musicPlayList = musicPlayLists.get(position);
-                musicDatabaseUtils.removeMusicItem(musicPlayList.sid);
+
+                musicDatabaseUtils.removeMusicItem(musicPlayLists.get(position).sid);
 
                 musicPlayLists.remove(position);
+
+                //通知数据已发生改变
                 musicPlayListAdapter.notifyDataSetChanged();
 
                 //刷新UpSongActivity红心的状态
@@ -94,7 +97,6 @@ public class MusicListDialog extends AlertDialog {
         Window window = this.getWindow();
 
         //添加缩放动画
-//        window.setGravity(Gravity.END | Gravity.TOP); //对话框显示的位置
         window.setWindowAnimations(R.style.music_list_dialog);
     }
 

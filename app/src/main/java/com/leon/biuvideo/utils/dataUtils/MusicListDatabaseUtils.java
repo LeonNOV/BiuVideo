@@ -1,4 +1,4 @@
-package com.leon.biuvideo.utils;
+package com.leon.biuvideo.utils.dataUtils;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,6 +8,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
+import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.SQLiteHelper;
 
 import java.util.ArrayList;
 import java.util.List;

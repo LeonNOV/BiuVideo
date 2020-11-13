@@ -17,7 +17,7 @@
         android:bottom="3dp"
         android:right="3dp"
         android:left="45dp">
-        <bitmap android:gravity="end" android:src="@drawable/spinner_arrow_1" />
+        <bitmap android:gravity="end" android:src="@drawable/spinner_arrow" />
     </item>
 
 </layer-list>

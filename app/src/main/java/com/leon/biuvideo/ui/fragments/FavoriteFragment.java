@@ -1,30 +1,27 @@
 package com.leon.biuvideo.ui.fragments;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.FavoriteAdapter;
 import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.ui.activitys.UpMasterActivity;
-import com.leon.biuvideo.utils.SQLiteHelper;
+import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.dataUtils.FavoriteDatabaseUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,12 +30,15 @@ import java.util.List;
 public class FavoriteFragment extends Fragment {
     private RecyclerView favorite_recyclerView;
     private TextView favorite_textView_noDataStr;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     private Context context;
 
     private View view;
 
     private List<Favorite> favorites;
     private FavoriteAdapter favoriteAdapter;
+    private FavoriteDatabaseUtils favoriteDatabaseUtils;
 
     @Nullable
     @Override
@@ -50,32 +50,23 @@ public class FavoriteFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        context = getActivity();
-        view = getView();
-
         initView();
         initValue();
     }
 
     private void initView() {
-        favorite_recyclerView = view.findViewById(R.id.recyclerView);
+        context = getActivity();
+        view = getView();
+        favoriteDatabaseUtils = new FavoriteDatabaseUtils(context);
 
+        favorite_recyclerView = view.findViewById(R.id.recyclerView);
         favorite_textView_noDataStr = view.findViewById(R.id.textView_noDataStr);
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setEnabled(false);
     }
 
     private void initValue() {
-        //获取favorite_up库中的数据
-        favorites = getFavorites();
-
-        //判断数据是否为0
-        if (favorites.size() == 0) {
-            favorite_textView_noDataStr.setVisibility(View.VISIBLE);
-            favorite_recyclerView.setVisibility(View.INVISIBLE);
-        } else {
-            favorite_textView_noDataStr.setVisibility(View.INVISIBLE);
-            favorite_recyclerView.setVisibility(View.VISIBLE);
-        }
-
+        favorites = favoriteDatabaseUtils.queryFavorites();
         favoriteAdapter = new FavoriteAdapter(favorites, context);
         favoriteAdapter.setOnItemClickListener((view, position) -> {
             switch (view.getId()) {
@@ -87,7 +78,11 @@ public class FavoriteFragment extends Fragment {
 
                     break;
                 case R.id.favorite_imageView_cancel_favoriteIcon:
-                    removeFavorite(position);
+                    favoriteDatabaseUtils.removeFavorite(favorites.get(position).mid);
+
+                    favorites.remove(position);
+                    favoriteAdapter.notifyDataSetChanged();
+
                     break;
                 default:
                     break;
@@ -99,59 +94,24 @@ public class FavoriteFragment extends Fragment {
         favorite_recyclerView.setAdapter(favoriteAdapter);
     }
 
-    //获取favorite_up库中isFavorite为1的数据
-    private List<Favorite> getFavorites() {
-        SQLiteHelper sqLiteHelper = new SQLiteHelper(context, 1);
-        SQLiteDatabase database = sqLiteHelper.getReadableDatabase();
+    @Override
+    public void onResume() {
+        super.onResume();
 
-        Cursor favoriteUp = database.query("favorite_up", new String[]{"mid", "name", "faceUrl", "desc", "isFavorite"}, "isFavorite=1", null, null, null, null);
+        //处理Favorite数据
+        favorites = favoriteDatabaseUtils.queryFavorites();
 
-        List<Favorite> favorites = new ArrayList<>();
-        while (favoriteUp.moveToNext()) {
-            Favorite favorite = new Favorite();
+        Fuck.blue("FavoriteFragment:onResume");
 
-            favorite.mid = favoriteUp.getLong(favoriteUp.getColumnIndex("mid"));
-            favorite.name = favoriteUp.getString(favoriteUp.getColumnIndex("name"));
-            favorite.faceUrl = favoriteUp.getString(favoriteUp.getColumnIndex("faceUrl"));
-            favorite.desc = favoriteUp.getString(favoriteUp.getColumnIndex("desc"));
-            favorite.isFavorite = favoriteUp.getInt(favoriteUp.getColumnIndex("isFavorite"));
+        if (favorites.size() > 0) {
+            //隐藏无数据提示，显示item数据
+            favorite_textView_noDataStr.setVisibility(View.INVISIBLE);
+            favorite_recyclerView.setVisibility(View.VISIBLE);
 
-            favorites.add(favorite);
-        }
-
-        favoriteUp.close();
-        database.close();
-        sqLiteHelper.close();
-
-        return favorites;
-    }
-
-    /**
-     * 将对应的信息从favorite_up中删除（从“我的收藏”中删除）
-     */
-    private void removeFavorite(int position) {
-        Favorite favorite = favorites.get(position);
-
-        //将对应mid的isFavorite的值修改为0
-        SQLiteHelper sqLiteHelper = new SQLiteHelper(context, 1);
-        SQLiteDatabase database = sqLiteHelper.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put("isFavorite", 0);
-
-        int favorite_up = database.update("favorite_up", values, "mid=?", new String[]{favorite.mid + ""});
-
-        if (favorite_up > 0) {
-            //删除对应item
-            favorites.remove(position);
-            favoriteAdapter.notifyDataSetChanged();
-
-            Toast.makeText(context, favorite.name + " 已从“我的收藏”中移除" + favorite.name, Toast.LENGTH_SHORT).show();
+            favoriteAdapter.refresh(favorites);
         } else {
-            Toast.makeText(context, "出错了~~~", Toast.LENGTH_SHORT).show();
+            favorite_textView_noDataStr.setVisibility(View.VISIBLE);
+            favorite_recyclerView.setVisibility(View.INVISIBLE);
         }
-
-        database.close();
-        sqLiteHelper.close();
     }
 }

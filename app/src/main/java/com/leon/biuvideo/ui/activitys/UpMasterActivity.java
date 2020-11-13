@@ -1,9 +1,7 @@
 package com.leon.biuvideo.ui.activitys;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -12,20 +10,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.adapters.FavoriteAdapter;
 import com.leon.biuvideo.adapters.ViewPageAdapter;
+import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.beans.upMasterBean.UpInfo;
 import com.leon.biuvideo.ui.fragments.UserFragments.UserArticlesFragment;
 import com.leon.biuvideo.ui.fragments.UserFragments.UserAudioListFragment;
 import com.leon.biuvideo.ui.fragments.UserFragments.UserPictureListFragment;
 import com.leon.biuvideo.ui.fragments.UserFragments.UserVideoListFragment;
-import com.leon.biuvideo.utils.SQLiteHelper;
 import com.leon.biuvideo.utils.WebpSizes;
+import com.leon.biuvideo.utils.dataUtils.FavoriteDatabaseUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpInfoParseUtils;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
@@ -48,8 +49,12 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
     private TextView user_textView_video, user_textView_audio, user_textView_articles, user_textView_picture;
     private ViewPager up_viewPage;
 
+    private ViewPageAdapter viewPageAdapter;
+
     private long mid;
     private UpInfo upInfo;
+
+    private FavoriteDatabaseUtils favoriteDatabaseUtils;
 
     private int point_bilibili_pink = R.drawable.shape_bilibili_pink;
     private int point_bilibili_pink_lite = R.drawable.ripple_user_bilibili_pink_lite;
@@ -106,6 +111,8 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
 
     //初始化数据
     private void initValue() {
+        favoriteDatabaseUtils = new FavoriteDatabaseUtils(getApplicationContext());
+
         //获取mid
         Intent intent = getIntent();
         mid = intent.getLongExtra("mid", -1);
@@ -117,6 +124,7 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
 
         setValue(mid);
         initViewPage();
+
     }
 
     //设置控件的数据
@@ -135,12 +143,15 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
         //设置签名
         up_textView_sign.setText(upInfo.sign);
 
-        //设置关注状态
-        boolean favorite_state = queryFavoriteState(mid);
+        //获取关注状态
+        boolean favorite_state = favoriteDatabaseUtils.queryFavoriteState(mid);
 
         if (favorite_state) {
             up_imageView_favoriteIconState.setImageResource(R.drawable.favorite);
             up_textView_favoriteStrState.setText("已关注");
+        } else {
+            up_imageView_favoriteIconState.setImageResource(R.drawable.no_favorite);
+            up_textView_favoriteStrState.setText("未关注");
         }
     }
 
@@ -160,7 +171,7 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
         //获取相簿数据
         fragments.add(new UserPictureListFragment(mid, 0, getApplicationContext()));
 
-        ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), fragments);
+        viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), fragments);
         up_viewPage.setAdapter(viewPageAdapter);
     }
 
@@ -202,15 +213,38 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
 
     @Override
     public void onClick(View v) {
-
         switch (v.getId()) {
             case R.id.up_imageView_back:
                 this.finish();
                 break;
             case R.id.up_imageView_favoriteIconState:
-                up_imageView_favoriteIconState.setImageResource(R.drawable.favorite);
-                //将up的基本信息存入数据库
-                addFavorite();
+
+                //判断是否存在于数据库中
+                boolean state = favoriteDatabaseUtils.queryFavoriteState(mid);
+
+                if (state) {
+                    //从数据库中移除
+                    up_imageView_favoriteIconState.setImageResource(R.drawable.no_favorite);
+                    up_textView_favoriteStrState.setText("未关注");
+
+                    favoriteDatabaseUtils.removeFavorite(mid);
+                } else {
+                    //添加至数据库中
+                    up_imageView_favoriteIconState.setImageResource(R.drawable.favorite);
+                    up_textView_favoriteStrState.setText("已关注");
+
+                    Favorite favorite = new Favorite();
+                    favorite.desc = upInfo.sign;
+                    favorite.mid = mid;
+                    favorite.faceUrl = upInfo.face;
+                    favorite.name = upInfo.name;
+
+                    favoriteDatabaseUtils.addFavorite(favorite);
+                }
+
+                //通知数据已更改
+                new FavoriteAdapter(favoriteDatabaseUtils.queryFavorites(), getApplicationContext()).notifyDataSetChanged();
+
                 break;
             case R.id.user_textView_video:
                 up_viewPage.setCurrentItem(0);
@@ -229,61 +263,31 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
         }
     }
 
-    /**
-     * 将UP的数据导入favorite_up库中
-     */
-    private void addFavorite() {
-        SQLiteHelper sqLiteHelper = new SQLiteHelper(getApplicationContext(), 1);
-        SQLiteDatabase database = sqLiteHelper.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put("mid", mid);
-        values.put("name", upInfo.name);
-        values.put("faceUrl", upInfo.face);
-        values.put("desc", upInfo.sign);
-        values.put("isFavorite", 1);//1：正在关注；0：已取消关注
-
-        database.insert("favorite_up", null, values);
-
-        Toast.makeText(getApplicationContext(), upInfo.name + " 已加入到“我的收藏”中", Toast.LENGTH_SHORT).show();
-
-        sqLiteHelper.close();
-        database.close();
-    }
-
-    /**
-     * 查询对应用户是否存在于favorite_up库中
-     *
-     * @param mid 用户id
-     * @return true：存在；false：不存在
-     */
-    private boolean queryFavoriteState(long mid) {
-        SQLiteHelper sqLiteHelper = new SQLiteHelper(getApplicationContext(), 1);
-        SQLiteDatabase database = sqLiteHelper.getReadableDatabase();
-
-        boolean state;
-
-        Cursor favoriteUp = database.query("favorite_up", new String[]{"isFavorite"}, "mid=?", new String[]{mid + ""}, null, null, null);
-
-        if (!favoriteUp.moveToNext()) {
-            state = false;
-        } else {
-            int isFavorite = favoriteUp.getInt(0);
-            state = isFavorite == 1;
-        }
-
-        favoriteUp.close();
-        database.close();
-        sqLiteHelper.close();
-
-        return state;
-    }
-
     @Override
     public void onPageScrollStateChanged(int state) {
     }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
+
+    /**
+     * 权限回调
+     *
+     * @param requestCode   请求码
+     * @param permissions   文件读写权限
+     * @param grantResults  授权结果
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 1024) {
+            if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                Toast.makeText(getApplicationContext(), "权限申请成功", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "权限申请失败", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

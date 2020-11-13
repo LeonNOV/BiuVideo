@@ -1,5 +1,6 @@
 package com.leon.biuvideo;
 
+import com.leon.biuvideo.beans.AboutBean;
 import com.leon.biuvideo.beans.upMasterBean.UpAudio;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
 import com.leon.biuvideo.beans.upMasterBean.UpVideo;

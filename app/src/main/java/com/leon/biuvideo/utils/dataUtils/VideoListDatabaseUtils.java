@@ -1,4 +1,4 @@
-package com.leon.biuvideo.utils;
+package com.leon.biuvideo.utils.dataUtils;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.leon.biuvideo.beans.upMasterBean.VideoPlayList;
+import com.leon.biuvideo.utils.SQLiteHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class VideoListDatabaseUtils {
 
                 videoPlayList.bvid = cursor.getString(cursor.getColumnIndex("bvid"));
                 videoPlayList.uname = cursor.getString(cursor.getColumnIndex("uname"));
-                videoPlayList.desc = cursor.getString(cursor.getColumnIndex("desc"));
+                videoPlayList.title = cursor.getString(cursor.getColumnIndex("title"));
                 videoPlayList.coverUrl = cursor.getString(cursor.getColumnIndex("coverUrl"));
                 videoPlayList.length = cursor.getInt(cursor.getColumnIndex("length"));
                 videoPlayList.play = cursor.getInt(cursor.getColumnIndex("play"));
@@ -86,7 +87,7 @@ public class VideoListDatabaseUtils {
         ContentValues contentValues = new ContentValues();
         contentValues.put("bvid", videoPlayList.bvid);
         contentValues.put("uname", videoPlayList.uname);
-        contentValues.put("desc", videoPlayList.desc);
+        contentValues.put("title", videoPlayList.title);
         contentValues.put("coverUrl", videoPlayList.coverUrl);
         contentValues.put("length", videoPlayList.length);
         contentValues.put("play", videoPlayList.play);

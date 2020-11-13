@@ -13,11 +13,11 @@
         android:background="?selectableItemBackgroundBorderless"/>
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_gravity="center"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:src="@drawable/vector_hero_marvel_ironman" />
+        android:src="@drawable/biu_video" />
 
 </RelativeLayout>

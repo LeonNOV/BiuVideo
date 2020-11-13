@@ -85,6 +85,24 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             favorite_textView_desc = itemView.findViewById(R.id.favorite_textView_desc);
             favorite_textView_name = itemView.findViewById(R.id.favorite_textView_name);
             favorite_imageView_cancel_favoriteIcon = itemView.findViewById(R.id.favorite_imageView_cancel_favoriteIcon);
+            favorite_imageView_cancel_favoriteIcon.setOnClickListener(v -> {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClickListener(v, getAdapterPosition());
+                }
+            });
+        }
+    }
+
+    //加载数据使用
+    public void refresh(List<Favorite> addOns) {
+        //清空原有数据
+        if (addOns.size() > 0) {
+            if (favorites.size() > 0) {
+                favorites.clear();
+            }
+
+            favorites.addAll(addOns);
+            notifyDataSetChanged();
         }
     }
 }
