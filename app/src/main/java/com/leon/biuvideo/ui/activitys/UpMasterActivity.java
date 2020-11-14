@@ -17,7 +17,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.FavoriteAdapter;
 import com.leon.biuvideo.adapters.ViewPageAdapter;
 import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.beans.upMasterBean.UpInfo;
@@ -25,8 +24,10 @@ import com.leon.biuvideo.ui.fragments.UserFragments.UserArticlesFragment;
 import com.leon.biuvideo.ui.fragments.UserFragments.UserAudioListFragment;
 import com.leon.biuvideo.ui.fragments.UserFragments.UserPictureListFragment;
 import com.leon.biuvideo.ui.fragments.UserFragments.UserVideoListFragment;
-import com.leon.biuvideo.utils.WebpSizes;
+import com.leon.biuvideo.utils.ImagePixelSize;
 import com.leon.biuvideo.utils.dataUtils.FavoriteDatabaseUtils;
+import com.leon.biuvideo.utils.dataUtils.SQLiteHelperFactory;
+import com.leon.biuvideo.utils.dataUtils.Tables;
 import com.leon.biuvideo.utils.resourcesParseUtils.UpInfoParseUtils;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
@@ -111,7 +112,8 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
 
     //初始化数据
     private void initValue() {
-        favoriteDatabaseUtils = new FavoriteDatabaseUtils(getApplicationContext());
+        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.FavoriteUp);
+        favoriteDatabaseUtils = (FavoriteDatabaseUtils) sqLiteHelperFactory.getInstance();
 
         //获取mid
         Intent intent = getIntent();
@@ -135,7 +137,7 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
         Glide.with(getApplicationContext()).load(upInfo.topPhoto).into(up_imageView_cover);
 
         //设置头像
-        Glide.with(getApplicationContext()).load(upInfo.face + WebpSizes.face).into(up_circleImageView_face);
+        Glide.with(getApplicationContext()).load(upInfo.face + ImagePixelSize.FACE.value).into(up_circleImageView_face);
 
         //设置昵称
         up_textView_name.setText(upInfo.name);
@@ -227,7 +229,9 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
                     up_imageView_favoriteIconState.setImageResource(R.drawable.no_favorite);
                     up_textView_favoriteStrState.setText("未关注");
 
-                    favoriteDatabaseUtils.removeFavorite(mid);
+                    boolean removeState = favoriteDatabaseUtils.removeFavorite(mid);
+
+                    Toast.makeText(this, removeState ? "已取消关注" : "取消关注失败", Toast.LENGTH_SHORT).show();
                 } else {
                     //添加至数据库中
                     up_imageView_favoriteIconState.setImageResource(R.drawable.favorite);
@@ -239,11 +243,10 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
                     favorite.faceUrl = upInfo.face;
                     favorite.name = upInfo.name;
 
-                    favoriteDatabaseUtils.addFavorite(favorite);
-                }
+                    boolean addState = favoriteDatabaseUtils.addFavorite(favorite);
 
-                //通知数据已更改
-                new FavoriteAdapter(favoriteDatabaseUtils.queryFavorites(), getApplicationContext()).notifyDataSetChanged();
+                    Toast.makeText(this, addState ? "已加入至关注列表" : "关注失败", Toast.LENGTH_SHORT).show();
+                }
 
                 break;
             case R.id.user_textView_video:
@@ -289,5 +292,11 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
                 Toast.makeText(getApplicationContext(), "权限申请失败", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        favoriteDatabaseUtils.close();
     }
 }

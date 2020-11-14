@@ -5,6 +5,36 @@
 
 ## 📘开发日志
 
+### 2020/11/14
+- 对获取接口响应数据的方式进行了更改
+
+  - 获取接口数据的方法
+
+    1. 对请求头(Header)有特殊要求的
+    
+		```java
+    public HttpUtils(String url, Headers headers, Map<String, String> params) {
+
+    	this.url = url;
+    	this.headers = headers;
+    	this.params = params;
+    }
+		```
+
+    2. 对请求头没有要求的
+		``` java
+    public HttpUtils(String url, Map<String, String> params) {
+    	this.url = url;
+    	this.params = params;
+    	this.headers = Headers.of(getHeaders());
+    }
+		```
+
+- 对连接SQLite的方式进行了更改
+  - 创建数据连接时必须通过创建`SQLiteHelperFactory`类,构造方法参数只用传入`Context`和对应的Tables,调用`getInstance()`方法来获取对象,**需要进行强制转换**
+  - 使用完数据库之后只需在对应的`Destroy`中调用其`close()`方法即可,**使用完数据库必须要调用该方法**
+- **各适配器(Adapter)的代码还未进行冗余清除**
+
 ### 2020/11/13
 - 以下两项**暂定**
   - 添加了Logo

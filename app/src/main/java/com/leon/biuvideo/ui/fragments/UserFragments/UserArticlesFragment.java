@@ -29,10 +29,9 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import java.util.List;
 
 public class UserArticlesFragment extends Fragment {
-    private long mid;
+    private final long mid;
     private int pageNum;
     private Context context;
-
 
     //总条目数
     private int count;

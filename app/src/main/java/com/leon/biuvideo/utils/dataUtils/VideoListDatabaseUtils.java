@@ -11,11 +11,15 @@ import com.leon.biuvideo.utils.SQLiteHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VideoListDatabaseUtils {
-    private final Context context;
+public class VideoListDatabaseUtils extends SQLiteHelper{
+    private final SQLiteHelper sqLiteHelper;
+    private final SQLiteDatabase sqLiteDatabase;
 
     public VideoListDatabaseUtils(Context context) {
-        this.context = context;
+        super(context, 1);
+
+        this.sqLiteHelper = new SQLiteHelper(context, 1);
+        sqLiteDatabase = sqLiteHelper.getReadableDatabase();
     }
 
     /**
@@ -24,10 +28,7 @@ public class VideoListDatabaseUtils {
      * @return  返回VideoPlayList集合
      */
     public List<VideoPlayList> queryFavoriteVideos() {
-        SQLiteHelper sqLiteHelper = new SQLiteHelper(context, 1);
-        SQLiteDatabase database = sqLiteHelper.getReadableDatabase();
-
-        Cursor cursor = database.query(Tables.VideoPlayList, null, "isDelete=?", new String[]{"1"}, null, null, null);
+        Cursor cursor = sqLiteDatabase.query(Tables.VideoPlayList.value, null, "isDelete=?", new String[]{"1"}, null, null, null);
 
         List<VideoPlayList> videoPlayLists = new ArrayList<>();
 
@@ -48,8 +49,6 @@ public class VideoListDatabaseUtils {
         }
 
         cursor.close();
-        database.close();
-        sqLiteHelper.close();
 
         return videoPlayLists;
     }
@@ -61,16 +60,11 @@ public class VideoListDatabaseUtils {
      * @return  是否存在，小于等于0不存在，大于0则存在
      */
     public boolean queryFavoriteVideo (String bvid) {
-        SQLiteHelper sqLiteHelper = new SQLiteHelper(context, 1);
-        SQLiteDatabase database = sqLiteHelper.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.query(Tables.VideoPlayList.value, null, "bvid=? and isDelete=?", new String[]{bvid, "1"}, null, null, null);
 
-        Cursor cursor = database.query(Tables.VideoPlayList, null, "bvid=? and isDelete=?", new String[]{bvid, "1"}, null, null, null);
         int count = cursor.getCount();
 
         cursor.close();
-        database.close();
-        sqLiteHelper.close();
-
         return count > 0;
     }
 
@@ -81,9 +75,6 @@ public class VideoListDatabaseUtils {
      * @return 是否添加成功
      */
     public boolean addFavoriteVideo (VideoPlayList videoPlayList) {
-        SQLiteHelper sqLiteHelper = new SQLiteHelper(context, 1);
-        SQLiteDatabase database = sqLiteHelper.getWritableDatabase();
-
         ContentValues contentValues = new ContentValues();
         contentValues.put("bvid", videoPlayList.bvid);
         contentValues.put("uname", videoPlayList.uname);
@@ -94,10 +85,7 @@ public class VideoListDatabaseUtils {
         contentValues.put("danmaku", videoPlayList.danmaku);
         contentValues.put("isDelete", 1);
 
-        long insert = database.insert(Tables.VideoPlayList, null, contentValues);
-
-        database.close();
-        sqLiteHelper.close();
+        long insert = sqLiteDatabase.insert(Tables.VideoPlayList.value, null, contentValues);
 
         return insert > 0;
     }
@@ -109,17 +97,23 @@ public class VideoListDatabaseUtils {
      * @return  移除状态
      */
     public boolean removeVideo(String bvid) {
-        SQLiteHelper sqLiteHelper = new SQLiteHelper(context, 1);
-        SQLiteDatabase database = sqLiteHelper.getWritableDatabase();
-
         ContentValues contentValues = new ContentValues();
         contentValues.put("isDelete", 0);
 
-        int update = database.update(Tables.VideoPlayList, contentValues, "bvid=?", new String[]{bvid});
-
-        database.close();
-        sqLiteHelper.close();
+        int update = sqLiteDatabase.update(Tables.VideoPlayList.value, contentValues, "bvid=?", new String[]{bvid});
 
         return update > 0;
+    }
+
+    /**
+     * ActivityDestroy时调用该方法
+     * 关闭数据库连接
+     */
+    @Override
+    public void close() {
+        if (sqLiteHelper != null) {
+            sqLiteDatabase.close();
+            sqLiteHelper.close();
+        }
     }
 }

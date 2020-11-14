@@ -23,13 +23,12 @@ public class MusicParseUtils {
      * @return  返回MusicInfo对象
      */
     public static MusicInfo parseMusic(long sid) {
-        Map<String, Object> values = new HashMap<>();
-        values.put("sid", sid);
+        Map<String, String> params = new HashMap<>();
+        params.put("sid", String.valueOf(sid));
 
-        String response = HttpUtils.GETByParam(Paths.musicInfo, values);
+        String response = new HttpUtils(Paths.musicInfo, params).getData();
 
         JSONObject jsonObject = JSON.parseObject(response);
-
         JSONObject dataObject = jsonObject.getJSONObject("data");
 
         if (dataObject != null) {

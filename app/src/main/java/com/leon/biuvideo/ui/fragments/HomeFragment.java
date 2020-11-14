@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.*;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,9 +37,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
 
     //spinner索引
     private int spinnerIndex;
-
-    //闹着玩儿专用
-    int nullCount = 0;
 
     @Nullable
     @Override
@@ -142,6 +142,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         switch (view.getId()) {
             case R.id.home_imageView_hero:
                 //抖一抖！！！
+                Animation animation = AnimationUtils.loadAnimation(context, R.anim.hero_anim);
+                animation.setDuration(1000);
+                animation.setRepeatMode(Animation.INFINITE);
+                hero_imageView.startAnimation(animation);
 
                 break;
             case R.id.home_button_confirm:
@@ -149,10 +153,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                 switch (spinnerIndex) {
                     //获取数据，进入VideoActivity
                     case 0:
-                        String value_bvid = main_editText_value.getText().toString();
+                        String value_bvid = main_editText_value.getText().toString().trim();
 
                         if (value_bvid.length() != 0) {
-
                             String bvid = IDUtils.getBvid(value_bvid);
 
                             if (bvid != null) {
@@ -162,42 +165,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                             } else {
                                 Toast.makeText(context, "ERROR~~~\n可通过右上角中的帮助来了解正确的获取方式", Toast.LENGTH_SHORT).show();
                             }
-                        } else {
-
-                            switch (nullCount) {
-                                case 0:
-                                    Toast.makeText(context, "咋滴?搁这儿闹着玩儿呢?", Toast.LENGTH_SHORT).show();
-                                    break;
-                                case 1:
-                                case 2:
-                                case 3:
-                                case 4:
-                                case 5:
-                                    Toast.makeText(context, nullCount + "次了啊!", Toast.LENGTH_SHORT).show();
-                                    break;
-                                default:
-                                    Toast.makeText(context, "嫩可长点儿心吧~~~", Toast.LENGTH_SHORT).show();
-
-                                    for (int i = 3; i > 0; i--) {
-                                        try {
-                                            Thread.sleep(1000);
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-
-                                    int pid = android.os.Process.myPid();
-                                    android.os.Process.killProcess(pid);
-                            }
-
-                            nullCount++;
                         }
                         break;
                     //获取数据，进入UpMasterActivity
                     case 1:
 
                         //获取mid
-                        String value_mid = main_editText_value.getText().toString();
+                        String value_mid = main_editText_value.getText().toString().trim();
 
                         if (value_mid.length() != 0) {
 

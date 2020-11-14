@@ -1,7 +1,13 @@
 package com.leon.biuvideo.utils.dataUtils;
 
-public class Tables {
-    public static final String FavoriteUp = "favorite_up";
-    public static final String MusicPlayList = "musicPlayList";
-    public static final String VideoPlayList = "videoPlayList";
+public enum  Tables {
+    FavoriteUp("favorite_up"),
+    MusicPlayList("musicPlayList"),
+    VideoPlayList("videoPlayList");
+
+    String value;
+
+    Tables(String value) {
+        this.value = value;
+    }
 }

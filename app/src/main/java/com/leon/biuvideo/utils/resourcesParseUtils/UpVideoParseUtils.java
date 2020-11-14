@@ -29,15 +29,15 @@ public class UpVideoParseUtils {
      * @return  返回UpVideo类型集合
      */
     public static List<UpVideo> parseVideo(long mid, int pageNum) {
-        Map<String, Object> values = new HashMap<>();
-        values.put("mid", mid);
-        values.put("ps", 30);
-        values.put("pn", pageNum);
-        values.put("order", "pubdate");
-        values.put("tid", 0);
-        values.put("jsonp", "jsonp");
+        Map<String, String> params = new HashMap<>();
+        params.put("mid", String.valueOf(mid));
+        params.put("ps", String.valueOf(30));
+        params.put("pn", String.valueOf(pageNum));
+        params.put("order", "pubdate");
+        params.put("tid", "0");
+        params.put("jsonp", "jsonp");
 
-        String response = HttpUtils.GETByParam(Paths.videos, values);
+        String response = new HttpUtils(Paths.videos, params).getData();
 
         JSONObject jsonObject = JSON.parseObject(response);
 

@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
-import com.leon.biuvideo.utils.WebpSizes;
+import com.leon.biuvideo.utils.ImagePixelSize;
 
 /**
  * videoActivity播放列表控件的适配器
@@ -39,7 +39,7 @@ public class AnthologyAdapter extends RecyclerView.Adapter<AnthologyAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Glide.with(context).load(viewPage.coverUrl + WebpSizes.cover).into(holder.single_video_item_imageView_cover);
+        Glide.with(context).load(viewPage.coverUrl + ImagePixelSize.COVER.value).into(holder.single_video_item_imageView_cover);
 
         String singleVideoIndexStr = "P" + (position + 1);
         holder.single_video_item_textView_index.setText(singleVideoIndexStr);

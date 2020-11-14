@@ -30,11 +30,13 @@ import com.leon.biuvideo.ui.dialogs.SingleVideoQualityDialog;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.GeneralNotification;
+import com.leon.biuvideo.utils.ImagePixelSize;
 import com.leon.biuvideo.utils.MediaUtils;
 import com.leon.biuvideo.utils.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.dataUtils.SQLiteHelperFactory;
+import com.leon.biuvideo.utils.dataUtils.Tables;
 import com.leon.biuvideo.utils.dataUtils.VideoListDatabaseUtils;
-import com.leon.biuvideo.utils.WebpSizes;
 import com.leon.biuvideo.utils.mediaParseUtils.MediaParseUtils;
 import com.leon.biuvideo.utils.mediaParseUtils.ViewParseUtils;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
@@ -154,12 +156,13 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         play = MediaParseUtils.parseMedia(viewPage.bvid, viewPage.aid, viewPage.singleVideoInfoList.get(0).cid);
 
         //设置显示头像
-        Glide.with(getApplicationContext()).load(viewPage.upInfo.faceUrl + WebpSizes.face).into(video_circleImageView_face);
+        Glide.with(getApplicationContext()).load(viewPage.upInfo.faceUrl + ImagePixelSize.FACE.value).into(video_circleImageView_face);
 
         //设置up主昵称
         video_textView_name.setText(viewPage.upInfo.name);
 
-        videoListDatabaseUtils = new VideoListDatabaseUtils(getApplicationContext());
+        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.VideoPlayList);
+        videoListDatabaseUtils = (VideoListDatabaseUtils) sqLiteHelperFactory.getInstance();
 
         //查询是否已添加至播放列表
         videoState = videoListDatabaseUtils.queryFavoriteVideo(viewPage.bvid);
@@ -447,6 +450,8 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         webView.clearFormData();
 
         webView.destroy();
+
+        videoListDatabaseUtils.close();
     }
 
     /**

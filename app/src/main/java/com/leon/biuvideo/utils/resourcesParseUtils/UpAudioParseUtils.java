@@ -28,18 +28,18 @@ public class UpAudioParseUtils {
      * @return  返回UpAudio类型集合
      */
     public static List<UpAudio> parseAudio(long mid, int pageNum) {
-        Map<String, Object> value = new HashMap<>();
-        value.put("uid", mid);
-        value.put("pn", pageNum);
-        value.put("ps", 30);
-        value.put("order", 1);
-        value.put("jsonp", "jsonp");
+        Map<String, String> params = new HashMap<>();
+        params.put("uid", String.valueOf(mid));
+        params.put("pn", String.valueOf(pageNum));
+        params.put("ps", String.valueOf(30));
+        params.put("order", "1");
+        params.put("jsonp", "jsonp");
 
-        String response = HttpUtils.GETByParam(Paths.music, value);
+        String response = new HttpUtils(Paths.music, params).getData();
 
         JSONObject jsonObject = JSON.parseObject(response);
-
         JSONObject data = jsonObject.getJSONObject("data");
+
         if (data != null) {
             //获取数据总数
             count = getAudioCount(data);

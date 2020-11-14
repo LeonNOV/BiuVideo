@@ -19,8 +19,7 @@ public class ValueFormat {
             int tenThousand = (int) number / 10000;
 
             //组合为万位数
-            String result = tenThousand + "." + thousand + "万";
-            return result;
+            return tenThousand + "." + thousand + "万";
         }
     }
 

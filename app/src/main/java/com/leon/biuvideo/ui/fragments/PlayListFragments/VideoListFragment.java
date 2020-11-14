@@ -19,6 +19,8 @@ import com.leon.biuvideo.adapters.PlayListAdapter.VideoListAdapter;
 import com.leon.biuvideo.beans.upMasterBean.VideoPlayList;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.dataUtils.SQLiteHelperFactory;
+import com.leon.biuvideo.utils.dataUtils.Tables;
 import com.leon.biuvideo.utils.dataUtils.VideoListDatabaseUtils;
 
 import java.util.List;
@@ -55,7 +57,8 @@ public class VideoListFragment extends Fragment {
         context = getContext();
         view = getView();
 
-        videoListDatabaseUtils = new VideoListDatabaseUtils(context);
+        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.VideoPlayList);
+        videoListDatabaseUtils = (VideoListDatabaseUtils) sqLiteHelperFactory.getInstance();
 
         recyclerView = view.findViewById(R.id.recyclerView);
         textView_noDataStr = view.findViewById(R.id.textView_noDataStr);
@@ -97,5 +100,11 @@ public class VideoListFragment extends Fragment {
             textView_noDataStr.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        videoListDatabaseUtils.close();
     }
 }

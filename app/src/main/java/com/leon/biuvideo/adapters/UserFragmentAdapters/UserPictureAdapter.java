@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
+import com.leon.biuvideo.utils.ImagePixelSize;
 import com.leon.biuvideo.utils.ValueFormat;
-import com.leon.biuvideo.utils.WebpSizes;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -45,7 +45,7 @@ public class UserPictureAdapter extends RecyclerView.Adapter<UserPictureAdapter.
         UpPicture upPicture = upPictures.get(position);
 
         //设置相簿封面，即pics中的第一个
-        Glide.with(context).load(upPicture.pictures.get(0) + WebpSizes.cover).into(holder.up_picture_imageView_cover);
+        Glide.with(context).load(upPicture.pictures.get(0) + ImagePixelSize.COVER.value).into(holder.up_picture_imageView_cover);
 
         //设置相簿count
         //总数大于2则进行显示

@@ -21,6 +21,8 @@ import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.ui.activitys.UpMasterActivity;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.dataUtils.FavoriteDatabaseUtils;
+import com.leon.biuvideo.utils.dataUtils.SQLiteHelperFactory;
+import com.leon.biuvideo.utils.dataUtils.Tables;
 
 import java.util.List;
 
@@ -57,7 +59,9 @@ public class FavoriteFragment extends Fragment {
     private void initView() {
         context = getActivity();
         view = getView();
-        favoriteDatabaseUtils = new FavoriteDatabaseUtils(context);
+
+        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.FavoriteUp);
+        favoriteDatabaseUtils = (FavoriteDatabaseUtils) sqLiteHelperFactory.getInstance();
 
         favorite_recyclerView = view.findViewById(R.id.recyclerView);
         favorite_textView_noDataStr = view.findViewById(R.id.textView_noDataStr);
@@ -113,5 +117,11 @@ public class FavoriteFragment extends Fragment {
             favorite_textView_noDataStr.setVisibility(View.VISIBLE);
             favorite_recyclerView.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        favoriteDatabaseUtils.close();
     }
 }

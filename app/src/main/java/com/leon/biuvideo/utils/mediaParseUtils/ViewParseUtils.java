@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.Headers;
+
 /**
  * view接口解析工具
  */
@@ -31,10 +33,11 @@ public class ViewParseUtils {
      */
     public static ViewPage parseView(String bvid) {
         try {
-            Map<String, Object> values = new HashMap<>();
-            values.put("bvid", bvid);
+            Map<String, String> params = new HashMap<>();
+            params.put("bvid", bvid);
 
-            String response = HttpUtils.GETByParam(Paths.view, values);
+            HttpUtils httpUtils = new HttpUtils(Paths.view, params);
+            String response = httpUtils.getData();
 
             JSONObject jsonObject = JSON.parseObject(response);
             JSONObject dataObject = jsonObject.getJSONObject("data");

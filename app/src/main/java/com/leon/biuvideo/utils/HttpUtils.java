@@ -1,41 +1,65 @@
 package com.leon.biuvideo.utils;
 
-import android.view.textclassifier.ConversationActions;
-
-import org.apache.http.Header;
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpHead;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
-import org.jetbrains.annotations.NotNull;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.Headers;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
-import okio.BufferedSource;
 
 public class HttpUtils {
+    private String url;
+    private Headers headers;
+    private Map<String, String> params;
+
+    public HttpUtils(String url, Map<String, String> params) {
+        this.url = url;
+        this.params = params;
+        this.headers = Headers.of(getHeaders());
+    }
+
+    public HttpUtils(String url, Headers headers, Map<String, String> params) {
+        this.url = url;
+        this.headers = headers;
+        this.params = params;
+    }
+
+    /**
+     * 短链解析
+     *
+     * @return  返回短链解析结果
+     */
+    public String parseShortUrl() {
+        try {
+            return getInstance().request().url().url().toURI().getPath();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * 向接口请求数据/获取网页源码
+
+     * @return  返回响应数据
+     */
+    public String getData() {
+        try {
+            return getInstance().body().string();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     /**
      * get请求获取数据
      *
@@ -43,7 +67,7 @@ public class HttpUtils {
      * @param params    请求参数
      * @return  返回响应体
      */
-    public static String GETByParam(String path, Map<String, Object> params) {
+    /*public static String GETByParam(String path, Map<String, Object> params) {
         try {
             StringBuilder builder = new StringBuilder(path + "?");
 
@@ -90,11 +114,54 @@ public class HttpUtils {
         }
 
         return null;
+    }*/
+
+    /**
+     * 获取实例对象
+     *
+     * @return  返回Response对象
+     */
+    private Response getInstance () {
+        Request request;
+        OkHttpClient okHttpClient = new OkHttpClient();
+
+        Request.Builder requestBuilder = new Request.Builder();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
+
+        //添加参数
+        if (params != null) {
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                urlBuilder.addQueryParameter(entry.getKey(), entry.getValue());
+            }
+        }
+
+        try {
+
+            if (headers == null) {
+                requestBuilder.headers(Headers.of(getHeaders()));
+            } else {
+                requestBuilder.headers(headers);
+            }
+
+            request = requestBuilder.url(urlBuilder.build()).get().build();
+
+            Call call = okHttpClient.newCall(request);
+            Response response = call.execute();
+
+            //判断是否响应成功
+            if (response.code() == HttpURLConnection.HTTP_OK) {
+                return response;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     /**
      * 设置头信息
-     * 属于冗余，待清理
      *
      * @return  返回头信息
      */
@@ -105,103 +172,5 @@ public class HttpUtils {
         headers.put("Referer", "https://www.bilibili.com/");
 
         return headers;
-    }
-
-    /**
-     * 短链解析
-     *
-     * @param shortUrl  短链
-     * @return  返回url后面的path
-     */
-    public static String parseShortUrl(String shortUrl) {
-        CloseableHttpClient client = HttpClientBuilder.create().disableRedirectHandling().build();
-
-        HttpHead request = null;
-        try {
-            request = new HttpHead(shortUrl);
-            HttpResponse httpResponse = client.execute(request);
-
-            int statusCode = httpResponse.getStatusLine().getStatusCode();
-            if (statusCode != 301 && statusCode != 302) {
-                return shortUrl;
-            }
-
-            //获取响应头中的location的值
-            Header[] headers = httpResponse.getHeaders(HttpHeaders.LOCATION);
-            String location = headers[0].getValue();
-
-            //使用uri对象来获取path
-            URI uri = URI.create(location);
-
-            return uri.getPath();
-        } catch (IllegalArgumentException | IOException uriEx) {
-            return null;
-        } finally {
-            if (request != null) {
-                request.releaseConnection();
-            }
-        }
-    }
-
-    /**
-     * 网页源代码获取
-     *
-     * @param path  链接
-     * @return  返回HTML源码
-     */
-    private static String result;
-    public static String GetHtmlSrc(String path) {
-        /*CloseableHttpClient httpClient = HttpClientBuilder.create().disableRedirectHandling().build();
-
-        HttpGet httpGet = new HttpGet(path);
-
-        //设置请求头
-        for (Map.Entry<String, String> entry : getHeaders().entrySet()) {
-            httpGet.setHeader(entry.getKey(), entry.getValue());
-        }
-
-        CloseableHttpResponse response;
-        try {
-            response = httpClient.execute(httpGet);
-
-            if (response.getStatusLine().getStatusCode() == 200) {
-                if (response.getEntity() != null) {
-                    String html = EntityUtils.toString(response.getEntity());
-
-                    return html;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
-        OkHttpClient okHttpClient = new OkHttpClient();
-
-        Request.Builder builder = new Request.Builder();
-        builder.url(path);
-        builder.get();
-
-        //设置请求头
-        Headers headers = Headers.of(getHeaders());
-        builder.headers(headers);
-
-        Request request = builder.build();
-        Call call = okHttpClient.newCall(request);
-
-        try {
-            Response response = response = call.execute();
-
-            if (response.code() == 200) {
-                result = response.body().string();
-            }
-
-            response.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-
-        return result;
     }
 }

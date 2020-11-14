@@ -42,6 +42,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import okhttp3.Headers;
+
 public class ArticleActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView article_textView_title;
     private ImageView article_imageView_back, article_imageView_more;
@@ -143,7 +145,9 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
      * @return 返回文章HTML源码
      */
     public String parseHTMLonPhone(String path) {
-        String html = HttpUtils.GetHtmlSrc(path);
+        HttpUtils httpUtils = new HttpUtils(path, Headers.of(HttpUtils.getHeaders()), null);
+
+        String html = httpUtils.getData();
         Document document = Jsoup.parse(html);
 
         //获取头部份
@@ -317,5 +321,10 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
 
         popupWindow.showAsDropDown(view, -10, 0);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

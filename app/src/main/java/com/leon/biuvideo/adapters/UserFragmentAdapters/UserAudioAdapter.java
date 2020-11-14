@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.upMasterBean.UpAudio;
+import com.leon.biuvideo.utils.ImagePixelSize;
 import com.leon.biuvideo.utils.ValueFormat;
-import com.leon.biuvideo.utils.WebpSizes;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -45,7 +45,7 @@ public class UserAudioAdapter extends RecyclerView.Adapter<UserAudioAdapter.View
         UpAudio upAudio = upAudios.get(position);
 
         //设置封面
-        Glide.with(context).load(upAudio.cover + WebpSizes.cover).into(holder.up_media_imageView_cover);
+        Glide.with(context).load(upAudio.cover + ImagePixelSize.COVER.value).into(holder.up_media_imageView_cover);
 
         //设置播放时长
         holder.up_media_textView_mediaLength.setText(ValueFormat.lengthGenerate(upAudio.duration));

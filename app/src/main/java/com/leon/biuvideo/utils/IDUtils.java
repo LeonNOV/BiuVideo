@@ -1,8 +1,12 @@
 package com.leon.biuvideo.utils;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import okhttp3.Headers;
+import okhttp3.Response;
 
 public class IDUtils {
     private static final int[] ints = {11, 10, 3, 8, 4, 6};
@@ -63,23 +67,22 @@ public class IDUtils {
      * @return  返回mid
      */
     public static long getMid(String value) {
+        Pattern pattern;
+        Matcher matcher;
+
         //判断原本的内容是否为mid
-        //判断原本是否就是bvid
-        String regEx = "[\\d]{8}";
-        Pattern pattern = Pattern.compile(regEx);
-        Matcher matcher = pattern.matcher(value);
+        String regEx = "[\\d]{7}";
+        pattern = Pattern.compile(regEx);
+        matcher = pattern.matcher(value);
 
         if (matcher.matches()) {
             return Long.parseLong(value);
         }
 
-        //去除参数
-        if (value.contains("?")) {
-            value = value.split("\\?")[0];
-        }
-
-        //判断是否为url
+        //判断是否为url,提前去除参数部分
+        value = value.split("\\?")[0];
         if (verifyUrl(value)) {
+            //去除URL参数部分
             String mid = parseUrl(value);
 
             return Long.parseLong(mid);
@@ -118,7 +121,7 @@ public class IDUtils {
      */
     private static boolean verifyUrl(String url) {
         // URL验证规则
-        String regEx = "[a-zA-z]+://[^\\s]*";
+        String regEx = "^((https|http)?://)[^\\s]+";
         Pattern pattern = Pattern.compile(regEx);
         Matcher matcher = pattern.matcher(url);
 
@@ -133,11 +136,11 @@ public class IDUtils {
      */
     private static String parseUrl(String url) {
         String path;
-        boolean isContains = url.contains("https://b23.tv/");
 
         //判断是否为短链
-        if (isContains) {
-            path = HttpUtils.parseShortUrl(url);
+        if (url.contains("https://b23.tv/")) {
+            HttpUtils httpUtils = new HttpUtils(url, Headers.of("Host", "b23.tv"), null);
+            path = httpUtils.parseShortUrl();
         } else {
             //否则按正常url来解析
             URI uri = URI.create(url);
@@ -146,7 +149,11 @@ public class IDUtils {
 
             //判断是否为用户host
             if (host.equals("space.bilibili.com")) {
-                return uri.getPath().substring(1);
+                //移除数字以外的其他字符
+                String regEx = "[^0-9]";
+                Pattern pattern = Pattern.compile(regEx);
+                Matcher matcher = pattern.matcher(uri.getPath());
+                return matcher.replaceAll("").trim();
             } else {
                 //判断host是否为b站
                 if (!host.equals("www.bilibili.com")) {

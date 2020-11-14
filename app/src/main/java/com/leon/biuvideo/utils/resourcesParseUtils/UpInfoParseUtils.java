@@ -22,11 +22,11 @@ public class UpInfoParseUtils {
      * @return  返回UpInfo对象
      */
     public static UpInfo parseUpInfo(long mid) {
-        Map<String, Object> values = new HashMap<>();
-        values.put("mid", mid);
-        values.put("jsonp", "jsonp");
+        Map<String, String> params = new HashMap<>();
+        params.put("mid", String.valueOf(mid));
+        params.put("jsonp", "jsonp");
 
-        String response = HttpUtils.GETByParam(Paths.info, values);
+        String response = new HttpUtils(Paths.info, params).getData();
 
         JSONObject jsonObject = JSON.parseObject(response);
 

@@ -25,10 +25,10 @@ import com.leon.biuvideo.adapters.PictureListAdapter;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
 import com.leon.biuvideo.layoutManager.PictureGridLayoutManager;
 import com.leon.biuvideo.ui.views.PictureViewer;
+import com.leon.biuvideo.utils.ImagePixelSize;
 import com.leon.biuvideo.utils.MediaUtils;
 import com.leon.biuvideo.utils.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
-import com.leon.biuvideo.utils.WebpSizes;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -74,7 +74,6 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initView() {
-
         picture_back = findViewById(R.id.picture_back);
         picture_back.setOnClickListener(this);
 
@@ -113,21 +112,21 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
         picture_textView_desc.setText(picture.description);
 
         int spanCount;
-        WebpSizes.PicturePixelSize picturePixelSize;
+        ImagePixelSize imagePixelSize;
 
         //判断要显示的列数
         if (picture.pictures.size() % 3 == 0) {
-            picturePixelSize = WebpSizes.PicturePixelSize.MORE;
+            imagePixelSize = ImagePixelSize.MORE;
             spanCount = 3;
         } else if (picture.pictures.size() % 2 == 0) {
-            picturePixelSize = WebpSizes.PicturePixelSize.DOUBLE;
+            imagePixelSize = ImagePixelSize.DOUBLE;
             spanCount = 2;
         } else {
-            picturePixelSize = WebpSizes.PicturePixelSize.SINGLE;
+            imagePixelSize = ImagePixelSize.SINGLE;
             spanCount = 1;
         }
 
-        PictureListAdapter pictureListAdapter = new PictureListAdapter(getApplicationContext(), picture.pictures, picturePixelSize.value);
+        PictureListAdapter pictureListAdapter = new PictureListAdapter(getApplicationContext(), picture.pictures, imagePixelSize.value);
 
         pictureListAdapter.setOnPictureItemClickListener(new PictureListAdapter.OnPictureItemClickListener() {
             @Override

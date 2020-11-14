@@ -21,6 +21,8 @@ import com.leon.biuvideo.ui.activitys.UpSongActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.dataUtils.MusicListDatabaseUtils;
+import com.leon.biuvideo.utils.dataUtils.SQLiteHelperFactory;
+import com.leon.biuvideo.utils.dataUtils.Tables;
 
 import java.util.List;
 
@@ -55,7 +57,8 @@ public class MusicListFragment extends Fragment {
         context = getContext();
         view = getView();
 
-        musicListDatabaseUtils = new MusicListDatabaseUtils(context);
+        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.MusicPlayList);
+        musicListDatabaseUtils = (MusicListDatabaseUtils) sqLiteHelperFactory.getInstance();
 
         recyclerView = view.findViewById(R.id.recyclerView);
         textView_noDataStr = view.findViewById(R.id.textView_noDataStr);
@@ -106,5 +109,11 @@ public class MusicListFragment extends Fragment {
             textView_noDataStr.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        musicListDatabaseUtils.close();
     }
 }

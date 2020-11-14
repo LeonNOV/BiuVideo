@@ -17,8 +17,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.utils.ImagePixelSize;
 import com.leon.biuvideo.utils.MediaUtils;
-import com.leon.biuvideo.utils.WebpSizes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -147,7 +147,7 @@ public class PictureViewer extends PopupWindow implements View.OnClickListener, 
         @Override
         public Object instantiateItem(@NonNull ViewGroup container, int position) {
             container.addView(imageViews.get(position));
-            Glide.with(context).load(pictures.get(position) + WebpSizes.PicturePixelSize.VIEWER.value).into(imageViews.get(position));
+            Glide.with(context).load(pictures.get(position) + ImagePixelSize.VIEWER.value).into(imageViews.get(position));
 
             return imageViews.get(position);
         }

@@ -1,0 +1,45 @@
+package com.leon.biuvideo.utils.dataUtils;
+
+import android.content.Context;
+
+import com.leon.biuvideo.utils.SQLiteHelper;
+
+/**
+ * 创建数据库连接时使用该类创建
+ */
+public class SQLiteHelperFactory {
+    private final Context context;
+    private final Tables table;
+
+    public SQLiteHelperFactory(Context context, Tables table) {
+        this.context = context;
+        this.table = table;
+    }
+
+    /**
+     * 根据table获取对应的对象
+     *
+     * @return  返回对应数据库所使用的工具类
+     */
+    public SQLiteHelper getInstance() {
+
+        SQLiteHelper sqLiteHelper;
+
+        switch (table) {
+            case FavoriteUp:
+                sqLiteHelper = new FavoriteDatabaseUtils(context);
+                break;
+            case VideoPlayList:
+                sqLiteHelper = new VideoListDatabaseUtils(context);
+                break;
+            case MusicPlayList:
+                sqLiteHelper = new MusicListDatabaseUtils(context);
+                break;
+            default:
+                sqLiteHelper = new SQLiteHelper(context, 1);
+                break;
+        }
+
+        return sqLiteHelper;
+    }
+}

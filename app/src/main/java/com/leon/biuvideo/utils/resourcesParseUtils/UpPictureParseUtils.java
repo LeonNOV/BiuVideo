@@ -27,13 +27,13 @@ public class UpPictureParseUtils {
      * @return  返回UpPicture类型集合
      */
     public static List<UpPicture> parsePicture(long mid, int pageNum) {
-        Map<String, Object> values = new HashMap<>();
-        values.put("uid", mid);
-        values.put("page_num", pageNum);
-        values.put("page_size", 30);
-        values.put("biz", "all");
+        Map<String, String> params = new HashMap<>();
+        params.put("uid", String.valueOf(mid));
+        params.put("page_num", String.valueOf(pageNum));
+        params.put("page_size", String.valueOf(30));
+        params.put("biz", "all");
 
-        String response = HttpUtils.GETByParam(Paths.picture, values);
+        String response = new HttpUtils(Paths.picture, params).getData();
 
         JSONObject jsonObject = JSON.parseObject(response);
 
@@ -102,10 +102,10 @@ public class UpPictureParseUtils {
      * @return  返回相簿数量
      */
     public static int getPictureCount(long mid) {
-        Map<String, Object> values = new HashMap<>();
-        values.put("mid", mid);
+        Map<String, String> values = new HashMap<>();
+        values.put("mid", String.valueOf(mid));
 
-        String response = HttpUtils.GETByParam(Paths.pictureCount, values);
+        String response = new HttpUtils(Paths.pictureCount, values).getData();
 
         JSONObject jsonObject = JSON.parseObject(response);
 

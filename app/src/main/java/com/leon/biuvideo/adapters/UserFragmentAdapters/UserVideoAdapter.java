@@ -9,14 +9,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.upMasterBean.UpVideo;
+import com.leon.biuvideo.utils.ImagePixelSize;
 import com.leon.biuvideo.utils.ValueFormat;
-import com.leon.biuvideo.utils.WebpSizes;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -51,7 +50,7 @@ public class UserVideoAdapter extends RecyclerView.Adapter {
         UpVideo upVideo = upVideos.get(position);
 
         //设置封面
-        Glide.with(context).load("http:" + upVideo.cover + WebpSizes.cover).into(innerHolder.up_media_imageView_cover);
+        Glide.with(context).load("http:" + upVideo.cover + ImagePixelSize.COVER.value).into(innerHolder.up_media_imageView_cover);
 
         //判断是否是和其他人进行合作
         //1为合作

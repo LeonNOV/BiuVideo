@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.upMasterBean.VideoPlayList;
+import com.leon.biuvideo.utils.ImagePixelSize;
 import com.leon.biuvideo.utils.ValueFormat;
-import com.leon.biuvideo.utils.WebpSizes;
 
 import java.util.List;
 
@@ -52,7 +52,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.View
             }
         });
 
-        Glide.with(context).load(videoPlayList.coverUrl + WebpSizes.cover).into(holder.play_list_video_imageView_cover);
+        Glide.with(context).load(videoPlayList.coverUrl + ImagePixelSize.COVER.value).into(holder.play_list_video_imageView_cover);
         holder.play_list_video_textView_length.setText(ValueFormat.lengthGenerate(videoPlayList.length));
         holder.play_list_video_textView_desc.setText(videoPlayList.title);
         holder.play_list_video_imageView_userName.setText(videoPlayList.uname);

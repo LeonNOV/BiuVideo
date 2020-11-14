@@ -4,21 +4,22 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.SQLiteHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MusicListDatabaseUtils {
-    private final Context context;
+public class MusicListDatabaseUtils extends SQLiteHelper {
+    private final SQLiteHelper sqLiteHelper;
+    private final SQLiteDatabase sqLiteDatabase;
 
     public MusicListDatabaseUtils(Context context) {
-        this.context = context;
+        super(context, 1);
+
+        this.sqLiteHelper = new SQLiteHelper(context, 1);
+        sqLiteDatabase = sqLiteHelper.getReadableDatabase();
     }
 
     /**
@@ -27,10 +28,7 @@ public class MusicListDatabaseUtils {
      * @return 返回MusicPlayList集合
      */
     public List<MusicPlayList> queryPlayList() {
-        SQLiteHelper sqLiteHelper = new SQLiteHelper(context, 1);
-        SQLiteDatabase database = sqLiteHelper.getReadableDatabase();
-
-        Cursor cursor = database.query("musicPlayList", null, "isDelete=?", new String[]{"1"}, null, null, null);
+        Cursor cursor = sqLiteDatabase.query(Tables.MusicPlayList.value, null, "isDelete=?", new String[]{"1"}, null, null, null);
 
         List<MusicPlayList> musicPlayLists = new ArrayList<>();
         while (cursor.moveToNext()) {
@@ -46,8 +44,6 @@ public class MusicListDatabaseUtils {
         }
 
         cursor.close();
-        database.close();
-        sqLiteHelper.close();
 
         return musicPlayLists;
     }
@@ -57,10 +53,7 @@ public class MusicListDatabaseUtils {
      *
      * @param musicPlayList musicPlayList对象
      */
-    public void addPlayList(MusicPlayList musicPlayList) {
-        SQLiteHelper sqLiteHelper = new SQLiteHelper(context, 1);
-        SQLiteDatabase database = sqLiteHelper.getWritableDatabase();
-
+    public boolean addPlayList(MusicPlayList musicPlayList) {
         ContentValues values = new ContentValues();
         values.put("sid", musicPlayList.sid);
         values.put("bvid", musicPlayList.bvid);
@@ -69,11 +62,9 @@ public class MusicListDatabaseUtils {
         values.put("isHaveVideo", musicPlayList.isHaveVideo ? 1 : 0);
         values.put("isDelete", 1);
 
-        long insert = database.insert("musicPlayList", null, values);
+        long insert = sqLiteDatabase.insert(Tables.MusicPlayList.value, null, values);
 
-        Toast.makeText(context, insert > 0 ? "已加入到播放列表" : "添加失败~~~", Toast.LENGTH_SHORT).show();
-
-        database.close();
+        return insert > 0;
     }
 
     /**
@@ -82,21 +73,12 @@ public class MusicListDatabaseUtils {
      * @param sid sid
      * @return 返回查询结果；true：存在、false：不存在
      */
-    //43199
     public boolean queryMusic(long sid) {
-        SQLiteHelper sqLiteHelper = new SQLiteHelper(context, 1);
-        SQLiteDatabase database = sqLiteHelper.getReadableDatabase();
-
-        Cursor cursor = database.query("musicPlayList", null, "sid=? and isDelete=?", new String[]{String.valueOf(sid), String.valueOf(1)}, null, null, null);
+        Cursor cursor = sqLiteDatabase.query(Tables.MusicPlayList.value, null, "sid=? and isDelete=?", new String[]{String.valueOf(sid), String.valueOf(1)}, null, null, null);
 
         int count = cursor.getCount();
 
-        Log.d(Fuck.blue, "queryMusic: " + count);
-
         cursor.close();
-        database.close();
-        sqLiteHelper.close();
-
         return count > 0;
     }
 
@@ -105,18 +87,24 @@ public class MusicListDatabaseUtils {
      *
      * @param sid sid
      */
-    public void removeMusicItem(long sid) {
-        SQLiteHelper sqLiteHelper = new SQLiteHelper(context, 1);
-        SQLiteDatabase database = sqLiteHelper.getReadableDatabase();
-
+    public boolean removeMusicItem(long sid) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("isDelete", 0);
 
-        int state = database.update("musicPlayList", contentValues, "sid=?", new String[]{String.valueOf(sid)});
+        int state = sqLiteDatabase.update(Tables.MusicPlayList.value, contentValues, "sid=?", new String[]{String.valueOf(sid)});
 
-        Toast.makeText(context, state > 0 ? "已从播放列表中移除" : "移除失败~~~", Toast.LENGTH_SHORT).show();
+        return state > 0;
+    }
 
-        database.close();
-        sqLiteHelper.close();
+    /**
+     * ActivityDestroy时调用该方法
+     * 关闭数据库连接
+     */
+    @Override
+    public void close() {
+        if (sqLiteHelper != null) {
+            sqLiteDatabase.close();
+            sqLiteHelper.close();
+        }
     }
 }

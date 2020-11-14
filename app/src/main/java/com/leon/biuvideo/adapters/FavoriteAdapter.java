@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.Favorite;
-import com.leon.biuvideo.utils.WebpSizes;
+import com.leon.biuvideo.utils.ImagePixelSize;
 
 import java.util.List;
 
@@ -43,7 +43,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         Favorite favorite = favorites.get(position);
 
         //设置头像
-        Glide.with(context).load(favorite.faceUrl + WebpSizes.face).into(holder.favorite_circleImageView_face);
+        Glide.with(context).load(favorite.faceUrl + ImagePixelSize.FACE.value).into(holder.favorite_circleImageView_face);
 
         //设置昵称
         holder.favorite_textView_name.setText(favorite.name);

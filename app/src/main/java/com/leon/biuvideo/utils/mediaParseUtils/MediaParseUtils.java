@@ -15,79 +15,73 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.Headers;
+
 public class MediaParseUtils {
     private static final String TAG = "LeonLogCat-red";
 
-    /**
-     *
-     *
-     * @param response  响应体
-     * @return  返回解析结果
-     */
     /**
      * 解析playUrl接口
      *
      * @param bvid  bvid
      * @param aid   aid
      * @param cid   cid
-     * @param pageNum   页码
      * @return  返回选集视频信息
      */
     public static Play parseMedia(String bvid, long aid, long cid) {
         try {
 
-            Map<String, Object> param = new HashMap<>();
-            param.put("avid", aid);
-            param.put("bvid", bvid);
-            param.put("cid", cid);
-            param.put("qn", 0);
-            param.put("otype", "json");
-            param.put("fourk", 1);
-            param.put("fnver", 0);
-            param.put("fnval", 80);
+            Map<String, String> params = new HashMap<>();
+            params.put("avid", String.valueOf(aid));
+            params.put("bvid", String.valueOf(bvid));
+            params.put("cid", String.valueOf(cid));
+            params.put("qn", "0");
+            params.put("otype", "json");
+            params.put("fourk", "1");
+            params.put("fnver", "0");
+            params.put("fnval", "80");
 
-            String response = HttpUtils.GETByParam(Paths.playUrl, param);
-
-
-            Play play = new Play();
-            play.videoQualitys = new ArrayList<>();
+            String response = new HttpUtils(Paths.playUrl, params).getData();
 
             JSONObject jsonObject = JSON.parseObject(response);
-
             JSONObject data = jsonObject.getJSONObject("data");
 
-            //获取清晰度
-            JSONArray accept_description = data.getJSONArray("accept_description");
-            for (Object o : accept_description) {
-                play.videoQualitys.add(o.toString());
+            if (data != null) {
+                Play play = new Play();
+                play.videoQualitys = new ArrayList<>();
+
+                //获取清晰度
+                JSONArray accept_description = data.getJSONArray("accept_description");
+                for (Object o : accept_description) {
+                    play.videoQualitys.add(o.toString());
+                }
+
+                //删除超清4K
+                play.videoQualitys.remove("超清 4K");
+
+                //删除1080P+
+                play.videoQualitys.remove("高清 1080P+");
+
+                //删除高清 1080P60
+                play.videoQualitys.remove("高清 1080P60");
+
+                //删除高清 720P60
+                play.videoQualitys.remove("高清 720P60");
+
+                JSONObject dash = data.getJSONObject("dash");
+
+                //获取video
+                play.videos = new ArrayList<>();
+                JSONArray video = dash.getJSONArray("video");
+                play.videos = parseVideo(video);
+
+                //获取audios
+                play.audios = new ArrayList<>();
+                JSONArray audio = dash.getJSONArray("audio");
+                play.audios = parseAudio(audio);
+
+                return play;
             }
-
-            //删除超清4K
-            play.videoQualitys.remove("超清 4K");
-
-            //删除1080P+
-            play.videoQualitys.remove("高清 1080P+");
-
-            //删除高清 1080P60
-            play.videoQualitys.remove("高清 1080P60");
-
-            //删除高清 720P60
-            play.videoQualitys.remove("高清 720P60");
-
-            JSONObject dash = data.getJSONObject("dash");
-
-            //获取video
-            play.videos = new ArrayList<>();
-            JSONArray video = dash.getJSONArray("video");
-            play.videos = parseVideo(video);
-
-            //获取audios
-            play.audios = new ArrayList<>();
-            JSONArray audio = dash.getJSONArray("audio");
-            play.audios = parseAudio(audio);
-
-
-            return play;
         } catch (NullPointerException e) {
             Log.e(TAG, "parseView: 数据解析出错");
         }

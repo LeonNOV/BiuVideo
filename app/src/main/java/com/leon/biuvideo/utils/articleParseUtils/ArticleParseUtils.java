@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.Headers;
+
 public class ArticleParseUtils {
 
     /**
@@ -21,11 +23,12 @@ public class ArticleParseUtils {
      * @return  返回Article集合
      */
     public static List<Article> parseArticle (long mid, int pn) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("mid", mid);
-        params.put("pn", pn);
+        Map<String, String> params = new HashMap<>();
+        params.put("mid", String.valueOf(mid));
+        params.put("pn", String.valueOf(pn));
 
-        String response = HttpUtils.GETByParam(Paths.article, params);
+        HttpUtils httpUtils = new HttpUtils(Paths.article, params);
+        String response = httpUtils.getData();
 
         JSONObject responseObject = JSON.parseObject(response);
 
@@ -120,11 +123,12 @@ public class ArticleParseUtils {
      * @return  返回文章总条目数
      */
     public static int getCount(long mid) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("mid", mid);
-        params.put("pn", 1);
+        Map<String, String> params = new HashMap<>();
+        params.put("mid", String.valueOf(mid));
+        params.put("pn", "1");
 
-        String response = HttpUtils.GETByParam(Paths.article, params);
+        HttpUtils httpUtils = new HttpUtils(Paths.article, Headers.of(HttpUtils.getHeaders()), params);
+        String response = httpUtils.getData();
 
         JSONObject responseObject = JSON.parseObject(response);
 
