@@ -7,28 +7,26 @@
 
 ### 2020/11/14
 - 对获取接口响应数据的方式进行了更改
-
   - 获取接口数据的方法
-
     1. 对请求头(Header)有特殊要求的
     
-		```java
-    public HttpUtils(String url, Headers headers, Map<String, String> params) {
-
-    	this.url = url;
-    	this.headers = headers;
-    	this.params = params;
-    }
-		```
+	``` java
+        public HttpUtils(String url, Headers headers, Map<String, String> params) {
+    
+        	this.url = url;
+        	this.headers = headers;
+        	this.params = params;
+        }
+	```
 
     2. 对请求头没有要求的
-		``` java
-    public HttpUtils(String url, Map<String, String> params) {
-    	this.url = url;
-    	this.params = params;
-    	this.headers = Headers.of(getHeaders());
-    }
-		```
+	``` java
+        public HttpUtils(String url, Map<String, String> params) {
+        	this.url = url;
+        	this.params = params;
+        	this.headers = Headers.of(getHeaders());
+        }
+	```
 
 - 对连接SQLite的方式进行了更改
   - 创建数据连接时必须通过创建`SQLiteHelperFactory`类,构造方法参数只用传入`Context`和对应的Tables,调用`getInstance()`方法来获取对象,**需要进行强制转换**
