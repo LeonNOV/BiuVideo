@@ -9,10 +9,8 @@
 - 对获取接口响应数据的方式进行了更改
   - 获取接口数据的方法
     1. 对请求头(Header)有特殊要求的
-    
 	``` java
         public HttpUtils(String url, Headers headers, Map<String, String> params) {
-    
         	this.url = url;
         	this.headers = headers;
         	this.params = params;
