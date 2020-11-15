@@ -87,22 +87,6 @@ public class UserArticlesFragment extends Fragment {
         List<Article> initArticles = getArticles(mid, pageNum);
 
         UserArticleAdapter articleAdapter = new UserArticleAdapter(initArticles, context);
-        articleAdapter.setOnItemClickListener(new UserArticleAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClickListener(int position) {
-                //跳转至ArticleActivity
-                Article article = initArticles.get(position);
-
-                Intent intent = new Intent(context, ArticleActivity.class);
-
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("article", article);
-
-                intent.putExtras(bundle);
-
-                startActivity(intent);
-            }
-        });
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
 

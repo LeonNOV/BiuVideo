@@ -1,18 +1,16 @@
 package com.leon.biuvideo.adapters.UserFragmentAdapters;
 
 import android.content.Context;
-import android.view.LayoutInflater;
+import android.content.Intent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-import com.bumptech.glide.Glide;
+
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
+import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.upMasterBean.UpAudio;
+import com.leon.biuvideo.ui.activitys.UpSongActivity;
 import com.leon.biuvideo.utils.ImagePixelSize;
 import com.leon.biuvideo.utils.ValueFormat;
 
@@ -24,90 +22,64 @@ import java.util.Locale;
 /**
  * 用户界面，音频/音乐fragment适配器
  */
-public class UserAudioAdapter extends RecyclerView.Adapter<UserAudioAdapter.ViewHolder> {
+public class UserAudioAdapter extends BaseAdapter<UpAudio> {
     private List<UpAudio> upAudios;
     private final Context context;
 
     public UserAudioAdapter(List<UpAudio> upAudios, Context context) {
+        super(upAudios, context);
         this.upAudios = upAudios;
         this.context = context;
     }
 
-    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.user_media_list_view_item, parent, false);
-        return new ViewHolder(view);
+    public int getLayout(int viewType) {
+        return R.layout.user_media_list_view_item;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull UserAudioAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         UpAudio upAudio = upAudios.get(position);
 
         //设置封面
-        Glide.with(context).load(upAudio.cover + ImagePixelSize.COVER.value).into(holder.up_media_imageView_cover);
+        holder.setImage(R.id.up_media_imageView_cover, upAudio.cover, ImagePixelSize.COVER)
 
-        //设置播放时长
-        holder.up_media_textView_mediaLength.setText(ValueFormat.lengthGenerate(upAudio.duration));
+                //设置播放时长
+                .setText(R.id.up_media_textView_mediaLength, ValueFormat.lengthGenerate(upAudio.duration))
 
-        //不显示合作标识
-        holder.up_media_textView_isUnionmedia.setVisibility(View.INVISIBLE);
+                //不显示合作标识
+                .setVisibility(R.id.up_media_textView_isUnionmedia, View.INVISIBLE)
 
-        //设置播放次数
-        holder.up_media_textView_play.setText(ValueFormat.generateCN(upAudio.play));
+                //设置播放次数
+                .setText(R.id.up_media_textView_play, ValueFormat.generateCN(upAudio.play))
 
-        //设置上传日期
-        holder.up_media_textView_ctime.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA).format(new Date(upAudio.ctime)));
+                //设置上传日期
+                .setText(R.id.up_media_textView_ctime, new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA).format(new Date(upAudio.ctime)))
 
-        //设置标题
-        holder.up_media_textView_title.setText(upAudio.title);
-    }
+                //设置标题
+                .setText(R.id.up_media_textView_title, upAudio.title)
 
-    public interface OnItemClickListener {
-        void onItemClickListener(View view, int position);
-    }
+                //设置监听
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //获取所有sid
+                        long[] sids = new long[upAudios.size()];
+                        for (int i = 0; i < upAudios.size(); i++) {
+                            sids[i] = (upAudios.get(i).sid);
+                        }
 
-    private OnItemClickListener onItemClickListener;
+                        Intent intent = new Intent(context, UpSongActivity.class);
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
+                        //传递sid在upAudios中的position
+                        intent.putExtra("position", position);
 
-    @Override
-    public int getItemCount() {
-        return upAudios.size();
-    }
+                        //传递所有的sid
+                        intent.putExtra("sids", sids);
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        RelativeLayout user_media_relativeLayout;
-        ImageView up_media_imageView_cover;
-        TextView
-                up_media_textView_isUnionmedia,
-                up_media_textView_mediaLength,
-                up_media_textView_title,
-                up_media_textView_play,
-                up_media_textView_ctime;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            user_media_relativeLayout = itemView.findViewById(R.id.user_media_relativeLayout);
-            user_media_relativeLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onItemClickListener != null) {
-                        onItemClickListener.onItemClickListener(v, getAdapterPosition());
+                        context.startActivity(intent);
                     }
-                }
-            });
-
-            up_media_textView_isUnionmedia = itemView.findViewById(R.id.up_media_textView_isUnionmedia);
-            up_media_imageView_cover = itemView.findViewById(R.id.up_media_imageView_cover);
-            up_media_textView_mediaLength = itemView.findViewById(R.id.up_media_textView_mediaLength);
-            up_media_textView_title = itemView.findViewById(R.id.up_media_textView_title);
-            up_media_textView_play = itemView.findViewById(R.id.up_media_textView_play);
-            up_media_textView_ctime = itemView.findViewById(R.id.up_media_textView_ctime);
-        }
+                });
     }
 
     //加载数据使用

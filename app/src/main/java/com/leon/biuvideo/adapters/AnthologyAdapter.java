@@ -4,88 +4,87 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
+import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
+import com.leon.biuvideo.beans.videoBean.view.SingleVideoInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
+import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.utils.ImagePixelSize;
+import com.leon.biuvideo.utils.WebViewUtils;
+import com.leon.biuvideo.utils.mediaParseUtils.MediaParseUtils;
+
+import java.util.List;
 
 /**
  * videoActivity播放列表控件的适配器
  */
-public class AnthologyAdapter extends RecyclerView.Adapter<AnthologyAdapter.ViewHolder> {
-    private final Context context;
+public class AnthologyAdapter extends BaseAdapter<SingleVideoInfo> {
     private final ViewPage viewPage;
+    private final List<SingleVideoInfo> singleVideoInfos;
+    private final Context context;
 
-    private OnItemClickListener onItemClickListener;
+    private final WebView webView;
+    private WebViewUtils webViewUtils;
 
-    public AnthologyAdapter(Context context, ViewPage viewPage) {
-        this.context = context;
+    //当前webView中播放的选集索引，默认为0
+    private int singleVideoSelectedIndex = 0;
+
+    public AnthologyAdapter(ViewPage viewPage, Context context, WebView webView) {
+        super(viewPage.singleVideoInfoList, context);
         this.viewPage = viewPage;
-    }
-
-    @NonNull
-    @Override
-    public AnthologyAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.single_video_listview_item, parent, false);
-
-        return new ViewHolder(view, onItemClickListener);
+        this.singleVideoInfos = viewPage.singleVideoInfoList;
+        this.context = context;
+        this.webView = webView;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Glide.with(context).load(viewPage.coverUrl + ImagePixelSize.COVER.value).into(holder.single_video_item_imageView_cover);
-
-        String singleVideoIndexStr = "P" + (position + 1);
-        holder.single_video_item_textView_index.setText(singleVideoIndexStr);
-        holder.single_video_item_textView_title.setText(viewPage.singleVideoInfoList.get(position).part);
+    public int getLayout(int viewType) {
+        return R.layout.single_video_listview_item;
     }
 
     @Override
-    public int getItemCount() {
-        return viewPage.singleVideoInfoList.size();
-    }
+    public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
+        SingleVideoInfo singleVideoInfo = singleVideoInfos.get(position);
 
-    public interface OnItemClickListener {
-        void onSingleVideoClick(int position);
-    }
+        //设置选集封面
+        holder.setImage(R.id.single_video_item_imageView_cover, viewPage.coverUrl, ImagePixelSize.COVER)
 
-    public void setOnItemClickListener(OnItemClickListener clickListener) {
-        this.onItemClickListener = clickListener;
-    }
+                //设置选集序号
+                .setText(R.id.single_video_item_textView_index, "P" + (position + 1))
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView single_video_item_imageView_cover;
-        TextView single_video_item_textView_index, single_video_item_textView_title;
+                //设置选集标题
+                .setText(R.id.single_video_item_textView_title, singleVideoInfo.part)
 
-        public ViewHolder(@NonNull View itemView, OnItemClickListener onItemClickListener) {
-            super(itemView);
+                //设置监听
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        webViewUtils = new WebViewUtils(webView);
 
-            single_video_item_imageView_cover = itemView.findViewById(R.id.single_video_item_imageView_cover);
-            single_video_item_textView_index = itemView.findViewById(R.id.single_video_item_textView_index);
-            single_video_item_textView_title = itemView.findViewById(R.id.single_video_item_textView_title);
+                        //判断当前观看的视频cid是否和选择的一样
+                        if (singleVideoSelectedIndex != position) {
+                            //设置webView的链接
+                            webViewUtils.setWebViewUrl(viewPage.aid, singleVideoInfo.cid, position);
 
-            //设置点击事件
-            single_video_item_imageView_cover.setOnClickListener(new View.OnClickListener(){
+                            //重置nowPosition
+                            singleVideoSelectedIndex = position;
 
-                @Override
-                public void onClick(View view) {
-                    if (onItemClickListener != null) {
-                        int position = getAdapterPosition();
-
-                        if (position != RecyclerView.NO_POSITION) {
-
-                            //singleVideoIndex的值和position是同一个
-                            onItemClickListener.onSingleVideoClick(position);
+                            //重置当前play变量
+                            VideoActivity.play = MediaParseUtils.parseMedia(viewPage.bvid, viewPage.aid, singleVideoInfo.cid);
+                        } else {
+                            Toast.makeText(context, "选择的视频已经在播放了~~", Toast.LENGTH_SHORT).show();
                         }
                     }
-                }
-            });
-        }
+                });
     }
 }

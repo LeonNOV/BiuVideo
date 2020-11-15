@@ -96,7 +96,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
     private long[] sids;
 
     //当前sid在sids中的索引位置
-    private int position;
+    public static int position;
 
     //music信息
     private MusicInfo musicInfo;
@@ -330,9 +330,8 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                 List<MusicPlayList> musicPlayLists = musicDatabaseUtils.queryPlayList();
                 Log.d(Fuck.blue, "onClick: " + musicPlayLists.size());
 
-                MusicListDialog musicListDialog = new MusicListDialog(UpSongActivity.this, musicPlayLists, new MusicListDialog.PriorityListener() {
-
-                    //刷新当前music_imageView_addFavorite的状态
+                MusicListDialog musicListDialog = new MusicListDialog(UpSongActivity.this, musicPlayLists);
+                MusicListDialog.priorityListener = new MusicListDialog.PriorityListener() {
                     @Override
                     public void refreshFavoriteIcon() {
                         //判断当前歌曲是否从playList中删除
@@ -346,20 +345,12 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                         }
                     }
 
-                    //切换当前歌曲
                     @Override
                     public void refreshMusic(long sid) {
                         switchMusic(sid);
                     }
-                });
+                };
                 musicListDialog.show();
-
-                musicListDialog.setOnDialogClickListener(new MusicListDialog.OnDialogClickListener() {
-                    @Override
-                    public void onCloseDialog() {
-                        musicListDialog.dismiss();
-                    }
-                });
 
                 break;
             case R.id.music_imageView_download:
@@ -399,15 +390,15 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                     musicPlayList.isHaveVideo = !musicInfo.bvid.equals("");
 
                     //添加至播放列表
-                    musicDatabaseUtils.addPlayList(musicPlayList);
+                    boolean addState = musicDatabaseUtils.addPlayList(musicPlayList);
 
-                    music_imageView_addFavorite.setImageResource(R.drawable.favorite);
+                    if (addState) {
+                        music_imageView_addFavorite.setImageResource(R.drawable.favorite);
+                        isHavePlayList = true;
 
-                    isHavePlayList = true;
+                        Toast.makeText(this, addState ? "已添加至播放列表" : "添加失败~~~", Toast.LENGTH_SHORT).show();
+                    }
                 }
-
-                //通知数据已发生改变
-                new MusicListAdapter(musicDatabaseUtils.queryPlayList(), getApplicationContext()).notifyDataSetChanged();
 
                 break;
             case R.id.music_imageView_control:

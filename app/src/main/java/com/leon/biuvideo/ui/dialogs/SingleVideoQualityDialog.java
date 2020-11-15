@@ -25,13 +25,12 @@ public class SingleVideoQualityDialog extends AlertDialog implements View.OnClic
 
     private final Context context;
     private List<String> qualitys;
-    private final SingleVideoQualityAdapter.OnQualityItemListener onQualityItemListener;
+    public static OnQualityItemListener onQualityItemListener;
 
-    public SingleVideoQualityDialog(@NonNull Context context, List<String> qualitys, SingleVideoQualityAdapter.OnQualityItemListener onQualityItemListener) {
+    public SingleVideoQualityDialog(@NonNull Context context, List<String> qualitys) {
         super(context);
         this.context = context;
         this.qualitys = qualitys;
-        this.onQualityItemListener = onQualityItemListener;
     }
 
     @Override
@@ -56,10 +55,13 @@ public class SingleVideoQualityDialog extends AlertDialog implements View.OnClic
     private void initValue() {
         SingleQualityLinearLayoutManager linearLayoutManager = new SingleQualityLinearLayoutManager(context);
         SingleVideoQualityAdapter videoQualityAdapter = new SingleVideoQualityAdapter(qualitys, context);
-        videoQualityAdapter.setOnQualityItemListener(onQualityItemListener);
 
         single_video_recyclerView_quality.setAdapter(videoQualityAdapter);
         single_video_recyclerView_quality.setLayoutManager(linearLayoutManager);
+    }
+
+    public interface OnQualityItemListener {
+        void onItemClickListener(int position);
     }
 
     @Override

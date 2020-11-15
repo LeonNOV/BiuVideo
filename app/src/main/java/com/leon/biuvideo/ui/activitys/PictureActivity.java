@@ -108,37 +108,22 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
         } else {
             picture_textView_title.setText(title);
         }
-
         picture_textView_desc.setText(picture.description);
 
+
         int spanCount;
-        ImagePixelSize imagePixelSize;
 
         //判断要显示的列数
         if (picture.pictures.size() % 3 == 0) {
-            imagePixelSize = ImagePixelSize.MORE;
             spanCount = 3;
         } else if (picture.pictures.size() % 2 == 0) {
-            imagePixelSize = ImagePixelSize.DOUBLE;
             spanCount = 2;
         } else {
-            imagePixelSize = ImagePixelSize.SINGLE;
             spanCount = 1;
         }
-
-        PictureListAdapter pictureListAdapter = new PictureListAdapter(getApplicationContext(), picture.pictures, imagePixelSize.value);
-
-        pictureListAdapter.setOnPictureItemClickListener(new PictureListAdapter.OnPictureItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                //创建图片查看器
-                PictureViewer pictureViewer = new PictureViewer(PictureActivity.this, position, picture.pictures);
-                pictureViewer.showAtLocation(PictureActivity.this.findViewById(R.id.picture_toolBar),
-                        Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
-            }
-        });
         PictureGridLayoutManager pictureGridLayoutManager = new PictureGridLayoutManager(getApplicationContext(), spanCount);
 
+        PictureListAdapter pictureListAdapter = new PictureListAdapter(picture.pictures, PictureActivity.this);
         picture_recyclerView.setLayoutManager(pictureGridLayoutManager);
         picture_recyclerView.setAdapter(pictureListAdapter);
     }

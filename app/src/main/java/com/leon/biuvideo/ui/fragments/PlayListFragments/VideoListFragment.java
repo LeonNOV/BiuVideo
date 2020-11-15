@@ -65,16 +65,6 @@ public class VideoListFragment extends Fragment {
 
         videoPlayLists = videoListDatabaseUtils.queryFavoriteVideos();
         videoListAdapter = new VideoListAdapter(videoPlayLists, getContext());
-        videoListAdapter.setOnVideoItemClickListener(new VideoListAdapter.OnVideoItemClickListener() {
-            @Override
-            public void onVideoItemClickListener(int position) {
-                //跳转到VideoActivity
-                Intent intent = new Intent(context, VideoActivity.class);
-                intent.putExtra("bvid", videoPlayLists.get(position).bvid);
-
-                startActivity(intent);
-            }
-        });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(linearLayoutManager);

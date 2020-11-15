@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -26,17 +27,12 @@ public class MusicListDialog extends AlertDialog {
     private List<MusicPlayList> musicPlayLists;
     private final Context context;
 
-    private RecyclerView music_recyclerView_playList;
-    private Button music_button_close;
+    public static PriorityListener priorityListener;
 
-    private OnDialogClickListener onDialogClickListener;
-    private final PriorityListener priorityListener;
-
-    public MusicListDialog(@NonNull Context context, List<MusicPlayList> musicPlayLists, PriorityListener priorityListener) {
+    public MusicListDialog(@NonNull Context context, List<MusicPlayList> musicPlayLists) {
         super(context);
         this.context = context;
         this.musicPlayLists = musicPlayLists;
-        this.priorityListener = priorityListener;
     }
 
     @Override
@@ -48,47 +44,18 @@ public class MusicListDialog extends AlertDialog {
     }
 
     private void initView() {
-        MusicPlayListAdapter musicPlayListAdapter;
+        RecyclerView music_recyclerView_playList = findViewById(R.id.music_recyclerView_playList);
 
-        music_recyclerView_playList = findViewById(R.id.music_recyclerView_playList);
-        music_button_close = findViewById(R.id.music_button_close);
+        Button music_button_close = findViewById(R.id.music_button_close);
         music_button_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onDialogClickListener != null) {
-                    onDialogClickListener.onCloseDialog();
-                }
+                dismiss();
             }
         });
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        musicPlayListAdapter = new MusicPlayListAdapter(musicPlayLists, context);
-        musicPlayListAdapter.setOnItemClickListener(new MusicPlayListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClickListener(int position) {
-                //将当前播放的歌曲切换为在播放列表中选中的歌曲
-                MusicPlayList musicPlayList = musicPlayLists.get(position);
-                priorityListener.refreshMusic(musicPlayList.sid);
-
-                dismiss();
-            }
-
-            @Override
-            public void onItemDeleteListener(int position) {
-                //删除播放列表中的对应条目
-                MusicListDatabaseUtils musicDatabaseUtils = new MusicListDatabaseUtils(context);
-
-                musicDatabaseUtils.removeMusicItem(musicPlayLists.get(position).sid);
-
-                musicPlayLists.remove(position);
-
-                //通知数据已发生改变
-                musicPlayListAdapter.notifyDataSetChanged();
-
-                //刷新UpSongActivity红心的状态
-                priorityListener.refreshFavoriteIcon();
-            }
-        });
+        MusicPlayListAdapter musicPlayListAdapter = new MusicPlayListAdapter(musicPlayLists, context);
 
         music_recyclerView_playList.setLayoutManager(layoutManager);
         music_recyclerView_playList.setAdapter(musicPlayListAdapter);
@@ -103,14 +70,6 @@ public class MusicListDialog extends AlertDialog {
     @Override
     public void show() {
         super.show();
-    }
-
-    public interface OnDialogClickListener {
-        void onCloseDialog();
-    }
-
-    public void setOnDialogClickListener(OnDialogClickListener onDialogClickListener) {
-        this.onDialogClickListener = onDialogClickListener;
     }
 
     public interface PriorityListener {

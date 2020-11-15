@@ -1,107 +1,86 @@
 package com.leon.biuvideo.adapters.PlayListAdapter;
 
 import android.content.Context;
-import android.view.LayoutInflater;
+import android.content.Intent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
+import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
+import com.leon.biuvideo.ui.activitys.MainActivity;
+import com.leon.biuvideo.ui.activitys.UpSongActivity;
+import com.leon.biuvideo.ui.activitys.VideoActivity;
+import com.leon.biuvideo.utils.Fuck;
 
 import java.util.List;
 
 /**
  * music播放列表适配器
  */
-public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.ViewHolder> {
+public class MusicListAdapter extends BaseAdapter<MusicPlayList> {
     private List<MusicPlayList> musicPlayLists;
     private final Context context;
 
     public MusicListAdapter(List<MusicPlayList> musicPlayLists, Context context) {
+        super(musicPlayLists, context);
         this.musicPlayLists = musicPlayLists;
         this.context = context;
     }
 
-    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.play_list_music_item, parent, false);
-
-        return new ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         MusicPlayList musicPlayList = musicPlayLists.get(position);
 
-        holder.play_list_music_textView_serial.setText(String.valueOf(position + 1));
-        holder.play_list_music_textView_musicName.setText(musicPlayList.musicName);
-        holder.play_list_video_author.setText(musicPlayList.author);
+        //设置序号
+        holder.setText(R.id.play_list_music_textView_serial, String.valueOf(position + 1))
 
-        holder.play_list_music_imageView_isHaveVideo.setVisibility(musicPlayList.isHaveVideo ? View.VISIBLE : View.INVISIBLE);
-        holder.play_list_music_imageView_isHaveVideo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onMusicItemClickListener != null) {
-                    onMusicItemClickListener.onMusicVideoClickListener(position);
-                }
-            }
-        });
+                //设置歌曲名称
+                .setText(R.id.play_list_music_textView_musicName, musicPlayList.musicName)
 
-        holder.play_list_music_relativeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onMusicItemClickListener != null) {
-                    long[] sids = new long[musicPlayLists.size()];
-                    for (int i = 0; i < musicPlayLists.size(); i++) {
-                        sids[i] = musicPlayLists.get(i).sid;
+                //设置作者
+                .setText(R.id.play_list_video_author, musicPlayList.author)
+
+                //设置是否显示video图标
+                .setVisibility(R.id.play_list_music_imageView_isHaveVideo, musicPlayList.isHaveVideo ? View.VISIBLE : View.INVISIBLE)
+                .setOnClickListener(R.id.play_list_music_imageView_isHaveVideo, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //跳转到VideoActivity
+                        Intent intent = new Intent(context, VideoActivity.class);
+                        intent.putExtra("bvid", musicPlayLists.get(position).bvid);
+
+                        Fuck.blue(musicPlayLists.get(position).bvid);
+                        Fuck.blue(position + "");
+
+                        context.startActivity(intent);
                     }
+                })
 
-                    onMusicItemClickListener.onMusicItemClickListener(position, sids);
-                }
-            }
-        });
+                //设置监听
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        long[] sids = new long[musicPlayLists.size()];
+                        for (int i = 0; i < musicPlayLists.size(); i++) {
+                            sids[i] = musicPlayLists.get(i).sid;
+                        }
+
+                        //跳转到UpSongActivity
+                        Intent intent = new Intent(context, UpSongActivity.class);
+                        intent.putExtra("position", position);
+                        intent.putExtra("sids", sids);
+
+                        context.startActivity(intent);
+                    }
+                });
     }
 
     @Override
-    public int getItemCount() {
-        return musicPlayLists.size();
-    }
-
-    private OnMusicItemClickListener onMusicItemClickListener;
-
-    public interface OnMusicItemClickListener {
-        void onMusicItemClickListener(int position, long[] sids);
-        void onMusicVideoClickListener(int position);
-    }
-
-    public void setOnMusicItemClickListener(OnMusicItemClickListener onMusicItemClickListener) {
-        this.onMusicItemClickListener = onMusicItemClickListener;
-    }
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-        RelativeLayout play_list_music_relativeLayout;
-        TextView
-                play_list_music_textView_serial,
-                play_list_music_textView_musicName,
-                play_list_video_author;
-        ImageView play_list_music_imageView_isHaveVideo;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            play_list_music_relativeLayout = itemView.findViewById(R.id.play_list_music_relativeLayout);
-            play_list_music_textView_serial = itemView.findViewById(R.id.play_list_music_textView_serial);
-            play_list_music_textView_musicName = itemView.findViewById(R.id.play_list_music_textView_musicName);
-            play_list_video_author = itemView.findViewById(R.id.play_list_video_author);
-            play_list_music_imageView_isHaveVideo = itemView.findViewById(R.id.play_list_music_imageView_isHaveVideo);
-        }
+    public int getLayout(int viewType) {
+        return R.layout.play_list_music_item;
     }
 
     //加载数据使用

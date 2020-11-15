@@ -1,19 +1,16 @@
 package com.leon.biuvideo.adapters.PlayListAdapter;
 
 import android.content.Context;
-import android.view.LayoutInflater;
+import android.content.Intent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
+import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.upMasterBean.VideoPlayList;
+import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.utils.ImagePixelSize;
 import com.leon.biuvideo.utils.ValueFormat;
 
@@ -22,83 +19,50 @@ import java.util.List;
 /**
  * video播放列表适配器
  */
-public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.ViewHolder> {
+public class VideoListAdapter extends BaseAdapter<VideoPlayList> {
     private List<VideoPlayList> videoPlayLists;
-    private final Context context;
+    private Context context;
 
     public VideoListAdapter(List<VideoPlayList> videoPlayLists, Context context) {
+        super(videoPlayLists, context);
         this.videoPlayLists = videoPlayLists;
         this.context = context;
     }
 
-    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.play_list_video_item, parent, false);
-
-        return new ViewHolder(view);
+    public int getLayout(int viewType) {
+        return R.layout.play_list_video_item;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         VideoPlayList videoPlayList = videoPlayLists.get(position);
 
-        holder.play_list_video_relativeLayout.setOnClickListener(new View.OnClickListener() {
+        holder.setOnClickListener(R.id.play_list_video_relativeLayout, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onVideoItemClickListener != null) {
-                    onVideoItemClickListener.onVideoItemClickListener(position);
-                }
+                //跳转到VideoActivity
+                Intent intent = new Intent(context, VideoActivity.class);
+                intent.putExtra("bvid", videoPlayLists.get(position).bvid);
+
+                context.startActivity(intent);
             }
-        });
+        })
+                //设置封面
+                .setImage(R.id.play_list_video_imageView_cover, videoPlayList.coverUrl, ImagePixelSize.COVER)
 
-        Glide.with(context).load(videoPlayList.coverUrl + ImagePixelSize.COVER.value).into(holder.play_list_video_imageView_cover);
-        holder.play_list_video_textView_length.setText(ValueFormat.lengthGenerate(videoPlayList.length));
-        holder.play_list_video_textView_desc.setText(videoPlayList.title);
-        holder.play_list_video_imageView_userName.setText(videoPlayList.uname);
-        holder.play_list_video_textView_play.setText(ValueFormat.generateCN(videoPlayList.play));
-        holder.play_list_video_textView_danmaku.setText(ValueFormat.generateCN(videoPlayList.danmaku));
-    }
+                //设置视频时长
+                .setText(R.id.play_list_video_textView_length, ValueFormat.lengthGenerate(videoPlayList.length))
 
-    @Override
-    public int getItemCount() {
-        return videoPlayLists.size();
-    }
+                //设置视频标题
+                .setText(R.id.play_list_video_textView_desc, videoPlayList.title)
 
-    private OnVideoItemClickListener onVideoItemClickListener;
+                //设置作者
+                .setText(R.id.play_list_video_imageView_userName, videoPlayList.uname)
 
-    public interface OnVideoItemClickListener {
-        void onVideoItemClickListener(int position);
-    }
-
-    public void setOnVideoItemClickListener(OnVideoItemClickListener onVideoItemClickListener) {
-        this.onVideoItemClickListener = onVideoItemClickListener;
-    }
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-        RelativeLayout play_list_video_relativeLayout;
-
-        ImageView play_list_video_imageView_cover;
-        TextView
-                play_list_video_textView_length,
-                play_list_video_textView_desc,
-                play_list_video_imageView_userName,
-                play_list_video_textView_play,
-                play_list_video_textView_danmaku;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            play_list_video_relativeLayout = itemView.findViewById(R.id.play_list_video_relativeLayout);
-
-            play_list_video_imageView_cover = itemView.findViewById(R.id.play_list_video_imageView_cover);
-
-            play_list_video_textView_length = itemView.findViewById(R.id.play_list_video_textView_length);
-            play_list_video_textView_desc = itemView.findViewById(R.id.play_list_video_textView_desc);
-            play_list_video_imageView_userName = itemView.findViewById(R.id.play_list_video_imageView_userName);
-            play_list_video_textView_play = itemView.findViewById(R.id.play_list_video_textView_play);
-            play_list_video_textView_danmaku = itemView.findViewById(R.id.play_list_video_textView_danmaku);
-        }
+                //设置播放量
+                .setText(R.id.play_list_video_textView_play, ValueFormat.generateCN(videoPlayList.play))
+                .setText(R.id.play_list_video_textView_danmaku, ValueFormat.generateCN(videoPlayList.danmaku));
     }
 
     //加载数据使用

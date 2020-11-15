@@ -95,22 +95,8 @@ public class UserVideoListFragment extends Fragment {
             view = inflater.inflate(R.layout.fragment_up_no_data, null);
         }
 
-        UserVideoAdapter userVideoAdapter = new UserVideoAdapter(upVideos, context);
+        UserVideoAdapter userVideoAdapter = new UserVideoAdapter(upVideos, getContext());
         up_video_recyclerView.setAdapter(userVideoAdapter);
-        userVideoAdapter.setOnItemClickListener(new UserVideoAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClickListener(int position) {
-                //获取对应的bvid
-                UpVideo upVideo = upVideos.get(position);
-
-                Log.d(Fuck.blue, "size:" + upVideos.size());
-
-                //跳转到VideoActivity
-                Intent intent = new Intent(context, VideoActivity.class);
-                intent.putExtra("bvid", upVideo.bvid);
-                startActivity(intent);
-            }
-        });
 
         //添加加载更多监听事件
         video_smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {

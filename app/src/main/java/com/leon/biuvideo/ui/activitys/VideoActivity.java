@@ -34,6 +34,7 @@ import com.leon.biuvideo.utils.ImagePixelSize;
 import com.leon.biuvideo.utils.MediaUtils;
 import com.leon.biuvideo.utils.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.WebViewUtils;
 import com.leon.biuvideo.utils.dataUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.utils.dataUtils.Tables;
 import com.leon.biuvideo.utils.dataUtils.VideoListDatabaseUtils;
@@ -49,7 +50,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * 视频观看activity
  */
-public class VideoActivity extends AppCompatActivity implements View.OnClickListener, AnthologyAdapter.OnItemClickListener {
+public class VideoActivity extends AppCompatActivity implements View.OnClickListener {
     private CircleImageView video_circleImageView_face;
     private ImageView video_imageView_back, video_imageView_addFavorite;
     private RecyclerView video_recyclerView_singleVideoList;
@@ -70,7 +71,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
             video_button_saveFace;
 
     private ViewPage viewPage;
-    private Play play;
+    public static Play play;
 
     private WebView webView;
 
@@ -213,71 +214,14 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);//设置为水平方向
 
         //创建adapter
-        AnthologyAdapter anthologyAdapter = new AnthologyAdapter(getApplicationContext(), viewPage);
+        AnthologyAdapter anthologyAdapter = new AnthologyAdapter(viewPage, getApplicationContext(), webView);
 
         //设置RecyclerView
         video_recyclerView_singleVideoList.setLayoutManager(layoutManager);
         video_recyclerView_singleVideoList.setAdapter(anthologyAdapter);
 
-        //设置RecyclerView的监听事件
-        anthologyAdapter.setOnItemClickListener(this);
-
         //设置默认的选集
-        setWebViewUrl(viewPage.singleVideoInfoList.get(0).cid, 0);
-    }
-
-    /**
-     * 选集列表监听事件
-     *
-     * @param position  选集索引
-     */
-    @Override
-    public void onSingleVideoClick(int position) {
-        //判断当前观看的视频cid是否和选择的一样
-        if (singleVideoSelectedIndex != position) {
-            //设置webView的链接
-            setWebViewUrl(viewPage.singleVideoInfoList.get(position).cid, position);
-
-            //重置nowPosition
-            singleVideoSelectedIndex = position;
-
-            //重置当前play变量
-            play = MediaParseUtils.parseMedia(viewPage.bvid, viewPage.aid, viewPage.singleVideoInfoList.get(position).cid);
-        } else {
-            Toast.makeText(VideoActivity.this, "选择的视频已经在播放了~~", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    //设置webView的链接
-    private void setWebViewUrl(long cid, int pageIndex) {
-        //配置webView地址
-        String parameter_aid = "aid=" + viewPage.aid;
-        String parameter_cid = "cid=" + cid;
-
-        //默认第一个视频为singleVideoInfoList中的第一个，page为选集列表中的第一个视频的索引（从1开始,所以要进行加1）
-        String videoPath = Paths.videoBaeUrl + parameter_aid + "&" + parameter_cid + "&" + "page=" + pageIndex + 1;
-        configWebView(videoPath);
-    }
-
-    /**
-     * 配置网页控件
-     * @param videoUrl  设置网页地址
-     */
-    @SuppressLint("SetJavaScriptEnabled")//忽略SetJavaScriptEnabled的警告
-    private void configWebView (String videoUrl) {
-        WebSettings settings = webView.getSettings();
-
-        settings.setJavaScriptEnabled(true);
-        settings.setJavaScriptCanOpenWindowsAutomatically(true);
-        settings.setDatabaseEnabled(true);
-        settings.setAppCacheEnabled(true);
-        settings.setCacheMode(WebSettings.LOAD_DEFAULT);
-        settings.setAllowFileAccess(true);
-        settings.setLoadWithOverviewMode(true);
-        settings.setDomStorageEnabled(true);
-        settings.setUseWideViewPort(true);
-
-        webView.loadUrl(videoUrl);
+        new WebViewUtils(webView).setWebViewUrl(viewPage.aid, viewPage.singleVideoInfoList.get(0).cid, 0);
     }
 
     @Override
@@ -334,9 +278,10 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 Fuck.blue("===============quality===============");
 
                 //创建清晰度选择dialog
-                singleVideoQualityDialog = new SingleVideoQualityDialog(VideoActivity.this, play.videoQualitys, new SingleVideoQualityAdapter.OnQualityItemListener() {
+                singleVideoQualityDialog = new SingleVideoQualityDialog(VideoActivity.this, play.videoQualitys);
+                SingleVideoQualityDialog.onQualityItemListener = new SingleVideoQualityDialog.OnQualityItemListener() {
                     @Override
-                    public void onItemListener(int position) {
+                    public void onItemClickListener(int position) {
                         //获取权限
                         FileUtils.verifyPermissions(VideoActivity.this);
 
@@ -369,7 +314,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                             }
                         }).start();
                     }
-                });
+                };
 
                 //显示选择清晰度dialog
                 singleVideoQualityDialog.show();

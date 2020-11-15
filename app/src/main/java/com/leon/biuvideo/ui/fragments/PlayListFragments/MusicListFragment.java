@@ -33,9 +33,6 @@ public class MusicListFragment extends Fragment {
     private RecyclerView recyclerView;
     private TextView textView_noDataStr;
 
-    private Context context;
-    private View view;
-
     private List<MusicPlayList> musicPlayLists;
     private MusicListAdapter musicListAdapter;
     private MusicListDatabaseUtils musicListDatabaseUtils;
@@ -54,8 +51,8 @@ public class MusicListFragment extends Fragment {
     }
 
     private void initView() {
-        context = getContext();
-        view = getView();
+        Context context = getContext();
+        View view = getView();
 
         SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.MusicPlayList);
         musicListDatabaseUtils = (MusicListDatabaseUtils) sqLiteHelperFactory.getInstance();
@@ -64,27 +61,7 @@ public class MusicListFragment extends Fragment {
         textView_noDataStr = view.findViewById(R.id.textView_noDataStr);
 
         musicPlayLists = musicListDatabaseUtils.queryPlayList();
-        musicListAdapter = new MusicListAdapter(musicPlayLists, context);
-        musicListAdapter.setOnMusicItemClickListener(new MusicListAdapter.OnMusicItemClickListener() {
-            @Override
-            public void onMusicItemClickListener(int position, long[] sids) {
-                //跳转到UpSongActivity
-                Intent intent = new Intent(context, UpSongActivity.class);
-                intent.putExtra("position", position);
-                intent.putExtra("sids", sids);
-
-                startActivity(intent);
-            }
-
-            @Override
-            public void onMusicVideoClickListener(int position) {
-                //跳转到VideoActivity
-                Intent intent = new Intent(context, VideoActivity.class);
-                intent.putExtra("bvid", musicPlayLists.get(position).bvid);
-
-                startActivity(intent);
-            }
-        });
+        musicListAdapter = new MusicListAdapter(musicPlayLists, getContext());
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(linearLayoutManager);

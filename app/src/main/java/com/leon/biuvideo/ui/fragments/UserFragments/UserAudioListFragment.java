@@ -88,29 +88,8 @@ public class UserAudioListFragment extends Fragment {
             view = inflater.inflate(R.layout.fragment_up_no_data, null);
         }
 
-        UserAudioAdapter userAudioAdapter = new UserAudioAdapter(upAudios, context);
+        UserAudioAdapter userAudioAdapter = new UserAudioAdapter(upAudios, getContext());
         up_audio_recyclerView.setAdapter(userAudioAdapter);
-
-        //设置item点击事件，跳转到音乐播放界面
-        userAudioAdapter.setOnItemClickListener((view, position) -> {
-
-            //获取所有sid
-            long[] sids = new long[upAudios.size()];
-
-            for (int i = 0; i < upAudios.size(); i++) {
-                sids[i] = (upAudios.get(i).sid);
-            }
-
-            Intent intent = new Intent(context, UpSongActivity.class);
-
-            //传递sid在upAudios中的position
-            intent.putExtra("position", position);
-
-            //传递所有的sid
-            intent.putExtra("sids", sids);
-
-            startActivity(intent);
-        });
 
         //添加加载更多监听事件
         audio_smartRefresh.setOnLoadMoreListener(refreshLayout -> {

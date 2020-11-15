@@ -13,40 +13,75 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
+import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
+import com.leon.biuvideo.ui.activitys.UpSongActivity;
+import com.leon.biuvideo.ui.dialogs.MusicListDialog;
+import com.leon.biuvideo.utils.dataUtils.MusicListDatabaseUtils;
 
 import java.util.List;
 
 /**
  * 音乐播放界面中播放列表的适配器
  */
-public class MusicPlayListAdapter extends RecyclerView.Adapter<MusicPlayListAdapter.ViewHolder> {
+public class MusicPlayListAdapter extends BaseAdapter<MusicPlayList> {
     public List<MusicPlayList> musicPlayLists;
     private final Context context;
 
+    private MusicListDialog.PriorityListener priorityListener;
+
     public MusicPlayListAdapter(List<MusicPlayList> musicPlayLists, Context context) {
+        super(musicPlayLists, context);
         this.musicPlayLists = musicPlayLists;
         this.context = context;
     }
 
-    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.music_play_list_item, parent, false);
-        return new ViewHolder(view);
+    public int getLayout(int viewType) {
+        return R.layout.music_play_list_item;
+    }
+
+    public void setPriorityListener(MusicListDialog.PriorityListener priorityListener) {
+        this.priorityListener = priorityListener;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         MusicPlayList musicPlayList = musicPlayLists.get(position);
+        priorityListener = MusicListDialog.priorityListener;
 
-        holder.music_textView_playList_title.setText(musicPlayList.musicName);
-        holder.music_textView_playList_author.setText(musicPlayList.author);
-    }
+        holder.setText(R.id.music_textView_playList_title, musicPlayList.musicName)
+                .setText(R.id.music_textView_playList_author, musicPlayList.author)
+                .setOnClickListener(R.id.music_imageView_playList_delete, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //删除播放列表中的对应条目
+                        MusicListDatabaseUtils musicDatabaseUtils = new MusicListDatabaseUtils(context);
 
-    @Override
-    public int getItemCount() {
-        return musicPlayLists.size();
+                        musicDatabaseUtils.removeMusicItem(musicPlayList.sid);
+
+                        musicPlayLists.remove(position);
+
+                        //通知数据已发生改变
+                        notifyItemRemoved(position);
+
+                        //刷新UpSongActivity红心的状态
+                        priorityListener.refreshFavoriteIcon();
+                    }
+                })
+
+                //切换歌曲
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //判断当前正在播放的歌曲
+                        priorityListener.refreshMusic(musicPlayList.sid);
+
+                        //重置索引位置
+                        UpSongActivity.position = position;
+                    }
+                });
     }
 
     private OnItemClickListener onItemClickListener;

@@ -38,7 +38,7 @@ public class MusicListDatabaseUtils extends SQLiteHelper {
             musicPlayList.bvid = cursor.getString(cursor.getColumnIndex("bvid"));
             musicPlayList.musicName = cursor.getString(cursor.getColumnIndex("musicName"));
             musicPlayList.author = cursor.getString(cursor.getColumnIndex("author"));
-            musicPlayList.isHaveVideo = cursor.getInt(cursor.getColumnIndex("isHaveVideo"))  == 0;
+            musicPlayList.isHaveVideo = cursor.getInt(cursor.getColumnIndex("isHaveVideo"))  == 1;
 
             musicPlayLists.add(musicPlayList);
         }

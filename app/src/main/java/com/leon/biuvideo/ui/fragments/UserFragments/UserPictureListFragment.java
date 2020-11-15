@@ -91,21 +91,7 @@ public class UserPictureListFragment extends Fragment {
             view = inflater.inflate(R.layout.fragment_up_no_data, null);
         }
 
-        UserPictureAdapter userPictureAdapter = new UserPictureAdapter(upPictures, context);
-        userPictureAdapter.setOnPictureItemClickListener(new UserPictureAdapter.OnPictureItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                //跳转到PictureActivity
-                Intent intent = new Intent(context, PictureActivity.class);
-
-                //传递整个UpPicture对象
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("picture", upPictures.get(position));
-                intent.putExtras(bundle);
-
-                startActivity(intent);
-            }
-        });
+        UserPictureAdapter userPictureAdapter = new UserPictureAdapter(upPictures, getContext());
         picture_recyclerView.setAdapter(userPictureAdapter);
 
         //添加加载更多监听事件

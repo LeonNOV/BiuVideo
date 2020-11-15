@@ -72,26 +72,6 @@ public class FavoriteFragment extends Fragment {
     private void initValue() {
         favorites = favoriteDatabaseUtils.queryFavorites();
         favoriteAdapter = new FavoriteAdapter(favorites, context);
-        favoriteAdapter.setOnItemClickListener((view, position) -> {
-            switch (view.getId()) {
-                case R.id.favorite_circleImageView_face:
-                    //跳转到UpMasterActivity中
-                    Intent intent = new Intent(context, UpMasterActivity.class);
-                    intent.putExtra("mid", favorites.get(position).mid);
-                    startActivity(intent);
-
-                    break;
-                case R.id.favorite_imageView_cancel_favoriteIcon:
-                    favoriteDatabaseUtils.removeFavorite(favorites.get(position).mid);
-
-                    favorites.remove(position);
-                    favoriteAdapter.notifyDataSetChanged();
-
-                    break;
-                default:
-                    break;
-            }
-        });
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         favorite_recyclerView.setLayoutManager(layoutManager);

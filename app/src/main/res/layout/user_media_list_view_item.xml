@@ -11,8 +11,6 @@
         android:id="@+id/user_media_relativeLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
         android:background="@drawable/ripple_item_bilibili_lite">
 
         <ImageView
