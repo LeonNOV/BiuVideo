@@ -10,12 +10,13 @@
 - 注意：
   - 创建Adapter时按照以下的格式创建
   - ``` java
-        public class MusicListAdapter extends BaseAdapter<MusicPlayList> {
+        public class Adapter extends BaseAdapter<MusicPlayList> {
     
             @Override
             public int getLayout(int viewType) {
                 return itemID;
             }
+            
             @Override
             public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
                 //调用holder中对应的方法，具体说明可看代码注释
