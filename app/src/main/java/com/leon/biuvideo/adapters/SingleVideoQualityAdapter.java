@@ -1,14 +1,9 @@
 package com.leon.biuvideo.adapters;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;

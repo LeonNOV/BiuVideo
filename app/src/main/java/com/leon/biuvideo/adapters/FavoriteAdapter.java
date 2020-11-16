@@ -12,7 +12,6 @@ import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.ui.activitys.UpMasterActivity;
 import com.leon.biuvideo.utils.ImagePixelSize;
-import com.leon.biuvideo.utils.SQLiteHelper;
 import com.leon.biuvideo.utils.dataUtils.FavoriteDatabaseUtils;
 import com.leon.biuvideo.utils.dataUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.utils.dataUtils.Tables;

@@ -2,19 +2,15 @@ package com.leon.biuvideo.adapters;
 
 import android.content.Context;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
-import com.leon.biuvideo.ui.activitys.PictureActivity;
 import com.leon.biuvideo.ui.views.PictureViewer;
 import com.leon.biuvideo.utils.ImagePixelSize;
 

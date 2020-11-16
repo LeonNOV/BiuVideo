@@ -43,6 +43,7 @@ import com.leon.biuvideo.utils.resourcesParseUtils.MusicParseUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.MusicUrlParseUtils;
 import com.sunfusheng.marqueeview.MarqueeView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -154,12 +155,18 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
         //获取sid的position
         position = intent.getIntExtra("position", -1);
 
-        //获取所有的sid
-        //转换为List集合
-        sids = intent.getLongArrayExtra("sids");
+        long[] sidsArray = intent.getLongArrayExtra("sids");
+        // 获取所有的sid,转换为List集合
+        if (sidsArray.length != 0) {
+            this.sids = new ArrayList<>();
+
+            for (long l : sidsArray) {
+                this.sids.add(l);
+            }
+        }
 
         if (position != -1) {
-            long sid = sids[position];
+            long sid = sids.get(position);
 
             //获取music信息
             musicInfo = MusicParseUtils.parseMusic(sid);
@@ -352,6 +359,8 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                     @Override
                     public void refreshMusic(long sid) {
                         switchMusic(sid);
+
+                        musicListDialog.dismiss();
                     }
                 };
                 musicListDialog.show();
@@ -387,7 +396,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                     isHavePlayList = false;
 
                     //从sids中删除
-                    sids[position] = -1;
+                    sids.remove(position);
 
                 } else {
                     MusicPlayList musicPlayList = new MusicPlayList();
@@ -451,7 +460,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                 //判断当前播放的歌曲是否处于第一个
                 if (position != 0) {
                     //获取上一个music的sid
-                    long sid = sids[--position];
+                    long sid = sids.get(--position);
 
                     Log.d(Fuck.blue, "上一首：" + position);
 
@@ -461,14 +470,12 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                     Toast.makeText(this, "当前播放的就是第一个了~~~", Toast.LENGTH_SHORT).show();
                 }
 
-
-
                 break;
             case R.id.music_imageView_next:
                 //判断当前播放的歌曲是否处于最后一个
-                if (position != sids.length - 1) {
+                if (position != sids.size() - 1) {
                     //获取下一个music的sid
-                    long sid = sids[++position];
+                    long sid = sids.get(++position);
 
                     Log.d(Fuck.blue, "下一首：" + position);
 

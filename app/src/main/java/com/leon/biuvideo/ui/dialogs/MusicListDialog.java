@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -14,9 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.MusicPlayListAdapter;
-import com.leon.biuvideo.adapters.PlayListAdapter.MusicListAdapter;
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
-import com.leon.biuvideo.utils.dataUtils.MusicListDatabaseUtils;
 
 import java.util.List;
 

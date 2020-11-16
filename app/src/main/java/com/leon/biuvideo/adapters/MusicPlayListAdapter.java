@@ -1,16 +1,9 @@
 package com.leon.biuvideo.adapters;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
@@ -18,10 +11,7 @@ import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
 import com.leon.biuvideo.ui.activitys.UpSongActivity;
 import com.leon.biuvideo.ui.dialogs.MusicListDialog;
-import com.leon.biuvideo.utils.SQLiteHelper;
 import com.leon.biuvideo.utils.dataUtils.MusicListDatabaseUtils;
-import com.leon.biuvideo.utils.dataUtils.SQLiteHelperFactory;
-import com.leon.biuvideo.utils.dataUtils.Tables;
 
 import java.util.List;
 
@@ -67,10 +57,6 @@ public class MusicPlayListAdapter extends BaseAdapter<MusicPlayList> {
 
                         //刷新UpSongActivity红心的状态
                         priorityListener.refreshFavoriteIcon();
-
-                        //重置当前position,如果为当前正在播放的歌曲,将其position移至上一首
-//                        -- UpSongActivity.position;
-
                     }
                 })
 

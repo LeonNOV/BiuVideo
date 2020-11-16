@@ -1,11 +1,9 @@
 package com.leon.biuvideo.ui.activitys;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Looper;
 import android.view.*;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.*;
 
@@ -21,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.AnthologyAdapter;
-import com.leon.biuvideo.adapters.SingleVideoQualityAdapter;
 import com.leon.biuvideo.beans.upMasterBean.VideoPlayList;
 import com.leon.biuvideo.beans.videoBean.play.Play;
 import com.leon.biuvideo.beans.videoBean.view.SingleVideoInfo;
@@ -32,7 +29,6 @@ import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.GeneralNotification;
 import com.leon.biuvideo.utils.ImagePixelSize;
 import com.leon.biuvideo.utils.MediaUtils;
-import com.leon.biuvideo.utils.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.WebViewUtils;
 import com.leon.biuvideo.utils.dataUtils.SQLiteHelperFactory;

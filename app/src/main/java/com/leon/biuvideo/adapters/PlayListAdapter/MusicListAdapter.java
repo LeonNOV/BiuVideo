@@ -10,7 +10,6 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
-import com.leon.biuvideo.ui.activitys.MainActivity;
 import com.leon.biuvideo.ui.activitys.UpSongActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.utils.Fuck;
