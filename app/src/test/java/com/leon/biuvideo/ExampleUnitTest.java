@@ -1,20 +1,18 @@
 package com.leon.biuvideo;
 
-import com.leon.biuvideo.beans.AboutBean;
 import com.leon.biuvideo.beans.upMasterBean.UpAudio;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
 import com.leon.biuvideo.beans.upMasterBean.UpVideo;
 import com.leon.biuvideo.utils.IDUtils;
 import com.leon.biuvideo.utils.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
-import com.leon.biuvideo.utils.resourcesParseUtils.UpAudioParseUtils;
-import com.leon.biuvideo.utils.resourcesParseUtils.UpPictureParseUtils;
-import com.leon.biuvideo.utils.resourcesParseUtils.UpVideoParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UpAudioParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UpPictureParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UpVideoParseUtils;
 
 import org.junit.Test;
 
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * Example local unit test, which will execute on the development machine (host).

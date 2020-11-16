@@ -12,9 +12,9 @@ import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.ui.activitys.UpMasterActivity;
 import com.leon.biuvideo.utils.ImagePixelSize;
-import com.leon.biuvideo.utils.dataUtils.FavoriteDatabaseUtils;
-import com.leon.biuvideo.utils.dataUtils.SQLiteHelperFactory;
-import com.leon.biuvideo.utils.dataUtils.Tables;
+import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
+import com.leon.biuvideo.utils.dataBaseUtils.Tables;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.leon.biuvideo.utils.dataUtils;
+package com.leon.biuvideo.utils.dataBaseUtils;
 
 import android.content.ContentValues;
 import android.content.Context;

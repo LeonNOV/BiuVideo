@@ -1,7 +1,6 @@
 package com.leon.biuvideo.ui.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +17,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.FavoriteAdapter;
 import com.leon.biuvideo.beans.Favorite;
-import com.leon.biuvideo.ui.activitys.UpMasterActivity;
 import com.leon.biuvideo.utils.Fuck;
-import com.leon.biuvideo.utils.dataUtils.FavoriteDatabaseUtils;
-import com.leon.biuvideo.utils.dataUtils.SQLiteHelperFactory;
-import com.leon.biuvideo.utils.dataUtils.Tables;
+import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
+import com.leon.biuvideo.utils.dataBaseUtils.Tables;
 
 import java.util.List;
 

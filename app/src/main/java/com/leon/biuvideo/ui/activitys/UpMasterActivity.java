@@ -25,10 +25,10 @@ import com.leon.biuvideo.ui.fragments.UserFragments.UserAudioListFragment;
 import com.leon.biuvideo.ui.fragments.UserFragments.UserPictureListFragment;
 import com.leon.biuvideo.ui.fragments.UserFragments.UserVideoListFragment;
 import com.leon.biuvideo.utils.ImagePixelSize;
-import com.leon.biuvideo.utils.dataUtils.FavoriteDatabaseUtils;
-import com.leon.biuvideo.utils.dataUtils.SQLiteHelperFactory;
-import com.leon.biuvideo.utils.dataUtils.Tables;
-import com.leon.biuvideo.utils.resourcesParseUtils.UpInfoParseUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
+import com.leon.biuvideo.utils.dataBaseUtils.Tables;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UpInfoParseUtils;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;

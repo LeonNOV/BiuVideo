@@ -1,4 +1,4 @@
-package com.leon.biuvideo.utils.dataUtils;
+package com.leon.biuvideo.utils.dataBaseUtils;
 
 public enum  Tables {
     FavoriteUp("favorite_up"),

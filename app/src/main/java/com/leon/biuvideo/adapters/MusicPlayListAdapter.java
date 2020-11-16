@@ -11,7 +11,7 @@ import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
 import com.leon.biuvideo.ui.activitys.UpSongActivity;
 import com.leon.biuvideo.ui.dialogs.MusicListDialog;
-import com.leon.biuvideo.utils.dataUtils.MusicListDatabaseUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.MusicListDatabaseUtils;
 
 import java.util.List;
 

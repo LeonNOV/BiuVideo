@@ -1,4 +1,4 @@
-package com.leon.biuvideo.utils.mediaParseUtils;
+package com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils;
 
 import android.util.Log;
 
@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import okhttp3.Headers;
 
 public class MediaParseUtils {
     private static final String TAG = "LeonLogCat-red";

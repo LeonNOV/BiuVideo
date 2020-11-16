@@ -1,7 +1,6 @@
 package com.leon.biuvideo.ui.fragments.PlayListFragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,12 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.PlayListAdapter.MusicListAdapter;
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
-import com.leon.biuvideo.ui.activitys.UpSongActivity;
-import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.utils.Fuck;
-import com.leon.biuvideo.utils.dataUtils.MusicListDatabaseUtils;
-import com.leon.biuvideo.utils.dataUtils.SQLiteHelperFactory;
-import com.leon.biuvideo.utils.dataUtils.Tables;
+import com.leon.biuvideo.utils.dataBaseUtils.MusicListDatabaseUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
+import com.leon.biuvideo.utils.dataBaseUtils.Tables;
 
 import java.util.List;
 

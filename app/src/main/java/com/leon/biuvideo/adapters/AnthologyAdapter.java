@@ -15,7 +15,7 @@ import com.leon.biuvideo.beans.videoBean.view.ViewPage;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.utils.ImagePixelSize;
 import com.leon.biuvideo.utils.WebViewUtils;
-import com.leon.biuvideo.utils.mediaParseUtils.MediaParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParseUtils;
 
 import java.util.List;
 

@@ -1,7 +1,6 @@
 package com.leon.biuvideo.ui.fragments.UserFragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -19,9 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UserFragmentAdapters.UserAudioAdapter;
 import com.leon.biuvideo.beans.upMasterBean.UpAudio;
-import com.leon.biuvideo.ui.activitys.UpSongActivity;
 import com.leon.biuvideo.utils.Fuck;
-import com.leon.biuvideo.utils.resourcesParseUtils.UpAudioParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UpAudioParseUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import java.util.List;

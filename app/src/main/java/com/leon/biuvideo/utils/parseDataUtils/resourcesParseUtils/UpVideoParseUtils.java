@@ -1,5 +1,4 @@
-package com.leon.biuvideo.utils.resourcesParseUtils;
-
+package com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils;
 
 import android.util.Log;
 import com.alibaba.fastjson.JSON;

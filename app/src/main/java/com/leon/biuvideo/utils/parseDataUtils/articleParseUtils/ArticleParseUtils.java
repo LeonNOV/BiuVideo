@@ -1,4 +1,4 @@
-package com.leon.biuvideo.utils.articleParseUtils;
+package com.leon.biuvideo.utils.parseDataUtils.articleParseUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;

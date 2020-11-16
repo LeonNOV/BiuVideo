@@ -31,11 +31,11 @@ import com.leon.biuvideo.utils.ImagePixelSize;
 import com.leon.biuvideo.utils.MediaUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.WebViewUtils;
-import com.leon.biuvideo.utils.dataUtils.SQLiteHelperFactory;
-import com.leon.biuvideo.utils.dataUtils.Tables;
-import com.leon.biuvideo.utils.dataUtils.VideoListDatabaseUtils;
-import com.leon.biuvideo.utils.mediaParseUtils.MediaParseUtils;
-import com.leon.biuvideo.utils.mediaParseUtils.ViewParseUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
+import com.leon.biuvideo.utils.dataBaseUtils.Tables;
+import com.leon.biuvideo.utils.dataBaseUtils.VideoListDatabaseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.ViewParseUtils;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.text.SimpleDateFormat;

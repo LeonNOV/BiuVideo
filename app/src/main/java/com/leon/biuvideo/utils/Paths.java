@@ -49,17 +49,6 @@ public class Paths {
     public static String videos = "https://api.bilibili.com/x/space/arc/search";
 
     /**
-     * 该接口需要知道用户所发动态的类型，百度找不到，所以，弃坑。。。
-     * 获取相簿列表
-     *      参数：
-     *          visitor_uid：查看者id，默认为0
-     *          host_uid：up主id
-     *          offset_dynamic_id：偏移id，第一页为0，后面调用需要获取最后一个条目的dynamic_id_str的值
-     *          need_top：默认为0
-     */
-    public static String space = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history";
-
-    /**
      * 获取up音频接口
      *      参数：
      *          uid：up主id
@@ -86,9 +75,7 @@ public class Paths {
      * 相簿原链接
      *      参数：后跟相簿ID
      */
-//    public static String pictureWebPage = "https://h.bilibili.com/";
     public static String pictureWebPage = "https://t.bilibili.com/h5/dynamic/detail/";
-    //https://t.bilibili.com/h5/dynamic/detail/97176992?tab=1&type=2
 
 
     /**
@@ -119,7 +106,6 @@ public class Paths {
      *          from:默认值:category_0,可选
      */
     public static String articleWebPage = "https://www.bilibili.com/read/mobile/";
-//    public static String article = "https://www.bilibili.com/read/cv";
 
     /**
      * 专栏列表接口

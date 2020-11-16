@@ -1,12 +1,10 @@
 package com.leon.biuvideo.utils;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import okhttp3.Headers;
-import okhttp3.Response;
 
 public class IDUtils {
     private static final int[] ints = {11, 10, 3, 8, 4, 6};
