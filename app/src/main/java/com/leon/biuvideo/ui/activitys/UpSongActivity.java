@@ -43,6 +43,7 @@ import com.leon.biuvideo.utils.resourcesParseUtils.MusicParseUtils;
 import com.leon.biuvideo.utils.resourcesParseUtils.MusicUrlParseUtils;
 import com.sunfusheng.marqueeview.MarqueeView;
 
+import java.util.Arrays;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -93,7 +94,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
     public static ImageView music_imageView_control;
 
     //所有的sid
-    private long[] sids;
+    private List<Long> sids;
 
     //当前sid在sids中的索引位置
     public static int position;
@@ -127,6 +128,9 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
     //music数据库的helper对象
     private MusicListDatabaseUtils musicDatabaseUtils;
 
+    //播放列表弹窗
+    private MusicListDialog musicListDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -151,6 +155,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
         position = intent.getIntExtra("position", -1);
 
         //获取所有的sid
+        //转换为List集合
         sids = intent.getLongArrayExtra("sids");
 
         if (position != -1) {
@@ -330,7 +335,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                 List<MusicPlayList> musicPlayLists = musicDatabaseUtils.queryPlayList();
                 Log.d(Fuck.blue, "onClick: " + musicPlayLists.size());
 
-                MusicListDialog musicListDialog = new MusicListDialog(UpSongActivity.this, musicPlayLists);
+                musicListDialog = new MusicListDialog(UpSongActivity.this, musicPlayLists);
                 MusicListDialog.priorityListener = new MusicListDialog.PriorityListener() {
                     @Override
                     public void refreshFavoriteIcon() {
@@ -344,7 +349,6 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                             isHavePlayList = false;
                         }
                     }
-
                     @Override
                     public void refreshMusic(long sid) {
                         switchMusic(sid);
@@ -381,6 +385,10 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                     music_imageView_addFavorite.setImageResource(R.drawable.no_favorite);
 
                     isHavePlayList = false;
+
+                    //从sids中删除
+                    sids[position] = -1;
+
                 } else {
                     MusicPlayList musicPlayList = new MusicPlayList();
                     musicPlayList.sid = musicInfo.sid;
@@ -452,6 +460,9 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                 } else {
                     Toast.makeText(this, "当前播放的就是第一个了~~~", Toast.LENGTH_SHORT).show();
                 }
+
+
+
                 break;
             case R.id.music_imageView_next:
                 //判断当前播放的歌曲是否处于最后一个

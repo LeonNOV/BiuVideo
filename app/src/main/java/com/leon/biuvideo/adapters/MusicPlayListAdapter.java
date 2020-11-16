@@ -18,7 +18,10 @@ import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
 import com.leon.biuvideo.ui.activitys.UpSongActivity;
 import com.leon.biuvideo.ui.dialogs.MusicListDialog;
+import com.leon.biuvideo.utils.SQLiteHelper;
 import com.leon.biuvideo.utils.dataUtils.MusicListDatabaseUtils;
+import com.leon.biuvideo.utils.dataUtils.SQLiteHelperFactory;
+import com.leon.biuvideo.utils.dataUtils.Tables;
 
 import java.util.List;
 
@@ -40,10 +43,6 @@ public class MusicPlayListAdapter extends BaseAdapter<MusicPlayList> {
     @Override
     public int getLayout(int viewType) {
         return R.layout.music_play_list_item;
-    }
-
-    public void setPriorityListener(MusicListDialog.PriorityListener priorityListener) {
-        this.priorityListener = priorityListener;
     }
 
     @Override
@@ -68,6 +67,10 @@ public class MusicPlayListAdapter extends BaseAdapter<MusicPlayList> {
 
                         //刷新UpSongActivity红心的状态
                         priorityListener.refreshFavoriteIcon();
+
+                        //重置当前position,如果为当前正在播放的歌曲,将其position移至上一首
+//                        -- UpSongActivity.position;
+
                     }
                 })
 
@@ -82,45 +85,5 @@ public class MusicPlayListAdapter extends BaseAdapter<MusicPlayList> {
                         UpSongActivity.position = position;
                     }
                 });
-    }
-
-    private OnItemClickListener onItemClickListener;
-
-    public interface OnItemClickListener {
-        void onItemClickListener(int position);
-
-        void onItemDeleteListener(int position);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-        RelativeLayout music_relativeLayout;
-        TextView music_textView_playList_title, music_textView_playList_author;
-        ImageView music_imageView_playList_delete;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            music_relativeLayout = itemView.findViewById(R.id.music_relativeLayout);
-            music_relativeLayout.setOnClickListener(v -> {
-                if (onItemClickListener != null) {
-                    onItemClickListener.onItemClickListener(getAdapterPosition());
-                }
-            });
-
-            music_textView_playList_title = itemView.findViewById(R.id.music_textView_playList_title);
-            music_textView_playList_author = itemView.findViewById(R.id.music_textView_playList_author);
-
-            music_imageView_playList_delete = itemView.findViewById(R.id.music_imageView_playList_delete);
-            music_imageView_playList_delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onItemClickListener.onItemDeleteListener(getAdapterPosition());
-                }
-            });
-        }
     }
 }
