@@ -1,5 +1,7 @@
 package com.leon.biuvideo.utils;
 
+import java.text.DecimalFormat;
+
 public class ValueFormat {
     /**
      * 生成以万结尾的字符串，小于1万则直接返回
@@ -37,5 +39,42 @@ public class ValueFormat {
         String secondStr = second < 10 ? "0" + second : String.valueOf(second);
 
         return minuteStr + ":" + secondStr;
+    }
+
+    /**
+     * 字节大小转换
+     *
+     * @param size  需要转换的大小(单位：byte)
+     * @return  返回转换后的数据
+     */
+    public static String sizeFormat(long size) {
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+
+        if (size > 1024) {
+            //转换为KB
+            double kb = (double) size / 1024;
+
+            if (kb > 1024) {
+                double mb = kb / 1024;
+
+                if (mb > 1024) {
+                    double gb = mb / 1024;
+
+                    if (gb > 1024) {
+                        double tb = mb / 1024;
+
+                        return decimalFormat.format(tb) + "TB";
+                    }
+
+                    return decimalFormat.format(gb) + "GB";
+                }
+
+                return decimalFormat.format(mb) + "MB";
+            }
+
+            return decimalFormat.format(kb) + "KB";
+        } else {
+            return size + "B";
+        }
     }
 }

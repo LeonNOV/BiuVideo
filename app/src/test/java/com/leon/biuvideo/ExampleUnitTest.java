@@ -3,6 +3,7 @@ package com.leon.biuvideo;
 import com.leon.biuvideo.beans.upMasterBean.UpAudio;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
 import com.leon.biuvideo.beans.upMasterBean.UpVideo;
+import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.IDUtils;
 import com.leon.biuvideo.utils.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
@@ -139,5 +140,20 @@ public class ExampleUnitTest {
     @Test
     public void HtmlSource() {
         String path = Paths.articleWebPage + "8107744";
+    }
+
+    //size转换测试
+    @Test
+    public void sizeFormat() {
+        //4653470B
+
+        //2,719,458,939
+//        long size = 2719458939L;
+
+        long size = 465347 * 1024 * 10;
+
+        String s = ValueFormat.sizeFormat(size);
+
+        System.out.println(s);
     }
 }

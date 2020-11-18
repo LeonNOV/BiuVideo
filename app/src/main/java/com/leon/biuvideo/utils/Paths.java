@@ -114,4 +114,15 @@ public class Paths {
      *          pn：页码，必须
      */
     public static String article = "https://api.bilibili.com/x/space/article";
+
+    /**
+     * 获取Ta的关注列表接口
+     *      参数：
+     *          vmid：用户ID，必须
+     *          pn：页码，从1开始，必须
+     *          ps：获取数量，建议20，必须
+     *          order：排序方式，默认DESC，可选
+     *
+     */
+    public static String follow = "https://api.bilibili.com/x/relation/followings";
 }

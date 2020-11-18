@@ -12,10 +12,11 @@
         android:background="@color/bilibili_pink">
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:id="@+id/preference_imageView_back"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:background="@drawable/ripple_user_bilibili_pink"
-            android:padding="3dp"
+            android:padding="7dp"
             android:src="@drawable/icon_back"
             app:tint="@color/normal" />
 
@@ -55,9 +56,10 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/preference_textView_import"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ripple_user_bilibili_pink_lite"
+                    android:background="?selectableItemBackground"
                     android:padding="10dp"
                     android:text="@string/preference_import"
                     android:textColor="@color/preference_item" />
@@ -67,25 +69,30 @@
                     android:layout_height="0.5dp"
                     android:background="#333333" />
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="10dp">
+                    android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:id="@+id/preference_textView_cache"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/preference_clean_cache"
+                        android:padding="10dp"
+                        android:background="?selectableItemBackground"
                         android:textColor="@color/preference_item" />
 
                     <TextView
+                        android:id="@+id/preference_textView_cache_size"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="5.32mb"
+                        android:layout_toEndOf="@id/preference_textView_cache"
+                        android:text="5.32M"
+                        android:layout_centerVertical="true"
                         android:textColor="@color/preference_item" />
 
-                </LinearLayout>
+                </RelativeLayout>
 
             </LinearLayout>
 
@@ -104,6 +111,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/preference_textView_open_source_license"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
@@ -116,6 +124,7 @@
                     android:background="#333333" />
 
                 <TextView
+                    android:id="@+id/preference_textView_thanks_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
@@ -139,6 +148,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/preference_textView_feed_back"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
@@ -151,6 +161,7 @@
                     android:background="#333333" />
 
                 <TextView
+                    android:id="@+id/preference_textView_feed_back_bug"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
