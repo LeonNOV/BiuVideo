@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="preference_title">设置</string>
+
+
+    <string name="preference_category_baseSetting">基本设置</string>
+
+    <string name="preference_import">导入外部数据</string>
+    <string name="preference_clean_cache">清除缓存</string>
+
+    <string name="preference_category_about">关于</string>
+
+    <string name="preference_version">版本</string>
+    <string name="preference_open_source_license">开源许可</string>
+    <string name="preference_thanks_list">感谢列表</string>
+
+    <string name="preference_category_feed_back">反馈</string>
+
+    <string name="preference_star_rating">提交反馈</string>
+    <string name="preference_feed_back_bug">提交BUG</string>
+
+</resources>

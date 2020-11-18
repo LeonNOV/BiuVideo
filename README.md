@@ -5,6 +5,9 @@
 
 ## 📘开发日志
 
+### 2020/11/17
+- 无进度
+
 ### 2020/11/16
 - BUG还未修复,需要将sids的类型更换为List集合
 - UpSongActivity的BUG已修复,所有关于RecyclerView的Adapter的代码已经进行优化

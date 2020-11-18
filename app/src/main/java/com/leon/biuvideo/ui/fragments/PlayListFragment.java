@@ -1,6 +1,5 @@
 package com.leon.biuvideo.ui.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,7 +36,7 @@ public class PlayListFragment extends Fragment implements ViewPager.OnPageChange
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_play_list_fragment, container, false);
+        view = inflater.inflate(R.layout.main_fragment_play_list_fragment, container, false);
 
         initView();
         initFragments();

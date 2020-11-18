@@ -17,4 +17,6 @@
 
     <color name="light_gray">#707070</color>
 
+    <color name="preference_item">#2B2B2B</color>
+
 </resources>

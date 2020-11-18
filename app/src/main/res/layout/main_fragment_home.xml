@@ -11,7 +11,7 @@
         android:id="@+id/home_imageView_hero"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:src="@mipmap/marvel_ironman" />
+        tools:src="@drawable/vector_hero_marvel_ironman" />
 
     <LinearLayout
         android:layout_width="wrap_content"

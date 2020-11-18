@@ -1,5 +1,6 @@
 package com.leon.biuvideo.ui.activitys;
 
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.view.*;
 
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView toolBar_imageView_menu, navigation_imageView_back, toolBar_imageView_more;
 
     private PopupWindow popupWindow;
-    private Button main_more_help, main_more_about, main_more_thanks;
+    private Button main_more_help, main_more_preference;
 
     private List<Fragment> fragmentList;
 
@@ -208,14 +209,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.toolBar_imageView_more:
                 View popupView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.main_popup_window, null);
+
                 main_more_help = popupView.findViewById(R.id.main_more_help);
                 main_more_help.setOnClickListener(this);
 
-                main_more_about = popupView.findViewById(R.id.main_more_about);
-                main_more_about.setOnClickListener(this);
-
-                main_more_thanks = popupView.findViewById(R.id.main_more_thanks);
-                main_more_thanks.setOnClickListener(this);
+                main_more_preference = popupView.findViewById(R.id.main_more_preference);
+                main_more_preference.setOnClickListener(this);
 
                 popupWindow = new PopupWindow(popupView, ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
                 popupWindow.setFocusable(true);
@@ -227,44 +226,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.navigation_imageView_back:
                 drawer_layout.closeDrawer(navigation_view);
+
                 break;
             case R.id.main_more_help:
                 Toast.makeText(MainActivity.this, "help", Toast.LENGTH_SHORT).show();
-                popupWindow.dismiss();
 
+                popupWindow.dismiss();
                 break;
-            case R.id.main_more_about:
-                Toast.makeText(MainActivity.this, "about", Toast.LENGTH_SHORT).show();
-                popupWindow.dismiss();
-
-                break;
-            case R.id.main_more_thanks:
-
-                //设置Dialog显示内容
-                ArrayList<AboutBean> aboutBeans = new ArrayList<>();
-                for (int i = 1; i <= 10; i++) {
-                    AboutBean aboutBean = new AboutBean();
-
-                    aboutBean.title = "标题" + i;
-                    aboutBean.license = "许可许可许可" + i;
-                    aboutBean.desc = "内容内容内容内容内容内容内容内容" + i;
-
-                    aboutBeans.add(aboutBean);
-                }
-
-                //显示Dialog
-                AboutDialog aboutDialog = new AboutDialog(MainActivity.this, aboutBeans);
-                aboutDialog.setOnClickBottomListener(new AboutDialog.OnClickBottomListener() {
-                    @Override
-                    public void onCloseClick() {
-                        aboutDialog.dismiss();
-                    }
-                });
-
-                aboutDialog.show();
+            case R.id.main_more_preference:
+                //跳转至PreferenceActivity
+                Intent intent = new Intent(this, PreferenceActivity.class);
+                startActivity(intent);
 
                 popupWindow.dismiss();
-
                 break;
             default:
                 break;
