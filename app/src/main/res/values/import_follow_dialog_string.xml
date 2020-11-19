@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="import_follow_editText_hint">输入要导入的用户ID/昵称</string>
+    <string name="import_follow_editText_hint">输入要导入的用户ID</string>
     <string name="import_follow_button_cancel">取消</string>
     <string name="import_follow_button_confirm">确定</string>
 

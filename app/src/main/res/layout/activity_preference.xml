@@ -78,18 +78,18 @@
                         android:id="@+id/preference_textView_cache"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/preference_clean_cache"
-                        android:padding="10dp"
                         android:background="?selectableItemBackground"
+                        android:padding="10dp"
+                        android:text="@string/preference_clean_cache"
                         android:textColor="@color/preference_item" />
 
                     <TextView
                         android:id="@+id/preference_textView_cache_size"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         android:layout_toEndOf="@id/preference_textView_cache"
                         android:text="5.32M"
-                        android:layout_centerVertical="true"
                         android:textColor="@color/preference_item" />
 
                 </RelativeLayout>
@@ -114,6 +114,7 @@
                     android:id="@+id/preference_textView_open_source_license"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="?selectableItemBackground"
                     android:padding="10dp"
                     android:text="@string/preference_open_source_license"
                     android:textColor="@color/preference_item" />
@@ -127,6 +128,7 @@
                     android:id="@+id/preference_textView_thanks_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="?selectableItemBackground"
                     android:padding="10dp"
                     android:text="@string/preference_thanks_list"
                     android:textColor="@color/preference_item" />
@@ -151,6 +153,7 @@
                     android:id="@+id/preference_textView_feed_back"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="?selectableItemBackground"
                     android:padding="10dp"
                     android:text="@string/preference_star_rating"
                     android:textColor="@color/preference_item" />
@@ -164,6 +167,7 @@
                     android:id="@+id/preference_textView_feed_back_bug"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="?selectableItemBackground"
                     android:padding="10dp"
                     android:text="@string/preference_feed_back_bug"
                     android:textColor="@color/preference_item" />

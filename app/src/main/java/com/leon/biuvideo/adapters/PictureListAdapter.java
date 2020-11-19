@@ -56,38 +56,4 @@ public class PictureListAdapter extends BaseAdapter<String> {
                     }
                 });
     }
-
-    @Override
-    public int getItemCount() {
-        return pictures.size();
-    }
-
-    private OnPictureItemClickListener onPictureItemClickListener;
-
-    public interface OnPictureItemClickListener {
-        void onItemClick(int position);
-    }
-
-    public void setOnPictureItemClickListener(OnPictureItemClickListener onPictureItemClickListener) {
-        this.onPictureItemClickListener = onPictureItemClickListener;
-    }
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView picture_imageView_item;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            picture_imageView_item = itemView.findViewById(R.id.picture_imageView_item);
-
-            picture_imageView_item.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onPictureItemClickListener != null) {
-                        onPictureItemClickListener.onItemClick(getAdapterPosition());
-                    }
-                }
-            });
-        }
-    }
 }

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -13,11 +14,19 @@ import android.widget.TextView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.AboutBean;
+import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.ui.dialogs.AboutDialog;
+import com.leon.biuvideo.ui.dialogs.ImportFollowDialog;
+import com.leon.biuvideo.ui.dialogs.WaitingDialog;
 import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
+import com.leon.biuvideo.utils.dataBaseUtils.Tables;
+import com.leon.biuvideo.utils.parseDataUtils.FollowParseUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PreferenceActivity extends AppCompatActivity implements OnClickListener {
     private ImageView preference_imageView_back;
@@ -29,8 +38,6 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
             preference_textView_thanks_list,
             preference_textView_feed_back,
             preference_textView_feed_back_bug;
-
-    private AlertDialog cacheDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +58,6 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
         preference_textView_cache = findViewById(R.id.preference_textView_cache);
         preference_textView_cache.setOnClickListener(this);
         preference_textView_cache_size = findViewById(R.id.preference_textView_cache_size);
-        preference_textView_cache_size.setOnClickListener(this);
         preference_textView_open_source_license = findViewById(R.id.preference_textView_open_source_license);
         preference_textView_open_source_license.setOnClickListener(this);
         preference_textView_thanks_list = findViewById(R.id.preference_textView_thanks_list);
@@ -79,7 +85,36 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
                 break;
             case R.id.preference_textView_import:
                 //导入指定ID的关注列表
-                //540-28-519
+                ImportFollowDialog importFollowDialog = new ImportFollowDialog(PreferenceActivity.this);
+                importFollowDialog.show();
+                importFollowDialog.setPriorityListener(new ImportFollowDialog.PriorityListener() {
+                    @Override
+                    public void setActivityText(long mid) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                //隐藏importFollowDialog
+                                importFollowDialog.dismiss();
+
+                                Looper.prepare();
+
+                                //显示等待对话框
+                                WaitingDialog waitingDialog = new WaitingDialog(PreferenceActivity.this);
+                                waitingDialog.show();
+
+                                boolean insertState = getFollowings(mid);
+
+                                //修改等待对话框的显示资源
+                                waitingDialog.setResourceState(insertState);
+
+                                //设置dialog可点击消失
+                                waitingDialog.setCanceledOnTouchOutside(true);
+
+                                Looper.loop();
+                            }
+                        }).start();
+                    }
+                });
 
                 break;
             case R.id.preference_textView_cache:
@@ -108,10 +143,6 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
                             }
                         });
                 builder.create().show();
-
-                break;
-            case R.id.preference_textView_cache_size:
-                //显示缓存大小
 
                 break;
             case R.id.preference_textView_open_source_license:
@@ -154,6 +185,48 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
 
             default:
                 break;
+        }
+    }
+
+    /**
+     * 获取关注列表并进行添加
+     *
+     * @param mid   用户ID
+     * @return  返回插入状态
+     */
+    private boolean getFollowings(long mid) {
+        if (mid != 0) {
+            //获取总数
+            int total = FollowParseUtils.getTotal(mid);
+            if (total == 0) {
+                return true;
+            }
+
+            //获取数据
+            int pn = 1;
+            int currentTotal = 0;
+
+            SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.FavoriteUp);
+            FavoriteDatabaseUtils favoriteDatabaseUtils = (FavoriteDatabaseUtils) sqLiteHelperFactory.getInstance();
+
+            while (currentTotal != total) {
+                List<Favorite> favorites = FollowParseUtils.parseFollow(mid, pn++);
+                currentTotal += favorites.size();
+
+                //将数据添加至favorites_up
+                for (Favorite favorite : favorites) {
+                    boolean insertState = favoriteDatabaseUtils.addFavorite(favorite);
+
+                    if (!insertState) {
+                        return false;
+                    }
+                }
+            }
+
+            favoriteDatabaseUtils.close();
+            return true;
+        } else {
+            return false;
         }
     }
 

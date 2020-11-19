@@ -52,19 +52,20 @@ public class AboutDialog extends AlertDialog {
         aboutDialog_recyclerView.setAdapter(dialogAdapter);
 
         //获取window
-//        Window window = this.getWindow();
+        Window window = this.getWindow();
+        window.setBackgroundDrawableResource(android.R.color.transparent);
 
         //添加缩放动画
 //        window.setWindowAnimations(R.style.music_list_dialog);
 //        window.setBackgroundDrawableResource(android.R.color.transparent);
 
         //获取屏幕宽高
-//        int widthPixels = context.getResources().getDisplayMetrics().widthPixels;
-//        int heightPixels = context.getResources().getDisplayMetrics().heightPixels;
-//
-//        WindowManager.LayoutParams attributes = window.getAttributes();
-//        attributes.width = (int) (widthPixels * 0.9f);
-//        attributes.height = (int) (heightPixels * 0.9f);
+        int widthPixels = context.getResources().getDisplayMetrics().widthPixels;
+        int heightPixels = context.getResources().getDisplayMetrics().heightPixels;
+
+        WindowManager.LayoutParams attributes = window.getAttributes();
+        attributes.width = (int) (widthPixels * 0.9f);
+        attributes.height = (int) (heightPixels * 0.9f);
     }
 
     private void initEvent() {

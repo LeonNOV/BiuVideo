@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import kotlin.reflect.KVariance;
+
 /**
  * 获取Ta的关注列表数据
  */
@@ -27,7 +29,7 @@ public class FollowParseUtils {
      */
     public static List<Favorite> parseFollow(long vmid, int pn) {
         Map<String, String> params = new HashMap<>();
-        params.put("mid", String.valueOf(vmid));
+        params.put("vmid", String.valueOf(vmid));
         params.put("pn", String.valueOf(pn));
         params.put("ps", "20");
         params.put("order", "desc");
@@ -58,11 +60,39 @@ public class FollowParseUtils {
 
                 //获取头像url
                 favorite.faceUrl = jsonObject.getString("face");
+
+                followings.add(favorite);
             }
 
             return followings;
         } else {
             return null;
+        }
+    }
+
+    /**
+     * 获取关注总数
+     *
+     * @param mid   用户ID
+     * @return  返回total
+     */
+    public static int getTotal(long mid) {
+        Map<String, String> params = new HashMap<>();
+        params.put("vmid", String.valueOf(mid));
+        params.put("pn", "1");
+        params.put("ps", "20");
+        params.put("order", "desc");
+
+        HttpUtils httpUtils = new HttpUtils(Paths.follow, params);
+
+        String response = httpUtils.getData();
+
+        JSONObject responseObject = JSON.parseObject(response);
+        JSONObject data = responseObject.getJSONObject("data");
+        if (data != null) {
+            return data.getIntValue("total");
+        } else {
+            return 0;
         }
     }
 }

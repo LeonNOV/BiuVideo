@@ -5,10 +5,15 @@
 
 ## 📘开发日志
 
+### 2020/11/19
+- 修改了`AboutDialog`的界面代码
+- 在PreferenceActivity中加入了`导入外部数据`功能
+- `ImportFollowDialog`已完成
+
 ### 2020/11/18
 - 更改了MainActivity中popupWindow中的item,加入了PreferenceActivity
 - 加入了清除缓存功能
-- ImportFollowDialog进行到了一半。。。太困了。。。
+- ~~ImportFollowDialog进行到了一半。。。太困了。。。~~
 
 ### 2020/11/17
 - 无进度
