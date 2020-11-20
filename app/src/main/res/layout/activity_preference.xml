@@ -157,20 +157,6 @@
                     android:padding="10dp"
                     android:text="@string/preference_star_rating"
                     android:textColor="@color/preference_item" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="#333333" />
-
-                <TextView
-                    android:id="@+id/preference_textView_feed_back_bug"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?selectableItemBackground"
-                    android:padding="10dp"
-                    android:text="@string/preference_feed_back_bug"
-                    android:textColor="@color/preference_item" />
             </LinearLayout>
 
         </LinearLayout>

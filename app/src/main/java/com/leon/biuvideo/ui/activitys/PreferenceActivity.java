@@ -17,6 +17,7 @@ import com.leon.biuvideo.beans.AboutBean;
 import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.ui.dialogs.AboutDialog;
 import com.leon.biuvideo.ui.dialogs.ImportFollowDialog;
+import com.leon.biuvideo.ui.dialogs.LicenseDialog;
 import com.leon.biuvideo.ui.dialogs.WaitingDialog;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
@@ -36,8 +37,7 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
             preference_textView_cache_size,
             preference_textView_open_source_license,
             preference_textView_thanks_list,
-            preference_textView_feed_back,
-            preference_textView_feed_back_bug;
+            preference_textView_feed_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +64,6 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
         preference_textView_thanks_list.setOnClickListener(this);
         preference_textView_feed_back = findViewById(R.id.preference_textView_feed_back);
         preference_textView_feed_back.setOnClickListener(this);
-        preference_textView_feed_back_bug = findViewById(R.id.preference_textView_feed_back_bug);
-        preference_textView_feed_back_bug.setOnClickListener(this);
     }
 
     private void initValue() {
@@ -147,6 +145,8 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
                 break;
             case R.id.preference_textView_open_source_license:
                 //显示开源许可
+                LicenseDialog licenseDialog = new LicenseDialog(PreferenceActivity.this);
+                licenseDialog.show();
 
                 break;
             case R.id.preference_textView_thanks_list:
@@ -177,12 +177,6 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
                 //显示反馈提交界面
 
                 break;
-            case R.id.preference_textView_feed_back_bug:
-
-                //显示BUG提交界面
-
-                break;
-
             default:
                 break;
         }
