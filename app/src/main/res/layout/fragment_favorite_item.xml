@@ -51,10 +51,11 @@
 
         <Button
             android:id="@+id/favorite_imageView_cancel_favoriteIcon"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
             android:layout_alignParentEnd="true"
             android:layout_margin="10dp"
+            android:textSize="13sp"
             android:background="@drawable/shape_bilibili_pink"
             android:text="取消关注" />
     </RelativeLayout>

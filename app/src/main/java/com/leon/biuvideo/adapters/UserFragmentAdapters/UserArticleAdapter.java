@@ -64,6 +64,7 @@ public class UserArticleAdapter extends BaseAdapter<Article> {
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("article", article);
                         intent.putExtras(bundle);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                         context.startActivity(intent);
                     }

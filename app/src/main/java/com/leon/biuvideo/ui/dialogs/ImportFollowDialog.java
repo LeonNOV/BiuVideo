@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -12,14 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.beans.Favorite;
-import com.leon.biuvideo.utils.SQLiteHelper;
-import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
-import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
-import com.leon.biuvideo.utils.dataBaseUtils.Tables;
-import com.leon.biuvideo.utils.parseDataUtils.FollowParseUtils;
-
-import java.util.List;
 
 public class ImportFollowDialog extends AlertDialog implements View.OnClickListener {
     private EditText import_follow_editText;
@@ -49,6 +42,9 @@ public class ImportFollowDialog extends AlertDialog implements View.OnClickListe
         //获取window
         Window window = this.getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
+
+        //点击输入框弹出软键盘
+        window.clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
     }
 
     @Override

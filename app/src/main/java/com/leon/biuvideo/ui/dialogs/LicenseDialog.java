@@ -3,7 +3,6 @@ package com.leon.biuvideo.ui.dialogs;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,8 +11,6 @@ import androidx.appcompat.app.AlertDialog;
 import com.leon.biuvideo.R;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,7 +23,7 @@ public class LicenseDialog extends AlertDialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.liscense_dialog);
+        setContentView(R.layout.license_dialog);
 
         initView();
     }
@@ -44,6 +41,7 @@ public class LicenseDialog extends AlertDialog {
 
         //获取LICENSE内容
         String content = readLicense();
+        System.out.println(content);
         license_dialog_textView.setText(content);
     }
 
@@ -61,7 +59,7 @@ public class LicenseDialog extends AlertDialog {
             String temp;
             StringBuilder content = new StringBuilder();
             while ((temp = bufferedReader.readLine()) != null) {
-                content.append(temp);
+                content.append(temp + "\n");
             }
 
             bufferedReader.close();

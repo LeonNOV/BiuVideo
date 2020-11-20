@@ -5,6 +5,15 @@
 
 ## 📘开发日志
 
+### 2020/11/20
+- 添加了LICENSE
+- 加入了LicenseDialog
+- PreferenceActivity的所有功能已完成
+  - **暂未对反馈信息进行处理**
+- 修改了部分icon的大小
+- 修改了部分布局代码
+- 删除了无用的icon
+
 ### 2020/11/19
 - 修改了`AboutDialog`的界面代码
 - 在PreferenceActivity中加入了`导入外部数据`功能

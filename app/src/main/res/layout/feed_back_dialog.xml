@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="10dp"
+    app:cardBackgroundColor="#fff"
+    app:cardCornerRadius="15dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/feed_back_editText"
+            android:layout_width="wrap_content"
+            android:layout_height="270dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/shape_feed_back"
+            android:ems="17"
+            android:gravity="start|top"
+            android:hint="@string/feed_back_dialog_hint"
+            android:inputType="textMultiLine"
+            android:minLines="10"
+            android:padding="10dp"
+            android:scrollbars="vertical"
+            android:textSize="18sp"
+            android:theme="@style/CustomEditText" />
+
+        <Button
+            android:id="@+id/feed_back_button_submit"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/shape_bilibili_pink_lite"
+            android:text="@string/feed_back_dialog_submit" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

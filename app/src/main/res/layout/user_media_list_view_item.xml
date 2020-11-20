@@ -24,19 +24,20 @@
         <!-- 如果为音频则不显示该控件 -->
         <TextView
             android:id="@+id/up_media_textView_isUnionmedia"
-            android:layout_width="60dp"
-            android:layout_height="30dp"
+            android:layout_width="40dp"
+            android:layout_height="20dp"
             android:layout_alignEnd="@id/up_media_imageView_cover"
             android:layout_margin="10dp"
             android:background="@drawable/shape_bilibili_pink"
             android:gravity="center"
+            android:textSize="12sp"
             android:text="合作"
             android:textColor="#282828" />
 
         <TextView
             android:id="@+id/up_media_textView_mediaLength"
-            android:layout_width="60dp"
-            android:layout_height="30dp"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
             android:layout_alignEnd="@id/up_media_imageView_cover"
             android:layout_alignBottom="@id/up_media_imageView_cover"
             android:layout_margin="10dp"
@@ -52,7 +53,7 @@
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@id/up_media_imageView_cover"
             android:ellipsize="end"
-            android:maxLines="3"
+            android:maxLines="2"
             android:text="介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍"
             android:textSize="17sp" />
 

@@ -94,8 +94,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_video_play"
-                app:tint="#515151" />
+                android:src="@drawable/icon_video_play" />
 
             <TextView
                 android:id="@+id/play_list_video_textView_play"
@@ -110,8 +109,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:src="@drawable/play_list_video_danmaku"
-                app:tint="#515151" />
+                android:src="@drawable/play_list_video_danmaku" />
 
             <TextView
                 android:id="@+id/play_list_video_textView_danmaku"

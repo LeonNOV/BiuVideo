@@ -63,8 +63,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/icon_view"
-                    app:tint="#707070"/>
+                    android:src="@drawable/icon_view" />
 
                 <TextView
                     android:id="@+id/up_picture_textView_view"
@@ -85,8 +84,7 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/icon_video_time"
-                    app:tint="#707070" />
+                    android:src="@drawable/icon_video_time" />
 
                 <TextView
                     android:id="@+id/up_picture_textView_ctime"

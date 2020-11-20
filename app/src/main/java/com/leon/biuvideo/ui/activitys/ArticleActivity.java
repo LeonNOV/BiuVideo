@@ -150,22 +150,6 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         String html = httpUtils.getData();
         Document document = Jsoup.parse(html);
 
-        //获取头部份
-        Elements headContainer = document.getElementsByClass("head-container");
-        Element first = headContainer.first();
-
-        //删除文章基本参数
-        first.childNode(5).childNode(3).remove();
-
-        //删除部分数据
-        first.childNode(1).remove();
-        first.childNode(2).remove();
-        first.childNode(5).remove();
-
-        String head = headContainer.first().toString();
-
-        //====================================================================
-
         //获取文章主要部分
         Elements articleHolder = document.getElementsByClass("article-holder");
 
@@ -193,7 +177,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         String body = articleHolder.first().toString();
 
         //合并html
-        return combineWebPage(head + body);
+        return combineWebPage(body);
     }
 
     /**
@@ -217,6 +201,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
 
             webPage.append(head + css + "</head>" + "<body>");
 
+            //添加头部图片
             webPage.append("<div class=\"head-container\">\n" +
                     "        <div class=\"banner-img-holder\">\n" +
                     "           <img src=\"" + article.coverUrl + "\">" +

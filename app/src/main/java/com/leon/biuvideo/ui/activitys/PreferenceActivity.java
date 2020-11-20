@@ -16,6 +16,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.AboutBean;
 import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.ui.dialogs.AboutDialog;
+import com.leon.biuvideo.ui.dialogs.FeedbackDialog;
 import com.leon.biuvideo.ui.dialogs.ImportFollowDialog;
 import com.leon.biuvideo.ui.dialogs.LicenseDialog;
 import com.leon.biuvideo.ui.dialogs.WaitingDialog;
@@ -85,6 +86,7 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
                 //导入指定ID的关注列表
                 ImportFollowDialog importFollowDialog = new ImportFollowDialog(PreferenceActivity.this);
                 importFollowDialog.show();
+
                 importFollowDialog.setPriorityListener(new ImportFollowDialog.PriorityListener() {
                     @Override
                     public void setActivityText(long mid) {
@@ -175,7 +177,8 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
                 break;
             case R.id.preference_textView_feed_back:
                 //显示反馈提交界面
-
+                FeedbackDialog feedbackDialog = new FeedbackDialog(PreferenceActivity.this);
+                feedbackDialog.show();
                 break;
             default:
                 break;
@@ -196,6 +199,11 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
                 return true;
             }
 
+            //由于官方的限制关注列表最多只能获取100条
+            if (total > 100) {
+                total = 100;
+            }
+
             //获取数据
             int pn = 1;
             int currentTotal = 0;
@@ -204,16 +212,22 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
             FavoriteDatabaseUtils favoriteDatabaseUtils = (FavoriteDatabaseUtils) sqLiteHelperFactory.getInstance();
 
             while (currentTotal != total) {
-                List<Favorite> favorites = FollowParseUtils.parseFollow(mid, pn++);
-                currentTotal += favorites.size();
+                List<Favorite> favorites = FollowParseUtils.parseFollow(mid, pn);
+                if (favorites != null) {
+                    currentTotal += favorites.size();
 
-                //将数据添加至favorites_up
-                for (Favorite favorite : favorites) {
-                    boolean insertState = favoriteDatabaseUtils.addFavorite(favorite);
+                    //将数据添加至favorites_up
+                    for (Favorite favorite : favorites) {
+                        boolean insertState = favoriteDatabaseUtils.addFavorite(favorite);
 
-                    if (!insertState) {
-                        return false;
+                        if (!insertState) {
+                            return false;
+                        }
                     }
+
+                    pn++;
+                } else {
+                    return false;
                 }
             }
 

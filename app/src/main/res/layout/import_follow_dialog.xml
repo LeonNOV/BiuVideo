@@ -22,6 +22,7 @@
             android:gravity="center"
             android:hint="@string/import_follow_editText_hint"
             android:inputType="number"
+            android:textSize="15sp"
             android:textColor="@color/normal"
             android:theme="@style/CustomEditText" />
 

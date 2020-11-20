@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -62,6 +63,15 @@ public class MusicListDialog extends AlertDialog {
 
         //添加缩放动画
         window.setWindowAnimations(R.style.music_list_dialog);
+        window.setBackgroundDrawableResource(android.R.color.transparent);
+
+        //限制大小
+        int widthPixels = context.getResources().getDisplayMetrics().widthPixels;
+        int heightPixels = context.getResources().getDisplayMetrics().heightPixels;
+
+        WindowManager.LayoutParams attributes = window.getAttributes();
+        attributes.width = (int) (widthPixels * 0.8f);
+        attributes.height = (int) (heightPixels * 0.8f);
     }
 
     @Override
