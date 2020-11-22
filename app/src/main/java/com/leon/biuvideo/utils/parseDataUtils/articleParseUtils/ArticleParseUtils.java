@@ -96,19 +96,19 @@ public class ArticleParseUtils {
             article.view = stats.getIntValue("view");
 
             //获取收藏数
-            article.favorite = stats.getIntValue("favorite");
+//            article.favorite = stats.getIntValue("favorite");
 
             //获取点赞数
             article.like = stats.getIntValue("like");
 
             //获取评论数
-            article.replay = stats.getIntValue("replay");
+            article.reply = stats.getIntValue("replay");
 
             //获取分享数
-            article.share = stats.getIntValue("share");
+//            article.share = stats.getIntValue("share");
 
             //获取投币数
-            article.coin = stats.getIntValue("coin");
+//            article.coin = stats.getIntValue("coin");
 
             return article;
         }

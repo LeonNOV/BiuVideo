@@ -5,6 +5,14 @@
 
 ## 📘开发日志
 
+### 2020/11/22
+- 对`HomeFragment`进行了修改，将其中的搜索视频&用户更改为了综合搜索，搜索结果有视频、专栏和用户
+- 添加了`SearchResultActivity`,该Activity的作用为搜索结果页面
+- **`SearchResultActivity`的界面设计还未完成**
+
+### 2020/11/21
+- 无进度
+
 ### 2020/11/20
 - 添加了LICENSE
 - 加入了LicenseDialog

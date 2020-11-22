@@ -13,10 +13,10 @@ public class Article implements Serializable {
     public String category;
     public long ctime;//秒
 
-    public int coin;
+//    public int coin;
     public int view;
-    public int share;
-    public int favorite;
+//    public int share;
+//    public int favorite;
     public int like;
-    public int replay;
+    public int reply;
 }

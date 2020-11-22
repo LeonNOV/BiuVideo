@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
-            android:background="@drawable/ripple_user_bilibili_pink_lite"
+            android:background="@drawable/ripple_bilibili_pink_lite"
             android:gravity="center"
             android:paddingStart="20dp"
             android:paddingTop="7dp"

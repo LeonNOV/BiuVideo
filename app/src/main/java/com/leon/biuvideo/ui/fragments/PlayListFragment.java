@@ -31,7 +31,7 @@ public class PlayListFragment extends Fragment implements ViewPager.OnPageChange
     private View view;
 
     private int point_bilibili_pink = R.drawable.shape_bilibili_pink;
-    private int point_bilibili_pink_lite = R.drawable.ripple_user_bilibili_pink_lite;
+    private int point_bilibili_pink_lite = R.drawable.ripple_bilibili_pink_lite;
 
     @Nullable
     @Override

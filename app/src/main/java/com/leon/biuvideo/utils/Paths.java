@@ -125,4 +125,27 @@ public class Paths {
      *
      */
     public static String follow = "https://api.bilibili.com/x/relation/followings";
+
+    /**
+     * 搜索接口
+     *      参数：
+     *          keyword：关键字，必须进行URLencoding
+     *          search_type:搜索类型
+     *              video：视频
+     *              article：专栏
+     *              bili_user：用户
+     *          page：页码，从1开始
+     *          order：排序方式
+     *              default/totalrank：综合排序
+     *              pubdate：按发布日期倒序排序
+     *              senddate：按修改日期倒序排序
+     *              id：按投稿ID倒序排序
+     *              ranklevel：按相关度排序
+     *              click：按点击从高至低排序
+     *              scores：按评论数从高至低排序
+     *              damku/dm：按弹幕数从高至低排序
+     *              stow：按收藏数从高至低排序
+     * 需要在请求头中添加referer，默认为`https://search.bilibili.com`
+     */
+    public static String search = "https://api.bilibili.com/x/web-interface/search/type";
 }

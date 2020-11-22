@@ -12,11 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.ui.activitys.SearchResultActivity;
 import com.leon.biuvideo.ui.activitys.UpMasterActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.utils.IDUtils;
 import com.leon.biuvideo.utils.HeroImages;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -148,8 +151,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
 
                 break;
             case R.id.home_button_confirm:
+                //获取输入内容，对输入内容进行URL编码
+                String keywordUnCoded = main_editText_value.getText().toString();
 
-                switch (spinnerIndex) {
+                if (!keywordUnCoded.equals("")) {
+                    try {
+
+                        String keywordCoded = URLEncoder.encode(keywordUnCoded, "utf-8");
+
+                        Intent intent = new Intent(context, SearchResultActivity.class);
+                        startActivity(intent);
+                    } catch (UnsupportedEncodingException e) {
+                        Toast.makeText(getContext(), "输入内容有误，请检查要搜索的关键词", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(getContext(), "不输点啥,就想搜吗？", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                /*switch (spinnerIndex) {
                     //获取数据，进入VideoActivity
                     case 0:
                         String value_bvid = main_editText_value.getText().toString().trim();
@@ -186,7 +207,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                         }
                         break;
                     default:break;
-                }
+                }*/
 
                 break;
             default:break;

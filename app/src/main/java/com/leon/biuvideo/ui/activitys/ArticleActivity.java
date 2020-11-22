@@ -122,7 +122,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         article_textView_like.setText(likeStr);
 
         //设置评论数
-        String replayStr = ValueFormat.generateCN(article.replay) + "次评论";
+        String replayStr = ValueFormat.generateCN(article.reply) + "次评论";
         article_textView_replay.setText(replayStr);
 
         String path = Paths.articleWebPage + article.articleID;
