@@ -16,18 +16,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.UserFragmentAdapters.UserVideoAdapter;
-import com.leon.biuvideo.beans.upMasterBean.UpVideo;
+import com.leon.biuvideo.adapters.UserFragmentAdapters.BiliUserAdapter;
+import com.leon.biuvideo.beans.BiliUser;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.OrderType;
-import com.leon.biuvideo.utils.searchParsers.VideoParser;
+import com.leon.biuvideo.utils.searchParsers.ArticleParser;
+import com.leon.biuvideo.utils.searchParsers.BiliUserParser;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.List;
 
-public class VideoResultFragment extends Fragment {
+public class BiliUserResultFragment extends Fragment {
     private SmartRefreshLayout search_result_smartRefresh;
     private RecyclerView search_result_recyclerView;
 
@@ -36,8 +37,8 @@ public class VideoResultFragment extends Fragment {
     private int count;
     private int currentCount;
 
-    private VideoParser videoParser;
-    private List<UpVideo> videos;
+    private BiliUserParser biliUserParser;
+    private List<BiliUser> biliUsers;
 
     private LayoutInflater inflater;
     private Context context;
@@ -47,7 +48,7 @@ public class VideoResultFragment extends Fragment {
 
     private View view;
 
-    public VideoResultFragment(String keyword) {
+    public BiliUserResultFragment(String keyword) {
         this.keyword = keyword;
     }
 
@@ -74,30 +75,29 @@ public class VideoResultFragment extends Fragment {
     }
 
     private void initValue() {
-        //判断结果是否与搜索关键词匹配
-        boolean isMatch = VideoParser.isMatch(keyword);
-        if (!isMatch) {
+        //获取结果总数，最大为1000， 最小为0
+        count = BiliUserParser.getSearchUserCount(keyword);
+
+        //判断获取的数据条目是否为0
+        if (count == 0) {
             //设置无数据提示界面
             view = inflater.inflate(R.layout.fragment_no_data, null);
             return;
         }
 
-        //获取结果总数，最大为1000，最小为0
-        count = VideoParser.getSearchVideoCount(keyword);
-
-        videoParser = new VideoParser();
-        videos = videoParser.videoParse(keyword, pageNum, OrderType.DEFAULT);
+        biliUserParser = new BiliUserParser();
+        biliUsers = biliUserParser.userParse(keyword, pageNum, OrderType.DEFAULT);
 
         //判断第一次加载是否已加载完所有数据
-        if (count > videos.size()) {
+        if (count > biliUsers.size()) {
             dataState = false;
         }
 
-        UserVideoAdapter userVideoAdapter = new UserVideoAdapter(videos, getContext());
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        BiliUserAdapter biliUserAdapter = new BiliUserAdapter(biliUsers, context);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
 
         search_result_recyclerView.setLayoutManager(linearLayoutManager);
-        search_result_recyclerView.setAdapter(userVideoAdapter);
+        search_result_recyclerView.setAdapter(biliUserAdapter);
 
         //添加加载更多监听事件
         search_result_smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -111,12 +111,12 @@ public class VideoResultFragment extends Fragment {
                         @Override
                         public void run() {
                             //获取新数据
-                            List<UpVideo> addOns = getVideos(pageNum);
+                            List<BiliUser> addOns = getBiliUsers(pageNum);
 
                             Log.d(Fuck.blue, "成功获取了第" + pageNum + "页的" + addOns.size() + "条数据");
 
                             //添加新数据
-                            userVideoAdapter.refresh(addOns);
+                            biliUserAdapter.refresh(addOns);
                         }
                     }, 1000);
                 } else {
@@ -132,17 +132,17 @@ public class VideoResultFragment extends Fragment {
         });
     }
 
-    public List<UpVideo> getVideos(int pageNum) {
-        List<UpVideo> temp = videoParser.videoParse(keyword, pageNum, OrderType.DEFAULT);
+    public List<BiliUser> getBiliUsers(int pageNum) {
+        List<BiliUser> biliUsers = biliUserParser.userParse(keyword, pageNum, OrderType.DEFAULT);
 
         //记录获取的总数
-        currentCount += temp.size();
+        currentCount += biliUsers.size();
 
         //判断是否已获取完所有的数据
-        if (temp.size() < 30 || currentCount == count) {
+        if (biliUsers.size() < 30 || currentCount == count) {
             dataState = false;
         }
 
-        return videos;
+        return biliUsers;
     }
 }

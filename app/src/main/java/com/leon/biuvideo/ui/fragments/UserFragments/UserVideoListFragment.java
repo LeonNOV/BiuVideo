@@ -90,7 +90,7 @@ public class UserVideoListFragment extends Fragment {
         if (upVideos.size() == 0) {
 
             //设置无数据提示界面
-            view = inflater.inflate(R.layout.fragment_up_no_data, null);
+            view = inflater.inflate(R.layout.fragment_no_data, null);
         }
 
         UserVideoAdapter userVideoAdapter = new UserVideoAdapter(upVideos, getContext());

@@ -1,5 +1,7 @@
 package com.leon.biuvideo.utils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 
 public class ValueFormat {

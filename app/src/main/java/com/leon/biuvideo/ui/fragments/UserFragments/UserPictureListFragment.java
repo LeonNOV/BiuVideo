@@ -86,7 +86,7 @@ public class UserPictureListFragment extends Fragment {
         if (upPictures.size() == 0) {
 
             //设置无数据提示界面
-            view = inflater.inflate(R.layout.fragment_up_no_data, null);
+            view = inflater.inflate(R.layout.fragment_no_data, null);
         }
 
         UserPictureAdapter userPictureAdapter = new UserPictureAdapter(upPictures, getContext());

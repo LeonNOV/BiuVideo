@@ -42,7 +42,7 @@ public class UserVideoAdapter extends BaseAdapter<UpVideo> {
         UpVideo upVideo = upVideos.get(position);
 
         //设置封面
-        holder.setImage(R.id.up_media_imageView_cover, "http:" + upVideo.cover, ImagePixelSize.COVER)
+        holder.setImage(R.id.up_media_imageView_cover, upVideo.cover, ImagePixelSize.COVER)
 
                 //判断视频是否是和其他人进行合作
                 //1为合作

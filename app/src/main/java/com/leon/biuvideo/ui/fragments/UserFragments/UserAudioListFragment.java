@@ -83,7 +83,7 @@ public class UserAudioListFragment extends Fragment {
         if (upAudios.size() == 0) {
 
             //设置无数据提示界面
-            view = inflater.inflate(R.layout.fragment_up_no_data, null);
+            view = inflater.inflate(R.layout.fragment_no_data, null);
         }
 
         UserAudioAdapter userAudioAdapter = new UserAudioAdapter(upAudios, getContext());

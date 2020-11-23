@@ -7,6 +7,7 @@ import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.OrderType;
 import com.leon.biuvideo.utils.Paths;
 import com.leon.biuvideo.utils.SearchType;
+import com.leon.biuvideo.utils.ValueFormat;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -15,22 +16,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.Headers;
+
 public class ArticleParser {
     public List<Article> articleParse(String keyword, int pn, OrderType orderType) {
         Map<String, String> params = new HashMap<>();
-        try {
-            //进行URL编码
-            String keywordCoded = URLEncoder.encode(keyword, "utf-8");
-            params.put("keyword", keywordCoded);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
+        params.put("keyword", keyword);
         params.put("search_type", SearchType.ARTICLE.value);
         params.put("page", String.valueOf(pn));
         params.put("order", orderType.value);
 
-        HttpUtils httpUtils = new HttpUtils(Paths.search, params);
+        HttpUtils httpUtils = new HttpUtils(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
         String response = httpUtils.getData();
 
         JSONObject responseObject = JSONObject.parseObject(response);
@@ -66,7 +62,7 @@ public class ArticleParser {
                 article.title = jsonObject.getString("title");
 
                 //获取封面url
-                article.coverUrl = jsonObject.getJSONArray("image_urls").getString(0);
+                article.coverUrl = "http://" + jsonObject.getJSONArray("image_urls").getString(0);
 
                 //获取阅读数
                 article.view = jsonObject.getIntValue("view");
@@ -92,23 +88,16 @@ public class ArticleParser {
         return null;
     }
 
-    public static int getSearchVideoCount(String keyword) {
+    public static int getSearchArticleCount(String keyword) {
         int count = -1;
 
         Map<String, String> params = new HashMap<>();
-        try {
-            //进行URL编码
-            String keywordCoded = URLEncoder.encode(keyword, "utf-8");
-            params.put("keyword", keywordCoded);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
+        params.put("keyword", keyword);
         params.put("search_type", SearchType.ARTICLE.value);
         params.put("page", "1");
         params.put("order", OrderType.DEFAULT.value);
 
-        HttpUtils httpUtils = new HttpUtils(Paths.search, params);
+        HttpUtils httpUtils = new HttpUtils(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
         String response = httpUtils.getData();
 
         JSONObject jsonObject = JSONObject.parseObject(response);

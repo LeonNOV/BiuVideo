@@ -30,9 +30,6 @@ public class PlayListFragment extends Fragment implements ViewPager.OnPageChange
 
     private View view;
 
-    private int point_bilibili_pink = R.drawable.shape_bilibili_pink;
-    private int point_bilibili_pink_lite = R.drawable.ripple_bilibili_pink_lite;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -67,8 +64,10 @@ public class PlayListFragment extends Fragment implements ViewPager.OnPageChange
 
     @Override
     public void onPageSelected(int position) {
-
         Log.d(Fuck.blue, "page position:" + position);
+
+        int point_bilibili_pink_lite = R.drawable.ripple_bilibili_pink_lite;
+        int point_bilibili_pink = R.drawable.shape_bilibili_pink;
 
         switch (position) {
             case 0:

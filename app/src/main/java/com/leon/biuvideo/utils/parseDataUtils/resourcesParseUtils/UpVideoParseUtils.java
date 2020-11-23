@@ -61,7 +61,7 @@ public class UpVideoParseUtils {
                 upVideo.author = videoObject.getString("author");
 
                 //获取封面地址
-                upVideo.cover = videoObject.getString("pic");
+                upVideo.cover = "http://" + videoObject.getString("pic");
 
                 //获取视频bvid
                 upVideo.bvid = videoObject.getString("bvid");
