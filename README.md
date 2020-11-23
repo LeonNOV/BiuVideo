@@ -5,6 +5,12 @@
 
 ## 📘开发日志
 
+### 2020/11/23
+- 进行到了`VideoResultFragment`
+- 在`VideoResultFragment`中添加了加载更多功能
+- **搜索相关的功能已完成，但代码还存在大部分冗余**
+- 对`HomeFragment`中的spinner的样式进行了修改
+
 ### 2020/11/22
 - 对`HomeFragment`进行了修改，将其中的搜索视频&用户更改为了综合搜索，搜索结果有视频、专栏和用户
 - 添加了`SearchResultActivity`,该Activity的作用为搜索结果页面

@@ -1,4 +1,4 @@
-package com.leon.biuvideo.utils.searchParsers;
+package com.leon.biuvideo.utils.parseDataUtils.searchParsers;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -7,10 +7,7 @@ import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.OrderType;
 import com.leon.biuvideo.utils.Paths;
 import com.leon.biuvideo.utils.SearchType;
-import com.leon.biuvideo.utils.ValueFormat;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +15,18 @@ import java.util.Map;
 
 import okhttp3.Headers;
 
+/**
+ * 解析搜索结果-专栏数据
+ */
 public class ArticleParser {
+    /**
+     * 获取专栏列表
+     *
+     * @param keyword   关键字
+     * @param pn    页码
+     * @param orderType 排序方式
+     * @return  返回专栏数据
+     */
     public List<Article> articleParse(String keyword, int pn, OrderType orderType) {
         Map<String, String> params = new HashMap<>();
         params.put("keyword", keyword);
@@ -41,6 +49,12 @@ public class ArticleParser {
         return articles;
     }
 
+    /**
+     * 解析JSONObject类型的数据
+     *
+     * @param data  JSONObject对象
+     * @return  返回解析结果
+     */
     private List<Article> parseData(JSONObject data) {
         JSONArray result = data.getJSONArray("result");
 
@@ -88,6 +102,12 @@ public class ArticleParser {
         return null;
     }
 
+    /**
+     * 获取结果个数
+     *
+     * @param keyword   关键字
+     * @return  返回搜索结果个数
+     */
     public static int getSearchArticleCount(String keyword) {
         int count = -1;
 

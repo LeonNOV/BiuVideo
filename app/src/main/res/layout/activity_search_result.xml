@@ -50,10 +50,12 @@
                         android:layout_marginStart="13dp"
                         android:layout_marginEnd="9dp"
                         android:background="@null"
-                        android:hint="awdawdawdaw"
+                        android:hint="输入关键字，进行搜索"
                         android:imeOptions="actionSearch"
                         android:inputType="text"
                         android:maxLines="1"
+                        android:gravity="center_vertical"
+                        android:textSize="15sp"
                         android:theme="@style/CustomEditText" />
 
                     <ImageView

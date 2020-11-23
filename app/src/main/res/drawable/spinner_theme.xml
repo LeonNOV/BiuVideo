@@ -4,20 +4,24 @@
     <!--第一组item 圆角边框-->
     <item>
         <shape>
-            <stroke android:width="2dp" android:color="@color/bilibili_pink" />
+            <stroke
+                android:width="3dp"
+                android:color="@color/bilibili_pink" />
             <corners android:radius="10dp" />
             <solid android:color="@color/bilibili_pink_lite" />
-            <padding android:right="2dp" />
+            <padding
+                android:bottom="5dp"
+                android:left="5dp"
+                android:right="5dp"
+                android:top="5dp" />
         </shape>
     </item>
 
     <!--替换spinner默认箭头-->
     <item
-        android:top="3dp"
         android:bottom="3dp"
+        android:drawable="@drawable/spinner_arrow"
+        android:left="45dp"
         android:right="3dp"
-        android:left="45dp">
-        <bitmap android:gravity="end" android:src="@drawable/spinner_arrow" />
-    </item>
-
+        android:top="3dp"/>
 </layer-list>

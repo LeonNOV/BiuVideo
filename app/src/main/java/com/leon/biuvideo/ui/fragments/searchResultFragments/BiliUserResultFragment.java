@@ -20,14 +20,16 @@ import com.leon.biuvideo.adapters.UserFragmentAdapters.BiliUserAdapter;
 import com.leon.biuvideo.beans.BiliUser;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.OrderType;
-import com.leon.biuvideo.utils.searchParsers.ArticleParser;
-import com.leon.biuvideo.utils.searchParsers.BiliUserParser;
+import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BiliUserParser;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.List;
 
+/**
+ * 搜索结果-用户片段
+ */
 public class BiliUserResultFragment extends Fragment {
     private SmartRefreshLayout search_result_smartRefresh;
     private RecyclerView search_result_recyclerView;

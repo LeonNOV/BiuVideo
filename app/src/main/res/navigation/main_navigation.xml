@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.leon.biuvideo.ui.fragments.HomeFragment"
+        android:name="com.leon.biuvideo.ui.fragments.mainFragments.HomeFragment"
         android:label="HomeFragment">
         <action
             android:id="@+id/action_homeFragment_to_favoriteFragment"
@@ -14,7 +14,7 @@
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
-        android:name="com.leon.biuvideo.ui.fragments.FavoriteFragment"
+        android:name="com.leon.biuvideo.ui.fragments.mainFragments.FavoriteFragment"
         android:label="FavoriteFragment">
         <action
             android:id="@+id/action_favoriteFragment_to_homeFragment"
@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/playListFragment"
-        android:name="com.leon.biuvideo.ui.fragments.PlayListFragment"
+        android:name="com.leon.biuvideo.ui.fragments.mainFragments.PlayListFragment"
         android:label="PlayListFragment">
 
     </fragment>

@@ -2,8 +2,10 @@
     <string name="app_name">BiuVideo</string>
 
     <string name="main_button_start">开始获取</string>
-    <string name="main_editText_hint">输入链接或id</string>
+    <string name="main_editText_hint1">输入关键词进行搜索</string>
+    <string name="main_editText_hint2">输入链接或id</string>
     <array name="home_spinner">
+        <item>综合</item>
         <item>视频</item>
         <item>UP主</item>
     </array>

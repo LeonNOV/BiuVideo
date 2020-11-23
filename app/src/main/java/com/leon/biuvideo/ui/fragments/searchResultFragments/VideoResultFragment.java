@@ -20,13 +20,16 @@ import com.leon.biuvideo.adapters.UserFragmentAdapters.UserVideoAdapter;
 import com.leon.biuvideo.beans.upMasterBean.UpVideo;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.OrderType;
-import com.leon.biuvideo.utils.searchParsers.VideoParser;
+import com.leon.biuvideo.utils.parseDataUtils.searchParsers.VideoParser;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.List;
 
+/**
+ * 搜索结果-视频片段
+ */
 public class VideoResultFragment extends Fragment {
     private SmartRefreshLayout search_result_smartRefresh;
     private RecyclerView search_result_recyclerView;

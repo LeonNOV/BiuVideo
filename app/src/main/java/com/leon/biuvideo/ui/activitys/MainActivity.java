@@ -21,14 +21,11 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.beans.AboutBean;
-import com.leon.biuvideo.ui.dialogs.AboutDialog;
-import com.leon.biuvideo.ui.fragments.FavoriteFragment;
-import com.leon.biuvideo.ui.fragments.HomeFragment;
-import com.leon.biuvideo.ui.fragments.PlayListFragment;
+import com.leon.biuvideo.ui.fragments.mainFragments.FavoriteFragment;
+import com.leon.biuvideo.ui.fragments.mainFragments.HomeFragment;
+import com.leon.biuvideo.ui.fragments.mainFragments.PlayListFragment;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.SQLiteHelper;
 
 import java.util.ArrayList;
 import java.util.List;

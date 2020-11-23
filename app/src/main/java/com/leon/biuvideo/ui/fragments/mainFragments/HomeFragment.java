@@ -1,4 +1,4 @@
-package com.leon.biuvideo.ui.fragments;
+package com.leon.biuvideo.ui.fragments.mainFragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -151,22 +151,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
 
                 break;
             case R.id.home_button_confirm:
-                //获取输入内容，对输入内容进行URL编码
-                String keywordUnCoded = main_editText_value.getText().toString();
-
-                if (!keywordUnCoded.equals("")) {
-
-                    Intent intent = new Intent(context, SearchResultActivity.class);
-                    intent.putExtra("keyword", keywordUnCoded);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(getContext(), "不输点啥,就想搜吗？", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                /*switch (spinnerIndex) {
-                    //获取数据，进入VideoActivity
+                switch (spinnerIndex) {
                     case 0:
+                        //获取输入内容
+                        String keywordUnCoded = main_editText_value.getText().toString();
+                        if (!keywordUnCoded.equals("")) {
+
+                            Intent intent = new Intent(context, SearchResultActivity.class);
+                            intent.putExtra("keyword", keywordUnCoded);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(getContext(), "不输点啥,就想搜吗？", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        break;
+                    //获取数据，进入VideoActivity
+                    case 1:
                         String value_bvid = main_editText_value.getText().toString().trim();
 
                         if (value_bvid.length() != 0) {
@@ -181,8 +181,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                             }
                         }
                         break;
+
                     //获取数据，进入UpMasterActivity
-                    case 1:
+                    case 2:
 
                         //获取mid
                         String value_mid = main_editText_value.getText().toString().trim();
@@ -201,7 +202,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                         }
                         break;
                     default:break;
-                }*/
+                }
 
                 break;
             default:break;
@@ -210,6 +211,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        if (i == 0) {
+            main_editText_value.setHint(R.string.main_editText_hint1);
+        } else {
+            main_editText_value.setHint(R.string.main_editText_hint2);
+        }
         spinnerIndex = i;
     }
 
