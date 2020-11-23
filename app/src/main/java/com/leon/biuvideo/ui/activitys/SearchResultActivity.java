@@ -1,8 +1,10 @@
 package com.leon.biuvideo.ui.activitys;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -11,8 +13,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.ui.fragments.UserFragments.UserArticlesFragment;
+import com.leon.biuvideo.ui.fragments.UserFragments.UserAudioListFragment;
+import com.leon.biuvideo.ui.fragments.UserFragments.UserPictureListFragment;
+import com.leon.biuvideo.ui.fragments.UserFragments.UserVideoListFragment;
 
-public class SearchResultActivity extends AppCompatActivity implements View.OnClickListener {
+import java.util.ArrayList;
+import java.util.List;
+
+public class SearchResultActivity extends AppCompatActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
     private ImageView search_imageView_back, search_imageView_clean;
     private EditText search_editText_searchBox;
     private TextView search_textView_result_video, search_textView_result_article, search_textView_result_user;
@@ -26,6 +35,8 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_search_result);
 
         initView();
+        initValue();
+        initViewPage();
     }
 
     private void initView() {
@@ -44,6 +55,21 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
 
         search_textView_result_user = findViewById(R.id.search_textView_result_user);
         search_textView_result_user.setOnClickListener(this);
+
+        search_viewPager = findViewById(R.id.search_viewPager);
+        search_viewPager.addOnPageChangeListener(this);
+    }
+
+    private void initValue() {
+        //获取输入的关键词
+        Intent intent = getIntent();
+        String keyword = intent.getStringExtra("keyword");
+
+        search_editText_searchBox.setText(keyword);
+    }
+
+    private void initViewPage() {
+        List<Fragment> fragments = new ArrayList<>();
     }
 
     @Override
@@ -51,6 +77,7 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
         switch (v.getId()) {
             case R.id.search_imageView_back:
                 this.finish();
+
 
                 break;
             case R.id.search_imageView_clean:
@@ -69,5 +96,20 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

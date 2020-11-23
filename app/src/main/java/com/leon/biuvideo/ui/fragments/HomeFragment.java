@@ -155,16 +155,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                 String keywordUnCoded = main_editText_value.getText().toString();
 
                 if (!keywordUnCoded.equals("")) {
-                    try {
 
-                        String keywordCoded = URLEncoder.encode(keywordUnCoded, "utf-8");
-
-                        Intent intent = new Intent(context, SearchResultActivity.class);
-                        startActivity(intent);
-                    } catch (UnsupportedEncodingException e) {
-                        Toast.makeText(getContext(), "输入内容有误，请检查要搜索的关键词", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
+                    Intent intent = new Intent(context, SearchResultActivity.class);
+                    intent.putExtra("keyword", keywordUnCoded);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(getContext(), "不输点啥,就想搜吗？", Toast.LENGTH_SHORT).show();
                     return;

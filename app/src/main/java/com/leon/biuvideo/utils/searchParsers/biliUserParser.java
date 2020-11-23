@@ -9,6 +9,8 @@ import com.leon.biuvideo.utils.OrderType;
 import com.leon.biuvideo.utils.Paths;
 import com.leon.biuvideo.utils.SearchType;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +19,14 @@ import java.util.Map;
 public class biliUserParser {
     public List<BiliUser> userParse(String keyword, int pn, OrderType orderType) {
         Map<String, String> params = new HashMap<>();
-        params.put("keyword", keyword);
+        try {
+            //进行URL编码
+            String keywordCoded = URLEncoder.encode(keyword, "utf-8");
+            params.put("keyword", keywordCoded);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
         params.put("search_type", SearchType.BILI_USER.value);
         params.put("page", String.valueOf(pn));
         params.put("order", orderType.value);
