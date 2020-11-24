@@ -33,6 +33,8 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
     private ProgressBar search_progressBar;
 
     private String keyword;
+    private List<Fragment> fragments;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +63,7 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
                 //当i == XX_SEND 或者 XX_DONE时都触发
                 //或者event.getKeyCode == ENTER 且 event.getAction == ACTION_DOWN时也触发
                 //注意，这是一定要判断event != null。因为在某些输入法上会返回null。
-                if (i == EditorInfo.IME_ACTION_SEARCH || i == EditorInfo.IME_ACTION_GO || i == EditorInfo.IME_ACTION_SEND || i == EditorInfo.IME_ACTION_DONE || (keyEvent != null && KeyEvent.KEYCODE_ENTER == keyEvent.getKeyCode() && KeyEvent.ACTION_DOWN == keyEvent.getAction())) {
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
                     //获取输入内容
                     String value = search_editText_searchBox.getText().toString();
 
@@ -71,8 +73,11 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
                     } else {
                         //刷新当前界面数据,显示progressBar
                         search_progressBar.setVisibility(View.VISIBLE);
+
                         keyword = value;
+                        fragments.clear();
                         initViewPage();
+
                         search_progressBar.setVisibility(View.GONE);
                     }
                 }
@@ -105,7 +110,7 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void initViewPage() {
-        List<Fragment> fragments = new ArrayList<>();
+        fragments = new ArrayList<>();
 
         fragments.add(new VideoResultFragment(keyword));
         fragments.add(new ArticleResultFragment(keyword));
