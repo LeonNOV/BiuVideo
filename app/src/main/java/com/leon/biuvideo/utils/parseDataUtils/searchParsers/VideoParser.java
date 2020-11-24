@@ -3,6 +3,7 @@ package com.leon.biuvideo.utils.parseDataUtils.searchParsers;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.upMasterBean.UpVideo;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.OrderType;
 import com.leon.biuvideo.utils.Paths;
@@ -34,6 +35,8 @@ public class VideoParser {
         params.put("page", String.valueOf(pn));
         params.put("order", orderType.value);
 
+        Fuck.blue(Paths.search + params.toString());
+
         HttpUtils httpUtils = new HttpUtils(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
         String response = httpUtils.getData();
 
@@ -43,7 +46,7 @@ public class VideoParser {
 
         JSONObject data = responseObject.getJSONObject("data");
         if (data != null) {
-            videos = parseData(data);
+            videos = parseData(data, keyword);
         }
 
         return videos;
@@ -55,7 +58,9 @@ public class VideoParser {
      * @param data  JSONObject对象
      * @return  返回解析结果
      */
-    private List<UpVideo> parseData(JSONObject data) {
+    private List<UpVideo> parseData(JSONObject data, String keyword) {
+        String oldStr = "<em class=\"keyword\">" + keyword + "</em>";
+
         JSONArray result = data.getJSONArray("result");
 
         List<UpVideo> videos;
@@ -79,7 +84,7 @@ public class VideoParser {
                 upVideo.bvid = jsonObject.getString("bvid");
 
                 //获取标题
-                upVideo.title = jsonObject.getString("title");
+                upVideo.title = jsonObject.getString("title").replaceAll(oldStr, "");
 
                 //获取视频说明
                 upVideo.description = jsonObject.getString("description");

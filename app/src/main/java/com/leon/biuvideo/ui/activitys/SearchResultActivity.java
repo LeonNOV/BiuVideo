@@ -2,6 +2,8 @@ package com.leon.biuvideo.ui.activitys;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
@@ -34,7 +36,6 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
 
     private String keyword;
     private List<Fragment> fragments;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,10 +76,10 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
                         search_progressBar.setVisibility(View.VISIBLE);
 
                         keyword = value;
-                        fragments.clear();
+                        refreshFragments();
                         initViewPage();
 
-                        search_progressBar.setVisibility(View.GONE);
+                        search_progressBar.setVisibility(View.INVISIBLE);
                     }
                 }
 
@@ -96,6 +97,7 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
         search_textView_result_user.setOnClickListener(this);
 
         search_progressBar = findViewById(R.id.search_progressBar);
+        search_progressBar.setVisibility(View.INVISIBLE);
 
         search_viewPager = findViewById(R.id.search_viewPager);
         search_viewPager.addOnPageChangeListener(this);
@@ -110,7 +112,9 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void initViewPage() {
-        fragments = new ArrayList<>();
+        if (fragments == null) {
+            fragments = new ArrayList<>();
+        }
 
         fragments.add(new VideoResultFragment(keyword));
         fragments.add(new ArticleResultFragment(keyword));
@@ -118,6 +122,18 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
 
         ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), fragments);
         search_viewPager.setAdapter(viewPageAdapter);
+    }
+
+    private void refreshFragments() {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+
+        for (Fragment fragment : fragments) {
+            fragmentTransaction.remove(fragment);
+        }
+
+        fragments.clear();
+
+        fragmentTransaction.commit();
     }
 
     @Override

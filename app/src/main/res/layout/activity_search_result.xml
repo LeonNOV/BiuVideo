@@ -127,19 +127,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/search_viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <ProgressBar
             android:id="@+id/search_progressBar"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_centerInParent="true"
             android:indeterminateTint="@color/colorPrimary"
-            android:indeterminateTintMode="src_atop"
-            android:visibility="gone" />
-
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/search_viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:indeterminateTintMode="src_atop" />
 
     </RelativeLayout>
 

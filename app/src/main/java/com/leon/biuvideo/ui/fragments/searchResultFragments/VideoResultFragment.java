@@ -88,12 +88,18 @@ public class VideoResultFragment extends Fragment {
         //获取结果总数，最大为1000，最小为0
         count = VideoParser.getSearchVideoCount(keyword);
 
+        Fuck.blue("Video:" + count);
+
         videoParser = new VideoParser();
         videos = videoParser.videoParse(keyword, pageNum, OrderType.DEFAULT);
+        currentCount += videos.size();
 
         //判断第一次加载是否已加载完所有数据
-        if (count > videos.size()) {
+        if (count == videos.size()) {
             dataState = false;
+
+            //关闭上滑加载
+            search_result_smartRefresh.setEnabled(false);
         }
 
         UserVideoAdapter userVideoAdapter = new UserVideoAdapter(videos, getContext());
@@ -142,7 +148,7 @@ public class VideoResultFragment extends Fragment {
         currentCount += temp.size();
 
         //判断是否已获取完所有的数据
-        if (temp.size() < 30 || currentCount == count) {
+        if (temp.size() < 20 || currentCount == count) {
             dataState = false;
         }
 

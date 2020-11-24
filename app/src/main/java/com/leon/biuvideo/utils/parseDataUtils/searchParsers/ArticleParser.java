@@ -43,7 +43,7 @@ public class ArticleParser {
 
         JSONObject data = responseObject.getJSONObject("data");
         if (data != null) {
-            articles = parseData(data);
+            articles = parseData(data, keyword);
         }
 
         return articles;
@@ -55,7 +55,9 @@ public class ArticleParser {
      * @param data  JSONObject对象
      * @return  返回解析结果
      */
-    private List<Article> parseData(JSONObject data) {
+    private List<Article> parseData(JSONObject data, String keyword) {
+        String oldStr = "<em class=\"keyword\">" + keyword + "</em>";
+
         JSONArray result = data.getJSONArray("result");
 
         List<Article> articles;
@@ -73,7 +75,7 @@ public class ArticleParser {
                 article.like = jsonObject.getIntValue("like");
 
                 //获取标题
-                article.title = jsonObject.getString("title");
+                article.title = jsonObject.getString("title").replaceAll(oldStr, "");
 
                 //获取封面url
                 article.coverUrl = "http://" + jsonObject.getJSONArray("image_urls").getString(0);

@@ -167,7 +167,6 @@ public class PictureViewer extends PopupWindow implements View.OnClickListener, 
             } else {
                 container.removeView(imageViews.get(position));
             }
-
         }
 
         @Override

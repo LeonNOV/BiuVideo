@@ -80,6 +80,8 @@ public class ArticleResultFragment extends Fragment {
         //获取结果总数，最大为1000， 最小为0
         count = ArticleParser.getSearchArticleCount(keyword);
 
+        Fuck.blue("Article:" + count);
+
         //判断获取的数据条目是否为0
         if (count == 0) {
             //设置无数据提示界面
@@ -89,10 +91,14 @@ public class ArticleResultFragment extends Fragment {
 
         articleParser = new ArticleParser();
         articles = articleParser.articleParse(keyword, pageNum, OrderType.DEFAULT);
+        currentCount += articles.size();
 
         //判断第一次加载是否已加载完所有数据
-        if (count > articles.size()) {
+        if (count == articles.size()) {
             dataState = false;
+
+            //关闭上滑加载
+            search_result_smartRefresh.setEnabled(false);
         }
 
         UserArticleAdapter userArticleAdapter = new UserArticleAdapter(articles, getContext());
@@ -141,7 +147,7 @@ public class ArticleResultFragment extends Fragment {
         currentCount += articles.size();
 
         //判断是否已获取完所有的数据
-        if (articles.size() < 30 || currentCount == count) {
+        if (articles.size() < 20 || currentCount == count) {
             dataState = false;
         }
 

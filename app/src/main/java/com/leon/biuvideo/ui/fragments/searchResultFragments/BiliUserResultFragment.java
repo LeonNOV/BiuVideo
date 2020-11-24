@@ -80,6 +80,8 @@ public class BiliUserResultFragment extends Fragment {
         //获取结果总数，最大为1000， 最小为0
         count = BiliUserParser.getSearchUserCount(keyword);
 
+        Fuck.blue("BiliUser:" + count);
+
         //判断获取的数据条目是否为0
         if (count == 0) {
             //设置无数据提示界面
@@ -89,10 +91,14 @@ public class BiliUserResultFragment extends Fragment {
 
         biliUserParser = new BiliUserParser();
         biliUsers = biliUserParser.userParse(keyword, pageNum, OrderType.DEFAULT);
+        currentCount += biliUsers.size();
 
         //判断第一次加载是否已加载完所有数据
-        if (count > biliUsers.size()) {
+        if (count == biliUsers.size()) {
             dataState = false;
+
+            //关闭上滑加载
+            search_result_smartRefresh.setEnabled(false);
         }
 
         BiliUserAdapter biliUserAdapter = new BiliUserAdapter(biliUsers, context);
@@ -141,7 +147,7 @@ public class BiliUserResultFragment extends Fragment {
         currentCount += biliUsers.size();
 
         //判断是否已获取完所有的数据
-        if (biliUsers.size() < 30 || currentCount == count) {
+        if (biliUsers.size() < 20 || currentCount == count) {
             dataState = false;
         }
 
