@@ -3,6 +3,7 @@ package com.leon.biuvideo.utils.parseDataUtils.searchParsers;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.articleBeans.Article;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.OrderType;
 import com.leon.biuvideo.utils.Paths;
@@ -33,6 +34,8 @@ public class ArticleParser {
         params.put("search_type", SearchType.ARTICLE.value);
         params.put("page", String.valueOf(pn));
         params.put("order", orderType.value);
+
+        Fuck.blue("Article----pageNum:" + pn + "----" + Paths.search + params.toString());
 
         HttpUtils httpUtils = new HttpUtils(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
         String response = httpUtils.getData();

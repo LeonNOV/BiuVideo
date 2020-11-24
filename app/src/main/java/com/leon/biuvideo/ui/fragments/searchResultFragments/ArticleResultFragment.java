@@ -34,7 +34,7 @@ public class ArticleResultFragment extends Fragment {
     private SmartRefreshLayout search_result_smartRefresh;
     private RecyclerView search_result_recyclerView;
 
-    private final String keyword;
+    private String keyword;
 
     private int count;
     private int currentCount;
@@ -50,8 +50,21 @@ public class ArticleResultFragment extends Fragment {
 
     private View view;
 
+    public ArticleResultFragment() {
+    }
+
     public ArticleResultFragment(String keyword) {
         this.keyword = keyword;
+    }
+
+    public static ArticleResultFragment getInstance(String keyword) {
+        ArticleResultFragment articleResultFragment = new ArticleResultFragment(keyword);
+
+        Bundle bundle = new Bundle();
+        bundle.putString("keyword", keyword);
+        articleResultFragment.setArguments(bundle);
+
+        return articleResultFragment;
     }
 
     @Nullable

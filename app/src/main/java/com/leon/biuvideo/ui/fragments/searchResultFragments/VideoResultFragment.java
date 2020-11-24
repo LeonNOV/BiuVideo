@@ -50,8 +50,21 @@ public class VideoResultFragment extends Fragment {
 
     private View view;
 
+    public VideoResultFragment() {
+    }
+
     public VideoResultFragment(String keyword) {
         this.keyword = keyword;
+    }
+
+    public static VideoResultFragment getInstance(String keyword) {
+        VideoResultFragment videoResultFragment = new VideoResultFragment(keyword);
+
+        Bundle bundle = new Bundle();
+        bundle.putString("keyword", keyword);
+        videoResultFragment.setArguments(bundle);
+
+        return videoResultFragment;
     }
 
     @Nullable

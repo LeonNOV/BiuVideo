@@ -50,8 +50,21 @@ public class BiliUserResultFragment extends Fragment {
 
     private View view;
 
+    public BiliUserResultFragment() {
+    }
+
     public BiliUserResultFragment(String keyword) {
         this.keyword = keyword;
+    }
+
+    public static BiliUserResultFragment getInstance(String keyword) {
+        BiliUserResultFragment biliUserResultFragment = new BiliUserResultFragment(keyword);
+
+        Bundle bundle = new Bundle();
+        bundle.putString("keyword", keyword);
+        biliUserResultFragment.setArguments(bundle);
+
+        return biliUserResultFragment;
     }
 
     @Nullable

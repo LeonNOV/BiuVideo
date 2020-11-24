@@ -35,7 +35,7 @@ public class VideoParser {
         params.put("page", String.valueOf(pn));
         params.put("order", orderType.value);
 
-        Fuck.blue(Paths.search + params.toString());
+        Fuck.blue("Video----pageNum:" + pn + "----" + Paths.search + params.toString());
 
         HttpUtils httpUtils = new HttpUtils(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
         String response = httpUtils.getData();

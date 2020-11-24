@@ -2,7 +2,6 @@ package com.leon.biuvideo.ui.activitys;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
@@ -116,12 +115,17 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
             fragments = new ArrayList<>();
         }
 
-        fragments.add(new VideoResultFragment(keyword));
-        fragments.add(new ArticleResultFragment(keyword));
-        fragments.add(new BiliUserResultFragment(keyword));
+//        fragments.add(new VideoResultFragment(keyword));
+//        fragments.add(new ArticleResultFragment(keyword));
+//        fragments.add(new BiliUserResultFragment(keyword));
+
+        fragments.add(VideoResultFragment.getInstance(keyword));
+        fragments.add(ArticleResultFragment.getInstance(keyword));
+        fragments.add(BiliUserResultFragment.getInstance(keyword));
 
         ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), fragments);
         search_viewPager.setAdapter(viewPageAdapter);
+        search_viewPager.setOffscreenPageLimit(fragments.size());
     }
 
     private void refreshFragments() {
