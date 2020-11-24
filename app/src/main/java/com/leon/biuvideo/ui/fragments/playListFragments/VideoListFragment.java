@@ -1,4 +1,4 @@
-package com.leon.biuvideo.ui.fragments.PlayListFragments;
+package com.leon.biuvideo.ui.fragments.playListFragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,25 +14,29 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.PlayListAdapter.MusicListAdapter;
-import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
+import com.leon.biuvideo.adapters.PlayListAdapter.VideoListAdapter;
+import com.leon.biuvideo.beans.upMasterBean.VideoPlayList;
 import com.leon.biuvideo.utils.Fuck;
-import com.leon.biuvideo.utils.dataBaseUtils.MusicListDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.utils.dataBaseUtils.Tables;
+import com.leon.biuvideo.utils.dataBaseUtils.VideoListDatabaseUtils;
 
 import java.util.List;
 
 /**
- * PlayListFragment中的music片段
+ * PlayListFragment中的video片段
  */
-public class MusicListFragment extends Fragment {
+public class VideoListFragment extends Fragment {
     private RecyclerView recyclerView;
     private TextView textView_noDataStr;
 
-    private List<MusicPlayList> musicPlayLists;
-    private MusicListAdapter musicListAdapter;
-    private MusicListDatabaseUtils musicListDatabaseUtils;
+    private Context context;
+    private View view;
+
+    private VideoListAdapter videoListAdapter;
+    private List<VideoPlayList> videoPlayLists;
+
+    private VideoListDatabaseUtils videoListDatabaseUtils;
 
     @Nullable
     @Override
@@ -48,37 +52,38 @@ public class MusicListFragment extends Fragment {
     }
 
     private void initView() {
-        Context context = getContext();
-        View view = getView();
+        context = getContext();
+        view = getView();
 
-        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.MusicPlayList);
-        musicListDatabaseUtils = (MusicListDatabaseUtils) sqLiteHelperFactory.getInstance();
+        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.VideoPlayList);
+        videoListDatabaseUtils = (VideoListDatabaseUtils) sqLiteHelperFactory.getInstance();
 
         recyclerView = view.findViewById(R.id.recyclerView);
         textView_noDataStr = view.findViewById(R.id.textView_noDataStr);
 
-        musicPlayLists = musicListDatabaseUtils.queryPlayList();
-        musicListAdapter = new MusicListAdapter(musicPlayLists, getContext());
+        videoPlayLists = videoListDatabaseUtils.queryFavoriteVideos();
+        videoListAdapter = new VideoListAdapter(videoPlayLists, getContext());
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(musicListAdapter);
+        recyclerView.setAdapter(videoListAdapter);
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        //处理music播放列表数据
-        musicPlayLists = musicListDatabaseUtils.queryPlayList();
+        //处理video播放列表数据
+        videoPlayLists = videoListDatabaseUtils.queryFavoriteVideos();
 
-        Fuck.blue("MusicListFragment:onResume");
+        Fuck.blue("VideoListFragment:onResume");
 
-        if (musicPlayLists.size() > 0) {
+        if (videoPlayLists.size() > 0) {
+            //隐藏无数据提示，显示item数据
             textView_noDataStr.setVisibility(View.INVISIBLE);
             recyclerView.setVisibility(View.VISIBLE);
 
-            musicListAdapter.refresh(musicPlayLists);
+            videoListAdapter.refresh(videoPlayLists);
         } else {
             textView_noDataStr.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.INVISIBLE);
@@ -88,6 +93,6 @@ public class MusicListFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        musicListDatabaseUtils.close();
+        videoListDatabaseUtils.close();
     }
 }

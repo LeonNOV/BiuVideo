@@ -14,8 +14,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.ViewPageAdapter;
-import com.leon.biuvideo.ui.fragments.PlayListFragments.MusicListFragment;
-import com.leon.biuvideo.ui.fragments.PlayListFragments.VideoListFragment;
+import com.leon.biuvideo.ui.fragments.playListFragments.MusicListFragment;
+import com.leon.biuvideo.ui.fragments.playListFragments.VideoListFragment;
 import com.leon.biuvideo.utils.Fuck;
 
 import java.util.ArrayList;
@@ -66,8 +66,8 @@ public class PlayListFragment extends Fragment implements ViewPager.OnPageChange
     public void onPageSelected(int position) {
         Log.d(Fuck.blue, "page position:" + position);
 
-        int point_bilibili_pink_lite = R.drawable.ripple_bilibili_pink_lite;
         int point_bilibili_pink = R.drawable.shape_bilibili_pink;
+        int point_bilibili_pink_lite = R.drawable.ripple_bilibili_pink_lite;
 
         switch (position) {
             case 0:

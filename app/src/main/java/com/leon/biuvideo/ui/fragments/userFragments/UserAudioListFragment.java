@@ -1,4 +1,4 @@
-package com.leon.biuvideo.ui.fragments.UserFragments;
+package com.leon.biuvideo.ui.fragments.userFragments;
 
 import android.content.Context;
 import android.os.Bundle;

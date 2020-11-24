@@ -20,10 +20,10 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.ViewPageAdapter;
 import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.beans.upMasterBean.UpInfo;
-import com.leon.biuvideo.ui.fragments.UserFragments.UserArticlesFragment;
-import com.leon.biuvideo.ui.fragments.UserFragments.UserAudioListFragment;
-import com.leon.biuvideo.ui.fragments.UserFragments.UserPictureListFragment;
-import com.leon.biuvideo.ui.fragments.UserFragments.UserVideoListFragment;
+import com.leon.biuvideo.ui.fragments.userFragments.UserArticlesFragment;
+import com.leon.biuvideo.ui.fragments.userFragments.UserAudioListFragment;
+import com.leon.biuvideo.ui.fragments.userFragments.UserPictureListFragment;
+import com.leon.biuvideo.ui.fragments.userFragments.UserVideoListFragment;
 import com.leon.biuvideo.utils.ImagePixelSize;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
@@ -56,9 +56,6 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
     private UpInfo upInfo;
 
     private FavoriteDatabaseUtils favoriteDatabaseUtils;
-
-    private int point_bilibili_pink = R.drawable.shape_bilibili_pink;
-    private int point_bilibili_pink_lite = R.drawable.ripple_bilibili_pink_lite;
 
     public UpMasterActivity() {
         super();
@@ -179,6 +176,9 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
 
     @Override
     public void onPageSelected(int position) {
+        int point_bilibili_pink = R.drawable.shape_bilibili_pink;
+        int point_bilibili_pink_lite = R.drawable.ripple_bilibili_pink_lite;
+
         switch (position) {
             case 0:
                 user_textView_video.setBackgroundResource(point_bilibili_pink);

@@ -21,9 +21,9 @@
                 android:id="@+id/search_imageView_back"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_marginTop="5dp"
                 android:background="?selectableItemBackgroundBorderless"
                 android:padding="5dp"
-                android:layout_marginTop="5dp"
                 android:src="@drawable/icon_back"
                 app:tint="#707070" />
 
@@ -50,11 +50,11 @@
                         android:layout_marginStart="13dp"
                         android:layout_marginEnd="9dp"
                         android:background="@null"
+                        android:gravity="center_vertical"
                         android:hint="输入关键字，进行搜索"
                         android:imeOptions="actionSearch"
                         android:inputType="text"
                         android:maxLines="1"
-                        android:gravity="center_vertical"
                         android:textSize="15sp"
                         android:theme="@style/CustomEditText" />
 
@@ -89,7 +89,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
-            android:background="@drawable/shape_bilibili_pink_lite"
+            android:background="@drawable/shape_bilibili_pink"
             android:gravity="center"
             android:padding="7dp"
             android:text="视频"
@@ -102,7 +102,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
-            android:background="@drawable/ripple_bilibili_pink"
+            android:background="@drawable/ripple_bilibili_pink_lite"
             android:gravity="center"
             android:padding="7dp"
             android:text="专栏"
@@ -115,7 +115,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
-            android:background="@drawable/ripple_bilibili_pink"
+            android:background="@drawable/ripple_bilibili_pink_lite"
             android:gravity="center"
             android:padding="7dp"
             android:text="用户"
@@ -123,9 +123,24 @@
 
     </LinearLayout>
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/search_viewPager"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+
+        <ProgressBar
+            android:id="@+id/search_progressBar"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerInParent="true"
+            android:indeterminateTint="@color/colorPrimary"
+            android:indeterminateTintMode="src_atop"
+            android:visibility="gone" />
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/search_viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
 
 </LinearLayout>
