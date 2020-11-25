@@ -45,6 +45,7 @@ public class VideoResultFragment extends Fragment {
 
     private LayoutInflater inflater;
     private Context context;
+    private LinearLayoutManager linearLayoutManager;
     private UserVideoAdapter userVideoAdapter;
 
     private boolean dataState = true;
@@ -101,20 +102,40 @@ public class VideoResultFragment extends Fragment {
         search_result_smartRefresh.setEnableRefresh(false);
     }
 
-    private void initValue() {
-        if (getDataState()) {
+    private List<UpVideo> initValue() {
+        //判断结果是否与搜索关键词匹配
+        if (VideoParser.isMatch(keyword)) {
             //设置无数据提示界面
             view = inflater.inflate(R.layout.fragment_no_data, null);
-            return;
+            return null;
         }
 
         //初始化数据
-        videos = initData();
+        videoParser = new VideoParser();
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        //获取第一页数据
+        List<UpVideo> videos = videoParser.videoParse(keyword, pageNum, OrderType.DEFAULT);
+
+        //获取第一页结果总数，最大为20，最小为0
+        currentCount += videos.size();
+
+        //获取总条目数，最大为1000，最小为0
+        count = VideoParser.getSearchVideoCount(keyword);
+
+        //判断第一次加载是否已加载完所有数据
+        if (count == videos.size()) {
+            dataState = false;
+
+            //关闭上滑加载
+            search_result_smartRefresh.setEnabled(false);
+        }
+
+        if (linearLayoutManager == null || userVideoAdapter == null) {
+            linearLayoutManager = new LinearLayoutManager(getContext());
+            userVideoAdapter = new UserVideoAdapter(videos, getContext());
+        }
+
         search_result_recyclerView.setLayoutManager(linearLayoutManager);
-
-        userVideoAdapter = new UserVideoAdapter(videos, getContext());
         search_result_recyclerView.setAdapter(userVideoAdapter);
 
         //添加加载更多监听事件
@@ -148,45 +169,53 @@ public class VideoResultFragment extends Fragment {
                 search_result_smartRefresh.finishLoadMore();
             }
         });
-    }
-
-    private List<UpVideo> initData() {
-        videoParser = new VideoParser();
-        //获取第一页数据
-        List<UpVideo> videos = videoParser.videoParse(keyword, pageNum, OrderType.DEFAULT);
-        //获取结果总数，最大为1000，最小为0
-        currentCount += videos.size();
-
-        count = VideoParser.getSearchVideoCount(keyword);
-
-        //判断第一次加载是否已加载完所有数据
-        if (count == videos.size()) {
-            dataState = false;
-
-            //关闭上滑加载
-            search_result_smartRefresh.setEnabled(false);
-        }
 
         return videos;
     }
 
-    public boolean getDataState() {
-        //判断结果是否与搜索关键词匹配
-        return !VideoParser.isMatch(keyword);
-    }
+//    private List<UpVideo> initData() {
+//        videoParser = new VideoParser();
+//        //获取第一页数据
+//        List<UpVideo> videos = videoParser.videoParse(keyword, pageNum, OrderType.DEFAULT);
+//        //获取结果总数，最大为1000，最小为0
+//        currentCount += videos.size();
+//
+//        count = VideoParser.getSearchVideoCount(keyword);
+//
+//        //判断第一次加载是否已加载完所有数据
+//        if (count == videos.size()) {
+//            dataState = false;
+//
+//            //关闭上滑加载
+//            search_result_smartRefresh.setEnabled(false);
+//        }
+//
+//        return videos;
+//    }
 
+//    public boolean getDataState() {
+//        //判断结果是否与搜索关键词匹配
+//        return !VideoParser.isMatch(keyword);
+//    }
+
+    /**
+     * 获取下一页的数据
+     *
+     * @param pageNum   页码
+     * @return  返回下一页的数据
+     */
     public List<UpVideo> getVideos(int pageNum) {
-        List<UpVideo> videos = videoParser.videoParse(keyword, pageNum, OrderType.DEFAULT);
+        List<UpVideo> newVideos = videoParser.videoParse(keyword, pageNum, OrderType.DEFAULT);
 
         //记录获取的总数
-        currentCount += videos.size();
+        currentCount += newVideos.size();
 
         //判断是否已获取完所有的数据
-        if (videos.size() < 20 || currentCount == count) {
+        if (newVideos.size() < 20 || currentCount == count) {
             dataState = false;
         }
 
-        return videos;
+        return newVideos;
     }
 
     /**
@@ -199,10 +228,10 @@ public class VideoResultFragment extends Fragment {
         this.pageNum = 1;
 
         //判断是否与关键词相匹配
-        if (getDataState()) {
-            view = inflater.inflate(R.layout.fragment_no_data, null);
-            return;
-        }
+//        if (getDataState()) {
+//            view = inflater.inflate(R.layout.fragment_no_data, null);
+//            return;
+//        }
 
         if (videos != null && videos.size() > 0) {
             videos.clear();
@@ -211,7 +240,7 @@ public class VideoResultFragment extends Fragment {
         }
 
         //获取二次搜索的数据
-        videos = initData();
+        videos = initValue();
 
         if (userVideoAdapter == null) {
             userVideoAdapter = new UserVideoAdapter(new ArrayList<>(), getContext());
