@@ -84,13 +84,13 @@ public class VideoParser {
                 upVideo.bvid = jsonObject.getString("bvid");
 
                 //获取标题
-                upVideo.title = jsonObject.getString("title").replaceAll(oldStr, "");
+                upVideo.title = jsonObject.getString("title").replaceAll(oldStr, keyword);
 
                 //获取视频说明
                 upVideo.description = jsonObject.getString("description");
 
                 //获取视频封面
-                upVideo.cover = "http://" + jsonObject.getString("pic");
+                upVideo.cover = "http:" + jsonObject.getString("pic");
 
                 //获取播放量
                 upVideo.play = jsonObject.getIntValue("play");

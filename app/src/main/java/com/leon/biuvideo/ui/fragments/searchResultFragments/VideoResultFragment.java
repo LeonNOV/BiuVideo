@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ import com.leon.biuvideo.utils.OrderType;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.VideoParser;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.constant.RefreshState;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.ArrayList;
@@ -34,6 +36,7 @@ import java.util.List;
 public class VideoResultFragment extends Fragment {
     private SmartRefreshLayout search_result_smartRefresh;
     private RecyclerView search_result_recyclerView;
+    private TextView search_result_no_data;
 
     private String keyword;
 
@@ -43,7 +46,6 @@ public class VideoResultFragment extends Fragment {
     private VideoParser videoParser;
     private List<UpVideo> videos;
 
-    private LayoutInflater inflater;
     private Context context;
     private LinearLayoutManager linearLayoutManager;
     private UserVideoAdapter userVideoAdapter;
@@ -73,28 +75,21 @@ public class VideoResultFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.inflater = inflater;
         view = inflater.inflate(R.layout.search_result_fragment, container, false);
 
         initView();
-        initValue();
+        initVisibility();
 
         return view;
     }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        Bundle arguments = getArguments();
-
-        if (arguments != null) {
-            keyword = arguments.getString("keyword");
-        }
-    }
-
+    /**
+     * 初始控件
+     */
     private void initView() {
         context = getContext();
 
+        search_result_no_data = view.findViewById(R.id.search_result_no_data);
         search_result_smartRefresh = view.findViewById(R.id.search_result_smartRefresh);
         search_result_recyclerView = view.findViewById(R.id.search_result_recyclerView);
 
@@ -102,39 +97,56 @@ public class VideoResultFragment extends Fragment {
         search_result_smartRefresh.setEnableRefresh(false);
     }
 
-    private List<UpVideo> initValue() {
+    /**
+     * 初始化控件Visibility
+     */
+    private void initVisibility() {
         //判断结果是否与搜索关键词匹配
-        if (VideoParser.isMatch(keyword)) {
+        if (!VideoParser.isMatch(keyword)) {
             //设置无数据提示界面
-            view = inflater.inflate(R.layout.fragment_no_data, null);
-            return null;
-        }
-
-        //初始化数据
-        videoParser = new VideoParser();
-
-        //获取第一页数据
-        List<UpVideo> videos = videoParser.videoParse(keyword, pageNum, OrderType.DEFAULT);
-
-        //获取第一页结果总数，最大为20，最小为0
-        currentCount += videos.size();
-
-        //获取总条目数，最大为1000，最小为0
-        count = VideoParser.getSearchVideoCount(keyword);
-
-        //判断第一次加载是否已加载完所有数据
-        if (count == videos.size()) {
-            dataState = false;
-
-            //关闭上滑加载
+            search_result_no_data.setVisibility(View.VISIBLE);
+            search_result_recyclerView.setVisibility(View.GONE);
             search_result_smartRefresh.setEnabled(false);
-        }
+        } else {
+            search_result_no_data.setVisibility(View.GONE);
+            search_result_recyclerView.setVisibility(View.VISIBLE);
+            search_result_smartRefresh.setEnabled(true);
 
-        if (linearLayoutManager == null || userVideoAdapter == null) {
-            linearLayoutManager = new LinearLayoutManager(getContext());
-            userVideoAdapter = new UserVideoAdapter(videos, getContext());
-        }
+            //获取总条目数，最大为1000，最小为0
+            count = VideoParser.getSearchVideoCount(keyword);
 
+            if (videoParser == null) {
+                videoParser = new VideoParser();
+            }
+
+            //获取第一页数据
+            List<UpVideo> newVideos = videoParser.videoParse(keyword, pageNum, OrderType.DEFAULT);
+
+            //获取第一页结果总数，最大为20，最小为0
+            currentCount += newVideos.size();
+
+            //判断第一次加载是否已加载完所有数据
+            if (count == newVideos.size()) {
+                dataState = false;
+                //关闭上滑加载
+                search_result_smartRefresh.setEnabled(false);
+            }
+
+            if (linearLayoutManager == null || userVideoAdapter == null) {
+                linearLayoutManager = new LinearLayoutManager(context);
+                userVideoAdapter = new UserVideoAdapter(newVideos, context);
+            }
+
+            videos = newVideos;
+
+            initAttr();
+        }
+    }
+
+    /**
+     * 初始化控件属性
+     */
+    private void initAttr() {
         search_result_recyclerView.setLayoutManager(linearLayoutManager);
         search_result_recyclerView.setAdapter(userVideoAdapter);
 
@@ -142,61 +154,38 @@ public class VideoResultFragment extends Fragment {
         search_result_smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
+                RefreshState state = refreshLayout.getState();
 
-                if (dataState) {
-                    pageNum++;
+                //判断是否处于拖拽已释放的状态
+                if (state.finishing == RefreshState.ReleaseToLoad.finishing) {
+                    if (dataState) {
+                        pageNum++;
 
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            //获取新数据
-                            List<UpVideo> addOns = getVideos(pageNum);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                //获取新数据
+                                List<UpVideo> addOns = getVideos(pageNum);
 
-                            Log.d(Fuck.blue, "成功获取了第" + pageNum + "页的" + addOns.size() + "条数据");
+                                Log.d(Fuck.blue, "成功获取了第" + pageNum + "页的" + addOns.size() + "条数据");
 
-                            //添加新数据
-                            userVideoAdapter.append(addOns);
-                        }
-                    }, 1000);
-                } else {
-                    //关闭上滑刷新
-                    search_result_smartRefresh.setEnabled(false);
+                                //添加新数据
+                                userVideoAdapter.append(addOns);
+                            }
+                        }, 1000);
+                    } else {
+                        //关闭上滑刷新
+                        search_result_smartRefresh.setEnabled(false);
 
-                    Toast.makeText(context, "只有这么多数据了~~~", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "只有这么多数据了~~~", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 //结束加载更多动画
                 search_result_smartRefresh.finishLoadMore();
             }
         });
-
-        return videos;
     }
-
-//    private List<UpVideo> initData() {
-//        videoParser = new VideoParser();
-//        //获取第一页数据
-//        List<UpVideo> videos = videoParser.videoParse(keyword, pageNum, OrderType.DEFAULT);
-//        //获取结果总数，最大为1000，最小为0
-//        currentCount += videos.size();
-//
-//        count = VideoParser.getSearchVideoCount(keyword);
-//
-//        //判断第一次加载是否已加载完所有数据
-//        if (count == videos.size()) {
-//            dataState = false;
-//
-//            //关闭上滑加载
-//            search_result_smartRefresh.setEnabled(false);
-//        }
-//
-//        return videos;
-//    }
-
-//    public boolean getDataState() {
-//        //判断结果是否与搜索关键词匹配
-//        return !VideoParser.isMatch(keyword);
-//    }
 
     /**
      * 获取下一页的数据
@@ -224,28 +213,21 @@ public class VideoResultFragment extends Fragment {
      * @param keyword   搜索关键字
      */
     public void updateData(String keyword) {
-        this.keyword = keyword;
-        this.pageNum = 1;
-
-        //判断是否与关键词相匹配
-//        if (getDataState()) {
-//            view = inflater.inflate(R.layout.fragment_no_data, null);
-//            return;
-//        }
-
-        if (videos != null && videos.size() > 0) {
-            videos.clear();
-        } else {
-            videos = new ArrayList<>();
-        }
+        this.keyword = keyword;     //初始化当前搜索关键字
+        this.pageNum = 1;       //初始化当前页码值
+        this.currentCount = 0;      //重置现数据数量
+        this.dataState = true;
 
         //获取二次搜索的数据
-        videos = initValue();
+        initVisibility();
 
-        if (userVideoAdapter == null) {
-            userVideoAdapter = new UserVideoAdapter(new ArrayList<>(), getContext());
-        }
+        /**
+         * 需要将二次搜索的第一个页面的数据放入一个临时的变量中
+         * 以防userVideoAdapter.removeAll()将其清空
+         */
+        List<UpVideo> temp = new ArrayList<>(videos);
 
-        userVideoAdapter.refresh(videos);
+        userVideoAdapter.removeAll();
+        userVideoAdapter.append(temp);
     }
 }

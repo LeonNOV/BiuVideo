@@ -78,7 +78,7 @@ public class ArticleParser {
                 article.like = jsonObject.getIntValue("like");
 
                 //获取标题
-                article.title = jsonObject.getString("title").replaceAll(oldStr, "");
+                article.title = jsonObject.getString("title").replaceAll(oldStr, keyword);
 
                 //获取封面url
                 article.coverUrl = "http://" + jsonObject.getJSONArray("image_urls").getString(0);

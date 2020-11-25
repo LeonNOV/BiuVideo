@@ -13,7 +13,6 @@ import com.leon.biuvideo.beans.upMasterBean.UpVideo;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.utils.ImagePixelSize;
 import com.leon.biuvideo.utils.ValueFormat;
-import com.leon.biuvideo.utils.parseDataUtils.searchParsers.VideoParser;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -74,20 +73,20 @@ public class UserVideoAdapter extends BaseAdapter<UpVideo> {
                 });
     }
 
-    //加载数据使用
+    /**
+     * 刷新加载数据
+     *
+     * @param addOns    要加入的数据
+     */
     public void append(List<UpVideo> addOns) {
-        int position = upVideos.size();
-
-        upVideos.addAll(position, addOns);
+        upVideos.addAll(addOns);
         notifyDataSetChanged();
     }
 
-    public void refresh(List<UpVideo> newVideos) {
-        if (upVideos.size() > 0) {
-            upVideos.clear();
-        }
-
-        upVideos.addAll(newVideos);
-        notifyDataSetChanged();
+    /**
+     * 清空上次搜索后的数据缓存
+     */
+    public void removeAll() {
+        upVideos.clear();
     }
 }

@@ -110,20 +110,20 @@ public class BiliUserAdapter extends BaseAdapter<BiliUser> {
                 .setText(R.id.search_bili_user_textView_sign, biliUser.usign);
     }
 
-    //加载数据使用
+    /**
+     * 刷新加载数据
+     *
+     * @param addOns    要加载的数据
+     */
     public void append(List<BiliUser> addOns) {
-        int position = biliUsers.size();
-
-        biliUsers.addAll(position, addOns);
+        biliUsers.addAll(addOns);
         notifyDataSetChanged();
     }
 
-    public void refresh(List<BiliUser> newBiliUsers) {
-        if (biliUsers.size() > 0) {
-            biliUsers.clear();
-        }
-
-        biliUsers.addAll(newBiliUsers);
-        notifyDataSetChanged();
+    /**
+     * 清空上次搜索后的数据缓存
+     */
+    public void removeAll() {
+        biliUsers.clear();
     }
 }

@@ -5,11 +5,17 @@
 
 ## 📘开发日志
 
+### 2020/11/25
+- 二次搜索无数据问题已基本解决，如果二次搜索的Adapter没有创建的话，则数据还是显示不了
+- 更改了VideoResultFragment的部分代码，还未进行过调试
+- 搜索功能已全部完善，暂未遇到BUG的出现
+  - **搜索部分的Fragment还存在代码冗余，需要进行清理**
+
 ### 2020/11/24
 - 修改了部分界面，`SearchResultActivity`还存在输入关键字搜索不了的情况
 - 修改了SearchResultActivity的部分代码
 - 对部分代码进行了更改，二次搜索，fragment数据的加载还存在问题，切换fragment时存在fragment频繁创建的问题
-- **淦，执行二次搜索，fragment数据的加载还是存在问题**
+- ~~**淦，执行二次搜索，fragment数据的加载还是存在问题**~~
 - 不过，倒是在`SearchResultActivity`中加入了`setOffscreenPageLimit()`方法，解决了切换fragment时不在加载范围内的fragment会被销毁的问题（总感觉使用这个方法会有点不妥的感觉）
 
 ### 2020/11/23

@@ -72,20 +72,20 @@ public class UserArticleAdapter extends BaseAdapter<Article> {
                 });
     }
 
-    //加载数据使用
+    /**
+     * 刷新加载数据
+     *
+     * @param addOns    要加入的数据
+     */
     public void append(List<Article> addOns) {
-        int position = articles.size();
-
-        articles.addAll(position, addOns);
+        articles.addAll(addOns);
         notifyDataSetChanged();
     }
 
-    public void refresh(List<Article> newArticles) {
-        if (articles.size() > 0) {
-            articles.clear();
-        }
-
-        articles.addAll(newArticles);
-        notifyDataSetChanged();
+    /**
+     * 清空上次搜索后的数据缓存
+     */
+    public void removeAll() {
+        articles.clear();
     }
 }

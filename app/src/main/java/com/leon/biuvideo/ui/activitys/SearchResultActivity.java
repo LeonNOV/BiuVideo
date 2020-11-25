@@ -1,4 +1,4 @@
-package com.leon.biuvideo.ui.activitys;
+ package com.leon.biuvideo.ui.activitys;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -121,7 +121,7 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
         viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
         search_viewPager.setAdapter(viewPageAdapter);
         search_viewPager.setOffscreenPageLimit(fragments.size());
-        Fuck.blue("Adapter:" + search_viewPager.getAdapter().getCount());
+        Fuck.blue("Adapter:" + viewPageAdapter.getCount());
     }
 
     private void refreshFragments() {

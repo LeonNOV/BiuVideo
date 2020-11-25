@@ -1,5 +1,7 @@
 package com.leon.biuvideo;
 
+import android.view.View;
+
 import com.leon.biuvideo.beans.upMasterBean.UpAudio;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
 import com.leon.biuvideo.beans.upMasterBean.UpVideo;
@@ -13,6 +15,7 @@ import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UpVideoParseUt
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -155,5 +158,51 @@ public class ExampleUnitTest {
         String s = ValueFormat.sizeFormat(size);
 
         System.out.println(s);
+    }
+
+    @Test
+    public void Visibility() {
+        List<String> list1 = new ArrayList<>();
+        list1.add("A");
+        list1.add("B");
+        list1.add("C");
+        list1.add("D");
+        list1.add("E");
+        list1.add("F");
+        list1.add("G");
+
+        upVideos = list1;
+
+        List<String> list2 = new ArrayList<>();
+        list2.add("a");
+        list2.add("b");
+        list2.add("c");
+        list2.add("d");
+        list2.add("e");
+        list2.add("f");
+        list2.add("g");
+
+        System.out.println(list1.size());
+        System.out.println(list2.size());
+
+        System.out.println("-----------------------------");
+        System.out.println("-----------------------------");
+
+        refresh(list2);
+    }
+
+    private List<String> upVideos;
+
+    public void refresh(List<String> newVideos) {
+        if (upVideos.size() > 0) {
+            while (upVideos.size() != 0) {
+                upVideos.remove(0);
+            }
+        }
+
+        System.out.println(upVideos.size());
+        System.out.println(newVideos.size());
+
+        upVideos.addAll(newVideos);
     }
 }

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,6 +35,7 @@ import java.util.List;
 public class BiliUserResultFragment extends Fragment {
     private SmartRefreshLayout search_result_smartRefresh;
     private RecyclerView search_result_recyclerView;
+    private TextView search_result_no_data;
 
     private String keyword;
 
@@ -43,9 +45,9 @@ public class BiliUserResultFragment extends Fragment {
     private BiliUserParser biliUserParser;
     private List<BiliUser> biliUsers;
 
-    private LayoutInflater inflater;
     private Context context;
     private BiliUserAdapter biliUserAdapter;
+    private LinearLayoutManager linearLayoutManager;
 
     private boolean dataState = true;
     private int pageNum = 1;
@@ -72,11 +74,10 @@ public class BiliUserResultFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.inflater = inflater;
         view = inflater.inflate(R.layout.search_result_fragment, container, false);
 
         initView();
-        initValue();
+        initVisibility();
 
         return view;
     }
@@ -84,6 +85,7 @@ public class BiliUserResultFragment extends Fragment {
     private void initView() {
         context = getContext();
 
+        search_result_no_data = view.findViewById(R.id.search_result_no_data);
         search_result_smartRefresh = view.findViewById(R.id.search_result_smartRefresh);
         search_result_recyclerView = view.findViewById(R.id.search_result_recyclerView);
 
@@ -91,18 +93,49 @@ public class BiliUserResultFragment extends Fragment {
         search_result_smartRefresh.setEnableRefresh(false);
     }
 
-    private void initValue() {
+    /**
+     * 初始化控件Visibility
+     */
+    private void initVisibility() {
         if (getDataState()) {
             //设置无数据提示界面
-            view = inflater.inflate(R.layout.fragment_no_data, null);
-            return;
+            search_result_no_data.setVisibility(View.VISIBLE);
+            search_result_recyclerView.setVisibility(View.GONE);
+            search_result_smartRefresh.setEnabled(false);
+        } else {
+            search_result_no_data.setVisibility(View.GONE);
+            search_result_recyclerView.setVisibility(View.VISIBLE);
+            search_result_smartRefresh.setEnabled(true);
+
+            if (biliUserParser == null) {
+                biliUserParser = new BiliUserParser();
+            }
+
+            List<BiliUser> newBiliUsers = biliUserParser.userParse(keyword, pageNum, OrderType.DEFAULT);
+
+            currentCount += newBiliUsers.size();
+
+            if (count == newBiliUsers.size()) {
+                dataState = false;
+                //关闭上滑加载
+                search_result_smartRefresh.setEnabled(false);
+            }
+
+            if (linearLayoutManager == null || biliUserAdapter == null) {
+                linearLayoutManager = new LinearLayoutManager(context);
+                biliUserAdapter = new BiliUserAdapter(newBiliUsers, context);
+            }
+
+            biliUsers = newBiliUsers;
+
+            initAttr();
         }
+    }
 
-        biliUsers = initData();
-
-        biliUserAdapter = new BiliUserAdapter(biliUsers, context);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-
+    /**
+     * 初始化控件属性
+     */
+    private void initAttr() {
         search_result_recyclerView.setLayoutManager(linearLayoutManager);
         search_result_recyclerView.setAdapter(biliUserAdapter);
 
@@ -139,28 +172,24 @@ public class BiliUserResultFragment extends Fragment {
         });
     }
 
-    private List<BiliUser> initData() {
-        biliUserParser = new BiliUserParser();
-        List<BiliUser> biliUsers = biliUserParser.userParse(keyword, pageNum, OrderType.DEFAULT);
-        currentCount += biliUsers.size();
-
-        //判断第一次加载是否已加载完所有数据
-        if (count == biliUsers.size()) {
-            dataState = false;
-
-            //关闭上滑加载
-            search_result_smartRefresh.setEnabled(false);
-        }
-        return biliUsers;
-    }
-
+    /**
+     * 获取数据状态，同时对总数进行赋值
+     *
+     * @return  返回是否等于0
+     */
     public boolean getDataState() {
         //获取结果总数，最大为1000， 最小为0
         count = BiliUserParser.getSearchUserCount(keyword);
 
-        return count <= 0;
+        return count == 0;
     }
 
+    /**
+     * 获取下一页用户数据
+     *
+     * @param pageNum   页码
+     * @return  返回下一页用户数据
+     */
     public List<BiliUser> getBiliUsers(int pageNum) {
         List<BiliUser> biliUsers = biliUserParser.userParse(keyword, pageNum, OrderType.DEFAULT);
 
@@ -183,26 +212,14 @@ public class BiliUserResultFragment extends Fragment {
     public void updateData(String keyword) {
         this.keyword = keyword;
         this.pageNum = 1;
+        this.currentCount = 0;
+        this.dataState = true;
 
-        if (getDataState()) {
-            //设置无数据提示界面
-            view = inflater.inflate(R.layout.fragment_no_data, null);
-            return;
-        }
+        initVisibility();
 
-        if (biliUsers != null && biliUsers.size() > 0) {
-            biliUsers.clear();
-        } else {
-            biliUsers = new ArrayList<>();
-        }
+        ArrayList<BiliUser> temp = new ArrayList<>(biliUsers);
 
-        //获取二次搜索的数据
-        biliUsers = initData();
-
-        if (biliUserAdapter == null) {
-            biliUserAdapter = new BiliUserAdapter(new ArrayList<>(), getContext());
-        }
-
-        biliUserAdapter.refresh(biliUsers);
+        biliUserAdapter.removeAll();
+        biliUserAdapter.append(temp);
     }
 }

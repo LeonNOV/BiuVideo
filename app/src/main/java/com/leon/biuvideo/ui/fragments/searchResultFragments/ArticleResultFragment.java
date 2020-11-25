@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,6 +35,7 @@ import java.util.List;
 public class ArticleResultFragment extends Fragment {
     private SmartRefreshLayout search_result_smartRefresh;
     private RecyclerView search_result_recyclerView;
+    private TextView search_result_no_data;
 
     private String keyword;
 
@@ -43,9 +45,9 @@ public class ArticleResultFragment extends Fragment {
     private ArticleParser articleParser;
     private List<Article> articles;
 
-    private LayoutInflater inflater;
     private Context context;
     private UserArticleAdapter userArticleAdapter;
+    private LinearLayoutManager linearLayoutManager;
 
     private boolean dataState = true;
     private int pageNum = 1;
@@ -72,18 +74,21 @@ public class ArticleResultFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.inflater = inflater;
         view = inflater.inflate(R.layout.search_result_fragment, container, false);
 
         initView();
-        initValue();
+        initVisibility();
 
         return view;
     }
 
+    /**
+     * 初始化控件
+     */
     private void initView() {
         context = getContext();
 
+        search_result_no_data = view.findViewById(R.id.search_result_no_data);
         search_result_smartRefresh = view.findViewById(R.id.search_result_smartRefresh);
         search_result_recyclerView = view.findViewById(R.id.search_result_recyclerView);
 
@@ -91,19 +96,49 @@ public class ArticleResultFragment extends Fragment {
         search_result_smartRefresh.setEnableRefresh(false);
     }
 
-    private void initValue() {
-        //判断获取的数据条目是否为0
+    /**
+     * 初始化控件Visibility
+     */
+    private void initVisibility() {
         if (getDataState()) {
             //设置无数据提示界面
-            view = inflater.inflate(R.layout.fragment_no_data, null);
-            return;
+            search_result_no_data.setVisibility(View.VISIBLE);
+            search_result_recyclerView.setVisibility(View.GONE);
+            search_result_smartRefresh.setEnabled(false);
+        } else {
+            search_result_no_data.setVisibility(View.GONE);
+            search_result_recyclerView.setVisibility(View.VISIBLE);
+            search_result_smartRefresh.setEnabled(true);
+
+            if (articleParser == null) {
+                articleParser = new ArticleParser();
+            }
+
+            List<Article> newArticles = articleParser.articleParse(keyword, pageNum, OrderType.DEFAULT);
+
+            currentCount += newArticles.size();
+
+            if (count == newArticles.size()) {
+                dataState = false;
+
+                search_result_smartRefresh.setEnabled(false);
+            }
+
+            if (linearLayoutManager == null || userArticleAdapter == null) {
+                linearLayoutManager = new LinearLayoutManager(context);
+                userArticleAdapter = new UserArticleAdapter(newArticles, context);
+            }
+
+            articles = newArticles;
+
+            initAttr();
         }
+    }
 
-        articles = initData();
-
-        userArticleAdapter = new UserArticleAdapter(articles, getContext());
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-
+    /**
+     * 初始化控件属性
+     */
+    private void initAttr() {
         search_result_recyclerView.setLayoutManager(linearLayoutManager);
         search_result_recyclerView.setAdapter(userArticleAdapter);
 
@@ -140,27 +175,23 @@ public class ArticleResultFragment extends Fragment {
         });
     }
 
-    private List<Article> initData() {
-        articleParser = new ArticleParser();
-        List<Article> articles = articleParser.articleParse(keyword, pageNum, OrderType.DEFAULT);
-        currentCount += articles.size();
-
-        //判断第一次加载是否已加载完所有数据
-        if (count == articles.size()) {
-            dataState = false;
-
-            //关闭上滑加载
-            search_result_smartRefresh.setEnabled(false);
-        }
-        return articles;
-    }
-
+    /**
+     * 获取数据状态，同时对总数量进行赋值
+     *
+     * @return  返回是否等于0
+     */
     private boolean getDataState() {
         //获取结果总数，最大为1000， 最小为0
         count = ArticleParser.getSearchArticleCount(keyword);
-        return count <= 0;
+        return count == 0;
     }
 
+    /**
+     * 获取下一页数据
+     *
+     * @param pageNum   页码
+     * @return  返回下一页数据
+     */
     private List<Article> getArticles(int pageNum) {
         List<Article> articles = articleParser.articleParse(keyword, pageNum, OrderType.DEFAULT);
 
@@ -183,26 +214,14 @@ public class ArticleResultFragment extends Fragment {
     public void updateData(String keyword) {
         this.keyword = keyword;
         this.pageNum = 1;
+        this.currentCount = 0;
+        this.dataState = true;
 
-        if (getDataState()) {
-            //设置无数据提示界面
-            view = inflater.inflate(R.layout.fragment_no_data, null);
-            return;
-        }
+        initVisibility();
 
-        if (articles != null && articles.size() > 0) {
-            articles.clear();
-        } else {
-            articles = new ArrayList<>();
-        }
+        ArrayList<Article> temp = new ArrayList<>(this.articles);
 
-        //获取二次搜索的数据
-        articles = initData();
-
-        if (userArticleAdapter == null) {
-            userArticleAdapter = new UserArticleAdapter(new ArrayList<>(), getContext());
-        }
-
-        userArticleAdapter.refresh(articles);
+        userArticleAdapter.removeAll();
+        userArticleAdapter.append(temp);
     }
 }
