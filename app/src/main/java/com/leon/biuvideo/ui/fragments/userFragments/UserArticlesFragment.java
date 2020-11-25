@@ -106,7 +106,7 @@ public class UserArticlesFragment extends Fragment {
                             Log.d(Fuck.blue, "成功获取了" + mid + "的第" + pageNum + "页的" + addOns.size() + "条数据");
 
                             //添加新数据
-                            articleAdapter.refresh(addOns);
+                            articleAdapter.append(addOns);
                         }
                     }, 1000);
 

@@ -11,6 +11,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.articleBeans.Article;
+import com.leon.biuvideo.beans.upMasterBean.UpVideo;
 import com.leon.biuvideo.ui.activitys.ArticleActivity;
 import com.leon.biuvideo.utils.ImagePixelSize;
 
@@ -72,10 +73,19 @@ public class UserArticleAdapter extends BaseAdapter<Article> {
     }
 
     //加载数据使用
-    public void refresh(List<Article> addOns) {
+    public void append(List<Article> addOns) {
         int position = articles.size();
 
         articles.addAll(position, addOns);
+        notifyDataSetChanged();
+    }
+
+    public void refresh(List<Article> newArticles) {
+        if (articles.size() > 0) {
+            articles.clear();
+        }
+
+        articles.addAll(newArticles);
         notifyDataSetChanged();
     }
 }

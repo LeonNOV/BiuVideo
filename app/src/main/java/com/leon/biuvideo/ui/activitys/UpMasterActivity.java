@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
@@ -170,7 +171,7 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
         //获取相簿数据
         fragments.add(new UserPictureListFragment(mid, 0, getApplicationContext()));
 
-        viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), fragments);
+        viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
         up_viewPage.setAdapter(viewPageAdapter);
     }
 

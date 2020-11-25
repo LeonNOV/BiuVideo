@@ -12,6 +12,7 @@ import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.BiliUser;
 import com.leon.biuvideo.beans.Favorite;
+import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.beans.upMasterBean.UpVideo;
 import com.leon.biuvideo.ui.activitys.UpMasterActivity;
 import com.leon.biuvideo.utils.ImagePixelSize;
@@ -110,10 +111,19 @@ public class BiliUserAdapter extends BaseAdapter<BiliUser> {
     }
 
     //加载数据使用
-    public void refresh(List<BiliUser> addOns) {
+    public void append(List<BiliUser> addOns) {
         int position = biliUsers.size();
 
         biliUsers.addAll(position, addOns);
+        notifyDataSetChanged();
+    }
+
+    public void refresh(List<BiliUser> newBiliUsers) {
+        if (biliUsers.size() > 0) {
+            biliUsers.clear();
+        }
+
+        biliUsers.addAll(newBiliUsers);
         notifyDataSetChanged();
     }
 }

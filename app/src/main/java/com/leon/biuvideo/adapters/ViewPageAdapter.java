@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.PagerAdapter;
 
 import java.util.List;
 
@@ -14,9 +14,14 @@ import java.util.List;
 public class ViewPageAdapter extends FragmentPagerAdapter {
     private List<Fragment> fragments;
 
-    public ViewPageAdapter(@NonNull FragmentManager fm, List<Fragment> fragments) {
-        super(fm);
+    public ViewPageAdapter(@NonNull FragmentManager fm, int behavior, List<Fragment> fragments) {
+        super(fm, behavior);
         this.fragments = fragments;
+    }
+
+    @Override
+    public int getItemPosition(@NonNull Object object) {
+        return PagerAdapter.POSITION_NONE;
     }
 
     @NonNull

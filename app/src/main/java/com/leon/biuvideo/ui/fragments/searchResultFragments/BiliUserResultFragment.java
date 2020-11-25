@@ -25,6 +25,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,6 +45,7 @@ public class BiliUserResultFragment extends Fragment {
 
     private LayoutInflater inflater;
     private Context context;
+    private BiliUserAdapter biliUserAdapter;
 
     private boolean dataState = true;
     private int pageNum = 1;
@@ -90,31 +92,15 @@ public class BiliUserResultFragment extends Fragment {
     }
 
     private void initValue() {
-        //获取结果总数，最大为1000， 最小为0
-        count = BiliUserParser.getSearchUserCount(keyword);
-
-        Fuck.blue("BiliUser:" + count);
-
-        //判断获取的数据条目是否为0
-        if (count == 0) {
+        if (getDataState()) {
             //设置无数据提示界面
             view = inflater.inflate(R.layout.fragment_no_data, null);
             return;
         }
 
-        biliUserParser = new BiliUserParser();
-        biliUsers = biliUserParser.userParse(keyword, pageNum, OrderType.DEFAULT);
-        currentCount += biliUsers.size();
+        biliUsers = initData();
 
-        //判断第一次加载是否已加载完所有数据
-        if (count == biliUsers.size()) {
-            dataState = false;
-
-            //关闭上滑加载
-            search_result_smartRefresh.setEnabled(false);
-        }
-
-        BiliUserAdapter biliUserAdapter = new BiliUserAdapter(biliUsers, context);
+        biliUserAdapter = new BiliUserAdapter(biliUsers, context);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
 
         search_result_recyclerView.setLayoutManager(linearLayoutManager);
@@ -137,7 +123,7 @@ public class BiliUserResultFragment extends Fragment {
                             Log.d(Fuck.blue, "成功获取了第" + pageNum + "页的" + addOns.size() + "条数据");
 
                             //添加新数据
-                            biliUserAdapter.refresh(addOns);
+                            biliUserAdapter.append(addOns);
                         }
                     }, 1000);
                 } else {
@@ -153,6 +139,28 @@ public class BiliUserResultFragment extends Fragment {
         });
     }
 
+    private List<BiliUser> initData() {
+        biliUserParser = new BiliUserParser();
+        List<BiliUser> biliUsers = biliUserParser.userParse(keyword, pageNum, OrderType.DEFAULT);
+        currentCount += biliUsers.size();
+
+        //判断第一次加载是否已加载完所有数据
+        if (count == biliUsers.size()) {
+            dataState = false;
+
+            //关闭上滑加载
+            search_result_smartRefresh.setEnabled(false);
+        }
+        return biliUsers;
+    }
+
+    public boolean getDataState() {
+        //获取结果总数，最大为1000， 最小为0
+        count = BiliUserParser.getSearchUserCount(keyword);
+
+        return count <= 0;
+    }
+
     public List<BiliUser> getBiliUsers(int pageNum) {
         List<BiliUser> biliUsers = biliUserParser.userParse(keyword, pageNum, OrderType.DEFAULT);
 
@@ -165,5 +173,36 @@ public class BiliUserResultFragment extends Fragment {
         }
 
         return biliUsers;
+    }
+
+    /**
+     * 用于二次搜索刷新fragment数据
+     *
+     * @param keyword   搜索关键字
+     */
+    public void updateData(String keyword) {
+        this.keyword = keyword;
+        this.pageNum = 1;
+
+        if (getDataState()) {
+            //设置无数据提示界面
+            view = inflater.inflate(R.layout.fragment_no_data, null);
+            return;
+        }
+
+        if (biliUsers != null && biliUsers.size() > 0) {
+            biliUsers.clear();
+        } else {
+            biliUsers = new ArrayList<>();
+        }
+
+        //获取二次搜索的数据
+        biliUsers = initData();
+
+        if (biliUserAdapter == null) {
+            biliUserAdapter = new BiliUserAdapter(new ArrayList<>(), getContext());
+        }
+
+        biliUserAdapter.refresh(biliUsers);
     }
 }

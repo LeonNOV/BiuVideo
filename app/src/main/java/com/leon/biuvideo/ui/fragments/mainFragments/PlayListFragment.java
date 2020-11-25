@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.leon.biuvideo.R;
@@ -58,7 +59,7 @@ public class PlayListFragment extends Fragment implements ViewPager.OnPageChange
         fragments.add(new VideoListFragment());
         fragments.add(new MusicListFragment());
 
-        ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getParentFragmentManager(), fragments);
+        ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getParentFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
         play_list_viewPage.setAdapter(viewPageAdapter);
     }
 

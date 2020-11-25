@@ -2,11 +2,12 @@ package com.leon.biuvideo.ui.activitys;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -22,6 +23,7 @@ import com.leon.biuvideo.adapters.ViewPageAdapter;
 import com.leon.biuvideo.ui.fragments.searchResultFragments.ArticleResultFragment;
 import com.leon.biuvideo.ui.fragments.searchResultFragments.BiliUserResultFragment;
 import com.leon.biuvideo.ui.fragments.searchResultFragments.VideoResultFragment;
+import com.leon.biuvideo.utils.Fuck;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,7 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
 
     private String keyword;
     private List<Fragment> fragments;
+    private ViewPageAdapter viewPageAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +63,7 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
 
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                //当i == XX_SEND 或者 XX_DONE时都触发
-                //或者event.getKeyCode == ENTER 且 event.getAction == ACTION_DOWN时也触发
-                //注意，这是一定要判断event != null。因为在某些输入法上会返回null。
+                //按下软键盘的搜索按钮会触发该方法
                 if (i == EditorInfo.IME_ACTION_SEARCH) {
                     //获取输入内容
                     String value = search_editText_searchBox.getText().toString();
@@ -76,7 +77,6 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
 
                         keyword = value;
                         refreshFragments();
-                        initViewPage();
 
                         search_progressBar.setVisibility(View.INVISIBLE);
                     }
@@ -96,7 +96,6 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
         search_textView_result_user.setOnClickListener(this);
 
         search_progressBar = findViewById(R.id.search_progressBar);
-        search_progressBar.setVisibility(View.INVISIBLE);
 
         search_viewPager = findViewById(R.id.search_viewPager);
         search_viewPager.addOnPageChangeListener(this);
@@ -115,29 +114,29 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
             fragments = new ArrayList<>();
         }
 
-//        fragments.add(new VideoResultFragment(keyword));
-//        fragments.add(new ArticleResultFragment(keyword));
-//        fragments.add(new BiliUserResultFragment(keyword));
-
         fragments.add(VideoResultFragment.getInstance(keyword));
         fragments.add(ArticleResultFragment.getInstance(keyword));
         fragments.add(BiliUserResultFragment.getInstance(keyword));
 
-        ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), fragments);
+        viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
         search_viewPager.setAdapter(viewPageAdapter);
         search_viewPager.setOffscreenPageLimit(fragments.size());
+        Fuck.blue("Adapter:" + search_viewPager.getAdapter().getCount());
     }
 
     private void refreshFragments() {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-
         for (Fragment fragment : fragments) {
-            fragmentTransaction.remove(fragment);
+            if (fragment instanceof VideoResultFragment) {
+                VideoResultFragment videoResultFragment = (VideoResultFragment) fragment;
+                videoResultFragment.updateData(keyword);
+            } else if (fragment instanceof ArticleResultFragment){
+                ArticleResultFragment articleResultFragment = (ArticleResultFragment) fragment;
+                articleResultFragment.updateData(keyword);
+            } else {
+                BiliUserResultFragment biliUserResultFragment = (BiliUserResultFragment) fragment;
+                biliUserResultFragment.updateData(keyword);
+            }
         }
-
-        fragments.clear();
-
-        fragmentTransaction.commit();
     }
 
     @Override
@@ -195,6 +194,8 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
             default:
                 break;
         }
+
+        Fuck.blue("pageIndex:" + position);
     }
 
     @Override
