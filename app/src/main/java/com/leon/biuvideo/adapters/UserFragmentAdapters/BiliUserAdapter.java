@@ -12,8 +12,6 @@ import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.BiliUser;
 import com.leon.biuvideo.beans.Favorite;
-import com.leon.biuvideo.beans.articleBeans.Article;
-import com.leon.biuvideo.beans.upMasterBean.UpVideo;
 import com.leon.biuvideo.ui.activitys.UpMasterActivity;
 import com.leon.biuvideo.utils.ImagePixelSize;
 import com.leon.biuvideo.utils.ValueFormat;
@@ -108,22 +106,5 @@ public class BiliUserAdapter extends BaseAdapter<BiliUser> {
         String fans = "粉丝：" + ValueFormat.generateCN(biliUser.fans);
         holder.setText(R.id.search_bili_user_textView_fans, fans)
                 .setText(R.id.search_bili_user_textView_sign, biliUser.usign);
-    }
-
-    /**
-     * 刷新加载数据
-     *
-     * @param addOns    要加载的数据
-     */
-    public void append(List<BiliUser> addOns) {
-        biliUsers.addAll(addOns);
-        notifyDataSetChanged();
-    }
-
-    /**
-     * 清空上次搜索后的数据缓存
-     */
-    public void removeAll() {
-        biliUsers.clear();
     }
 }

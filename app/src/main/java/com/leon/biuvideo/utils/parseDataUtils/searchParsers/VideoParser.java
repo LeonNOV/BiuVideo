@@ -114,30 +114,6 @@ public class VideoParser {
     }
 
     /**
-     * 是否与搜索关键词相匹配
-     *
-     * @param keyword   搜索关键词
-     * @return  返回是否匹配
-     */
-    public static boolean isMatch(String keyword) {
-        Map<String, String> params = new HashMap<>();
-        params.put("keyword", keyword);
-        params.put("search_type", SearchType.VIDEO.value);
-        params.put("page", "1");
-        params.put("order", OrderType.DEFAULT.value);
-
-        HttpUtils httpUtils = new HttpUtils(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
-        String response = httpUtils.getData();
-
-        JSONObject jsonObject = JSONObject.parseObject(response);
-        JSONObject data = jsonObject.getJSONObject("data");
-
-        String isMatch = data.getString("suggest_keyword");
-
-        return isMatch.equals("");
-    }
-
-    /**
      * 获取结果个数
      *
      * @param keyword   关键字
@@ -163,5 +139,29 @@ public class VideoParser {
         }
 
         return count;
+    }
+
+    /**
+     * 是否与搜索关键词相匹配
+     *
+     * @param keyword   搜索关键词
+     * @return  返回是否匹配
+     */
+    public static boolean dataState(String keyword) {
+        Map<String, String> params = new HashMap<>();
+        params.put("keyword", keyword);
+        params.put("search_type", SearchType.VIDEO.value);
+        params.put("page", "1");
+        params.put("order", OrderType.DEFAULT.value);
+
+        HttpUtils httpUtils = new HttpUtils(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
+        String response = httpUtils.getData();
+
+        JSONObject jsonObject = JSONObject.parseObject(response);
+        JSONObject data = jsonObject.getJSONObject("data");
+
+        String isMatch = data.getString("suggest_keyword");
+
+        return !isMatch.equals("");
     }
 }

@@ -72,21 +72,4 @@ public class UserVideoAdapter extends BaseAdapter<UpVideo> {
                     }
                 });
     }
-
-    /**
-     * 刷新加载数据
-     *
-     * @param addOns    要加入的数据
-     */
-    public void append(List<UpVideo> addOns) {
-        upVideos.addAll(addOns);
-        notifyDataSetChanged();
-    }
-
-    /**
-     * 清空上次搜索后的数据缓存
-     */
-    public void removeAll() {
-        upVideos.clear();
-    }
 }

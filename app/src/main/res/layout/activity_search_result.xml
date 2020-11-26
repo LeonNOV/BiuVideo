@@ -50,7 +50,7 @@
                         android:layout_marginStart="13dp"
                         android:layout_marginEnd="9dp"
                         android:background="@null"
-                        android:gravity="center_vertical"
+                        android:layout_centerVertical="true"
                         android:hint="输入关键字，进行搜索"
                         android:imeOptions="actionSearch"
                         android:inputType="text"

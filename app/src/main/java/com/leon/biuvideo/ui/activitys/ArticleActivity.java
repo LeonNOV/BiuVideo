@@ -21,6 +21,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.utils.HttpUtils;
@@ -46,9 +47,10 @@ import okhttp3.Headers;
 
 public class ArticleActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView article_textView_title;
-    private ImageView article_imageView_back, article_imageView_more;
+    private ImageView article_imageView_face, article_imageView_back, article_imageView_more;
     private WebView article_webView;
     private TextView
+            article_textView_author,
             article_textView_category,
             article_textView_ctime,
             article_textView_view,
@@ -73,6 +75,11 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initView() {
+        article_imageView_face = findViewById(R.id.article_imageView_face);
+        article_imageView_face.setOnClickListener(this);
+
+        article_textView_author = findViewById(R.id.article_textView_author);
+
         article_textView_title = findViewById(R.id.article_textView_title);
 
         article_imageView_back = findViewById(R.id.article_imageView_back);
@@ -102,6 +109,12 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         article = (Article) extras.getSerializable("article");
+
+        //设置头像
+        Glide.with(getApplicationContext()).load(article.face).into(article_imageView_face);
+
+        //设置作者名称
+        article_textView_author.setText(article.author);
 
         //设置标题
         article_textView_title.setText(article.title);
@@ -247,6 +260,13 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.article_imageView_face:
+
+                Intent intent = new Intent(this, UpMasterActivity.class);
+                intent.putExtra("mid", article.mid);
+                startActivity(intent);
+
+                break;
             case R.id.article_imageView_back:
                 this.finish();
                 break;

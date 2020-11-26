@@ -74,8 +74,16 @@ public class ArticleParseUtils {
             //获取文章摘要
             article.summary = articleObject.getString("summary");
 
+            JSONObject author = articleObject.getJSONObject("author");
+
+            //获取作者face
+            article.face = author.getString("face");
+
+            //获取作者mid
+            article.mid = author.getLongValue("mid");
+
             //获取文章作者
-            article.author = articleObject.getJSONObject("author").getString("name");
+            article.author = author.getString("name");
 
             //获取文章封面
             //如果banner_url的值为空则获取image_urls中的第一个链接

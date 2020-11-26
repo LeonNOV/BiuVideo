@@ -55,4 +55,21 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     public int getItemCount() {
         return beans == null ? 0 : beans.size();
     }
+
+    /**
+     * 刷新加载数据
+     *
+     * @param addOns    要加入的数据
+     */
+    public void append (List<T> addOns) {
+        this.beans.addAll(addOns);
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 清空上次搜索后的数据缓存
+     */
+    public void removeAll() {
+        this.beans.clear();
+    }
 }

@@ -102,7 +102,7 @@ public class VideoResultFragment extends Fragment {
      */
     private void initVisibility() {
         //判断结果是否与搜索关键词匹配
-        if (!VideoParser.isMatch(keyword)) {
+        if (VideoParser.dataState(keyword)) {
             //设置无数据提示界面
             search_result_no_data.setVisibility(View.VISIBLE);
             search_result_recyclerView.setVisibility(View.GONE);

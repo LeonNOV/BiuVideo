@@ -26,18 +26,30 @@
                 android:src="@drawable/icon_back"
                 app:tint="#E3E3E3" />
 
-            <TextView
-                android:id="@+id/article_textView_title"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="50dp"
-                android:layout_marginEnd="50dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitle"
-                android:textColor="#E3E3E3"
-                android:textSize="18sp" />
+                android:layout_marginStart="30dp"
+                android:layout_toEndOf="@id/article_imageView_back"
+                android:orientation="horizontal">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/article_imageView_face"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:src="@drawable/ic_launcher_background" />
+
+                <TextView
+                    android:id="@+id/article_textView_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="20dp"
+                    android:text="Name"
+                    android:textColor="@color/normal"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/article_imageView_more"
@@ -61,19 +73,30 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/article_textView_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle"
+                android:textColor="@color/normal"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:gravity="center">
+                android:layout_margin="10dp">
 
                 <TextView
                     android:id="@+id/article_textView_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="单机游戏"
                     android:textColor="@color/light_gray"
                     android:textSize="12sp" />
@@ -82,7 +105,7 @@
                     android:id="@+id/article_textView_ctime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
                     android:text="2020-11-08-16:35"
                     android:textColor="@color/light_gray"
                     android:textSize="12sp" />
@@ -91,7 +114,7 @@
                     android:id="@+id/article_textView_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
                     android:text="16.3万阅读"
                     android:textColor="@color/light_gray"
                     android:textSize="12sp" />
@@ -100,7 +123,7 @@
                     android:id="@+id/article_textView_like"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
                     android:text="915点赞"
                     android:textColor="@color/light_gray"
                     android:textSize="12sp" />
@@ -109,7 +132,7 @@
                     android:id="@+id/article_textView_replay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
                     android:text="436评论"
                     android:textColor="@color/light_gray"
                     android:textSize="12sp" />
