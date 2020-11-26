@@ -148,4 +148,12 @@ public class Paths {
      * 需要在请求头中添加referer，默认为`https://search.bilibili.com`
      */
     public static String search = "https://api.bilibili.com/x/web-interface/search/type";
+
+    /**
+     * 获取专栏具体信息的接口
+     *      参数
+     *          ids：专栏id，多个参数，需要用URL编码格式的‘,’来分隔(%2C)
+     *
+     */
+    public static String metas = "https://api.bilibili.com/x/article/metas";
 }
