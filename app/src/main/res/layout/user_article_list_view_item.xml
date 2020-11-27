@@ -24,16 +24,18 @@
             android:id="@+id/article_textView_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_margin="5dp"
             android:layout_toEndOf="@id/article_imageView_cover"
             android:ellipsize="end"
-            android:maxLines="3"
-            android:text="介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍"
+            android:maxLines="2"
+            android:text="介绍介绍介绍介绍介绍介绍介绍介介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍"
+            android:textColor="@color/normal"
             android:textSize="17sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:layout_alignBottom="@id/article_imageView_cover"
             android:layout_toEndOf="@id/article_imageView_cover"
             android:orientation="vertical">
@@ -41,6 +43,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -52,8 +55,10 @@
                     android:id="@+id/article_textView_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="单机游戏" />
+                    android:layout_marginStart="5dp"
+                    android:text="单机游戏"
+                    android:textSize="13sp"
+                    android:textColor="@color/normal" />
 
             </LinearLayout>
 
@@ -72,7 +77,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:text="2020-11-08 13:45" />
+                    android:text="2020-11-08 13:45"
+                    android:textSize="13sp"
+                    android:textColor="@color/normal" />
 
             </LinearLayout>
 

@@ -34,6 +34,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * 相簿界面Activity
+ */
 public class PictureActivity extends AppCompatActivity implements View.OnClickListener {
     private ImageView
             picture_back,

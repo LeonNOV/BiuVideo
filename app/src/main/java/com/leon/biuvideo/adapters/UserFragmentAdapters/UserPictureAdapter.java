@@ -12,6 +12,7 @@ import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
 import com.leon.biuvideo.ui.activitys.PictureActivity;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.ImagePixelSize;
 import com.leon.biuvideo.utils.ValueFormat;
 
@@ -53,6 +54,8 @@ public class UserPictureAdapter extends BaseAdapter<UpPicture> {
         } else {
             holder.setVisibility(R.id.up_picture_textView_count, View.INVISIBLE);
         }
+
+        Fuck.blue("标题:" + upPicture.description + "---" + "第" + position + "个相簿的图片个数为" + upPicture.count + "个");
 
         //设置标题
         holder.setText(R.id.up_picture_textView_desc, upPicture.description)

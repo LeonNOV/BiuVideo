@@ -32,7 +32,7 @@
             android:paddingEnd="10dp"
             android:scaleType="centerCrop"
             android:text="9P"
-            android:textSize="15sp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/up_picture_textView_desc"
@@ -41,18 +41,18 @@
             android:layout_below="@id/up_picture_imageView_cover"
             android:layout_alignStart="@id/up_picture_imageView_cover"
             android:layout_alignEnd="@id/up_picture_imageView_cover"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
+            android:layout_margin="5dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍"
+            android:text="介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍绍介绍介绍介绍介绍绍介绍介绍介绍介绍"
+            android:textColor="@color/normal"
             android:textSize="15sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/up_picture_textView_desc"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -61,17 +61,18 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:src="@drawable/icon_view" />
 
                 <TextView
                     android:id="@+id/up_picture_textView_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="5dp"
                     android:text="150"
-                    android:textSize="15sp" />
+                    android:textColor="@color/normal"
+                    android:textSize="13sp" />
 
             </LinearLayout>
 
@@ -82,17 +83,18 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:src="@drawable/icon_video_time" />
 
                 <TextView
                     android:id="@+id/up_picture_textView_ctime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="5dp"
                     android:text="2020-11-12 13:46"
-                    android:textSize="15sp" />
+                    android:textColor="@color/normal"
+                    android:textSize="13sp" />
 
             </LinearLayout>
 

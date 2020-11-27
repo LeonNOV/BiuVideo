@@ -106,6 +106,7 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
 
         up_viewPage = findViewById(R.id.up_viewPage);
         up_viewPage.addOnPageChangeListener(this);
+        up_viewPage.setOffscreenPageLimit(4);
     }
 
     //初始化数据

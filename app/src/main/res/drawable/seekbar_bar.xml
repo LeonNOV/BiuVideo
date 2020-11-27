@@ -4,19 +4,24 @@
     <item>
         <shape>
             <solid android:color="#A39D9D" />
+            <corners android:radius="10dp"/>
         </shape>
     </item>
     <item>
         <clip>
             <shape>
+                <size android:height="10dp"/>
                 <solid android:color="#FFFFFFFF" />
+                <corners android:radius="10dp"/>
             </shape>
         </clip>
     </item>
     <item>
         <clip>
             <shape>
+                <size android:height="10dp"/>
                 <solid android:color="@color/bilibili_pink" />
+                <corners android:radius="10dp"/>
             </shape>
         </clip>
     </item>

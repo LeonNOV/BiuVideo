@@ -46,6 +46,9 @@ import java.util.Locale;
 
 import okhttp3.Headers;
 
+/**
+ * 专栏界面Activity
+ */
 public class ArticleActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView article_textView_title;
     private ImageView article_imageView_face, article_imageView_back, article_imageView_more;

@@ -19,16 +19,18 @@
 
             <ImageView
                 android:id="@+id/article_imageView_back"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_centerVertical="true"
                 android:background="?selectableItemBackgroundBorderless"
+                android:padding="5dp"
                 android:src="@drawable/icon_back"
-                app:tint="#E3E3E3" />
+                app:tint="@color/normal" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_marginStart="30dp"
                 android:layout_toEndOf="@id/article_imageView_back"
                 android:orientation="horizontal">
@@ -37,8 +39,8 @@
                     android:id="@+id/article_imageView_face"
                     android:layout_width="42dp"
                     android:layout_height="42dp"
-                    app:civ_border_width="1dp"
-                    android:src="@drawable/ic_launcher_background" />
+                    android:src="@drawable/ic_launcher_background"
+                    app:civ_border_width="1dp" />
 
                 <TextView
                     android:id="@+id/article_textView_author"
@@ -54,13 +56,15 @@
 
             <ImageView
                 android:id="@+id/article_imageView_more"
-                android:layout_width="27dp"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
                 android:layout_marginEnd="10dp"
                 android:background="?selectableItemBackgroundBorderless"
+                android:padding="5dp"
                 android:src="@drawable/more_icon"
-                app:tint="#E3E3E3" />
+                app:tint="@color/normal" />
 
         </RelativeLayout>
 
@@ -144,6 +148,8 @@
                 android:id="@+id/article_webView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:background="#fff" />
 
         </LinearLayout>

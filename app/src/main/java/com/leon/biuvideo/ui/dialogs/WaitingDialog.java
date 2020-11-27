@@ -12,6 +12,9 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.leon.biuvideo.R;
 
+/**
+ * 导入关注列表时显示的弹窗
+ */
 public class WaitingDialog extends AlertDialog {
     public static final String STR_SUCCESS = "导入成功";
     public static final String STR_ERROR = "导入失败";

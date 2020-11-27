@@ -15,6 +15,12 @@ import com.leon.biuvideo.utils.ImagePixelSize;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 基本的ViewHolder
+ * 该类提供了一些常用的绑定数据方法，可自行根据需要添加
+ * <br/>
+ * <strong>注意：设置点击事件时请注意该类中两个不同参数的setOnClickListener()方法，具体使用可看方法的注释</strong>
+ */
 public class BaseViewHolder extends RecyclerView.ViewHolder {
     private final Map<Integer, View> views;
     private final Context context;

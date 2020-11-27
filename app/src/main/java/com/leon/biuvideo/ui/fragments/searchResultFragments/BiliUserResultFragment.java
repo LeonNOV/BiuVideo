@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 搜索结果-用户片段
+ * SearchResultActivity-BiliUser Fragment
  */
 public class BiliUserResultFragment extends Fragment {
     private SmartRefreshLayout search_result_smartRefresh;

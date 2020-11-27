@@ -31,7 +31,10 @@ import com.leon.biuvideo.utils.Fuck;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchResultActivity extends AppCompatActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
+ /**
+  * 搜索结果Activity
+  */
+ public class SearchResultActivity extends AppCompatActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
     private ImageView search_imageView_back, search_imageView_clean;
     private EditText search_editText_searchBox;
     private TextView search_textView_result_video, search_textView_result_article, search_textView_result_user;

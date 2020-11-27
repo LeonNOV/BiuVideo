@@ -27,7 +27,7 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import java.util.List;
 
 /**
- * UpMasterActivity中的pic片段
+ * UpMasterActivity-pic fragment
  */
 public class UserPictureListFragment extends Fragment {
     private long mid;
@@ -141,8 +141,6 @@ public class UserPictureListFragment extends Fragment {
         //判断是否已获取完所有的数据
         if (temp.size() < 30 || valueCount == valueCount) {
             dataState = false;
-        } else {
-            dataState = true;
         }
 
         return temp;

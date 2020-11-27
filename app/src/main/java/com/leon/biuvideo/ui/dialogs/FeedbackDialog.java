@@ -15,6 +15,9 @@ import androidx.appcompat.app.AlertDialog;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.utils.Fuck;
 
+/**
+ * 反馈弹窗
+ */
 public class FeedbackDialog extends AlertDialog {
 
     public FeedbackDialog(@NonNull Context context) {

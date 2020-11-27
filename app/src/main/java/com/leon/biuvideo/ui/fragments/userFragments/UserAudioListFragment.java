@@ -25,7 +25,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import java.util.List;
 
 /**
- * UpMasterActivity中的audio/music片段
+ * UpMasterActivity-audio/music fragment
  */
 public class UserAudioListFragment extends Fragment {
     private long mid;

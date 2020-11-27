@@ -4,23 +4,33 @@ import androidx.annotation.NonNull;
 
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.app.WallpaperManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +50,6 @@ import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.utils.dataBaseUtils.Tables;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicParseUtils;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicUrlParseUtils;
-import com.sunfusheng.marqueeview.MarqueeView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,11 +60,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * 音乐/音频Activity
  */
 public class UpSongActivity extends Activity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
-    //返回、播放列表
-    private ImageView music_imageView_back, music_imageView_musicList;
-
     //歌曲名称、作者
-    private MarqueeView music_marqueeView;
+    private TextView music_textView_musicName, music_textView_author;
 
     //视频（MV）icon
     private ImageView music_imageView_isHaveVideo;
@@ -66,28 +72,11 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
     //喜欢按钮
     private ImageView music_imageView_addFavorite;
 
-    //播放数、投币数、评论数、收藏数、分享数
-    private TextView
-            music_imageView_play,
-            music_imageView_coin,
-            music_imageView_comment;
-
-    //音乐原链接
-    private ImageView music_imageView_link;
-
-    //缓存歌曲
-    private ImageView music_imageView_download;
-
     //当前播放进度、总长度
     private TextView music_textView_nowProgress, music_textView_length;
 
     //music进度条
     private SeekBar music_seekBar;
-
-    //上一曲、music总控、下一曲
-    private ImageView
-            music_imageView_up,
-            music_imageView_next;
 
     //暂停/播放icon
     public static ImageView music_imageView_control;
@@ -198,8 +187,6 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                 //获取当前进度
                 int currentPosition = bundle.getInt("currentPosition");
 
-                Log.d(Fuck.blue, "UpSongActivity--------------duration:" + duration + "------currentPosition:" + currentPosition);
-
                 //设置进度条最大值
                 music_seekBar.setMax(duration);
 
@@ -227,15 +214,20 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
      * 初始化控件
      */
     private void initView() {
-        music_imageView_back = findViewById(R.id.music_imageView_back);
+        //返回、播放列表
+        ImageView music_imageView_back = findViewById(R.id.music_imageView_back);
         music_imageView_back.setOnClickListener(this);
 
-        music_imageView_musicList = findViewById(R.id.music_imageView_musicList);
+        ImageView music_imageView_musicList = findViewById(R.id.music_imageView_musicList);
         music_imageView_musicList.setOnClickListener(this);
 
-        music_marqueeView = findViewById(R.id.music_marqueeView);
+        music_textView_musicName = findViewById(R.id.music_textView_musicName);
+
+        music_textView_author = findViewById(R.id.music_textView_author);
+        music_textView_author.setOnClickListener(this);
 
         music_imageView_isHaveVideo = findViewById(R.id.music_imageView_isHaveVideo);
+
         music_imageView_isHaveVideo.setOnClickListener(this);
 
         music_circleImageView_cover = findViewById(R.id.music_circleImageView_cover);
@@ -250,14 +242,12 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
         music_imageView_addFavorite = findViewById(R.id.music_imageView_addFavorite);
         music_imageView_addFavorite.setOnClickListener(this);
 
-        music_imageView_play = findViewById(R.id.music_imageView_play);
-        music_imageView_coin = findViewById(R.id.music_imageView_coin);
-        music_imageView_comment = findViewById(R.id.music_imageView_comment);
-
-        music_imageView_link = findViewById(R.id.music_imageView_link);
+        //音乐原链接
+        ImageView music_imageView_link = findViewById(R.id.music_imageView_link);
         music_imageView_link.setOnClickListener(this);
 
-        music_imageView_download = findViewById(R.id.music_imageView_download);
+        //缓存歌曲
+        ImageView music_imageView_download = findViewById(R.id.music_imageView_download);
         music_imageView_download.setOnClickListener(this);
 
         music_textView_nowProgress = findViewById(R.id.music_textView_nowProgress);
@@ -266,13 +256,14 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
         music_seekBar = findViewById(R.id.music_seekBar);
         music_seekBar.setOnSeekBarChangeListener(this);
 
-        music_imageView_up = findViewById(R.id.music_imageView_up);
+        //上一曲、music总控、下一曲
+        ImageView music_imageView_up = findViewById(R.id.music_imageView_up);
         music_imageView_up.setOnClickListener(this);
 
         music_imageView_control = findViewById(R.id.music_imageView_control);
         music_imageView_control.setOnClickListener(this);
 
-        music_imageView_next = findViewById(R.id.music_imageView_next);
+        ImageView music_imageView_next = findViewById(R.id.music_imageView_next);
         music_imageView_next.setOnClickListener(this);
     }
 
@@ -284,13 +275,11 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
         Glide.with(getApplicationContext()).load(musicInfo.cover).into(music_circleImageView_cover);
 
         //设置歌曲名、作者
-        String title = musicInfo.title + "-" + musicInfo.uname;
-        music_marqueeView.startWithText(title);
+        music_textView_musicName.setText(musicInfo.title.trim());
+        music_textView_author.setText(musicInfo.uname.trim());
 
         //判断是否有MV
-        if (!musicInfo.bvid.equals("")) {
-            music_imageView_isHaveVideo.setVisibility(View.VISIBLE);
-        }
+        music_imageView_isHaveVideo.setEnabled(!musicInfo.bvid.equals(""));
 
         //判断是否在播放列表中,更改addFavoriteIcon
         isHavePlayList = musicDatabaseUtils.queryMusic(musicInfo.sid);
@@ -299,15 +288,6 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
         } else {
             music_imageView_addFavorite.setImageResource(R.drawable.no_favorite);
         }
-
-        //设置播放量
-        music_imageView_play.setText(ValueFormat.generateCN(musicInfo.play));
-
-        //设置投币数
-        music_imageView_coin.setText(ValueFormat.generateCN(musicInfo.coinNum));
-
-        //设置评论数
-        music_imageView_comment.setText(ValueFormat.generateCN(musicInfo.comment));
 
         //初始化当前播放进度
         music_textView_nowProgress.setText("00:00");
@@ -330,9 +310,21 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                 break;
             case R.id.music_imageView_isHaveVideo:
                 //跳转到video界面
-                Intent intent = new Intent(this, VideoActivity.class);
-                intent.putExtra("bvid", musicInfo.bvid);
-                startActivity(intent);
+                Intent videoIntent = new Intent(this, VideoActivity.class);
+                videoIntent.putExtra("bvid", musicInfo.bvid);
+                startActivity(videoIntent);
+
+                break;
+            case R.id.music_textView_author:
+
+                //跳转至作者页面
+                Intent userIntent = new Intent(this, UpMasterActivity.class);
+                userIntent.putExtra("mid", musicInfo.uid);
+
+                //判断上一Activity是否为UpMasterActivity
+                //如果是，则销毁当前Activity
+
+                startActivity(userIntent);
 
                 break;
             case R.id.music_imageView_musicList:
@@ -565,7 +557,6 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
     @Override
     public void onStart() {
         super.onStart();
-        music_marqueeView.startFlipping();
     }
 
     /**
@@ -574,7 +565,6 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
     @Override
     public void onStop() {
         super.onStop();
-        music_marqueeView.stopFlipping();
     }
 
     /**

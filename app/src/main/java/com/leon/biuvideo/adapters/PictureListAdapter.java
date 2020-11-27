@@ -16,6 +16,9 @@ import com.leon.biuvideo.utils.ImagePixelSize;
 
 import java.util.List;
 
+/**
+ * 相簿列表适配器
+ */
 public class PictureListAdapter extends BaseAdapter<String> {
     private final Context context;
     private final List<String> pictures;

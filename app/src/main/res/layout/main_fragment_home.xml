@@ -60,6 +60,6 @@
         android:layout_marginTop="35dp"
         android:background="@drawable/shape_bilibili_pink"
         android:text="@string/main_button_start"
-        android:textColor="#FF515151" />
+        android:textColor="@color/normal" />
 
 </LinearLayout>

@@ -14,6 +14,9 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.leon.biuvideo.R;
 
+/**
+ * 导入关注列表弹窗
+ */
 public class ImportFollowDialog extends AlertDialog implements View.OnClickListener {
     private EditText import_follow_editText;
     private Button import_follow_button_cancel, import_follow_button_confirm;

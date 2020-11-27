@@ -3,7 +3,9 @@ package com.leon.biuvideo.beans.videoBean.play;
 import java.io.Serializable;
 import java.util.List;
 
-//video和audio通用
+/**
+ * video和audio通用
+ */
 public class Media implements Serializable {
     public String baseUrl;
     public List<String> backupUrl;

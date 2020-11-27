@@ -21,7 +21,7 @@
             android:layout_marginBottom="15dp"
             android:src="@drawable/ic_launcher_background"
             app:civ_border_color="#000"
-            app:civ_border_width="2dp" />
+            app:civ_border_width="1dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -52,6 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textColor="@color/normal"
                     android:text="稿件：173" />
 
                 <TextView
@@ -59,6 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textColor="@color/normal"
                     android:text="粉丝：70.2万" />
 
             </LinearLayout>
@@ -70,6 +72,7 @@
                 android:layout_marginEnd="10dp"
                 android:ellipsize="end"
                 android:maxLines="2"
+                android:textColor="@color/normal"
                 android:text="介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍"
                 android:textSize="12sp" />
 

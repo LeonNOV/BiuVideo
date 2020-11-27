@@ -30,9 +30,9 @@
             android:layout_margin="10dp"
             android:background="@drawable/shape_bilibili_pink"
             android:gravity="center"
-            android:textSize="12sp"
             android:text="合作"
-            android:textColor="#282828" />
+            android:textColor="#282828"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/up_media_textView_mediaLength"
@@ -44,30 +44,33 @@
             android:background="@drawable/shape_gray"
             android:gravity="center"
             android:text="02:49"
-            android:textSize="15sp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/up_media_textView_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_margin="5dp"
             android:layout_toEndOf="@id/up_media_imageView_cover"
             android:ellipsize="end"
             android:maxLines="2"
             android:text="介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍"
+            android:textColor="@color/normal"
             android:textSize="17sp" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/up_media_imageView_cover"
             android:layout_toEndOf="@id/up_media_imageView_cover"
             android:gravity="center"
+            android:layout_margin="5dp"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -81,9 +84,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:layout_marginBottom="10dp"
                     android:text="1502130次播放"
-                    android:textSize="15sp" />
+                    android:textColor="@color/normal"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
@@ -103,7 +106,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:text="2020-10-21 19:15"
-                    android:textSize="15sp" />
+                    android:textColor="@color/normal"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 

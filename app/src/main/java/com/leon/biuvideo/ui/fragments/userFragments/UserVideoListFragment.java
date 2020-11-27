@@ -27,7 +27,7 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import java.util.List;
 
 /**
- * UpMasterActivity中的video片段
+ * UpMasterActivity-video fragment
  */
 public class UserVideoListFragment extends Fragment {
     private long mid;

@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 搜索结果-专栏片段
+ * SearchResultActivity-article Fragment
  */
 public class ArticleResultFragment extends Fragment {
     private SmartRefreshLayout search_result_smartRefresh;

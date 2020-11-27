@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 搜索结果-视频片段
+ * SearchResultActivity-video Fragment
  */
 public class VideoResultFragment extends Fragment {
     private SmartRefreshLayout search_result_smartRefresh;

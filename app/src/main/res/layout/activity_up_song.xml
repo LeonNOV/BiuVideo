@@ -2,9 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/music_relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="#fff"
     android:orientation="vertical"
     tools:context=".ui.activitys.UpSongActivity">
 
@@ -12,7 +13,7 @@
         android:id="@+id/music_toolBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/noneColor">
+        android:background="@android:color/transparent">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -20,51 +21,63 @@
 
             <ImageView
                 android:id="@+id/music_imageView_back"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:background="@drawable/ripple_image_view_pressed"
+                android:padding="5dp"
                 android:src="@drawable/icon_back" />
-
-            <com.sunfusheng.marqueeview.MarqueeView
-                android:id="@+id/music_marqueeView"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@id/music_imageView_back"
-                app:mvAnimDuration="3000"
-                app:mvDirection="right_to_left"
-                app:mvInterval="3000"
-                app:mvSingleLine="false"
-                app:mvTextColor="#4E4E4E"
-                app:mvTextSize="14sp" />
-
-            <ImageView
-                android:id="@+id/music_imageView_isHaveVideo"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_toEndOf="@id/music_marqueeView"
-                android:background="@drawable/ripple_image_view_pressed"
-                android:src="@drawable/icon_video"
-                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/music_imageView_musicList"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="30dp"
+                android:layout_marginEnd="20dp"
                 android:background="@drawable/ripple_image_view_pressed"
+                android:padding="5dp"
                 android:src="@drawable/music_icon_playlist" />
 
         </RelativeLayout>
 
     </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/music_textView_musicName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/music_toolBar"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="MusicName"
+        android:textColor="@color/normal"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/music_textView_musicName"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/music_textView_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Author"
+            android:textColor="@color/normal" />
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginTop="6dp"
+            android:src="@drawable/icon_enter" />
+
+    </LinearLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/music_circleImageView_cover"
@@ -72,7 +85,7 @@
         android:layout_height="240dp"
         android:layout_below="@id/music_toolBar"
         android:layout_centerInParent="true"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="160dp"
         android:src="@drawable/ic_launcher_background"
         app:civ_border_color="#979797"
         app:civ_border_overlay="true"
@@ -83,104 +96,48 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/music_constraintLayout_progress"
         android:layout_marginBottom="30dp"
-        android:gravity="center"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/music_imageView_addFavorite"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/ripple_image_view_pressed"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_button_rectangle"
+            android:padding="5dp"
             android:src="@drawable/no_favorite" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_music_play" />
-
-            <TextView
-                android:id="@+id/music_imageView_play"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="1234"
-                android:textColor="#707070" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_coin" />
-
-            <TextView
-                android:id="@+id/music_imageView_coin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="123"
-                android:textColor="#707070" />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_comment" />
-
-            <TextView
-                android:id="@+id/music_imageView_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="4561"
-                android:textColor="#707070" />
-
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/music_imageView_isHaveVideo"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_button_rectangle"
+            android:clickable="false"
+            android:padding="5dp"
+            android:src="@drawable/icon_video" />
 
         <ImageView
             android:id="@+id/music_imageView_link"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_button_rectangle"
+            android:padding="5dp"
             android:src="@drawable/icon_link" />
 
         <ImageView
             android:id="@+id/music_imageView_download"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/ripple_image_view_pressed"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_button_rectangle"
+            android:padding="5dp"
             android:src="@drawable/icon_download_music" />
 
     </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:id="@+id/music_constraintLayout_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -192,38 +149,35 @@
             android:id="@+id/music_textView_nowProgress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_below="@id/music_seekBar"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="5dp"
             android:text="01:23"
-            android:textColor="#515151"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/music_seekBar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textColor="#515151" />
 
         <SeekBar
             android:id="@+id/music_seekBar"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxHeight="3.0dp"
-            android:minHeight="3.0dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:maxHeight="4.3dp"
+            android:minHeight="4.0dp"
             android:progressDrawable="@drawable/seekbar_bar"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/music_textView_nowProgress"
-            app:layout_constraintStart_toStartOf="@id/music_textView_length" />
+            android:thumb="@drawable/icon_circle" />
 
         <TextView
             android:id="@+id/music_textView_length"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_below="@id/music_seekBar"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="30dp"
             android:text="03:45"
-            android:textColor="#515151"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/music_seekBar"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textColor="#515151" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/music_linearLayout_control"

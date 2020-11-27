@@ -30,6 +30,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 设置/首选项Activity
+ */
 public class PreferenceActivity extends AppCompatActivity implements OnClickListener {
     private ImageView preference_imageView_back;
     private TextView

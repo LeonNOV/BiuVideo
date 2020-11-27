@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:background="@drawable/ripple_item_white"
     android:clickable="true"
-    android:focusable="true"
-    android:layout_height="wrap_content">
+    android:focusable="true">
 
     <TextView
         android:id="@+id/about_dialog_item_textView_title"
@@ -13,7 +13,7 @@
         android:layout_marginStart="5dp"
         android:text="我是标题"
         android:textColor="@color/bilibili_pink"
-        android:textSize="25sp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/about_dialog_item_textView_license"
@@ -24,7 +24,7 @@
         android:layout_marginTop="5dp"
         android:text="我是开源License"
         android:textColor="@color/normal"
-        android:textSize="18sp" />
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/about_dialog_item_textView_desc"
@@ -33,8 +33,8 @@
         android:layout_below="@+id/about_dialog_item_textView_license"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
-        android:textColor="@color/normal"
         android:text="开源许可说明"
-        android:textSize="20sp" />
+        android:textColor="@color/normal"
+        android:textSize="17sp" />
 
 </RelativeLayout>

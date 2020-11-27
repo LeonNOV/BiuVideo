@@ -47,10 +47,10 @@
                         android:id="@+id/search_editText_searchBox"
                         android:layout_width="200dp"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         android:layout_marginStart="13dp"
                         android:layout_marginEnd="9dp"
                         android:background="@null"
-                        android:layout_centerVertical="true"
                         android:hint="输入关键字，进行搜索"
                         android:imeOptions="actionSearch"
                         android:inputType="text"
@@ -125,7 +125,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp">
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/search_viewPager"
@@ -138,8 +140,8 @@
             android:layout_height="70dp"
             android:layout_centerInParent="true"
             android:indeterminateTint="@color/colorPrimary"
-            android:visibility="invisible"
-            android:indeterminateTintMode="src_atop" />
+            android:indeterminateTintMode="src_atop"
+            android:visibility="invisible" />
 
     </RelativeLayout>
 

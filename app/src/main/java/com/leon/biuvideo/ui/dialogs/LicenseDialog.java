@@ -15,6 +15,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+/**
+ * 开源声明弹窗
+ */
 public class LicenseDialog extends AlertDialog {
     public LicenseDialog(@NonNull Context context) {
         super(context);

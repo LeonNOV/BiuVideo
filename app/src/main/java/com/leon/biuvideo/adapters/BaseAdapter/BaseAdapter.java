@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * 基本的RecyclerViewAdapter
- * 使用Recycler时最好使用该抽象类
+ * 为RecyclerView创建适配器时最好使用该抽象类进行创建
  * ViewHolder为同包下的BaseViewHolder
  *
  * @param <T>   实体类型

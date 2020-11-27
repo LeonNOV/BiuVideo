@@ -26,6 +26,9 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.List;
 
+/**
+ * 用户主页-专栏Fragment
+ */
 public class UserArticlesFragment extends Fragment {
     private final long mid;
     private int pageNum;
