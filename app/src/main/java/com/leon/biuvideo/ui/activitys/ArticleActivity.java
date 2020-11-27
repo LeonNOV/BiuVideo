@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.articleBeans.Article;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.MediaUtils;
 import com.leon.biuvideo.utils.Paths;
@@ -264,6 +265,9 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
 
                 Intent intent = new Intent(this, UpMasterActivity.class);
                 intent.putExtra("mid", article.mid);
+
+                Fuck.blue("跳转至----" + article.author + "----" + article.mid + "----的主页");
+
                 startActivity(intent);
 
                 break;

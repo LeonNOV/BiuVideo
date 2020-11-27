@@ -35,7 +35,7 @@ public class ArticleParser {
         params.put("page", String.valueOf(pn));
         params.put("order", orderType.value);
 
-        Fuck.blue("Article----pageNum:" + pn + "----" + Paths.search + params.toString());
+//        Fuck.blue("Article----pageNum:" + pn + "----" + Paths.search + params.toString());
 
         HttpUtils httpUtils = new HttpUtils(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
         String response = httpUtils.getData();
@@ -101,10 +101,69 @@ public class ArticleParser {
                 articles.add(article);
             }
 
-            return articles;
+            //获取详细信息
+            List<Article> articlesWhitDetails = gteArticleDetail(articles);
+
+            return articlesWhitDetails;
         }
 
         return null;
+    }
+
+    /**
+     * 将Article详细信息添加至articles中
+     *
+     * @param articles  无face、name、mid的article集合
+     * @return  返回含有face、name、mid的article结合
+     */
+    private List<Article> gteArticleDetail(List<Article> articles) {
+
+        //获取articleID
+        StringBuilder ids = new StringBuilder();
+        String separator = ",";
+
+        for (Article article : articles) {
+            ids.append(article.articleID).append(separator);
+        }
+
+        int length = ids.length();
+        ids.delete(length - 1, length);
+
+        Map<String, Object> details = new HashMap<>();
+
+        //获取article详细信息
+        Map<String, String> params = new HashMap<>();
+        params.put("ids", ids.toString());
+
+        HttpUtils httpUtils = new HttpUtils(Paths.metas, Headers.of("Referer", "https://search.bilibili.com"), params);
+        String response = httpUtils.getData();
+
+        JSONObject responseObject = JSONObject.parseObject(response);
+        JSONObject data = responseObject.getJSONObject("data");
+        if (data != null) {
+            Map<String, Object> innerMap = data.getInnerMap();
+
+            details = innerMap;
+        }
+
+        //将对应详细信息放入对应Article对象中
+        for (Article article : articles) {
+            JSONObject articleObject = (JSONObject) details.get(String.valueOf(article.articleID));
+
+            //获取author对象
+            JSONObject authorObject = articleObject.getJSONObject("author");
+
+            //获取face
+            article.face = authorObject.getString("face");
+
+            //获取name
+            article.author = authorObject.getString("name");
+
+            //获取mid
+            article.mid = authorObject.getLongValue("mid");
+        }
+
+        return articles;
     }
 
     /**

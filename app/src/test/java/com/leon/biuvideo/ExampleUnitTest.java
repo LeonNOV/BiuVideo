@@ -2,16 +2,19 @@ package com.leon.biuvideo;
 
 import android.view.View;
 
+import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.beans.upMasterBean.UpAudio;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
 import com.leon.biuvideo.beans.upMasterBean.UpVideo;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.IDUtils;
+import com.leon.biuvideo.utils.OrderType;
 import com.leon.biuvideo.utils.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UpAudioParseUtils;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UpPictureParseUtils;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UpVideoParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.searchParsers.ArticleParser;
 
 import org.junit.Test;
 
@@ -160,49 +163,12 @@ public class ExampleUnitTest {
         System.out.println(s);
     }
 
+
+    //article details的获取
     @Test
-    public void Visibility() {
-        List<String> list1 = new ArrayList<>();
-        list1.add("A");
-        list1.add("B");
-        list1.add("C");
-        list1.add("D");
-        list1.add("E");
-        list1.add("F");
-        list1.add("G");
+    public void articlesForDetails() {
+        ArticleParser articleParser = new ArticleParser();
 
-        upVideos = list1;
-
-        List<String> list2 = new ArrayList<>();
-        list2.add("a");
-        list2.add("b");
-        list2.add("c");
-        list2.add("d");
-        list2.add("e");
-        list2.add("f");
-        list2.add("g");
-
-        System.out.println(list1.size());
-        System.out.println(list2.size());
-
-        System.out.println("-----------------------------");
-        System.out.println("-----------------------------");
-
-        refresh(list2);
-    }
-
-    private List<String> upVideos;
-
-    public void refresh(List<String> newVideos) {
-        if (upVideos.size() > 0) {
-            while (upVideos.size() != 0) {
-                upVideos.remove(0);
-            }
-        }
-
-        System.out.println(upVideos.size());
-        System.out.println(newVideos.size());
-
-        upVideos.addAll(newVideos);
+        List<Article> articles = articleParser.articleParse("马保国", 1, OrderType.DEFAULT);
     }
 }
