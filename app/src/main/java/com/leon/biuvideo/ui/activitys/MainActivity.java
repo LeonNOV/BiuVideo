@@ -7,6 +7,7 @@ import android.view.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.widget.PopupWindowCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.os.Bundle;
@@ -218,7 +219,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 popupWindow.setOutsideTouchable(true);
                 popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
 
-                popupWindow.showAsDropDown(view, -10, 0);
+                View contentView = popupWindow.getContentView();
+
+                //需要先测量，PopupWindow还未弹出时，宽高为0
+                contentView.measure(makeDropDownMeasureSpec(popupWindow.getWidth()),
+                        makeDropDownMeasureSpec(popupWindow.getHeight()));
+
+                int offsetX = - popupWindow.getContentView().getMeasuredWidth();
+                int offsetY = 0;
+                PopupWindowCompat.showAsDropDown(popupWindow, toolBar_imageView_more, offsetX, offsetY, Gravity.START);
 
                 break;
             case R.id.navigation_imageView_back:
@@ -240,5 +249,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             default:
                 break;
         }
+    }
+
+    private static int makeDropDownMeasureSpec(int measureSpec) {
+        int mode;
+        if (measureSpec == ViewGroup.LayoutParams.WRAP_CONTENT) {
+            mode = View.MeasureSpec.UNSPECIFIED;
+        } else {
+            mode = View.MeasureSpec.EXACTLY;
+        }
+        return View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(measureSpec), mode);
     }
 }

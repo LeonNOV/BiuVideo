@@ -184,7 +184,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
 
                     //获取数据，进入UpMasterActivity
                     case 2:
-
                         //获取mid
                         String value_mid = main_editText_value.getText().toString().trim();
 
