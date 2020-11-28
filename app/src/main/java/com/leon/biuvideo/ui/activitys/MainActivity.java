@@ -1,20 +1,17 @@
 package com.leon.biuvideo.ui.activitys;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.view.*;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.widget.PopupWindowCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -25,6 +22,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.fragments.mainFragments.FavoriteFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.HomeFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.PlayListFragment;
+import com.leon.biuvideo.ui.views.RoundPopupWindow;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.InternetUtils;
 
@@ -39,8 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private NavigationView navigation_view;
     private ImageView toolBar_imageView_menu, navigation_imageView_back, toolBar_imageView_more;
 
-    private PopupWindow popupWindow;
-    private Button main_more_help, main_more_preference;
+    private RoundPopupWindow roundPopupWindow;
 
     private List<Fragment> fragmentList;
 
@@ -206,58 +203,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 drawer_layout.openDrawer(Gravity.LEFT);
                 break;
             case R.id.toolBar_imageView_more:
-                View popupView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.main_popup_window, null);
 
-                main_more_help = popupView.findViewById(R.id.main_more_help);
-                main_more_help.setOnClickListener(this);
+                if (roundPopupWindow == null) {
+                    roundPopupWindow = new RoundPopupWindow(getApplicationContext()) {
+                        @Override
+                        public int setLayout() {
+                            return R.layout.main_popup_window;
+                        }
+                    };
+                }
 
-                main_more_preference = popupView.findViewById(R.id.main_more_preference);
-                main_more_preference.setOnClickListener(this);
+                roundPopupWindow
+                        .setOnClickListener(R.id.main_more_help, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(MainActivity.this, "help", Toast.LENGTH_SHORT).show();
+                                roundPopupWindow.dismiss();
+                            }
+                        })
+                        .setOnClickListener(R.id.main_more_preference, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //跳转至PreferenceActivity
+                                Intent intent = new Intent(MainActivity.this, PreferenceActivity.class);
+                                startActivity(intent);
 
-                popupWindow = new PopupWindow(popupView, ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
-                popupWindow.setFocusable(true);
-                popupWindow.setOutsideTouchable(true);
-                popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
-
-                View contentView = popupWindow.getContentView();
-
-                //需要先测量，PopupWindow还未弹出时，宽高为0
-                contentView.measure(makeDropDownMeasureSpec(popupWindow.getWidth()),
-                        makeDropDownMeasureSpec(popupWindow.getHeight()));
-
-                int offsetX = - popupWindow.getContentView().getMeasuredWidth();
-                int offsetY = 0;
-                PopupWindowCompat.showAsDropDown(popupWindow, toolBar_imageView_more, offsetX, offsetY, Gravity.START);
+                                roundPopupWindow.dismiss();
+                            }
+                        })
+                        .setLocation(toolBar_imageView_more, RoundPopupWindow.SHOW_AS_DROP_LEFT);
 
                 break;
             case R.id.navigation_imageView_back:
                 drawer_layout.closeDrawer(navigation_view);
-
-                break;
-            case R.id.main_more_help:
-                Toast.makeText(MainActivity.this, "help", Toast.LENGTH_SHORT).show();
-
-                popupWindow.dismiss();
-                break;
-            case R.id.main_more_preference:
-                //跳转至PreferenceActivity
-                Intent intent = new Intent(this, PreferenceActivity.class);
-                startActivity(intent);
-
-                popupWindow.dismiss();
                 break;
             default:
                 break;
         }
     }
 
-    private static int makeDropDownMeasureSpec(int measureSpec) {
-        int mode;
-        if (measureSpec == ViewGroup.LayoutParams.WRAP_CONTENT) {
-            mode = View.MeasureSpec.UNSPECIFIED;
-        } else {
-            mode = View.MeasureSpec.EXACTLY;
-        }
-        return View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(measureSpec), mode);
-    }
+
 }
