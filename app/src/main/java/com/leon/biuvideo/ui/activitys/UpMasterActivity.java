@@ -161,16 +161,16 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
         List<Fragment> fragments = new ArrayList<>();
 
         //获取视频数据
-        fragments.add(new UserVideoListFragment(mid, 1, getApplicationContext()));
+        fragments.add(new UserVideoListFragment(mid, getApplicationContext()));
 
         //获取音频数据
-        fragments.add(new UserAudioListFragment(mid, 1, getApplicationContext()));
+        fragments.add(new UserAudioListFragment(mid, getApplicationContext()));
 
         //获取文章数据
-        fragments.add(new UserArticlesFragment(mid, 1, getApplicationContext()));
+        fragments.add(new UserArticlesFragment(mid, getApplicationContext()));
 
         //获取相簿数据
-        fragments.add(new UserPictureListFragment(mid, 0, getApplicationContext()));
+        fragments.add(new UserPictureListFragment(mid, getApplicationContext()));
 
         viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
         up_viewPage.setAdapter(viewPageAdapter);

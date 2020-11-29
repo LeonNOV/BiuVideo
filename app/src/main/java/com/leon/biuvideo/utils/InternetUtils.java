@@ -3,11 +3,17 @@ package com.leon.biuvideo.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.widget.Toast;
 
 public class InternetUtils {
 
-    //判断网络状态
-    public static InternetState InternetState(Context context) {
+    /**
+     * 判断网络状态
+     *
+     * @param context   Context对象
+     * @return  返回网络状态
+     */
+    public static InternetState internetState(Context context) {
         if (context != null) {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
@@ -40,6 +46,17 @@ public class InternetUtils {
         }
 
         return InternetState.INTERNET_NoAvailable;
+    }
+
+    /**
+     * 检查网络是否可用
+     *
+     * @return  true：可用状态；false：不可用状态
+     */
+    public static boolean checkNetwork(Context context) {
+        InternetState internetState = internetState(context);
+
+        return internetState == InternetState.INTERNET_MOBILE || internetState == InternetState.INTERNET_WIFI;
     }
 
     public enum InternetState {

@@ -15,6 +15,14 @@
   - 最后使用create来创建`RoundPopupWindow`
 - 更具体的说明可看对应方法的注释
 - 现所有的`more`弹窗都已使用`RoundPopupWindow`进行创建
+- 添加了无网络提示，不过使用有点麻烦，后期会根据需要进行优化
+  - 调用`InternetUtils`中的静态方法`checkNetwork()`
+  - false为无网络，true为有网络
+  - 更改提示语句的话只需更改`string.xml`中的`network_sign`即可
+- 修改了用户界面中四个Fragment中数据获取的方式，需要先获取总数，再获取具体数据
+- 未解决问题：
+  - **Fragment子类还存在代码冗余，`parseDataUtils`包中的各解析工具类也存在大量代码冗余**
+  - **在用户界面中浏览数据的话，如果滑动的速度过快，很容易使应用出现闪退情况**
 
 ### 2020/11/28
 - 修改了popupWindow的弹出位置

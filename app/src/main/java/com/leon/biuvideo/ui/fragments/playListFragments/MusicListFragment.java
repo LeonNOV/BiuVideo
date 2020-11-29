@@ -72,8 +72,6 @@ public class MusicListFragment extends Fragment {
         //处理music播放列表数据
         musicPlayLists = musicListDatabaseUtils.queryPlayList();
 
-        Fuck.blue("MusicListFragment:onResume");
-
         if (musicPlayLists.size() > 0) {
             textView_noDataStr.setVisibility(View.INVISIBLE);
             recyclerView.setVisibility(View.VISIBLE);

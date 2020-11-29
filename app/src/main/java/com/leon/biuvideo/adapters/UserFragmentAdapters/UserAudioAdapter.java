@@ -3,6 +3,7 @@ package com.leon.biuvideo.adapters.UserFragmentAdapters;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -12,6 +13,7 @@ import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.upMasterBean.UpAudio;
 import com.leon.biuvideo.ui.activitys.UpSongActivity;
 import com.leon.biuvideo.utils.ImagePixelSize;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 
 import java.text.SimpleDateFormat;
@@ -63,6 +65,14 @@ public class UserAudioAdapter extends BaseAdapter<UpAudio> {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //判断是否有网络
+                        boolean isHaveNetwork = InternetUtils.checkNetwork(context);
+
+                        if (!isHaveNetwork) {
+                            Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         //获取所有sid
                         long[] sids = new long[upAudios.size()];
                         for (int i = 0; i < upAudios.size(); i++) {

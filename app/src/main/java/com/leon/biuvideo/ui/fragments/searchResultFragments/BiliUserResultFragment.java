@@ -20,6 +20,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UserFragmentAdapters.BiliUserAdapter;
 import com.leon.biuvideo.beans.BiliUser;
 import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.OrderType;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BiliUserParser;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -143,6 +144,18 @@ public class BiliUserResultFragment extends Fragment {
         search_result_smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
+
+                //判断是否有网络
+                boolean isHaveNetwork = InternetUtils.checkNetwork(context);
+
+                if (!isHaveNetwork) {
+                    Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+
+                    //结束加载更多动画
+                    search_result_smartRefresh.finishLoadMore();
+
+                    return;
+                }
 
                 if (dataState) {
                     pageNum++;

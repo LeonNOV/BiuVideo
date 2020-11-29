@@ -3,6 +3,7 @@ package com.leon.biuvideo.adapters.PlayListAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -12,6 +13,7 @@ import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.upMasterBean.VideoPlayList;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.utils.ImagePixelSize;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 
 import java.util.List;
@@ -21,7 +23,7 @@ import java.util.List;
  */
 public class VideoListAdapter extends BaseAdapter<VideoPlayList> {
     private List<VideoPlayList> videoPlayLists;
-    private Context context;
+    private final Context context;
 
     public VideoListAdapter(List<VideoPlayList> videoPlayLists, Context context) {
         super(videoPlayLists, context);
@@ -41,6 +43,14 @@ public class VideoListAdapter extends BaseAdapter<VideoPlayList> {
         holder.setOnClickListener(R.id.play_list_video_relativeLayout, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //判断是否有网络
+                boolean isHaveNetwork = InternetUtils.checkNetwork(context);
+
+                if (!isHaveNetwork) {
+                    Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 //跳转到VideoActivity
                 Intent intent = new Intent(context, VideoActivity.class);
                 intent.putExtra("bvid", videoPlayLists.get(position).bvid);

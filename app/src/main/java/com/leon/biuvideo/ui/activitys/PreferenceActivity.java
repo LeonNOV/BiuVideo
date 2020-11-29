@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.AboutBean;
@@ -20,6 +21,7 @@ import com.leon.biuvideo.ui.dialogs.FeedbackDialog;
 import com.leon.biuvideo.ui.dialogs.ImportFollowDialog;
 import com.leon.biuvideo.ui.dialogs.LicenseDialog;
 import com.leon.biuvideo.ui.dialogs.WaitingDialog;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
@@ -86,6 +88,14 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
                 this.finish();
                 break;
             case R.id.preference_textView_import:
+                //判断是否有网络
+                boolean isHaveNetwork = InternetUtils.checkNetwork(getApplicationContext());
+
+                if (!isHaveNetwork) {
+                    Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 //导入指定ID的关注列表
                 ImportFollowDialog importFollowDialog = new ImportFollowDialog(PreferenceActivity.this);
                 importFollowDialog.show();
@@ -93,6 +103,7 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
                 importFollowDialog.setPriorityListener(new ImportFollowDialog.PriorityListener() {
                     @Override
                     public void setActivityText(long mid) {
+
                         new Thread(new Runnable() {
                             @Override
                             public void run() {

@@ -130,7 +130,7 @@ public class ArticleParseUtils {
      * @param mid   用户ID
      * @return  返回文章总条目数
      */
-    public static int getCount(long mid) {
+    public static int getAriticleTotal(long mid) {
         Map<String, String> params = new HashMap<>();
         params.put("mid", String.valueOf(mid));
         params.put("pn", "1");

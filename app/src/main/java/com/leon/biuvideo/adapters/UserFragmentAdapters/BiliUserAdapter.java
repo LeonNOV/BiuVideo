@@ -14,6 +14,7 @@ import com.leon.biuvideo.beans.BiliUser;
 import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.ui.activitys.UpMasterActivity;
 import com.leon.biuvideo.utils.ImagePixelSize;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
@@ -49,6 +50,14 @@ public class BiliUserAdapter extends BaseAdapter<BiliUser> {
         holder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //判断是否有网络
+                boolean isHaveNetwork = InternetUtils.checkNetwork(context);
+
+                if (!isHaveNetwork) {
+                    Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 //跳转至UpMasterActivity
                 Intent intent = new Intent(context, UpMasterActivity.class);
                 intent.putExtra("mid", biliUser.mid);
@@ -57,7 +66,8 @@ public class BiliUserAdapter extends BaseAdapter<BiliUser> {
             }
         });
 
-        holder.setImage(R.id.search_bili_user_face, biliUser.face, ImagePixelSize.FACE)
+        holder
+                .setImage(R.id.search_bili_user_face, biliUser.face, ImagePixelSize.FACE)
                 .setText(R.id.search_bili_user_textView_name, biliUser.name);
 
         //查询对应用户是否存在于Favorite_up中
@@ -107,7 +117,8 @@ public class BiliUserAdapter extends BaseAdapter<BiliUser> {
 
         //设置粉丝数
         String fans = "粉丝：" + ValueFormat.generateCN(biliUser.fans);
-        holder.setText(R.id.search_bili_user_textView_fans, fans)
+        holder
+                .setText(R.id.search_bili_user_textView_fans, fans)
                 .setText(R.id.search_bili_user_textView_sign, biliUser.usign);
     }
 }

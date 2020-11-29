@@ -35,7 +35,7 @@
             android:textSize="13sp" />
 
         <TextView
-            android:id="@+id/up_picture_textView_desc"
+            android:id="@+id/up_picture_textView_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/up_picture_imageView_cover"
@@ -51,7 +51,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/up_picture_textView_desc"
+            android:layout_below="@id/up_picture_textView_title"
             android:layout_margin="5dp"
             android:orientation="vertical">
 

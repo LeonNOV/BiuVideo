@@ -14,6 +14,7 @@ import com.leon.biuvideo.beans.videoBean.view.SingleVideoInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.utils.ImagePixelSize;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.WebViewUtils;
 import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParseUtils;
 
@@ -67,6 +68,14 @@ public class AnthologyAdapter extends BaseAdapter<SingleVideoInfo> {
 
                         //判断当前观看的视频cid是否和选择的一样
                         if (singleVideoSelectedIndex != position) {
+                            //判断是否有网络
+                            boolean isHaveNetwork = InternetUtils.checkNetwork(context);
+
+                            if (!isHaveNetwork) {
+                                Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+
                             //设置webView的链接
                             webViewUtils.setWebViewUrl(viewPage.aid, singleVideoInfo.cid, position);
 

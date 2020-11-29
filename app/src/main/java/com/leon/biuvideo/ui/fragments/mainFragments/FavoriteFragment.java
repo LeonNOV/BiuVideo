@@ -83,8 +83,6 @@ public class FavoriteFragment extends Fragment {
         //处理Favorite数据
         favorites = favoriteDatabaseUtils.queryFavorites();
 
-        Fuck.blue("FavoriteFragment:onResume");
-
         if (favorites.size() > 0) {
             //隐藏无数据提示，显示item数据
             favorite_textView_noDataStr.setVisibility(View.INVISIBLE);

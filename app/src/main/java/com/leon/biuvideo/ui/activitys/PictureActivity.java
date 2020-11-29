@@ -83,22 +83,15 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
     private void initValue() {
         picture_textView_title.setText(picture.title);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
-
-        Date time = new Date(picture.ctime * 1000);
-        picture_textView_time.setText(sdf.format(time));
+        picture_textView_time.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA)
+                .format(new Date(picture.ctime * 1000)));
 
         picture_textView_view.setText(ValueFormat.generateCN(picture.view));
 
         picture_textView_like.setText(ValueFormat.generateCN(picture.like));
 
-        //如果标题为空，则将picture_textView_title控件进行‘删除’
-        String title = picture.title;
-        if (title.equals("")) {
-            picture_textView_title.setVisibility(View.GONE);
-        } else {
-            picture_textView_title.setText(title);
-        }
+        picture_textView_title.setText(picture.title);
+
         picture_textView_desc.setText(picture.description);
 
 

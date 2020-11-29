@@ -76,8 +76,6 @@ public class VideoListFragment extends Fragment {
         //处理video播放列表数据
         videoPlayLists = videoListDatabaseUtils.queryFavoriteVideos();
 
-        Fuck.blue("VideoListFragment:onResume");
-
         if (videoPlayLists.size() > 0) {
             //隐藏无数据提示，显示item数据
             textView_noDataStr.setVisibility(View.INVISIBLE);

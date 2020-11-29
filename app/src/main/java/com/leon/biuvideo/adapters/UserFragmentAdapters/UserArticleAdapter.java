@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -12,7 +13,9 @@ import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.ui.activitys.ArticleActivity;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.ImagePixelSize;
+import com.leon.biuvideo.utils.InternetUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -57,6 +60,14 @@ public class UserArticleAdapter extends BaseAdapter<Article> {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //判断是否有网络
+                        boolean isHaveNetwork = InternetUtils.checkNetwork(context);
+
+                        if (!isHaveNetwork) {
+                            Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         //跳转至ArticleActivity
                         Article article = articles.get(position);
 

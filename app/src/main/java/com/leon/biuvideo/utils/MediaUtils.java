@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.UUID;
 
 public class MediaUtils {
+    private static boolean isHaveNetwork;
+
     /**
      * 获取、合并视频音频
      *
@@ -36,6 +38,13 @@ public class MediaUtils {
      * @return  返回获取状态
      */
     public static boolean saveVideo(Context context, String videoPath, String audioPath, String fileName) {
+
+        //判断是否有网络
+        isHaveNetwork = InternetUtils.checkNetwork(context);
+
+        if (!isHaveNetwork) {
+            return false;
+        }
 
         String folderPath = FileUtils.createFolder(FileUtils.ResourcesFolder.VIDEOS);
 
@@ -182,6 +191,13 @@ public class MediaUtils {
      * @return  返回保存状态
      */
     public static boolean saveMusic(Context context, String resourceUrl, String fileName) {
+        //判断是否有网络
+        isHaveNetwork = InternetUtils.checkNetwork(context);
+
+        if (!isHaveNetwork) {
+            return false;
+        }
+
         try {
             URL url = new URL(resourceUrl);
 
@@ -237,6 +253,13 @@ public class MediaUtils {
      * @return  返回保存成功状态
      */
     public static boolean savePicture(Context context, String picUrl) {
+        //判断是否有网络
+        isHaveNetwork = InternetUtils.checkNetwork(context);
+
+        if (!isHaveNetwork) {
+            return false;
+        }
+
         try {
             URL url = new URL(picUrl);
 

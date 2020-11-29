@@ -27,6 +27,7 @@ import com.leon.biuvideo.ui.fragments.searchResultFragments.ArticleResultFragmen
 import com.leon.biuvideo.ui.fragments.searchResultFragments.BiliUserResultFragment;
 import com.leon.biuvideo.ui.fragments.searchResultFragments.VideoResultFragment;
 import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.InternetUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +70,14 @@ import java.util.List;
 
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                //判断是否有网络
+                boolean isHaveNetwork = InternetUtils.checkNetwork(getApplicationContext());
+
+                if (!isHaveNetwork) {
+                    Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
                 //按下软键盘的搜索按钮会触发该方法
                 if (i == EditorInfo.IME_ACTION_SEARCH) {
                     //获取输入内容
@@ -127,7 +136,6 @@ import java.util.List;
         viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
         search_viewPager.setAdapter(viewPageAdapter);
         search_viewPager.setOffscreenPageLimit(fragments.size());
-        Fuck.blue("Adapter:" + viewPageAdapter.getCount());
     }
 
     private void refreshFragments() {

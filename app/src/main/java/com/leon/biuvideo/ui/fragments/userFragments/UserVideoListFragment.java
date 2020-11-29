@@ -19,6 +19,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UserFragmentAdapters.UserVideoAdapter;
 import com.leon.biuvideo.beans.upMasterBean.UpVideo;
 import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UpVideoParseUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -31,16 +32,16 @@ import java.util.List;
  */
 public class UserVideoListFragment extends Fragment {
     private long mid;
-    private int pageNum;
     private Context context;
+    private int pageNum = 1;
 
     private LayoutInflater inflater;
 
     //记录数据是否已全部获取完
-    private boolean dataState;
+    private boolean dataState = true;
 
-    private int valueCount;
-    private int total = -1;
+    private int currentCount;
+    private int total;
 
     private View view;
     private RecyclerView up_video_recyclerView;
@@ -49,9 +50,8 @@ public class UserVideoListFragment extends Fragment {
     public UserVideoListFragment() {
     }
 
-    public UserVideoListFragment(long mid, int pageNum, Context context) {
+    public UserVideoListFragment(long mid, Context context) {
         this.mid = mid;
-        this.pageNum = pageNum;
         this.context = context;
     }
 
@@ -78,28 +78,42 @@ public class UserVideoListFragment extends Fragment {
 
     //初始化数据
     private void initValue() {
-        valueCount = UpVideoParseUtils.count;
+        total = UpVideoParseUtils.getVideoTotal(mid);
+
+        Fuck.blue("VideoTotal:" + total);
+
+        //判断获取的数据条目是否为0
+        if (total == 0) {
+            //设置无数据提示界面
+            view = inflater.inflate(R.layout.fragment_no_data, null);
+            return;
+        }
+
+        //获取初始数据
+        List<UpVideo> initVideos = UpVideoParseUtils.parseVideo(mid, pageNum);
+        currentCount += initVideos.size();
+
+        UserVideoAdapter userVideoAdapter = new UserVideoAdapter(initVideos, getContext());
+        up_video_recyclerView.setAdapter(userVideoAdapter);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         up_video_recyclerView.setLayoutManager(layoutManager);
-
-        //获取初始数据
-        List<UpVideo> upVideos = getUpVideos(mid, pageNum);
-
-        //判断获取的数据条目是否为0
-        if (upVideos.size() == 0) {
-
-            //设置无数据提示界面
-            view = inflater.inflate(R.layout.fragment_no_data, null);
-        }
-
-        UserVideoAdapter userVideoAdapter = new UserVideoAdapter(upVideos, getContext());
-        up_video_recyclerView.setAdapter(userVideoAdapter);
 
         //添加加载更多监听事件
         video_smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
+                //判断是否有网络
+                boolean isHaveNetwork = InternetUtils.checkNetwork(context);
+
+                if (!isHaveNetwork) {
+                    Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+
+                    //结束加载更多动画
+                    video_smartRefresh.finishLoadMore();
+
+                    return;
+                }
 
                 if (dataState) {
                     pageNum++;
@@ -137,18 +151,16 @@ public class UserVideoListFragment extends Fragment {
      * @return 返回UpVideo集合
      */
     private List<UpVideo> getUpVideos(long mid, int pageNum) {
-        List<UpVideo> temp = UpVideoParseUtils.parseVideo(mid, pageNum);
+        List<UpVideo> videos = UpVideoParseUtils.parseVideo(mid, pageNum);
 
         //记录获取的总数
-        valueCount += temp.size();
+        currentCount += videos.size();
 
         //判断是否已获取完所有的数据
-        if (temp.size() < 30 || valueCount == total) {
+        if (videos.size() < 30 || total == currentCount) {
             dataState = false;
-        } else {
-            dataState = true;
         }
 
-        return temp;
+        return videos;
     }
 }

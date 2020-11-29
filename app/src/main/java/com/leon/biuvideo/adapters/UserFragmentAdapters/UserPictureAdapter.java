@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -12,8 +13,8 @@ import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
 import com.leon.biuvideo.ui.activitys.PictureActivity;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.ImagePixelSize;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 
 import java.text.SimpleDateFormat;
@@ -55,10 +56,8 @@ public class UserPictureAdapter extends BaseAdapter<UpPicture> {
             holder.setVisibility(R.id.up_picture_textView_count, View.INVISIBLE);
         }
 
-        Fuck.blue("标题:" + upPicture.description + "---" + "第" + position + "个相簿的图片个数为" + upPicture.count + "个");
-
         //设置标题
-        holder.setText(R.id.up_picture_textView_desc, upPicture.description)
+        holder.setText(R.id.up_picture_textView_title, upPicture.title)
 
                 //设置查看次数
                 .setText(R.id.up_picture_textView_view, ValueFormat.generateCN(upPicture.view))
@@ -70,6 +69,14 @@ public class UserPictureAdapter extends BaseAdapter<UpPicture> {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //判断是否有网络
+                        boolean isHaveNetwork = InternetUtils.checkNetwork(context);
+
+                        if (!isHaveNetwork) {
+                            Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         //跳转到PictureActivity
                         Intent intent = new Intent(context, PictureActivity.class);
 

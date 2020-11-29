@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DrawerLayout drawer_layout;
     private NavigationView navigation_view;
     private ImageView toolBar_imageView_menu, navigation_imageView_back, toolBar_imageView_more;
+    private InternetUtils.InternetState internetState;
 
     private List<Fragment> fragmentList;
 
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void init() {
         //检查网络状态
-        InternetUtils.InternetState internetState = InternetUtils.InternetState(getApplicationContext());
+        internetState = InternetUtils.internetState(getApplicationContext());
         switch (internetState) {
             case INTERNET_NoAvailable:
                 Toast.makeText(getApplicationContext(), "没有网络哦~~~", Toast.LENGTH_SHORT).show();

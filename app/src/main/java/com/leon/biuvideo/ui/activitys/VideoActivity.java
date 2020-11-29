@@ -28,6 +28,7 @@ import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.GeneralNotification;
 import com.leon.biuvideo.utils.ImagePixelSize;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.MediaUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.WebViewUtils;
@@ -227,6 +228,14 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 this.finish();
                 break;
             case R.id.video_circleImageView_face:
+                //判断是否有网络
+                boolean isHaveNetwork = InternetUtils.checkNetwork(getApplicationContext());
+
+                if (!isHaveNetwork) {
+                    Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 //跳转到up主界面
                 Intent intent = new Intent(this, UpMasterActivity.class);
                 intent.putExtra("mid", viewPage.upInfo.mid);
@@ -266,13 +275,14 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
                 break;
             case R.id.video_button_saveVideo://保存选定画质的视频
+                //判断是否有网络
+                boolean isHaveNetworkSaveVideo = InternetUtils.checkNetwork(getApplicationContext());
 
-                Fuck.blue("===============quality===============");
-                for (String s : play.videoQualitys) {
-                    Fuck.blue(s);
+                if (!isHaveNetworkSaveVideo) {
+                    Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    return;
                 }
-                Fuck.blue("===============quality===============");
-
+                
                 //创建清晰度选择dialog
                 singleVideoQualityDialog = new SingleVideoQualityDialog(VideoActivity.this, play.videoQualitys);
                 SingleVideoQualityDialog.onQualityItemListener = new SingleVideoQualityDialog.OnQualityItemListener() {

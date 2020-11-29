@@ -61,6 +61,11 @@ public class UpPictureParseUtils {
                 //获取介绍信息
                 upPicture.description = itemObject.getString("description");
 
+                //如果title为空，则使用description
+                if (upPicture.title.equals("")) {
+                    upPicture.title = upPicture.description;
+                }
+
                 //获取图片数量
                 upPicture.count = itemObject.getIntValue("count");
 
@@ -101,14 +106,13 @@ public class UpPictureParseUtils {
      * @param mid   用户ID
      * @return  返回相簿数量
      */
-    public static int getPictureCount(long mid) {
+    public static int getPictureTotal(long mid) {
         Map<String, String> values = new HashMap<>();
-        values.put("mid", String.valueOf(mid));
+        values.put("uid", String.valueOf(mid));
 
         String response = new HttpUtils(Paths.pictureCount, values).getData();
 
         JSONObject jsonObject = JSON.parseObject(response);
-
         JSONObject data = jsonObject.getJSONObject("data");
 
         return data.getIntValue("all_count");

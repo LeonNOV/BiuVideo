@@ -14,6 +14,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.InternetUtils;
 
 /**
  * 反馈弹窗
@@ -38,10 +39,18 @@ public class FeedbackDialog extends AlertDialog {
         feed_back_button_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //判断是否有网络
+                boolean isHaveNetwork = InternetUtils.checkNetwork(getContext());
+
+                if (!isHaveNetwork) {
+                    Toast.makeText(getContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 String feedBack = feed_back_editText.getText().toString();
                 if (!feedBack.equals("")) {
                     //处理反馈的提交
-                    Fuck.blue(feedBack);
+                    //do something...
                     dismiss();
                     Toast.makeText(getContext(), "感谢您的反馈", Toast.LENGTH_SHORT).show();
                 } else {

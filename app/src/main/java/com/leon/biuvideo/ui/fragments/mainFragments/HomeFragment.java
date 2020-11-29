@@ -17,9 +17,8 @@ import com.leon.biuvideo.ui.activitys.UpMasterActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.utils.IDUtils;
 import com.leon.biuvideo.utils.HeroImages;
+import com.leon.biuvideo.utils.InternetUtils;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -151,6 +150,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
 
                 break;
             case R.id.home_button_confirm:
+                //判断是否有网络
+                boolean isHaveNetwork = InternetUtils.checkNetwork(context);
+
+                if (!isHaveNetwork) {
+                    Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 switch (spinnerIndex) {
                     case 0:
                         //获取输入内容

@@ -18,8 +18,6 @@ import java.util.Map;
  * 视频接口解析
  */
 public class UpVideoParseUtils {
-    public static int count;
-
     /**
      * 视频接口解析
      *
@@ -42,9 +40,6 @@ public class UpVideoParseUtils {
 
         JSONObject dataObject = jsonObject.getJSONObject("data");
         if (dataObject != null) {
-            //获取数据总数
-            count = getPageInfo(dataObject);
-
             JSONObject listObject = dataObject.getJSONObject("list");
             JSONArray vlistArray = listObject.getJSONArray("vlist");
 
@@ -97,8 +92,25 @@ public class UpVideoParseUtils {
         return null;
     }
 
-    //获取数据总数
-    private static int getPageInfo(JSONObject dataObject) {
+    /**
+     * 获取视频总数
+     *
+     * @param mid   用户ID
+     * @return  返回视频总数
+     */
+    public static int getVideoTotal(long mid) {
+        Map<String, String> params = new HashMap<>();
+        params.put("mid", String.valueOf(mid));
+        params.put("ps", "30");
+        params.put("pn", "1");
+        params.put("order", "pubdate");
+        params.put("tid", "0");
+        params.put("jsonp", "jsonp");
+
+        String response = new HttpUtils(Paths.videos, params).getData();
+
+        JSONObject jsonObject = JSON.parseObject(response);
+        JSONObject dataObject = jsonObject.getJSONObject("data");
         JSONObject page = dataObject.getJSONObject("page");
 
         return page.getIntValue("count");

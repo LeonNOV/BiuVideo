@@ -19,6 +19,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UserFragmentAdapters.UserAudioAdapter;
 import com.leon.biuvideo.beans.upMasterBean.UpAudio;
 import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UpAudioParseUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
@@ -29,15 +30,15 @@ import java.util.List;
  */
 public class UserAudioListFragment extends Fragment {
     private long mid;
-    private int pageNum;
+    private int pageNum = 1;
     private Context context;
 
     private LayoutInflater inflater;
 
     //记录数据是否已全部获取完
-    private boolean dataState;
-    private int valueCount;
-    private int total = -1;
+    private boolean dataState = true;
+    private int currentCount;
+    private int total;
 
     private View view;
     private RecyclerView up_audio_recyclerView;
@@ -46,9 +47,8 @@ public class UserAudioListFragment extends Fragment {
     public UserAudioListFragment() {
     }
 
-    public UserAudioListFragment(long mid, int pageNum, Context context) {
+    public UserAudioListFragment(long mid, Context context) {
         this.mid = mid;
-        this.pageNum = pageNum;
         this.context = context;
     }
 
@@ -73,24 +73,40 @@ public class UserAudioListFragment extends Fragment {
     }
 
     private void initValue() {
+        total = UpAudioParseUtils.getAudioTotal(mid);
+
+        Fuck.blue("AudioTotal:" + total);
+
+        //判断获取的数据条目是否为0
+        if (total == 0) {
+            //设置无数据提示界面
+            view = inflater.inflate(R.layout.fragment_no_data, null);
+            return;
+        }
+
+        //获取初始数据
+        List<UpAudio> initAudios = UpAudioParseUtils.parseAudio(mid, pageNum);
+        currentCount += initAudios.size();
+
+        UserAudioAdapter userAudioAdapter = new UserAudioAdapter(initAudios, getContext());
+        up_audio_recyclerView.setAdapter(userAudioAdapter);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         up_audio_recyclerView.setLayoutManager(layoutManager);
 
-        //获取初始数据
-        List<UpAudio> upAudios = getUpAudios(mid, pageNum);
-
-        //判断获取的数据条目是否为0
-        if (upAudios.size() == 0) {
-
-            //设置无数据提示界面
-            view = inflater.inflate(R.layout.fragment_no_data, null);
-        }
-
-        UserAudioAdapter userAudioAdapter = new UserAudioAdapter(upAudios, getContext());
-        up_audio_recyclerView.setAdapter(userAudioAdapter);
-
         //添加加载更多监听事件
         audio_smartRefresh.setOnLoadMoreListener(refreshLayout -> {
+            //判断是否有网络
+            boolean isHaveNetwork = InternetUtils.checkNetwork(context);
+
+            if (!isHaveNetwork) {
+                Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+
+                //结束加载更多动画
+                audio_smartRefresh.finishLoadMore();
+
+                return;
+            }
 
             if (dataState) {
                 pageNum++;
@@ -127,23 +143,15 @@ public class UserAudioListFragment extends Fragment {
      * @return 返回UpAudio集合
      */
     private List<UpAudio> getUpAudios(long mid, int pageNum) {
-        List<UpAudio> temp = UpAudioParseUtils.parseAudio(mid, pageNum);
+        List<UpAudio> audios = UpAudioParseUtils.parseAudio(mid, pageNum);
 
-        //记录获取的总数
-        valueCount += temp.size();
+        currentCount += audios.size();
 
-        //初始化数据总数目
-        if (total == -1) {
-            valueCount = UpAudioParseUtils.count;
-        }
-
-        //判断是否已获取完所有的数据
-        if (temp.size() < 30 || valueCount == total) {
+        //如果第一次获取的条目数小于30则设置dataState
+        if (audios.size() < 30 || total == currentCount) {
             dataState = false;
-        } else {
-            dataState = true;
         }
 
-        return temp;
+        return audios;
     }
 }

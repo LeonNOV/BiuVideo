@@ -19,6 +19,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UserFragmentAdapters.UserArticleAdapter;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.parseDataUtils.articleParseUtils.ArticleParseUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -31,32 +32,33 @@ import java.util.List;
  */
 public class UserArticlesFragment extends Fragment {
     private final long mid;
-    private int pageNum;
-    private Context context;
+    private final Context context;
+    private int pageNum = 1;
 
     //总条目数
-    private int count;
+    private int total;
 
     //以获取的条目数
-    private int valueCount;
+    private int currentCount;
 
     //数据状态
-    private boolean dataState;
+    private boolean dataState = true;
 
     private View view;
+    private LayoutInflater inflater;
 
     private RecyclerView user_article_recyclerView;
     private SmartRefreshLayout article_smartRefresh;
 
-    public UserArticlesFragment(long mid, int pageNum, Context context) {
+    public UserArticlesFragment(long mid, Context context) {
         this.mid = mid;
-        this.pageNum = pageNum;
         this.context = context;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        this.inflater = inflater;
         view = inflater.inflate(R.layout.fragment_up_space, container, false);
 
         initView();
@@ -67,7 +69,6 @@ public class UserArticlesFragment extends Fragment {
 
     private void initView() {
         user_article_recyclerView = view.findViewById(R.id.user_recyclerView_space);
-
         article_smartRefresh = view.findViewById(R.id.user_smartRefresh);
 
         //关闭下拉刷新
@@ -75,28 +76,42 @@ public class UserArticlesFragment extends Fragment {
     }
 
     private void initValue() {
-        count = ArticleParseUtils.getCount(mid);
+        total = ArticleParseUtils.getAriticleTotal(mid);
+
+        Fuck.blue("ArticleTotal:" + total);
 
         //判断条目是否为0
-        if (count == 0) {
-            //显示无数据提示
-
+        if (total == 0) {
+            //设置无数据提示界面
+            view = inflater.inflate(R.layout.fragment_no_data, null);
             return;
         }
 
         //获取初始数据
-        List<Article> initArticles = getArticles(mid, pageNum);
+        List<Article> initArticles = ArticleParseUtils.parseArticle(mid, pageNum);
+        currentCount += initArticles.size();
 
         UserArticleAdapter articleAdapter = new UserArticleAdapter(initArticles, context);
+        user_article_recyclerView.setAdapter(articleAdapter);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-
-        user_article_recyclerView.setAdapter(articleAdapter);
         user_article_recyclerView.setLayoutManager(layoutManager);
 
         article_smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
+                //判断是否有网络
+                boolean isHaveNetwork = InternetUtils.checkNetwork(context);
+
+                if (!isHaveNetwork) {
+                    Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+
+                    //结束加载更多动画
+                    article_smartRefresh.finishLoadMore();
+
+                    return;
+                }
+
                 if (dataState) {
                     pageNum++;
 
@@ -126,16 +141,21 @@ public class UserArticlesFragment extends Fragment {
         });
     }
 
+    /**
+     * 获取下一页数据
+     *
+     * @param mid   用户ID
+     * @param pageNum   页码
+     * @return  返回下一页数据
+     */
     private List<Article> getArticles(long mid, int pageNum) {
         List<Article> articles = ArticleParseUtils.parseArticle(mid, pageNum);
 
-        valueCount += articles.size();
+        currentCount += articles.size();
 
         //如果第一次获取的条目数小于30则设置dataState
-        if (articles.size() < 30 || count == valueCount) {
+        if (articles.size() < 30 || total == currentCount) {
             dataState = false;
-        } else {
-            dataState = true;
         }
 
         return articles;

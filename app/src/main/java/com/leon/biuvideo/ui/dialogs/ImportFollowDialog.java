@@ -58,7 +58,7 @@ public class ImportFollowDialog extends AlertDialog implements View.OnClickListe
                 String mid = import_follow_editText.getText().toString();
 
                 if (mid.equals("")) {
-                    Toast.makeText(getContext(), "输入内容有误", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "不要搞这些骚操作好吗？", Toast.LENGTH_SHORT).show();
                     return;
                 }
 

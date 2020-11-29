@@ -21,4 +21,7 @@
 
     <string name="close">关闭</string>
     <string name="noneData">啥都没有哎~~~</string>
+
+    <!-- 无网络提示 -->
+    <string name="network_sign">网络貌似有点问题哎~</string>
 </resources>

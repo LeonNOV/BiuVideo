@@ -43,6 +43,7 @@ import com.leon.biuvideo.service.MusicService;
 import com.leon.biuvideo.ui.dialogs.MusicListDialog;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.MediaUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.MusicListDatabaseUtils;
 import com.leon.biuvideo.utils.ValueFormat;
@@ -309,6 +310,14 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                 finish();
                 break;
             case R.id.music_imageView_isHaveVideo:
+                //判断是否有网络
+                boolean isHaveNetworkVideo = InternetUtils.checkNetwork(getApplicationContext());
+
+                if (!isHaveNetworkVideo) {
+                    Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 //跳转到video界面
                 Intent videoIntent = new Intent(this, VideoActivity.class);
                 videoIntent.putExtra("bvid", musicInfo.bvid);
@@ -316,6 +325,13 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
 
                 break;
             case R.id.music_textView_author:
+                //判断是否有网络
+                boolean isHaveNetworkAuthor = InternetUtils.checkNetwork(getApplicationContext());
+
+                if (!isHaveNetworkAuthor) {
+                    Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 //跳转至作者页面
                 Intent userIntent = new Intent(this, UpMasterActivity.class);
@@ -348,6 +364,14 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                     }
                     @Override
                     public void refreshMusic(long sid) {
+                        //判断是否有网络
+                        boolean isHaveNetwork = InternetUtils.checkNetwork(getApplicationContext());
+
+                        if (!isHaveNetwork) {
+                            Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         switchMusic(sid);
 
                         musicListDialog.dismiss();
@@ -409,6 +433,13 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
 
                 break;
             case R.id.music_imageView_control:
+                //判断是否有网络
+                boolean isHaveNetwork = InternetUtils.checkNetwork(getApplicationContext());
+
+                if (!isHaveNetwork) {
+                    Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 switch (musicState) {
                     case 0:
@@ -447,6 +478,14 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
 
                 break;
             case R.id.music_imageView_up:
+                //判断是否有网络
+                boolean isHaveNetworkUp = InternetUtils.checkNetwork(getApplicationContext());
+
+                if (!isHaveNetworkUp) {
+                    Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 //判断当前播放的歌曲是否处于第一个
                 if (position != 0) {
                     //获取上一个music的sid
@@ -462,6 +501,14 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
 
                 break;
             case R.id.music_imageView_next:
+                //判断是否有网络
+                boolean isHaveNetworkNext = InternetUtils.checkNetwork(getApplicationContext());
+
+                if (!isHaveNetworkNext) {
+                    Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 //判断当前播放的歌曲是否处于最后一个
                 if (position != sids.size() - 1) {
                     //获取下一个music的sid

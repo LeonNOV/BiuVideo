@@ -3,6 +3,7 @@ package com.leon.biuvideo.adapters.PlayListAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -13,6 +14,7 @@ import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
 import com.leon.biuvideo.ui.activitys.UpSongActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.InternetUtils;
 
 import java.util.List;
 
@@ -47,6 +49,14 @@ public class MusicListAdapter extends BaseAdapter<MusicPlayList> {
                 .setOnClickListener(R.id.play_list_music_imageView_isHaveVideo, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //判断是否有网络
+                        boolean isHaveNetwork = InternetUtils.checkNetwork(context);
+
+                        if (!isHaveNetwork) {
+                            Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         //跳转到VideoActivity
                         Intent intent = new Intent(context, VideoActivity.class);
                         intent.putExtra("bvid", musicPlayLists.get(position).bvid);
@@ -62,6 +72,14 @@ public class MusicListAdapter extends BaseAdapter<MusicPlayList> {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //判断是否有网络
+                        boolean isHaveNetwork = InternetUtils.checkNetwork(context);
+
+                        if (!isHaveNetwork) {
+                            Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         long[] sids = new long[musicPlayLists.size()];
                         for (int i = 0; i < musicPlayLists.size(); i++) {
                             sids[i] = musicPlayLists.get(i).sid;

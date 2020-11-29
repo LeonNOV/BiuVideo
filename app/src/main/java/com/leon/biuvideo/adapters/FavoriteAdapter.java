@@ -3,6 +3,7 @@ package com.leon.biuvideo.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -12,6 +13,7 @@ import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.ui.activitys.UpMasterActivity;
 import com.leon.biuvideo.utils.ImagePixelSize;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.utils.dataBaseUtils.Tables;
@@ -53,6 +55,14 @@ public class FavoriteAdapter extends BaseAdapter<Favorite> {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //判断是否有网络
+                        boolean isHaveNetwork = InternetUtils.checkNetwork(context);
+
+                        if (!isHaveNetwork) {
+                            Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         Intent intent = new Intent(context, UpMasterActivity.class);
                         intent.putExtra("mid", favorite.mid);
                         context.startActivity(intent);

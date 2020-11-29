@@ -14,12 +14,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.Headers;
+
 /**
  * 音频接口解析
  */
 public class UpAudioParseUtils {
-    public static int count;
-
     /**
      * 音频接口解析
      *
@@ -41,9 +41,6 @@ public class UpAudioParseUtils {
         JSONObject data = jsonObject.getJSONObject("data");
 
         if (data != null) {
-            //获取数据总数
-            count = getAudioCount(data);
-
             List<UpAudio> upAudios = new ArrayList<>();
 
             JSONArray innerData = data.getJSONArray("data");
@@ -83,7 +80,25 @@ public class UpAudioParseUtils {
         return null;
     }
 
-    private static int getAudioCount(JSONObject data) {
-        return data.getIntValue("pageSize");
+    /**
+     * 获取歌曲总数
+     *
+     * @param mid   用户ID
+     * @return  返回歌曲总数
+     */
+    public static int getAudioTotal(long mid) {
+        Map<String, String> params = new HashMap<>();
+        params.put("uid", String.valueOf(mid));
+        params.put("pn", "1");
+        params.put("ps", "30");
+        params.put("order", "1");
+        params.put("jsonp", "jsonp");
+
+        String response = new HttpUtils(Paths.music, params).getData();
+
+        JSONObject jsonObject = JSON.parseObject(response);
+        JSONObject data = jsonObject.getJSONObject("data");
+
+        return data.getIntValue("totalSize");
     }
 }
