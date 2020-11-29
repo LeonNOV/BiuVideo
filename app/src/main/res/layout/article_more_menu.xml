@@ -13,7 +13,7 @@
         android:paddingBottom="10dp">
 
         <Button
-            android:id="@+id/article_more_menu_screenshot"
+            android:id="@+id/article_more_menu_savePic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/ripple_button_rectangle"

@@ -6,11 +6,11 @@ import android.view.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -36,8 +36,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DrawerLayout drawer_layout;
     private NavigationView navigation_view;
     private ImageView toolBar_imageView_menu, navigation_imageView_back, toolBar_imageView_more;
-
-    private RoundPopupWindow roundPopupWindow;
 
     private List<Fragment> fragmentList;
 
@@ -200,20 +198,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.toolBar_imageView_menu:
-                drawer_layout.openDrawer(Gravity.LEFT);
+                drawer_layout.openDrawer(GravityCompat.START);
                 break;
             case R.id.toolBar_imageView_more:
-
-                if (roundPopupWindow == null) {
-                    roundPopupWindow = new RoundPopupWindow(getApplicationContext()) {
-                        @Override
-                        public int setLayout() {
-                            return R.layout.main_popup_window;
-                        }
-                    };
-                }
-
+                RoundPopupWindow roundPopupWindow = new RoundPopupWindow(getApplicationContext(), toolBar_imageView_more);
                 roundPopupWindow
+                        .setContentView(R.layout.main_popup_window)
                         .setOnClickListener(R.id.main_more_help, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -231,9 +221,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 roundPopupWindow.dismiss();
                             }
                         })
-                        .setLocation(toolBar_imageView_more, RoundPopupWindow.SHOW_AS_DROP_LEFT);
+                        .setLocation(RoundPopupWindow.SHOW_AS_DROP_DOWN)
+                        .create();
 
-                break;
+                        break;
             case R.id.navigation_imageView_back:
                 drawer_layout.closeDrawer(navigation_view);
                 break;
@@ -241,6 +232,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
-
-
 }

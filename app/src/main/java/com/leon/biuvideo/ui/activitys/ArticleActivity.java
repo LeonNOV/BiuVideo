@@ -3,27 +3,23 @@ package com.leon.biuvideo.ui.activitys;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Base64;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.articleBeans.Article;
+import com.leon.biuvideo.ui.views.RoundPopupWindow;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.MediaUtils;
@@ -60,9 +56,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
             article_textView_view,
             article_textView_like,
             article_textView_replay;
-    private Button article_more_menu_screenshot, article_more_menu_jumpToOrigin;
 
-    private PopupWindow popupWindow;
     private Article article;
     private String encodedHtml;
 
@@ -279,64 +273,45 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.article_imageView_more:
                 //显示弹出菜单
-                createPopupMenu(v);
+                RoundPopupWindow roundPopupWindow = new RoundPopupWindow(getApplicationContext(), article_imageView_more);
+                roundPopupWindow
+                        .setContentView(R.layout.article_more_menu)
+                        .setOnClickListener(R.id.article_more_menu_savePic, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //进行保存
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        boolean saveState = MediaUtils.saveArticle(article_webView, getApplicationContext());
 
-                break;
-            case R.id.article_more_menu_screenshot:
-                //进行保存
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        boolean saveState = MediaUtils.saveArticle(article_webView, getApplicationContext());
+                                        Looper.prepare();
+                                        Toast.makeText(ArticleActivity.this, saveState ? "保存成功" : "保存失败", Toast.LENGTH_SHORT).show();
+                                        Looper.loop();
+                                    }
+                                }).start();
 
-                        Looper.prepare();
-                        Toast.makeText(ArticleActivity.this, saveState ? "保存成功" : "保存失败", Toast.LENGTH_SHORT).show();
-                        Looper.loop();
-                    }
-                }).start();
+                                roundPopupWindow.dismiss();
+                            }
+                        })
+                        .setOnClickListener(R.id.article_more_menu_jumpToOrigin, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //跳转到源网站
+                                Intent intentOriginUrl = new Intent();
+                                intentOriginUrl.setAction("android.intent.action.VIEW");
+                                Uri uri = Uri.parse(Paths.articleWebPage + article.articleID);
+                                intentOriginUrl.setData(uri);
+                                startActivity(intentOriginUrl);
 
-                popupWindow.dismiss();
-
-                break;
-            case R.id.article_more_menu_jumpToOrigin:
-                //跳转到源网站收听
-                Intent intentOriginUrl = new Intent();
-                intentOriginUrl.setAction("android.intent.action.VIEW");
-                Uri uri = Uri.parse(Paths.articleWebPage + article.articleID);
-                intentOriginUrl.setData(uri);
-                startActivity(intentOriginUrl);
-
-                popupWindow.dismiss();
-
+                                roundPopupWindow.dismiss();
+                            }
+                        })
+                        .setLocation(RoundPopupWindow.SHOW_AS_DROP_DOWN)
+                        .create();
                 break;
             default:
                 break;
         }
-    }
-
-    /**
-     * 创建弹出窗口
-     *
-     * @param view  View对象
-     */
-    private void createPopupMenu(View view) {
-        View popupView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.article_more_menu, null);
-        article_more_menu_screenshot = popupView.findViewById(R.id.article_more_menu_screenshot);
-        article_more_menu_screenshot.setOnClickListener(this);
-
-        article_more_menu_jumpToOrigin = popupView.findViewById(R.id.article_more_menu_jumpToOrigin);
-        article_more_menu_jumpToOrigin.setOnClickListener(this);
-
-        popupWindow = new PopupWindow(popupView, ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
-        popupWindow.setFocusable(true);
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
-
-        popupWindow.showAsDropDown(view, -10, 0);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 }

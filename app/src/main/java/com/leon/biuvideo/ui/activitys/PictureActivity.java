@@ -4,19 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,8 +18,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.PictureListAdapter;
 import com.leon.biuvideo.beans.upMasterBean.UpPicture;
 import com.leon.biuvideo.layoutManager.PictureGridLayoutManager;
-import com.leon.biuvideo.ui.views.PictureViewer;
-import com.leon.biuvideo.utils.ImagePixelSize;
+import com.leon.biuvideo.ui.views.RoundPopupWindow;
 import com.leon.biuvideo.utils.MediaUtils;
 import com.leon.biuvideo.utils.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
@@ -38,9 +31,7 @@ import java.util.Locale;
  * 相簿界面Activity
  */
 public class PictureActivity extends AppCompatActivity implements View.OnClickListener {
-    private ImageView
-            picture_back,
-            picture_more;
+    private ImageView picture_back, picture_more;
 
     private TextView
             picture_textView_title,
@@ -52,9 +43,6 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
     private RecyclerView picture_recyclerView;
 
     private UpPicture picture;
-
-    private PopupWindow popupWindow;
-    private Button picture_more_saveAll, picture_more_jumpToOrigin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,64 +127,53 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.picture_more:
                 //创建popupWindow
-                createPopupWindow(v);
-                break;
-            case R.id.picture_more_saveAll:
-                //保存所有图片
-                Toast.makeText(this, "正在保存图片", Toast.LENGTH_SHORT).show();
+                RoundPopupWindow roundPopupWindow = new RoundPopupWindow(getApplicationContext(), picture_more);
+                roundPopupWindow
+                        .setContentView(R.layout.picture_popup_window)
+                        .setOnClickListener(R.id.picture_more_saveAll, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //保存所有图片
+                                Toast.makeText(getApplicationContext(), "正在保存图片", Toast.LENGTH_SHORT).show();
 
-                popupWindow.dismiss();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        int saveCounts = 0;
+                                roundPopupWindow.dismiss();
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        int saveCounts = 0;
 
-                        for (String url : picture.pictures) {
-                            boolean b = MediaUtils.savePicture(getApplicationContext(), url);
+                                        for (String url : picture.pictures) {
+                                            boolean b = MediaUtils.savePicture(getApplicationContext(), url);
 
-                            if (b) saveCounts++;
-                        }
+                                            if (b) saveCounts++;
+                                        }
 
-                        Looper.prepare();
-                        Toast.makeText(getApplicationContext(),
-                                "保存成功" + saveCounts + "张,失败" + (picture.pictures.size() - saveCounts) + "张",
-                                Toast.LENGTH_SHORT).show();
-                        Looper.loop();
-                    }
-                }).start();
+                                        Looper.prepare();
+                                        Toast.makeText(getApplicationContext(),
+                                                "保存成功" + saveCounts + "张,失败" + (picture.pictures.size() - saveCounts) + "张",
+                                                Toast.LENGTH_SHORT).show();
+                                        Looper.loop();
+                                    }
+                                }).start();
+                            }
+                        })
+                        .setOnClickListener(R.id.picture_more_jumpToOrigin, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intentOriginUrl = new Intent();
+                                intentOriginUrl.setAction("android.intent.action.VIEW");
+                                Uri uri = Uri.parse(Paths.pictureWebPage + picture.docId + "?tab=1&type=2");
+                                intentOriginUrl.setData(uri);
+                                startActivity(intentOriginUrl);
 
-                break;
-            case R.id.picture_more_jumpToOrigin:
-
-                Intent intentOriginUrl = new Intent();
-                intentOriginUrl.setAction("android.intent.action.VIEW");
-                Uri uri = Uri.parse(Paths.pictureWebPage + picture.docId + "?tab=1&type=2");
-                intentOriginUrl.setData(uri);
-                startActivity(intentOriginUrl);
-
-                popupWindow.dismiss();
-
+                                roundPopupWindow.dismiss();
+                            }
+                        })
+                        .setLocation(RoundPopupWindow.SHOW_AS_DROP_DOWN)
+                        .create();
                 break;
             default:
                 break;
         }
-    }
-
-    private void createPopupWindow(View view) {
-        popupWindow = new PopupWindow(getApplicationContext());
-
-        View popupView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.picture_popup_window, null);
-        picture_more_saveAll = popupView.findViewById(R.id.picture_more_saveAll);
-        picture_more_saveAll.setOnClickListener(this);
-
-        picture_more_jumpToOrigin = popupView.findViewById(R.id.picture_more_jumpToOrigin);
-        picture_more_jumpToOrigin.setOnClickListener(this);
-
-        popupWindow = new PopupWindow(popupView, ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
-        popupWindow.setFocusable(true);
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
-
-        popupWindow.showAsDropDown(view, -10, 0);
     }
 }

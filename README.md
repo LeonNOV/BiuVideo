@@ -5,6 +5,17 @@
 
 ## 📘开发日志
 
+### 2020/11/29
+- 添加了`RoundPopupWindow`类，该类用于创建一个带有圆角的popupWindow
+- 使用步骤：
+  - 创建该类对象，构造参数需要传入Context，和Anchor(锚点，即显示在那一控件的旁边的那个对象)对象
+  - 使用`setContentView(int layoutId)`来设置视图内容
+  - `setOnClickListener (int viewId, View.OnClickListener onClickListener)`用来设置控件的监听
+  - `setLocation(int location)`根据需要进行设置
+  - 最后使用create来创建`RoundPopupWindow`
+- 更具体的说明可看对应方法的注释
+- 现所有的`more`弹窗都已使用`RoundPopupWindow`进行创建
+
 ### 2020/11/28
 - 修改了popupWindow的弹出位置
 - 添加了`RoundPopupWindow`抽象类，该类可以创建一个带有圆角样式的popupWindow

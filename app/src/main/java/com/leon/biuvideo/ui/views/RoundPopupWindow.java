@@ -8,70 +8,91 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 
-import androidx.core.widget.PopupWindowCompat;
-
-public abstract class RoundPopupWindow extends PopupWindow {
+public class RoundPopupWindow extends PopupWindow {
     public final static int SHOW_AS_DROP_DOWN = 1;
-    public final static int SHOW_AS_DROP_LEFT = 2;
+    public final static int SHOW_AS_LEFT = 2;
 
     private final Context context;
+    private final View anchor;
 
     private View popupView;
-    private PopupWindow popupWindow;
 
-    private View anchor;
     private int offsetX = 0;
     private int offsetY = 0;
+    private int gravity = Gravity.END;
 
-    public RoundPopupWindow(Context context) {
+    public RoundPopupWindow(Context context, View anchor) {
         super(context);
         this.context = context;
-
-        initView();
+        this.anchor = anchor;
     }
 
-    public abstract int setLayout();
+    /**
+     * 设置popupWindow显示视图
+     * <br/>
+     * <strong>该方法必须在创建完RoundPopupWindow后进行调用，否则将出现`NullPointerException`</strong>
+     *
+     * @param layoutId  layout ID
+     * @return  返回this
+     */
+    public RoundPopupWindow setContentView(int layoutId) {
+        popupView = LayoutInflater.from(context).inflate(layoutId, null);
 
-    private void initView() {
-        popupView = LayoutInflater.from(context).inflate(setLayout(), null);
-
-        popupWindow = new PopupWindow(popupView, ViewGroup.MarginLayoutParams.WRAP_CONTENT, ViewGroup.MarginLayoutParams.WRAP_CONTENT);
-        popupWindow.setFocusable(true);
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
+        return this;
     }
 
+    /**
+     * 设置控件的监听事件
+     * <br/>
+     * <strong>只需传入对应的控件的ID，覆盖View.OnClickListener即可<strong/>
+     *
+     * @param viewId    监听的控件ID
+     * @param onClickListener   需要覆盖View.OnClickListener
+     * @return  返回this
+     */
     public RoundPopupWindow setOnClickListener (int viewId, View.OnClickListener onClickListener) {
         popupView.findViewById(viewId).setOnClickListener(onClickListener);
 
         return this;
     }
 
-    public RoundPopupWindow setLocation(View anchor, int location) {
-        this.anchor = anchor;
-        setPopupWindowLocation(location);
+    /**
+     * 设置popupWindow显示的位置
+     * 不调用该方法的话则按默认位置显示
+     *
+     * @param location  该类中的常量
+     * @return  返回this
+     */
+    public RoundPopupWindow setLocation(int location) {
+        //测量popupWindow的宽高
+        popupView.measure(makeDropDownMeasureSpec(this.getWidth()), makeDropDownMeasureSpec(this.getHeight()));
+
+        if (location == SHOW_AS_DROP_DOWN) {
+            this.offsetX = -popupView.getMeasuredWidth();
+            this.offsetY = anchor.getHeight() / 3;
+            this.gravity = Gravity.END;
+        } else {
+            this.offsetX = -popupView.getMeasuredWidth();
+            this.offsetY = -anchor.getHeight();
+            this.gravity = Gravity.START;
+        }
 
         return this;
     }
 
-    private void setPopupWindowLocation (int location) {
-        if (anchor != null) {
-            View contentView = popupWindow.getContentView();
-
-            //测量popupWindow的宽高
-            contentView.measure(makeDropDownMeasureSpec(popupWindow.getWidth()), makeDropDownMeasureSpec(popupWindow.getHeight()));
-
-            if (location == SHOW_AS_DROP_LEFT) {
-                this.offsetX = -popupWindow.getContentView().getMeasuredWidth();
-                this.offsetY = -(popupWindow.getContentView().getMeasuredHeight() + popupWindow.getHeight());
-            } else {
-                this.offsetX = -popupWindow.getContentView().getMeasuredWidth();
-                this.offsetY = 0;
-            }
-
-            PopupWindowCompat.showAsDropDown(popupWindow, anchor, this.offsetX, this.offsetY, Gravity.START);
-//            PopupWindowCompat.showAsDropDown(popupWindow, anchor, this.offsetX, this.offsetY, Gravity.END);
-        }
+    /**
+     * 创建RoundPopupWindow对象
+     * <br/>
+     * <strong>该方法必须放到在最后进行调用</strong>
+     */
+    public void create() {
+        this.setContentView(popupView);
+        this.setHeight(ViewGroup.MarginLayoutParams.WRAP_CONTENT);
+        this.setWidth(ViewGroup.MarginLayoutParams.WRAP_CONTENT);
+        this.setFocusable(true);
+        this.setOutsideTouchable(true);
+        this.setBackgroundDrawable(new ColorDrawable(0x00000000));
+        this.showAsDropDown(anchor, offsetX, offsetY, gravity);
     }
 
     /**
