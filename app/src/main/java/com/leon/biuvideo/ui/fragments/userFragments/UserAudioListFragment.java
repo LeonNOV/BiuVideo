@@ -56,7 +56,7 @@ public class UserAudioListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.inflater = inflater;
-        view = inflater.inflate(R.layout.fragment_up_space, container, false);
+        view = inflater.inflate(R.layout.fragment_space, container, false);
 
         initView();
         initValue();

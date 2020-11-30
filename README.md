@@ -13,6 +13,9 @@
   - 后期添加Hero的话需要在`HeroImages.heroImages`中加入其资源ID
   - 然后在`preference_strings.xml`中的`heroNames`数组中加入其名称即可
   - **资源ID和heroNames的顺序必须保持一致，否则会出现资源顺序错乱的情况**
+- 在`activity_user`和`activity_search_result`中使用了`CoordinatorLayout`控件，已实现折叠悬浮效果
+- 对logo进行了更改
+  - **侧边栏上的icon还未进行更换**
 
 ### 2020/11/29
 - 添加了`RoundPopupWindow`类，该类用于创建一个带有圆角的popupWindow

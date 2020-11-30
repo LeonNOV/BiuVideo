@@ -116,7 +116,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_up_song);
+        setContentView(R.layout.activity_music);
 
         init();
         initView();

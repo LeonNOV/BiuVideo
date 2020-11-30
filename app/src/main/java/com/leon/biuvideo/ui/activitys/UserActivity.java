@@ -68,7 +68,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_up_master);
+        setContentView(R.layout.activity_user);
 
         initView();
 

@@ -10,7 +10,7 @@ import java.util.Map;
 public class Picture implements Serializable {
     public long docId;
     public long posterUid;//用户ID
-    public String title;
+//    public String title;
     public String description;
     public int count;//图片总数量
     public long view;

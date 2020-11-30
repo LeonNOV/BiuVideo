@@ -15,6 +15,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.activitys.SearchResultActivity;
 import com.leon.biuvideo.ui.activitys.UserActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
+import com.leon.biuvideo.utils.GeneralNotification;
 import com.leon.biuvideo.utils.IDUtils;
 import com.leon.biuvideo.utils.HeroImages;
 import com.leon.biuvideo.utils.InternetUtils;

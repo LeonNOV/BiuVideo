@@ -53,15 +53,10 @@ public class PictureParseUtils {
                 picture.posterUid = itemObject.getLong("poster_uid");
 
                 //获取标题
-                picture.title = itemObject.getString("title");
+//                picture.title = itemObject.getString("title");
 
                 //获取介绍信息
                 picture.description = itemObject.getString("description");
-
-                //如果title为空，则使用description
-                if (picture.title.equals("")) {
-                    picture.title = picture.description;
-                }
 
                 //获取图片数量
                 picture.count = itemObject.getIntValue("count");

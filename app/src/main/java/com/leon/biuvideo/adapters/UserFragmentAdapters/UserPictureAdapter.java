@@ -57,7 +57,7 @@ public class UserPictureAdapter extends BaseAdapter<Picture> {
         }
 
         //设置标题
-        holder.setText(R.id.up_picture_textView_title, picture.title)
+        holder.setText(R.id.up_picture_textView_title, picture.description)
 
                 //设置查看次数
                 .setText(R.id.up_picture_textView_view, ValueFormat.generateCN(picture.view))

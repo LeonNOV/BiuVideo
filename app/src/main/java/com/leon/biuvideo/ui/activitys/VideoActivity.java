@@ -316,7 +316,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                                 GeneralNotification notification = new GeneralNotification(getApplicationContext(), getSystemService(Context.NOTIFICATION_SERVICE), viewPage.bvid + "", "SaveVideo", (int) nowSingleVideoInfo.cid);
 
                                 String title = saveState ? "视频已缓存完成" : "视频缓存失败";
-                                notification.setNotificationOnSDK26(title, viewPage.title + "\t" + nowSingleVideoInfo.part, R.drawable.ic_menu_camera);
+                                notification.setNotificationOnSDK26(title, viewPage.title + "\t" + nowSingleVideoInfo.part, R.drawable.notification_biu_video);
                             }
                         }).start();
                     }

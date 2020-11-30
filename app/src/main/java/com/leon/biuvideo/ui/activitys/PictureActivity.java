@@ -34,7 +34,6 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
     private ImageView picture_back, picture_more;
 
     private TextView
-            picture_textView_title,
             picture_textView_time,
             picture_textView_view,
             picture_textView_like,
@@ -71,7 +70,6 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
         picture_more = findViewById(R.id.picture_more);
         picture_more.setOnClickListener(this);
 
-        picture_textView_title =findViewById(R.id.picture_textView_title);
         picture_textView_time =findViewById(R.id.picture_textView_time);
         picture_textView_view =findViewById(R.id.picture_textView_view);
         picture_textView_like =findViewById(R.id.picture_textView_like);
@@ -81,19 +79,12 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initValue() {
-        picture_textView_title.setText(picture.title);
-
         picture_textView_time.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA)
                 .format(new Date(picture.ctime * 1000)));
 
         picture_textView_view.setText(ValueFormat.generateCN(picture.view));
-
         picture_textView_like.setText(ValueFormat.generateCN(picture.like));
-
-        picture_textView_title.setText(picture.title);
-
         picture_textView_desc.setText(picture.description);
-
 
         int spanCount;
 
