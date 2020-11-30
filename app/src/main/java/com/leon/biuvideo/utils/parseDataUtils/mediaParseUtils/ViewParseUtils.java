@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.videoBean.view.SingleVideoInfo;
-import com.leon.biuvideo.beans.videoBean.view.UpInfo;
+import com.leon.biuvideo.beans.videoBean.view.UserInfo;
 import com.leon.biuvideo.beans.videoBean.view.VideoInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
 import com.leon.biuvideo.utils.HttpUtils;
@@ -34,11 +34,8 @@ public class ViewParseUtils {
             Map<String, String> params = new HashMap<>();
             params.put("bvid", bvid);
 
-            HttpUtils httpUtils = new HttpUtils(Paths.view, params);
-            String response = httpUtils.getData();
-
-            JSONObject jsonObject = JSON.parseObject(response);
-            JSONObject dataObject = jsonObject.getJSONObject("data");
+            JSONObject responseObject = HttpUtils.getResponse(Paths.view, params);
+            JSONObject dataObject = responseObject.getJSONObject("data");
 
             if (dataObject != null) {
                 ViewPage viewPage = new ViewPage();
@@ -71,7 +68,7 @@ public class ViewParseUtils {
                 viewPage.desc = dataObject.getString("desc");
 
                 //获取up主信息
-                viewPage.upInfo = parseUpInfo(dataObject.getJSONObject("owner"));
+                viewPage.userInfo = parseUpInfo(dataObject.getJSONObject("owner"));
 
                 //获取视频信息
                 viewPage.videoInfo = parseVideoInfo(dataObject.getJSONObject("stat"));
@@ -162,18 +159,18 @@ public class ViewParseUtils {
      * @param owner json对象
      * @return  返回up主信息
      */
-    private static UpInfo parseUpInfo(JSONObject owner) {
-        UpInfo upInfo = new UpInfo();
+    private static UserInfo parseUpInfo(JSONObject owner) {
+        UserInfo userInfo = new UserInfo();
 
         //up主mid（b站ID）
-        upInfo.mid = owner.getLong("mid");
+        userInfo.mid = owner.getLong("mid");
 
         //up主昵称
-        upInfo.name = owner.getString("name");
+        userInfo.name = owner.getString("name");
 
         //up主头像
-        upInfo.faceUrl = owner.getString("face");
+        userInfo.faceUrl = owner.getString("face");
 
-        return upInfo;
+        return userInfo;
     }
 }

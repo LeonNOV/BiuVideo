@@ -4,7 +4,7 @@ import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.upMasterBean.UpVideo;
+import com.leon.biuvideo.beans.upMasterBean.Video;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.Paths;
@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * 视频接口解析
  */
-public class UpVideoParseUtils {
+public class VideoParseUtils {
     /**
      * 视频接口解析
      *
@@ -25,7 +25,7 @@ public class UpVideoParseUtils {
      * @param pageNum   页码，从1开始
      * @return  返回UpVideo类型集合
      */
-    public static List<UpVideo> parseVideo(long mid, int pageNum) {
+    public static List<Video> parseVideo(long mid, int pageNum) {
         Map<String, String> params = new HashMap<>();
         params.put("mid", String.valueOf(mid));
         params.put("ps", String.valueOf(30));
@@ -34,58 +34,56 @@ public class UpVideoParseUtils {
         params.put("tid", "0");
         params.put("jsonp", "jsonp");
 
-        String response = new HttpUtils(Paths.videos, params).getData();
+        JSONObject responseObject = HttpUtils.getResponse(Paths.videos, params);
+        JSONObject dataObject = responseObject.getJSONObject("data");
 
-        JSONObject jsonObject = JSON.parseObject(response);
-
-        JSONObject dataObject = jsonObject.getJSONObject("data");
         if (dataObject != null) {
             JSONObject listObject = dataObject.getJSONObject("list");
             JSONArray vlistArray = listObject.getJSONArray("vlist");
 
-            List<UpVideo> upVideos  = new ArrayList<>();
+            List<Video> videos = new ArrayList<>();
             for (Object o : vlistArray) {
-                UpVideo upVideo = new UpVideo();
+                Video video = new Video();
 
                 JSONObject videoObject = (JSONObject) o;
 
                 //获取视频作者mid
-                upVideo.mid = videoObject.getLong("mid");
+                video.mid = videoObject.getLong("mid");
 
                 //获取作者名称
-                upVideo.author = videoObject.getString("author");
+                video.author = videoObject.getString("author");
 
                 //获取封面地址
-                upVideo.cover = "http://" + videoObject.getString("pic");
+                video.cover = "http://" + videoObject.getString("pic");
 
                 //获取视频bvid
-                upVideo.bvid = videoObject.getString("bvid");
+                video.bvid = videoObject.getString("bvid");
 
                 //获取视频aid
-                upVideo.aid = videoObject.getLong("aid");
+                video.aid = videoObject.getLong("aid");
 
                 //获取视频播放量
-                upVideo.play = videoObject.getLong("play");
+                video.play = videoObject.getLong("play");
 
                 //获取视频上传日期
-                upVideo.create = videoObject.getLong("created");
+                video.create = videoObject.getLong("created");
 
                 //获取是否为合作视频
-                upVideo.isUnionVideo = videoObject.getIntValue("is_union_video");
+                video.isUnionVideo = videoObject.getIntValue("is_union_video");
 
                 //获取视频长度
-                upVideo.length = videoObject.getString("length");
+                video.length = videoObject.getString("length");
 
                 //获取视频标题
-                upVideo.title = videoObject.getString("title");
+                video.title = videoObject.getString("title");
 
                 //获取视频说明
-                upVideo.description = videoObject.getString("description");
+                video.description = videoObject.getString("description");
 
-                upVideos.add(upVideo);
+                videos.add(video);
             }
 
-            return upVideos;
+            return videos;
         }
 
         Log.e(Fuck.red, "search接口数据获取失败", new NullPointerException("search接口数据获取失败"));
@@ -107,10 +105,8 @@ public class UpVideoParseUtils {
         params.put("tid", "0");
         params.put("jsonp", "jsonp");
 
-        String response = new HttpUtils(Paths.videos, params).getData();
-
-        JSONObject jsonObject = JSON.parseObject(response);
-        JSONObject dataObject = jsonObject.getJSONObject("data");
+        JSONObject responseObject = HttpUtils.getResponse(Paths.videos, params);
+        JSONObject dataObject = responseObject.getJSONObject("data");
         JSONObject page = dataObject.getJSONObject("page");
 
         return page.getIntValue("count");

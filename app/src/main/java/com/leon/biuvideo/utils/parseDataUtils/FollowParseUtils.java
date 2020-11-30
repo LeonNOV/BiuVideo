@@ -34,11 +34,7 @@ public class FollowParseUtils {
         params.put("ps", "20");
         params.put("order", "desc");
 
-        HttpUtils httpUtils = new HttpUtils(Paths.follow, params);
-
-        String response = httpUtils.getData();
-
-        JSONObject responseObject = JSON.parseObject(response);
+        JSONObject responseObject = HttpUtils.getResponse(Paths.follow, params);
         JSONObject data = responseObject.getJSONObject("data");
         if (data != null) {
             List<Favorite> followings = new ArrayList<>();

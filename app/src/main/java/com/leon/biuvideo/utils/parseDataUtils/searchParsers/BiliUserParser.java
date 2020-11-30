@@ -35,16 +35,10 @@ public class BiliUserParser {
         params.put("page", String.valueOf(pn));
         params.put("order", orderType.value);
 
-        Fuck.blue("BiliUser----pageNum:" + pn + "----" + Paths.search + params.toString());
-
-        HttpUtils httpUtils = new HttpUtils(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
-        String response = httpUtils.getData();
-
-        JSONObject responseObject = JSONObject.parseObject(response);
+        JSONObject responseObject = HttpUtils.getResponse(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
+        JSONObject data = responseObject.getJSONObject("data");
 
         List<BiliUser> biliUsers = new ArrayList<>();
-
-        JSONObject data = responseObject.getJSONObject("data");
         if (data != null) {
             biliUsers = parseData(data);
         }

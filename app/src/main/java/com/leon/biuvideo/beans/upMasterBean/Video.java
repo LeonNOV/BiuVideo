@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * 用户上传的视频的基本信息
  */
-public class UpVideo implements Serializable {
+public class Video implements Serializable {
     public long mid;
     public String author;
     public String cover;

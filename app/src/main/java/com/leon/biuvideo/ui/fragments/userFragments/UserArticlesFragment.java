@@ -76,9 +76,7 @@ public class UserArticlesFragment extends Fragment {
     }
 
     private void initValue() {
-        total = ArticleParseUtils.getAriticleTotal(mid);
-
-        Fuck.blue("ArticleTotal:" + total);
+        total = ArticleParseUtils.getArticleTotal(mid);
 
         //判断条目是否为0
         if (total == 0) {
@@ -90,6 +88,12 @@ public class UserArticlesFragment extends Fragment {
         //获取初始数据
         List<Article> initArticles = ArticleParseUtils.parseArticle(mid, pageNum);
         currentCount += initArticles.size();
+
+        //判断第一次是否已加载完所有数据
+        if (total == currentCount) {
+            dataState = false;
+            article_smartRefresh.setEnabled(false);
+        }
 
         UserArticleAdapter articleAdapter = new UserArticleAdapter(initArticles, context);
         user_article_recyclerView.setAdapter(articleAdapter);
@@ -119,14 +123,14 @@ public class UserArticlesFragment extends Fragment {
                         @Override
                         public void run() {
                             //获取新数据
-                            List<Article> addOns = getArticles(mid, pageNum);
+                            List<Article> addOns = getNextArticles(mid, pageNum);
 
                             Log.d(Fuck.blue, "成功获取了" + mid + "的第" + pageNum + "页的" + addOns.size() + "条数据");
 
                             //添加新数据
                             articleAdapter.append(addOns);
                         }
-                    }, 1000);
+                    }, 2000);
 
                 } else {
                     //关闭上滑刷新
@@ -148,7 +152,7 @@ public class UserArticlesFragment extends Fragment {
      * @param pageNum   页码
      * @return  返回下一页数据
      */
-    private List<Article> getArticles(long mid, int pageNum) {
+    private List<Article> getNextArticles(long mid, int pageNum) {
         List<Article> articles = ArticleParseUtils.parseArticle(mid, pageNum);
 
         currentCount += articles.size();
@@ -156,6 +160,7 @@ public class UserArticlesFragment extends Fragment {
         //如果第一次获取的条目数小于30则设置dataState
         if (articles.size() < 30 || total == currentCount) {
             dataState = false;
+            article_smartRefresh.setEnabled(false);
         }
 
         return articles;

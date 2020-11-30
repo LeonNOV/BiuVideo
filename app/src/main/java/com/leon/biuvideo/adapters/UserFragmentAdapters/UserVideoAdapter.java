@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
-import com.leon.biuvideo.beans.upMasterBean.UpVideo;
+import com.leon.biuvideo.beans.upMasterBean.Video;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.utils.ImagePixelSize;
 import com.leon.biuvideo.utils.InternetUtils;
@@ -24,13 +24,13 @@ import java.util.Locale;
 /**
  * 用户界面，视频fragment适配器
  */
-public class UserVideoAdapter extends BaseAdapter<UpVideo> {
-    private List<UpVideo> upVideos;
+public class UserVideoAdapter extends BaseAdapter<Video> {
+    private List<Video> videos;
     private final Context context;
 
-    public UserVideoAdapter(List<UpVideo> upVideos, Context context) {
-        super(upVideos, context);
-        this.upVideos = upVideos;
+    public UserVideoAdapter(List<Video> videos, Context context) {
+        super(videos, context);
+        this.videos = videos;
         this.context = context;
     }
 
@@ -41,27 +41,27 @@ public class UserVideoAdapter extends BaseAdapter<UpVideo> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        UpVideo upVideo = upVideos.get(position);
+        Video video = videos.get(position);
 
         //设置封面
-        holder.setImage(R.id.up_media_imageView_cover, upVideo.cover, ImagePixelSize.COVER)
+        holder.setImage(R.id.up_media_imageView_cover, video.cover, ImagePixelSize.COVER)
 
                 //判断视频是否是和其他人进行合作
                 //1为合作
                 //0为单人
-                .setVisibility(R.id.up_media_textView_isUnionmedia, upVideo.isUnionVideo == 1 ? View.VISIBLE : View.INVISIBLE)
+                .setVisibility(R.id.up_media_textView_isUnionmedia, video.isUnionVideo == 1 ? View.VISIBLE : View.INVISIBLE)
 
                 //设置播放时长
-                .setText(R.id.up_media_textView_mediaLength, upVideo.length)
+                .setText(R.id.up_media_textView_mediaLength, video.length)
 
                 //设置播放次数
-                .setText(R.id.up_media_textView_play, ValueFormat.generateCN(upVideo.play))
+                .setText(R.id.up_media_textView_play, ValueFormat.generateCN(video.play))
 
                 //设置上传日期
-                .setText(R.id.up_media_textView_ctime, new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA).format(new Date(upVideo.create * 1000)))
+                .setText(R.id.up_media_textView_ctime, new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA).format(new Date(video.create * 1000)))
 
                 //设置标题部分
-                .setText(R.id.up_media_textView_title, upVideo.title)
+                .setText(R.id.up_media_textView_title, video.title)
 
                 //设置监听
                 .setOnClickListener(new View.OnClickListener() {
@@ -77,7 +77,7 @@ public class UserVideoAdapter extends BaseAdapter<UpVideo> {
 
                         //跳转到VideoActivity
                         Intent intent = new Intent(context, VideoActivity.class);
-                        intent.putExtra("bvid", upVideo.bvid);
+                        intent.putExtra("bvid", video.bvid);
                         context.startActivity(intent);
                     }
                 });

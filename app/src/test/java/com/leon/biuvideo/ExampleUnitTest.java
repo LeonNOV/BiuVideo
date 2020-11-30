@@ -1,24 +1,20 @@
 package com.leon.biuvideo;
 
-import android.view.View;
-
 import com.leon.biuvideo.beans.articleBeans.Article;
-import com.leon.biuvideo.beans.upMasterBean.UpAudio;
-import com.leon.biuvideo.beans.upMasterBean.UpPicture;
-import com.leon.biuvideo.beans.upMasterBean.UpVideo;
-import com.leon.biuvideo.utils.FileUtils;
+import com.leon.biuvideo.beans.upMasterBean.Audio;
+import com.leon.biuvideo.beans.upMasterBean.Picture;
+import com.leon.biuvideo.beans.upMasterBean.Video;
 import com.leon.biuvideo.utils.IDUtils;
 import com.leon.biuvideo.utils.OrderType;
 import com.leon.biuvideo.utils.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UpAudioParseUtils;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UpPictureParseUtils;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UpVideoParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.AudioParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.PictureParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.VideoParseUtils;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.ArticleParser;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,36 +27,36 @@ public class ExampleUnitTest {
     //video接口测试
     @Test
     public void video() {
-        List<UpVideo> upVideos = UpVideoParseUtils.parseVideo(49405324, 1);
+        List<Video> videos = VideoParseUtils.parseVideo(49405324, 1);
 
-        System.out.println("page1count:" + upVideos.size());
+        System.out.println("page1count:" + videos.size());
 
-        for (UpVideo upVideo : upVideos) {
-            System.out.println(upVideo);
+        for (Video video : videos) {
+            System.out.println(video);
         }
     }
 
     //audio接口测试
     @Test
     public void audio() {
-        List<UpAudio> upAudios = UpAudioParseUtils.parseAudio(49405324, 1);
+        List<Audio> audio = AudioParseUtils.parseAudio(49405324, 1);
 
-        System.out.println("page1count:" + upAudios.size());
+        System.out.println("page1count:" + audio.size());
 
-        for (UpAudio upAudio : upAudios) {
-            System.out.println(upAudio);
+        for (Audio audio : audio) {
+            System.out.println(audio);
         }
     }
 
     //picture接口测试
     @Test
     public void picture() {
-        List<UpPicture> upPictures = UpPictureParseUtils.parsePicture(49405324, 0);
+        List<Picture> pictures = PictureParseUtils.parsePicture(49405324, 0);
 
-        System.out.println("page0count:" + upPictures.size());
+        System.out.println("page0count:" + pictures.size());
 
-        for (UpPicture upPicture : upPictures) {
-            System.out.println(upPicture);
+        for (Picture picture : pictures) {
+            System.out.println(picture);
         }
     }
 

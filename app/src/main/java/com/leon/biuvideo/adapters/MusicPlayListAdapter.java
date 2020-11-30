@@ -9,7 +9,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
-import com.leon.biuvideo.ui.activitys.UpSongActivity;
+import com.leon.biuvideo.ui.activitys.MusicActivity;
 import com.leon.biuvideo.ui.dialogs.MusicListDialog;
 import com.leon.biuvideo.utils.dataBaseUtils.MusicListDatabaseUtils;
 
@@ -68,7 +68,7 @@ public class MusicPlayListAdapter extends BaseAdapter<MusicPlayList> {
                         priorityListener.refreshMusic(musicPlayList.sid);
 
                         //重置索引位置
-                        UpSongActivity.position = position;
+                        MusicActivity.position = position;
                     }
                 });
     }

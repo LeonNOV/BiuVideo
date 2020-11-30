@@ -7,7 +7,7 @@
     android:background="#fff"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".ui.activitys.UpMasterActivity">
+    tools:context=".ui.activitys.UserActivity">
 
     <FrameLayout
         android:layout_width="wrap_content"

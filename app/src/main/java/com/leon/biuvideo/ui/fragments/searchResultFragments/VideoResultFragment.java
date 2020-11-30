@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UserFragmentAdapters.UserVideoAdapter;
-import com.leon.biuvideo.beans.upMasterBean.UpVideo;
+import com.leon.biuvideo.beans.upMasterBean.Video;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.OrderType;
@@ -45,7 +45,7 @@ public class VideoResultFragment extends Fragment {
     private int currentCount;
 
     private VideoParser videoParser;
-    private List<UpVideo> videos;
+    private List<Video> videos;
 
     private Context context;
     private LinearLayoutManager linearLayoutManager;
@@ -121,7 +121,7 @@ public class VideoResultFragment extends Fragment {
             }
 
             //获取第一页数据
-            List<UpVideo> newVideos = videoParser.videoParse(keyword, pageNum, OrderType.DEFAULT);
+            List<Video> newVideos = videoParser.videoParse(keyword, pageNum, OrderType.DEFAULT);
 
             //获取第一页结果总数，最大为20，最小为0
             currentCount += newVideos.size();
@@ -178,7 +178,7 @@ public class VideoResultFragment extends Fragment {
                             @Override
                             public void run() {
                                 //获取新数据
-                                List<UpVideo> addOns = getVideos(pageNum);
+                                List<Video> addOns = getVideos(pageNum);
 
                                 Log.d(Fuck.blue, "成功获取了第" + pageNum + "页的" + addOns.size() + "条数据");
 
@@ -206,8 +206,8 @@ public class VideoResultFragment extends Fragment {
      * @param pageNum   页码
      * @return  返回下一页的数据
      */
-    public List<UpVideo> getVideos(int pageNum) {
-        List<UpVideo> newVideos = videoParser.videoParse(keyword, pageNum, OrderType.DEFAULT);
+    public List<Video> getVideos(int pageNum) {
+        List<Video> newVideos = videoParser.videoParse(keyword, pageNum, OrderType.DEFAULT);
 
         //记录获取的总数
         currentCount += newVideos.size();
@@ -238,7 +238,7 @@ public class VideoResultFragment extends Fragment {
          * 需要将二次搜索的第一个页面的数据放入一个临时的变量中
          * 以防userVideoAdapter.removeAll()将其清空
          */
-        List<UpVideo> temp = new ArrayList<>(videos);
+        List<Video> temp = new ArrayList<>(videos);
 
         userVideoAdapter.removeAll();
         userVideoAdapter.append(temp);

@@ -39,6 +39,7 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
     private ImageView preference_imageView_back;
     private TextView
             preference_textView_import,
+            preference_textView_set_hero,
             preference_textView_cache,
             preference_textView_cache_size,
             preference_textView_open_source_license,
@@ -59,17 +60,27 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
     private void initView() {
         preference_imageView_back = findViewById(R.id.preference_imageView_back);
         preference_imageView_back.setOnClickListener(this);
+
+        preference_textView_set_hero = findViewById(R.id.preference_textView_set_hero);
+        preference_textView_set_hero.setOnClickListener(this);
+
         preference_textView_import = findViewById(R.id.preference_textView_import);
         preference_textView_import.setOnClickListener(this);
+
         preference_textView_cache = findViewById(R.id.preference_textView_cache);
         preference_textView_cache.setOnClickListener(this);
+
         preference_textView_cache_size = findViewById(R.id.preference_textView_cache_size);
+
         preference_textView_open_source_license = findViewById(R.id.preference_textView_open_source_license);
         preference_textView_open_source_license.setOnClickListener(this);
+
         preference_textView_thanks_list = findViewById(R.id.preference_textView_thanks_list);
         preference_textView_thanks_list.setOnClickListener(this);
+
         preference_textView_feed_back = findViewById(R.id.preference_textView_feed_back);
         preference_textView_feed_back.setOnClickListener(this);
+
     }
 
     private void initValue() {
@@ -86,6 +97,11 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
         switch (v.getId()) {
             case R.id.preference_imageView_back:
                 this.finish();
+                break;
+            case R.id.preference_textView_set_hero:
+
+                //显示
+
                 break;
             case R.id.preference_textView_import:
                 //判断是否有网络

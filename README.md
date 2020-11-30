@@ -5,6 +5,11 @@
 
 ## 📘开发日志
 
+### 2020/11/30
+- 清理了`parseDataUtils`包中的部分代码
+- 重命名了部分名称
+- 在`PreferenceActivity`中加入了`设置Hero`的功能
+
 ### 2020/11/29
 - 添加了`RoundPopupWindow`类，该类用于创建一个带有圆角的popupWindow
 - 使用步骤：

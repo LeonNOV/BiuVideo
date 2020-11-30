@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#fff"
     android:orientation="vertical"
-    tools:context=".ui.activitys.UpSongActivity">
+    tools:context=".ui.activitys.MusicActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/music_toolBar"

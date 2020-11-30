@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * 音频/音乐基本信息实体类
  */
-public class UpAudio implements Serializable {
+public class Audio implements Serializable {
     public long sid;//音频id
     public String cover;
     public int duration;//音频时长（秒）

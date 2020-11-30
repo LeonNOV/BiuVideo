@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * 相簿
  */
-public class UpPicture implements Serializable {
+public class Picture implements Serializable {
     public long docId;
     public long posterUid;//用户ID
     public String title;

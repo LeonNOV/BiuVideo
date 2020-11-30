@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.activitys.SearchResultActivity;
-import com.leon.biuvideo.ui.activitys.UpMasterActivity;
+import com.leon.biuvideo.ui.activitys.UserActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.utils.IDUtils;
 import com.leon.biuvideo.utils.HeroImages;
@@ -199,7 +199,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                             long mid = IDUtils.getMid(value_mid);
 
                             if (mid != 0) {
-                                Intent intent = new Intent(context, UpMasterActivity.class);
+                                Intent intent = new Intent(context, UserActivity.class);
                                 intent.putExtra("mid", mid);
                                 startActivity(intent);
                             } else {

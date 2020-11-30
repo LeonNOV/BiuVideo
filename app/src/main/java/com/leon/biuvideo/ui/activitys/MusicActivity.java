@@ -4,33 +4,23 @@ import androidx.annotation.NonNull;
 
 import android.animation.ObjectAnimator;
 import android.app.Activity;
-import android.app.WallpaperManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
-import android.renderscript.Allocation;
-import android.renderscript.Element;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,7 +50,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * 音乐/音频Activity
  */
-public class UpSongActivity extends Activity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
+public class MusicActivity extends Activity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
     //歌曲名称、作者
     private TextView music_textView_musicName, music_textView_author;
 
@@ -334,7 +324,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                 }
 
                 //跳转至作者页面
-                Intent userIntent = new Intent(this, UpMasterActivity.class);
+                Intent userIntent = new Intent(this, UserActivity.class);
                 userIntent.putExtra("mid", musicInfo.uid);
 
                 //判断上一Activity是否为UpMasterActivity
@@ -348,7 +338,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                 List<MusicPlayList> musicPlayLists = musicDatabaseUtils.queryPlayList();
                 Log.d(Fuck.blue, "onClick: " + musicPlayLists.size());
 
-                musicListDialog = new MusicListDialog(UpSongActivity.this, musicPlayLists);
+                musicListDialog = new MusicListDialog(MusicActivity.this, musicPlayLists);
                 MusicListDialog.priorityListener = new MusicListDialog.PriorityListener() {
                     @Override
                     public void refreshFavoriteIcon() {
@@ -393,7 +383,7 @@ public class UpSongActivity extends Activity implements View.OnClickListener, Se
                         boolean saveState = MediaUtils.saveMusic(getApplicationContext(), musicUrl, musicInfo.title + "-" + musicInfo.uname);
 
                         Looper.prepare();
-                        Toast.makeText(UpSongActivity.this, saveState ? "缓存成功" : "缓存失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MusicActivity.this, saveState ? "缓存成功" : "缓存失败", Toast.LENGTH_SHORT).show();
                         Looper.loop();
                         //添加到下载任务界面中
                     }

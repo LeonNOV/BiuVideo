@@ -2,7 +2,7 @@ package com.leon.biuvideo.utils.parseDataUtils.searchParsers;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.upMasterBean.UpVideo;
+import com.leon.biuvideo.beans.upMasterBean.Video;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.OrderType;
@@ -28,23 +28,17 @@ public class VideoParser {
      * @param orderType 排序方式
      * @return  返回视频数据
      */
-    public List<UpVideo> videoParse(String keyword, int pn, OrderType orderType) {
+    public List<Video> videoParse(String keyword, int pn, OrderType orderType) {
         Map<String, String> params = new HashMap<>();
         params.put("keyword", keyword);
         params.put("search_type", SearchType.VIDEO.value);
         params.put("page", String.valueOf(pn));
         params.put("order", orderType.value);
 
-        Fuck.blue("Video----pageNum:" + pn + "----" + Paths.search + params.toString());
-
-        HttpUtils httpUtils = new HttpUtils(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
-        String response = httpUtils.getData();
-
-        JSONObject responseObject = JSONObject.parseObject(response);
-
-        List<UpVideo> videos = new ArrayList<>();
-
+        JSONObject responseObject = HttpUtils.getResponse(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
         JSONObject data = responseObject.getJSONObject("data");
+
+        List<Video> videos = new ArrayList<>();
         if (data != null) {
             videos = parseData(data, keyword);
         }
@@ -58,53 +52,53 @@ public class VideoParser {
      * @param data  JSONObject对象
      * @return  返回解析结果
      */
-    private List<UpVideo> parseData(JSONObject data, String keyword) {
+    private List<Video> parseData(JSONObject data, String keyword) {
         String oldStr = "<em class=\"keyword\">" + keyword + "</em>";
 
         JSONArray result = data.getJSONArray("result");
 
-        List<UpVideo> videos;
+        List<Video> videos;
         if (result.size() != 0) {
             videos = new ArrayList<>();
 
             for (Object o : result) {
-                UpVideo upVideo = new UpVideo();
+                Video video = new Video();
                 JSONObject jsonObject = (JSONObject) o;
 
                 //获取作者
-                upVideo.author = jsonObject.getString("author");
+                video.author = jsonObject.getString("author");
 
                 //获取作者ID
-                upVideo.mid = jsonObject.getLongValue("mid");
+                video.mid = jsonObject.getLongValue("mid");
 
                 //获取aid
-                upVideo.aid = jsonObject.getLongValue("aid");
+                video.aid = jsonObject.getLongValue("aid");
 
                 //获取bvid
-                upVideo.bvid = jsonObject.getString("bvid");
+                video.bvid = jsonObject.getString("bvid");
 
                 //获取标题
-                upVideo.title = jsonObject.getString("title").replaceAll(oldStr, keyword);
+                video.title = jsonObject.getString("title").replaceAll(oldStr, keyword);
 
                 //获取视频说明
-                upVideo.description = jsonObject.getString("description");
+                video.description = jsonObject.getString("description");
 
                 //获取视频封面
-                upVideo.cover = "http:" + jsonObject.getString("pic");
+                video.cover = "http:" + jsonObject.getString("pic");
 
                 //获取播放量
-                upVideo.play = jsonObject.getIntValue("play");
+                video.play = jsonObject.getIntValue("play");
 
                 //获取评论数
-                upVideo.create = jsonObject.getLongValue("pubdate");
+                video.create = jsonObject.getLongValue("pubdate");
 
                 //获取视频长度
-                upVideo.length = jsonObject.getString("duration");
+                video.length = jsonObject.getString("duration");
 
                 //获取合作关系
-                upVideo.isUnionVideo = jsonObject.getIntValue("is_union_video");
+                video.isUnionVideo = jsonObject.getIntValue("is_union_video");
 
-                videos.add(upVideo);
+                videos.add(video);
             }
 
             return videos;

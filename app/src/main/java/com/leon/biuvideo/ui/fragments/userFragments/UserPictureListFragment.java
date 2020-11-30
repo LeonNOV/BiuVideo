@@ -17,10 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UserFragmentAdapters.UserPictureAdapter;
-import com.leon.biuvideo.beans.upMasterBean.UpPicture;
+import com.leon.biuvideo.beans.upMasterBean.Picture;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UpPictureParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.PictureParseUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -75,8 +75,7 @@ public class UserPictureListFragment extends Fragment {
     }
 
     private void initValue() {
-        total = UpPictureParseUtils.getPictureTotal(mid);
-        Fuck.blue("PictureTotal:" + total);
+        total = PictureParseUtils.getPictureTotal(mid);
 
         //判断获取的数据条目是否为0
         if (total == 0) {
@@ -86,8 +85,14 @@ public class UserPictureListFragment extends Fragment {
         }
 
         //获取初始数据
-        List<UpPicture> initPictures = UpPictureParseUtils.parsePicture(mid, pageNum);
+        List<Picture> initPictures = PictureParseUtils.parsePicture(mid, pageNum);
         currentCount += initPictures.size();
+
+        //判断第一次是否已加载完所有数据
+        if (total == currentCount) {
+            dataState = false;
+            picture_smartRefresh.setEnabled(false);
+        }
 
         UserPictureAdapter userPictureAdapter = new UserPictureAdapter(initPictures, getContext());
         picture_recyclerView.setAdapter(userPictureAdapter);
@@ -120,7 +125,7 @@ public class UserPictureListFragment extends Fragment {
                         @Override
                         public void run() {
                             //获取新数据
-                            List<UpPicture> addOns = getUpPictures(mid, pageNum);
+                            List<Picture> addOns = getNextPictures(mid, pageNum);
 
                             Log.d(Fuck.blue, "成功获取了" + mid + "的第" + pageNum + "页的" + addOns.size() + "条数据");
 
@@ -148,8 +153,8 @@ public class UserPictureListFragment extends Fragment {
      * @param pageNum 页码
      * @return  返回下一页数据
      */
-    private List<UpPicture> getUpPictures(long mid, int pageNum) {
-        List<UpPicture> pictures = UpPictureParseUtils.parsePicture(mid, pageNum);
+    private List<Picture> getNextPictures(long mid, int pageNum) {
+        List<Picture> pictures = PictureParseUtils.parsePicture(mid, pageNum);
 
         //记录获取的总数
         currentCount += pictures.size();
@@ -157,6 +162,7 @@ public class UserPictureListFragment extends Fragment {
         //判断是否已获取完所有的数据
         if (pictures.size() < 30 || total == currentCount) {
             dataState = false;
+            picture_smartRefresh.setEnabled(false);
         }
 
         return pictures;

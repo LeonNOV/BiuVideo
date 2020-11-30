@@ -37,11 +37,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
-            android:name=".ui.activitys.UpSongActivity"
+            android:name=".ui.activitys.MusicActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" /> <!-- 10以上需要使用requestLegacyExternalStorage属性 -->
         <activity
-            android:name=".ui.activitys.UpMasterActivity"
+            android:name=".ui.activitys.UserActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity

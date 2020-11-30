@@ -20,7 +20,7 @@ import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.ViewPageAdapter;
 import com.leon.biuvideo.beans.Favorite;
-import com.leon.biuvideo.beans.upMasterBean.UpInfo;
+import com.leon.biuvideo.beans.upMasterBean.UserInfo;
 import com.leon.biuvideo.ui.fragments.userFragments.UserArticlesFragment;
 import com.leon.biuvideo.ui.fragments.userFragments.UserAudioListFragment;
 import com.leon.biuvideo.ui.fragments.userFragments.UserPictureListFragment;
@@ -29,7 +29,7 @@ import com.leon.biuvideo.utils.ImagePixelSize;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.utils.dataBaseUtils.Tables;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UpInfoParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UserInfoParseUtils;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -41,7 +41,7 @@ import java.util.List;
  * 用户界面activity
  * 由于用户粉丝数、获赞数和观看数的获取需要使用cookie获取，所以暂不添加该三项
  */
-public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
+public class UserActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
     private ImageView up_imageView_cover, up_imageView_back;
     private CircleImageView up_circleImageView_face;
     private TextView up_textView_name;
@@ -54,11 +54,11 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
     private ViewPageAdapter viewPageAdapter;
 
     private long mid;
-    private UpInfo upInfo;
+    private UserInfo userInfo;
 
     private FavoriteDatabaseUtils favoriteDatabaseUtils;
 
-    public UpMasterActivity() {
+    public UserActivity() {
         super();
     }
 
@@ -130,19 +130,19 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
 
     //设置控件的数据
     private void setValue(long mid) {
-        upInfo = UpInfoParseUtils.parseUpInfo(mid);
+        userInfo = UserInfoParseUtils.parseUpInfo(mid);
 
         //设置顶部图片
-        Glide.with(getApplicationContext()).load(upInfo.topPhoto).into(up_imageView_cover);
+        Glide.with(getApplicationContext()).load(userInfo.topPhoto).into(up_imageView_cover);
 
         //设置头像
-        Glide.with(getApplicationContext()).load(upInfo.face + ImagePixelSize.FACE.value).into(up_circleImageView_face);
+        Glide.with(getApplicationContext()).load(userInfo.face + ImagePixelSize.FACE.value).into(up_circleImageView_face);
 
         //设置昵称
-        up_textView_name.setText(upInfo.name);
+        up_textView_name.setText(userInfo.name);
 
         //设置签名
-        up_textView_sign.setText(upInfo.sign);
+        up_textView_sign.setText(userInfo.sign);
 
         //获取关注状态
         boolean favorite_state = favoriteDatabaseUtils.queryFavoriteState(mid);
@@ -240,10 +240,10 @@ public class UpMasterActivity extends AppCompatActivity implements ViewPager.OnP
                     up_textView_favoriteStrState.setText("已关注");
 
                     Favorite favorite = new Favorite();
-                    favorite.desc = upInfo.sign;
+                    favorite.desc = userInfo.sign;
                     favorite.mid = mid;
-                    favorite.faceUrl = upInfo.face;
-                    favorite.name = upInfo.name;
+                    favorite.faceUrl = userInfo.face;
+                    favorite.name = userInfo.name;
 
                     boolean addState = favoriteDatabaseUtils.addFavorite(favorite);
 

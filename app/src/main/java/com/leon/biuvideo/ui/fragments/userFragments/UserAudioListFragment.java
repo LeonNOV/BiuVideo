@@ -17,10 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UserFragmentAdapters.UserAudioAdapter;
-import com.leon.biuvideo.beans.upMasterBean.UpAudio;
+import com.leon.biuvideo.beans.upMasterBean.Audio;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UpAudioParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.AudioParseUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import java.util.List;
@@ -73,9 +73,7 @@ public class UserAudioListFragment extends Fragment {
     }
 
     private void initValue() {
-        total = UpAudioParseUtils.getAudioTotal(mid);
-
-        Fuck.blue("AudioTotal:" + total);
+        total = AudioParseUtils.getAudioTotal(mid);
 
         //判断获取的数据条目是否为0
         if (total == 0) {
@@ -85,8 +83,14 @@ public class UserAudioListFragment extends Fragment {
         }
 
         //获取初始数据
-        List<UpAudio> initAudios = UpAudioParseUtils.parseAudio(mid, pageNum);
+        List<Audio> initAudios = AudioParseUtils.parseAudio(mid, pageNum);
         currentCount += initAudios.size();
+
+        //判断第一次是否已加载完所有数据
+        if (total == currentCount) {
+            dataState = false;
+            audio_smartRefresh.setEnabled(false);
+        }
 
         UserAudioAdapter userAudioAdapter = new UserAudioAdapter(initAudios, getContext());
         up_audio_recyclerView.setAdapter(userAudioAdapter);
@@ -115,14 +119,14 @@ public class UserAudioListFragment extends Fragment {
                     @Override
                     public void run() {
                         //获取新数据
-                        List<UpAudio> addOns = getUpAudios(mid, pageNum);
+                        List<Audio> addOns = getNextAudios(mid, pageNum);
 
                         Log.d(Fuck.blue, "成功获取了" + mid + "的第" + pageNum + "页的" + addOns.size() + "条数据");
 
                         //添加新数据
                         userAudioAdapter.refresh(addOns);
                     }
-                }, 1000);
+                }, 2000);
             } else {
                 //关闭上滑刷新
                 audio_smartRefresh.setEnabled(false);
@@ -142,14 +146,15 @@ public class UserAudioListFragment extends Fragment {
      * @param pageNum 页码
      * @return 返回UpAudio集合
      */
-    private List<UpAudio> getUpAudios(long mid, int pageNum) {
-        List<UpAudio> audios = UpAudioParseUtils.parseAudio(mid, pageNum);
+    private List<Audio> getNextAudios(long mid, int pageNum) {
+        List<Audio> audios = AudioParseUtils.parseAudio(mid, pageNum);
 
         currentCount += audios.size();
 
         //如果第一次获取的条目数小于30则设置dataState
         if (audios.size() < 30 || total == currentCount) {
             dataState = false;
+            audio_smartRefresh.setEnabled(false);
         }
 
         return audios;

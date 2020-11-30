@@ -35,16 +35,10 @@ public class ArticleParser {
         params.put("page", String.valueOf(pn));
         params.put("order", orderType.value);
 
-//        Fuck.blue("Article----pageNum:" + pn + "----" + Paths.search + params.toString());
-
-        HttpUtils httpUtils = new HttpUtils(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
-        String response = httpUtils.getData();
-
-        JSONObject responseObject = JSONObject.parseObject(response);
+        JSONObject responseObject = HttpUtils.getResponse(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
+        JSONObject data = responseObject.getJSONObject("data");
 
         List<Article> articles = new ArrayList<>();
-
-        JSONObject data = responseObject.getJSONObject("data");
         if (data != null) {
             articles = parseData(data, keyword);
         }

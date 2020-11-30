@@ -39,10 +39,8 @@ public class MediaParseUtils {
             params.put("fnver", "0");
             params.put("fnval", "80");
 
-            String response = new HttpUtils(Paths.playUrl, params).getData();
-
-            JSONObject jsonObject = JSON.parseObject(response);
-            JSONObject data = jsonObject.getJSONObject("data");
+            JSONObject responseObject = HttpUtils.getResponse(Paths.playUrl, params);
+            JSONObject data = responseObject.getJSONObject("data");
 
             if (data != null) {
                 Play play = new Play();

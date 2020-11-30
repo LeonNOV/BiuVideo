@@ -26,10 +26,8 @@ public class MusicUrlParseUtils {
         Map<String, String> params = new HashMap<>();
         params.put("sid", String.valueOf(sid));
 
-        String response = new HttpUtils(Paths.musicUrl, params).getData();
-
-        JSONObject jsonObject = JSON.parseObject(response);
-        JSONObject dataObject = jsonObject.getJSONObject("data");
+        JSONObject responseObject = HttpUtils.getResponse(Paths.musicUrl, params);
+        JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {
             JSONArray cdns = dataObject.getJSONArray("cdns");

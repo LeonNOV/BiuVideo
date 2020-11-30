@@ -260,7 +260,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.article_imageView_face:
 
-                Intent intent = new Intent(this, UpMasterActivity.class);
+                Intent intent = new Intent(this, UserActivity.class);
                 intent.putExtra("mid", article.mid);
 
                 Fuck.blue("跳转至----" + article.author + "----" + article.mid + "----的主页");

@@ -7,6 +7,7 @@
     <string name="preference_category_baseSetting">基本设置</string>
 
     <string name="preference_import">导入外部数据</string>
+    <string name="preference_set_hero">设置Hero</string>
     <string name="preference_clean_cache">清除缓存</string>
 
     <string name="preference_category_about">关于</string>

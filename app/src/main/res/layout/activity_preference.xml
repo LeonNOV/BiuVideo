@@ -76,6 +76,20 @@
                         android:layout_height="0.5dp"
                         android:background="#333333" />
 
+                    <TextView
+                        android:id="@+id/preference_textView_set_hero"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?actionBarItemBackground"
+                        android:padding="10dp"
+                        android:text="@string/preference_set_hero"
+                        android:textColor="@color/preference_item"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="#333333" />
+
                     <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

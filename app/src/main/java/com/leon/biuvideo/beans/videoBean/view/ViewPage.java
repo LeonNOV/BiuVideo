@@ -16,7 +16,7 @@ public class ViewPage implements Serializable {
     public String title;
     public long upTime;
     public String desc;
-    public UpInfo upInfo;
+    public UserInfo userInfo;
     public VideoInfo videoInfo;
     public List<SingleVideoInfo> singleVideoInfoList;
 
@@ -32,7 +32,7 @@ public class ViewPage implements Serializable {
                 ", title='" + title + '\'' +
                 ", upTime=" + upTime +
                 ", desc='" + desc + '\'' +
-                ", upInfo=" + upInfo +
+                ", upInfo=" + userInfo +
                 ", videoInfo=" + videoInfo +
                 ", singleVideoInfoList=" + singleVideoInfoList +
                 '}';

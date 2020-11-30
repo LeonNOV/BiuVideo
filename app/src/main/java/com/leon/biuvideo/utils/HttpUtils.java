@@ -1,5 +1,8 @@
 package com.leon.biuvideo.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
@@ -102,6 +105,32 @@ public class HttpUtils {
         }
 
         return null;
+    }
+
+    /**
+     * 获取接口响应体
+     *
+     * @param path  接口地址
+     * @param params    参数
+     * @return  将响应体已JSONObject对象的形式返回
+     */
+    public static JSONObject getResponse(String path, Map<String, String> params) {
+        String response = new HttpUtils(path, params).getData();
+
+        return JSON.parseObject(response);
+    }
+
+    /**
+     * 获取接口响应体
+     *
+     * @param path  接口地址
+     * @param params    参数
+     * @return  将响应体已JSONObject对象的形式返回
+     */
+    public static JSONObject getResponse(String path, Headers headers, Map<String, String> params) {
+        String response = new HttpUtils(path, headers, params).getData();
+
+        return JSON.parseObject(response);
     }
 
     /**

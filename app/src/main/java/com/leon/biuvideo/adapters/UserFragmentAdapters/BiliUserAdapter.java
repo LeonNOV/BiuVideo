@@ -12,7 +12,7 @@ import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.BiliUser;
 import com.leon.biuvideo.beans.Favorite;
-import com.leon.biuvideo.ui.activitys.UpMasterActivity;
+import com.leon.biuvideo.ui.activitys.UserActivity;
 import com.leon.biuvideo.utils.ImagePixelSize;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueFormat;
@@ -59,7 +59,7 @@ public class BiliUserAdapter extends BaseAdapter<BiliUser> {
                 }
 
                 //跳转至UpMasterActivity
-                Intent intent = new Intent(context, UpMasterActivity.class);
+                Intent intent = new Intent(context, UserActivity.class);
                 intent.putExtra("mid", biliUser.mid);
 
                 context.startActivity(intent);

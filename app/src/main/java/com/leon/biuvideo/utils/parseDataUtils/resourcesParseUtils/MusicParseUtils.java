@@ -26,10 +26,8 @@ public class MusicParseUtils {
         Map<String, String> params = new HashMap<>();
         params.put("sid", String.valueOf(sid));
 
-        String response = new HttpUtils(Paths.musicInfo, params).getData();
-
-        JSONObject jsonObject = JSON.parseObject(response);
-        JSONObject dataObject = jsonObject.getJSONObject("data");
+        JSONObject responseObject = HttpUtils.getResponse(Paths.musicInfo, params);
+        JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {
             MusicInfo musicInfo = new MusicInfo();

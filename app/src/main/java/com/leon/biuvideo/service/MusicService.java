@@ -14,7 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.ui.activitys.UpSongActivity;
+import com.leon.biuvideo.ui.activitys.MusicActivity;
 import com.leon.biuvideo.utils.Fuck;
 
 import java.io.IOException;
@@ -104,7 +104,7 @@ public class MusicService extends Service {
                     int duration = mediaPlayer.getDuration();
 
                     //利用message给主线程发消息更新seekBar进度
-                    Message message = UpSongActivity.handler.obtainMessage();
+                    Message message = MusicActivity.handler.obtainMessage();
 
                     Bundle bundle = new Bundle();
                     bundle.putInt("duration", duration);
@@ -114,7 +114,7 @@ public class MusicService extends Service {
                     message.setData(bundle);
 
                     //发送消息给主线程
-                    UpSongActivity.handler.sendMessage(message);
+                    MusicActivity.handler.sendMessage(message);
                 }
             };
 
@@ -192,9 +192,9 @@ public class MusicService extends Service {
                     if (duration != 0 && currentPosition != 0) {
                         //确定范围
                         if (mp.getDuration() - mp.getCurrentPosition() <= differenceRange) {
-                            UpSongActivity.music_imageView_control.setImageResource(R.drawable.music_icon_pause);
-                            UpSongActivity.rotation.pause();
-                            UpSongActivity.musicState = 2;
+                            MusicActivity.music_imageView_control.setImageResource(R.drawable.music_icon_pause);
+                            MusicActivity.rotation.pause();
+                            MusicActivity.musicState = 2;
                         }
                     }
                 }

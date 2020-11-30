@@ -4,7 +4,7 @@ import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.upMasterBean.UpAudio;
+import com.leon.biuvideo.beans.upMasterBean.Audio;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.Paths;
@@ -14,12 +14,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.Headers;
-
 /**
  * 音频接口解析
  */
-public class UpAudioParseUtils {
+public class AudioParseUtils {
     /**
      * 音频接口解析
      *
@@ -27,7 +25,7 @@ public class UpAudioParseUtils {
      * @param pageNum   页码，从1开始
      * @return  返回UpAudio类型集合
      */
-    public static List<UpAudio> parseAudio(long mid, int pageNum) {
+    public static List<Audio> parseAudio(long mid, int pageNum) {
         Map<String, String> params = new HashMap<>();
         params.put("uid", String.valueOf(mid));
         params.put("pn", String.valueOf(pageNum));
@@ -35,45 +33,43 @@ public class UpAudioParseUtils {
         params.put("order", "1");
         params.put("jsonp", "jsonp");
 
-        String response = new HttpUtils(Paths.music, params).getData();
-
-        JSONObject jsonObject = JSON.parseObject(response);
-        JSONObject data = jsonObject.getJSONObject("data");
+        JSONObject responseObject = HttpUtils.getResponse(Paths.music, params);
+        JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {
-            List<UpAudio> upAudios = new ArrayList<>();
+            List<Audio> audios = new ArrayList<>();
 
             JSONArray innerData = data.getJSONArray("data");
 
             if (innerData != null) {
                 for (Object innerDatum : innerData) {
-                    UpAudio upAudio = new UpAudio();
+                    Audio audio = new Audio();
 
                     JSONObject datumObject = (JSONObject) innerDatum;
 
                     //获取音频id
-                    upAudio.sid = datumObject.getLong("id");
+                    audio.sid = datumObject.getLong("id");
 
                     //获取封面
-                    upAudio.cover = datumObject.getString("cover");
+                    audio.cover = datumObject.getString("cover");
 
                     //获取音频时长
-                    upAudio.duration = datumObject.getIntValue("duration");
+                    audio.duration = datumObject.getIntValue("duration");
 
                     //获取标题
-                    upAudio.title = datumObject.getString("title");
+                    audio.title = datumObject.getString("title");
 
                     //获取播放量
-                    upAudio.play = datumObject.getJSONObject("statistic").getLong("play");
+                    audio.play = datumObject.getJSONObject("statistic").getLong("play");
 
                     //获取发布时间
-                    upAudio.ctime = datumObject.getLong("ctime");
+                    audio.ctime = datumObject.getLong("ctime");
 
-                    upAudios.add(upAudio);
+                    audios.add(audio);
                 }
             }
 
-            return upAudios;
+            return audios;
         }
 
         Log.e(Fuck.red, "upper接口数据获取失败", new NullPointerException("upper接口数据获取失败"));
@@ -94,10 +90,8 @@ public class UpAudioParseUtils {
         params.put("order", "1");
         params.put("jsonp", "jsonp");
 
-        String response = new HttpUtils(Paths.music, params).getData();
-
-        JSONObject jsonObject = JSON.parseObject(response);
-        JSONObject data = jsonObject.getJSONObject("data");
+        JSONObject responseObject = HttpUtils.getResponse(Paths.music, params);
+        JSONObject data = responseObject.getJSONObject("data");
 
         return data.getIntValue("totalSize");
     }

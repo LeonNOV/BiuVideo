@@ -17,10 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UserFragmentAdapters.UserVideoAdapter;
-import com.leon.biuvideo.beans.upMasterBean.UpVideo;
+import com.leon.biuvideo.beans.upMasterBean.Video;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UpVideoParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.VideoParseUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -78,9 +78,7 @@ public class UserVideoListFragment extends Fragment {
 
     //初始化数据
     private void initValue() {
-        total = UpVideoParseUtils.getVideoTotal(mid);
-
-        Fuck.blue("VideoTotal:" + total);
+        total = VideoParseUtils.getVideoTotal(mid);
 
         //判断获取的数据条目是否为0
         if (total == 0) {
@@ -90,8 +88,14 @@ public class UserVideoListFragment extends Fragment {
         }
 
         //获取初始数据
-        List<UpVideo> initVideos = UpVideoParseUtils.parseVideo(mid, pageNum);
+        List<Video> initVideos = VideoParseUtils.parseVideo(mid, pageNum);
         currentCount += initVideos.size();
+
+        //判断第一次是否已加载完所有数据
+        if (total == currentCount) {
+            dataState = false;
+            video_smartRefresh.setEnabled(false);
+        }
 
         UserVideoAdapter userVideoAdapter = new UserVideoAdapter(initVideos, getContext());
         up_video_recyclerView.setAdapter(userVideoAdapter);
@@ -122,14 +126,14 @@ public class UserVideoListFragment extends Fragment {
                         @Override
                         public void run() {
                             //获取新数据
-                            List<UpVideo> addOns = getUpVideos(mid, pageNum);
+                            List<Video> addOns = getNextVideos(mid, pageNum);
 
                             Log.d(Fuck.blue, "成功获取了" + mid + "的第" + pageNum + "页的" + addOns.size() + "条数据");
 
                             //添加新数据
                             userVideoAdapter.append(addOns);
                         }
-                    }, 1000);
+                    }, 2000);
                 } else {
                     //关闭上滑刷新
                     video_smartRefresh.setEnabled(false);
@@ -150,8 +154,8 @@ public class UserVideoListFragment extends Fragment {
      * @param pageNum 页码
      * @return 返回UpVideo集合
      */
-    private List<UpVideo> getUpVideos(long mid, int pageNum) {
-        List<UpVideo> videos = UpVideoParseUtils.parseVideo(mid, pageNum);
+    private List<Video> getNextVideos(long mid, int pageNum) {
+        List<Video> videos = VideoParseUtils.parseVideo(mid, pageNum);
 
         //记录获取的总数
         currentCount += videos.size();
@@ -159,6 +163,7 @@ public class UserVideoListFragment extends Fragment {
         //判断是否已获取完所有的数据
         if (videos.size() < 30 || total == currentCount) {
             dataState = false;
+            video_smartRefresh.setEnabled(false);
         }
 
         return videos;

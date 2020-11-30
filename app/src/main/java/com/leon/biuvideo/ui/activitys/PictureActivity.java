@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.PictureListAdapter;
-import com.leon.biuvideo.beans.upMasterBean.UpPicture;
+import com.leon.biuvideo.beans.upMasterBean.Picture;
 import com.leon.biuvideo.layoutManager.PictureGridLayoutManager;
 import com.leon.biuvideo.ui.views.RoundPopupWindow;
 import com.leon.biuvideo.utils.MediaUtils;
@@ -42,7 +42,7 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
 
     private RecyclerView picture_recyclerView;
 
-    private UpPicture picture;
+    private Picture picture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +61,7 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
         //获取数据
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
-        picture = (UpPicture) extras.getSerializable("picture");
+        picture = (Picture) extras.getSerializable("picture");
     }
 
     private void initView() {

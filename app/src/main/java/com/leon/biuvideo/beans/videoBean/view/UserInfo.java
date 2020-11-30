@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * 用户信息
  */
-public class UpInfo implements Serializable {
+public class UserInfo implements Serializable {
     public long mid;
     public String name;
     public String faceUrl;

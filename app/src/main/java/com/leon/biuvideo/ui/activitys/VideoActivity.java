@@ -154,10 +154,10 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         play = MediaParseUtils.parseMedia(viewPage.bvid, viewPage.aid, viewPage.singleVideoInfoList.get(0).cid);
 
         //设置显示头像
-        Glide.with(getApplicationContext()).load(viewPage.upInfo.faceUrl + ImagePixelSize.FACE.value).into(video_circleImageView_face);
+        Glide.with(getApplicationContext()).load(viewPage.userInfo.faceUrl + ImagePixelSize.FACE.value).into(video_circleImageView_face);
 
         //设置up主昵称
-        video_textView_name.setText(viewPage.upInfo.name);
+        video_textView_name.setText(viewPage.userInfo.name);
 
         SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.VideoPlayList);
         videoListDatabaseUtils = (VideoListDatabaseUtils) sqLiteHelperFactory.getInstance();
@@ -237,8 +237,8 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 }
 
                 //跳转到up主界面
-                Intent intent = new Intent(this, UpMasterActivity.class);
-                intent.putExtra("mid", viewPage.upInfo.mid);
+                Intent intent = new Intent(this, UserActivity.class);
+                intent.putExtra("mid", viewPage.userInfo.mid);
                 startActivity(intent);
                 break;
             case R.id.video_imageView_addFavorite:
@@ -257,7 +257,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                     VideoPlayList videoPlayList = new VideoPlayList();
 
                     videoPlayList.bvid = viewPage.bvid;
-                    videoPlayList.uname = viewPage.upInfo.name;
+                    videoPlayList.uname = viewPage.userInfo.name;
                     videoPlayList.title = viewPage.title;
                     videoPlayList.coverUrl = viewPage.coverUrl;
                     videoPlayList.length = viewPage.singleVideoInfoList.get(0).duration;//只获取第一个视频的长度
@@ -351,7 +351,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 FileUtils.verifyPermissions(this);
 
                 //获取链接
-                String faceUrl = viewPage.upInfo.faceUrl;
+                String faceUrl = viewPage.userInfo.faceUrl;
 
                 //进行保存
                 new Thread(new Runnable() {

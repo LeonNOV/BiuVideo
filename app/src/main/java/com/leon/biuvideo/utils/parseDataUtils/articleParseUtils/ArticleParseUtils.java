@@ -27,11 +27,7 @@ public class ArticleParseUtils {
         params.put("mid", String.valueOf(mid));
         params.put("pn", String.valueOf(pn));
 
-        HttpUtils httpUtils = new HttpUtils(Paths.article, params);
-        String response = httpUtils.getData();
-
-        JSONObject responseObject = JSON.parseObject(response);
-
+        JSONObject responseObject = HttpUtils.getResponse(Paths.article, params);
         JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {
@@ -130,15 +126,12 @@ public class ArticleParseUtils {
      * @param mid   用户ID
      * @return  返回文章总条目数
      */
-    public static int getAriticleTotal(long mid) {
+    public static int getArticleTotal(long mid) {
         Map<String, String> params = new HashMap<>();
         params.put("mid", String.valueOf(mid));
         params.put("pn", "1");
 
-        HttpUtils httpUtils = new HttpUtils(Paths.article, Headers.of(HttpUtils.getHeaders()), params);
-        String response = httpUtils.getData();
-
-        JSONObject responseObject = JSON.parseObject(response);
+        JSONObject responseObject = HttpUtils.getResponse(Paths.article, params);
 
         return responseObject.getJSONObject("data").getIntValue("count");
     }

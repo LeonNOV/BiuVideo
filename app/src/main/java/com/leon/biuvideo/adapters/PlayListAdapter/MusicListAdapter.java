@@ -11,7 +11,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
-import com.leon.biuvideo.ui.activitys.UpSongActivity;
+import com.leon.biuvideo.ui.activitys.MusicActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InternetUtils;
@@ -86,7 +86,7 @@ public class MusicListAdapter extends BaseAdapter<MusicPlayList> {
                         }
 
                         //跳转到UpSongActivity
-                        Intent intent = new Intent(context, UpSongActivity.class);
+                        Intent intent = new Intent(context, MusicActivity.class);
                         intent.putExtra("position", position);
                         intent.putExtra("sids", sids);
 
