@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--第一组item 圆角边框-->
+    <item>
+        <shape>
+            <stroke
+                android:width="3dp"
+                android:color="@color/bilibili_pink" />
+            <corners android:radius="10dp" />
+            <solid android:color="#fff" />
+            <padding
+                android:bottom="2dp"
+                android:left="3dp"
+                android:right="3dp"
+                android:top="2dp" />
+        </shape>
+    </item>
+
+    <!--替换spinner默认箭头-->
+    <item
+        android:drawable="@drawable/spinner_arrow"
+        android:bottom="3dp"
+        android:left="90dp"
+        android:right="3dp"
+        android:top="3dp"/>
+</layer-list>

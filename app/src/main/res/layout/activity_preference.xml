@@ -80,10 +80,10 @@
                         android:id="@+id/preference_textView_set_hero"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="?actionBarItemBackground"
+                        android:background="?selectableItemBackground"
                         android:padding="10dp"
                         android:text="@string/preference_set_hero"
-                        android:textColor="@color/preference_item"/>
+                        android:textColor="@color/preference_item" />
 
                     <View
                         android:layout_width="match_parent"

@@ -9,6 +9,10 @@
 - 清理了`parseDataUtils`包中的部分代码
 - 重命名了部分名称
 - 在`PreferenceActivity`中加入了`设置Hero`的功能
+- `PreferenceActivity`中的`设置Hero`功能已完成
+  - 后期添加Hero的话需要在`HeroImages.heroImages`中加入其资源ID
+  - 然后在`preference_strings.xml`中的`heroNames`数组中加入其名称即可
+  - **资源ID和heroNames的顺序必须保持一致，否则会出现资源顺序错乱的情况**
 
 ### 2020/11/29
 - 添加了`RoundPopupWindow`类，该类用于创建一个带有圆角的popupWindow

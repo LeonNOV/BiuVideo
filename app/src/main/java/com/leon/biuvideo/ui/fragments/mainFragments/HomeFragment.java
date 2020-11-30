@@ -79,15 +79,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     }
 
     private void initValues() {
-        //设置每天打开的hero
-        setHero();
+
+        //判断是否为自动更换
+        SharedPreferences initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
+        boolean isAutoChange = initValues.getBoolean("isAutoChange", true);
+
+        if (isAutoChange) {
+            //设置每天打开的hero
+            setHero();
+        } else {
+            //设置自定义的hero
+            int customHeroIndex = initValues.getInt("customHeroIndex", 0);
+            hero_imageView.setImageResource(HeroImages.heroImages[customHeroIndex]);
+        }
     }
 
     /**
      * 设置hero
      */
     private void setHero() {
-        SharedPreferences initValues = context.getSharedPreferences("initValues", context.MODE_PRIVATE);
+        SharedPreferences initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = initValues.edit();
 
         //获取当前时间
@@ -213,6 +224,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                 break;
             default:break;
         }
+    }
+
+    /**
+     * PreferenceActivity被onDestroy后调用该方法，用来初始化Hero
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        initValues();
     }
 
     @Override

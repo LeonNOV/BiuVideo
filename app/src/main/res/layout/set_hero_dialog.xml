@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="250dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
     android:orientation="vertical"
     app:cardBackgroundColor="#fff"
     app:cardCornerRadius="15dp">
@@ -13,37 +14,97 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <TextView
+        <RadioGroup
+            android:id="@+id/set_hero_radio_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/set_hero_radioButton_auto"
+                style="@style/CustomRadioTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="@string/set_hero_auto"
+                android:paddingHorizontal="7dp"
+                android:textColor="@color/normal"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/set_hero_radioButton_custom"
+                style="@style/CustomRadioTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:paddingHorizontal="7dp"
+                android:text="@string/set_hero_custom"
+                android:textColor="@color/normal"
+                android:textSize="15sp" />
+
+        </RadioGroup>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="10dp"
+            android:background="#A8A8A8" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/set_hero_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="设置主界面显示Hero的方式" />
-
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:background="@drawable/spinner_theme_set_hero"
+            android:entries="@array/heroNames"
+            android:popupBackground="@drawable/spinner_popup_theme_set_hero"
             android:textColor="@color/normal"
-            android:text="预览"/>
+            android:theme="@style/set_hero_dialog_spinner" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/set_hero_imageView_preview"
+            android:layout_width="156dp"
+            android:layout_height="156dp"
             android:layout_margin="10dp"
             android:background="@drawable/ripple_border_display"
             android:src="@drawable/vector_hero_marvel_antman" />
 
-        <TextView
-            android:layout_width="80dp"
-            android:layout_height="50dp"
-            android:background="@drawable/ripple_bilibili_pink_lite"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/close"
-            android:textColor="@color/normal" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/set_hero_textView_save"
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:background="@drawable/ripple_bilibili_pink_lite"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="@string/set_hero_save"
+                android:textColor="@color/normal" />
+
+            <TextView
+                android:id="@+id/set_hero_textView_close"
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:background="@drawable/ripple_bilibili_pink_lite"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="@string/set_hero_close"
+                android:textColor="@color/normal" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

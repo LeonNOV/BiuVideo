@@ -20,6 +20,7 @@ import com.leon.biuvideo.ui.dialogs.AboutDialog;
 import com.leon.biuvideo.ui.dialogs.FeedbackDialog;
 import com.leon.biuvideo.ui.dialogs.ImportFollowDialog;
 import com.leon.biuvideo.ui.dialogs.LicenseDialog;
+import com.leon.biuvideo.ui.dialogs.SetHeroDialog;
 import com.leon.biuvideo.ui.dialogs.WaitingDialog;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueFormat;
@@ -99,8 +100,9 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
                 this.finish();
                 break;
             case R.id.preference_textView_set_hero:
-
-                //显示
+                //显示SetHeroDialog
+                SetHeroDialog setHeroDialog = new SetHeroDialog(PreferenceActivity.this);
+                setHeroDialog.show();
 
                 break;
             case R.id.preference_textView_import:

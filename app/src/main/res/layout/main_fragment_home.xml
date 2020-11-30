@@ -33,10 +33,10 @@
                 android:id="@+id/home_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/spinner_theme"
+                android:background="@drawable/spinner_theme_home"
                 android:dropDownVerticalOffset="43dp"
                 android:entries="@array/home_spinner"
-                android:popupBackground="@drawable/spinner_popup_theme"
+                android:popupBackground="@drawable/spinner_popup_theme_home"
                 android:theme="@style/home_fragment_spinner" />
 
             <EditText
