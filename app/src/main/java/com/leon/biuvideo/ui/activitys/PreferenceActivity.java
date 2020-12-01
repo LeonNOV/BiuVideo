@@ -28,6 +28,7 @@ import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.utils.dataBaseUtils.Tables;
 import com.leon.biuvideo.utils.parseDataUtils.FollowParseUtils;
+import com.leon.biuvideo.values.ThanksList;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -188,11 +189,11 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
 
                 //设置Dialog显示内容
                 ArrayList<AboutBean> aboutBeans = new ArrayList<>();
-                for (int i = 1; i <= 10; i++) {
+                for (int i = 0; i < ThanksList.titles.length; i++) {
                     AboutBean aboutBean = new AboutBean();
-                    aboutBean.title = "标题" + i;
-                    aboutBean.license = "许可许可许可" + i;
-                    aboutBean.desc = "内容内容内容内容内容内容内容内容" + i;
+                    aboutBean.title = ThanksList.titles[i];
+                    aboutBean.desc = ThanksList.desc[i];
+                    aboutBean.orgUrl = ThanksList.orgUrl[i];
                     aboutBeans.add(aboutBean);
                 }
 

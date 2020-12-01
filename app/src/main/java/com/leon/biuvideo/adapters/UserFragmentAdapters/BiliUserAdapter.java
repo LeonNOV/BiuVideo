@@ -13,7 +13,7 @@ import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.BiliUser;
 import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.ui.activitys.UserActivity;
-import com.leon.biuvideo.utils.ImagePixelSize;
+import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;

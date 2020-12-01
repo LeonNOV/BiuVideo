@@ -17,7 +17,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.utils.ImagePixelSize;
+import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.MediaUtils;
 
 import java.util.ArrayList;

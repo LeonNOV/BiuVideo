@@ -13,7 +13,7 @@ import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.videoBean.view.SingleVideoInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
-import com.leon.biuvideo.utils.ImagePixelSize;
+import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.WebViewUtils;
 import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParseUtils;

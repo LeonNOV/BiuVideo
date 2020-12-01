@@ -25,7 +25,7 @@ import com.leon.biuvideo.ui.fragments.userFragments.UserArticlesFragment;
 import com.leon.biuvideo.ui.fragments.userFragments.UserAudioListFragment;
 import com.leon.biuvideo.ui.fragments.userFragments.UserPictureListFragment;
 import com.leon.biuvideo.ui.fragments.userFragments.UserVideoListFragment;
-import com.leon.biuvideo.utils.ImagePixelSize;
+import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.utils.dataBaseUtils.Tables;

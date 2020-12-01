@@ -20,7 +20,7 @@ import com.leon.biuvideo.beans.upMasterBean.Picture;
 import com.leon.biuvideo.layoutManager.PictureGridLayoutManager;
 import com.leon.biuvideo.ui.views.RoundPopupWindow;
 import com.leon.biuvideo.utils.MediaUtils;
-import com.leon.biuvideo.utils.Paths;
+import com.leon.biuvideo.values.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
 
 import java.text.SimpleDateFormat;

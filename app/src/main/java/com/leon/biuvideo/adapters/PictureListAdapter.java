@@ -3,16 +3,14 @@ package com.leon.biuvideo.adapters;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.ui.views.PictureViewer;
-import com.leon.biuvideo.utils.ImagePixelSize;
+import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.List;
 

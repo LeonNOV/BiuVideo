@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import com.leon.biuvideo.values.Paths;
+
 public class WebViewUtils {
     private WebView webView;
 

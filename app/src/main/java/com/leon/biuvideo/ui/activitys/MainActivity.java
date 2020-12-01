@@ -35,7 +35,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, ActivityCompat.OnRequestPermissionsResultCallback {
     private DrawerLayout drawer_layout;
     private NavigationView navigation_view;
-    private ImageView toolBar_imageView_menu, navigation_imageView_back, toolBar_imageView_more;
+    private ImageView toolBar_imageView_menu, toolBar_imageView_more;
     private InternetUtils.InternetState internetState;
 
     private List<Fragment> fragmentList;
@@ -104,9 +104,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         toolBar_imageView_more = findViewById(R.id.toolBar_imageView_more);
         toolBar_imageView_more.setOnClickListener(this);
-
-        navigation_imageView_back = navigation_view.getHeaderView(0).findViewById(R.id.navigation_imageView_back);
-        navigation_imageView_back.setOnClickListener(this);
     }
 
     /**
@@ -226,9 +223,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .create();
 
                         break;
-            case R.id.navigation_imageView_back:
-                drawer_layout.closeDrawer(navigation_view);
-                break;
             default:
                 break;
         }

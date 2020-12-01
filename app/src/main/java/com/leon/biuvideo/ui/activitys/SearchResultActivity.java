@@ -36,11 +36,11 @@ import java.util.List;
   * 搜索结果Activity
   */
  public class SearchResultActivity extends AppCompatActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
-    private ImageView search_imageView_back, search_imageView_clean;
-    private EditText search_editText_searchBox;
-    private TextView search_textView_result_video, search_textView_result_article, search_textView_result_user;
-    private ViewPager search_viewPager;
-    private ProgressBar search_progressBar;
+     private ProgressBar search_progressBar;
+     private ImageView search_imageView_back, search_imageView_clean;
+     private EditText search_editText_searchBox;
+     private TextView search_textView_result_video, search_textView_result_article, search_textView_result_user;
+     private ViewPager search_viewPager;
 
     private String keyword;
     private List<Fragment> fragments;
@@ -56,9 +56,14 @@ import java.util.List;
         initView();
         initValue();
         initViewPage();
+
+        search_progressBar.setVisibility(View.INVISIBLE);
     }
 
     private void initView() {
+        search_progressBar = findViewById(R.id.search_progressBar);
+        search_progressBar.setVisibility(View.VISIBLE);
+
         search_imageView_back = findViewById(R.id.search_imageView_back);
         search_imageView_back.setOnClickListener(this);
 
@@ -109,8 +114,6 @@ import java.util.List;
 
         search_textView_result_user = findViewById(R.id.search_textView_result_user);
         search_textView_result_user.setOnClickListener(this);
-
-        search_progressBar = findViewById(R.id.search_progressBar);
 
         search_viewPager = findViewById(R.id.search_viewPager);
         search_viewPager.addOnPageChangeListener(this);

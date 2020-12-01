@@ -1,4 +1,4 @@
-package com.leon.biuvideo.utils;
+package com.leon.biuvideo.values;
 
 /**
  * 接口请求地址

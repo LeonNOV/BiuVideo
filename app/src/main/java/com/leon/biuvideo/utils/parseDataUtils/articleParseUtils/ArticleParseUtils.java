@@ -1,18 +1,15 @@
 package com.leon.biuvideo.utils.parseDataUtils.articleParseUtils;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.utils.Paths;
+import com.leon.biuvideo.values.Paths;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import okhttp3.Headers;
 
 public class ArticleParseUtils {
 

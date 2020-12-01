@@ -5,14 +5,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.utils.Paths;
+import com.leon.biuvideo.values.Paths;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import kotlin.reflect.KVariance;
 
 /**
  * 获取Ta的关注列表数据

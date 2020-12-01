@@ -13,8 +13,7 @@ import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.ui.activitys.ArticleActivity;
-import com.leon.biuvideo.utils.Fuck;
-import com.leon.biuvideo.utils.ImagePixelSize;
+import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.InternetUtils;
 
 import java.text.SimpleDateFormat;

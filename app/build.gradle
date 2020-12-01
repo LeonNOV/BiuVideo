@@ -59,9 +59,6 @@ dependencies {
     //折叠TextView
     implementation 'com.ms-square:expandableTextView:0.1.4'
 
-    //QMUI
-    implementation 'com.qmuiteam:qmui:2.0.0-alpha10'
-
     //SmartRefreshLayout
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.5.1'//没有使用特殊Header，可以不加这行
@@ -69,9 +66,6 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.0'
-
-    //文字滚动依赖
-//    implementation 'com.sunfusheng:marqueeview:1.3.8'
 
     // https://mvnrepository.com/artifact/org.jsoup/jsoup
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.13.1'

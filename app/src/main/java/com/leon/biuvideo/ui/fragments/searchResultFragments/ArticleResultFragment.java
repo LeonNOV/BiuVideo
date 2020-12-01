@@ -21,7 +21,7 @@ import com.leon.biuvideo.adapters.UserFragmentAdapters.UserArticleAdapter;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.OrderType;
+import com.leon.biuvideo.values.OrderType;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.ArticleParser;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;

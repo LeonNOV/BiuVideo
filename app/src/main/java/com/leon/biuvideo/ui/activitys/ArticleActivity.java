@@ -23,7 +23,7 @@ import com.leon.biuvideo.ui.views.RoundPopupWindow;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.MediaUtils;
-import com.leon.biuvideo.utils.Paths;
+import com.leon.biuvideo.values.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
 
 import org.jsoup.Jsoup;

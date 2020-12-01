@@ -23,6 +23,7 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/shape_feed_back"
             android:ems="17"
+            android:text="@string/feed_back_dialog_text"
             android:gravity="start|top"
             android:hint="@string/feed_back_dialog_hint"
             android:inputType="textMultiLine"
