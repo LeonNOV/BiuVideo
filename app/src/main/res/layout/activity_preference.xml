@@ -91,6 +91,34 @@
                         android:background="#CF879B" />
 
                     <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/preference_visit"
+                            android:layout_centerVertical="true"
+                            android:textColor="@color/preference_item"/>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/preference_switch_visitState"
+                            android:layout_width="wrap_content"
+                            android:checked="true"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_height="wrap_content"/>
+
+                    </RelativeLayout>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.43dp"
+                        android:background="#CF879B" />
+
+                    <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">

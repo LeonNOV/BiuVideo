@@ -1,6 +1,7 @@
 package com.leon.biuvideo.ui.fragments.mainFragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,7 @@ public class FavoriteFragment extends Fragment {
     private List<Favorite> favorites;
     private FavoriteAdapter favoriteAdapter;
     private FavoriteDatabaseUtils favoriteDatabaseUtils;
+    private boolean isVisit;
 
     @Nullable
     @Override
@@ -68,7 +70,15 @@ public class FavoriteFragment extends Fragment {
     }
 
     private void initValue() {
-        favorites = favoriteDatabaseUtils.queryFavorites();
+        SharedPreferences initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
+        isVisit = initValues.getBoolean("isVisit", true);
+
+        if (isVisit) {
+            favorites = favoriteDatabaseUtils.queryFavoritesByVisit();
+        } else {
+            favorites = favoriteDatabaseUtils.queryFavorites();
+        }
+
         favoriteAdapter = new FavoriteAdapter(favorites, context);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
@@ -81,7 +91,11 @@ public class FavoriteFragment extends Fragment {
         super.onResume();
 
         //处理Favorite数据
-        favorites = favoriteDatabaseUtils.queryFavorites();
+        if (isVisit) {
+            favorites = favoriteDatabaseUtils.queryFavoritesByVisit();
+        } else {
+            favorites = favoriteDatabaseUtils.queryFavorites();
+        }
 
         if (favorites.size() > 0) {
             //隐藏无数据提示，显示item数据

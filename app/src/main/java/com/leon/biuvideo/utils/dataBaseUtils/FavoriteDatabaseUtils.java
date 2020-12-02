@@ -51,7 +51,11 @@ public class FavoriteDatabaseUtils extends SQLiteHelper {
         return count > 0;
     }
 
-    //获取favorite_up库中isDelete为1的数据
+    /**
+     * 获取favorite_up库中isDelete为1的数据
+     *
+     * @return  返回favorites
+     */
     public List<Favorite> queryFavorites() {
         Cursor cursor = sqLiteDatabase.query(Tables.FavoriteUp.value, null, "isDelete=?", new String [] {"1"}, null, null, "id DESC");
 
@@ -85,6 +89,30 @@ public class FavoriteDatabaseUtils extends SQLiteHelper {
         long insert = sqLiteDatabase.insert(Tables.FavoriteUp.value, null, values);
 
         return insert > 0;
+    }
+
+    /**
+     * 查询关注列表数据，按照访问量进行排序
+     *
+     * @return  返回favorites
+     */
+    public List<Favorite> queryFavoritesByVisit() {
+        Cursor cursor = sqLiteDatabase.query(Tables.FavoriteUp.value, null, "isDelete=?", new String [] {"1"}, null, null, "visit ASC");
+
+        List<Favorite> favorites = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            Favorite favorite = new Favorite();
+
+            favorite.mid = cursor.getLong(cursor.getColumnIndex("mid"));
+            favorite.name = cursor.getString(cursor.getColumnIndex("name"));
+            favorite.faceUrl = cursor.getString(cursor.getColumnIndex("faceUrl"));
+            favorite.desc = cursor.getString(cursor.getColumnIndex("desc"));
+
+            favorites.add(favorite);
+        }
+
+        cursor.close();
+        return favorites;
     }
 
     /**

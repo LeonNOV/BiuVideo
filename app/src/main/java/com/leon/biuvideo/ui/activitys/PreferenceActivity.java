@@ -1,14 +1,18 @@
 package com.leon.biuvideo.ui.activitys;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Looper;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +41,7 @@ import java.util.List;
 /**
  * 设置/首选项Activity
  */
-public class PreferenceActivity extends AppCompatActivity implements OnClickListener {
+public class PreferenceActivity extends AppCompatActivity implements OnClickListener, CompoundButton.OnCheckedChangeListener {
     private ImageView preference_imageView_back;
     private TextView
             preference_textView_import,
@@ -47,6 +51,8 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
             preference_textView_open_source_license,
             preference_textView_thanks_list,
             preference_textView_feed_back;
+
+    private SwitchCompat preference_switch_visitState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +74,9 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
 
         preference_textView_import = findViewById(R.id.preference_textView_import);
         preference_textView_import.setOnClickListener(this);
+
+        preference_switch_visitState  = findViewById(R.id.preference_switch_visitState);
+        preference_switch_visitState.setOnCheckedChangeListener(this);
 
         preference_textView_cache = findViewById(R.id.preference_textView_cache);
         preference_textView_cache.setOnClickListener(this);
@@ -299,5 +308,15 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
         } else {
             cacheFile.delete();
         }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        SharedPreferences initValues = getSharedPreferences("initValues", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = initValues.edit();
+
+        editor.putBoolean("isVisit", isChecked);
+
+        editor.apply();
     }
 }

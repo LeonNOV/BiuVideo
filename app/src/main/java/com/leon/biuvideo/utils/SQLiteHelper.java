@@ -15,6 +15,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "\"name\"  TEXT,\n" +
             "\"faceUrl\"  TEXT,\n" +
             "\"desc\"  TEXT,\n" +
+            "\"visit\"  INTEGER DEFAULT 0,\n" +
             "\"isDelete\"  INTEGER DEFAULT 1\n" +
             ");";
     private static final String musicPlayList = "CREATE TABLE \"musicPlayList\" (\n" +
