@@ -17,20 +17,14 @@
             android:id="@+id/waiting_dialog_imageView_import_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/icon_success"
-            android:visibility="gone" />
-
-        <ProgressBar
-            android:id="@+id/waiting_dialog_progressBar"
-            android:layout_width="70dp"
-            android:layout_height="70dp" />
+            android:src="@drawable/icon_success" />
 
         <TextView
             android:id="@+id/waiting_dialog_textView_import_str_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:text="正在导入中..."
+            android:text="导入成功"
             android:textColor="@color/normal"
             android:textSize="17sp"
             android:textStyle="bold" />

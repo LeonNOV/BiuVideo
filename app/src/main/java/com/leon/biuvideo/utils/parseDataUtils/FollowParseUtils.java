@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.Headers;
+
 /**
  * 获取Ta的关注列表数据
  */
@@ -25,14 +27,22 @@ public class FollowParseUtils {
      * @param pn    页码，从1开始
      * @return  返回Favorite集合
      */
-    public static List<Favorite> parseFollow(long vmid, int pn) {
+    public static List<Favorite> parseFollow(long vmid, String cookie, int pn) {
         Map<String, String> params = new HashMap<>();
         params.put("vmid", String.valueOf(vmid));
         params.put("pn", String.valueOf(pn));
         params.put("ps", "20");
         params.put("order", "desc");
+        params.put("order_type", "attention");//按照最常访问获取
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.follow, params);
+        JSONObject responseObject;
+        //判断cookie是否为空
+        if (cookie.equals("")) {
+            responseObject = HttpUtils.getResponse(Paths.follow, params);
+        } else {
+            responseObject = HttpUtils.getResponse(Paths.follow, Headers.of("Cookie", cookie), params);
+        }
+
         JSONObject data = responseObject.getJSONObject("data");
         if (data != null) {
             List<Favorite> followings = new ArrayList<>();

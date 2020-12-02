@@ -22,9 +22,72 @@
             android:gravity="center"
             android:hint="@string/import_follow_editText_hint"
             android:inputType="number"
-            android:textSize="15sp"
             android:textColor="@color/normal"
+            android:textSize="15sp"
             android:theme="@style/CustomEditText" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/import_follow_advanced"
+                android:textSize="12sp"
+                android:textColor="@color/normal"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/import_follow_imageView_expansion"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="10dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:padding="5dp"
+                android:src="@drawable/icon_back"
+                app:tint="@color/bilibili_pink" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/import_follow_linearLayout_cookie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:gravity="center"
+                android:text="@string/import_follow_advanced_sign" />
+
+            <EditText
+                android:id="@+id/import_follow_editText_cookie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_feed_back"
+                android:ems="17"
+                android:gravity="start|top"
+                android:hint="@string/import_follow_editText_cookie_hint"
+                android:inputType="textMultiLine"
+                android:maxLines="10"
+                android:minLines="10"
+                android:padding="10dp"
+                android:scrollbars="vertical"
+                android:textSize="18sp"
+                android:theme="@style/CustomEditText" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"

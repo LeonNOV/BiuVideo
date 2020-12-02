@@ -11,7 +11,7 @@ public class Video implements Serializable {
     public String cover;
     public String bvid;
     public long aid;
-    public long play;
+    public int play;
     public long create;
     public int isUnionVideo;//是否为合作视频，1：合作；0：单人
     public String length;

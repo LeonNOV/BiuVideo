@@ -53,7 +53,7 @@ public class FavoriteDatabaseUtils extends SQLiteHelper {
 
     //获取favorite_up库中isDelete为1的数据
     public List<Favorite> queryFavorites() {
-        Cursor cursor = sqLiteDatabase.query(Tables.FavoriteUp.value, null, "isDelete=?", new String [] {"1"}, null, null, null);
+        Cursor cursor = sqLiteDatabase.query(Tables.FavoriteUp.value, null, "isDelete=?", new String [] {"1"}, null, null, "id DESC");
 
         List<Favorite> favorites = new ArrayList<>();
         while (cursor.moveToNext()) {

@@ -68,8 +68,12 @@ public class IDUtils {
         Pattern pattern;
         Matcher matcher;
 
+        if (value.startsWith("UID:")) {
+            value = value.replaceAll("UID:", "");
+        }
+
         //判断原本的内容是否为mid
-        String regEx = "[\\d]{7}";
+        String regEx = "[\\d]{7,9}";
         pattern = Pattern.compile(regEx);
         matcher = pattern.matcher(value);
 

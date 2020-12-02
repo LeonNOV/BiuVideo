@@ -7,6 +7,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,12 +16,22 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.leon.biuvideo.R;
 
+import kotlin.reflect.KVariance;
+import okhttp3.Cookie;
+import okhttp3.HttpUrl;
+
 /**
  * 导入关注列表弹窗
  */
 public class ImportFollowDialog extends AlertDialog implements View.OnClickListener {
     private EditText import_follow_editText;
     private Button import_follow_button_cancel, import_follow_button_confirm;
+
+    private ImageView import_follow_imageView_expansion;
+    private LinearLayout import_follow_linearLayout_cookie;
+    private EditText import_follow_editText_cookie;
+
+    private boolean expansionState = true;
 
     public ImportFollowDialog(@NonNull Context context) {
         super(context);
@@ -41,6 +53,12 @@ public class ImportFollowDialog extends AlertDialog implements View.OnClickListe
 
         import_follow_button_confirm = findViewById(R.id.import_follow_button_confirm);
         import_follow_button_confirm.setOnClickListener(this);
+
+        import_follow_imageView_expansion = findViewById(R.id.import_follow_imageView_expansion);
+        import_follow_imageView_expansion.setOnClickListener(this);
+
+        import_follow_linearLayout_cookie = findViewById(R.id.import_follow_linearLayout_cookie);
+        import_follow_editText_cookie = findViewById(R.id.import_follow_editText_cookie);
 
         //获取window
         Window window = this.getWindow();
@@ -66,11 +84,23 @@ public class ImportFollowDialog extends AlertDialog implements View.OnClickListe
                     try {
                         //将输入内容转换为long类型
                         long vmid = Long.parseLong(mid);
+                        String cookie = import_follow_editText_cookie.getText().toString();
 
-                        priorityListener.setActivityText(vmid);
+                        priorityListener.setActivityText(vmid, cookie);
                     } catch (Exception e) {
                         Toast.makeText(getContext(), "输入内容需要为全数字，请检查输入内容", Toast.LENGTH_SHORT).show();
                     }
+                }
+
+                break;
+            case R.id.import_follow_imageView_expansion:
+
+                if (expansionState) {
+                    import_follow_linearLayout_cookie.setVisibility(View.VISIBLE);
+                    expansionState = false;
+                } else {
+                    import_follow_linearLayout_cookie.setVisibility(View.GONE);
+                    expansionState = true;
                 }
 
                 break;
@@ -86,7 +116,7 @@ public class ImportFollowDialog extends AlertDialog implements View.OnClickListe
      * 将mid回传给PreferenceActivity
      */
     public interface PriorityListener {
-        void setActivityText(long mid);
+        void setActivityText(long mid, String cookie);
     }
 
     private PriorityListener priorityListener;

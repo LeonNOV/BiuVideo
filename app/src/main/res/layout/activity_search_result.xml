@@ -143,13 +143,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <ProgressBar
+        <!--<ProgressBar
             android:id="@+id/search_progressBar"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_centerInParent="true"
-            android:indeterminateTint="@color/bilibili_pink"
-            android:indeterminateTintMode="src_atop" />
+            android:indeterminateTint="@color/light_gray"
+            android:indeterminateTintMode="src_atop" />-->
 
     </RelativeLayout>
 

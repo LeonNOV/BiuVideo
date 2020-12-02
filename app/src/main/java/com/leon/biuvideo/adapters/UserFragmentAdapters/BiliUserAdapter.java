@@ -32,6 +32,8 @@ public class BiliUserAdapter extends BaseAdapter<BiliUser> {
     private SQLiteHelperFactory sqLiteHelperFactory;
     private FavoriteDatabaseUtils favoriteDatabaseUtils;
 
+    private boolean followState;
+
     public BiliUserAdapter(List<BiliUser> biliUsers, Context context) {
         super(biliUsers, context);
         this.biliUsers = biliUsers;
@@ -73,9 +75,9 @@ public class BiliUserAdapter extends BaseAdapter<BiliUser> {
         //查询对应用户是否存在于Favorite_up中
         sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.FavoriteUp);
         favoriteDatabaseUtils = (FavoriteDatabaseUtils) sqLiteHelperFactory.getInstance();
-        boolean state = favoriteDatabaseUtils.queryFavoriteState(biliUser.mid);
+        followState = favoriteDatabaseUtils.queryFavoriteState(biliUser.mid);
 
-        if (state) {
+        if (followState) {
             holder.setText(R.id.search_bili_user_button_follow, "已关注");
         } else {
             holder.setText(R.id.search_bili_user_button_follow, "关注");
@@ -91,10 +93,11 @@ public class BiliUserAdapter extends BaseAdapter<BiliUser> {
                 favoriteDatabaseUtils = (FavoriteDatabaseUtils) sqLiteHelperFactory.getInstance();
 
                 //已关注的话则进行移除
-                if (state) {
+                if (followState) {
                     favoriteDatabaseUtils.removeFavorite(biliUser.mid);
-                    holder.setText(R.id.search_bili_user_button_follow, "已关注");
+                    holder.setText(R.id.search_bili_user_button_follow, "关注");
 
+                    followState = false;
                     Toast.makeText(context, "已将'" + biliUser.name + "'从关注列表中移除", Toast.LENGTH_SHORT).show();
                 } else {
                     Favorite favorite = new Favorite();
@@ -104,8 +107,9 @@ public class BiliUserAdapter extends BaseAdapter<BiliUser> {
                     favorite.desc = biliUser.usign;
 
                     favoriteDatabaseUtils.addFavorite(favorite);
-                    holder.setText(R.id.search_bili_user_button_follow, "关注");
+                    holder.setText(R.id.search_bili_user_button_follow, "已关注");
 
+                    followState = true;
                     Toast.makeText(context, "已将'" + biliUser.name + "'添加至关注列表", Toast.LENGTH_SHORT).show();
                 }
             }

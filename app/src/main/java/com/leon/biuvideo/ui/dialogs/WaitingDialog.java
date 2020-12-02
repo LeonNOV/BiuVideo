@@ -22,7 +22,6 @@ public class WaitingDialog extends AlertDialog {
     public static final int IMG_ERROR = R.drawable.icon_error;
 
     private ImageView waiting_dialog_imageView_import_state;
-    private ProgressBar waiting_dialog_progressBar;
     private TextView waiting_dialog_textView_import_str_state;
 
     public WaitingDialog(@NonNull Context context) {
@@ -34,12 +33,13 @@ public class WaitingDialog extends AlertDialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.waiting_dialog);
 
+        setCanceledOnTouchOutside(true);
+
         initView();
     }
 
     private void initView() {
         waiting_dialog_imageView_import_state = findViewById(R.id.waiting_dialog_imageView_import_state);
-        waiting_dialog_progressBar = findViewById(R.id.waiting_dialog_progressBar);
         waiting_dialog_textView_import_str_state = findViewById(R.id.waiting_dialog_textView_import_str_state);
 
         this.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -54,9 +54,6 @@ public class WaitingDialog extends AlertDialog {
      * @param state 导入状态；true：导入成功；false：导入失败
      */
     public void setResourceState(boolean state) {
-        //隐藏ProgressBar
-        waiting_dialog_progressBar.setVisibility(View.GONE);
-
         if (state) {
             waiting_dialog_imageView_import_state.setImageResource(IMG_SUCCESS);
             waiting_dialog_textView_import_str_state.setText(STR_SUCCESS);
@@ -64,6 +61,7 @@ public class WaitingDialog extends AlertDialog {
             waiting_dialog_imageView_import_state.setImageResource(IMG_ERROR);
             waiting_dialog_textView_import_str_state.setText(STR_ERROR);
         }
+
         waiting_dialog_imageView_import_state.setVisibility(View.VISIBLE);
         waiting_dialog_textView_import_str_state.setVisibility(View.VISIBLE);
     }

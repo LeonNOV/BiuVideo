@@ -2,6 +2,11 @@
 <resources>
 
     <string name="import_follow_editText_hint">输入要导入的用户ID(最多100条)</string>
+
+    <string name="import_follow_advanced">高级设置(可导入关注列表中所有的数据)</string>
+    <string name="import_follow_advanced_sign">↓在以下输入框中输入Cookie内容↓</string>
+    <string name="import_follow_editText_cookie_hint">Cookie</string>
+
     <string name="import_follow_button_cancel">取消</string>
     <string name="import_follow_button_confirm">确定</string>
 

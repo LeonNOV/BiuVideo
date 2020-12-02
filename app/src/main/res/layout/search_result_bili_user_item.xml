@@ -37,8 +37,8 @@
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:text="我是name"
-                android:textSize="17sp"
                 android:textColor="@color/normal"
+                android:textSize="17sp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -53,16 +53,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textColor="@color/normal"
-                    android:text="稿件：173" />
+                    android:text="稿件：173"
+                    android:textColor="@color/normal" />
 
                 <TextView
                     android:id="@+id/search_bili_user_textView_fans"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textColor="@color/normal"
-                    android:text="粉丝：70.2万" />
+                    android:text="粉丝：70.2万"
+                    android:textColor="@color/normal" />
 
             </LinearLayout>
 
@@ -73,8 +73,8 @@
                 android:layout_marginEnd="10dp"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:textColor="@color/normal"
                 android:text="介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍"
+                android:textColor="@color/normal"
                 android:textSize="12sp" />
 
         </LinearLayout>
@@ -87,6 +87,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/shape_bilibili_pink"
             android:text="关注"
+            android:textColor="@color/normal"
             android:textSize="13sp" />
     </RelativeLayout>
 

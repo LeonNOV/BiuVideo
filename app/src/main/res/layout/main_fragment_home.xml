@@ -46,7 +46,7 @@
                 android:background="@null"
                 android:ems="10"
                 android:gravity="center"
-                android:hint="@string/main_editText_hint2"
+                android:hint="@string/main_editText_hint1"
                 android:inputType="text"
                 android:theme="@style/CustomEditText" />
         </LinearLayout>

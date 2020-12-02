@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 视频接口解析
@@ -48,7 +49,7 @@ public class VideoParseUtils {
                 JSONObject videoObject = (JSONObject) o;
 
                 //获取视频作者mid
-                video.mid = videoObject.getLong("mid");
+                video.mid = videoObject.getLongValue("mid");
 
                 //获取作者名称
                 video.author = videoObject.getString("author");
@@ -63,10 +64,15 @@ public class VideoParseUtils {
                 video.aid = videoObject.getLong("aid");
 
                 //获取视频播放量
-                video.play = videoObject.getLong("play");
+                //可能会出现play的数值为'--'的情况
+                if (Objects.equals(videoObject.get("play"), "--")) {
+                    video.play = 0;
+                } else {
+                    video.play = videoObject.getInteger("play");
+                }
 
                 //获取视频上传日期
-                video.create = videoObject.getLong("created");
+                video.create = videoObject.getLongValue("created");
 
                 //获取是否为合作视频
                 video.isUnionVideo = videoObject.getIntValue("is_union_video");

@@ -121,38 +121,25 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
 
                 importFollowDialog.setPriorityListener(new ImportFollowDialog.PriorityListener() {
                     @Override
-                    public void setActivityText(long mid) {
+                    public void setActivityText(long mid, String cookie) {
 
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                //隐藏importFollowDialog
-                                importFollowDialog.dismiss();
+                        //隐藏importFollowDialog
+                        importFollowDialog.dismiss();
 
-                                Looper.prepare();
+                        Toast.makeText(getApplicationContext(), "正在导入数据中，请不要随意进行任何操作", Toast.LENGTH_SHORT).show();
 
-                                //显示等待对话框
-                                WaitingDialog waitingDialog = new WaitingDialog(PreferenceActivity.this);
-                                waitingDialog.show();
+                        boolean insertState = getFollowings(mid, cookie);
 
-                                boolean insertState = getFollowings(mid);
+                        //显示等待对话框
+                        WaitingDialog waitingDialog = new WaitingDialog(PreferenceActivity.this);
 
-                                //修改等待对话框的显示资源
-                                waitingDialog.setResourceState(insertState);
-
-                                //设置dialog可点击消失
-                                waitingDialog.setCanceledOnTouchOutside(true);
-
-                                Looper.loop();
-                            }
-                        }).start();
+                        //修改等待对话框的显示资源
+                        waitingDialog.setResourceState(insertState);
                     }
                 });
 
                 break;
-            case R.id.preference_textView_cache:
-                //清除缓存
-
+            case R.id.preference_textView_cache: //清除缓存
                 //创建弹窗
                 AlertDialog.Builder builder = new AlertDialog.Builder(PreferenceActivity.this)
                         .setTitle("清除缓存")
@@ -222,9 +209,10 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
      * 获取关注列表并进行添加
      *
      * @param mid   用户ID
+     * @param cookie 用户cookie
      * @return  返回插入状态
      */
-    private boolean getFollowings(long mid) {
+    private boolean getFollowings(long mid, String cookie) {
         if (mid != 0) {
             //获取总数
             int total = FollowParseUtils.getTotal(mid);
@@ -232,8 +220,9 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
                 return true;
             }
 
-            //由于官方的限制关注列表最多只能获取100条
-            if (total > 100) {
+            //由于官方的限制
+            //在没有cookie的情况下，关注列表最多只能获取100条
+            if (total > 100 && cookie.equals("")) {
                 total = 100;
             }
 
@@ -245,7 +234,7 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
             FavoriteDatabaseUtils favoriteDatabaseUtils = (FavoriteDatabaseUtils) sqLiteHelperFactory.getInstance();
 
             while (currentTotal != total) {
-                List<Favorite> favorites = FollowParseUtils.parseFollow(mid, pn);
+                List<Favorite> favorites = FollowParseUtils.parseFollow(mid, cookie, pn);
                 if (favorites != null) {
                     currentTotal += favorites.size();
 
@@ -265,6 +254,7 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
             }
 
             favoriteDatabaseUtils.close();
+
             return true;
         } else {
             return false;
