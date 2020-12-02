@@ -106,6 +106,7 @@
                             android:id="@+id/preference_switch_visitState"
                             android:layout_width="wrap_content"
                             android:checked="true"
+                            android:theme="@style/CustomSwitchCompat"
                             android:layout_centerVertical="true"
                             android:layout_alignParentEnd="true"
                             android:layout_height="wrap_content"/>

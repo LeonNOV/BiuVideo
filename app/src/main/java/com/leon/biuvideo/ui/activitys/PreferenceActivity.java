@@ -101,6 +101,11 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
         //初始化缓存大小
         String cacheSize = ValueFormat.sizeFormat(getCacheSize(cacheDir));
         preference_textView_cache_size.setText(cacheSize);
+
+        //初始化preference_switch_visitState
+        SharedPreferences initValues = getSharedPreferences("initValues", Context.MODE_PRIVATE);
+        boolean isVisit = initValues.getBoolean("isVisit", true);
+        preference_switch_visitState.setChecked(isVisit);
     }
 
     @Override

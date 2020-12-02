@@ -46,4 +46,9 @@
         <item name="android:button">@drawable/radio_button</item>
     </style>
 
+    <style name="CustomSwitchCompat" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">@color/bilibili_pink</item>
+        <item name="colorSwitchThumbNormal">#E6E6E6</item>
+    </style>
+
 </resources>

@@ -106,7 +106,6 @@ public class VideoListDatabaseUtils extends SQLiteHelper{
     }
 
     /**
-     * ActivityDestroy时调用该方法
      * 关闭数据库连接
      */
     @Override

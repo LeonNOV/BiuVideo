@@ -90,6 +90,9 @@ public class FavoriteFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        SharedPreferences initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
+        isVisit = initValues.getBoolean("isVisit", true);
+
         //处理Favorite数据
         if (isVisit) {
             favorites = favoriteDatabaseUtils.queryFavoritesByVisit();

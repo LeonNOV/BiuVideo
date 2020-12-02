@@ -123,6 +123,9 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
             onDestroy();
         }
 
+        //更新visit
+        favoriteDatabaseUtils.updateVisit(mid);
+
         setValue(mid);
         initViewPage();
 

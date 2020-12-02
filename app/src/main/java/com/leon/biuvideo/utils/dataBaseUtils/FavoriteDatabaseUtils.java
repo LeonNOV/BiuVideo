@@ -97,7 +97,7 @@ public class FavoriteDatabaseUtils extends SQLiteHelper {
      * @return  返回favorites
      */
     public List<Favorite> queryFavoritesByVisit() {
-        Cursor cursor = sqLiteDatabase.query(Tables.FavoriteUp.value, null, "isDelete=?", new String [] {"1"}, null, null, "visit ASC");
+        Cursor cursor = sqLiteDatabase.query(Tables.FavoriteUp.value, null, "isDelete=?", new String [] {"1"}, null, null, "visit DESC");
 
         List<Favorite> favorites = new ArrayList<>();
         while (cursor.moveToNext()) {
@@ -116,7 +116,26 @@ public class FavoriteDatabaseUtils extends SQLiteHelper {
     }
 
     /**
-     * ActivityDestroy时调用该方法
+     * 更新visit
+     *
+     * @param mid   用户id
+     */
+    public void updateVisit(long mid) {
+        Cursor cursor = sqLiteDatabase.query(Tables.FavoriteUp.value, null, "mid=? and isDelete=?", new String[]{String.valueOf(mid), "1"}, null, null, null);
+
+        cursor.moveToPosition(0);
+
+        int visit = cursor.getInt(cursor.getColumnIndex("visit"));
+        visit++;
+        cursor.close();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("visit", visit);
+
+        sqLiteDatabase.update(Tables.FavoriteUp.value, contentValues, "mid=?", new String[]{String.valueOf(mid)});
+    }
+
+    /**
      * 关闭数据库连接
      */
     @Override
