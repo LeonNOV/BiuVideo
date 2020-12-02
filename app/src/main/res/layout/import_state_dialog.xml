@@ -14,13 +14,13 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/waiting_dialog_imageView_import_state"
+            android:id="@+id/import_state_dialog_imageView_import_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/icon_success" />
 
         <TextView
-            android:id="@+id/waiting_dialog_textView_import_str_state"
+            android:id="@+id/import_state_dialog_textView_import_str_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"

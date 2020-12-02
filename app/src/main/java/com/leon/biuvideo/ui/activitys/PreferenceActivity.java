@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Looper;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -25,7 +24,7 @@ import com.leon.biuvideo.ui.dialogs.FeedbackDialog;
 import com.leon.biuvideo.ui.dialogs.ImportFollowDialog;
 import com.leon.biuvideo.ui.dialogs.LicenseDialog;
 import com.leon.biuvideo.ui.dialogs.SetHeroDialog;
-import com.leon.biuvideo.ui.dialogs.WaitingDialog;
+import com.leon.biuvideo.ui.dialogs.ImportStateDialog;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
@@ -142,13 +141,13 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
 
                         Toast.makeText(getApplicationContext(), "正在导入数据中，请不要随意进行任何操作", Toast.LENGTH_SHORT).show();
 
+                        ImportStateDialog importStateDialog = new ImportStateDialog(PreferenceActivity.this);
+                        importStateDialog.show();
+
                         boolean insertState = getFollowings(mid, cookie);
 
-                        //显示等待对话框
-                        WaitingDialog waitingDialog = new WaitingDialog(PreferenceActivity.this);
-
                         //修改等待对话框的显示资源
-                        waitingDialog.setResourceState(insertState);
+                        importStateDialog.setResourceState(insertState);
                     }
                 });
 

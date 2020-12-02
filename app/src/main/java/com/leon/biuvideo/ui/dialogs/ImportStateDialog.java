@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,7 +14,7 @@ import com.leon.biuvideo.R;
 /**
  * 导入关注列表时显示的弹窗
  */
-public class WaitingDialog extends AlertDialog {
+public class ImportStateDialog extends AlertDialog {
     public static final String STR_SUCCESS = "导入成功";
     public static final String STR_ERROR = "导入失败";
     public static final int IMG_SUCCESS = R.drawable.icon_success;
@@ -24,28 +23,24 @@ public class WaitingDialog extends AlertDialog {
     private ImageView waiting_dialog_imageView_import_state;
     private TextView waiting_dialog_textView_import_str_state;
 
-    public WaitingDialog(@NonNull Context context) {
+    public ImportStateDialog(@NonNull Context context) {
         super(context);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.waiting_dialog);
+        setContentView(R.layout.import_state_dialog);
 
         setCanceledOnTouchOutside(true);
-
         initView();
     }
 
     private void initView() {
-        waiting_dialog_imageView_import_state = findViewById(R.id.waiting_dialog_imageView_import_state);
-        waiting_dialog_textView_import_str_state = findViewById(R.id.waiting_dialog_textView_import_str_state);
+        waiting_dialog_imageView_import_state = findViewById(R.id.import_state_dialog_imageView_import_state);
+        waiting_dialog_textView_import_str_state = findViewById(R.id.import_state_dialog_textView_import_str_state);
 
         this.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
-        //设置点击屏幕该dialog不会消失
-        this.setCanceledOnTouchOutside(false);
     }
 
     /**

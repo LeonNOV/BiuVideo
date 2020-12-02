@@ -73,7 +73,7 @@ public class ImportFollowDialog extends AlertDialog implements View.OnClickListe
         switch (v.getId()) {
             case R.id.import_follow_button_confirm:
                 //获取输入内容
-                String mid = import_follow_editText.getText().toString();
+                String mid = import_follow_editText.getText().toString().trim();
 
                 if (mid.equals("")) {
                     Toast.makeText(getContext(), "不要搞这些骚操作好吗？", Toast.LENGTH_SHORT).show();
