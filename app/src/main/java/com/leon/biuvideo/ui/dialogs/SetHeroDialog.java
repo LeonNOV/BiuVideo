@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -39,6 +38,9 @@ public class SetHeroDialog extends AlertDialog implements View.OnClickListener, 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.set_hero_dialog);
 
+        //获取window
+        this.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
         initView();
         initValue();
     }
@@ -60,10 +62,6 @@ public class SetHeroDialog extends AlertDialog implements View.OnClickListener, 
 
         TextView set_hero_textView_close = findViewById(R.id.set_hero_textView_close);
         set_hero_textView_close.setOnClickListener(this);
-
-        //获取window
-        Window window = this.getWindow();
-        window.setBackgroundDrawableResource(android.R.color.transparent);
     }
 
     private void initValue() {

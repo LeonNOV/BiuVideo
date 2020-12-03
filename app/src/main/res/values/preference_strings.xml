@@ -12,6 +12,7 @@
 
     <string name="preference_category_about">关于</string>
 
+    <string name="preference_about_biu_video">关于本APP</string>
     <string name="preference_version">版本</string>
     <string name="preference_open_source_license">开源许可</string>
     <string name="preference_thanks_list">感谢列表</string>

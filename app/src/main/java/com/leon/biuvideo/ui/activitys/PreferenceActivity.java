@@ -19,12 +19,14 @@ import android.widget.Toast;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.AboutBean;
 import com.leon.biuvideo.beans.Favorite;
+import com.leon.biuvideo.ui.dialogs.AboutBiuVideoDialog;
 import com.leon.biuvideo.ui.dialogs.AboutDialog;
 import com.leon.biuvideo.ui.dialogs.FeedbackDialog;
 import com.leon.biuvideo.ui.dialogs.ImportFollowDialog;
 import com.leon.biuvideo.ui.dialogs.LicenseDialog;
 import com.leon.biuvideo.ui.dialogs.SetHeroDialog;
 import com.leon.biuvideo.ui.dialogs.ImportStateDialog;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
@@ -47,6 +49,7 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
             preference_textView_set_hero,
             preference_textView_cache,
             preference_textView_cache_size,
+            preference_textView_about_biu_video,
             preference_textView_open_source_license,
             preference_textView_thanks_list,
             preference_textView_feed_back;
@@ -81,6 +84,9 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
         preference_textView_cache.setOnClickListener(this);
 
         preference_textView_cache_size = findViewById(R.id.preference_textView_cache_size);
+
+        preference_textView_about_biu_video = findViewById(R.id.preference_textView_about_biu_video);
+        preference_textView_about_biu_video.setOnClickListener(this);
 
         preference_textView_open_source_license = findViewById(R.id.preference_textView_open_source_license);
         preference_textView_open_source_license.setOnClickListener(this);
@@ -176,6 +182,14 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
                             }
                         });
                 builder.create().show();
+
+                break;
+            case R.id.preference_textView_about_biu_video:
+
+                AboutBiuVideoDialog aboutBiuVideoDialog = new AboutBiuVideoDialog(PreferenceActivity.this);
+                aboutBiuVideoDialog.show();
+
+                Fuck.blue("CurrentFocus:" + aboutBiuVideoDialog.getCurrentFocus());
 
                 break;
             case R.id.preference_textView_open_source_license:

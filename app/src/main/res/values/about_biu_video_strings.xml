@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="about_biu_video_prg">本项目为开源项目，如需源代码可点击下面的”黑黄“色的图标</string>
+    <string name="about_biu_video_join_group">如果在使用过程中有任何解决不了的问题，可以通过点击下面的图标进入QQ群聊</string>
+
+    <string name="about_biu_video_attention">声明</string>
+    <string name="about_biu_video_attention_desc1">• 该项目的初衷是“给使用者打造一个不用登录的B站第三方客户端”</string>
+    <string name="about_biu_video_attention_desc2">• 请合理使用该应用，不能侵犯原作者的著作权，不能侵犯他人的任何权益及利益</string>
+    <string name="about_biu_video_attention_desc3">• 如果你是一位开发者，想要对该软件进行二次开发的话，请一定要谨记”免费且开源“</string>
+
+    <string name="about_biu_video_version">V1.0 Dev</string>
+    <!--
+
+        Alpha - 内部测试版
+        Beta - 公开测试版
+        Dev - 开发专用版
+        Release - 发行版
+
+    -->
+
+</resources>
