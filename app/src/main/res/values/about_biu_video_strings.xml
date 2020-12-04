@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="about_biu_video_prg">本项目为开源项目，如需源代码可点击下面的”黑黄“色的图标</string>
+    <string name="about_biu_video_prg">本项目为开源项目，如需源代码可点击下面的”黑黄“色的图标(暂不提供GitHub，会在后期进行提供)</string>
     <string name="about_biu_video_join_group">如果在使用过程中有任何解决不了的问题，可以通过点击下面的图标进入QQ群聊</string>
 
     <string name="about_biu_video_attention">声明</string>

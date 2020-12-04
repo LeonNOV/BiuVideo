@@ -39,8 +39,8 @@ public class AboutBiuVideoDialog extends AlertDialog implements View.OnClickList
         ImageView about_biu_video_imageView_jumpToGitee = findViewById(R.id.about_biu_video_imageView_jumpToGitee);
         about_biu_video_imageView_jumpToGitee.setOnClickListener(this);
 
-        ImageView about_biu_video_imageView_jumpToGithub = findViewById(R.id.about_biu_video_imageView_jumpToGithub);
-        about_biu_video_imageView_jumpToGithub.setOnClickListener(this);
+//        ImageView about_biu_video_imageView_jumpToGithub = findViewById(R.id.about_biu_video_imageView_jumpToGithub);
+//        about_biu_video_imageView_jumpToGithub.setOnClickListener(this);
 
         ImageView about_biu_video_join_group = findViewById(R.id.about_biu_video_join_group);
         about_biu_video_join_group.setOnClickListener(this);
@@ -56,12 +56,12 @@ public class AboutBiuVideoDialog extends AlertDialog implements View.OnClickList
                 //跳转到Gitee
                 Intent intentGitee = new Intent();
                 intentGitee.setAction("android.intent.action.VIEW");
-                Uri uriGitee = Uri.parse("adwadawawd");
+                Uri uriGitee = Uri.parse("https://gitee.com/leon_xf/biu-video");
                 intentGitee.setData(uriGitee);
                 context.startActivity(intentGitee);
 
                 break;
-            case R.id.about_biu_video_imageView_jumpToGithub:
+            /*case R.id.about_biu_video_imageView_jumpToGithub:
                 //跳转到GitHub
                 Intent intentGithub = new Intent();
                 intentGithub.setAction("android.intent.action.VIEW");
@@ -69,7 +69,7 @@ public class AboutBiuVideoDialog extends AlertDialog implements View.OnClickList
                 intentGithub.setData(uriGithub);
                 context.startActivity(intentGithub);
 
-                break;
+                break;*/
             case R.id.about_biu_video_join_group:
 
                 Intent intent = new Intent();
