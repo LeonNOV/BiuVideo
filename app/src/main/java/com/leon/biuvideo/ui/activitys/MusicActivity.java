@@ -15,7 +15,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -32,7 +31,6 @@ import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
 import com.leon.biuvideo.service.MusicService;
 import com.leon.biuvideo.ui.dialogs.MusicListDialog;
 import com.leon.biuvideo.utils.FileUtils;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.MediaUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.MusicListDatabaseUtils;
@@ -76,7 +74,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
     private List<Long> sids;
 
     //当前sid在sids中的索引位置
-    public static int position;
+    public int position;
 
     //music信息
     private MusicInfo musicInfo;
@@ -336,7 +334,6 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
             case R.id.music_imageView_musicList:
                 //获取播放列表数据
                 List<MusicPlayList> musicPlayLists = musicDatabaseUtils.queryPlayList();
-                Log.d(Fuck.blue, "onClick: " + musicPlayLists.size());
 
                 musicListDialog = new MusicListDialog(MusicActivity.this, musicPlayLists);
                 MusicListDialog.priorityListener = new MusicListDialog.PriorityListener() {
@@ -416,9 +413,9 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                     if (addState) {
                         music_imageView_addFavorite.setImageResource(R.drawable.favorite);
                         isHavePlayList = true;
-
-                        Toast.makeText(this, addState ? "已添加至播放列表" : "添加失败~~~", Toast.LENGTH_SHORT).show();
                     }
+
+                    Toast.makeText(this, addState ? "已添加至播放列表" : "添加失败~~~", Toast.LENGTH_SHORT).show();
                 }
 
                 break;
@@ -481,8 +478,6 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                     //获取上一个music的sid
                     long sid = sids.get(--position);
 
-                    Log.d(Fuck.blue, "上一首：" + position);
-
                     //切换歌曲
                     switchMusic(sid);
                 } else {
@@ -503,8 +498,6 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                 if (position != sids.size() - 1) {
                     //获取下一个music的sid
                     long sid = sids.get(++position);
-
-                    Log.d(Fuck.blue, "下一首：" + position);
 
                     //切换歌曲
                     switchMusic(sid);
@@ -611,7 +604,6 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
     protected void onDestroy() {
         unbind();
         musicState = 0;
-        Log.d(Fuck.blue, "onDestroy: UpSongActivity is destroy");
 
         musicDatabaseUtils.close();
         super.onDestroy();

@@ -1,6 +1,7 @@
 package com.leon.biuvideo.ui.activitys;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.view.*;
 
 import androidx.annotation.NonNull;
@@ -195,7 +196,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .setOnClickListener(R.id.main_more_help, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Toast.makeText(MainActivity.this, "help", Toast.LENGTH_SHORT).show();
+                                //跳转至帮助文档页面
+                                Intent intent = new Intent();
+                                intent.setAction("android.intent.action.VIEW");
+                                intent.setData(Uri.parse(getString(R.string.help_link)));
+                                startActivity(intent);
+
                                 roundPopupWindow.dismiss();
                             }
                         })

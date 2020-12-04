@@ -10,6 +10,9 @@
 - 更改了应用版本号
   - 直到第一个发行版发布后，`build.gradle`的versionCode才进行递增
   - 版本更新后需要对`build.gradle`和`version.xml`中的versionCode和versionName进行更改，其两文件的值需要一一对应相同
+- 加入了`帮助`链接
+- 修复了`MusicActivity`切换歌曲的问题
+- 版本号修改为`1.1.2-beta`
 
 ### 2020/12/03
 - 在`PreferenceActivity`加入了`关于本APP`Dialog

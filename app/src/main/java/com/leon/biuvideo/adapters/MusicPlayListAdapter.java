@@ -64,11 +64,8 @@ public class MusicPlayListAdapter extends BaseAdapter<MusicPlayList> {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //判断当前正在播放的歌曲
+                        //切换当前歌曲为歌单内选定的歌曲
                         priorityListener.refreshMusic(musicPlayList.sid);
-
-                        //重置索引位置
-                        MusicActivity.position = position;
                     }
                 });
     }

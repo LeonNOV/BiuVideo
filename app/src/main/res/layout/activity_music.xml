@@ -152,7 +152,7 @@
             android:layout_below="@id/music_seekBar"
             android:layout_marginStart="30dp"
             android:layout_marginTop="5dp"
-            android:text="01:23"
+            android:text="00:00"
             android:textColor="#515151" />
 
         <SeekBar
