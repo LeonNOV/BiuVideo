@@ -123,6 +123,10 @@ public class FavoriteDatabaseUtils extends SQLiteHelper {
     public void updateVisit(long mid) {
         Cursor cursor = sqLiteDatabase.query(Tables.FavoriteUp.value, null, "mid=? and isDelete=?", new String[]{String.valueOf(mid), "1"}, null, null, null);
 
+        if (cursor.getCount() < 1) {
+            return;
+        }
+        
         cursor.moveToPosition(0);
 
         int visit = cursor.getInt(cursor.getColumnIndex("visit"));
