@@ -26,10 +26,11 @@ public class WebViewUtils {
 
     /**
      * 配置网页控件
-     * @param videoUrl  设置网页地址
+     *
+     * @param videoUrl 设置网页地址
      */
     @SuppressLint("SetJavaScriptEnabled")//忽略SetJavaScriptEnabled的警告
-    private void configWebView (String videoUrl) {
+    private void configWebView(String videoUrl) {
         WebSettings settings = webView.getSettings();
 
         settings.setJavaScriptEnabled(true);
@@ -37,7 +38,7 @@ public class WebViewUtils {
         settings.setDatabaseEnabled(true);
         settings.setAppCacheEnabled(true);
         settings.setCacheMode(WebSettings.LOAD_DEFAULT);
-        settings.setAllowFileAccess(true);
+        settings.setAllowFileAccess(false);
         settings.setLoadWithOverviewMode(true);
         settings.setDomStorageEnabled(true);
         settings.setUseWideViewPort(true);

@@ -13,6 +13,8 @@ import android.net.Uri;
 import android.util.Log;
 import android.webkit.WebView;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -69,12 +71,13 @@ public class MediaUtils {
             int videoTrack = mediaMuxer.addTrack(videoFormat);
             int audioTrack = mediaMuxer.addTrack(audioFormat);
 
-            //设置缓冲区大小
-            /**
-             * 出现：A/libc: Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR),
-             *      fault addr 0xc in tid 2843 (Thread-12), pid 2430 (m.leon.biuvideo)
-             * 这样的错误可能是缓冲区太小的缘故，设置sampleSize的大小即可
-             */
+            /*
+            * 设置缓冲区大小
+            *
+            * 出现：A/libc: Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR),
+            *      fault addr 0xc in tid 2843 (Thread-12), pid 2430 (m.leon.biuvideo)
+            * 这样的错误可能是缓冲区太小的缘故，设置sampleSize的大小即可
+            * */
             int sampleSize = 1024 * 1000;
             ByteBuffer videoBuffer = ByteBuffer.allocate(sampleSize);
             ByteBuffer audioBuffer = ByteBuffer.allocate(sampleSize);
@@ -139,7 +142,7 @@ public class MediaUtils {
             Log.d(Fuck.blue, "--------------------------------------------");
 
             //通知刷新，进行显示
-            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(outPath)));
+            sendBroadcast(context, new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(outPath)));
 
             return true;
         } catch (IOException e) {
@@ -235,7 +238,7 @@ public class MediaUtils {
             bufferedInputStream.close();
 
             //发送广播，通知刷新显示
-            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(musicFile)));
+            sendBroadcast(context, new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(musicFile)));
 
             return true;
         } catch (IOException e) {
@@ -292,7 +295,7 @@ public class MediaUtils {
             connection.disconnect();
 
             //保存图片后发送广播，通知刷新图库的显示
-            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(picFile)));
+            sendBroadcast(context, new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(picFile)));
 
             return isSuccess;
         } catch (IOException e) {
@@ -320,9 +323,10 @@ public class MediaUtils {
             FileOutputStream fos = new FileOutputStream(articlePic);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fos);
 
-            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(articlePic)));
-
             fos.close();
+
+            //发送广播
+            sendBroadcast(context, new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(articlePic)));
 
             return true;
         } catch (Exception e) {
@@ -330,5 +334,16 @@ public class MediaUtils {
         }
 
         return false;
+    }
+
+    /**
+     * 发送广播，通知本地资源库(视频、图片、音乐)进行更新
+     *
+     * @param context   context对象
+     * @param intent    intent对象
+     */
+    private static void sendBroadcast(Context context, Intent intent) {
+        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(context);
+        broadcastManager.sendBroadcast(intent);
     }
 }
