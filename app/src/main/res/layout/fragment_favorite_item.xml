@@ -20,7 +20,7 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:src="@drawable/ic_launcher_background"
-            app:civ_border_color="@color/normal"
+            app:civ_border_color="@color/black"
             app:civ_border_width="1dp" />
 
         <LinearLayout
@@ -37,7 +37,7 @@
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:text="我是name"
-                android:textColor="@color/normal"
+                android:textColor="@color/black"
                 android:textSize="17sp"
                 android:textStyle="bold" />
 
@@ -49,7 +49,7 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:text="介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍"
-                android:textColor="@color/normal"
+                android:textColor="@color/black"
                 android:textSize="12sp" />
 
         </LinearLayout>
@@ -62,7 +62,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/shape_bilibili_pink"
             android:text="@string/cancel_follow"
-            android:textColor="@color/normal"
+            android:textColor="@color/black"
             android:textSize="13sp" />
     </RelativeLayout>
 

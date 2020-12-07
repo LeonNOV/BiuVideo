@@ -22,7 +22,7 @@
             android:gravity="center"
             android:hint="@string/import_follow_editText_hint"
             android:inputType="number"
-            android:textColor="@color/normal"
+            android:textColor="@color/black"
             android:textSize="15sp"
             android:theme="@style/CustomEditText" />
 
@@ -41,7 +41,7 @@
                 android:gravity="center"
                 android:text="@string/import_follow_advanced"
                 android:textSize="12sp"
-                android:textColor="@color/normal"
+                android:textColor="@color/black"
                 android:textStyle="bold" />
 
             <ImageView

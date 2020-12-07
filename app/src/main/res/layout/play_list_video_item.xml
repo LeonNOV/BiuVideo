@@ -72,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/play_list_user"
-                app:tint="@color/normal" />
+                app:tint="@color/black" />
 
             <TextView
                 android:id="@+id/play_list_video_imageView_userName"
@@ -81,7 +81,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="3dp"
                 android:text="UserName"
-                android:textColor="@color/normal"
+                android:textColor="@color/black"
                 android:textSize="15sp" />
 
         </LinearLayout>
@@ -104,7 +104,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="2dp"
                 android:text="148.2万"
-                android:textColor="@color/normal"
+                android:textColor="@color/black"
                 android:textSize="15sp" />
 
             <ImageView
@@ -112,7 +112,7 @@
                 android:layout_height="25dp"
                 android:layout_marginStart="20dp"
                 android:src="@drawable/play_list_video_danmaku"
-                app:tint="@color/normal" />
+                app:tint="@color/black" />
 
             <TextView
                 android:id="@+id/play_list_video_textView_danmaku"
@@ -121,7 +121,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="2dp"
                 android:text="1.2万"
-                android:textColor="@color/normal"
+                android:textColor="@color/black"
                 android:textSize="15sp" />
 
         </LinearLayout>

@@ -22,7 +22,7 @@
             android:paddingEnd="20dp"
             android:paddingBottom="7dp"
             android:text="@string/play_list_video"
-            android:textColor="@color/normal"
+            android:textColor="@color/black"
             android:textSize="23sp" />
 
         <TextView
@@ -37,7 +37,7 @@
             android:paddingEnd="20dp"
             android:paddingBottom="7dp"
             android:text="@string/play_list_audio"
-            android:textColor="@color/normal"
+            android:textColor="@color/black"
             android:textSize="23sp" />
 
     </LinearLayout>

@@ -25,7 +25,7 @@
                 android:background="?selectableItemBackgroundBorderless"
                 android:padding="5dp"
                 android:src="@drawable/icon_back"
-                app:tint="@color/normal" />
+                app:tint="@color/black" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -49,7 +49,7 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="15dp"
                     android:text="Name"
-                    android:textColor="@color/normal"
+                    android:textColor="@color/black"
                     android:textSize="18sp" />
 
             </LinearLayout>
@@ -64,7 +64,7 @@
                 android:background="?selectableItemBackgroundBorderless"
                 android:padding="5dp"
                 android:src="@drawable/more_icon"
-                app:tint="@color/normal" />
+                app:tint="@color/black" />
 
         </RelativeLayout>
 
@@ -88,7 +88,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle"
-                android:textColor="@color/normal"
+                android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 

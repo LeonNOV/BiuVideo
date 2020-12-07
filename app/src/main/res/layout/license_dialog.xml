@@ -18,7 +18,7 @@
             android:layout_margin="10dp"
             android:scrollbars="vertical"
             android:text="LICENSE LICENSE LICENSE LICENSE LICENSE LICENSE LICENSE LICENSE LICENSE LICENSE LICENSE LICENSE LICENSE LICENSE LICENSE LICENSE LICENSE LICENSE"
-            android:textColor="@color/normal"
+            android:textColor="@color/black"
             android:textSize="17sp" />
 
     </ScrollView>

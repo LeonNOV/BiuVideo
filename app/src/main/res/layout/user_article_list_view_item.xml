@@ -29,7 +29,7 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:text="介绍介绍介绍介绍介绍介绍介绍介介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍"
-            android:textColor="@color/normal"
+            android:textColor="@color/black"
             android:textSize="17sp" />
 
         <LinearLayout
@@ -58,7 +58,7 @@
                     android:layout_marginStart="5dp"
                     android:text="单机游戏"
                     android:textSize="13sp"
-                    android:textColor="@color/normal" />
+                    android:textColor="@color/black" />
 
             </LinearLayout>
 
@@ -79,7 +79,7 @@
                     android:layout_marginStart="5dp"
                     android:text="2020-11-08 13:45"
                     android:textSize="13sp"
-                    android:textColor="@color/normal" />
+                    android:textColor="@color/black" />
 
             </LinearLayout>
 

@@ -18,14 +18,14 @@
             android:background="@drawable/ripple_bilibili_pink"
             android:padding="7dp"
             android:src="@drawable/icon_back"
-            app:tint="@color/normal" />
+            app:tint="@color/black" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:text="@string/preference_title"
-            android:textColor="@color/normal"
+            android:textColor="@color/black"
             android:textSize="18sp" />
 
     </androidx.appcompat.widget.Toolbar>
@@ -58,7 +58,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/preference_category_baseSetting"
-                        android:textColor="@color/normal"
+                        android:textColor="@color/black"
                         android:textSize="17sp"
                         android:textStyle="bold" />
 
@@ -165,7 +165,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/preference_category_about"
-                        android:textColor="@color/normal"
+                        android:textColor="@color/black"
                         android:textSize="17sp"
                         android:textStyle="bold" />
 
@@ -227,7 +227,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/preference_category_feed_back"
-                        android:textColor="@color/normal"
+                        android:textColor="@color/black"
                         android:textSize="17sp"
                         android:textStyle="bold" />
 

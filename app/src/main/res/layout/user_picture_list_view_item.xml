@@ -45,7 +45,7 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:text="介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍绍介绍介绍介绍介绍绍介绍介绍介绍介绍"
-            android:textColor="@color/normal"
+            android:textColor="@color/black"
             android:textSize="15sp" />
 
         <LinearLayout
@@ -71,7 +71,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:text="150"
-                    android:textColor="@color/normal"
+                    android:textColor="@color/black"
                     android:textSize="13sp" />
 
             </LinearLayout>
@@ -93,7 +93,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:text="2020-11-12 13:46"
-                    android:textColor="@color/normal"
+                    android:textColor="@color/black"
                     android:textSize="13sp" />
 
             </LinearLayout>

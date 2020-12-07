@@ -39,7 +39,7 @@
     </style>
 
     <style name="set_hero_dialog_spinner">
-        <item name="android:textColor">@color/normal</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
     <style name="CustomRadioTheme" parent="@android:style/Widget.CompoundButton.CheckBox">

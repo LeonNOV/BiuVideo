@@ -28,7 +28,7 @@
             android:paddingEnd="10dp"
             android:paddingBottom="2dp"
             android:text="P1"
-            android:textColor="@color/normal"
+            android:textColor="@color/black"
             android:textSize="13sp" />
 
         <TextView

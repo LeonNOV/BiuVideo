@@ -55,7 +55,7 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:text="介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍"
-            android:textColor="@color/normal"
+            android:textColor="@color/black"
             android:textSize="17sp" />
 
         <LinearLayout
@@ -85,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:text="1502130次播放"
-                    android:textColor="@color/normal"
+                    android:textColor="@color/black"
                     android:textSize="12sp" />
 
             </LinearLayout>
@@ -106,7 +106,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:text="2020-10-21 19:15"
-                    android:textColor="@color/normal"
+                    android:textColor="@color/black"
                     android:textSize="12sp" />
 
             </LinearLayout>

@@ -13,6 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -35,6 +36,7 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, ActivityCompat.OnRequestPermissionsResultCallback {
     private DrawerLayout drawer_layout;
+    private LinearLayout main_linear_layout;
     private NavigationView navigation_view;
     private ImageView toolBar_imageView_menu, toolBar_imageView_more;
     private InternetUtils.InternetState internetState;
@@ -96,6 +98,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void initView() {
         drawer_layout = findViewById(R.id.drawer_layout);
+
+        main_linear_layout = findViewById(R.id.main_linear_layout);
 
         navigation_view = findViewById(R.id.navigation_view);
         navigation_view.setNavigationItemSelectedListener(this);

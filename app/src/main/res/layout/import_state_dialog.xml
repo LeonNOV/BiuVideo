@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:text="导入成功"
-            android:textColor="@color/normal"
+            android:textColor="@color/black"
             android:textSize="17sp"
             android:textStyle="bold" />
 

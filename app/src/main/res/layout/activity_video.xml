@@ -63,7 +63,7 @@
                             android:layout_height="64dp"
                             android:layout_marginStart="5dp"
                             android:src="@drawable/ic_launcher_background"
-                            app:civ_border_color="@color/normal"
+                            app:civ_border_color="@color/black"
                             app:civ_border_width="2dp" />
 
                         <TextView
@@ -72,7 +72,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="15dp"
                             android:text="我是name"
-                            android:textColor="@color/normal"
+                            android:textColor="@color/black"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
@@ -92,7 +92,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:text="我是标题"
-                        android:textColor="@color/normal"
+                        android:textColor="@color/black"
                         android:textSize="18sp" />
 
                     <LinearLayout
@@ -108,7 +108,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="15.1W次观看"
-                            android:textColor="@color/normal"
+                            android:textColor="@color/black"
                             android:textSize="14sp" />
 
                         <TextView
@@ -117,7 +117,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="600弹幕"
-                            android:textColor="@color/normal"
+                            android:textColor="@color/black"
                             android:textSize="14sp" />
 
                         <TextView
@@ -126,7 +126,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="2020-10-17 18:15"
-                            android:textColor="@color/normal"
+                            android:textColor="@color/black"
                             android:textSize="14sp" />
 
                     </LinearLayout>
@@ -173,7 +173,7 @@
                                 android:layout_width="25dp"
                                 android:layout_height="25dp"
                                 android:src="@drawable/icon_video_like"
-                                app:tint="@color/normal" />
+                                app:tint="@color/black" />
 
                             <TextView
                                 android:id="@+id/video_textView_like"
@@ -181,7 +181,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:text="2.5万点赞"
-                                android:textColor="@color/normal"
+                                android:textColor="@color/black"
                                 android:textSize="12sp" />
 
                         </LinearLayout>
@@ -197,7 +197,7 @@
                                 android:layout_width="25dp"
                                 android:layout_height="25dp"
                                 android:src="@drawable/icon_coin"
-                                app:tint="@color/normal" />
+                                app:tint="@color/black" />
 
                             <TextView
                                 android:id="@+id/video_textView_coin"
@@ -205,7 +205,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:text="1.8万投币"
-                                android:textColor="@color/normal"
+                                android:textColor="@color/black"
                                 android:textSize="12sp" />
 
                         </LinearLayout>
@@ -221,7 +221,7 @@
                                 android:layout_width="25dp"
                                 android:layout_height="25dp"
                                 android:src="@drawable/icon_video_favorite"
-                                app:tint="@color/normal" />
+                                app:tint="@color/black" />
 
                             <TextView
                                 android:id="@+id/video_textView_favorite"
@@ -229,7 +229,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:text="2.1万收藏"
-                                android:textColor="@color/normal"
+                                android:textColor="@color/black"
                                 android:textSize="12sp" />
 
                         </LinearLayout>
@@ -245,7 +245,7 @@
                                 android:layout_width="25dp"
                                 android:layout_height="25dp"
                                 android:src="@drawable/icon_video_share"
-                                app:tint="@color/normal" />
+                                app:tint="@color/black" />
 
                             <TextView
                                 android:id="@+id/video_textView_share"
@@ -253,7 +253,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:text="3671分享"
-                                android:textColor="@color/normal"
+                                android:textColor="@color/black"
                                 android:textSize="12sp" />
 
                         </LinearLayout>
@@ -284,7 +284,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="7dp"
                         android:text="@string/video_textView_choiceSingleVideo_str"
-                        android:textColor="@color/normal"
+                        android:textColor="@color/black"
                         android:textSize="15sp" />
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -315,7 +315,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:text="@string/video_textView_saveOther_str"
-                        android:textColor="@color/normal"
+                        android:textColor="@color/black"
                         android:textSize="15sp" />
 
                     <LinearLayout
@@ -334,7 +334,7 @@
                             android:background="@drawable/shape_bilibili_pink"
                             android:padding="10dp"
                             android:text="@string/video_button_saveCover_str"
-                            android:textColor="@color/normal"
+                            android:textColor="@color/black"
                             android:textSize="12sp" />
 
                         <Button
@@ -347,7 +347,7 @@
                             android:background="@drawable/shape_bilibili_pink"
                             android:padding="10dp"
                             android:text="@string/video_button_saveFace_str"
-                            android:textColor="@color/normal"
+                            android:textColor="@color/black"
                             android:textSize="12sp" />
 
                         <Button
@@ -360,7 +360,7 @@
                             android:background="@drawable/shape_bilibili_pink"
                             android:padding="10dp"
                             android:text="@string/video_button_saveVideo_str"
-                            android:textColor="@color/normal"
+                            android:textColor="@color/black"
                             android:textSize="12sp" />
 
                     </LinearLayout>

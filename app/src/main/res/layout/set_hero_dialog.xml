@@ -34,7 +34,7 @@
                 android:checked="true"
                 android:text="@string/set_hero_auto"
                 android:paddingHorizontal="7dp"
-                android:textColor="@color/normal"
+                android:textColor="@color/black"
                 android:textSize="15sp" />
 
             <RadioButton
@@ -46,7 +46,7 @@
                 android:layout_weight="1"
                 android:paddingHorizontal="7dp"
                 android:text="@string/set_hero_custom"
-                android:textColor="@color/normal"
+                android:textColor="@color/black"
                 android:textSize="15sp" />
 
         </RadioGroup>
@@ -65,7 +65,7 @@
             android:background="@drawable/spinner_theme_set_hero"
             android:entries="@array/heroNames"
             android:popupBackground="@drawable/spinner_popup_theme_set_hero"
-            android:textColor="@color/normal"
+            android:textColor="@color/black"
             android:theme="@style/set_hero_dialog_spinner" />
 
         <ImageView
@@ -91,7 +91,7 @@
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="@string/set_hero_save"
-                android:textColor="@color/normal" />
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/set_hero_textView_close"
@@ -102,7 +102,7 @@
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="@string/set_hero_close"
-                android:textColor="@color/normal" />
+                android:textColor="@color/black" />
 
         </LinearLayout>
 

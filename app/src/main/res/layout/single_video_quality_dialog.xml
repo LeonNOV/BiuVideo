@@ -14,7 +14,7 @@
         android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal"
         android:textSize="13sp"
-        android:textColor="@color/normal"
+        android:textColor="@color/black"
         android:textStyle="bold"
         android:layout_above="@id/single_video_recyclerView_quality" />
 

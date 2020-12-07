@@ -80,7 +80,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="5dp"
                                 android:text="我是name"
-                                android:textColor="@color/normal"
+                                android:textColor="@color/black"
                                 android:textSize="23sp"
                                 android:textStyle="bold" />
 
@@ -167,7 +167,7 @@
                     android:background="@drawable/shape_bilibili_pink"
                     android:gravity="center"
                     android:text="@string/up_item_videos"
-                    android:textColor="@color/normal"
+                    android:textColor="@color/black"
                     android:textSize="15sp" />
 
                 <TextView
@@ -179,7 +179,7 @@
                     android:background="@drawable/ripple_bilibili_pink_lite"
                     android:gravity="center"
                     android:text="@string/up_item_audios"
-                    android:textColor="@color/normal"
+                    android:textColor="@color/black"
                     android:textSize="15sp" />
 
                 <TextView
@@ -191,7 +191,7 @@
                     android:background="@drawable/ripple_bilibili_pink_lite"
                     android:gravity="center"
                     android:text="@string/up_item_articles"
-                    android:textColor="@color/normal"
+                    android:textColor="@color/black"
                     android:textSize="15sp" />
 
                 <TextView
@@ -203,7 +203,7 @@
                     android:background="@drawable/ripple_bilibili_pink_lite"
                     android:gravity="center"
                     android:text="@string/up_item_pictures"
-                    android:textColor="@color/normal"
+                    android:textColor="@color/black"
                     android:textSize="15sp" />
 
             </LinearLayout>
