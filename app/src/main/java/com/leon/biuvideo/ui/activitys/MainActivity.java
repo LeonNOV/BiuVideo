@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -36,8 +38,17 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, ActivityCompat.OnRequestPermissionsResultCallback {
     private DrawerLayout drawer_layout;
-    private LinearLayout main_linear_layout;
     private NavigationView navigation_view;
+
+    private ImageView navigation_header_user_face, navigation_header_logout;
+    private TextView
+            navigation_header_user_name,
+            navigation_header_user_level,
+            navigation_header_user_ex,
+            navigation_header_b_coin1,
+            navigation_header_b_coin2;
+    private ProgressBar navigation_header_progress_level;
+
     private ImageView toolBar_imageView_menu, toolBar_imageView_more;
     private InternetUtils.InternetState internetState;
 
@@ -99,10 +110,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initView() {
         drawer_layout = findViewById(R.id.drawer_layout);
 
-        main_linear_layout = findViewById(R.id.main_linear_layout);
-
         navigation_view = findViewById(R.id.navigation_view);
         navigation_view.setNavigationItemSelectedListener(this);
+
+        navigation_header_user_face = findViewById(R.id.navigation_header_user_face);
+        navigation_header_user_face.setOnClickListener(this);
+
+        navigation_header_logout = findViewById(R.id.navigation_header_logout);
+        navigation_header_logout.setOnClickListener(this);
+
+        navigation_header_user_name = findViewById(R.id.navigation_header_user_name);
+        navigation_header_user_level = findViewById(R.id.navigation_header_user_level);
+        navigation_header_user_ex = findViewById(R.id.navigation_header_user_ex);
+        navigation_header_b_coin1 = findViewById(R.id.navigation_header_b_coin1);
+        navigation_header_b_coin2 = findViewById(R.id.navigation_header_b_coin2);
+
+        navigation_header_progress_level = findViewById(R.id.navigation_header_progress_level);
 
         toolBar_imageView_menu = findViewById(R.id.toolBar_imageView_menu);
         toolBar_imageView_menu.setOnClickListener(this);
