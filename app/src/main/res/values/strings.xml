@@ -10,7 +10,9 @@
         <item>UP主</item>
     </array>
 
-    <string name="navigation_userName">还未登录哦</string>
+    <string name="navigation_userName">点击头像即可登录哦</string>
+    <string name="navigation_nothing">--</string>
+    <string name="navigation_vip_due_date">登录即可查看VIP到期时间</string>
 
     <string name="cancel_follow">取消关注</string>
 

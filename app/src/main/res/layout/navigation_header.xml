@@ -4,9 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_marginStart="15dp"
-    android:layout_marginTop="30dp"
-    android:layout_marginEnd="15dp"
+    android:layout_margin="10dp"
     app:cardBackgroundColor="@color/bilibili_pink_light"
     app:cardCornerRadius="10dp">
 
@@ -39,7 +37,7 @@
                         android:id="@+id/navigation_header_user_face"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_launcher_background" />
+                        android:src="@drawable/icon_no_login" />
 
                 </androidx.cardview.widget.CardView>
 
@@ -52,7 +50,7 @@
                     android:fontFamily="sans-serif-smallcaps"
                     android:gravity="center"
                     android:maxLength="13"
-                    android:text="的的的的的的的的的的的的的的的的"
+                    android:text="@string/navigation_userName"
                     android:textColor="#000000"
                     android:textStyle="bold" />
 
@@ -90,7 +88,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-smallcaps"
-                    android:text="Lv:4"
+                    android:text="Lv：--"
                     android:textColor="#734754"
                     android:textStyle="bold" />
 
@@ -98,7 +96,7 @@
                     android:id="@+id/navigation_header_user_ex"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="7483/10800"
+                    android:text="--/--"
                     android:textColor="#734754"
                     android:fontFamily="sans-serif-smallcaps"
                     android:layout_alignParentEnd="true"
@@ -110,8 +108,6 @@
                 android:id="@+id/navigation_header_progress_level"
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
-                android:progress="7483"
-                android:max="10800"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 android:progressTint="#039BE5" />
 
@@ -128,12 +124,12 @@
                     android:src="@drawable/icon_b_coin2"
                     app:tint="#734754"/>
                 <TextView
-                    android:id="@+id/navigation_header_b_coin1"
+                    android:id="@+id/navigation_header_money"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="10dp"
-                    android:text="601"/>
+                    android:text="@string/navigation_nothing"/>
 
                 <ImageView
                     android:layout_width="24dp"
@@ -141,20 +137,29 @@
                     android:src="@drawable/icon_b_coin"/>
 
                 <TextView
-                    android:id="@+id/navigation_header_b_coin2"
+                    android:id="@+id/navigation_header_b_coin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="10dp"
-                    android:text="601"/>
+                    android:text="@string/navigation_nothing"/>
 
                 <ImageView
+                    android:id="@+id/navigation_header_vip_state"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:src="@drawable/icon_vip"/>
+                    android:src="@drawable/icon_normal_vip" />
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/navigation_header_vip_due_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/navigation_vip_due_date"/>
+
         </LinearLayout>
 
     </LinearLayout>

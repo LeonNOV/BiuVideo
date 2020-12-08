@@ -1,25 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group>
-        <item android:title="Main">
+        <item
+            android:id="@+id/navigation_menu_home"
+            android:checkable="true"
+            android:checked="true"
+            android:icon="@drawable/navigation_menu_home"
+            android:title="@string/navigation_menu_item1" />
+        <item
+            android:id="@+id/navigation_menu_favorite"
+            android:checkable="true"
+            android:icon="@drawable/navigation_menu_favorite"
+            android:title="@string/navigation_menu_item2" />
+        <item
+            android:id="@+id/navigation_menu_play_list"
+            android:checkable="true"
+            android:icon="@drawable/navigation_menu_play_list"
+            android:title="@string/navigation_menu_item3" />
+        <item android:title="@string/navigation_menu_other">
             <menu>
                 <group>
                     <item
-                        android:id="@+id/item1"
-                        android:checked="true"
-                        android:title="@string/navigation_menu_item1"/>
-                    <item android:id="@+id/item2"
-                        android:title="@string/navigation_menu_item2"/>
-                    <item android:id="@+id/item3"
-                        android:title="@string/navigation_menu_item3"/>
-                </group>
-            </menu>
-        </item>
-        <item android:title="其他">
-            <menu>
-                <group>
-                    <item android:title="设置"/>
-                    <item android:title="关于"/>
+                        android:id="@+id/navigation_menu_preference"
+                        android:checkable="true"
+                        android:icon="@drawable/navigation_menu_preference"
+                        android:title="@string/navigation_menu_item4" />
+                    <item
+                        android:id="@+id/navigation_menu_help"
+                        android:icon="@drawable/navigation_menu_help"
+                        android:title="@string/navigation_menu_item5" />
+                    <item
+                        android:id="@+id/navigation_menu_about"
+                        android:icon="@drawable/navigation_menu_about"
+                        android:title="@string/navigation_menu_item6" />
                 </group>
             </menu>
         </item>

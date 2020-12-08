@@ -184,14 +184,6 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
                 builder.create().show();
 
                 break;
-            case R.id.preference_textView_about_biu_video:
-
-                AboutBiuVideoDialog aboutBiuVideoDialog = new AboutBiuVideoDialog(PreferenceActivity.this);
-                aboutBiuVideoDialog.show();
-
-                Fuck.blue("CurrentFocus:" + aboutBiuVideoDialog.getCurrentFocus());
-
-                break;
             case R.id.preference_textView_open_source_license:
                 //显示开源许可
                 LicenseDialog licenseDialog = new LicenseDialog(PreferenceActivity.this);

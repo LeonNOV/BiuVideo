@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <!-- allowBackup属性默认为false，后期会根据反馈情况来决定是否开启 -->
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_biu_video"
@@ -19,7 +18,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-
+        <activity
+            android:name=".ui.activitys.LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity
             android:name=".ui.activitys.SearchResultActivity"
             android:exported="false"
@@ -71,9 +73,6 @@
             android:name=".service.MusicService"
             android:enabled="true"
             android:exported="false" />
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

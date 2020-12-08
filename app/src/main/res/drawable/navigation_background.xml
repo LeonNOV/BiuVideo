@@ -4,7 +4,7 @@
         android:angle="135"
         android:endColor="#fb7299"
         android:startColor="#3B99BF"
-        android:type="linear" />
+        android:type="linear"/>
 <!--    <gradient android:centerColor="@color/bilibili_pink_lite"-->
 <!--        android:startColor="@color/bilibili_pink_lite"-->
 <!--        android:endColor="@color/bilibili_pink_lite" />-->

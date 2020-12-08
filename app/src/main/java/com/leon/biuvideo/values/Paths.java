@@ -4,6 +4,14 @@ package com.leon.biuvideo.values;
  * 接口请求地址
  */
 public class Paths {
+
+    /**
+     * 获取用户信息
+     * 不需要任何参数
+     * 必须要设置Cookie信息
+     */
+    public static String nav = "https://api.bilibili.com/x/web-interface/nav";
+
     /**
      * 获取视频基本信息和所有选集信息
      *      参数：
