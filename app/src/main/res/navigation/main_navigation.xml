@@ -9,25 +9,38 @@
         android:name="com.leon.biuvideo.ui.fragments.mainFragments.HomeFragment"
         android:label="HomeFragment">
         <action
-            android:id="@+id/action_homeFragment_to_favoriteFragment"
+            android:id="@+id/action_homeFragment_to_historyFragment"
+            app:destination="@id/historyFragment" >
+            <action
+                android:id="@+id/action_action_homeFragment_to_historyFragment_to_homeFragment"
+                app:destination="@id/homeFragment"
+                app:popUpTo="@id/favoriteFragment" />
+        </action>
+        <action
+            android:id="@+id/action_homeFragment_to_playListFragment"
+            app:destination="@id/playListFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_favoriteFragment2"
             app:destination="@id/favoriteFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_preferenceFragment"
+            app:destination="@id/preferenceFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
         android:name="com.leon.biuvideo.ui.fragments.mainFragments.FavoriteFragment"
-        android:label="FavoriteFragment">
-        <action
-            android:id="@+id/action_favoriteFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-        <action
-            android:id="@+id/action_favoriteFragment_to_playListFragment"
-            app:destination="@id/playListFragment" />
-    </fragment>
+        android:label="FavoriteFragment"/>
 
     <fragment
         android:id="@+id/playListFragment"
         android:name="com.leon.biuvideo.ui.fragments.mainFragments.PlayListFragment"
-        android:label="PlayListFragment">
-
-    </fragment>
+        android:label="PlayListFragment"/>
+    <fragment
+        android:id="@+id/preferenceFragment"
+        android:name="com.leon.biuvideo.ui.fragments.mainFragments.PreferenceFragment"
+        android:label="PreferenceFragment" />
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.leon.biuvideo.ui.fragments.mainFragments.HistoryFragment"
+        android:label="HistoryFragment" />
 </navigation>

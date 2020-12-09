@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="history_video">视频</string>
+    <string name="history_live">直播</string>
+    <string name="history_article">专栏</string>
+
+</resources>

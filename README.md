@@ -8,6 +8,10 @@
 ### 2020/12/09
 - 加入了`BaseFragment`，继承该类可更好的创建和使用Fragment
 - 修复了`HomeFragment`中`onHiddenChanged()`方法不起作用的情况
+- 对主页面中4个Fragment进行了重构
+- 加入了获取历史记录的接口
+  - 在主页加入了`HistoryFragment`
+  - `HistoryFragment`中`ViewPager`的数据展示还未完成
 
 ### 2020/12/08
 - 加入了`LoginActivity`,该Activity用来用户登录的操作

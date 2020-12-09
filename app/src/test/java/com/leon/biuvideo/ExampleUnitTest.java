@@ -39,11 +39,11 @@ public class ExampleUnitTest {
     //audio接口测试
     @Test
     public void audio() {
-        List<Audio> audio = AudioParseUtils.parseAudio(49405324, 1);
+        List<Audio> audios = AudioParseUtils.parseAudio(49405324, 1);
 
         System.out.println("page1count:" + audio.size());
 
-        for (Audio audio : audio) {
+        for (Audio audio : audios) {
             System.out.println(audio);
         }
     }
@@ -166,5 +166,10 @@ public class ExampleUnitTest {
         ArticleParser articleParser = new ArticleParser();
 
         List<Article> articles = articleParser.articleParse("马保国", 1, OrderType.DEFAULT);
+    }
+
+    @Test
+    public void HistoryTest() {
+//        HistoryParser hsitory = new HistoryParser();
     }
 }

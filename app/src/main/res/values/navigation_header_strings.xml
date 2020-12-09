@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="navigation_menu_item1">主页</string>
-    <string name="navigation_menu_item2">收藏</string>
-    <string name="navigation_menu_item3">播放列表</string>
+    <string name="navigation_menu_home">主页</string>
+    <string name="navigation_menu_favorite">收藏</string>
+    <string name="navigation_menu_play_list">播放列表</string>
+    <string name="navigation_menu_history">播放历史</string>
     <string name="navigation_menu_other">其他</string>
-    <string name="navigation_menu_item4">设置</string>
-    <string name="navigation_menu_item5">帮助</string>
-    <string name="navigation_menu_item6">关于</string>
+    <string name="navigation_menu_preference">设置</string>
+    <string name="navigation_menu_help">帮助</string>
+    <string name="navigation_menu_about">关于</string>
 
 </resources>

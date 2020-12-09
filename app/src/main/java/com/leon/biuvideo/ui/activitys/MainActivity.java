@@ -28,6 +28,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.userBeans.UserInfo;
 import com.leon.biuvideo.ui.dialogs.AboutBiuVideoDialog;
 import com.leon.biuvideo.ui.fragments.mainFragments.FavoriteFragment;
+import com.leon.biuvideo.ui.fragments.mainFragments.HistoryFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.HomeFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.PlayListFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.PreferenceFragment;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Fragment homeFragment;
     private Fragment favoriteFragment;
     private Fragment playListFragment;
+    private Fragment historyFragment;
     private Fragment preferenceFragment;
 
     @Override
@@ -256,6 +258,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 switchFragment(playListFragment);
+                break;
+            case R.id.navigation_menu_history:
+
+                if (historyFragment == null) {
+                    historyFragment = new HistoryFragment();
+                }
+
+                switchFragment(historyFragment);
                 break;
             case R.id.navigation_menu_preference:
 

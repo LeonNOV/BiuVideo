@@ -6,13 +6,6 @@ package com.leon.biuvideo.values;
 public class Paths {
 
     /**
-     * 获取用户信息
-     * 不需要任何参数
-     * 必须要设置Cookie信息
-     */
-    public static String nav = "https://api.bilibili.com/x/web-interface/nav";
-
-    /**
      * 获取视频基本信息和所有选集信息
      *      参数：
      *          bvid：视频ID，必须
@@ -164,4 +157,25 @@ public class Paths {
      *
      */
     public static String metas = "https://api.bilibili.com/x/article/metas";
+
+    //========================以下接口数据的获取需要在请求头中添加Cookie========================
+
+    /**
+     * 获取用户信息
+     * 不需要任何参数
+     * 必须要设置Cookie信息
+     */
+    public static String nav = "https://api.bilibili.com/x/web-interface/nav";
+
+    /**
+     * 获取用户历史记录,默认为20条
+     *      参数：
+     *          max：第一页为0.后面几页则需要第一页中JSONArray(list)中最后一条kid的值
+     *          view_at：第一页为0，后面几页需要第一页中JSONArray(list)其中一条的view_at的值(默认为最后一条)
+     *          type：分类，下面三个中其中一个值即可，不添加则默认为视频
+     *              archive：视频
+     *              live：直播
+     *              article：专栏
+     */
+    public static String history = "https://api.bilibili.com/x/web-interface/history/cursor?max=0&view_at=0&type=";
 }

@@ -56,6 +56,7 @@ dependencies {
 
     //加载网络图片
     implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation 'androidx.preference:preference:1.1.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     //折叠TextView
