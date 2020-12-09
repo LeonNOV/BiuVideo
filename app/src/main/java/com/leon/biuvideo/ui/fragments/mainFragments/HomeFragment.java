@@ -15,6 +15,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.activitys.SearchResultActivity;
 import com.leon.biuvideo.ui.activitys.UserActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.IDUtils;
 import com.leon.biuvideo.utils.HeroImages;
 import com.leon.biuvideo.utils.InternetUtils;
@@ -230,9 +231,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
      * PreferenceActivity被onDestroy后调用该方法，用来初始化Hero
      */
     @Override
-    public void onResume() {
-        super.onResume();
-        initValues();
+    public void onHiddenChanged(boolean hidden) {
+        if (!hidden) {
+            initValues();
+        }
+        super.onHiddenChanged(hidden);
     }
 
     @Override

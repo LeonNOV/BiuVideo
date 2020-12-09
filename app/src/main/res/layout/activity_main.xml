@@ -12,28 +12,13 @@
         android:layout_height="wrap_content"
         android:background="@color/bilibili_pink">
 
-        <RelativeLayout
+        <ImageView
+            android:id="@+id/toolBar_imageView_menu"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/toolBar_imageView_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?selectableItemBackgroundBorderless"
-                android:src="@drawable/main_menu"
-                app:tint="#FF515151" />
-
-            <ImageView
-                android:id="@+id/toolBar_imageView_more"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentEnd="true"
-                android:background="?selectableItemBackgroundBorderless"
-                android:layout_marginEnd="20dp"
-                android:src="@drawable/more_icon" />
-
-        </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackgroundBorderless"
+            android:src="@drawable/main_menu"
+            app:tint="#FF515151" />
 
     </androidx.appcompat.widget.Toolbar>
 

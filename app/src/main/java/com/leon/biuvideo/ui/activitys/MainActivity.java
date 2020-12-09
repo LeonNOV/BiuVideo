@@ -27,10 +27,10 @@ import com.google.android.material.navigation.NavigationView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.userBeans.UserInfo;
 import com.leon.biuvideo.ui.dialogs.AboutBiuVideoDialog;
-import com.leon.biuvideo.ui.fragments.mainFragments.FavoriteFragment;
+import com.leon.biuvideo.ui.fragments.mainFragments.FavoriteFragment2;
+import com.leon.biuvideo.ui.fragments.mainFragments.PreferenceFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.HomeFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.PlayListFragment;
-import com.leon.biuvideo.ui.views.RoundPopupWindow;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserInfoParser;
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             navigation_header_vip_due_date;
     private ProgressBar navigation_header_progress_level;
 
-    private ImageView toolBar_imageView_menu, toolBar_imageView_more;
+    private ImageView toolBar_imageView_menu;
     private InternetUtils.InternetState internetState;
 
     //登录标识，true：已登录；false：未登录
@@ -63,11 +63,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String cookie;//cookie信息
     private UserInfo userInfo;
 
+    private FragmentTransaction fragmentTransaction;
     private List<Fragment> fragmentList;
 
     private Fragment homeFragment;
     private Fragment favoriteFragment;
     private Fragment playListFragment;
+    private Fragment preferenceFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +114,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //初始化fragment
         fragmentList = new ArrayList<>();
         //默认显示HomeFragment
-        fragmentList.add(new HomeFragment());
+        homeFragment = new HomeFragment();
+        fragmentList.add(homeFragment);
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.main_fragment, homeFragment).commit();
 
         // 获取权限
         FileUtils.verifyPermissions(this);
@@ -148,9 +153,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         toolBar_imageView_menu = findViewById(R.id.toolBar_imageView_menu);
         toolBar_imageView_menu.setOnClickListener(this);
-
-        toolBar_imageView_more = findViewById(R.id.toolBar_imageView_more);
-        toolBar_imageView_more.setOnClickListener(this);
     }
 
     /**
@@ -244,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.navigation_menu_favorite:
 
                 if (favoriteFragment == null) {
-                    favoriteFragment = new FavoriteFragment();
+                    favoriteFragment = new FavoriteFragment2();
                 }
 
                 switchFragment(favoriteFragment);
@@ -259,10 +261,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.navigation_menu_preference:
 
-                //跳转至PreferenceActivity
-                Intent intentPreference = new Intent(MainActivity.this, PreferenceActivity.class);
-                startActivity(intentPreference);
+                if (preferenceFragment ==  null) {
+                    preferenceFragment = new PreferenceFragment();
+                }
 
+                switchFragment(preferenceFragment);
                 break;
             case R.id.navigation_menu_help:
                 //跳转至帮助文档页面
@@ -291,14 +294,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @param fragment 要添加的fragment
      */
     private void switchFragment(Fragment fragment) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         //判断该fragment是否已经被添加过
         if (!fragment.isAdded()) {
             //添加到 fragmentList
             fragmentList.add(fragment);
-            fragmentTransaction.add(R.id.main_fragment, fragment).commit();
-        } else {
+            fragmentTransaction.add(R.id.main_fragment, fragment);
+        } /*else {
             for (Fragment frag : fragmentList) {
                 if (frag != fragment) {
                     //隐藏其他fragment
@@ -309,7 +312,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             fragmentTransaction.commit();
+        }*/
+
+        for (Fragment frag : fragmentList) {
+            if (frag != fragment) {
+                //隐藏其他fragment
+                fragmentTransaction.hide(frag);
+            } else {
+                fragmentTransaction.show(fragment);
+            }
         }
+
+        fragmentTransaction.commit();
     }
 
     //设置main中的打开侧滑菜单按钮的监听和侧滑菜单中的返回按钮
@@ -339,36 +353,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.toolBar_imageView_menu:
                 drawer_layout.openDrawer(GravityCompat.START);
                 break;
-            case R.id.toolBar_imageView_more:
-                RoundPopupWindow roundPopupWindow = new RoundPopupWindow(getApplicationContext(), toolBar_imageView_more);
-                roundPopupWindow
-                        .setContentView(R.layout.main_popup_window)
-                        .setOnClickListener(R.id.main_more_help, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                //跳转至帮助文档页面
-                                Intent intent = new Intent();
-                                intent.setAction("android.intent.action.VIEW");
-                                intent.setData(Uri.parse(getString(R.string.help_link)));
-                                startActivity(intent);
-
-                                roundPopupWindow.dismiss();
-                            }
-                        })
-                        .setOnClickListener(R.id.main_more_preference, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                //跳转至PreferenceActivity
-                                Intent intent = new Intent(MainActivity.this, PreferenceActivity.class);
-                                startActivity(intent);
-
-                                roundPopupWindow.dismiss();
-                            }
-                        })
-                        .setLocation(RoundPopupWindow.SHOW_AS_DROP_DOWN)
-                        .create();
-
-                        break;
             default:
                 break;
         }

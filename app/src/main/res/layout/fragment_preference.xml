@@ -6,7 +6,7 @@
     android:background="@color/bilibili_pink_lite"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
+    <!--<androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/bilibili_pink">
@@ -28,7 +28,7 @@
             android:textColor="@color/black"
             android:textSize="18sp" />
 
-    </androidx.appcompat.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>-->
 
     <ScrollView
         android:layout_width="match_parent"

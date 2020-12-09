@@ -1,32 +1,27 @@
-package com.leon.biuvideo.ui.activitys;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
+package com.leon.biuvideo.ui.fragments.mainFragments;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.AboutBean;
 import com.leon.biuvideo.beans.Favorite;
-import com.leon.biuvideo.ui.dialogs.AboutBiuVideoDialog;
 import com.leon.biuvideo.ui.dialogs.AboutDialog;
 import com.leon.biuvideo.ui.dialogs.FeedbackDialog;
 import com.leon.biuvideo.ui.dialogs.ImportFollowDialog;
+import com.leon.biuvideo.ui.dialogs.ImportStateDialog;
 import com.leon.biuvideo.ui.dialogs.LicenseDialog;
 import com.leon.biuvideo.ui.dialogs.SetHeroDialog;
-import com.leon.biuvideo.ui.dialogs.ImportStateDialog;
-import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.ui.fragments.BaseFragment;
+import com.leon.biuvideo.ui.fragments.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
@@ -39,76 +34,42 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 设置/首选项Activity
- */
-public class PreferenceActivity extends AppCompatActivity implements OnClickListener, CompoundButton.OnCheckedChangeListener {
-    private ImageView preference_imageView_back;
-    private TextView
-            preference_textView_import,
-            preference_textView_set_hero,
-            preference_textView_cache,
-            preference_textView_cache_size,
-            preference_textView_about_biu_video,
-            preference_textView_open_source_license,
-            preference_textView_thanks_list,
-            preference_textView_feed_back;
-
+public class PreferenceFragment extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+    private TextView preference_textView_cache_size;
     private SwitchCompat preference_switch_visitState;
+    
+    @Override
+    public int setLayout() {
+        return R.layout.fragment_preference;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    public void initView(BindingUtils bindingUtils) {
+        bindingUtils
+                .setOnClickListener(R.id.preference_textView_set_hero, this)
+                .setOnClickListener(R.id.preference_textView_import, this)
+                .setOnCheckedChangeListener(R.id.preference_switch_visitState, this)
+                .setOnClickListener(R.id.preference_textView_cache, this)
+                .setOnClickListener(R.id.preference_textView_about_biu_video, this)
+                .setOnClickListener(R.id.preference_textView_open_source_license, this)
+                .setOnClickListener(R.id.preference_textView_thanks_list, this)
+                .setOnClickListener(R.id.preference_textView_feed_back, this);
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_preference);
-
-        initView();
-        initValue();
+        preference_textView_cache_size = findView(R.id.preference_textView_cache_size);
+        preference_switch_visitState = findView(R.id.preference_switch_visitState);
     }
 
-    private void initView() {
-        preference_imageView_back = findViewById(R.id.preference_imageView_back);
-        preference_imageView_back.setOnClickListener(this);
-
-        preference_textView_set_hero = findViewById(R.id.preference_textView_set_hero);
-        preference_textView_set_hero.setOnClickListener(this);
-
-        preference_textView_import = findViewById(R.id.preference_textView_import);
-        preference_textView_import.setOnClickListener(this);
-
-        preference_switch_visitState  = findViewById(R.id.preference_switch_visitState);
-        preference_switch_visitState.setOnCheckedChangeListener(this);
-
-        preference_textView_cache = findViewById(R.id.preference_textView_cache);
-        preference_textView_cache.setOnClickListener(this);
-
-        preference_textView_cache_size = findViewById(R.id.preference_textView_cache_size);
-
-        preference_textView_about_biu_video = findViewById(R.id.preference_textView_about_biu_video);
-        preference_textView_about_biu_video.setOnClickListener(this);
-
-        preference_textView_open_source_license = findViewById(R.id.preference_textView_open_source_license);
-        preference_textView_open_source_license.setOnClickListener(this);
-
-        preference_textView_thanks_list = findViewById(R.id.preference_textView_thanks_list);
-        preference_textView_thanks_list.setOnClickListener(this);
-
-        preference_textView_feed_back = findViewById(R.id.preference_textView_feed_back);
-        preference_textView_feed_back.setOnClickListener(this);
-
-    }
-
-    private void initValue() {
+    @Override
+    public void initValues() {
         //获取缓存大小(最小单位：byte)
-        File cacheDir = getCacheDir();
+        File cacheDir = context.getCacheDir();
 
         //初始化缓存大小
         String cacheSize = ValueFormat.sizeFormat(getCacheSize(cacheDir));
         preference_textView_cache_size.setText(cacheSize);
 
         //初始化preference_switch_visitState
-        SharedPreferences initValues = getSharedPreferences("initValues", Context.MODE_PRIVATE);
+        SharedPreferences initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
         boolean isVisit = initValues.getBoolean("isVisit", true);
         preference_switch_visitState.setChecked(isVisit);
     }
@@ -116,26 +77,23 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.preference_imageView_back:
-                this.finish();
-                break;
             case R.id.preference_textView_set_hero:
                 //显示SetHeroDialog
-                SetHeroDialog setHeroDialog = new SetHeroDialog(PreferenceActivity.this);
+                SetHeroDialog setHeroDialog = new SetHeroDialog(context);
                 setHeroDialog.show();
 
                 break;
             case R.id.preference_textView_import:
                 //判断是否有网络
-                boolean isHaveNetwork = InternetUtils.checkNetwork(getApplicationContext());
+                boolean isHaveNetwork = InternetUtils.checkNetwork(context);
 
                 if (!isHaveNetwork) {
-                    Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 //导入指定ID的关注列表
-                ImportFollowDialog importFollowDialog = new ImportFollowDialog(PreferenceActivity.this);
+                ImportFollowDialog importFollowDialog = new ImportFollowDialog(context);
                 importFollowDialog.show();
 
                 importFollowDialog.setPriorityListener(new ImportFollowDialog.PriorityListener() {
@@ -145,9 +103,9 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
                         //隐藏importFollowDialog
                         importFollowDialog.dismiss();
 
-                        Toast.makeText(getApplicationContext(), "正在导入数据中，请不要随意进行任何操作", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "正在导入数据中，请不要随意进行任何操作", Toast.LENGTH_SHORT).show();
 
-                        ImportStateDialog importStateDialog = new ImportStateDialog(PreferenceActivity.this);
+                        ImportStateDialog importStateDialog = new ImportStateDialog(context);
                         importStateDialog.show();
 
                         boolean insertState = getFollowings(mid, cookie);
@@ -160,7 +118,7 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
                 break;
             case R.id.preference_textView_cache: //清除缓存
                 //创建弹窗
-                AlertDialog.Builder builder = new AlertDialog.Builder(PreferenceActivity.this)
+                AlertDialog.Builder builder = new AlertDialog.Builder(context)
                         .setTitle("清除缓存")
                         .setMessage("是否要清除缓存？如果选择清除则之前加载过的数据将要重新加载一遍！")
                         .setPositiveButton("是", new DialogInterface.OnClickListener() {
@@ -169,7 +127,7 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
                                 dialog.dismiss();
 
                                 //删除缓存
-                                cleanCache(getCacheDir());
+                                cleanCache(context.getCacheDir());
 
                                 //刷新显示的缓存大小
                                 preference_textView_cache_size.setText("0B");
@@ -186,7 +144,7 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
                 break;
             case R.id.preference_textView_open_source_license:
                 //显示开源许可
-                LicenseDialog licenseDialog = new LicenseDialog(PreferenceActivity.this);
+                LicenseDialog licenseDialog = new LicenseDialog(context);
                 licenseDialog.show();
 
                 break;
@@ -204,7 +162,7 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
                 }
 
                 //显示Dialog
-                AboutDialog aboutDialog = new AboutDialog(PreferenceActivity.this, aboutBeans);
+                AboutDialog aboutDialog = new AboutDialog(context, aboutBeans);
                 aboutDialog.setOnClickBottomListener(new AboutDialog.OnClickBottomListener() {
                     @Override
                     public void onCloseClick() {
@@ -216,7 +174,7 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
                 break;
             case R.id.preference_textView_feed_back:
                 //显示反馈提交界面
-                FeedbackDialog feedbackDialog = new FeedbackDialog(PreferenceActivity.this);
+                FeedbackDialog feedbackDialog = new FeedbackDialog(context);
                 feedbackDialog.show();
                 break;
             default:
@@ -249,7 +207,7 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
             int pn = 1;
             int currentTotal = 0;
 
-            SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.FavoriteUp);
+            SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.FavoriteUp);
             FavoriteDatabaseUtils favoriteDatabaseUtils = (FavoriteDatabaseUtils) sqLiteHelperFactory.getInstance();
 
             while (currentTotal != total) {
@@ -322,7 +280,7 @@ public class PreferenceActivity extends AppCompatActivity implements OnClickList
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        SharedPreferences initValues = getSharedPreferences("initValues", Context.MODE_PRIVATE);
+        SharedPreferences initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = initValues.edit();
 
         editor.putBoolean("isVisit", isChecked);
