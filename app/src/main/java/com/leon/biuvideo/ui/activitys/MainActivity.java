@@ -27,10 +27,10 @@ import com.google.android.material.navigation.NavigationView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.userBeans.UserInfo;
 import com.leon.biuvideo.ui.dialogs.AboutBiuVideoDialog;
-import com.leon.biuvideo.ui.fragments.mainFragments.FavoriteFragment2;
-import com.leon.biuvideo.ui.fragments.mainFragments.PreferenceFragment;
+import com.leon.biuvideo.ui.fragments.mainFragments.FavoriteFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.HomeFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.PlayListFragment;
+import com.leon.biuvideo.ui.fragments.mainFragments.PreferenceFragment;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserInfoParser;
@@ -45,7 +45,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DrawerLayout drawer_layout;
     private NavigationView navigation_view;
 
-    private ImageView navigation_header_user_face, navigation_header_logout, navigation_header_vip_state;
+    private ImageView navigation_header_user_face;
+    private ImageView navigation_header_vip_state;
     private TextView
             navigation_header_user_name,
             navigation_header_user_level,
@@ -54,9 +55,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             navigation_header_b_coin2,
             navigation_header_vip_due_date;
     private ProgressBar navigation_header_progress_level;
-
-    private ImageView toolBar_imageView_menu;
-    private InternetUtils.InternetState internetState;
 
     //登录标识，true：已登录；false：未登录
     private boolean isLogin;
@@ -95,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void init() {
         //检查网络状态
-        internetState = InternetUtils.internetState(getApplicationContext());
+        InternetUtils.InternetState internetState = InternetUtils.internetState(getApplicationContext());
         switch (internetState) {
             case INTERNET_NoAvailable:
                 Toast.makeText(getApplicationContext(), "没有网络哦~~~", Toast.LENGTH_SHORT).show();
@@ -137,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigation_header_user_face = headerView.findViewById(R.id.navigation_header_user_face);
         navigation_header_user_face.setOnClickListener(this);
 
-        navigation_header_logout = headerView.findViewById(R.id.navigation_header_logout);
+        ImageView navigation_header_logout = headerView.findViewById(R.id.navigation_header_logout);
         navigation_header_logout.setOnClickListener(this);
 
         navigation_header_vip_state = headerView.findViewById(R.id.navigation_header_vip_state);
@@ -151,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         navigation_header_progress_level = headerView.findViewById(R.id.navigation_header_progress_level);
 
-        toolBar_imageView_menu = findViewById(R.id.toolBar_imageView_menu);
+        ImageView toolBar_imageView_menu = findViewById(R.id.toolBar_imageView_menu);
         toolBar_imageView_menu.setOnClickListener(this);
     }
 
@@ -246,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.navigation_menu_favorite:
 
                 if (favoriteFragment == null) {
-                    favoriteFragment = new FavoriteFragment2();
+                    favoriteFragment = new FavoriteFragment();
                 }
 
                 switchFragment(favoriteFragment);
@@ -261,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.navigation_menu_preference:
 
-                if (preferenceFragment ==  null) {
+                if (preferenceFragment == null) {
                     preferenceFragment = new PreferenceFragment();
                 }
 
@@ -301,18 +299,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //添加到 fragmentList
             fragmentList.add(fragment);
             fragmentTransaction.add(R.id.main_fragment, fragment);
-        } /*else {
-            for (Fragment frag : fragmentList) {
-                if (frag != fragment) {
-                    //隐藏其他fragment
-                    fragmentTransaction.hide(frag);
-                } else {
-                    fragmentTransaction.show(fragment);
-                }
-            }
-
-            fragmentTransaction.commit();
-        }*/
+        }
 
         for (Fragment frag : fragmentList) {
             if (frag != fragment) {

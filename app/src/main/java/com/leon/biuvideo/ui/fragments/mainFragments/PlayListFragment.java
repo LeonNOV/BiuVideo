@@ -1,21 +1,17 @@
 package com.leon.biuvideo.ui.fragments.mainFragments;
 
-import android.content.Context;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.ViewPageAdapter;
+import com.leon.biuvideo.ui.fragments.BaseFragment;
+import com.leon.biuvideo.ui.fragments.BindingUtils;
 import com.leon.biuvideo.ui.fragments.playListFragments.MusicListFragment;
 import com.leon.biuvideo.ui.fragments.playListFragments.VideoListFragment;
 import com.leon.biuvideo.utils.Fuck;
@@ -23,35 +19,17 @@ import com.leon.biuvideo.utils.Fuck;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * MainActivity中的播放列表片段
- */
-public class PlayListFragment extends Fragment implements ViewPager.OnPageChangeListener, View.OnClickListener {
+public class PlayListFragment extends BaseFragment implements ViewPager.OnPageChangeListener, View.OnClickListener {
     private TextView play_list_textView_video, play_list_textView_music;
     private ViewPager play_list_viewPage;
 
-    private View view;
-
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.main_fragment_play_list_fragment, container, false);
+    public int setLayout() {
+        return R.layout.main_fragment_play_list_fragment;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        init();
-        initView();
-        initFragments();
-    }
-
-    private void init() {
-        view = getView();
-    }
-
-    private void initView() {
+    public void initView(BindingUtils bindingUtils) {
         play_list_textView_video = view.findViewById(R.id.play_list_textView_video);
         play_list_textView_video.setOnClickListener(this);
 
@@ -62,7 +40,8 @@ public class PlayListFragment extends Fragment implements ViewPager.OnPageChange
         play_list_viewPage.addOnPageChangeListener(this);
     }
 
-    private void initFragments() {
+    @Override
+    public void initValues() {
         List<Fragment> fragments = new ArrayList<>();
 
         fragments.add(new VideoListFragment());
@@ -76,18 +55,18 @@ public class PlayListFragment extends Fragment implements ViewPager.OnPageChange
     public void onPageSelected(int position) {
         Log.d(Fuck.blue, "page position:" + position);
 
-        int point_bilibili_pink = R.drawable.shape_bilibili_pink;
-        int point_bilibili_pink_lite = R.drawable.ripple_bilibili_pink_lite;
+        int pointBiliBiliPink = R.drawable.shape_bilibili_pink;
+        int pointBiliBiliPinkLite = R.drawable.ripple_bilibili_pink_lite;
 
         switch (position) {
             case 0:
-                play_list_textView_video.setBackgroundResource(point_bilibili_pink);
-                play_list_textView_music.setBackgroundResource(point_bilibili_pink_lite);
+                play_list_textView_video.setBackgroundResource(pointBiliBiliPink);
+                play_list_textView_music.setBackgroundResource(pointBiliBiliPinkLite);
 
                 break;
             case 1:
-                play_list_textView_video.setBackgroundResource(point_bilibili_pink_lite);
-                play_list_textView_music.setBackgroundResource(point_bilibili_pink);
+                play_list_textView_video.setBackgroundResource(pointBiliBiliPinkLite);
+                play_list_textView_music.setBackgroundResource(pointBiliBiliPink);
 
                 break;
             default:

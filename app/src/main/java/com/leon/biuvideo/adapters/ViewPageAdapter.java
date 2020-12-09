@@ -12,7 +12,7 @@ import java.util.List;
  * viewPage通用适配器
  */
 public class ViewPageAdapter extends FragmentPagerAdapter {
-    private List<Fragment> fragments;
+    private final List<Fragment> fragments;
 
     public ViewPageAdapter(@NonNull FragmentManager fm, int behavior, List<Fragment> fragments) {
         super(fm, behavior);

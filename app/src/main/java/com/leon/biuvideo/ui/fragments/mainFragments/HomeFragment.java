@@ -3,21 +3,23 @@ package com.leon.biuvideo.ui.fragments.mainFragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.view.*;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.*;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.Toast;
+
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.activitys.SearchResultActivity;
 import com.leon.biuvideo.ui.activitys.UserActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
-import com.leon.biuvideo.utils.Fuck;
-import com.leon.biuvideo.utils.IDUtils;
+import com.leon.biuvideo.ui.fragments.BaseFragment;
+import com.leon.biuvideo.ui.fragments.BindingUtils;
 import com.leon.biuvideo.utils.HeroImages;
+import com.leon.biuvideo.utils.IDUtils;
 import com.leon.biuvideo.utils.InternetUtils;
 
 import java.text.ParseException;
@@ -25,62 +27,33 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-/**
- * MainActivity中的主页片段
- */
-public class HomeFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class HomeFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     private ImageView hero_imageView;
-    private Spinner home_spinner;
     private EditText main_editText_value;
-    private Button main_button_confirm;
-
-    private View view;
-    private Context context;
 
     //spinner索引
     private int spinnerIndex;
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.main_fragment_home, container, false);
+    public int setLayout() {
+        return R.layout.main_fragment_home;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        init();
-        initView();
-        initValues();
-    }
-
-    /**
-     * 初始化
-     */
-    private void init() {
-        view = getView();
-        context = getActivity();
-    }
-
-    /**
-     * 初始化控件
-     */
-    private void initView() {
-        hero_imageView = view.findViewById(R.id.home_imageView_hero);
+    public void initView(BindingUtils bindingUtils) {
+        hero_imageView = findView(R.id.home_imageView_hero);
         hero_imageView.setOnClickListener(this);
 
-        home_spinner = view.findViewById(R.id.home_spinner);
+        Spinner home_spinner = findView(R.id.home_spinner);
         home_spinner.setOnItemSelectedListener(this);
 
-        main_editText_value = view.findViewById(R.id.home_editText_value);
+        main_editText_value = findView(R.id.home_editText_value);
 
-        main_button_confirm = view.findViewById(R.id.home_button_confirm);
-        main_button_confirm.setOnClickListener(this);
+        bindingUtils.setOnClickListener(R.id.home_button_confirm, this);
     }
 
-    private void initValues() {
-
+    @Override
+    public void initValues() {
         //判断是否为自动更换
         SharedPreferences initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
         boolean isAutoChange = initValues.getBoolean("isAutoChange", true);
@@ -107,9 +80,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         int heroIndex = initValues.getInt("heroIndex", 0);
 
         //判断是否为第一次启动
-        if (startTime == 0 && heroIndex == 0) {
-            heroIndex = 0;
-        } else {
+        if (startTime != 0 && heroIndex != 0) {
             //判断是否已过去一天，如果已过则设置新的hero
             if (System.currentTimeMillis() - startTime >= 86400000) {
                 //达到最后一个则将index重置为0
@@ -249,7 +220,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 }

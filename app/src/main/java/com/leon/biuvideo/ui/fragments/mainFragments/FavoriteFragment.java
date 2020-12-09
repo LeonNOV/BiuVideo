@@ -1,71 +1,52 @@
-/*
 package com.leon.biuvideo.ui.fragments.mainFragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.FavoriteAdapter;
 import com.leon.biuvideo.beans.Favorite;
-import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.ui.fragments.BaseFragment;
+import com.leon.biuvideo.ui.fragments.BindingUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.utils.dataBaseUtils.Tables;
 
 import java.util.List;
 
-
-public class FavoriteFragment extends Fragment {
+/**
+ * MainActivity中的收藏片段
+ */
+public class FavoriteFragment extends BaseFragment {
     private RecyclerView favorite_recyclerView;
     private TextView favorite_textView_noDataStr;
-
-    private Context context;
-
-    private View view;
 
     private List<Favorite> favorites;
     private FavoriteAdapter favoriteAdapter;
     private FavoriteDatabaseUtils favoriteDatabaseUtils;
     private boolean isVisit;
-
-    @Nullable
+    
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.main_fragment_recycler_view, container, false);
+    public int setLayout() {
+        return R.layout.main_fragment_recycler_view;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        initView();
-        initValue();
-    }
-
-    private void initView() {
-        context = getActivity();
-        view = getView();
-
+    public void initView(BindingUtils bindingUtils) {
         SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.FavoriteUp);
         favoriteDatabaseUtils = (FavoriteDatabaseUtils) sqLiteHelperFactory.getInstance();
 
-        favorite_recyclerView = view.findViewById(R.id.recyclerView);
-        favorite_textView_noDataStr = view.findViewById(R.id.textView_noDataStr);
+        favorite_recyclerView = findView(R.id.recyclerView);
+        favorite_textView_noDataStr = findView(R.id.textView_noDataStr);
     }
 
-    private void initValue() {
+    @Override
+    public void initValues() {
         SharedPreferences initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
         isVisit = initValues.getBoolean("isVisit", true);
 
@@ -114,4 +95,3 @@ public class FavoriteFragment extends Fragment {
         favoriteDatabaseUtils.close();
     }
 }
-*/

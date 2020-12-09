@@ -16,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.ui.fragments.mainFragments.HomeFragment;
 import com.leon.biuvideo.utils.HeroImages;
 
 public class SetHeroDialog extends AlertDialog implements View.OnClickListener, AdapterView.OnItemSelectedListener, RadioGroup.OnCheckedChangeListener {
