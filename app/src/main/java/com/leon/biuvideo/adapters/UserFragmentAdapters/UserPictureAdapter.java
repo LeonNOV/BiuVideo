@@ -9,8 +9,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
-import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
+import com.leon.biuvideo.adapters.BaseAdapters.BaseAdapter;
+import com.leon.biuvideo.adapters.BaseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.upMasterBean.Picture;
 import com.leon.biuvideo.ui.activitys.PictureActivity;
 import com.leon.biuvideo.values.ImagePixelSize;

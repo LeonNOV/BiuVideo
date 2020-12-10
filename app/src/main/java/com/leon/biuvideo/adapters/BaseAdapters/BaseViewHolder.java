@@ -1,4 +1,4 @@
-package com.leon.biuvideo.adapters.BaseAdapter;
+package com.leon.biuvideo.adapters.BaseAdapters;
 
 import android.content.Context;
 import android.os.Build;

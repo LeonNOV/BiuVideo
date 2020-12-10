@@ -14,9 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.PlayListAdapter.VideoListAdapter;
+import com.leon.biuvideo.adapters.PlayListAdapters.VideoListAdapter;
 import com.leon.biuvideo.beans.upMasterBean.VideoPlayList;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.utils.dataBaseUtils.Tables;
 import com.leon.biuvideo.utils.dataBaseUtils.VideoListDatabaseUtils;

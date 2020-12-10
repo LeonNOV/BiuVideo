@@ -8,8 +8,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
-import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
+import com.leon.biuvideo.adapters.BaseAdapters.BaseAdapter;
+import com.leon.biuvideo.adapters.BaseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.upMasterBean.Audio;
 import com.leon.biuvideo.ui.activitys.MusicActivity;
 import com.leon.biuvideo.values.ImagePixelSize;

@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/search_result_no_data"
+        android:id="@+id/smart_refresh_layout_fragment_no_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -15,12 +15,12 @@
         android:textSize="30sp" />
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        android:id="@+id/search_result_smartRefresh"
+        android:id="@+id/smart_refresh_layout_fragment_smartRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/search_result_recyclerView"
+            android:id="@+id/smart_refresh_layout_fragment_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

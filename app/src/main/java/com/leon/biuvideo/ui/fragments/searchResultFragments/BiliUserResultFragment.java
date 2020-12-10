@@ -75,7 +75,7 @@ public class BiliUserResultFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.search_result_fragment, container, false);
+        view = inflater.inflate(R.layout.smart_refresh_layout_fragment, container, false);
 
         initView();
         initVisibility();
@@ -86,9 +86,9 @@ public class BiliUserResultFragment extends Fragment {
     private void initView() {
         context = getContext();
 
-        search_result_no_data = view.findViewById(R.id.search_result_no_data);
-        search_result_smartRefresh = view.findViewById(R.id.search_result_smartRefresh);
-        search_result_recyclerView = view.findViewById(R.id.search_result_recyclerView);
+        search_result_no_data = view.findViewById(R.id.smart_refresh_layout_fragment_no_data);
+        search_result_smartRefresh = view.findViewById(R.id.smart_refresh_layout_fragment_smartRefresh);
+        search_result_recyclerView = view.findViewById(R.id.smart_refresh_layout_fragment_recyclerView);
 
         //关闭下拉刷新
         search_result_smartRefresh.setEnableRefresh(false);
