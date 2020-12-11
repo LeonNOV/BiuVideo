@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class VideoHistoryAdapter extends BaseAdapter<History.InnerHistory> {
-    private List<History.InnerHistory> historys;
+    private final List<History.InnerHistory> historys;
     private final Context context;
 
     public VideoHistoryAdapter(List<History.InnerHistory> historys, Context context) {

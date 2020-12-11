@@ -31,20 +31,22 @@ public class HistoryParser {
         params.put("view_at", viewAt == -1 ? "" : String.valueOf(viewAt));
         params.put("type", historyType.value);
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.nav, Headers.of("Cookie", cookie), params);
-        JSONObject data = responseObject.getJSONObject("data");
+        if (cookie != null) {
+            JSONObject responseObject = HttpUtils.getResponse(Paths.history, Headers.of("Cookie", cookie), params);
+            JSONObject data = responseObject.getJSONObject("data");
 
-        if (data != null) {
-            History history = new History();
+            if (data != null) {
+                History history = new History();
 
-            JSONObject cursor = data.getJSONObject("cursor");
-            history.max = cursor.getLongValue("max");
-            history.viewAt = cursor.getLongValue("view_at");
+                JSONObject cursor = data.getJSONObject("cursor");
+                history.max = cursor.getLongValue("max");
+                history.viewAt = cursor.getLongValue("view_at");
 
-            JSONArray list = data.getJSONArray("list");
-            history.innerHistory = parseJSONArray(list);
+                JSONArray list = data.getJSONArray("list");
+                history.innerHistory = parseJSONArray(list);
 
-            return history;
+                return history;
+            }
         }
 
         return null;
