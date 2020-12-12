@@ -177,5 +177,14 @@ public class Paths {
      *              live：直播
      *              article：专栏
      */
-    public static String history = "https://api.bilibili.com/x/web-interface/history/cursor?max=0&view_at=0&type=";
+    public static String history = "https://api.bilibili.com/x/web-interface/history/cursor";
+
+    /**
+     * 获取<strong>单个专利<strong/>的信息
+     * Cookie可有可无
+     *
+     *      参数：
+     *          id：专栏ID
+     */
+    public static String articleInfo = "https://api.bilibili.com/x/article/viewinfo";
 }

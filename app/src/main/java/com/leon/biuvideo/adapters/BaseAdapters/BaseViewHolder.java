@@ -80,6 +80,19 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     /**
+     * 用于设置控件的image(本地资源)
+     *
+     * @param id    控件ID
+     * @return  返回this
+     */
+    public BaseViewHolder setImage(int id, int resId) {
+        ImageView imageView = findById(id);
+        imageView.setImageResource(resId);
+
+        return this;
+    }
+
+    /**
      * 用于设置控件的监听事件
      *
      * @param id    控件ID

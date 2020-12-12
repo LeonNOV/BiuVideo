@@ -108,6 +108,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         Bundle extras = intent.getExtras();
         article = (Article) extras.getSerializable("article");
 
+
         //设置头像
         Glide.with(getApplicationContext()).load(article.face).into(article_imageView_face);
 
@@ -117,12 +118,19 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         //设置标题
         article_textView_title.setText(article.title);
 
-        //设置文章分类
-        article_textView_category.setText(article.category);
+        boolean isHistory = extras.getBoolean("isHistory", false);
+        if (isHistory) {
+            article_textView_category.setVisibility(View.GONE);
+            article_textView_ctime.setVisibility(View.GONE);
 
-        //设置创建时间
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
-        article_textView_ctime.setText(sdf.format(new Date(article.ctime * 1000)));
+        } else {
+            //设置文章分类
+            article_textView_category.setText(article.category);
+
+            //设置创建时间
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
+            article_textView_ctime.setText(sdf.format(new Date(article.ctime * 1000)));
+        }
 
         //设置观看量
         String viewStr = ValueFormat.generateCN(article.view) + "次阅读";

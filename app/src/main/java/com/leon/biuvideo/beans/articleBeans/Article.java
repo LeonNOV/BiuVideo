@@ -6,7 +6,6 @@ import java.io.Serializable;
  * 专栏相关数据
  */
 public class Article implements Serializable {
-
     public long mid;
     public String face;
     public long articleID;

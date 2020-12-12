@@ -1,7 +1,7 @@
 package com.leon.biuvideo.beans.userBeans;
 
 public enum HistoryType {
-    ARCHIVE("archive"),
+    VIDEO("archive"),
     ARTICLE("article"),
     LIVE("live");
 

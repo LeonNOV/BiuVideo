@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.Headers;
+
 public class ArticleParseUtils {
 
     /**
@@ -110,6 +112,44 @@ public class ArticleParseUtils {
 
             //获取投币数
 //            article.coin = stats.getIntValue("coin");
+
+            return article;
+        }
+
+        return null;
+    }
+
+    /**
+     * 获取单个专栏信息
+     *
+     * @param articleId     专栏ID
+     * @param cookie    cookie
+     * @return      返回Article
+     */
+    public static Article getArticle(long articleId, String cookie) {
+        Map<String, String> params = new HashMap<>();
+        params.put("id", String.valueOf(articleId));
+
+        JSONObject responseObject;
+        if (cookie != null) {
+            responseObject = HttpUtils.getResponse(Paths.articleInfo, Headers.of("Cookie", cookie), params);
+        } else {
+            responseObject = HttpUtils.getResponse(Paths.articleInfo, params);
+        }
+
+        JSONObject dataObject = responseObject.getJSONObject("data");
+
+        if (dataObject != null) {
+            Article article = new Article();
+
+            article.articleID = articleId;
+            article.mid = dataObject.getLongValue("mid");
+            article.author = dataObject.getString("author_name");
+
+            JSONObject stats = dataObject.getJSONObject("stats");
+            article.view = stats.getIntValue("view");
+            article.like = stats.getIntValue("like");
+            article.reply = stats.getIntValue("reply");
 
             return article;
         }

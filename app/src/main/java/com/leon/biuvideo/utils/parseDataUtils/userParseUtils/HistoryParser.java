@@ -27,8 +27,8 @@ public class HistoryParser {
      */
     public History parseHistory(String cookie, long max, long viewAt, HistoryType historyType) {
         Map<String, String> params = new HashMap<>();
-        params.put("max", max == -1 ? "" : String.valueOf(max));
-        params.put("view_at", viewAt == -1 ? "" : String.valueOf(viewAt));
+        params.put("max", max == -1 ? "0" : String.valueOf(max));
+        params.put("view_at", viewAt == -1 ? "0" : String.valueOf(viewAt));
         params.put("type", historyType.value);
 
         if (cookie != null) {
@@ -41,9 +41,7 @@ public class HistoryParser {
                 JSONObject cursor = data.getJSONObject("cursor");
                 history.max = cursor.getLongValue("max");
                 history.viewAt = cursor.getLongValue("view_at");
-
-                JSONArray list = data.getJSONArray("list");
-                history.innerHistory = parseJSONArray(list);
+                history.innerHistory = parseJSONArray(data.getJSONArray("list"));
 
                 return history;
             }
@@ -81,7 +79,7 @@ public class HistoryParser {
             String business = object.getString("business");
             switch (business) {
                 case "archive":
-                    innerHistory.historyType = HistoryType.ARCHIVE;
+                    innerHistory.historyType = HistoryType.VIDEO;
 
                     break;
                 case "article":
