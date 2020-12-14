@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="order_video">视频</string>
+    <string name="order_bangumi">追番</string>
+    <string name="order_series">追剧</string>
+    <string name="order_article">专栏</string>
+
+</resources>

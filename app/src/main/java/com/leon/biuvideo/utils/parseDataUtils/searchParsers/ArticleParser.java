@@ -7,6 +7,7 @@ import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.values.OrderType;
 import com.leon.biuvideo.values.Paths;
 import com.leon.biuvideo.values.SearchType;
+import com.leon.biuvideo.values.SortType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,15 +25,15 @@ public class ArticleParser {
      *
      * @param keyword   关键字
      * @param pn    页码
-     * @param orderType 排序方式
+     * @param sortType 排序方式
      * @return  返回专栏数据
      */
-    public List<Article> articleParse(String keyword, int pn, OrderType orderType) {
+    public List<Article> articleParse(String keyword, int pn, SortType sortType) {
         Map<String, String> params = new HashMap<>();
         params.put("keyword", keyword);
         params.put("search_type", SearchType.ARTICLE.value);
         params.put("page", String.valueOf(pn));
-        params.put("order", orderType.value);
+        params.put("order", sortType.value);
 
         JSONObject responseObject = HttpUtils.getResponse(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
         JSONObject data = responseObject.getJSONObject("data");
@@ -172,7 +173,7 @@ public class ArticleParser {
         params.put("keyword", keyword);
         params.put("search_type", SearchType.ARTICLE.value);
         params.put("page", "1");
-        params.put("order", OrderType.DEFAULT.value);
+        params.put("order", SortType.DEFAULT.value);
 
         HttpUtils httpUtils = new HttpUtils(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
         String response = httpUtils.getData();

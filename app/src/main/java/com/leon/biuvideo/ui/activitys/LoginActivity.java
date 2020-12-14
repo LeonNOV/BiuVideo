@@ -104,7 +104,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     //添加Cookie至本地
                     SharedPreferences sharedPreferences = getSharedPreferences("initValues", Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("cookie", cookieStr).apply();
+                    editor.putString("cookie", cookieStr);
+
+                    //获取用户ID
+                    String[] split = cookieStr.split("; ");
+                    for (String s : split) {
+                        if (s.startsWith("DedeUserID")) {
+                            editor.putLong("mid", Long.parseLong(s.split("=")[1]));
+                        }
+                    }
+                    editor.apply();
 
                     Log.d(TAG, cookieStr);
 

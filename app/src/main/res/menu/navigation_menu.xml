@@ -18,6 +18,11 @@
             android:icon="@drawable/navigation_menu_play_list"
             android:title="@string/navigation_menu_play_list" />
         <item
+            android:id="@+id/navigation_menu_order"
+            android:checkable="true"
+            android:icon="@drawable/navigation_menu_order"
+            android:title="@string/navigation_menu_order" />
+        <item
             android:id="@+id/navigation_menu_history"
             android:checkable="true"
             android:icon="@drawable/navigation_menu_history"

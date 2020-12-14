@@ -6,14 +6,14 @@ package com.leon.biuvideo.values;
 public class Paths {
 
     /**
-     * 获取视频基本信息和所有选集信息
+     * 获取视频基本信息和所有选集信息<br/>
      *      参数：
      *          bvid：视频ID，必须
      */
     public static String view = "https://api.bilibili.com/x/web-interface/view";
 
     /**
-     * 获取选集信息，返回视频和音频原链接
+     * 获取选集信息，返回视频和音频原链接<br/>
      *      参数：
      *          aid：aid，必须
      *          cid：cid，必须
@@ -23,7 +23,7 @@ public class Paths {
     public static String playUrl = "https://api.bilibili.com/x/player/playurl";
 
     /**
-     * 视频播放请求地址
+     * 视频播放请求地址<br/>
      * 参数：
      *      aid
      *      cid
@@ -31,14 +31,14 @@ public class Paths {
     public static String videoBaeUrl = "https://www.bilibili.com/blackboard/html5mobileplayer.html?";
 
     /**
-     * UP主基本信息接口
+     * UP主基本信息接口<br/>
      * 参数：
      *  mid：up主id
      */
     public static String info = "https://api.bilibili.com/x/space/acc/info";
 
     /**
-     * 获取指定up的所有视频
+     * 获取指定up的所有视频<br/>
      *     参数：
      *       mid：up主id，必须
      *       ps：视频条目，建议30，必须
@@ -50,7 +50,7 @@ public class Paths {
     public static String videos = "https://api.bilibili.com/x/space/arc/search";
 
     /**
-     * 获取up音频接口
+     * 获取up音频接口<br/>
      *      参数：
      *          uid：up主id
      *          pn：页码，从1开始
@@ -60,7 +60,7 @@ public class Paths {
     public static String music = "https://api.bilibili.com/audio/music-service/web/song/upper";
 
     /**
-     * 获取up相簿列表
+     * 获取up相簿列表<br/>
      *  uid：up主id
      *  page_num：页码，从0开始，必须
      *  page_size：每页个数，建议30，必须
@@ -73,35 +73,35 @@ public class Paths {
     public static String picture = "https://api.vc.bilibili.com/link_draw/v1/doc/doc_list";
 
     /**
-     * 相簿原链接
+     * 相簿原链接<br/>
      *      参数：后跟相簿ID
      */
     public static String pictureWebPage = "https://t.bilibili.com/h5/dynamic/detail/";
 
 
     /**
-     * 获取相簿总数
+     * 获取相簿总数<br/>
      *      参数
      *          uid：up主id
      */
     public static String pictureCount = "https://api.vc.bilibili.com/link_draw/v1/doc/upload_count";
 
     /**
-     * 歌曲基本信息接口
+     * 歌曲基本信息接口<br/>
      *      参数：
      *          sid：音频id
      */
     public static String musicInfo = "https://www.bilibili.com/audio/music-service-c/web/song/info";
 
     /**
-     *  获取歌曲链接
+     *  获取歌曲链接<br/>
      *      参数：
      *          sid：音频sid，必须
      */
     public static String musicUrl = "https://www.bilibili.com/audio/music-service-c/web/url";
 
     /**
-     * 专栏页面链接
+     * 专栏页面链接<br/>
      *      参数
      *          后跟专栏ID（CVxxxxxxx）
      *          from:默认值:category_0,可选
@@ -109,7 +109,7 @@ public class Paths {
     public static String articleWebPage = "https://www.bilibili.com/read/mobile/";
 
     /**
-     * 专栏列表接口
+     * 专栏列表接口<br/>
      *      参数：
      *          mid：用户id，必须
      *          pn：页码，必须
@@ -117,7 +117,7 @@ public class Paths {
     public static String article = "https://api.bilibili.com/x/space/article";
 
     /**
-     * 获取Ta的关注列表接口
+     * 获取Ta的关注列表接口<br/>
      *      参数：
      *          vmid：用户ID，必须
      *          pn：页码，从1开始，必须
@@ -128,7 +128,7 @@ public class Paths {
     public static String follow = "https://api.bilibili.com/x/relation/followings";
 
     /**
-     * 搜索接口
+     * 搜索接口<br/>
      *      参数：
      *          keyword：关键字，必须进行URLencoding
      *          search_type:搜索类型
@@ -151,12 +151,40 @@ public class Paths {
     public static String search = "https://api.bilibili.com/x/web-interface/search/type";
 
     /**
-     * 获取专栏具体信息的接口
+     * 获取专栏具体信息的接口<br/>
      *      参数
      *          ids：专栏id，多个参数，需要用URL编码格式的‘,’来分隔(%2C)
      *
      */
     public static String metas = "https://api.bilibili.com/x/article/metas";
+
+    /**
+     * 获取‘我的’订阅数据接口<br/>
+     * <strong>
+     *     该接口是通过开放接口获取数据，如果用户在隐私设置中将'追番追剧'设置为隐藏的话该接口将无效<br/>
+     *      将会返回以下数据:
+     *           <p>
+     *           "code": 53013,
+     *           "message": "用户隐私设置未公开",
+     *           "ttl": 1
+     *           <p/>
+     *
+     *     如果该接口的返回码为‘53013’，即'追番追剧'设置为隐藏状态，可在请求中加入用户Cookie即可
+     * </strong>
+     *      参数：
+     *          type:获取订阅类型，必须
+     *              1：番剧
+     *              2：其他剧，不包括标签（纪录片、电视剧等）
+     *          follow_status：筛选方式，默认为0，可选
+     *              0：全部
+     *              1：想看
+     *              2：在看
+     *              3：看过
+     *          pn:页码，从1开始，必须
+     *          ps：条目数量，默认为15，必须
+     *          vmid：用户ID，必须
+     */
+    public static String bangumi = "https://api.bilibili.com/x/space/bangumi/follow/list";
 
     //========================以下接口数据的获取需要在请求头中添加Cookie========================
 

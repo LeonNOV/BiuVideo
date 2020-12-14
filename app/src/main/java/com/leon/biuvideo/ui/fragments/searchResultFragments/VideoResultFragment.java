@@ -23,6 +23,7 @@ import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.values.OrderType;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.VideoParser;
+import com.leon.biuvideo.values.SortType;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
@@ -121,7 +122,7 @@ public class VideoResultFragment extends Fragment {
             }
 
             //获取第一页数据
-            List<Video> newVideos = videoParser.videoParse(keyword, pageNum, OrderType.DEFAULT);
+            List<Video> newVideos = videoParser.videoParse(keyword, pageNum, SortType.DEFAULT);
 
             //获取第一页结果总数，最大为20，最小为0
             currentCount += newVideos.size();
@@ -207,7 +208,7 @@ public class VideoResultFragment extends Fragment {
      * @return  返回下一页的数据
      */
     public List<Video> getVideos(int pageNum) {
-        List<Video> newVideos = videoParser.videoParse(keyword, pageNum, OrderType.DEFAULT);
+        List<Video> newVideos = videoParser.videoParse(keyword, pageNum, SortType.DEFAULT);
 
         //记录获取的总数
         currentCount += newVideos.size();

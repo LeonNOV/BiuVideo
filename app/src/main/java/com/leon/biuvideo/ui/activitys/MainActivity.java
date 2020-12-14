@@ -1,6 +1,7 @@
 package com.leon.biuvideo.ui.activitys;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -30,6 +31,7 @@ import com.leon.biuvideo.ui.dialogs.AboutBiuVideoDialog;
 import com.leon.biuvideo.ui.fragments.mainFragments.FavoriteFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.HistoryFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.HomeFragment;
+import com.leon.biuvideo.ui.fragments.mainFragments.OrderFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.PlayListFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.PreferenceFragment;
 import com.leon.biuvideo.utils.FileUtils;
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Fragment playListFragment;
     private Fragment historyFragment;
     private Fragment preferenceFragment;
+    private Fragment orderFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,6 +194,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             navigation_header_vip_state.setImageResource(R.drawable.icon_normal_vip);
         }
+
         Glide.with(getApplicationContext()).load(userInfo.userFace).into(navigation_header_user_face);
         navigation_header_user_name.setText(userInfo.userName);
         navigation_header_user_level.setText("Lv：" + userInfo.currentLevel);
@@ -258,6 +262,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 switchFragment(playListFragment);
+                break;
+            case R.id.navigation_menu_order:
+
+                if (orderFragment == null) {
+                    orderFragment = new OrderFragment();
+                }
+
+                switchFragment(orderFragment);
                 break;
             case R.id.navigation_menu_history:
 

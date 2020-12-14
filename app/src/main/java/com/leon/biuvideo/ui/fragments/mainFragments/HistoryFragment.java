@@ -2,7 +2,6 @@ package com.leon.biuvideo.ui.fragments.mainFragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,11 +14,13 @@ import com.leon.biuvideo.adapters.ViewPageAdapter;
 import com.leon.biuvideo.beans.userBeans.HistoryType;
 import com.leon.biuvideo.ui.fragments.BaseFragment;
 import com.leon.biuvideo.ui.fragments.BindingUtils;
-import com.leon.biuvideo.ui.fragments.historyFragment.InnerHistoryFragment;
-import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.ui.fragments.historyFragment.HistoryInnerFragment;
+import com.leon.biuvideo.utils.ViewUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 历史记录Fragment
@@ -27,6 +28,8 @@ import java.util.List;
 public class HistoryFragment extends BaseFragment implements View.OnClickListener, ViewPager.OnPageChangeListener {
     private ViewPager viewPager;
     private TextView history_video, history_live, history_article;
+
+    private Map<Integer, TextView> textViewMap;
 
     @Override
     public int setLayout() {
@@ -40,21 +43,28 @@ public class HistoryFragment extends BaseFragment implements View.OnClickListene
 
         history_video = findView(R.id.history_video);
         history_video.setOnClickListener(this);
+
         history_live = findView(R.id.history_live);
         history_live.setOnClickListener(this);
+
         history_article = findView(R.id.history_article);
         history_article.setOnClickListener(this);
     }
 
     @Override
     public void initValues() {
+        textViewMap = new HashMap<>();
+        textViewMap.put(0, history_video);
+        textViewMap.put(1, history_live);
+        textViewMap.put(2, history_article);
+
         SharedPreferences initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
         String cookie = initValues.getString("cookie", null);
 
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new InnerHistoryFragment(cookie, HistoryType.VIDEO));
-        fragments.add(new InnerHistoryFragment(cookie, HistoryType.LIVE));
-        fragments.add(new InnerHistoryFragment(cookie, HistoryType.ARTICLE));
+        fragments.add(new HistoryInnerFragment(cookie, HistoryType.VIDEO));
+        fragments.add(new HistoryInnerFragment(cookie, HistoryType.LIVE));
+        fragments.add(new HistoryInnerFragment(cookie, HistoryType.ARTICLE));
 
         ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getParentFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
         viewPager.setAdapter(viewPageAdapter);
@@ -80,29 +90,15 @@ public class HistoryFragment extends BaseFragment implements View.OnClickListene
 
     @Override
     public void onPageSelected(int position) {
-        Log.d(Fuck.blue, "page position:" + position);
-
-        int pointBiliBiliPink = R.drawable.shape_bilibili_pink;
-        int pointBiliBiliPinkLite = R.drawable.ripple_bilibili_pink_lite;
-
         switch (position) {
             case 0:
-                history_video.setBackgroundResource(pointBiliBiliPink);
-                history_live.setBackgroundResource(pointBiliBiliPinkLite);
-                history_article.setBackgroundResource(pointBiliBiliPinkLite);
-
+                ViewUtils.changeText(textViewMap, 0);
                 break;
             case 1:
-                history_video.setBackgroundResource(pointBiliBiliPinkLite);
-                history_live.setBackgroundResource(pointBiliBiliPink);
-                history_article.setBackgroundResource(pointBiliBiliPinkLite);
-
+                ViewUtils.changeText(textViewMap, 1);
                 break;
             case 2:
-                history_video.setBackgroundResource(pointBiliBiliPinkLite);
-                history_live.setBackgroundResource(pointBiliBiliPinkLite);
-                history_article.setBackgroundResource(pointBiliBiliPink);
-
+                ViewUtils.changeText(textViewMap, 2);
                 break;
             default:
                 break;

@@ -23,6 +23,7 @@ import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.values.OrderType;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BiliUserParser;
+import com.leon.biuvideo.values.SortType;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -112,7 +113,7 @@ public class BiliUserResultFragment extends Fragment {
                 biliUserParser = new BiliUserParser();
             }
 
-            List<BiliUser> newBiliUsers = biliUserParser.userParse(keyword, pageNum, OrderType.DEFAULT);
+            List<BiliUser> newBiliUsers = biliUserParser.userParse(keyword, pageNum, SortType.DEFAULT);
 
             currentCount += newBiliUsers.size();
 
@@ -204,7 +205,7 @@ public class BiliUserResultFragment extends Fragment {
      * @return  返回下一页用户数据
      */
     public List<BiliUser> getBiliUsers(int pageNum) {
-        List<BiliUser> biliUsers = biliUserParser.userParse(keyword, pageNum, OrderType.DEFAULT);
+        List<BiliUser> biliUsers = biliUserParser.userParse(keyword, pageNum, SortType.DEFAULT);
 
         //记录获取的总数
         currentCount += biliUsers.size();

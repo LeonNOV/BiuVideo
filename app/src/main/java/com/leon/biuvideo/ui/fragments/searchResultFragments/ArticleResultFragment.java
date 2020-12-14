@@ -23,6 +23,7 @@ import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.values.OrderType;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.ArticleParser;
+import com.leon.biuvideo.values.SortType;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -115,7 +116,7 @@ public class ArticleResultFragment extends Fragment {
                 articleParser = new ArticleParser();
             }
 
-            List<Article> newArticles = articleParser.articleParse(keyword, pageNum, OrderType.DEFAULT);
+            List<Article> newArticles = articleParser.articleParse(keyword, pageNum, SortType.DEFAULT);
 
             currentCount += newArticles.size();
 
@@ -206,7 +207,7 @@ public class ArticleResultFragment extends Fragment {
      * @return  返回下一页数据
      */
     private List<Article> getArticles(int pageNum) {
-        List<Article> articles = articleParser.articleParse(keyword, pageNum, OrderType.DEFAULT);
+        List<Article> articles = articleParser.articleParse(keyword, pageNum, SortType.DEFAULT);
 
         //记录获取的总数
         currentCount += articles.size();

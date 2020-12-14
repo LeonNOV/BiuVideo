@@ -25,7 +25,7 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 /**
  * 根据HistoryType创建对应的Fragment
  */
-public class InnerHistoryFragment extends BaseFragment {
+public class HistoryInnerFragment extends BaseFragment {
     private final String cookie;
     private final HistoryType historyType;
 
@@ -41,7 +41,7 @@ public class InnerHistoryFragment extends BaseFragment {
     private LinearLayoutManager linearLayoutManager;
     private HistoryAdapter historyAdapter;
 
-    public InnerHistoryFragment(String cookie, HistoryType historyType) {
+    public HistoryInnerFragment(String cookie, HistoryType historyType) {
         this.cookie = cookie;
         this.historyType = historyType;
     }
