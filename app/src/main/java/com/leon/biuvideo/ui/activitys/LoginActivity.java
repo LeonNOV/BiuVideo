@@ -19,6 +19,10 @@ import android.widget.TextView;
 
 import com.leon.biuvideo.R;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private String TAG = "BiliBiliCookie";
     private TextView textView_title;
@@ -108,12 +112,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     //获取用户ID
                     String[] split = cookieStr.split("; ");
+                    Map<String, String> cookieMap = new HashMap<>();
                     for (String s : split) {
                         if (s.startsWith("DedeUserID")) {
-                            editor.putLong("mid", Long.parseLong(s.split("=")[1]));
+                            String[] arrayTemp = s.split("=");
+                            cookieMap.put(arrayTemp[0], arrayTemp[1]);
                         }
                     }
-                    editor.apply();
+
+                    editor.putLong("mid", Long.parseLong(Objects.requireNonNull(cookieMap.get("DedeUserID")))).apply();
 
                     Log.d(TAG, cookieStr);
 
