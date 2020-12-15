@@ -1,4 +1,4 @@
-package com.leon.biuvideo.ui.fragments.historyFragment;
+package com.leon.biuvideo.ui.fragments.orderFragments;
 
 import android.os.Handler;
 import android.view.View;
@@ -9,41 +9,52 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.HistoryAdapters.HistoryAdapter;
-import com.leon.biuvideo.beans.userBeans.History;
-import com.leon.biuvideo.beans.userBeans.HistoryType;
+import com.leon.biuvideo.adapters.OrderAdapter;
+import com.leon.biuvideo.beans.userBeans.Order;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.HistoryParser;
+import com.leon.biuvideo.utils.dataBaseUtils.ArticleDatabaseUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
+import com.leon.biuvideo.utils.dataBaseUtils.Tables;
+import com.leon.biuvideo.utils.dataBaseUtils.VideoListDatabaseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.OrderParser;
+import com.leon.biuvideo.values.OrderFollowType;
+import com.leon.biuvideo.values.OrderType;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
-/**
- * 根据HistoryType创建对应的Fragment
- */
-public class HistoryInnerFragment extends BaseFragment {
+import java.util.List;
+
+public class OrderInnerFragment extends BaseFragment {
     private final String cookie;
-    private final HistoryType historyType;
+    private final OrderType orderType;
+    private final long mid;
+    private final OrderFollowType orderFollowType;
 
     private RecyclerView recyclerView;
     private SmartRefreshLayout smartRefresh;
     private TextView no_data;
 
+    private int total;
+    private int currentCount;
+    private int pageNum = 1;
     private boolean dataState = true;
 
-    private HistoryParser historyParser;
-    private History history;
+    private OrderParser orderParser;
+    private List<Order> orders;
 
     private LinearLayoutManager linearLayoutManager;
-    private HistoryAdapter historyAdapter;
+    private OrderAdapter orderAdapter;
 
-    public HistoryInnerFragment(String cookie, HistoryType historyType) {
+    public OrderInnerFragment(long mid, String cookie, OrderType orderType, OrderFollowType orderFollowType) {
+        this.mid = mid;
         this.cookie = cookie;
-        this.historyType = historyType;
+        this.orderType = orderType;
+        this.orderFollowType = orderFollowType;
     }
 
     @Override
@@ -53,7 +64,6 @@ public class HistoryInnerFragment extends BaseFragment {
 
     @Override
     public void initView(BindingUtils bindingUtils) {
-        //获取初始数据
         recyclerView = findView(R.id.smart_refresh_layout_fragment_recyclerView);
         smartRefresh = findView(R.id.smart_refresh_layout_fragment_smartRefresh);
         no_data = findView(R.id.smart_refresh_layout_fragment_no_data);
@@ -64,12 +74,22 @@ public class HistoryInnerFragment extends BaseFragment {
 
     @Override
     public void initValues() {
-        historyParser = new HistoryParser();
+        orderParser = new OrderParser();
 
-        this.history = historyParser.parseHistory(cookie, -1, -1, historyType);
+        switch (orderType) {
+            case VIDEO:
+                //判断是否已登陆
+            case ARTICLE:
+                //判断是否已登陆
+                if (mid == -1 || cookie == null) {
 
-        //判断当前条目数量是否大于0
-        if (this.history.innerHistory.size() <= 0) {
+                }
+                break;
+        }
+
+        total = orderParser.getOrderCount(mid, cookie, orderType, orderFollowType);
+
+        if (total <= 0) {
             //设置无数据提示界面
             no_data.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
@@ -79,29 +99,31 @@ public class HistoryInnerFragment extends BaseFragment {
             recyclerView.setVisibility(View.VISIBLE);
             smartRefresh.setEnabled(true);
 
+            orders = orderParser.parseOrder(mid, cookie, orderType, orderFollowType, pageNum);
+            currentCount += orders.size();
+            pageNum++;
+
             //判断第一次加载是否已加载完所有数据
-            if (this.history.innerHistory.size() < 20) {
+            if (orders.size() < 15) {
                 dataState = false;
                 //关闭上滑加载
                 smartRefresh.setEnabled(false);
             }
 
-            if (linearLayoutManager == null || historyAdapter == null) {
+            if (linearLayoutManager == null || orderAdapter == null) {
                 linearLayoutManager = new LinearLayoutManager(context);
                 Fuck.blue("linearLayoutManager" + linearLayoutManager);
-                historyAdapter = new HistoryAdapter(history.innerHistory, context, historyType);
+                orderAdapter = new OrderAdapter(orders, context, orderType);
             }
 
             initAttr();
         }
+
     }
 
-    /**
-     * 初始化控件属性
-     */
     private void initAttr() {
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(historyAdapter);
+        recyclerView.setAdapter(orderAdapter);
 
         Handler handler = new Handler();
 
@@ -130,10 +152,10 @@ public class HistoryInnerFragment extends BaseFragment {
                             @Override
                             public void run() {
                                 //获取新数据
-                                History temp = getVideoHistory(history.max, history.viewAt);
+                                getOrder();
 
                                 //添加新数据
-                                historyAdapter.append(temp.innerHistory);
+                                orderAdapter.append(orders);
                             }
                         }, 1000);
                     } else {
@@ -151,22 +173,18 @@ public class HistoryInnerFragment extends BaseFragment {
     }
 
     /**
-     * 获取下一页视频历史记录
-     *
-     * @param max   history对象中的max变量的数值
-     * @param viewAt    history对象中的viewAt变量的数值
-     * @return  返回下一页数据
+     * 获取下一页订阅数据
      */
-    private History getVideoHistory(long max, long viewAt) {
-        History history = historyParser.parseHistory(cookie, max, viewAt, historyType);
-        this.history.max = history.max;
-        this.history.viewAt = history.viewAt;
+    private void getOrder() {
+        this.orders = orderParser.parseOrder(mid, cookie, orderType, orderFollowType, pageNum);
+
+        currentCount += this.orders.size();
 
         //判断是否已获取完所有的数据
-        if (history.innerHistory.size() < 20) {
+        if (currentCount >= total || this.orders.size() < 15) {
             dataState = false;
         }
 
-        return history;
+        pageNum++;
     }
 }

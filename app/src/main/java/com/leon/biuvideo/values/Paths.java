@@ -241,7 +241,7 @@ public class Paths {
      * 参数：
      *      media_id：收藏夹ID，必须
      *      pn：页码，从1开始，必须
-     *      ps：条目数，建议20，必须
+     *      ps：条目数，默认20，必须
      *      order：排序方式
      *          view：最多播放
      *          mtime：最近收藏

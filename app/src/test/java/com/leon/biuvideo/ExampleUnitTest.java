@@ -4,7 +4,10 @@ import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.beans.upMasterBean.Audio;
 import com.leon.biuvideo.beans.upMasterBean.Picture;
 import com.leon.biuvideo.beans.upMasterBean.Video;
+import com.leon.biuvideo.beans.userBeans.UserFolder;
+import com.leon.biuvideo.beans.userBeans.UserFolderData;
 import com.leon.biuvideo.utils.IDUtils;
+import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserFolderParser;
 import com.leon.biuvideo.values.OrderType;
 import com.leon.biuvideo.values.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
@@ -33,18 +36,6 @@ public class ExampleUnitTest {
 
         for (Video video : videos) {
             System.out.println(video);
-        }
-    }
-
-    //audio接口测试
-    @Test
-    public void audio() {
-        List<Audio> audios = AudioParseUtils.parseAudio(49405324, 1);
-
-        System.out.println("page1count:" + audio.size());
-
-        for (Audio audio : audios) {
-            System.out.println(audio);
         }
     }
 
@@ -159,17 +150,20 @@ public class ExampleUnitTest {
         System.out.println(s);
     }
 
-
-    //article details的获取
-    @Test
-    public void articlesForDetails() {
-        ArticleParser articleParser = new ArticleParser();
-
-        List<Article> articles = articleParser.articleParse("马保国", 1, OrderType.DEFAULT);
-    }
-
     @Test
     public void HistoryTest() {
-//        HistoryParser hsitory = new HistoryParser();
+        UserFolderParser userFolderParser = new UserFolderParser();
+//        List<UserFolder> userFolders = userFolderParser.parseUserFolder(49405324, null);
+//
+//        for (UserFolder userFolder : userFolders) {
+//            System.out.println(userFolder.id + "----" + userFolder.title);
+//        }
+
+        UserFolderData userFolderData = userFolderParser.parseUserFolderData(null, 153608924, 1);
+        List<UserFolderData.Media> medias = userFolderData.medias;
+
+        for (UserFolderData.Media media : medias) {
+            System.out.println(media.title);
+        }
     }
 }

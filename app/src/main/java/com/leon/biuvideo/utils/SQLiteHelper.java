@@ -47,7 +47,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "\"title\"  TEXT,\n" +
             "\"summary\"  TEXT,\n" +
             "\"coverUrl\"  TEXT,\n" +
-            "\"articleId\"  INTEGER,\n" +
+            "\"articleId\"  INTEGER UNIQUE,\n" +
             "\"author\"  TEXT,\n" +
             "\"category\"  TEXT,\n" +
             "\"ctime\"  INTEGER,\n" +

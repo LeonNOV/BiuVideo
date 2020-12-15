@@ -3,6 +3,9 @@ package com.leon.biuvideo.utils;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class ValueFormat {
     /**
@@ -78,5 +81,25 @@ public class ValueFormat {
         } else {
             return size + "B";
         }
+    }
+
+    /**
+     * 格式化时间
+     *
+     * @param time  毫秒值/秒值
+     * @param isSecond  是否为秒值
+     * @param delimiter     分隔符号
+     * @return  返回格式化后的时间
+     */
+    public static String generateTime(long time, boolean isSecond , String delimiter) {
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy" + delimiter + "MM" + delimiter + "dd HH:mm", Locale.CHINA);
+
+        if (isSecond) {
+            return simpleDateFormat.format(new Date(time * 1000));
+        } else {
+            return simpleDateFormat.format(new Date(time));
+        }
+
     }
 }

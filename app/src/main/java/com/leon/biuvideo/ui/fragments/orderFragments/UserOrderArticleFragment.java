@@ -1,4 +1,4 @@
-package com.leon.biuvideo.ui.fragments;
+package com.leon.biuvideo.ui.fragments.orderFragments;
 
 import android.os.Handler;
 import android.view.View;
@@ -10,13 +10,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.OrderAdapter;
-import com.leon.biuvideo.beans.userBeans.Order;
-import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.adapters.userDataAdapters.UserArticleAdapter;
+import com.leon.biuvideo.beans.articleBeans.Article;
+import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
+import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.OrderParser;
-import com.leon.biuvideo.values.OrderFollowType;
-import com.leon.biuvideo.values.OrderType;
-import com.leon.biuvideo.values.Paths;
+import com.leon.biuvideo.utils.dataBaseUtils.ArticleDatabaseUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
+import com.leon.biuvideo.utils.dataBaseUtils.Tables;
+import com.leon.biuvideo.utils.parseDataUtils.articleParseUtils.UserArticleParser;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
@@ -24,32 +26,26 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.List;
 
-public class OrderInnerFragment extends BaseFragment {
+public class UserOrderArticleFragment extends BaseFragment {
     private final String cookie;
-    private final OrderType orderType;
-    private final long mid;
-    private final OrderFollowType orderFollowType;
 
     private RecyclerView recyclerView;
     private SmartRefreshLayout smartRefresh;
     private TextView no_data;
 
     private int total;
-    private int currentCount;
     private int pageNum = 1;
+    private int currentCount;
     private boolean dataState = true;
 
-    private OrderParser orderParser;
-    private List<Order> orders;
+    private UserArticleParser userArticleParser;
+    private List<Article> articles;
 
     private LinearLayoutManager linearLayoutManager;
-    private OrderAdapter orderAdapter;
+    private UserArticleAdapter userArticleAdapter;
 
-    public OrderInnerFragment(long mid, String cookie, OrderType orderType, OrderFollowType orderFollowType) {
-        this.mid = mid;
+    public UserOrderArticleFragment(String cookie) {
         this.cookie = cookie;
-        this.orderType = orderType;
-        this.orderFollowType = orderFollowType;
     }
 
     @Override
@@ -59,7 +55,6 @@ public class OrderInnerFragment extends BaseFragment {
 
     @Override
     public void initView(BindingUtils bindingUtils) {
-        //获取初始数据
         recyclerView = findView(R.id.smart_refresh_layout_fragment_recyclerView);
         smartRefresh = findView(R.id.smart_refresh_layout_fragment_smartRefresh);
         no_data = findView(R.id.smart_refresh_layout_fragment_no_data);
@@ -70,20 +65,8 @@ public class OrderInnerFragment extends BaseFragment {
 
     @Override
     public void initValues() {
-        orderParser = new OrderParser();
-
-        switch (orderType) {
-            case VIDEO:
-                //判断是否已登陆
-            case ARTICLE:
-                //判断是否已登陆
-                if (mid == -1 || cookie == null) {
-
-                }
-                break;
-        }
-
-        total = orderParser.getOrderCount(mid, cookie, orderType, orderFollowType);
+        userArticleParser = new UserArticleParser();
+        total = userArticleParser.getTotal(cookie);
 
         if (total <= 0) {
             //设置无数据提示界面
@@ -95,31 +78,27 @@ public class OrderInnerFragment extends BaseFragment {
             recyclerView.setVisibility(View.VISIBLE);
             smartRefresh.setEnabled(true);
 
-            orders = orderParser.parseOrder(mid, cookie, orderType, orderFollowType, pageNum);
-            currentCount += orders.size();
+            articles = userArticleParser.parseArticle(cookie, pageNum);
+            currentCount += articles.size();
             pageNum++;
 
-            //判断第一次加载是否已加载完所有数据
-            if (orders.size() < 15) {
+            if (articles.size() < 16) {
                 dataState = false;
-                //关闭上滑加载
                 smartRefresh.setEnabled(false);
             }
 
-            if (linearLayoutManager == null || orderAdapter == null) {
+            if (linearLayoutManager == null || userArticleAdapter == null) {
                 linearLayoutManager = new LinearLayoutManager(context);
-                Fuck.blue("linearLayoutManager" + linearLayoutManager);
-                orderAdapter = new OrderAdapter(orders, context, orderType);
+                userArticleAdapter = new UserArticleAdapter(articles, context);
             }
 
             initAttr();
         }
-
     }
 
     private void initAttr() {
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(orderAdapter);
+        recyclerView.setAdapter(userArticleAdapter);
 
         Handler handler = new Handler();
 
@@ -148,10 +127,10 @@ public class OrderInnerFragment extends BaseFragment {
                             @Override
                             public void run() {
                                 //获取新数据
-                                getOrder();
+                                getUserArticleData();
 
                                 //添加新数据
-                                orderAdapter.append(orders);
+                                userArticleAdapter.append(articles);
                             }
                         }, 1000);
                     } else {
@@ -168,16 +147,30 @@ public class OrderInnerFragment extends BaseFragment {
         });
     }
 
-    /**
-     * 获取下一页订阅数据
-     */
-    private void getOrder() {
-        this.orders = orderParser.parseOrder(mid, cookie, orderType, orderFollowType, pageNum);
+    private void addArticle() {
+        //判断设置中的‘将用户数据保存至本地’开关是否已打开
 
-        currentCount += this.orders.size();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.Article);
+                ArticleDatabaseUtils articleDatabaseUtils = (ArticleDatabaseUtils) sqLiteHelperFactory.getInstance();
 
-        //判断是否已获取完所有的数据
-        if (currentCount >= total || this.orders.size() < 15) {
+                for (Article article : articles) {
+                    articleDatabaseUtils.addArticle(article);
+                }
+
+                articleDatabaseUtils.close();
+            }
+        }).start();
+    }
+
+    private void getUserArticleData() {
+        this.articles = userArticleParser.parseArticle(cookie, pageNum);
+
+        currentCount += articles.size();
+
+        if (currentCount == total || this.articles.size() < 16) {
             dataState = false;
         }
 

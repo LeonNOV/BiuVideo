@@ -11,10 +11,12 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.ViewPageAdapter;
-import com.leon.biuvideo.ui.fragments.BaseFragment;
-import com.leon.biuvideo.ui.fragments.BindingUtils;
-import com.leon.biuvideo.ui.fragments.OrderInnerFragment;
+import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
+import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.ui.fragments.orderFragments.OrderInnerFragment;
+import com.leon.biuvideo.ui.fragments.orderFragments.UserOrderArticleFragment;
 import com.leon.biuvideo.ui.fragments.playListFragments.VideoListFragment;
+import com.leon.biuvideo.ui.fragments.userFragments.UserArticlesFragment;
 import com.leon.biuvideo.utils.ViewUtils;
 import com.leon.biuvideo.values.OrderFollowType;
 import com.leon.biuvideo.values.OrderType;
@@ -67,10 +69,9 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
 
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(new VideoListFragment());
-        fragments.add(new VideoListFragment());
         fragments.add(new OrderInnerFragment(mid, cookie, OrderType.BANGUMI, OrderFollowType.ALL));
         fragments.add(new OrderInnerFragment(mid, cookie, OrderType.SERIES, OrderFollowType.ALL));
-//        fragments.add(new OrderInnerFragment(mid, cookie, OrderType.ARTICLE, OrderFollowType.ALL));
+        fragments.add(new UserOrderArticleFragment(cookie));
 
         ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getParentFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
         order_view_pager.setAdapter(viewPageAdapter);

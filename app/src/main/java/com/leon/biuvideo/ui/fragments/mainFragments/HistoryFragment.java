@@ -12,8 +12,8 @@ import androidx.viewpager.widget.ViewPager;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.ViewPageAdapter;
 import com.leon.biuvideo.beans.userBeans.HistoryType;
-import com.leon.biuvideo.ui.fragments.BaseFragment;
-import com.leon.biuvideo.ui.fragments.BindingUtils;
+import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
+import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.fragments.historyFragment.HistoryInnerFragment;
 import com.leon.biuvideo.utils.ViewUtils;
 
