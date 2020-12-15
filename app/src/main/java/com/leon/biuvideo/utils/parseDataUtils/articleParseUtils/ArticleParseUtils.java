@@ -58,7 +58,7 @@ public class ArticleParseUtils {
             Article article = new Article();
 
             //获取文章id
-            article.articleID = articleObject.getLongValue("id");
+            article.articleId = articleObject.getLongValue("id");
 
             //获取文章分类
             article.category = articleObject.getJSONObject("category").getString("name");
@@ -142,7 +142,7 @@ public class ArticleParseUtils {
         if (dataObject != null) {
             Article article = new Article();
 
-            article.articleID = articleId;
+            article.articleId = articleId;
             article.mid = dataObject.getLongValue("mid");
             article.author = dataObject.getString("author_name");
 

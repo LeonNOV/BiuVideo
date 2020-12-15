@@ -2,6 +2,8 @@
 <resources>
 
     <string name="article_screenshot">保存为图片</string>
+    <string name="article_addFavorite">收藏该文章</string>
+    <string name="article_no_Favorite">取消收藏</string>
     <string name="article_jumpToOrigin">跳转到原网站</string>
 
 </resources>

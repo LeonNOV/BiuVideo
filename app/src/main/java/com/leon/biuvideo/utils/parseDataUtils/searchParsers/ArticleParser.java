@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.values.OrderType;
 import com.leon.biuvideo.values.Paths;
 import com.leon.biuvideo.values.SearchType;
 import com.leon.biuvideo.values.SortType;
@@ -87,7 +86,7 @@ public class ArticleParser {
                 article.summary = jsonObject.getString("desc");
 
                 //获取文章ID
-                article.articleID = jsonObject.getLongValue("id");
+                article.articleId = jsonObject.getLongValue("id");
 
                 //获取文章分类标签
                 article.category = jsonObject.getString("category_name");
@@ -117,7 +116,7 @@ public class ArticleParser {
         String separator = ",";
 
         for (Article article : articles) {
-            ids.append(article.articleID).append(separator);
+            ids.append(article.articleId).append(separator);
         }
 
         int length = ids.length();
@@ -142,7 +141,7 @@ public class ArticleParser {
 
         //将对应详细信息放入对应Article对象中
         for (Article article : articles) {
-            JSONObject articleObject = (JSONObject) details.get(String.valueOf(article.articleID));
+            JSONObject articleObject = (JSONObject) details.get(String.valueOf(article.articleId));
 
             //获取author对象
             JSONObject authorObject = articleObject.getJSONObject("author");

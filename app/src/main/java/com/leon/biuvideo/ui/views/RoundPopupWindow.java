@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 public class RoundPopupWindow extends PopupWindow {
     public final static int SHOW_AS_DROP_DOWN = 1;
@@ -52,6 +53,13 @@ public class RoundPopupWindow extends PopupWindow {
      */
     public RoundPopupWindow setOnClickListener (int viewId, View.OnClickListener onClickListener) {
         popupView.findViewById(viewId).setOnClickListener(onClickListener);
+
+        return this;
+    }
+
+    public RoundPopupWindow setText(int viewId, String text) {
+        TextView textView = popupView.findViewById(viewId);
+        textView.setText(text);
 
         return this;
     }

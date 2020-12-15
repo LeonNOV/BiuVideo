@@ -14,6 +14,7 @@ import com.leon.biuvideo.adapters.ViewPageAdapter;
 import com.leon.biuvideo.ui.fragments.BaseFragment;
 import com.leon.biuvideo.ui.fragments.BindingUtils;
 import com.leon.biuvideo.ui.fragments.OrderInnerFragment;
+import com.leon.biuvideo.ui.fragments.playListFragments.VideoListFragment;
 import com.leon.biuvideo.utils.ViewUtils;
 import com.leon.biuvideo.values.OrderFollowType;
 import com.leon.biuvideo.values.OrderType;
@@ -66,6 +67,7 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
 
         List<Fragment> fragments = new ArrayList<>();
 //        fragments.add(new OrderInnerFragment(mid, cookie, OrderType.VIDEO, OrderFollowType.ALL));
+        fragments.add(new VideoListFragment());
         fragments.add(new OrderInnerFragment(mid, cookie, OrderType.BANGUMI, OrderFollowType.ALL));
         fragments.add(new OrderInnerFragment(mid, cookie, OrderType.SERIES, OrderFollowType.ALL));
 //        fragments.add(new OrderInnerFragment(mid, cookie, OrderType.ARTICLE, OrderFollowType.ALL));

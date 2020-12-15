@@ -37,7 +37,20 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "\"length\"  INTEGER,\n" +
             "\"play\"  INTEGER,\n" +
             "\"danmaku\"  INTEGER,\n" +
-            "\"isDelete\"  INTEGER\n" +
+            "\"isDelete\"  INTEGER DEFAULT 1\n" +
+            ");";
+
+    private static final String article = "CREATE TABLE \"article\" (\n" +
+            "\"id\"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+            "\"mid\"  INTEGER,\n" +
+            "\"face\"  TEXT,\n" +
+            "\"title\"  TEXT,\n" +
+            "\"coverUrl\"  TEXT,\n" +
+            "\"articleId\"  INTEGER,\n" +
+            "\"author\"  TEXT,\n" +
+            "\"category\"  TEXT,\n" +
+            "\"ctime\"  INTEGER,\n" +
+            "\"isDelete\"  INTEGER DEFAULT 1\n" +
             ");";
 
     public SQLiteHelper(@Nullable Context context, int version) {

@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class Article implements Serializable {
     public long mid;
     public String face;
-    public long articleID;
+    public long articleId;
     public String title;
     public String summary;
     public String author;

@@ -36,6 +36,9 @@ public class SQLiteHelperFactory {
             case MusicPlayList:
                 sqLiteHelper = new MusicListDatabaseUtils(context);
                 break;
+            case Article:
+                sqLiteHelper = new ArticleDatabaseUtils(context);
+                break;
             default:
                 sqLiteHelper = new SQLiteHelper(context, 1);
                 break;

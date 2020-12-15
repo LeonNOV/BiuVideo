@@ -144,7 +144,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         String replayStr = ValueFormat.generateCN(article.reply) + "次评论";
         article_textView_replay.setText(replayStr);
 
-        String path = Paths.articleWebPage + article.articleID;
+        String path = Paths.articleWebPage + article.articleId;
 
         //获取文章页面
         String unencodedHtml = parseHTMLonPhone(path);
@@ -308,11 +308,20 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                                 //跳转到源网站
                                 Intent intentOriginUrl = new Intent();
                                 intentOriginUrl.setAction("android.intent.action.VIEW");
-                                Uri uri = Uri.parse(Paths.articleWebPage + article.articleID);
+                                Uri uri = Uri.parse(Paths.articleWebPage + article.articleId);
                                 intentOriginUrl.setData(uri);
                                 startActivity(intentOriginUrl);
 
                                 roundPopupWindow.dismiss();
+                            }
+                        })
+                        .setOnClickListener(R.id.article_more_menu_favorite, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+
+
+                                //添加该文章至`Article`
                             }
                         })
                         .setLocation(RoundPopupWindow.SHOW_AS_DROP_DOWN)

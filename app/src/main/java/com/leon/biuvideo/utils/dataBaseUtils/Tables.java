@@ -3,7 +3,8 @@ package com.leon.biuvideo.utils.dataBaseUtils;
 public enum  Tables {
     FavoriteUp("favorite_up"),
     MusicPlayList("musicPlayList"),
-    VideoPlayList("videoPlayList");
+    VideoPlayList("videoPlayList"),
+    Article("article");
 
     String value;
 

@@ -74,9 +74,11 @@ public class OrderInnerFragment extends BaseFragment {
         switch (orderType) {
             case VIDEO:
                 //判断是否已登陆
-                break;
             case ARTICLE:
                 //判断是否已登陆
+                if (mid == -1 || cookie == null) {
+
+                }
                 break;
         }
 
