@@ -50,8 +50,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitle"
-            android:textSize="18sp"
-            android:lines="2"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:maxLines="2"
             android:ellipsize="end"
             android:textColor="@color/black"/>
         <TextView
@@ -60,9 +61,9 @@
             android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
             android:text="SubTitleSubTitleSubTitleSubTitleSubTitleSubTitleSubTitle"
-            android:lines="1"
+            android:maxLines="1"
             android:ellipsize="end"
-            android:textSize="15sp"
+            android:textSize="14sp"
             android:textColor="@color/gray"/>
 
         <TextView
@@ -71,9 +72,9 @@
             android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
             android:text="DescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDesc"
-            android:lines="2"
+            android:maxLines="2"
             android:ellipsize="end"
-            android:textSize="15sp"
+            android:textSize="13sp"
             android:textColor="@color/gray"/>
 
         <LinearLayout
@@ -90,11 +91,12 @@
                 android:text="番剧"/>
 
             <View
-                android:layout_width="2dp"
-                android:layout_height="match_parent"
+                android:layout_width="1dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center_vertical"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:background="#8A8A8A"/>
+                android:background="@color/gray"/>
 
             <TextView
                 android:id="@+id/order_item_textView_area"
@@ -119,11 +121,12 @@
                 android:text="看到第一话 7:13"/>
 
             <View
-                android:layout_width="2dp"
-                android:layout_height="match_parent"
+                android:layout_width="1dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center_vertical"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:background="#8A8A8A"/>
+                android:background="@color/gray"/>
 
             <TextView
                 android:id="@+id/order_item_textView_total"

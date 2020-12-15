@@ -215,4 +215,39 @@ public class Paths {
      *          id：专栏ID
      */
     public static String articleInfo = "https://api.bilibili.com/x/article/viewinfo";
+
+    /**
+     * 获取用户收藏的所有专栏<br/>
+     * 该接口数据只能通过用户Cookie获取
+     * 参数：
+     *      pn：页码，从1开始，必须
+     *      ps：条目数，默认为16条，可选
+     *
+     */
+    public static String userArticle = "https://api.bilibili.com/x/article/favorites/list/all";
+
+    /**
+     * 获取用户所有收藏夹<br/>
+     * 在没有Cookie的情况下，需要保证隐私设置中的‘我的收藏’处于公开状态<br/>
+     * 有Cookie的情况下，只需添加请求头即可<br/>
+     *  参数：
+     *      up_mid：用户ID，必须
+     */
+    public static String userAllFolder = "https://api.bilibili.com/x/v3/fav/folder/created/list-all";
+
+    /**
+     * 获取收藏夹中的所有数据
+     * 使用方式和‘userAllFolder’一样
+     * 参数：
+     *      media_id：收藏夹ID，必须
+     *      pn：页码，从1开始，必须
+     *      ps：条目数，建议20，必须
+     *      order：排序方式
+     *          view：最多播放
+     *          mtime：最近收藏
+     *          pubtime：最新投稿
+     *      type：还不知道是啥，默认为0
+     *      tid：分区ID，该值默认为0
+     */
+    public static String userFolderData = "https://api.bilibili.com/x/v3/fav/resource/list";
 }

@@ -67,11 +67,15 @@ public class ArticleDatabaseUtils extends SQLiteHelper {
             article.mid = cursor.getLong(cursor.getColumnIndex("mid"));
             article.face = cursor.getString(cursor.getColumnIndex("face"));
             article.title = cursor.getString(cursor.getColumnIndex("title"));
+            article.summary = cursor.getString(cursor.getColumnIndex("summary"));
             article.coverUrl = cursor.getString(cursor.getColumnIndex("coverUrl"));
             article.articleId = cursor.getLong(cursor.getColumnIndex("articleId"));
             article.author = cursor.getString(cursor.getColumnIndex("author"));
             article.category = cursor.getString(cursor.getColumnIndex("category"));
             article.ctime = cursor.getLong(cursor.getColumnIndex("ctime"));
+            article.view = cursor.getInt(cursor.getColumnIndex("view"));
+            article.like = cursor.getInt(cursor.getColumnIndex("like"));
+            article.reply = cursor.getInt(cursor.getColumnIndex("reply"));
 
             articles.add(article);
         }
@@ -92,11 +96,15 @@ public class ArticleDatabaseUtils extends SQLiteHelper {
         contentValues.put("mid", article.mid);
         contentValues.put("face", article.face);
         contentValues.put("title", article.title);
+        contentValues.put("summary", article.summary);
         contentValues.put("coverUrl", article.coverUrl);
         contentValues.put("articleId", article.articleId);
         contentValues.put("author", article.author);
         contentValues.put("category", article.category);
         contentValues.put("ctime", article.ctime);
+        contentValues.put("view", article.view);
+        contentValues.put("like", article.like);
+        contentValues.put("reply", article.reply);
 
         long insert = sqLiteDatabase.insert(Tables.Article.value, null, contentValues);
 

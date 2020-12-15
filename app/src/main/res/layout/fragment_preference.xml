@@ -6,34 +6,10 @@
     android:background="@color/bilibili_pink_lite"
     android:orientation="vertical">
 
-    <!--<androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/bilibili_pink">
-
-        <ImageView
-            android:id="@+id/preference_imageView_back"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@drawable/ripple_bilibili_pink"
-            android:padding="7dp"
-            android:src="@drawable/icon_back"
-            app:tint="@color/black" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:text="@string/preference_title"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
-
-    </androidx.appcompat.widget.Toolbar>-->
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -98,21 +74,76 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/preference_visit"
                             android:layout_centerVertical="true"
-                            android:textColor="@color/preference_item"/>
+                            android:text="@string/preference_visit"
+                            android:textColor="@color/preference_item" />
 
                         <androidx.appcompat.widget.SwitchCompat
                             android:id="@+id/preference_switch_visitState"
                             android:layout_width="wrap_content"
-                            android:checked="true"
-                            android:theme="@style/CustomSwitchCompat"
-                            android:layout_centerVertical="true"
+                            android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
-                            android:layout_height="wrap_content"/>
+                            android:layout_centerVertical="true"
+                            android:checked="true"
+                            android:theme="@style/CustomSwitchCompat" />
 
                     </RelativeLayout>
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.43dp"
+                        android:background="#CF879B" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp">
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="@string/preference_importData"
+                                android:textColor="@color/preference_item" />
+
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/preference_switch_importDataState"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:checked="true"
+                                android:theme="@style/CustomSwitchCompat" />
+
+                        </RelativeLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="30dp"
+                            android:text="@string/preference_importDataStr"
+                            android:textColor="@color/gray"
+                            android:textSize="12sp" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.43dp"
+                        android:background="#CF879B" />
+
+                    <TextView
+                        android:id="@+id/preference_textView_userData"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?selectableItemBackground"
+                        android:padding="10dp"
+                        android:text="@string/preference_clean_userData"
+                        android:textColor="@color/preference_item" />
 
                     <View
                         android:layout_width="match_parent"

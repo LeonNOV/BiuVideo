@@ -16,6 +16,7 @@ public class Article implements Serializable {
 
     public String category;
     public long ctime;//秒
+    public long favoriteTime;//收藏时间（秒）
 
 //    public int coin;
     public int view;

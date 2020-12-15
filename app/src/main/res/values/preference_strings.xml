@@ -8,6 +8,13 @@
     <string name="preference_import">导入外部数据</string>
     <string name="preference_set_hero">设置Hero</string>
     <string name="preference_visit">设置关注列表为按照“访问量”排序</string>
+    <string name="preference_importData">将用户数据保存至本地</string>
+    <string name="preference_importDataStr">
+        当该设置为‘打开’状态，且登录了该软件，你的观看记录、订阅、关注等数据会保存到当前设备本地文件中，
+        该功能可保证只登录一次后，可将用户数据进行‘离线化’，如果你退出了当前账户，你的用户数据还会保存在
+        本地，如果你想进行清除的话，可使用下面的‘清除用户数据’功能
+    </string>
+    <string name="preference_clean_userData">清除用户数据</string>
     <string name="preference_clean_cache">清除缓存</string>
 
     <string name="preference_category_about">关于</string>

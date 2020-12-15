@@ -1,7 +1,6 @@
 package com.leon.biuvideo.adapters;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -61,15 +60,20 @@ public class OrderAdapter extends BaseAdapter<Order> {
             holder.findById(R.id.order_item_textView_badge).getBackground().setTint(backgroundTint);
         }
 
+        if (order.seasonTitle.equals("")) {
+            holder.setVisibility(R.id.order_item_textView_subtitle, View.GONE);
+        } else {
+            holder.setText(R.id.order_item_textView_subtitle, order.seasonTitle);
+        }
+
         holder
                 .setText(R.id.order_item_textView_badge, order.badgeType)
                 .setImage(R.id.order_item_imageView_cover, order.cover, ImagePixelSize.COVER)
                 .setText(R.id.order_item_textView_title, order.title)
-                .setText(R.id.order_item_textView_subtitle, order.seasonTitle)
                 .setText(R.id.order_item_textView_desc, order.desc)
                 .setText(R.id.order_item_textView_type, order.seasonType)
                 .setText(R.id.order_item_textView_area, Arrays.toString(order.areas))
-                .setText(R.id.order_item_textView_progress, order.progress)
+                .setText(R.id.order_item_textView_progress, order.progress.equals("") ? "尚未观看" : order.progress)
                 .setText(R.id.order_item_textView_total, order.total);
     }
 }

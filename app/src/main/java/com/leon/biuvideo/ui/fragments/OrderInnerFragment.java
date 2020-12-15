@@ -16,6 +16,7 @@ import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.OrderParser;
 import com.leon.biuvideo.values.OrderFollowType;
 import com.leon.biuvideo.values.OrderType;
+import com.leon.biuvideo.values.Paths;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
@@ -96,6 +97,7 @@ public class OrderInnerFragment extends BaseFragment {
 
             orders = orderParser.parseOrder(mid, cookie, orderType, orderFollowType, pageNum);
             currentCount += orders.size();
+            pageNum++;
 
             //判断第一次加载是否已加载完所有数据
             if (orders.size() < 15) {

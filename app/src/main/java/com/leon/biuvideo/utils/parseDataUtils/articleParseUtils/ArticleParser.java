@@ -13,7 +13,7 @@ import java.util.Map;
 
 import okhttp3.Headers;
 
-public class ArticleParseUtils {
+public class ArticleParser {
 
     /**
      * 解析article接口

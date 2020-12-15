@@ -45,11 +45,15 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "\"mid\"  INTEGER,\n" +
             "\"face\"  TEXT,\n" +
             "\"title\"  TEXT,\n" +
+            "\"summary\"  TEXT,\n" +
             "\"coverUrl\"  TEXT,\n" +
             "\"articleId\"  INTEGER,\n" +
             "\"author\"  TEXT,\n" +
             "\"category\"  TEXT,\n" +
             "\"ctime\"  INTEGER,\n" +
+            "\"view\"  INTEGER,\n" +
+            "\"like\"  INTEGER,\n" +
+            "\"reply\"  INTEGER,\n" +
             "\"isDelete\"  INTEGER DEFAULT 1\n" +
             ");";
 
@@ -59,7 +63,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
         //创建数据库表格，通过反射获取SQL语句
         Class<SQLiteHelper> sqLiteHelperClass = SQLiteHelper.class;
         Field[] fields = sqLiteHelperClass.getDeclaredFields();

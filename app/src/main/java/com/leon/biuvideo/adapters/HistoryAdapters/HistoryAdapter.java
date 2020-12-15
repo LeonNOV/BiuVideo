@@ -18,8 +18,7 @@ import com.leon.biuvideo.beans.userBeans.HistoryType;
 import com.leon.biuvideo.ui.activitys.ArticleActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.utils.ValueFormat;
-import com.leon.biuvideo.utils.parseDataUtils.articleParseUtils.ArticleParseUtils;
-import com.leon.biuvideo.utils.parseDataUtils.searchParsers.ArticleParser;
+import com.leon.biuvideo.utils.parseDataUtils.articleParseUtils.ArticleParser;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.text.SimpleDateFormat;
@@ -114,7 +113,7 @@ public class HistoryAdapter extends BaseAdapter<History.InnerHistory> {
                     case ARTICLE:
                         intent = new Intent(context, ArticleActivity.class);
 
-                        Article article = ArticleParseUtils.getArticle(history.oid, null);
+                        Article article = ArticleParser.getArticle(history.oid, null);
                         article.coverUrl = history.cover;
                         article.face = history.authorFace;
                         article.title = history.title;

@@ -20,7 +20,7 @@ import com.leon.biuvideo.adapters.UserFragmentAdapters.UserArticleAdapter;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.parseDataUtils.articleParseUtils.ArticleParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.articleParseUtils.ArticleParser;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -76,7 +76,7 @@ public class UserArticlesFragment extends Fragment {
     }
 
     private void initValue() {
-        total = ArticleParseUtils.getArticleTotal(mid);
+        total = ArticleParser.getArticleTotal(mid);
 
         //判断条目是否为0
         if (total == 0) {
@@ -86,7 +86,7 @@ public class UserArticlesFragment extends Fragment {
         }
 
         //获取初始数据
-        List<Article> initArticles = ArticleParseUtils.parseArticle(mid, pageNum);
+        List<Article> initArticles = ArticleParser.parseArticle(mid, pageNum);
         currentCount += initArticles.size();
 
         //判断第一次是否已加载完所有数据
@@ -153,7 +153,7 @@ public class UserArticlesFragment extends Fragment {
      * @return  返回下一页数据
      */
     private List<Article> getNextArticles(long mid, int pageNum) {
-        List<Article> articles = ArticleParseUtils.parseArticle(mid, pageNum);
+        List<Article> articles = ArticleParser.parseArticle(mid, pageNum);
 
         currentCount += articles.size();
 

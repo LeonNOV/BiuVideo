@@ -59,14 +59,14 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
         order_article.setOnClickListener(this);
         textViewMap.put(3, order_article);
 
-        order_view_pager.setOffscreenPageLimit(2);
+        order_view_pager.setOffscreenPageLimit(3);
 
         SharedPreferences initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
         String cookie = initValues.getString("cookie", null);
         long mid = initValues.getLong("mid", -1);
 
         List<Fragment> fragments = new ArrayList<>();
-//        fragments.add(new OrderInnerFragment(mid, cookie, OrderType.VIDEO, OrderFollowType.ALL));
+        fragments.add(new VideoListFragment());
         fragments.add(new VideoListFragment());
         fragments.add(new OrderInnerFragment(mid, cookie, OrderType.BANGUMI, OrderFollowType.ALL));
         fragments.add(new OrderInnerFragment(mid, cookie, OrderType.SERIES, OrderFollowType.ALL));
