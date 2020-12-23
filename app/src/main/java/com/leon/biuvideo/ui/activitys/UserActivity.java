@@ -22,9 +22,9 @@ import com.leon.biuvideo.adapters.ViewPageAdapter;
 import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.beans.upMasterBean.UserInfo;
 import com.leon.biuvideo.ui.fragments.userFragments.UserArticlesFragment;
-import com.leon.biuvideo.ui.fragments.userFragments.UserAudioListFragment;
-import com.leon.biuvideo.ui.fragments.userFragments.UserPictureListFragment;
-import com.leon.biuvideo.ui.fragments.userFragments.UserVideoListFragment;
+import com.leon.biuvideo.ui.fragments.userFragments.UserAudiosFragment;
+import com.leon.biuvideo.ui.fragments.userFragments.UserPicturesFragment;
+import com.leon.biuvideo.ui.fragments.userFragments.UserVideosFragment;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
@@ -164,16 +164,16 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
         List<Fragment> fragments = new ArrayList<>();
 
         //获取视频数据
-        fragments.add(new UserVideoListFragment(mid, getApplicationContext()));
+        fragments.add(new UserVideosFragment(mid));
 
         //获取音频数据
-        fragments.add(new UserAudioListFragment(mid, getApplicationContext()));
+        fragments.add(new UserAudiosFragment(mid));
 
         //获取文章数据
-        fragments.add(new UserArticlesFragment(mid, getApplicationContext()));
+        fragments.add(new UserArticlesFragment(mid));
 
         //获取相簿数据
-        fragments.add(new UserPictureListFragment(mid, getApplicationContext()));
+        fragments.add(new UserPicturesFragment(mid));
 
         viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
         up_viewPage.setAdapter(viewPageAdapter);

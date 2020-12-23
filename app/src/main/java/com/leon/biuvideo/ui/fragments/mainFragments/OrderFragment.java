@@ -16,7 +16,6 @@ import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.fragments.orderFragments.OrderInnerFragment;
 import com.leon.biuvideo.ui.fragments.orderFragments.UserOrderArticleFragment;
 import com.leon.biuvideo.ui.fragments.playListFragments.VideoListFragment;
-import com.leon.biuvideo.ui.fragments.userFragments.UserArticlesFragment;
 import com.leon.biuvideo.utils.ViewUtils;
 import com.leon.biuvideo.values.OrderFollowType;
 import com.leon.biuvideo.values.OrderType;

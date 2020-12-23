@@ -113,6 +113,7 @@ public class Paths {
      *      参数：
      *          mid：用户id，必须
      *          pn：页码，必须
+     *          ps: 条目数，默认12
      */
     public static String article = "https://api.bilibili.com/x/space/article";
 
@@ -208,7 +209,7 @@ public class Paths {
     public static String history = "https://api.bilibili.com/x/web-interface/history/cursor";
 
     /**
-     * 获取<strong>单个专利<strong/>的信息
+     * 获取<strong>单个专栏<strong/>的信息
      * Cookie可有可无
      *
      *      参数：

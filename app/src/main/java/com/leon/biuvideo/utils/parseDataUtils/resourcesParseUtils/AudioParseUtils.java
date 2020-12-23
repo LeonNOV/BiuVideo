@@ -25,7 +25,7 @@ public class AudioParseUtils {
      * @param pageNum   页码，从1开始
      * @return  返回UpAudio类型集合
      */
-    public static List<Audio> parseAudio(long mid, int pageNum) {
+    public List<Audio> parseAudio(long mid, int pageNum) {
         Map<String, String> params = new HashMap<>();
         params.put("uid", String.valueOf(mid));
         params.put("pn", String.valueOf(pageNum));
@@ -82,7 +82,7 @@ public class AudioParseUtils {
      * @param mid   用户ID
      * @return  返回歌曲总数
      */
-    public static int getAudioTotal(long mid) {
+    public int getAudioTotal(long mid) {
         Map<String, String> params = new HashMap<>();
         params.put("uid", String.valueOf(mid));
         params.put("pn", "1");

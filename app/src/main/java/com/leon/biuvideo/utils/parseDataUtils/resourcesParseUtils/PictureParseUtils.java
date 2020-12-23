@@ -26,7 +26,7 @@ public class PictureParseUtils {
      * @param pageNum   获取的页码，从0开始
      * @return  返回UpPicture类型集合
      */
-    public static List<Picture> parsePicture(long mid, int pageNum) {
+    public List<Picture> parsePicture(long mid, int pageNum) {
         Map<String, String> params = new HashMap<>();
         params.put("uid", String.valueOf(mid));
         params.put("page_num", String.valueOf(pageNum));
@@ -98,7 +98,7 @@ public class PictureParseUtils {
      * @param mid   用户ID
      * @return  返回相簿数量
      */
-    public static int getPictureTotal(long mid) {
+    public int getPictureTotal(long mid) {
         Map<String, String> values = new HashMap<>();
         values.put("uid", String.valueOf(mid));
 

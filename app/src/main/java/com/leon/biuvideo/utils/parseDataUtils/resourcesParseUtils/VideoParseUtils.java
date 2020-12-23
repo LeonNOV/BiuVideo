@@ -26,7 +26,7 @@ public class VideoParseUtils {
      * @param pageNum   页码，从1开始
      * @return  返回UpVideo类型集合
      */
-    public static List<Video> parseVideo(long mid, int pageNum) {
+    public List<Video> parseVideo(long mid, int pageNum) {
         Map<String, String> params = new HashMap<>();
         params.put("mid", String.valueOf(mid));
         params.put("ps", String.valueOf(30));
@@ -102,7 +102,7 @@ public class VideoParseUtils {
      * @param mid   用户ID
      * @return  返回视频总数
      */
-    public static int getVideoTotal(long mid) {
+    public int getVideoTotal(long mid) {
         Map<String, String> params = new HashMap<>();
         params.put("mid", String.valueOf(mid));
         params.put("ps", "30");

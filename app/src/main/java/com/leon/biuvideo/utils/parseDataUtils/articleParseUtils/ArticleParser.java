@@ -21,10 +21,11 @@ public class ArticleParser {
      * @param pn    页码
      * @return  返回Article集合
      */
-    public static List<Article> parseArticle (long mid, int pn) {
+    public List<Article> parseArticle (long mid, int pn) {
         Map<String, String> params = new HashMap<>();
         params.put("mid", String.valueOf(mid));
         params.put("pn", String.valueOf(pn));
+        params.put("ps", "12");
 
         JSONObject responseObject = HttpUtils.getResponse(Paths.article, params);
         JSONObject dataObject = responseObject.getJSONObject("data");
@@ -53,7 +54,7 @@ public class ArticleParser {
      * @param articleObject JSON对象
      * @return  返回Article对象
      */
-    private static Article getArticleInfo(JSONObject articleObject) {
+    private Article getArticleInfo(JSONObject articleObject) {
         if (articleObject != null) {
             Article article = new Article();
 
@@ -163,7 +164,7 @@ public class ArticleParser {
      * @param mid   用户ID
      * @return  返回文章总条目数
      */
-    public static int getArticleTotal(long mid) {
+    public int getArticleTotal(long mid) {
         Map<String, String> params = new HashMap<>();
         params.put("mid", String.valueOf(mid));
         params.put("pn", "1");

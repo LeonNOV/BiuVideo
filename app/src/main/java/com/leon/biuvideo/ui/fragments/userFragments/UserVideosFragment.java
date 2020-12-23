@@ -9,12 +9,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.UserFragmentAdapters.UserArticleAdapter;
-import com.leon.biuvideo.beans.articleBeans.Article;
+import com.leon.biuvideo.adapters.UserFragmentAdapters.UserVideoAdapter;
+import com.leon.biuvideo.beans.upMasterBean.Video;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.parseDataUtils.articleParseUtils.ArticleParser;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.VideoParseUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
@@ -22,27 +22,30 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.List;
 
-public class UserArticlesFragment extends BaseFragment {
+/**
+ * UpMasterActivity-video fragment
+ */
+public class UserVideosFragment extends BaseFragment {
     private final long mid;
 
     private RecyclerView recyclerView;
     private SmartRefreshLayout smartRefresh;
     private TextView no_data;
 
-    private ArticleParser articleParser;
+    private VideoParseUtils videoParseUtils;
 
     private int pageNum = 1;
     private int currentCount;
     private boolean dataState = true;
 
-    private List<Article> articles;
+    private List<Video> videos;
 
-    public UserArticlesFragment(long mid) {
+    private UserVideoAdapter userVideoAdapter;
+    private LinearLayoutManager linearLayoutManager;
+
+    public UserVideosFragment(long mid) {
         this.mid = mid;
     }
-
-    private LinearLayoutManager linearLayoutManager;
-    private UserArticleAdapter userArticleAdapter;
 
     @Override
     public int setLayout() {
@@ -61,9 +64,9 @@ public class UserArticlesFragment extends BaseFragment {
 
     @Override
     public void initValues() {
-        articleParser = new ArticleParser();
+        videoParseUtils = new VideoParseUtils();
 
-        int total = articleParser.getArticleTotal(mid);
+        int total = videoParseUtils.getVideoTotal(mid);
 
         if (total == 0) {
             //设置无数据提示界面
@@ -76,18 +79,18 @@ public class UserArticlesFragment extends BaseFragment {
             smartRefresh.setEnabled(true);
 
             //获取初始数据
-            articles = articleParser.parseArticle(mid, pageNum);
-            currentCount += articles.size();
+            videos = videoParseUtils.parseVideo(mid, pageNum);
+            currentCount += videos.size();
             pageNum++;
 
-            if (currentCount < 12) {
+            if (currentCount < 30) {
                 dataState = false;
                 smartRefresh.setEnabled(false);
             }
 
-            if (linearLayoutManager == null || userArticleAdapter == null) {
+            if (linearLayoutManager == null || userVideoAdapter == null) {
                 linearLayoutManager = new LinearLayoutManager(context);
-                userArticleAdapter = new UserArticleAdapter(articles, context);
+                userVideoAdapter = new UserVideoAdapter(videos, context);
             }
 
             initAttr();
@@ -96,7 +99,7 @@ public class UserArticlesFragment extends BaseFragment {
 
     private void initAttr() {
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(userArticleAdapter);
+        recyclerView.setAdapter(userVideoAdapter);
 
         Handler handler = new Handler();
 
@@ -125,11 +128,11 @@ public class UserArticlesFragment extends BaseFragment {
                             @Override
                             public void run() {
                                 //获取新数据
-                                getArticles(mid, pageNum);
+                                getVideos(mid, pageNum);
                                 pageNum++;
 
                                 //添加新数据
-                                userArticleAdapter.append(articles);
+                                userVideoAdapter.append(videos);
                             }
                         }, 1000);
                     } else {
@@ -147,17 +150,19 @@ public class UserArticlesFragment extends BaseFragment {
     }
 
     /**
-     * 获取下一页数据
+     * 获取数据
      *
-     * @param mid   用户ID
-     * @param pageNum   页码
+     * @param mid     up主id
+     * @param pageNum 页码
      */
-    private void getArticles(long mid, int pageNum) {
-        articles = articleParser.parseArticle(mid, pageNum);
-        currentCount += articles.size();
+    private void getVideos(long mid, int pageNum) {
+        videos = videoParseUtils.parseVideo(mid, pageNum);
 
-        //如果第一次获取的条目数小于30则设置dataState
-        if (articles.size() < 12) {
+        //记录获取的总数
+        currentCount += videos.size();
+
+        //判断是否已获取完所有的数据
+        if (videos.size() < 30) {
             dataState = false;
             smartRefresh.setEnabled(false);
         }
