@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">BiuVideo</string>
 
+    <dimen name="corner_6dp">6dp</dimen>
+    <dimen name="item_padding">5dp</dimen>
+
     <string name="main_button_start">开始获取</string>
     <string name="main_editText_hint1">输入关键词进行搜索</string>
     <string name="main_editText_hint2">输入链接或id</string>

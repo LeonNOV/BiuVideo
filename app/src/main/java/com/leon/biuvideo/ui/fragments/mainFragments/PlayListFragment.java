@@ -44,7 +44,7 @@ public class PlayListFragment extends BaseFragment implements ViewPager.OnPageCh
     public void initValues() {
         List<Fragment> fragments = new ArrayList<>();
 
-        fragments.add(new VideoListFragment());
+//        fragments.add(new VideoListFragment());
         fragments.add(new MusicListFragment());
 
         ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getParentFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);

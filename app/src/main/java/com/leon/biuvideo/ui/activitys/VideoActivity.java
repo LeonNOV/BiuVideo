@@ -233,7 +233,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
                 if (!isHaveNetwork) {
                     Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
-                    return;
+                    break;
                 }
 
                 //跳转到up主界面
@@ -280,7 +280,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
                 if (!isHaveNetworkSaveVideo) {
                     Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
-                    return;
+                    break;
                 }
                 
                 //创建清晰度选择dialog
@@ -402,7 +402,9 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
         webView.destroy();
 
-        videoListDatabaseUtils.close();
+        if (videoListDatabaseUtils != null) {
+            videoListDatabaseUtils.close();
+        }
     }
 
     /**

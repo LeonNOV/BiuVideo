@@ -1,95 +1,172 @@
 package com.leon.biuvideo.ui.fragments.playListFragments;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.os.Handler;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.PlayListAdapters.VideoListAdapter;
-import com.leon.biuvideo.beans.upMasterBean.VideoPlayList;
-import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
-import com.leon.biuvideo.utils.dataBaseUtils.Tables;
-import com.leon.biuvideo.utils.dataBaseUtils.VideoListDatabaseUtils;
+import com.leon.biuvideo.adapters.userDataAdapters.UserFavoriteFolderAdapter;
+import com.leon.biuvideo.adapters.userDataAdapters.UserFavoriteFolderDetailAdapter;
+import com.leon.biuvideo.beans.userBeans.UserFolder;
+import com.leon.biuvideo.beans.userBeans.UserFolderData;
+import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
+import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserFolderParser;
+import com.leon.biuvideo.values.ImagePixelSize;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.constant.RefreshState;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.List;
 
 /**
  * PlayListFragment中的video片段
  */
-public class VideoListFragment extends Fragment {
-    private RecyclerView recyclerView;
-    private TextView textView_noDataStr;
+public class VideoListFragment extends BaseFragment {
+    private final long mid;
+    private final String cookie;
 
-    private Context context;
-    private View view;
+    private long nowFolderId;
+    private int pageNum = 1;
+    private boolean dataState = true;
+    private UserFolderData userFolderData;
+    private UserFolderParser userFolderParser;
 
-    private VideoListAdapter videoListAdapter;
-    private List<VideoPlayList> videoPlayLists;
+    private SmartRefreshLayout fragment_favorite_smartRefresh;
 
-    private VideoListDatabaseUtils videoListDatabaseUtils;
+    private RecyclerView folderList;
+    private RecyclerView folderDetail;
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.main_fragment_recycler_view, container, false);
+    private UserFavoriteFolderDetailAdapter userFavoriteFolderDetailAdapter;
+
+    public VideoListFragment(long mid, String cookie) {
+        this.mid = mid;
+        this.cookie = cookie;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        initView();
-    }
-
-    private void initView() {
-        context = getContext();
-        view = getView();
-
-        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.VideoPlayList);
-        videoListDatabaseUtils = (VideoListDatabaseUtils) sqLiteHelperFactory.getInstance();
-
-        recyclerView = view.findViewById(R.id.recyclerView);
-        textView_noDataStr = view.findViewById(R.id.textView_noDataStr);
-
-        videoPlayLists = videoListDatabaseUtils.queryFavoriteVideos();
-        videoListAdapter = new VideoListAdapter(videoPlayLists, getContext());
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(videoListAdapter);
+    public int setLayout() {
+        return R.layout.fragment_favorite_video;
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void initView(BindingUtils bindingUtils) {
+        folderList = findView(R.id.fragment_favorite_video_recyclerView_folderList);
+        folderDetail = findView(R.id.fragment_favorite_video_recyclerView_folderDetail);
 
-        //处理video播放列表数据
-        videoPlayLists = videoListDatabaseUtils.queryFavoriteVideos();
+        fragment_favorite_smartRefresh = findView(R.id.fragment_favorite_smartRefresh);
+        fragment_favorite_smartRefresh.setEnableRefresh(false);
+    }
 
-        if (videoPlayLists.size() > 0) {
-            //隐藏无数据提示，显示item数据
-            textView_noDataStr.setVisibility(View.INVISIBLE);
-            recyclerView.setVisibility(View.VISIBLE);
+    @Override
+    public void initValues() {
+        userFolderParser = new UserFolderParser();
+        List<UserFolder> userFolders = userFolderParser.parseUserFolder(mid, cookie);
 
-            videoListAdapter.refresh(videoPlayLists);
-        } else {
-            textView_noDataStr.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.INVISIBLE);
+        //获取第一个收藏夹ID
+        nowFolderId = userFolders.get(0).id;
+        userFolderData = userFolderParser.parseUserFolderData(cookie, nowFolderId, pageNum);
+
+        // 设置收藏夹参数
+        setFolderInfo(userFolderData);
+
+        UserFavoriteFolderAdapter userFavoriteFolderAdapter = new UserFavoriteFolderAdapter(userFolders, context);
+        userFavoriteFolderAdapter.setOnClickFolderListener(new UserFavoriteFolderAdapter.OnClickFolderListener() {
+            @Override
+            public void OnClick(long folderId) {
+                pageNum = 1;
+                dataState = true;
+                nowFolderId = folderId;
+                fragment_favorite_smartRefresh.setEnabled(true);
+
+                UserFolderData innerUserFolderData = userFolderParser.parseUserFolderData(cookie, nowFolderId, pageNum);
+                userFavoriteFolderDetailAdapter.reset(innerUserFolderData.medias);
+                setFolderInfo(innerUserFolderData);
+            }
+        });
+
+        userFavoriteFolderDetailAdapter = new UserFavoriteFolderDetailAdapter(userFolderData.medias, context);
+        folderList.setAdapter(userFavoriteFolderAdapter);
+        folderDetail.setAdapter(userFavoriteFolderDetailAdapter);
+
+        folderList.setLayoutManager(new LinearLayoutManager(context));
+        folderDetail.setLayoutManager(new LinearLayoutManager(context));
+
+        Handler handler = new Handler();
+
+        //添加加载更多监听事件
+        fragment_favorite_smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(RefreshLayout refreshLayout) {
+
+                //判断是否有网络
+                boolean isHaveNetwork = InternetUtils.checkNetwork(context);
+
+                if (!isHaveNetwork) {
+                    Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+
+                    //结束加载更多动画
+                    fragment_favorite_smartRefresh.finishLoadMore();
+
+                    return;
+                }
+
+                RefreshState state = refreshLayout.getState();
+
+                //判断是否处于拖拽已释放的状态
+                if (state.finishing == RefreshState.ReleaseToLoad.finishing) {
+                    if (dataState) {
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                //获取新数据
+                                getFavoriteVideo();
+
+                                //添加新数据
+                                userFavoriteFolderDetailAdapter.append(userFolderData.medias);
+                            }
+                        }, 1000);
+                    } else {
+                        //关闭上滑刷新
+                        fragment_favorite_smartRefresh.setEnabled(false);
+
+                        Toast.makeText(context, "只有这么多数据了~~~", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                //结束加载更多动画
+                fragment_favorite_smartRefresh.finishLoadMore();
+            }
+        });
+    }
+
+    /**
+     * 设置收藏夹参数
+     */
+    private void setFolderInfo(UserFolderData userFolderData) {
+        BindingUtils bindingUtils = new BindingUtils(view, context);
+        bindingUtils
+                .setImage(R.id.fragment_favorite_video_imageView_cover, userFolderData.cover, ImagePixelSize.COVER)
+                .setText(R.id.fragment_favorite_video_textView_creator, userFolderData.userName)
+                .setText(R.id.fragment_favorite_video_textView_total, userFolderData.total + "个内容")
+                .setText(R.id.fragment_favorite_video_textView_ctime, "创建于" + ValueFormat.generateTime(userFolderData.ctime, true, "/"));
+    }
+
+    /**
+     * 获取收藏的视频
+     */
+    private void getFavoriteVideo() {
+        pageNum++;
+        userFolderData = userFolderParser.parseUserFolderData(cookie, nowFolderId, pageNum);
+
+        if (userFolderData.medias.size() < 20) {
+            dataState = false;
+            fragment_favorite_smartRefresh.setEnabled(false);
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        videoListDatabaseUtils.close();
     }
 }

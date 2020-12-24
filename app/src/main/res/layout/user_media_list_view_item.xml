@@ -4,7 +4,7 @@
     android:id="@+id/user_media_cardView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="18dp"
+    app:cardCornerRadius="@dimen/corner_6dp"
     app:cardUseCompatPadding="true">
 
     <RelativeLayout
@@ -28,10 +28,10 @@
             android:layout_height="25dp"
             android:layout_alignEnd="@id/up_media_imageView_cover"
             android:layout_margin="10dp"
-            android:background="@drawable/shape_bilibili_pink"
+            android:background="@drawable/round_bilibili_pink_bg"
             android:gravity="center"
             android:text="合作"
-            android:textColor="#282828"
+            android:textColor="@color/white"
             android:textSize="12sp" />
 
         <TextView
@@ -41,7 +41,8 @@
             android:layout_alignEnd="@id/up_media_imageView_cover"
             android:layout_alignBottom="@id/up_media_imageView_cover"
             android:layout_margin="10dp"
-            android:background="@drawable/shape_gray"
+            android:textColor="@color/white"
+            android:background="@drawable/round_gray_with_media_length_bg"
             android:gravity="center"
             android:text="02:49"
             android:textSize="13sp" />
