@@ -1,6 +1,5 @@
 package com.leon.biuvideo.ui.activitys;
 
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Looper;
 import android.view.*;
@@ -19,21 +18,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.AnthologyAdapter;
+import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
+import com.leon.biuvideo.beans.downloadedBeans.DownloadedRecordsForVideo;
 import com.leon.biuvideo.beans.upMasterBean.VideoPlayList;
 import com.leon.biuvideo.beans.videoBean.play.Play;
-import com.leon.biuvideo.beans.videoBean.view.SingleVideoInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
 import com.leon.biuvideo.ui.dialogs.SingleVideoQualityDialog;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.Fuck;
-import com.leon.biuvideo.ui.views.GeneralNotification;
+import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
+import com.leon.biuvideo.utils.downloadUtils.MediaUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.MediaUtils;
+import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.WebViewUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
-import com.leon.biuvideo.utils.dataBaseUtils.Tables;
+import com.leon.biuvideo.values.Tables;
 import com.leon.biuvideo.utils.dataBaseUtils.VideoListDatabaseUtils;
 import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParseUtils;
 import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.ViewParseUtils;
@@ -62,10 +63,6 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
             video_textView_coin,
             video_textView_favorite,
             video_textView_share;
-    private Button
-            video_button_saveVideo,
-            video_button_saveCover,
-            video_button_saveFace;
 
     private ViewPage viewPage;
     public static Play play;
@@ -82,6 +79,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
     private boolean saveState;
 
     private VideoListDatabaseUtils videoListDatabaseUtils;
+    private DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils;
 
     //视频在videoPlayList库中的状态
     private boolean videoState;
@@ -125,13 +123,13 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
         expand_text_view = findViewById(R.id.expand_text_view);
 
-        video_button_saveVideo = findViewById(R.id.video_button_saveVideo);
+        Button video_button_saveVideo = findViewById(R.id.video_button_saveVideo);
         video_button_saveVideo.setOnClickListener(this);
 
-        video_button_saveCover = findViewById(R.id.video_button_saveCover);
+        Button video_button_saveCover = findViewById(R.id.video_button_saveCover);
         video_button_saveCover.setOnClickListener(this);
 
-        video_button_saveFace = findViewById(R.id.video_button_saveFace);
+        Button video_button_saveFace = findViewById(R.id.video_button_saveFace);
         video_button_saveFace.setOnClickListener(this);
 
         webView = findViewById(R.id.webView);
@@ -219,6 +217,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
         //设置默认的选集
         new WebViewUtils(webView).setWebViewUrl(viewPage.aid, viewPage.singleVideoInfoList.get(0).cid, 0);
+
     }
 
     @Override
@@ -302,21 +301,51 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                         //隐藏dialog
                         singleVideoQualityDialog.dismiss();
 
+                        // 添加至
+                        DownloadedRecordsForVideo downloadedRecordsForVideo = new DownloadedRecordsForVideo();
+                        downloadedRecordsForVideo.title = viewPage.title;
+                        downloadedRecordsForVideo.upName = viewPage.userInfo.name;
+                        downloadedRecordsForVideo.mainId = viewPage.bvid;
+                        downloadedRecordsForVideo.cover = viewPage.coverUrl;
+
+                        // 添加至DownloadDetailsForMedia
+                        DownloadedDetailMedia downloadedDetailMedia = new DownloadedDetailMedia();
+                        String fileName = FileUtils.generateFileName(viewPage.bvid);
+
+                        downloadedDetailMedia.fileName = fileName;
+                        downloadedDetailMedia.cover = viewPage.coverUrl;
+                        downloadedDetailMedia.title = viewPage.title;
+                        downloadedDetailMedia.videoUrl = videoUrlBase;
+                        downloadedDetailMedia.audioUrl = audioUrlBase;
+
+                        // 获取视频和音频总大小
+                        downloadedDetailMedia.size = ResourceUtils.getResourcesSize(videoUrlBase) + ResourceUtils.getResourcesSize(audioUrlBase);
+                        downloadedDetailMedia.mainId = viewPage.bvid;
+                        downloadedDetailMedia.subId = viewPage.singleVideoInfoList.get(singleVideoSelectedIndex).cid;
+                        downloadedDetailMedia.isVideo = true;
+
+                        if (downloadRecordsDatabaseUtils == null) {
+                            SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.DownloadDetailsForVideo);
+                            downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
+                        }
+
+                        downloadRecordsDatabaseUtils.addVideo(downloadedRecordsForVideo);
+                        downloadRecordsDatabaseUtils.addSubVideo(downloadedDetailMedia);
+
                         //获取视频线程
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                //获取对应选集的信息
-                                SingleVideoInfo nowSingleVideoInfo = viewPage.singleVideoInfoList.get(singleVideoSelectedIndex);
+                                MediaUtils mediaUtils = new MediaUtils(getApplicationContext());
 
                                 //缓存视频
-                                saveState = MediaUtils.saveVideo(getApplicationContext(), videoUrlBase, audioUrlBase, FileUtils.generateFileName(viewPage.bvid));
+                                saveState = mediaUtils.saveVideo(videoUrlBase, audioUrlBase, fileName);
 
                                 //创建推送通知
-                                GeneralNotification notification = new GeneralNotification(getApplicationContext(), getSystemService(Context.NOTIFICATION_SERVICE), viewPage.bvid + "", "SaveVideo", (int) nowSingleVideoInfo.cid);
+//                                GeneralNotification notification = new GeneralNotification(getApplicationContext(), getSystemService(Context.NOTIFICATION_SERVICE), viewPage.bvid + "", "SaveVideo", (int) nowSingleVideoInfo.cid);
 
-                                String title = saveState ? "视频已缓存完成" : "视频缓存失败";
-                                notification.setNotificationOnSDK26(title, viewPage.title + "\t" + nowSingleVideoInfo.part, R.drawable.notification_biu_video);
+//                                String title = saveState ? "视频已缓存完成" : "视频缓存失败";
+//                                notification.setNotificationOnSDK26(title, viewPage.title + "\t" + nowSingleVideoInfo.part, R.drawable.notification_biu_video);
                             }
                         }).start();
                     }
@@ -337,7 +366,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        boolean coverSaveState = MediaUtils.savePicture(getApplicationContext(), coverUrl);
+                        boolean coverSaveState = ResourceUtils.savePicture(getApplicationContext(), coverUrl);
 
                         Looper.prepare();
                         Toast.makeText(getApplicationContext(), coverSaveState ? "保存成功" : "保存失败", Toast.LENGTH_SHORT).show();
@@ -358,7 +387,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void run() {
 
-                        boolean faceSaveState = MediaUtils.savePicture(getApplicationContext(), faceUrl);
+                        boolean faceSaveState = ResourceUtils.savePicture(getApplicationContext(), faceUrl);
 
                         Looper.prepare();
                         Toast.makeText(getApplicationContext(), faceSaveState ? "保存成功" : "保存失败", Toast.LENGTH_SHORT).show();
@@ -405,7 +434,13 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         if (videoListDatabaseUtils != null) {
             videoListDatabaseUtils.close();
         }
+
+        if (downloadRecordsDatabaseUtils != null) {
+            downloadRecordsDatabaseUtils.close();
+        }
     }
+
+
 
     /**
      * 权限回调

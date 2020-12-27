@@ -1,4 +1,4 @@
-package com.leon.biuvideo.utils;
+package com.leon.biuvideo.utils.dataBaseUtils;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,8 +16,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "\"faceUrl\"  TEXT,\n" +
             "\"desc\"  TEXT,\n" +
             "\"visit\"  INTEGER DEFAULT 0,\n" +
-            "\"isDelete\"  INTEGER DEFAULT 1\n" +
+            "\"isDelete\"  INTEGER DEFAULT 0\n" +
             ");";
+
     private static final String musicPlayList = "CREATE TABLE \"musicPlayList\" (\n" +
             "\"id\"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
             "\"sid\"  INTEGER,\n" +
@@ -25,7 +26,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "\"author\"  TEXT,\n" +
             "\"musicName\"  TEXT,\n" +
             "\"isHaveVideo\"  INTEGER,\n" +
-            "\"isDelete\"  INTEGER\n" +
+            "\"isDelete\"  INTEGER DEFAULT 0\n" +
             ");";
 
     private static final String videoPlayList = "CREATE TABLE \"videoPlayList\" (\n" +
@@ -37,7 +38,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "\"length\"  INTEGER,\n" +
             "\"play\"  INTEGER,\n" +
             "\"danmaku\"  INTEGER,\n" +
-            "\"isDelete\"  INTEGER DEFAULT 1\n" +
+            "\"isDelete\"  INTEGER DEFAULT 0\n" +
             ");";
 
     private static final String article = "CREATE TABLE \"article\" (\n" +
@@ -54,7 +55,31 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "\"view\"  INTEGER,\n" +
             "\"like\"  INTEGER,\n" +
             "\"reply\"  INTEGER,\n" +
-            "\"isDelete\"  INTEGER DEFAULT 1\n" +
+            "\"isDelete\"  INTEGER DEFAULT 0\n" +
+            ");";
+
+    // 视频下载记录
+    private static final String downloadRecordsForVideo = "CREATE TABLE \"downloadRecordsForVideo\" (\n" +
+            "\"id\"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+            "\"cover\"  TEXT,\n" +
+            "\"title\"  TEXT,\n" +
+            "\"upName\"  TEXT,\n" +
+            "\"mainId\"  TEXT UNIQUE\n" +
+            ");";
+
+    // 视频/音乐下载记录，isVideo为视频和音频的标识，音频只需满足mainId, 视频则需要满足mainId和subId
+    private static final String downloadDetailsForMedia = "CREATE TABLE \"downloadDetailsForVideo\" (\n" +
+            "\"id\"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+            "\"fileName\"  TEXT,\n" +
+            "\"cover\"  TEXT,\n" +
+            "\"title\"  TEXT,\n" +
+            "\"size\"  LONG,\n" +
+            "\"mainId\"  TEXT,\n" +
+            "\"subId\"  LONG,\n" +
+            "\"videoUrl\"  TEXT,\n" +
+            "\"audioUrl\"  TEXT,\n" +
+            "\"isVideo\"  INTEGER,\n" +
+            "\"isComplete\"  INTEGER DEFAULT 0\n" +
             ");";
 
     public SQLiteHelper(@Nullable Context context, int version) {

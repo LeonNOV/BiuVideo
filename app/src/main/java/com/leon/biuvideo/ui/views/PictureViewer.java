@@ -18,7 +18,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.values.ImagePixelSize;
-import com.leon.biuvideo.utils.MediaUtils;
+import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +100,7 @@ public class PictureViewer extends PopupWindow implements View.OnClickListener, 
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        boolean saveState = MediaUtils.savePicture(context, pictures.get(picture_viewer_viewPager.getCurrentItem()));
+                        boolean saveState = ResourceUtils.savePicture(context, pictures.get(picture_viewer_viewPager.getCurrentItem()));
 
                         Looper.prepare();
                         Toast.makeText(context, saveState ? "保存成功" : "保存失败", Toast.LENGTH_SHORT).show();

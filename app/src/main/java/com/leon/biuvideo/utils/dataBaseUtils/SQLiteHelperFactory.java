@@ -2,7 +2,7 @@ package com.leon.biuvideo.utils.dataBaseUtils;
 
 import android.content.Context;
 
-import com.leon.biuvideo.utils.SQLiteHelper;
+import com.leon.biuvideo.values.Tables;
 
 /**
  * 创建数据库连接时使用该类创建
@@ -38,6 +38,10 @@ public class SQLiteHelperFactory {
                 break;
             case Article:
                 sqLiteHelper = new ArticleDatabaseUtils(context);
+                break;
+            case DownloadDetailsForVideo:
+            case DownloadRecordsForVideo:
+                sqLiteHelper = new DownloadRecordsDatabaseUtils(context);
                 break;
             default:
                 sqLiteHelper = new SQLiteHelper(context, 1);

@@ -22,7 +22,7 @@ import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.ui.views.RoundPopupWindow;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.utils.MediaUtils;
+import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.values.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
 
@@ -291,7 +291,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        boolean saveState = MediaUtils.saveArticle(article_webView, getApplicationContext());
+                                        boolean saveState = ResourceUtils.saveArticle(article_webView, getApplicationContext());
 
                                         Looper.prepare();
                                         Toast.makeText(ArticleActivity.this, saveState ? "保存成功" : "保存失败", Toast.LENGTH_SHORT).show();

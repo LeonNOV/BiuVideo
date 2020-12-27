@@ -15,7 +15,7 @@ import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
-import com.leon.biuvideo.utils.dataBaseUtils.Tables;
+import com.leon.biuvideo.values.Tables;
 
 import java.util.List;
 

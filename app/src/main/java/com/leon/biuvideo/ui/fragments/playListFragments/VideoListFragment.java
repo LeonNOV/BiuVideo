@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.userDataAdapters.UserFavoriteFolderAdapter;
-import com.leon.biuvideo.adapters.userDataAdapters.UserFavoriteFolderDetailAdapter;
+import com.leon.biuvideo.adapters.UserDataAdapters.UserFavoriteFolderAdapter;
+import com.leon.biuvideo.adapters.UserDataAdapters.UserFavoriteFolderDetailAdapter;
 import com.leon.biuvideo.beans.userBeans.UserFolder;
 import com.leon.biuvideo.beans.userBeans.UserFolderData;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;

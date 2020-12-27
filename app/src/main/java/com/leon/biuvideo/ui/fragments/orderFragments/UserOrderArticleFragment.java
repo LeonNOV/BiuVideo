@@ -9,15 +9,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.OrderAdapter;
-import com.leon.biuvideo.adapters.userDataAdapters.UserArticleAdapter;
+import com.leon.biuvideo.adapters.UserDataAdapters.UserArticleAdapter;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.ArticleDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
-import com.leon.biuvideo.utils.dataBaseUtils.Tables;
+import com.leon.biuvideo.values.Tables;
 import com.leon.biuvideo.utils.parseDataUtils.articleParseUtils.UserArticleParser;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;

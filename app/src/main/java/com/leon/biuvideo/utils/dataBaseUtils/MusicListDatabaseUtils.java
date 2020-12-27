@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
-import com.leon.biuvideo.utils.SQLiteHelper;
+import com.leon.biuvideo.values.Tables;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public class MusicListDatabaseUtils extends SQLiteHelper {
      * @return 返回MusicPlayList集合
      */
     public List<MusicPlayList> queryPlayList() {
-        Cursor cursor = sqLiteDatabase.query(Tables.MusicPlayList.value, null, "isDelete=?", new String[]{"1"}, null, null, null);
+        Cursor cursor = sqLiteDatabase.query(Tables.MusicPlayList.value, null, "isDelete = ?", new String[]{"0"}, null, null, null);
 
         List<MusicPlayList> musicPlayLists = new ArrayList<>();
         while (cursor.moveToNext()) {
@@ -74,7 +74,7 @@ public class MusicListDatabaseUtils extends SQLiteHelper {
      * @return 返回查询结果；true：存在、false：不存在
      */
     public boolean queryMusic(long sid) {
-        Cursor cursor = sqLiteDatabase.query(Tables.MusicPlayList.value, null, "sid=? and isDelete=?", new String[]{String.valueOf(sid), String.valueOf(1)}, null, null, null);
+        Cursor cursor = sqLiteDatabase.query(Tables.MusicPlayList.value, null, "sid = ? AND isDelete = ?", new String[]{String.valueOf(sid), String.valueOf(0)}, null, null, null);
 
         int count = cursor.getCount();
 
@@ -89,9 +89,9 @@ public class MusicListDatabaseUtils extends SQLiteHelper {
      */
     public boolean removeMusicItem(long sid) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("isDelete", 0);
+        contentValues.put("isDelete", 1);
 
-        int state = sqLiteDatabase.update(Tables.MusicPlayList.value, contentValues, "sid=?", new String[]{String.valueOf(sid)});
+        int state = sqLiteDatabase.update(Tables.MusicPlayList.value, contentValues, "sid = ?", new String[]{String.valueOf(sid)});
 
         return state > 0;
     }

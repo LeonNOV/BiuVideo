@@ -1,35 +1,37 @@
-package com.leon.biuvideo.utils;
+package com.leon.biuvideo.utils.downloadUtils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.media.MediaCodec;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.media.MediaMuxer;
 import android.net.Uri;
 import android.util.Log;
-import android.webkit.WebView;
 
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import com.leon.biuvideo.utils.FileUtils;
+import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
+import com.leon.biuvideo.values.Tables;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class MediaUtils {
-    private static boolean isHaveNetwork;
+    private final Context context;
+
+    public MediaUtils(Context context) {
+        this.context = context;
+    }
 
     /**
      * 获取、合并视频音频
@@ -39,14 +41,7 @@ public class MediaUtils {
      * @param fileName   文件名称
      * @return  返回获取状态
      */
-    public static boolean saveVideo(Context context, String videoPath, String audioPath, String fileName) {
-
-        //判断是否有网络
-        isHaveNetwork = InternetUtils.checkNetwork(context);
-
-        if (!isHaveNetwork) {
-            return false;
-        }
+    public boolean saveVideo(String videoPath, String audioPath, String fileName) {
 
         String folderPath = FileUtils.createFolder(FileUtils.ResourcesFolder.VIDEOS);
 
@@ -61,10 +56,12 @@ public class MediaUtils {
             //创建视频Extractor
             MediaExtractor videoExtractor = getVideoExtractor(videoPath, headers);
             MediaFormat videoFormat = videoExtractor.getTrackFormat(0);
+            videoExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
 
             //创建音频Extractor
             MediaExtractor audioExtractor = getAudioExtractor(audioPath, headers);
             MediaFormat audioFormat = audioExtractor.getTrackFormat(0);
+            audioExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
 
             //设置输出配置
             MediaMuxer mediaMuxer = new MediaMuxer(outPath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
@@ -72,12 +69,12 @@ public class MediaUtils {
             int audioTrack = mediaMuxer.addTrack(audioFormat);
 
             /*
-            * 设置缓冲区大小
-            *
-            * 出现：A/libc: Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR),
-            *      fault addr 0xc in tid 2843 (Thread-12), pid 2430 (m.leon.biuvideo)
-            * 这样的错误可能是缓冲区太小的缘故，设置sampleSize的大小即可
-            * */
+             * 设置缓冲区大小
+             *
+             * 出现：A/libc: Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR),
+             *      fault addr 0xc in tid 2843 (Thread-12), pid 2430 (m.leon.biuvideo)
+             * 这样的错误可能是缓冲区太小的缘故，设置sampleSize的大小即可
+             * */
             int sampleSize = 1024 * 1000;
             ByteBuffer videoBuffer = ByteBuffer.allocate(sampleSize);
             ByteBuffer audioBuffer = ByteBuffer.allocate(sampleSize);
@@ -85,10 +82,9 @@ public class MediaUtils {
             MediaCodec.BufferInfo videoBufferInfo = new MediaCodec.BufferInfo();
             MediaCodec.BufferInfo audioBufferInfo = new MediaCodec.BufferInfo();
 
-            videoExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
-            audioExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
-
             mediaMuxer.start();
+
+            long size = 0;
 
             boolean sawEOS_video = false;
             int frameCount_video = 0;
@@ -107,12 +103,15 @@ public class MediaUtils {
                     videoExtractor.advance();
                     frameCount_video++;
                 }
+
+//                size += videoBufferInfo.size;
+//                currentSize = size;
+//                currentProgress = (int) (size * 100 / this.size);
             }
 
             boolean sawEOS_audio = false;
             int frameCount_audio = 0;
             while (!sawEOS_audio) {
-                frameCount_audio++;
                 audioBufferInfo.offset = offset;
                 audioBufferInfo.size = audioExtractor.readSampleData(audioBuffer, offset);
 
@@ -124,7 +123,12 @@ public class MediaUtils {
                     audioBufferInfo.flags = audioExtractor.getSampleFlags();
                     mediaMuxer.writeSampleData(audioTrack, audioBuffer, audioBufferInfo);
                     audioExtractor.advance();
+                    frameCount_audio++;
                 }
+
+//                size += videoBufferInfo.size;
+//                currentSize = size;
+//                currentProgress = (int) (size * 100 / this.size);
             }
 
             mediaMuxer.stop();
@@ -138,11 +142,15 @@ public class MediaUtils {
             Log.d(Fuck.blue, "Video:" + videoPath.split("\\?")[0]);
             Log.d(Fuck.blue, "Audio:" + audioPath.split("\\?")[0]);
             Log.d(Fuck.blue, "isExists:" + new File(outPath).exists());
+//            Log.d(Fuck.blue, "size:" + this.size);
             Log.d(Fuck.blue, "耗时：" + (end - begin) + "ms");
             Log.d(Fuck.blue, "--------------------------------------------");
 
             //通知刷新，进行显示
-            sendBroadcast(context, new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(outPath)));
+            ResourceUtils.sendBroadcast(context, new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(outPath)));
+
+            // 设置isComplete值为1
+            setIsComplete(fileName);
 
             return true;
         } catch (IOException e) {
@@ -159,7 +167,7 @@ public class MediaUtils {
      * @param headers   头信息
      * @return  返回videoExtractor
      */
-    private static MediaExtractor getVideoExtractor(String videoPath, Map<String, String> headers) throws IOException {
+    private MediaExtractor getVideoExtractor(String videoPath, Map<String, String> headers) throws IOException {
         MediaExtractor videoExtractor = new MediaExtractor();
 
         //设置视频源
@@ -176,7 +184,7 @@ public class MediaUtils {
      * @param headers   头信息
      * @return  返回audioExtractor
      */
-    private static MediaExtractor getAudioExtractor(String audioPath, Map<String, String> headers) throws IOException {
+    private MediaExtractor getAudioExtractor(String audioPath, Map<String, String> headers) throws IOException {
         MediaExtractor audioExtractor = new MediaExtractor();
 
         //设置音频源
@@ -193,14 +201,7 @@ public class MediaUtils {
      * @param fileName  文件名称
      * @return  返回保存状态
      */
-    public static boolean saveMusic(Context context, String resourceUrl, String fileName) {
-        //判断是否有网络
-        isHaveNetwork = InternetUtils.checkNetwork(context);
-
-        if (!isHaveNetwork) {
-            return false;
-        }
-
+    public boolean saveMusic(String resourceUrl, String fileName) {
         try {
             URL url = new URL(resourceUrl);
 
@@ -213,7 +214,7 @@ public class MediaUtils {
 
             urlConnection.connect();
 
-            int length = urlConnection.getContentLength();
+//            size = urlConnection.getContentLength();
 
             BufferedInputStream bufferedInputStream = new BufferedInputStream(urlConnection.getInputStream());
 
@@ -224,12 +225,11 @@ public class MediaUtils {
 
             byte[] bytes = new byte[1024 * 10];
 
-            long total = 0;
+//            currentSize = 0;
             int len;
             while ((len = bufferedInputStream.read(bytes)) != -1) {
-                total += len;
-
-                Log.d(Fuck.blue, "保存进度: " + total * 100 / length);
+//                currentSize += len;
+//                currentProgress = (int) (size * 100 / this.size);
 
                 fileOutputStream.write(bytes, 0, len);
             }
@@ -238,7 +238,10 @@ public class MediaUtils {
             bufferedInputStream.close();
 
             //发送广播，通知刷新显示
-            sendBroadcast(context, new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(musicFile)));
+            ResourceUtils.sendBroadcast(context, new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(musicFile)));
+
+            // 设置isComplete值为1
+            setIsComplete(fileName);
 
             return true;
         } catch (IOException e) {
@@ -249,101 +252,15 @@ public class MediaUtils {
     }
 
     /**
-     * 保存图片资源至系统相册
+     * 设置isComplete为“已缓存”状态
      *
-     * @param context   上下文对象
-     * @param picUrl    图片链接
-     * @return  返回保存成功状态
+     * @param fileName  本地媒体资源文件名称
      */
-    public static boolean savePicture(Context context, String picUrl) {
-        //判断是否有网络
-        isHaveNetwork = InternetUtils.checkNetwork(context);
+    private void setIsComplete(String fileName) {
+        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.DownloadDetailsForVideo);
+        DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
 
-        if (!isHaveNetwork) {
-            return false;
-        }
-
-        try {
-            URL url = new URL(picUrl);
-
-            HttpURLConnection connection = (HttpURLConnection)  url.openConnection();
-
-            //获取&设置请求头
-            HashMap<String, String> headers = HttpUtils.getHeaders();
-            connection.setRequestProperty("User-Agent", headers.get("User-Agent"));
-            connection.setRequestProperty("Referer", headers.get("Referer"));
-
-            connection.setDoInput(true);
-            connection.connect();
-
-            InputStream inputStream = connection.getInputStream();
-
-            //获取bitmap对象
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-
-            //创建保存picFile类
-            //图片文件名称使用UUID进行命名
-            File picFile = new File(FileUtils.createFolder(FileUtils.ResourcesFolder.PICTURES), UUID.randomUUID().toString() + ".jpeg");
-
-            //获取输出流
-            FileOutputStream fileOutputStream = new FileOutputStream(picFile);
-
-            boolean isSuccess = bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
-
-            fileOutputStream.close();
-            inputStream.close();
-            connection.disconnect();
-
-            //保存图片后发送广播，通知刷新图库的显示
-            sendBroadcast(context, new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(picFile)));
-
-            return isSuccess;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-
-    /**
-     * 将webView中的内容转换为图片
-     *
-     * @param webView   webView对象
-     * @param context   context
-     * @return 返回截图保存状态
-     */
-    public static boolean saveArticle(WebView webView, Context context) {
-        Bitmap bitmap = Bitmap.createBitmap(webView.getWidth(), webView.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        webView.draw(canvas);
-
-        try {
-            File articlePic = new File(FileUtils.createFolder(FileUtils.ResourcesFolder.PICTURES), FileUtils.generateFileName("article") + ".jpeg");
-
-            FileOutputStream fos = new FileOutputStream(articlePic);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fos);
-
-            fos.close();
-
-            //发送广播
-            sendBroadcast(context, new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(articlePic)));
-
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-
-    /**
-     * 发送广播，通知本地资源库(视频、图片、音乐)进行更新
-     *
-     * @param context   context对象
-     * @param intent    intent对象
-     */
-    private static void sendBroadcast(Context context, Intent intent) {
-        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(context);
-        broadcastManager.sendBroadcast(intent);
+        downloadRecordsDatabaseUtils.setCompleteState(fileName);
+        downloadRecordsDatabaseUtils.close();
     }
 }

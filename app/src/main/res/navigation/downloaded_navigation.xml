@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/downloaded_navigation"
+    app:startDestination="@id/downloadedFragment">
+    <fragment
+        android:id="@+id/downloadedFragment"
+        android:name="com.leon.biuvideo.ui.fragments.downloadedFragments.DownloadedFragment"
+        android:label="DownloadedFragment" />
+    <fragment
+        android:id="@+id/musicListFragment"
+        android:name="com.leon.biuvideo.ui.fragments.playListFragments.MusicListFragment"
+        android:label="MusicListFragment" />
+    <fragment
+        android:id="@+id/videoDetailFragment"
+        android:name="com.leon.biuvideo.ui.fragments.downloadedFragments.VideoDetailFragment"
+        android:label="VideoDetailFragment" >
+        <action
+            android:id="@+id/action_videoDetailFragment_to_videoListFragment"
+            app:destination="@id/videoListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/videoListFragment"
+        android:name="com.leon.biuvideo.ui.fragments.downloadedFragments.VideoListFragment"
+        android:label="VideoListFragment" >
+        <action
+            android:id="@+id/action_videoListFragment_to_videoDetailFragment"
+            app:destination="@id/videoDetailFragment" />
+    </fragment>
+</navigation>

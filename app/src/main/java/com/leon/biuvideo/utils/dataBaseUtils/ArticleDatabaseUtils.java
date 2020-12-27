@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.leon.biuvideo.beans.articleBeans.Article;
-import com.leon.biuvideo.utils.SQLiteHelper;
+import com.leon.biuvideo.values.Tables;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +14,7 @@ import java.util.List;
 public class ArticleDatabaseUtils extends SQLiteHelper {
     private final SQLiteHelper sqLiteHelper;
     private final SQLiteDatabase sqLiteDatabase;
+    private final String dbName = Tables.Article.value;
 
     public ArticleDatabaseUtils(Context context) {
         super(context, 1);
@@ -30,9 +31,9 @@ public class ArticleDatabaseUtils extends SQLiteHelper {
      */
     public boolean removeArticle(long articleId) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("isDelete", 0);
+        contentValues.put("isDelete", 1);
 
-        int update = sqLiteDatabase.update(Tables.Article.value, contentValues, "articleId = ?", new String[]{String.valueOf(articleId)});
+        int update = sqLiteDatabase.update(dbName, contentValues, "articleId = ?", new String[]{String.valueOf(articleId)});
 
         return update > 0;
     }
@@ -44,7 +45,7 @@ public class ArticleDatabaseUtils extends SQLiteHelper {
      * @return
      */
     public boolean queryArticleState(long articleId) {
-        Cursor cursor = sqLiteDatabase.query(Tables.Article.value, new String[]{"isDelete"}, "articleId = ? AND isDelete = ?", new String[]{String.valueOf(articleId), "1"}, null, null, null);
+        Cursor cursor = sqLiteDatabase.query(dbName, new String[]{"isDelete"}, "articleId = ? AND isDelete = ?", new String[]{String.valueOf(articleId), "0"}, null, null, null);
 
         int count = cursor.getCount();
 
@@ -58,7 +59,7 @@ public class ArticleDatabaseUtils extends SQLiteHelper {
      * @return  返回Article集合
      */
     public List<Article> queryArticles() {
-        Cursor cursor = sqLiteDatabase.query(Tables.Article.value, null, "isDelete = ?", new String [] {"1"}, null, null, "id DESC");
+        Cursor cursor = sqLiteDatabase.query(dbName, null, "isDelete = ?", new String [] {"0"}, null, null, "id DESC");
 
         List<Article> articles = new ArrayList<>();
         while (cursor.moveToNext()) {
@@ -106,7 +107,7 @@ public class ArticleDatabaseUtils extends SQLiteHelper {
         contentValues.put("like", article.like);
         contentValues.put("reply", article.reply);
 
-        long insert = sqLiteDatabase.insert(Tables.Article.value, null, contentValues);
+        long insert = sqLiteDatabase.insert(dbName, null, contentValues);
 
         return insert > 0;
     }

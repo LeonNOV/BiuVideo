@@ -1,4 +1,4 @@
-package com.leon.biuvideo.adapters.userDataAdapters;
+package com.leon.biuvideo.adapters.UserDataAdapters;
 
 import android.content.Context;
 import android.content.Intent;

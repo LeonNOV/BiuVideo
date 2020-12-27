@@ -1,20 +1,11 @@
 package com.leon.biuvideo;
 
-import com.leon.biuvideo.beans.articleBeans.Article;
-import com.leon.biuvideo.beans.upMasterBean.Audio;
-import com.leon.biuvideo.beans.upMasterBean.Picture;
-import com.leon.biuvideo.beans.upMasterBean.Video;
-import com.leon.biuvideo.beans.userBeans.UserFolder;
 import com.leon.biuvideo.beans.userBeans.UserFolderData;
 import com.leon.biuvideo.utils.IDUtils;
+import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserFolderParser;
-import com.leon.biuvideo.values.OrderType;
 import com.leon.biuvideo.values.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.AudioParseUtils;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.PictureParseUtils;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.VideoParseUtils;
-import com.leon.biuvideo.utils.parseDataUtils.searchParsers.ArticleParser;
 
 import org.junit.Test;
 
@@ -26,30 +17,6 @@ import java.util.List;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class ExampleUnitTest {
-
-    //video接口测试
-    @Test
-    public void video() {
-        List<Video> videos = VideoParseUtils.parseVideo(49405324, 1);
-
-        System.out.println("page1count:" + videos.size());
-
-        for (Video video : videos) {
-            System.out.println(video);
-        }
-    }
-
-    //picture接口测试
-    @Test
-    public void picture() {
-        List<Picture> pictures = PictureParseUtils.parsePicture(49405324, 0);
-
-        System.out.println("page0count:" + pictures.size());
-
-        for (Picture picture : pictures) {
-            System.out.println(picture);
-        }
-    }
 
     //avid转bvid测试
     @Test
@@ -165,5 +132,14 @@ public class ExampleUnitTest {
         for (UserFolderData.Media media : medias) {
             System.out.println(media.title);
         }
+    }
+
+    @Test
+    public void ContentSize() {
+        long resourcesSize1 = ResourceUtils.getResourcesSize("https://upos-sz-mirrorks3.bilivideo.com/upgcxcode/77/38/205363877/205363877-1-30011.m4s");
+        long resourcesSize2 = ResourceUtils.getResourcesSize("https://upos-sz-mirrorkodo.bilivideo.com/upgcxcode/77/38/205363877/205363877_nb2-1-30280.m4s");
+
+        System.out.println(resourcesSize1);
+        System.out.println(resourcesSize2);
     }
 }

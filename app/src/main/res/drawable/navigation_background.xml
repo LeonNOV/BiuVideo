@@ -8,6 +8,7 @@
 <!--    <gradient android:centerColor="@color/bilibili_pink_lite"-->
 <!--        android:startColor="@color/bilibili_pink_lite"-->
 <!--        android:endColor="@color/bilibili_pink_lite" />-->
-    <corners android:topRightRadius="15dp"
-        android:topLeftRadius="15dp"/>
+    <corners
+        android:bottomRightRadius="15dp"
+        android:topRightRadius="15dp" />
 </shape>

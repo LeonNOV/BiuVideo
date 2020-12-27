@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.leon.biuvideo.beans.Favorite;
-import com.leon.biuvideo.utils.SQLiteHelper;
+import com.leon.biuvideo.values.Tables;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +14,7 @@ import java.util.List;
 public class FavoriteDatabaseUtils extends SQLiteHelper {
     private final SQLiteHelper sqLiteHelper;
     private final SQLiteDatabase sqLiteDatabase;
+    private final String dbName  = Tables.FavoriteUp.value;
 
     public FavoriteDatabaseUtils(Context context) {
         super(context, 1);
@@ -29,9 +30,9 @@ public class FavoriteDatabaseUtils extends SQLiteHelper {
      */
     public boolean removeFavorite(long mid) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("isDelete", 0);
+        contentValues.put("isDelete", 1);
 
-        int state = sqLiteDatabase.update(Tables.FavoriteUp.value, contentValues, "mid=?", new String[]{String.valueOf(mid)});
+        int state = sqLiteDatabase.update(dbName, contentValues, "mid = ?", new String[]{String.valueOf(mid)});
 
         return  state > 0;
     }
@@ -43,7 +44,7 @@ public class FavoriteDatabaseUtils extends SQLiteHelper {
      * @return true：存在；false：不存在
      */
     public boolean queryFavoriteState(long mid) {
-        Cursor cursor = sqLiteDatabase.query(Tables.FavoriteUp.value, new String[]{"isDelete"}, "mid=? and isDelete=?", new String[]{String.valueOf(mid), "1"}, null, null, null);
+        Cursor cursor = sqLiteDatabase.query(dbName, new String[]{"isDelete"}, "mid=? and isDelete = ?", new String[]{String.valueOf(mid), "0"}, null, null, null);
 
         int count = cursor.getCount();
 
@@ -57,7 +58,7 @@ public class FavoriteDatabaseUtils extends SQLiteHelper {
      * @return  返回favorites
      */
     public List<Favorite> queryFavorites() {
-        Cursor cursor = sqLiteDatabase.query(Tables.FavoriteUp.value, null, "isDelete=?", new String [] {"1"}, null, null, "id DESC");
+        Cursor cursor = sqLiteDatabase.query(dbName, null, "isDelete = ?", new String [] {"0"}, null, null, "id DESC");
 
         List<Favorite> favorites = new ArrayList<>();
         while (cursor.moveToNext()) {
@@ -84,9 +85,8 @@ public class FavoriteDatabaseUtils extends SQLiteHelper {
         values.put("name", favorite.name);
         values.put("faceUrl", favorite.faceUrl);
         values.put("desc", favorite.desc);
-        values.put("isDelete", 1);//1：正在关注；0：已取消关注
 
-        long insert = sqLiteDatabase.insert(Tables.FavoriteUp.value, null, values);
+        long insert = sqLiteDatabase.insert(dbName, null, values);
 
         return insert > 0;
     }
@@ -97,7 +97,7 @@ public class FavoriteDatabaseUtils extends SQLiteHelper {
      * @return  返回favorites
      */
     public List<Favorite> queryFavoritesByVisit() {
-        Cursor cursor = sqLiteDatabase.query(Tables.FavoriteUp.value, null, "isDelete=?", new String [] {"1"}, null, null, "visit DESC");
+        Cursor cursor = sqLiteDatabase.query(dbName, null, "isDelete = ?", new String [] {"0"}, null, null, "visit DESC");
 
         List<Favorite> favorites = new ArrayList<>();
         while (cursor.moveToNext()) {
@@ -121,7 +121,7 @@ public class FavoriteDatabaseUtils extends SQLiteHelper {
      * @param mid   用户id
      */
     public void updateVisit(long mid) {
-        Cursor cursor = sqLiteDatabase.query(Tables.FavoriteUp.value, null, "mid=? and isDelete=?", new String[]{String.valueOf(mid), "1"}, null, null, null);
+        Cursor cursor = sqLiteDatabase.query(dbName, null, "mid = ? AND isDelete = ?", new String[]{String.valueOf(mid), "0"}, null, null, null);
 
         if (cursor.getCount() < 1) {
             return;
@@ -136,7 +136,7 @@ public class FavoriteDatabaseUtils extends SQLiteHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put("visit", visit);
 
-        sqLiteDatabase.update(Tables.FavoriteUp.value, contentValues, "mid=?", new String[]{String.valueOf(mid)});
+        sqLiteDatabase.update(dbName, contentValues, "mid = ?", new String[]{String.valueOf(mid)});
     }
 
     /**

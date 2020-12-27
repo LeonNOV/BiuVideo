@@ -4,6 +4,9 @@
     <dimen name="corner_6dp">6dp</dimen>
     <dimen name="item_padding">5dp</dimen>
 
+    <dimen name="cover_width">128dp</dimen>
+    <dimen name="cover_height">72dp</dimen>
+
     <string name="main_button_start">开始获取</string>
     <string name="main_editText_hint1">输入关键词进行搜索</string>
     <string name="main_editText_hint2">输入链接或id</string>
@@ -36,4 +39,8 @@
 
     <!-- 帮助链接 -->
     <string name="help_link">https://www.yuque.com/books/share/0544c9b3-9de9-4d3b-ad1e-0d7defd7e8be?# 《BiuVideo帮助文档》</string>
+
+    <!-- 下载页面 -->
+    <string name="downloading">缓存中</string>
+    <string name="downloaded">已缓存</string>
 </resources>

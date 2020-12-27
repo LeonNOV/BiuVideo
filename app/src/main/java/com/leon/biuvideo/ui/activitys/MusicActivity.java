@@ -26,17 +26,20 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.beans.musicBeans.MusicInfo;
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
 import com.leon.biuvideo.service.MusicService;
 import com.leon.biuvideo.ui.dialogs.MusicListDialog;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.MediaUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
+import com.leon.biuvideo.utils.downloadUtils.MediaUtils;
+import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.MusicListDatabaseUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
-import com.leon.biuvideo.utils.dataBaseUtils.Tables;
+import com.leon.biuvideo.values.Tables;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicParseUtils;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicUrlParseUtils;
 
@@ -108,6 +111,9 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
     //播放列表弹窗
     private MusicListDialog musicListDialog;
 
+    private MediaUtils mediaUtils;
+    private DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -132,6 +138,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
         position = intent.getIntExtra("position", -1);
 
         long[] sidsArray = intent.getLongArrayExtra("sids");
+
         // 获取所有的sid,转换为List集合
         if (sidsArray.length != 0) {
             this.sids = new ArrayList<>();
@@ -371,13 +378,35 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                 //获取权限
                 FileUtils.verifyPermissions(this);
 
+                if (mediaUtils == null) {
+                    mediaUtils = new MediaUtils(getApplicationContext());
+                }
+
+                DownloadedDetailMedia downloadedDetailMedia = new DownloadedDetailMedia();
+                downloadedDetailMedia.fileName = musicInfo.title + "-" + musicInfo.uname;
+                downloadedDetailMedia.cover = musicInfo.cover;
+                downloadedDetailMedia.title = musicInfo.title + "-" + musicInfo.uname;
+                downloadedDetailMedia.audioUrl = musicUrl;
+
+                // 获取视频和音频总大小
+                downloadedDetailMedia.size = ResourceUtils.getResourcesSize(musicUrl);
+                downloadedDetailMedia.mainId = String.valueOf(musicInfo.sid);
+                downloadedDetailMedia.isVideo = false;
+
+                // 添加至DownloadDetailsForMedia
+                if (downloadRecordsDatabaseUtils == null) {
+                    SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.DownloadDetailsForVideo);
+                    downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
+                }
+                downloadRecordsDatabaseUtils.addSubVideo(downloadedDetailMedia);
+
                 Toast.makeText(this, "已添加至缓存队列", Toast.LENGTH_SHORT).show();
 
                 //保存歌曲线程
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        boolean saveState = MediaUtils.saveMusic(getApplicationContext(), musicUrl, musicInfo.title + "-" + musicInfo.uname);
+                        boolean saveState = mediaUtils.saveMusic(musicUrl, musicInfo.title + "-" + musicInfo.uname);
 
                         Looper.prepare();
                         Toast.makeText(MusicActivity.this, saveState ? "缓存成功" : "缓存失败", Toast.LENGTH_SHORT).show();
@@ -605,7 +634,14 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
         unbind();
         musicState = 0;
 
-        musicDatabaseUtils.close();
+        if (musicDatabaseUtils != null) {
+            musicDatabaseUtils.close();
+        }
+
+        if (downloadRecordsDatabaseUtils != null) {
+            downloadRecordsDatabaseUtils.close();
+        }
+
         super.onDestroy();
     }
 

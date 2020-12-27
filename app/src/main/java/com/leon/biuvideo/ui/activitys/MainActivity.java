@@ -287,7 +287,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 switchFragment(preferenceFragment);
                 break;
+            case R.id.navigation_menu_download:
+                Intent intent = new Intent(this, DownloadedActivity.class);
+                startActivity(intent);
+
+                break;
             case R.id.navigation_menu_help:
+
                 //跳转至帮助文档页面
                 Intent intentHelp = new Intent();
                 intentHelp.setAction("android.intent.action.VIEW");

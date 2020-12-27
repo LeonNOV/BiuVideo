@@ -163,7 +163,7 @@
             android:layout_marginEnd="20dp"
             android:maxHeight="4.3dp"
             android:minHeight="4.0dp"
-            android:progressDrawable="@drawable/seekbar_bar"
+            android:progressDrawable="@drawable/progress_seekbar_bg"
             android:thumb="@drawable/icon_circle" />
 
         <TextView

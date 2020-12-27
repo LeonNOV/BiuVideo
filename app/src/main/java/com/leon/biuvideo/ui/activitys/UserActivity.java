@@ -28,7 +28,7 @@ import com.leon.biuvideo.ui.fragments.userFragments.UserVideosFragment;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
-import com.leon.biuvideo.utils.dataBaseUtils.Tables;
+import com.leon.biuvideo.values.Tables;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UserInfoParseUtils;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
@@ -128,7 +128,6 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         setValue(mid);
         initViewPage();
-
     }
 
     //设置控件的数据

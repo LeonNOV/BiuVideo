@@ -26,7 +26,7 @@ import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
-import com.leon.biuvideo.utils.dataBaseUtils.Tables;
+import com.leon.biuvideo.values.Tables;
 import com.leon.biuvideo.utils.parseDataUtils.FollowParseUtils;
 import com.leon.biuvideo.values.ThanksList;
 
@@ -65,7 +65,7 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
         File cacheDir = context.getCacheDir();
 
         //初始化缓存大小
-        String cacheSize = ValueFormat.sizeFormat(getCacheSize(cacheDir));
+        String cacheSize = ValueFormat.sizeFormat(getCacheSize(cacheDir), true);
         preference_textView_cache_size.setText(cacheSize);
 
         //初始化preference_switch_visitState

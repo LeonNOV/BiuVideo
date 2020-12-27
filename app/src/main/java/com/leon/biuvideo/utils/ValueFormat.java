@@ -52,7 +52,7 @@ public class ValueFormat {
      * @param size  需要转换的大小(单位：byte)
      * @return  返回转换后的数据
      */
-    public static String sizeFormat(long size) {
+    public static String sizeFormat(long size, boolean withSuffix) {
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
 
         if (size > 1024) {
@@ -68,18 +68,29 @@ public class ValueFormat {
                     if (gb > 1024) {
                         double tb = mb / 1024;
 
-                        return decimalFormat.format(tb) + "TB";
+                        if (withSuffix)
+                            return decimalFormat.format(tb) + "TB";
+
+                        return decimalFormat.format(tb);
                     }
 
-                    return decimalFormat.format(gb) + "GB";
+                    if (withSuffix)
+                        return decimalFormat.format(gb) + "GB";
+                    return decimalFormat.format(gb);
                 }
 
-                return decimalFormat.format(mb) + "MB";
+                if (withSuffix)
+                    return decimalFormat.format(mb) + "MB";
+                return decimalFormat.format(mb);
             }
 
-            return decimalFormat.format(kb) + "KB";
+            if (withSuffix)
+                return decimalFormat.format(kb) + "KB";
+            return decimalFormat.format(kb);
         } else {
-            return size + "B";
+            if (withSuffix)
+                return size + "B";
+            return String.valueOf(size);
         }
     }
 

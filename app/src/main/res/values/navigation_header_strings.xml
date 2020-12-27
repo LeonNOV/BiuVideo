@@ -6,6 +6,7 @@
     <string name="navigation_menu_play_list">播放列表</string>
     <string name="navigation_menu_order">订阅</string>
     <string name="navigation_menu_history">播放历史</string>
+    <string name="navigation_menu_download">离线缓存</string>
     <string name="navigation_menu_other">其他</string>
     <string name="navigation_menu_preference">设置</string>
     <string name="navigation_menu_help">帮助</string>

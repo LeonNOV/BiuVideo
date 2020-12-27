@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.leon.biuvideo.beans.upMasterBean.VideoPlayList;
-import com.leon.biuvideo.utils.SQLiteHelper;
+import com.leon.biuvideo.values.Tables;
 
 import java.util.ArrayList;
 import java.util.List;

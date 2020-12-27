@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="@dimen/item_padding">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="@dimen/cover_width"
+        android:layout_height="@dimen/cover_height"
+        app:cardCornerRadius="@dimen/corner_6dp">
+
+        <ImageView
+            android:id="@+id/downloaded_item_detail_imageView_cover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_background" />
+
+    </androidx.cardview.widget.CardView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="5dp">
+
+        <TextView
+            android:id="@+id/downloaded_item_detail_textView_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <ImageView
+                android:id="@+id/downloaded_item_detail_imageView_mark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/icon_rectangle_video"/>
+
+            <TextView
+                android:id="@+id/downloaded_item_detail_textView_mediaInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="265.3M"
+                android:layout_toEndOf="@id/downloaded_item_detail_imageView_mark"
+                android:textColor="@color/gray"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/downloaded_item_detail_imageView_error"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:visibility="gone"
+                android:src="@drawable/icon_error2"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

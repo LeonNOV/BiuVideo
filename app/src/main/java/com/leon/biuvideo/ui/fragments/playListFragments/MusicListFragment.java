@@ -18,7 +18,7 @@ import com.leon.biuvideo.adapters.PlayListAdapters.MusicListAdapter;
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
 import com.leon.biuvideo.utils.dataBaseUtils.MusicListDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
-import com.leon.biuvideo.utils.dataBaseUtils.Tables;
+import com.leon.biuvideo.values.Tables;
 
 import java.util.List;
 
