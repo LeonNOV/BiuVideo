@@ -50,12 +50,13 @@ public class MediaDetailAdapter extends BaseAdapter<DownloadedDetailMedia> {
                         String path = folderPath + "/" + downloadedDetailMedia.fileName + (downloadedDetailMedia.isVideo ? ".mp4" : ".mp3");
 
                         Intent intentMediaPlayer;
-                        intentMediaPlayer = new Intent(Intent.ACTION_VIEW);
-                        Uri uri = Uri.parse(path);
                         if (downloadedDetailMedia.isVideo) {
+                            intentMediaPlayer = new Intent(Intent.ACTION_VIEW);
+                            Uri uri = Uri.parse(path);
                             intentMediaPlayer.setDataAndType(uri , "video/mp4");
                         } else {
-                            intentMediaPlayer.setDataAndType(uri , "audio/mp3");
+//                            intentMediaPlayer.setDataAndType(uri , "audio/*");
+                            intentMediaPlayer = new Intent("android.intent.action.MUSIC_PLAYER");
                         }
 
                         try {
