@@ -31,8 +31,8 @@
                 android:textColor="@color/white"
                 android:textSize="13sp"
                 android:layout_margin="5dp"
-                android:background="@drawable/round_gray_with_media_length_bg"
-                android:text="3P"/>
+                android:visibility="gone"
+                android:background="@drawable/round_gray_with_media_length_bg" />
 
         </RelativeLayout>
 

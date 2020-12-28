@@ -42,6 +42,16 @@ public class AnthologyAdapter extends BaseAdapter<SingleVideoInfo> {
         this.webView = webView;
     }
 
+    private OnClickAnthologyListener onClickAnthologyListener;
+
+    public interface OnClickAnthologyListener {
+        void onClick(int position);
+    }
+
+    public void setOnClickAnthologyListener(OnClickAnthologyListener onClickAnthologyListener) {
+        this.onClickAnthologyListener = onClickAnthologyListener;
+    }
+
     @Override
     public int getLayout(int viewType) {
         return R.layout.single_video_listview_item;
@@ -84,6 +94,10 @@ public class AnthologyAdapter extends BaseAdapter<SingleVideoInfo> {
 
                             //重置当前play变量
                             VideoActivity.play = MediaParseUtils.parseMedia(viewPage.bvid, viewPage.aid, singleVideoInfo.cid);
+
+                            if (onClickAnthologyListener != null) {
+                                onClickAnthologyListener.onClick(singleVideoSelectedIndex);
+                            }
                         } else {
                             Toast.makeText(context, "选择的视频已经在播放了~~", Toast.LENGTH_SHORT).show();
                         }

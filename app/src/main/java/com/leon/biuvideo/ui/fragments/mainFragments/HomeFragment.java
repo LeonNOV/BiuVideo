@@ -18,6 +18,7 @@ import com.leon.biuvideo.ui.activitys.UserActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.ui.views.GeneralNotification;
 import com.leon.biuvideo.utils.HeroImages;
 import com.leon.biuvideo.utils.IDUtils;
 import com.leon.biuvideo.utils.InternetUtils;
@@ -26,6 +27,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 
 public class HomeFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     private ImageView hero_imageView;
@@ -102,7 +104,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     /**
      * 获取的年月日
      *
-     * @return  返回年月日
+     * @return 返回年月日
      */
     private long getTime() {
         Date nowDate = new Date(System.currentTimeMillis());
@@ -130,6 +132,12 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 animation.setDuration(1000);
                 animation.setRepeatMode(Animation.INFINITE);
                 hero_imageView.startAnimation(animation);
+
+                Random random = new Random();
+                int i = random.nextInt(10);
+
+                GeneralNotification notification = new GeneralNotification(context, context.getSystemService(Context.NOTIFICATION_SERVICE),  i+"", "SaveVideo", i);
+                notification.setNotificationOnSDK26("Title" + i, "Content" + i, R.drawable.notification_biu_video);
 
                 break;
             case R.id.home_button_confirm:
@@ -190,11 +198,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                             }
                         }
                         break;
-                    default:break;
+                    default:
+                        break;
                 }
 
                 break;
-            default:break;
+            default:
+                break;
         }
     }
 

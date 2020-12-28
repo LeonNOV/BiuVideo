@@ -3,13 +3,20 @@ package com.leon.biuvideo.ui.views;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
+
+import com.leon.biuvideo.ui.activitys.DownloadedActivity;
 
 /**
  * 创建通知推送
  */
 public class GeneralNotification {
+    private static final String GROUP_VIDEO = "DownloadVideo";
+    private static final String GROUP_MUSIC = "DownloadMusic";
+
     private final Context context;
     private final NotificationManager manager;
     public Notification notification;
@@ -22,34 +29,39 @@ public class GeneralNotification {
         this.context = context;
         this.manager = (NotificationManager) manager;
         this.channelId = channelId;
-        this.description =description;
+        this.description = description;
         this.tag = tag;
     }
 
     /**
      * 创建推送通知
      *
-     * @param title 通知标题
-     * @param contentText   通知内容
-     * @param smallIcon 设置通知小图标，即状态栏图标
+     * @param title       通知标题
+     * @param contentText 通知内容
+     * @param smallIcon   设置通知小图标，即状态栏图标
      */
     public void setNotificationOnSDK26(String title, String contentText, int smallIcon) {
         if (Build.VERSION.SDK_INT >= 26) {
-            NotificationChannel notificationChannel = new NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel notificationChannel = new NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH);
             notificationChannel.enableLights(true);//设置闪烁灯光
             notificationChannel.enableVibration(true);//设置手机震动
 
             manager.createNotificationChannel(notificationChannel);
 
-            Notification.Builder builder = new Notification.Builder(context, channelId);
-            builder.setCategory(Notification.CATEGORY_MESSAGE);
-            builder.setContentTitle(title);
-            builder.setContentText(contentText);
-            builder.setWhen(System.currentTimeMillis());
-            builder.setSmallIcon(smallIcon);
-            builder.setShowWhen(true);
-            builder.setAutoCancel(true);//设置点击通知后自动清除对应的Notification
-            builder.setOnlyAlertOnce(true);//设置只响铃一次
+            Notification.Builder builder = new Notification.Builder(context, channelId)
+                    .setCategory(Notification.CATEGORY_MESSAGE)
+                    .setContentTitle(title)
+                    .setContentText(contentText)
+                    .setWhen(System.currentTimeMillis())
+                    .setSmallIcon(smallIcon)
+                    .setShowWhen(true)
+                    .setProgress(0, 0, true)// 设置模糊进度条
+                    .setOnlyAlertOnce(true);//设置只响铃一次
+
+            // 设置点击跳转
+            Intent intent = new Intent(context, DownloadedActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 100, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+            builder.setContentIntent(pendingIntent);
 
             notification = builder.build();
             manager.notify(tag, notification);

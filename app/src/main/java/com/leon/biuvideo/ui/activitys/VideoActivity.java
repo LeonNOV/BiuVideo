@@ -210,6 +210,12 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
         //创建adapter
         AnthologyAdapter anthologyAdapter = new AnthologyAdapter(viewPage, getApplicationContext(), webView);
+        anthologyAdapter.setOnClickAnthologyListener(new AnthologyAdapter.OnClickAnthologyListener() {
+            @Override
+            public void onClick(int position) {
+                singleVideoSelectedIndex = position;
+            }
+        });
 
         //设置RecyclerView
         video_recyclerView_singleVideoList.setLayoutManager(layoutManager);
@@ -314,7 +320,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
                         downloadedDetailMedia.fileName = fileName;
                         downloadedDetailMedia.cover = viewPage.coverUrl;
-                        downloadedDetailMedia.title = viewPage.title;
+                        downloadedDetailMedia.title = viewPage.singleVideoInfoList.get(singleVideoSelectedIndex).part;
                         downloadedDetailMedia.videoUrl = videoUrlBase;
                         downloadedDetailMedia.audioUrl = audioUrlBase;
 
