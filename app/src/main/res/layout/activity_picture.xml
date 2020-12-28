@@ -22,7 +22,6 @@
                 android:id="@+id/picture_back"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_centerVertical="true"
                 android:background="?selectableItemBackgroundBorderless"
                 android:padding="5dp"
                 android:src="@drawable/icon_back"

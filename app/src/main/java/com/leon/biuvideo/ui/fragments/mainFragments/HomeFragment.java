@@ -133,12 +133,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 animation.setRepeatMode(Animation.INFINITE);
                 hero_imageView.startAnimation(animation);
 
-                Random random = new Random();
-                int i = random.nextInt(10);
-
-                GeneralNotification notification = new GeneralNotification(context, context.getSystemService(Context.NOTIFICATION_SERVICE),  i+"", "SaveVideo", i);
-                notification.setNotificationOnSDK26("Title" + i, "Content" + i, R.drawable.notification_biu_video);
-
                 break;
             case R.id.home_button_confirm:
                 //判断是否有网络

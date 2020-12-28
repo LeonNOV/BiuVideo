@@ -1,6 +1,8 @@
 package com.leon.biuvideo.beans.downloadedBeans;
 
-public class DownloadedDetailMedia {
+import java.io.Serializable;
+
+public class DownloadedDetailMedia implements Serializable {
     public String fileName;
     public String cover;
     public String title;
@@ -10,5 +12,9 @@ public class DownloadedDetailMedia {
     public String videoUrl;
     public String audioUrl;
     public boolean isVideo;
-    public boolean isComplete;
+
+    /**
+     * 下载状态：0：未下载，1：正在下载(如果第一次打开APP为此状态，则表示下载失败)， 2：下载完成
+     */
+    public int downloadState;
 }

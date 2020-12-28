@@ -9,6 +9,10 @@ import android.media.MediaMuxer;
 import android.net.Uri;
 import android.util.Log;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.leon.biuvideo.R;
+import com.leon.biuvideo.ui.views.GeneralNotification;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
@@ -25,12 +29,17 @@ import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class MediaUtils {
     private final Context context;
+    private final int tag;
+
+    private GeneralNotification generalNotification;
 
     public MediaUtils(Context context) {
         this.context = context;
+        this.tag = new Random().nextInt(1001);
     }
 
     /**
@@ -39,15 +48,17 @@ public class MediaUtils {
      * @param videoPath 视频路径
      * @param audioPath 音频路径
      * @param fileName   文件名称
-     * @return  返回获取状态
      */
-    public boolean saveVideo(String videoPath, String audioPath, String fileName) {
-
+    public void saveVideo(String videoPath, String audioPath, String fileName) {
         String folderPath = FileUtils.createFolder(FileUtils.ResourcesFolder.VIDEOS);
 
         String outPath = folderPath + "/" + fileName + ".mp4";
 
         long begin = System.currentTimeMillis();
+
+        // 设置downloadState状态为“正在下载”状态
+        setDownloadState(fileName, false);
+        setNotificationState(fileName, false, true);
 
         try {
             //设置头信息
@@ -149,15 +160,17 @@ public class MediaUtils {
             //通知刷新，进行显示
             ResourceUtils.sendBroadcast(context, new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(outPath)));
 
-            // 设置isComplete值为1
-            setIsComplete(fileName);
-
-            return true;
+            // 设置downloadState状态为“已下载完成”状态
+            setDownloadState(fileName, true);
+            setNotificationState(fileName, true, true);
         } catch (IOException e) {
+            if (generalNotification == null) {
+                generalNotification = new GeneralNotification(context, "缓存媒体资源", this.tag);
+            }
+            generalNotification.setNotificationOnSDK26("缓存视频", "缓存失败\t" + fileName, R.drawable.notification_biu_video);
+
             e.printStackTrace();
         }
-
-        return false;
     }
 
     /**
@@ -214,6 +227,10 @@ public class MediaUtils {
 
             urlConnection.connect();
 
+            // 设置downloadState状态为“正在下载”状态
+            setDownloadState(fileName, false);
+            setNotificationState(fileName, false, false);
+
 //            size = urlConnection.getContentLength();
 
             BufferedInputStream bufferedInputStream = new BufferedInputStream(urlConnection.getInputStream());
@@ -240,11 +257,17 @@ public class MediaUtils {
             //发送广播，通知刷新显示
             ResourceUtils.sendBroadcast(context, new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(musicFile)));
 
-            // 设置isComplete值为1
-            setIsComplete(fileName);
+            // 设置downloadState状态为“已完成下载”状态
+            setDownloadState(fileName, true);
+            setNotificationState(fileName, true, false);
 
             return true;
         } catch (IOException e) {
+            if (generalNotification == null) {
+                generalNotification = new GeneralNotification(context, "缓存媒体资源", this.tag);
+            }
+            generalNotification.setNotificationOnSDK26("缓存音频", "缓存失败\t" + fileName, R.drawable.notification_biu_video);
+
             e.printStackTrace();
         }
 
@@ -252,15 +275,58 @@ public class MediaUtils {
     }
 
     /**
-     * 设置isComplete为“已缓存”状态
+     * 设置下载条目的状态
      *
-     * @param fileName  本地媒体资源文件名称
+     * @param fileName  文件名称
+     * @param isComplete    是否已下载完毕
      */
-    private void setIsComplete(String fileName) {
+    private void setDownloadState(String fileName, boolean isComplete) {
         SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.DownloadDetailsForVideo);
         DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
 
-        downloadRecordsDatabaseUtils.setCompleteState(fileName);
+        if (isComplete) {
+            downloadRecordsDatabaseUtils.setComplete(fileName);
+        } else {
+            downloadRecordsDatabaseUtils.setDownloading(fileName);
+        }
+
         downloadRecordsDatabaseUtils.close();
+    }
+
+    /**
+     * 创建通知栏
+     *
+     * @param fileName  文件名称
+     * @param isComplete    是否已下载完毕
+     * @param isVideo   是否为video
+     */
+    private void setNotificationState(String fileName, boolean isComplete, boolean isVideo) {
+        if (!isComplete) {
+            generalNotification = new GeneralNotification(context, "缓存媒体资源", this.tag);
+            generalNotification.setNotificationOnSDK26(isVideo ? "缓存视频" : "缓存音频", "正在缓存\t" + fileName, R.drawable.notification_biu_video);
+        } else {
+            GeneralNotification.cancel(tag);
+
+            // 发送本地广播
+            sendLocalBroadcast(fileName, isVideo);
+        }
+    }
+
+    /**
+     * 下载完毕后发送本地广播
+     *
+     * @param fileName  文件名称
+     */
+    private void sendLocalBroadcast(String fileName, boolean isVideo) {
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
+
+        Intent mediaIntent;
+        if (isVideo) {
+            mediaIntent = new Intent("DownloadVideo");
+        } else {
+            mediaIntent = new Intent("DownloadAudio");
+        }
+        mediaIntent.putExtra("fileName", fileName);
+        localBroadcastManager.sendBroadcast(mediaIntent);
     }
 }

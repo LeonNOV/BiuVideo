@@ -7,6 +7,9 @@
     <dimen name="cover_width">128dp</dimen>
     <dimen name="cover_height">72dp</dimen>
 
+    <dimen name="small_view_w_h">30dp</dimen>
+    <dimen name="small_view_padding">5dp</dimen>
+
     <string name="main_button_start">开始获取</string>
     <string name="main_editText_hint1">输入关键词进行搜索</string>
     <string name="main_editText_hint2">输入链接或id</string>

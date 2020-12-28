@@ -22,6 +22,7 @@ import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedRecordsForVideo;
 import com.leon.biuvideo.beans.upMasterBean.VideoPlayList;
 import com.leon.biuvideo.beans.videoBean.play.Play;
+import com.leon.biuvideo.beans.videoBean.view.SingleVideoInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
 import com.leon.biuvideo.ui.dialogs.SingleVideoQualityDialog;
 import com.leon.biuvideo.utils.FileUtils;
@@ -74,9 +75,6 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
     //当前webView中播放的选集索引，默认为0
     private int singleVideoSelectedIndex = 0;
-
-    //视频保存状态
-    private boolean saveState;
 
     private VideoListDatabaseUtils videoListDatabaseUtils;
     private DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils;
@@ -316,7 +314,9 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
                         // 添加至DownloadDetailsForMedia
                         DownloadedDetailMedia downloadedDetailMedia = new DownloadedDetailMedia();
-                        String fileName = FileUtils.generateFileName(viewPage.bvid);
+
+                        SingleVideoInfo singleVideoInfo = viewPage.singleVideoInfoList.get(singleVideoSelectedIndex);
+                        String fileName = viewPage.bvid + "-" + singleVideoInfo.part + "-" + play.videoQualitys.get(position).split(" ")[1];
 
                         downloadedDetailMedia.fileName = fileName;
                         downloadedDetailMedia.cover = viewPage.coverUrl;
@@ -345,13 +345,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                                 MediaUtils mediaUtils = new MediaUtils(getApplicationContext());
 
                                 //缓存视频
-                                saveState = mediaUtils.saveVideo(videoUrlBase, audioUrlBase, fileName);
-
-                                //创建推送通知
-//                                GeneralNotification notification = new GeneralNotification(getApplicationContext(), getSystemService(Context.NOTIFICATION_SERVICE), viewPage.bvid + "", "SaveVideo", (int) nowSingleVideoInfo.cid);
-
-//                                String title = saveState ? "视频已缓存完成" : "视频缓存失败";
-//                                notification.setNotificationOnSDK26(title, viewPage.title + "\t" + nowSingleVideoInfo.part, R.drawable.notification_biu_video);
+                                mediaUtils.saveVideo(videoUrlBase, audioUrlBase, fileName);
                             }
                         }).start();
                     }

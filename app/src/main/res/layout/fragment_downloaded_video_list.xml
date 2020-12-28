@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/fragment_downloaded_video_list_linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/bilibili_pink">
+
+            <ImageView
+                android:id="@+id/fragment_downloaded_video_list_imageView_back"
+                android:layout_width="@dimen/small_view_w_h"
+                android:layout_height="@dimen/small_view_w_h"
+                android:background="?selectableItemBackgroundBorderless"
+                android:padding="@dimen/small_view_padding"
+                android:src="@drawable/icon_back"
+                app:tint="#E3E3E3" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragment_downloaded_video_list_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/fragment_downloaded_video_list_textView_toAudio"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:textSize="13sp"
+            android:background="@drawable/ripple_item_white"
+            android:textColor="@color/black"
+            android:text="查看已缓存音频"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/fragment_downloaded_video_list_no_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:text="@string/noneData" />
+
+</RelativeLayout>

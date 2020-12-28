@@ -58,7 +58,7 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
      * @return  返回个数
      */
     private int getAnthologyCount(String mainId) {
-        Cursor cursor = sqLiteDatabase.query(videoDetail, null, "mainId = ? AND isVideo = ?", new String[]{mainId, "1"}, null, null, null);
+        Cursor cursor = sqLiteDatabase.query(videoDetail, null, "mainId = ? AND isVideo = ? AND downloadState = ?", new String[]{mainId, "1", "2"}, null, null, null);
 
         int count = cursor.getCount();
         cursor.close();
@@ -73,7 +73,7 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
      * @return  返回DownloadedDetailMedia集合
      */
     public List<DownloadedDetailMedia> queryAllMusic() {
-        Cursor cursor = sqLiteDatabase.query(videoDetail, null, "isVideo = ?", new String[]{"0"}, null, null, null);
+        Cursor cursor = sqLiteDatabase.query(videoDetail, null, "isVideo = ? AND downloadState = ?", new String[]{"0", "2"}, null, null, null);
 
         List<DownloadedDetailMedia> downloadedDetailMedias = new ArrayList<>();
         while (cursor.moveToNext()) {
@@ -84,7 +84,7 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
             downloadedDetailMedia.size = cursor.getLong(cursor.getColumnIndex("size"));
             downloadedDetailMedia.mainId = cursor.getString(cursor.getColumnIndex("mainId"));
             downloadedDetailMedia.audioUrl = cursor.getString(cursor.getColumnIndex("audioUrl"));
-            downloadedDetailMedia.isComplete = cursor.getInt(cursor.getColumnIndex("isComplete")) == 1;
+            downloadedDetailMedia.downloadState = cursor.getInt(cursor.getColumnIndex("downloadState"));
 
             downloadedDetailMedias.add(downloadedDetailMedia);
         }
@@ -99,8 +99,8 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
      * @param mainId    mainId
      * @return  返回DownloadedDetailMedia集合
      */
-    public List<DownloadedDetailMedia> queryAllSubVideo(long mainId) {
-        Cursor cursor = sqLiteDatabase.query(videoDetail, null, "mainId = ? AND isVideo = ?", new String[]{String.valueOf(mainId), "1"}, null, null, null);
+    public List<DownloadedDetailMedia> queryAllSubVideo(String mainId) {
+        Cursor cursor = sqLiteDatabase.query(videoDetail, null, "mainId = ? AND isVideo = ? AND downloadState = ?", new String[]{mainId, "1", "2"}, null, null, null);
 
         List<DownloadedDetailMedia> downloadedDetailMedias = new ArrayList<>();
         while (cursor.moveToNext()) {
@@ -113,7 +113,7 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
             downloadedDetailMedia.subId = cursor.getLong(cursor.getColumnIndex("subId"));
             downloadedDetailMedia.videoUrl = cursor.getString(cursor.getColumnIndex("videoUrl"));
             downloadedDetailMedia.audioUrl = cursor.getString(cursor.getColumnIndex("audioUrl"));
-            downloadedDetailMedia.isComplete = cursor.getInt(cursor.getColumnIndex("isComplete")) == 1;
+            downloadedDetailMedia.downloadState = cursor.getInt(cursor.getColumnIndex("downloadState"));
 
             downloadedDetailMedias.add(downloadedDetailMedia);
         }
@@ -123,19 +123,31 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
     }
 
     /**
-     * 根据fileName设置isComplete字段的值为1
+     * 根据fileName设置isComplete字段的值为1（正在下载）
      *
      * @param fileName    mainId
      */
-    public void setCompleteState(String fileName) {
+    public void setDownloading(String fileName) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("isComplete", 1);
+        contentValues.put("downloadState", 1);
 
         sqLiteDatabase.update(videoDetail, contentValues, "fileName = ?", new String[]{fileName});
     }
 
     /**
-     * 添加视频
+     * 根据fileName设置isComplete字段的值为2（下载完成）
+     *
+     * @param fileName    mainId
+     */
+    public void setComplete(String fileName) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("downloadState", 2);
+
+        sqLiteDatabase.update(videoDetail, contentValues, "fileName = ?", new String[]{fileName});
+    }
+
+    /**
+     * 添加视频（主）
      *
      * @param downloadedRecordsForVideo downloadedRecordsForVideo对象
      */
@@ -150,7 +162,7 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
     }
 
     /**
-     * 添加选集/音乐条目
+     * 添加选集/音乐下载条目
      *
      * @param downloadedDetailMedia downloadedDetailMedia对象
      */

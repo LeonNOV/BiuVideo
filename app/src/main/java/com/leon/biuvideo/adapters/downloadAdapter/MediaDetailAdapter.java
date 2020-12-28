@@ -1,7 +1,11 @@
 package com.leon.biuvideo.adapters.downloadAdapter;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -9,17 +13,20 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
+import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.List;
 
 public class MediaDetailAdapter extends BaseAdapter<DownloadedDetailMedia> {
+    private final Context context;
     private final List<DownloadedDetailMedia> downloadedDetailMedias;
 
     public MediaDetailAdapter(List<DownloadedDetailMedia> downloadedDetailMedias, Context context) {
         super(downloadedDetailMedias, context);
         this.downloadedDetailMedias = downloadedDetailMedias;
+        this.context = context;
     }
 
     @Override
@@ -34,9 +41,32 @@ public class MediaDetailAdapter extends BaseAdapter<DownloadedDetailMedia> {
         holder
                 .setImage(R.id.downloaded_item_detail_imageView_cover, downloadedDetailMedia.cover, ImagePixelSize.COVER)
                 .setText(R.id.downloaded_item_detail_textView_title, downloadedDetailMedia.title)
-                .setText(R.id.downloaded_item_detail_textView_mediaInfo, ValueFormat.sizeFormat(downloadedDetailMedia.size, true));
+                .setText(R.id.downloaded_item_detail_textView_mediaInfo, ValueFormat.sizeFormat(downloadedDetailMedia.size, true))
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String folderPath;
+                        folderPath = downloadedDetailMedia.isVideo ? FileUtils.createFolder(FileUtils.ResourcesFolder.VIDEOS) : FileUtils.createFolder(FileUtils.ResourcesFolder.MUSIC);
+                        String path = folderPath + "/" + downloadedDetailMedia.fileName + (downloadedDetailMedia.isVideo ? ".mp4" : ".mp3");
 
-        if (!downloadedDetailMedia.isComplete) {
+                        Intent intentMediaPlayer;
+                        intentMediaPlayer = new Intent(Intent.ACTION_VIEW);
+                        Uri uri = Uri.parse(path);
+                        if (downloadedDetailMedia.isVideo) {
+                            intentMediaPlayer.setDataAndType(uri , "video/mp4");
+                        } else {
+                            intentMediaPlayer.setDataAndType(uri , "audio/mp3");
+                        }
+
+                        try {
+                            context.startActivity(intentMediaPlayer);
+                        } catch (ActivityNotFoundException e) {
+                            Toast.makeText(context, "没有支持打开MP3格式的文件", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+        if (downloadedDetailMedia.downloadState == 0) {
             holder.setVisibility(R.id.downloaded_item_detail_imageView_error, View.VISIBLE);
         }
     }

@@ -1,29 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/downloaded_navigation"
-    app:startDestination="@id/downloadedFragment">
+    app:startDestination="@id/downloadedVideoListFragment">
     <fragment
-        android:id="@+id/downloadedFragment"
-        android:name="com.leon.biuvideo.ui.fragments.downloadedFragments.DownloadedFragment"
-        android:label="DownloadedFragment" />
-    <fragment
-        android:id="@+id/musicListFragment"
-        android:name="com.leon.biuvideo.ui.fragments.playListFragments.MusicListFragment"
-        android:label="MusicListFragment" />
-    <fragment
-        android:id="@+id/videoDetailFragment"
-        android:name="com.leon.biuvideo.ui.fragments.downloadedFragments.VideoDetailFragment"
-        android:label="VideoDetailFragment" >
+        android:id="@+id/downloadedMusicListFragment"
+        android:name="com.leon.biuvideo.ui.fragments.downloadedFragments.DownloadedMusicListFragment"
+        android:label="DownloadedMusicListFragment" >
         <action
-            android:id="@+id/action_videoDetailFragment_to_videoListFragment"
-            app:destination="@id/videoListFragment" />
+            android:id="@+id/action_downloadedMusicListFragment_to_downloadedVideoListFragment"
+            app:destination="@id/downloadedVideoListFragment" />
     </fragment>
     <fragment
-        android:id="@+id/videoListFragment"
-        android:name="com.leon.biuvideo.ui.fragments.downloadedFragments.VideoListFragment"
-        android:label="VideoListFragment" >
+        android:id="@+id/downloadedVideoDetailFragment"
+        android:name="com.leon.biuvideo.ui.fragments.downloadedFragments.DownloadedVideoDetailFragment"
+        android:label="DownloadedVideoDetailFragment" >
         <action
-            android:id="@+id/action_videoListFragment_to_videoDetailFragment"
-            app:destination="@id/videoDetailFragment" />
+            android:id="@+id/action_downloadedVideoDetailFragment_to_downloadedVideoListFragment"
+            app:destination="@id/downloadedVideoListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/downloadedVideoListFragment"
+        android:name="com.leon.biuvideo.ui.fragments.downloadedFragments.DownloadedVideoListFragment"
+        android:label="DownloadedVideoListFragment" >
+        <action
+            android:id="@+id/action_downloadedVideoListFragment_to_downloadedMusicListFragment"
+            app:destination="@id/downloadedMusicListFragment" />
+        <action
+            android:id="@+id/action_downloadedVideoListFragment_to_downloadedVideoDetailFragment"
+            app:destination="@id/downloadedVideoDetailFragment" />
     </fragment>
 </navigation>

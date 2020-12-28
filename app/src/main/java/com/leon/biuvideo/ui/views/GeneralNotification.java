@@ -14,23 +14,18 @@ import com.leon.biuvideo.ui.activitys.DownloadedActivity;
  * 创建通知推送
  */
 public class GeneralNotification {
-    private static final String GROUP_VIDEO = "DownloadVideo";
-    private static final String GROUP_MUSIC = "DownloadMusic";
-
     private final Context context;
-    private final NotificationManager manager;
+    private static NotificationManager manager;
     public Notification notification;
 
-    private final String channelId;   //channel的ID
     private final String description; //描述
-    private final int tag;    //该通知的id，用于取消通知的推送
+    private int tag;    //该通知的id，用于取消通知的推送
 
-    public GeneralNotification(Context context, Object manager, String channelId, String description, int tag) {
+    public GeneralNotification(Context context, String description, int tag) {
         this.context = context;
-        this.manager = (NotificationManager) manager;
-        this.channelId = channelId;
         this.description = description;
         this.tag = tag;
+        GeneralNotification.manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     /**
@@ -42,13 +37,13 @@ public class GeneralNotification {
      */
     public void setNotificationOnSDK26(String title, String contentText, int smallIcon) {
         if (Build.VERSION.SDK_INT >= 26) {
-            NotificationChannel notificationChannel = new NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel notificationChannel = new NotificationChannel("BiuVideoNotification", description, NotificationManager.IMPORTANCE_HIGH);
             notificationChannel.enableLights(true);//设置闪烁灯光
             notificationChannel.enableVibration(true);//设置手机震动
 
             manager.createNotificationChannel(notificationChannel);
 
-            Notification.Builder builder = new Notification.Builder(context, channelId)
+            Notification.Builder builder = new Notification.Builder(context, "BiuVideoNotification")
                     .setCategory(Notification.CATEGORY_MESSAGE)
                     .setContentTitle(title)
                     .setContentText(contentText)
@@ -70,8 +65,12 @@ public class GeneralNotification {
 
     /**
      * 取消通知
+     *
+     * @param tag   subId
      */
-    public void cancel() {
-        manager.cancel(tag);
+    public static void cancel(int tag) {
+        if (manager != null) {
+            manager.cancel(tag);
+        }
     }
 }
