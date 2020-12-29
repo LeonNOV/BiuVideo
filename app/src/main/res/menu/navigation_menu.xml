@@ -29,7 +29,6 @@
             android:title="@string/navigation_menu_history" />
         <item
             android:id="@+id/navigation_menu_download"
-            android:checkable="true"
             android:icon="@drawable/navigation_menu_download"
             android:title="@string/navigation_menu_download" />
         <item android:title="@string/navigation_menu_other">
