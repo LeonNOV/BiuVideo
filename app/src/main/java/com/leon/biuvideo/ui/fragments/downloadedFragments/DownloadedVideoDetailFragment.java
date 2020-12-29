@@ -14,7 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.downloadAdapter.MediaDetailAdapter;
+import com.leon.biuvideo.adapters.DownloadAdapter.DownloadedDetailAdapter;
+import com.leon.biuvideo.adapters.DownloadAdapter.DownloadedFailListAdapter;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
@@ -29,7 +30,7 @@ public class DownloadedVideoDetailFragment extends BaseFragment {
 
     private List<DownloadedDetailMedia> downloadedDetailMedia;
 
-    private MediaDetailAdapter mediaDetailAdapter;
+    private DownloadedDetailAdapter downloadedDetailAdapter;
 
     @Override
     public int setLayout() {
@@ -54,8 +55,8 @@ public class DownloadedVideoDetailFragment extends BaseFragment {
                 }
             });
 
-            mediaDetailAdapter = new MediaDetailAdapter(downloadedDetailMedia, context);
-            fragment_downloaded_media_detail_recyclerView.setAdapter(mediaDetailAdapter);
+            downloadedDetailAdapter = new DownloadedDetailAdapter(downloadedDetailMedia, context);
+            fragment_downloaded_media_detail_recyclerView.setAdapter(downloadedDetailAdapter);
             fragment_downloaded_media_detail_recyclerView.setLayoutManager(new LinearLayoutManager(context));
             bindingUtils.setOnClickListener(R.id.fragment_downloaded_media_detail_imageView_back, new View.OnClickListener() {
                 @Override
@@ -90,7 +91,7 @@ public class DownloadedVideoDetailFragment extends BaseFragment {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals("DownloadVideo")) {
                 String fileName = intent.getStringExtra("fileName");
-                mediaDetailAdapter.refresh(fileName);
+                downloadedDetailAdapter.refresh(fileName);
             }
         }
     }

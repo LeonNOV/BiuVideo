@@ -28,5 +28,16 @@
         <action
             android:id="@+id/action_downloadedVideoListFragment_to_downloadedVideoDetailFragment"
             app:destination="@id/downloadedVideoDetailFragment" />
+        <action
+            android:id="@+id/action_downloadedVideoListFragment_to_downloadFailListFragment"
+            app:destination="@id/downloadFailListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/downloadFailListFragment"
+        android:name="com.leon.biuvideo.ui.fragments.downloadedFragments.DownloadFailListFragment"
+        android:label="DownloadFailListFragment" >
+        <action
+            android:id="@+id/action_downloadFailListFragment_to_downloadedVideoListFragment"
+            app:destination="@id/downloadedVideoListFragment" />
     </fragment>
 </navigation>

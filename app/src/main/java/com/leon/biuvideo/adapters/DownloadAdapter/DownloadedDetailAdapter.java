@@ -1,4 +1,4 @@
-package com.leon.biuvideo.adapters.downloadAdapter;
+package com.leon.biuvideo.adapters.DownloadAdapter;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -23,11 +23,11 @@ import com.leon.biuvideo.values.Tables;
 
 import java.util.List;
 
-public class MediaDetailAdapter extends BaseAdapter<DownloadedDetailMedia> {
+public class DownloadedDetailAdapter extends BaseAdapter<DownloadedDetailMedia> {
     private final Context context;
     private final List<DownloadedDetailMedia> downloadedDetailMedias;
 
-    public MediaDetailAdapter(List<DownloadedDetailMedia> downloadedDetailMedias, Context context) {
+    public DownloadedDetailAdapter(List<DownloadedDetailMedia> downloadedDetailMedias, Context context) {
         super(downloadedDetailMedias, context);
         this.downloadedDetailMedias = downloadedDetailMedias;
         this.context = context;
@@ -84,7 +84,7 @@ public class MediaDetailAdapter extends BaseAdapter<DownloadedDetailMedia> {
         SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.DownloadDetailsForVideo);
         DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
 
-        DownloadedDetailMedia downloadedDetailMedia = downloadRecordsDatabaseUtils.querySubVideoByFileName(filename);
+        DownloadedDetailMedia downloadedDetailMedia = downloadRecordsDatabaseUtils.queryVideoByFileName(filename);
         this.downloadedDetailMedias.add(downloadedDetailMedia);
 
         downloadRecordsDatabaseUtils.close();

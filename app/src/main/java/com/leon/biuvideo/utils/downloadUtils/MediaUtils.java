@@ -12,12 +12,15 @@ import android.util.Log;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.beans.videoBean.play.Play;
 import com.leon.biuvideo.ui.views.GeneralNotification;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
+import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicUrlParseUtils;
 import com.leon.biuvideo.values.Tables;
 
 import java.io.BufferedInputStream;
@@ -27,6 +30,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -94,8 +98,6 @@ public class MediaUtils {
             MediaCodec.BufferInfo audioBufferInfo = new MediaCodec.BufferInfo();
 
             mediaMuxer.start();
-
-            long size = 0;
 
             boolean sawEOS_video = false;
             int frameCount_video = 0;
@@ -272,6 +274,29 @@ public class MediaUtils {
         }
 
         return false;
+    }
+
+    /**
+     * 获取媒体资源链接
+     *
+     * @param mainId    主ID（bvid， sid）
+     * @param subId 子ID（cid）
+     * @return  返回资源链接
+     */
+    public String[] reacquireMediaUrl(String mainId, long subId) {
+        String[] urls;
+        if (subId != 0) {
+            urls = new String[2];
+            Play play = MediaParseUtils.parseMedia(mainId, 0, subId);
+            urls[0] = play.videos.get(0).baseUrl;
+            urls[1] = play.audios.get(0).baseUrl;
+
+        } else {
+            urls = new String[1];
+            urls[0] = MusicUrlParseUtils.parseMusicUrl(mainId);;
+        }
+
+        return urls;
     }
 
     /**

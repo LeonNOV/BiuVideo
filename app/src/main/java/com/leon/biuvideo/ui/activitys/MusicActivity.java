@@ -155,7 +155,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
             musicInfo = MusicParseUtils.parseMusic(sid);
 
             //获取music文件
-            musicUrl = MusicUrlParseUtils.parseMusicUrl(sid);
+            musicUrl = MusicUrlParseUtils.parseMusicUrl(String.valueOf(sid));
         } else {
             Toast.makeText(this, "获取数据失败~~~", Toast.LENGTH_SHORT).show();
             finish();
@@ -569,7 +569,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
         musicInfo = MusicParseUtils.parseMusic(sid);
 
         //切换当前歌曲
-        musicUrl = MusicUrlParseUtils.parseMusicUrl(sid);
+        musicUrl = MusicUrlParseUtils.parseMusicUrl(String.valueOf(sid));
 
         //播放音乐
         musicControl.play(musicUrl);

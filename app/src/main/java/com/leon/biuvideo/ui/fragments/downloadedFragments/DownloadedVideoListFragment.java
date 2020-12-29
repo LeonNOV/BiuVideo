@@ -1,8 +1,6 @@
 package com.leon.biuvideo.ui.fragments.downloadedFragments;
 
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.navigation.Navigation;
@@ -10,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.downloadAdapter.MediaListAdapter;
+import com.leon.biuvideo.adapters.DownloadAdapter.DownloadedListAdapter;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedRecordsForVideo;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
@@ -21,10 +19,8 @@ import com.leon.biuvideo.values.Tables;
 import java.util.List;
 
 public class DownloadedVideoListFragment extends BaseFragment implements View.OnClickListener {
-    private LinearLayout fragment_downloaded_video_list_linearLayout;
     private RecyclerView fragment_downloaded_video_list_recyclerView;
-    private TextView fragment_downloaded_video_list_no_data, fragment_downloaded_video_list_textView_toAudio;
-    private ImageView fragment_downloaded_video_list_imageView_back;
+    private TextView fragment_downloaded_video_list_no_data;
 
     private DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils;
     private List<DownloadedRecordsForVideo> downloadedRecordsForVideos;
@@ -36,11 +32,13 @@ public class DownloadedVideoListFragment extends BaseFragment implements View.On
 
     @Override
     public void initView(BindingUtils bindingUtils) {
-        fragment_downloaded_video_list_linearLayout = findView(R.id.fragment_downloaded_video_list_linearLayout);
         fragment_downloaded_video_list_recyclerView = findView(R.id.fragment_downloaded_video_list_recyclerView);
         fragment_downloaded_video_list_no_data = findView(R.id.fragment_downloaded_video_list_no_data);
-        fragment_downloaded_video_list_textView_toAudio = findView(R.id.fragment_downloaded_video_list_textView_toAudio);
-        fragment_downloaded_video_list_imageView_back = findView(R.id.fragment_downloaded_video_list_imageView_back);
+        bindingUtils
+                .setOnClickListener(R.id.fragment_downloaded_video_list_textView_toAudio, this)
+                .setOnClickListener(R.id.fragment_downloaded_video_list_imageView_back, this)
+                .setOnClickListener(R.id.fragment_downloaded_video_list_textView_toFailList, this);
+
     }
 
     @Override
@@ -51,15 +49,12 @@ public class DownloadedVideoListFragment extends BaseFragment implements View.On
 
         if (downloadedRecordsForVideos.size() == 0) {
             fragment_downloaded_video_list_no_data.setVisibility(View.VISIBLE);
-            fragment_downloaded_video_list_linearLayout.setVisibility(View.GONE);
+            fragment_downloaded_video_list_recyclerView.setVisibility(View.GONE);
         } else {
             fragment_downloaded_video_list_no_data.setVisibility(View.GONE);
-            fragment_downloaded_video_list_linearLayout.setVisibility(View.VISIBLE);
+            fragment_downloaded_video_list_recyclerView.setVisibility(View.VISIBLE);
 
-            fragment_downloaded_video_list_imageView_back.setOnClickListener(this);
-            fragment_downloaded_video_list_textView_toAudio.setOnClickListener(this);
-
-            fragment_downloaded_video_list_recyclerView.setAdapter(new MediaListAdapter(downloadedRecordsForVideos, context));
+            fragment_downloaded_video_list_recyclerView.setAdapter(new DownloadedListAdapter(downloadedRecordsForVideos, context));
             fragment_downloaded_video_list_recyclerView.setLayoutManager(new LinearLayoutManager(context));
         }
     }
@@ -72,6 +67,9 @@ public class DownloadedVideoListFragment extends BaseFragment implements View.On
                 break;
             case R.id.fragment_downloaded_video_list_imageView_back:
                 getActivity().finish();
+                break;
+            case R.id.fragment_downloaded_video_list_textView_toFailList:
+                Navigation.findNavController(v).navigate(R.id.action_downloadedVideoListFragment_to_downloadFailListFragment);
                 break;
             default:
                 break;

@@ -140,8 +140,37 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
      * @param fileName    文件名称
      * @return  返回DownloadedDetailMedia对象
      */
-    public DownloadedDetailMedia querySubVideoByFileName(String fileName) {
+    public DownloadedDetailMedia queryVideoByFileName(String fileName) {
         Cursor cursor = sqLiteDatabase.query(videoDetail, null, "fileName = ? AND isVideo = ? AND downloadState = ? AND isDelete = ?", new String[]{fileName, "1", "2", "0"}, null, null, null);
+
+        if (cursor.getCount() != 0) {
+            cursor.moveToNext();
+            DownloadedDetailMedia downloadedDetailMedia = new DownloadedDetailMedia();
+            downloadedDetailMedia.fileName = cursor.getString(cursor.getColumnIndex("fileName"));
+            downloadedDetailMedia.cover = cursor.getString(cursor.getColumnIndex("cover"));
+            downloadedDetailMedia.title = cursor.getString(cursor.getColumnIndex("title"));
+            downloadedDetailMedia.size = cursor.getLong(cursor.getColumnIndex("size"));
+            downloadedDetailMedia.mainId = cursor.getString(cursor.getColumnIndex("mainId"));
+            downloadedDetailMedia.subId = cursor.getLong(cursor.getColumnIndex("subId"));
+            downloadedDetailMedia.videoUrl = cursor.getString(cursor.getColumnIndex("videoUrl"));
+            downloadedDetailMedia.audioUrl = cursor.getString(cursor.getColumnIndex("audioUrl"));
+            downloadedDetailMedia.downloadState = cursor.getInt(cursor.getColumnIndex("downloadState"));
+
+            return downloadedDetailMedia;
+        }
+
+        cursor.close();
+        return null;
+    }
+
+    /**
+     * 根据fileName获取单个选集视频
+     *
+     * @param fileName    文件名称
+     * @return  返回DownloadedDetailMedia对象
+     */
+    public DownloadedDetailMedia queryAudioByFileName(String fileName) {
+        Cursor cursor = sqLiteDatabase.query(videoDetail, null, "fileName = ? AND isVideo = ? AND downloadState = ? AND isDelete = ?", new String[]{fileName, "0", "2", "0"}, null, null, null);
 
         if (cursor.getCount() != 0) {
             cursor.moveToNext();
@@ -231,6 +260,94 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put("isDelete", 1);
         sqLiteDatabase.update(videoDetail, contentValues, "fileName = ?", new String[]{fileName});
+    }
+
+    /**
+     * 更新本地媒体资源链接
+     *
+     * @param urls  资源链接
+     * @param fileName  文件名称
+     */
+    public void updateUrl(String[] urls, String fileName) {
+        ContentValues contentValues = new ContentValues();
+        if (urls.length == 2) {
+            contentValues.put("videoUrl", urls[0]);
+            contentValues.put("audioUrl", urls[1]);
+        } else {
+            contentValues.put("videoUrl", urls[0]);
+        }
+
+        sqLiteDatabase.update(videoDetail, contentValues, "fileName = ?", new String[]{fileName});
+    }
+
+    /**
+     * 获取所有下载失败的媒体资源
+     *
+     * @return  返回所有下载失败的媒体资源
+     */
+    public List<DownloadedDetailMedia> queryDownloadFailMedia() {
+        Cursor cursor = sqLiteDatabase.query(videoDetail, null, "downloadState = ?", new String[]{"0"}, null, null, null);
+
+        List<DownloadedDetailMedia> downloadedDetailMedias = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            DownloadedDetailMedia downloadedDetailMedia = new DownloadedDetailMedia();
+            downloadedDetailMedia.fileName = cursor.getString(cursor.getColumnIndex("fileName"));
+            downloadedDetailMedia.cover = cursor.getString(cursor.getColumnIndex("cover"));
+            downloadedDetailMedia.title = cursor.getString(cursor.getColumnIndex("title"));
+            downloadedDetailMedia.size = cursor.getLong(cursor.getColumnIndex("size"));
+            downloadedDetailMedia.mainId = cursor.getString(cursor.getColumnIndex("mainId"));
+            downloadedDetailMedia.subId = cursor.getLong(cursor.getColumnIndex("subId"));
+            downloadedDetailMedia.videoUrl = cursor.getString(cursor.getColumnIndex("videoUrl"));
+            downloadedDetailMedia.audioUrl = cursor.getString(cursor.getColumnIndex("audioUrl"));
+            downloadedDetailMedia.isVideo = cursor.getInt(cursor.getColumnIndex("isVideo")) == 1;
+            downloadedDetailMedia.downloadState = cursor.getInt(cursor.getColumnIndex("downloadState"));
+
+            downloadedDetailMedias.add(downloadedDetailMedia);
+        }
+
+        cursor.close();
+        return downloadedDetailMedias;
+    }
+
+    /**
+     * 建议在APP启动时调用该方法<br/>
+     * 用于将“正在下载”状态的设置为“下载失败”状态，并获取所有“下载失败”状态的所有条目
+     *
+     * @return  返回“下载失败”状态的所有条目
+     */
+    public List<DownloadedDetailMedia> getDownloadFailMedias() {
+        // 将所有为“下载中”状态的设置为“下载失败”状态
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("downloadState", 0);
+
+        sqLiteDatabase.update(videoDetail, contentValues, "downloadState = ?", new String[]{"1"});
+
+        // 获取所有“下载失败”状态的条目
+        Cursor cursor = sqLiteDatabase.query(videoDetail, null, "downloadState = ?", new String[]{"0"}, null, null, null);
+
+        if (cursor.getCount() != 0) {
+            List<DownloadedDetailMedia> downloadedDetailMedias = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                DownloadedDetailMedia downloadedDetailMedia = new DownloadedDetailMedia();
+                downloadedDetailMedia.fileName = cursor.getString(cursor.getColumnIndex("fileName"));
+                downloadedDetailMedia.cover = cursor.getString(cursor.getColumnIndex("cover"));
+                downloadedDetailMedia.title = cursor.getString(cursor.getColumnIndex("title"));
+                downloadedDetailMedia.size = cursor.getLong(cursor.getColumnIndex("size"));
+                downloadedDetailMedia.mainId = cursor.getString(cursor.getColumnIndex("mainId"));
+                downloadedDetailMedia.subId = cursor.getLong(cursor.getColumnIndex("subId"));
+                downloadedDetailMedia.videoUrl = cursor.getString(cursor.getColumnIndex("videoUrl"));
+                downloadedDetailMedia.audioUrl = cursor.getString(cursor.getColumnIndex("audioUrl"));
+                downloadedDetailMedia.isVideo = cursor.getInt(cursor.getColumnIndex("isVideo")) == 1;
+                downloadedDetailMedia.downloadState = cursor.getInt(cursor.getColumnIndex("downloadState"));
+
+                downloadedDetailMedias.add(downloadedDetailMedia);
+            }
+
+            cursor.close();
+            return downloadedDetailMedias;
+        }
+
+        return null;
     }
 
     /**

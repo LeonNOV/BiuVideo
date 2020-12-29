@@ -21,7 +21,7 @@ public class MediaParseUtils {
      * 解析playUrl接口
      *
      * @param bvid  bvid
-     * @param aid   aid
+     * @param aid   aid,可选
      * @param cid   cid
      * @return  返回选集视频信息
      */
@@ -29,7 +29,9 @@ public class MediaParseUtils {
         try {
 
             Map<String, String> params = new HashMap<>();
-            params.put("avid", String.valueOf(aid));
+            if (aid != 0) {
+                params.put("avid", String.valueOf(aid));
+            }
             params.put("bvid", String.valueOf(bvid));
             params.put("cid", String.valueOf(cid));
             params.put("qn", "0");

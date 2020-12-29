@@ -1,4 +1,4 @@
-package com.leon.biuvideo.adapters.downloadAdapter;
+package com.leon.biuvideo.adapters.DownloadAdapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,11 +22,11 @@ import com.leon.biuvideo.values.Tables;
 
 import java.util.List;
 
-public class MediaListAdapter extends BaseAdapter<DownloadedRecordsForVideo> {
+public class DownloadedListAdapter extends BaseAdapter<DownloadedRecordsForVideo> {
     private final List<DownloadedRecordsForVideo> downloadRecords;
     private final Context context;
 
-    public MediaListAdapter(List<DownloadedRecordsForVideo> downloadRecords, Context context) {
+    public DownloadedListAdapter(List<DownloadedRecordsForVideo> downloadRecords, Context context) {
         super(downloadRecords, context);
         this.downloadRecords = downloadRecords;
         this.context = context;

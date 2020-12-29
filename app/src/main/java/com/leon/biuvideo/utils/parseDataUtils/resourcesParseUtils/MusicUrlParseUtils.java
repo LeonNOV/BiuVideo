@@ -21,9 +21,9 @@ public class MusicUrlParseUtils {
      * @param sid   音频ID
      * @return  返回第一个music链接
      */
-    public static String parseMusicUrl(long sid) {
+    public static String parseMusicUrl(String sid) {
         Map<String, String> params = new HashMap<>();
-        params.put("sid", String.valueOf(sid));
+        params.put("sid", sid);
 
         JSONObject responseObject = HttpUtils.getResponse(Paths.musicUrl, params);
         JSONObject dataObject = responseObject.getJSONObject("data");

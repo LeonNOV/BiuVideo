@@ -21,7 +21,7 @@ public class ExampleUnitTest {
     //avid转bvid测试
     @Test
     public void avidTobvid() {
-//        String s1 = IDUtils.avidToBvid(170001);
+//        String s1 = IDUtils.avidToBvid(373342471);
 //        String s2 = IDUtils.avidToBvid(455017605);
 //        String s3 = IDUtils.avidToBvid(882584971);
 
@@ -112,9 +112,9 @@ public class ExampleUnitTest {
 
         long size = 465347 * 1024 * 10;
 
-        String s = ValueFormat.sizeFormat(size);
+//        String s = ValueFormat.sizeFormat(size);
 
-        System.out.println(s);
+//        System.out.println(s);
     }
 
     @Test
