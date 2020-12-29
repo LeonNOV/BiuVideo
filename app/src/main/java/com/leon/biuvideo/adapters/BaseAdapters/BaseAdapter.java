@@ -72,4 +72,11 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     public void removeAll() {
         this.beans.clear();
     }
+
+    /**
+     * 刷新方法,使用时，必须对其进行重写
+     */
+    public void refresh(String str) {
+
+    }
 }

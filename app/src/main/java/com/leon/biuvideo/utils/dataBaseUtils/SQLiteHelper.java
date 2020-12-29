@@ -79,7 +79,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "\"videoUrl\"  TEXT,\n" +
             "\"audioUrl\"  TEXT,\n" +
             "\"isVideo\"  INTEGER,\n" +
-            "\"downloadState\"  INTEGER DEFAULT 0\n" +
+            "\"downloadState\"  INTEGER DEFAULT 0,\n" +
+            "\"isDelete\"  INTEGER DEFAULT 0\n" +
             ");";
 
     public SQLiteHelper(@Nullable Context context, int version) {

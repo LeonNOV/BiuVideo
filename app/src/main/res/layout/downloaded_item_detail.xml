@@ -59,7 +59,7 @@
                 android:textSize="15sp" />
 
             <ImageView
-                android:id="@+id/downloaded_item_detail_imageView_error"
+                android:id="@+id/downloaded_item_detail_imageView_state"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentEnd="true"

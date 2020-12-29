@@ -5,9 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,7 +17,6 @@ import com.leon.biuvideo.adapters.downloadAdapter.MediaDetailAdapter;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.values.Tables;
@@ -24,21 +24,22 @@ import com.leon.biuvideo.values.Tables;
 import java.util.List;
 
 public class DownloadedMusicListFragment extends BaseFragment {
-    private RecyclerView fragment_recyclerView;
-    private TextView fragment_no_data;
+    private RecyclerView fragment_downloaded_media_detail_recyclerView;
+    private ImageView fragment_downloaded_media_detail_imageView_back;
 
     private DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils;
     private List<DownloadedDetailMedia> downloadedDetailMedias;
+    private MediaDetailAdapter mediaDetailAdapter;
 
     @Override
     public int setLayout() {
-        return R.layout.layout_recycler_view_public;
+        return R.layout.fragment_downloaded_media_detail;
     }
 
     @Override
     public void initView(BindingUtils bindingUtils) {
-        fragment_recyclerView = findView(R.id.fragment_recyclerView);
-        fragment_no_data = findView(R.id.fragment_no_data);
+        fragment_downloaded_media_detail_recyclerView = findView(R.id.fragment_downloaded_media_detail_recyclerView);
+        fragment_downloaded_media_detail_imageView_back = findView(R.id.fragment_downloaded_media_detail_imageView_back);
     }
 
     @Override
@@ -53,16 +54,15 @@ public class DownloadedMusicListFragment extends BaseFragment {
     public void onResume() {
         downloadedDetailMedias = downloadRecordsDatabaseUtils.queryAllMusic();
 
-        if (downloadedDetailMedias.size() == 0) {
-            fragment_recyclerView.setVisibility(View.GONE);
-            fragment_no_data.setVisibility(View.VISIBLE);
-        } else {
-            fragment_recyclerView.setVisibility(View.VISIBLE);
-            fragment_no_data.setVisibility(View.GONE);
-
-            fragment_recyclerView.setAdapter(new MediaDetailAdapter(downloadedDetailMedias, context));
-            fragment_recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        }
+        mediaDetailAdapter = new MediaDetailAdapter(downloadedDetailMedias, context);
+        fragment_downloaded_media_detail_recyclerView.setAdapter(mediaDetailAdapter);
+        fragment_downloaded_media_detail_recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        fragment_downloaded_media_detail_imageView_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_downloadedMusicListFragment_to_downloadedVideoListFragment);
+            }
+        });
 
         super.onResume();
     }
@@ -83,7 +83,7 @@ public class DownloadedMusicListFragment extends BaseFragment {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals("DownloadVideo")) {
                 String fileName = intent.getStringExtra("fileName");
-                Fuck.blue(fileName + "---已下载完成");
+                mediaDetailAdapter.refresh(fileName);
             }
         }
     }

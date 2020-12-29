@@ -11,7 +11,7 @@
         android:background="@color/bilibili_pink">
 
         <ImageView
-            android:id="@+id/fragment_downloaded_video_detail_imageView_back"
+            android:id="@+id/fragment_downloaded_media_detail_imageView_back"
             android:layout_width="@dimen/small_view_w_h"
             android:layout_height="@dimen/small_view_w_h"
             android:background="?selectableItemBackgroundBorderless"
@@ -22,7 +22,7 @@
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/fragment_downloaded_video_detail_recyclerView"
+        android:id="@+id/fragment_downloaded_media_detail_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>

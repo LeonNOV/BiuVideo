@@ -1,15 +1,10 @@
 package com.leon.biuvideo.ui.fragments.downloadedFragments;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +14,6 @@ import com.leon.biuvideo.adapters.downloadAdapter.MediaListAdapter;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedRecordsForVideo;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.values.Tables;
@@ -67,19 +61,7 @@ public class DownloadedVideoListFragment extends BaseFragment implements View.On
 
             fragment_downloaded_video_list_recyclerView.setAdapter(new MediaListAdapter(downloadedRecordsForVideos, context));
             fragment_downloaded_video_list_recyclerView.setLayoutManager(new LinearLayoutManager(context));
-
-            initBroadcast();
         }
-    }
-
-    public void initBroadcast() {
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("DownloadVideo");
-        intentFilter.addAction("DownloadAudio");
-
-        LocalReceiver localReceiver = new LocalReceiver();
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
-        localBroadcastManager.registerReceiver(localReceiver, intentFilter);
     }
 
     @Override
@@ -93,17 +75,6 @@ public class DownloadedVideoListFragment extends BaseFragment implements View.On
                 break;
             default:
                 break;
-        }
-    }
-
-    private class LocalReceiver extends BroadcastReceiver{
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals("DownloadVideo")) {
-                String fileName = intent.getStringExtra("fileName");
-                Fuck.blue(fileName + "---已下载完成");
-            }
         }
     }
 }

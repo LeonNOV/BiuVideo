@@ -14,8 +14,12 @@ import com.leon.biuvideo.adapters.BaseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.utils.FileUtils;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.values.ImagePixelSize;
+import com.leon.biuvideo.values.Tables;
 
 import java.util.List;
 
@@ -50,6 +54,7 @@ public class MediaDetailAdapter extends BaseAdapter<DownloadedDetailMedia> {
                         String path = folderPath + "/" + downloadedDetailMedia.fileName + (downloadedDetailMedia.isVideo ? ".mp4" : ".mp3");
 
                         Intent intentMediaPlayer;
+                        Fuck.blue("isVideo:" + downloadedDetailMedia.isVideo + "");
                         if (downloadedDetailMedia.isVideo) {
                             intentMediaPlayer = new Intent(Intent.ACTION_VIEW);
                             Uri uri = Uri.parse(path);
@@ -62,13 +67,27 @@ public class MediaDetailAdapter extends BaseAdapter<DownloadedDetailMedia> {
                         try {
                             context.startActivity(intentMediaPlayer);
                         } catch (ActivityNotFoundException e) {
-                            Toast.makeText(context, "没有支持打开MP3格式的文件", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "找不到支持打开该文件格式的应用", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
 
-        if (downloadedDetailMedia.downloadState == 0) {
-            holder.setVisibility(R.id.downloaded_item_detail_imageView_error, View.VISIBLE);
+        if (downloadedDetailMedia.downloadState == 1) {
+            holder
+                    .setVisibility(R.id.downloaded_item_detail_imageView_state, View.VISIBLE)
+                    .setImage(R.id.downloaded_item_detail_imageView_state, R.drawable.icon_error2);
         }
+    }
+
+    @Override
+    public void refresh(String filename) {
+        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.DownloadDetailsForVideo);
+        DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
+
+        DownloadedDetailMedia downloadedDetailMedia = downloadRecordsDatabaseUtils.querySubVideoByFileName(filename);
+        this.downloadedDetailMedias.add(downloadedDetailMedia);
+
+        downloadRecordsDatabaseUtils.close();
+        notifyDataSetChanged();
     }
 }
