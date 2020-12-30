@@ -301,9 +301,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                     videoEntries = play.videoEntries();
                     for (Map.Entry<Integer, Media> entry : videoEntries) {
                        entry.getValue().isDownloaded = downloadRecordsDatabaseUtils
-                                .queryVideoDownloadState(viewPage.bvid,
-                                        viewPage.singleVideoInfoList.get(singleVideoSelectedIndex).cid,
-                                        entry.getKey());
+                                .queryVideoDownloadState(viewPage.singleVideoInfoList.get(singleVideoSelectedIndex).cid, entry.getKey());
                     }
 
                     audioEntries = play.audioEntries();
@@ -364,10 +362,11 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                         downloadedDetailMedia.size = ResourceUtils.getResourcesSize(videoUrlBase) + ResourceUtils.getResourcesSize(audioUrlBase);
                         downloadedDetailMedia.mainId = viewPage.bvid;
                         downloadedDetailMedia.subId = viewPage.singleVideoInfoList.get(singleVideoSelectedIndex).cid;
+                        downloadedDetailMedia.resourceMark = downloadedDetailMedia.subId + "-" + downloadedDetailMedia.qualityId;
                         downloadedDetailMedia.isVideo = true;
 
                         downloadRecordsDatabaseUtils.addVideo(downloadedRecordsForVideo);
-                        downloadRecordsDatabaseUtils.addSubVideo(downloadedDetailMedia);
+                        downloadRecordsDatabaseUtils.addMediaDetail(downloadedDetailMedia);
 
                         //获取视频线程
                         new Thread(new Runnable() {

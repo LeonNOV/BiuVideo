@@ -310,7 +310,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
 
                 if (!isHaveNetworkVideo) {
                     Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
-                    return;
+                    break;
                 }
 
                 //跳转到video界面
@@ -325,16 +325,12 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
 
                 if (!isHaveNetworkAuthor) {
                     Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
-                    return;
+                    break;
                 }
 
                 //跳转至作者页面
                 Intent userIntent = new Intent(this, UserActivity.class);
                 userIntent.putExtra("mid", musicInfo.uid);
-
-                //判断上一Activity是否为UpMasterActivity
-                //如果是，则销毁当前Activity
-
                 startActivity(userIntent);
 
                 break;
@@ -391,6 +387,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                 // 获取视频和音频总大小
                 downloadedDetailMedia.size = ResourceUtils.getResourcesSize(musicUrl);
                 downloadedDetailMedia.mainId = String.valueOf(musicInfo.sid);
+                downloadedDetailMedia.resourceMark = downloadedDetailMedia.mainId;
                 downloadedDetailMedia.isVideo = false;
 
                 // 添加至DownloadDetailsForMedia
@@ -398,7 +395,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                     SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.DownloadDetailsForVideo);
                     downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
                 }
-                downloadRecordsDatabaseUtils.addSubVideo(downloadedDetailMedia);
+                downloadRecordsDatabaseUtils.addMediaDetail(downloadedDetailMedia);
 
                 Toast.makeText(this, "已添加至缓存队列", Toast.LENGTH_SHORT).show();
 
@@ -454,7 +451,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
 
                 if (!isHaveNetwork) {
                     Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
-                    return;
+                    break;
                 }
 
                 switch (musicState) {
@@ -499,7 +496,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
 
                 if (!isHaveNetworkUp) {
                     Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
-                    return;
+                    break;
                 }
 
                 //判断当前播放的歌曲是否处于第一个
@@ -520,7 +517,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
 
                 if (!isHaveNetworkNext) {
                     Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
-                    return;
+                    break;
                 }
 
                 //判断当前播放的歌曲是否处于最后一个

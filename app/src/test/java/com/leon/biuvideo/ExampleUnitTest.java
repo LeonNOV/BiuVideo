@@ -27,14 +27,7 @@ public class ExampleUnitTest {
     //avid转bvid测试
     @Test
     public void avidTobvid() {
-        Play play = MediaParseUtils.parseMedia("BV1vX4y1T7T9", 0, 272552274);
-
-        Map<Integer, Media> videos = play.videos;
-        Map<Integer, Media> audios = play.audios;
-
-//        System.out.println(play.videoQualitys());
-
-//        System.out.println(Qualitys.valueOf("16"));
+        System.out.println();
     }
 
     //解析输入的内容

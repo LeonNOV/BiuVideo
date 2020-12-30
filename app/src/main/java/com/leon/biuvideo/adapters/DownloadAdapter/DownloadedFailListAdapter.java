@@ -85,13 +85,17 @@ public class DownloadedFailListAdapter extends BaseAdapter<DownloadedDetailMedia
 
     @Override
     public void refresh(String filename) {
-        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.DownloadDetailsForVideo);
-        DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
+        int index = -1;
+        for (int i = 0; i < this.downloadedDetailMedias.size(); i++) {
+            if (this.downloadedDetailMedias.get(i).fileName.equals(filename)) {
+                index = i;
+            }
+        }
 
-        DownloadedDetailMedia downloadedDetailMedia = downloadRecordsDatabaseUtils.queryAudioByFileName(filename);
-        this.downloadedDetailMedias.remove(downloadedDetailMedia);
+        if (index != -1) {
+            this.downloadedDetailMedias.remove(index);
+        }
 
-        downloadRecordsDatabaseUtils.close();
         notifyDataSetChanged();
     }
 

@@ -79,6 +79,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "\"videoUrl\"  TEXT,\n" +
             "\"audioUrl\"  TEXT,\n" +
             "\"qualityId\"  INTEGER,\n" +
+            "\"resourceMark\"  TEXT UNIQUE,\n" +
             "\"isVideo\"  INTEGER,\n" +
             "\"downloadState\"  INTEGER DEFAULT 0,\n" +
             "\"isDelete\"  INTEGER DEFAULT 0\n" +

@@ -91,6 +91,7 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
             downloadedDetailMedia.audioUrl = cursor.getString(cursor.getColumnIndex("audioUrl"));
             downloadedDetailMedia.isVideo = false;
             downloadedDetailMedia.downloadState = cursor.getInt(cursor.getColumnIndex("downloadState"));
+            downloadedDetailMedia.resourceMark = cursor.getString(cursor.getColumnIndex("resourceMark"));
 
             downloadedDetailMedias.add(downloadedDetailMedia);
         }
@@ -125,6 +126,7 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
             downloadedDetailMedia.videoUrl = cursor.getString(cursor.getColumnIndex("videoUrl"));
             downloadedDetailMedia.audioUrl = cursor.getString(cursor.getColumnIndex("audioUrl"));
             downloadedDetailMedia.qualityId = cursor.getInt(cursor.getColumnIndex("qualityId"));
+            downloadedDetailMedia.resourceMark = cursor.getString(cursor.getColumnIndex("resourceMark"));
             downloadedDetailMedia.isVideo = true;
             downloadedDetailMedia.downloadState = cursor.getInt(cursor.getColumnIndex("downloadState"));
 
@@ -156,6 +158,7 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
             downloadedDetailMedia.videoUrl = cursor.getString(cursor.getColumnIndex("videoUrl"));
             downloadedDetailMedia.audioUrl = cursor.getString(cursor.getColumnIndex("audioUrl"));
             downloadedDetailMedia.qualityId = cursor.getInt(cursor.getColumnIndex("qualityId"));
+            downloadedDetailMedia.resourceMark = cursor.getString(cursor.getColumnIndex("resourceMark"));
             downloadedDetailMedia.downloadState = cursor.getInt(cursor.getColumnIndex("downloadState"));
 
             return downloadedDetailMedia;
@@ -238,7 +241,7 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
      *
      * @param downloadedDetailMedia downloadedDetailMedia对象
      */
-    public void addSubVideo(DownloadedDetailMedia downloadedDetailMedia) {
+    public void addMediaDetail(DownloadedDetailMedia downloadedDetailMedia) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("fileName", downloadedDetailMedia.fileName);
         contentValues.put("cover", downloadedDetailMedia.cover);
@@ -249,6 +252,7 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
         contentValues.put("videoUrl", downloadedDetailMedia.videoUrl);
         contentValues.put("audioUrl", downloadedDetailMedia.audioUrl);
         contentValues.put("qualityId", downloadedDetailMedia.qualityId);
+        contentValues.put("resourceMark", downloadedDetailMedia.resourceMark);
         contentValues.put("isVideo", downloadedDetailMedia.isVideo ? 1 : 0);
 
         sqLiteDatabase.insert(videoDetail, null, contentValues);
@@ -257,13 +261,12 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
     /**
      * 查询对应视频的对应清晰度是否已下载
      *
-     * @param mainId
-     * @param subId
-     * @param qualityId
-     * @return
+     * @param subId     子ID
+     * @param qualityId     清晰度ID
+     * @return  返回是否已下载
      */
-    public boolean queryVideoDownloadState(String mainId, long subId, int qualityId) {
-        Cursor cursor = sqLiteDatabase.query(videoDetail, null, "mainId = ? AND subId = ? AND qualityId = ? AND downloadState = ?", new String[]{mainId, String.valueOf(subId), String.valueOf(qualityId), "2"}, null, null, null);
+    public boolean queryVideoDownloadState(long subId, int qualityId) {
+        Cursor cursor = sqLiteDatabase.query(videoDetail, null, "resourceMark = ? AND downloadState = ?", new String[]{subId + "-" + qualityId, "2"}, null, null, null);
         int count = cursor.getCount();
 
         cursor.close();

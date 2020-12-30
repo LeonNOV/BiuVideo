@@ -12,6 +12,14 @@ public class DownloadedDetailMedia implements Serializable {
     public String videoUrl;
     public String audioUrl;
     public int qualityId;   // 清晰度ID
+
+    /**
+     * 资源标记
+     * 格式：
+     *      视频：subId + "-" + qualityId
+     *      音频：mainId
+     */
+    public String resourceMark;
     public boolean isVideo;
 
     /**

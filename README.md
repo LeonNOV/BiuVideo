@@ -5,6 +5,12 @@
 
 ## 📘开发日志
 
+### 2020/12/31
+- 在`downloadDetailsForMedia`中加入了`resourceMark`字段，该字段为`UNIQUE`，用来标识已下载过的媒体资源
+- `resourceMark`字段格式：
+  - 视频：`subId` + "-" + `qualityId`
+  - 音频：`mainId`
+
 ### 2020/12/30
 - 加入了`缓存失败列表`，并加入了`重新下载`功能
 - 神了！DEBUG不了？？？
