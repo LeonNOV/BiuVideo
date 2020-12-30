@@ -1,5 +1,7 @@
 package com.leon.biuvideo.ui.activitys;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Looper;
 import android.view.*;
@@ -21,6 +23,7 @@ import com.leon.biuvideo.adapters.AnthologyAdapter;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedRecordsForVideo;
 import com.leon.biuvideo.beans.upMasterBean.VideoPlayList;
+import com.leon.biuvideo.beans.videoBean.play.Media;
 import com.leon.biuvideo.beans.videoBean.play.Play;
 import com.leon.biuvideo.beans.videoBean.view.SingleVideoInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
@@ -81,6 +84,9 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
     //视频在videoPlayList库中的状态
     private boolean videoState;
+
+    private List<Map.Entry<Integer, Media>> videoEntries = null;
+    private List<Map.Entry<Integer, Media>> audioEntries = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -285,20 +291,49 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                     Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
                     break;
                 }
-                
+
+                if (downloadRecordsDatabaseUtils == null) {
+                    SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.DownloadDetailsForVideo);
+                    downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
+                }
+
+                if (videoEntries == null) {
+                    videoEntries = play.videoEntries();
+                    for (Map.Entry<Integer, Media> entry : videoEntries) {
+                       entry.getValue().isDownloaded = downloadRecordsDatabaseUtils
+                                .queryVideoDownloadState(viewPage.bvid,
+                                        viewPage.singleVideoInfoList.get(singleVideoSelectedIndex).cid,
+                                        entry.getKey());
+                    }
+
+                    audioEntries = play.audioEntries();
+                }
+
                 //创建清晰度选择dialog
-                singleVideoQualityDialog = new SingleVideoQualityDialog(VideoActivity.this, play.videoQualitys);
+                singleVideoQualityDialog = new SingleVideoQualityDialog(VideoActivity.this, videoEntries);
                 SingleVideoQualityDialog.onQualityItemListener = new SingleVideoQualityDialog.OnQualityItemListener() {
                     @Override
-                    public void onItemClickListener(int position) {
+                    public void onItemClickListener(Map.Entry<Integer, Media> mediaEntry) {
+                        // 判断该清晰度是否需要大会员
+                        if (mediaEntry.getKey() > 80) {
+                            SharedPreferences sharedPreferences = getSharedPreferences("initValues", Activity.MODE_PRIVATE);
+                            boolean isVIP = sharedPreferences.getBoolean("isVIP", false);
+
+                            // 判断是否为大会员
+                            if (!isVIP) {
+                                Toast.makeText(VideoActivity.this, "不好依稀，该清晰度只有大会员才能下载~", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+
                         //获取权限
                         FileUtils.verifyPermissions(VideoActivity.this);
 
                         //获取视频路径
-                        String videoUrlBase = play.videos.get(position).baseUrl;
+                        String videoUrlBase = mediaEntry.getValue().baseUrl;
 
                         //获取音频路径,默认只获取第一个
-                        String audioUrlBase = play.audios.get(0).baseUrl;
+                        String audioUrlBase = audioEntries.get(0).getValue().baseUrl;
 
                         Toast.makeText(getApplicationContext(), "已加入缓存队列中", Toast.LENGTH_SHORT).show();
 
@@ -316,24 +351,20 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                         DownloadedDetailMedia downloadedDetailMedia = new DownloadedDetailMedia();
 
                         SingleVideoInfo singleVideoInfo = viewPage.singleVideoInfoList.get(singleVideoSelectedIndex);
-                        String fileName = viewPage.bvid + "-" + singleVideoInfo.part + "-" + play.videoQualitys.get(position).split(" ")[1];
+                        String fileName = viewPage.bvid + "-" + singleVideoInfo.part + "-" + mediaEntry.getValue().quality.split(" ")[1];
 
                         downloadedDetailMedia.fileName = fileName;
                         downloadedDetailMedia.cover = viewPage.coverUrl;
                         downloadedDetailMedia.title = viewPage.singleVideoInfoList.get(singleVideoSelectedIndex).part;
                         downloadedDetailMedia.videoUrl = videoUrlBase;
                         downloadedDetailMedia.audioUrl = audioUrlBase;
+                        downloadedDetailMedia.qualityId = mediaEntry.getKey();
 
                         // 获取视频和音频总大小
                         downloadedDetailMedia.size = ResourceUtils.getResourcesSize(videoUrlBase) + ResourceUtils.getResourcesSize(audioUrlBase);
                         downloadedDetailMedia.mainId = viewPage.bvid;
                         downloadedDetailMedia.subId = viewPage.singleVideoInfoList.get(singleVideoSelectedIndex).cid;
                         downloadedDetailMedia.isVideo = true;
-
-                        if (downloadRecordsDatabaseUtils == null) {
-                            SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.DownloadDetailsForVideo);
-                            downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
-                        }
 
                         downloadRecordsDatabaseUtils.addVideo(downloadedRecordsForVideo);
                         downloadRecordsDatabaseUtils.addSubVideo(downloadedDetailMedia);

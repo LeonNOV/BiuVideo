@@ -1,7 +1,10 @@
 package com.leon.biuvideo.adapters.DownloadAdapter;
 
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -22,8 +25,7 @@ import java.util.List;
 public class DownloadedFailListAdapter extends BaseAdapter<DownloadedDetailMedia> {
     private final Context context;
     private final List<DownloadedDetailMedia> downloadedDetailMedias;
-
-    String[] newUrls = new String[2];
+    private DownloadedDetailMedia downloadedDetailMedia;
 
     public DownloadedFailListAdapter(Context context, List<DownloadedDetailMedia> downloadedDetailMedias) {
         super(downloadedDetailMedias, context);
@@ -41,8 +43,9 @@ public class DownloadedFailListAdapter extends BaseAdapter<DownloadedDetailMedia
         int videoIcon = R.drawable.icon_rectangle_video;
         int audioIcon = R.drawable.icon_rectangle_music;
 
-        DownloadedDetailMedia downloadedDetailMedia = downloadedDetailMedias.get(position);
+        downloadedDetailMedia = downloadedDetailMedias.get(position);
 
+        ImageView imageView = holder.findById(R.id.downloaded_item_detail_imageView_state);
         holder
                 .setImage(R.id.downloaded_item_detail_imageView_mark, downloadedDetailMedia.isVideo ? videoIcon : audioIcon)
                 .setImage(R.id.downloaded_item_detail_imageView_cover, downloadedDetailMedia.cover, ImagePixelSize.COVER)
@@ -53,40 +56,29 @@ public class DownloadedFailListAdapter extends BaseAdapter<DownloadedDetailMedia
                     @Override
                     public void onClick(View v) {
                         // 重新对该资源进行下载
-                        MediaUtils mediaUtils = new MediaUtils(context);
-                        boolean urlState;
-                        if (downloadedDetailMedia.isVideo) {
-                            urlState = checkUrlState(downloadedDetailMedia.videoUrl, downloadedDetailMedia.audioUrl);
-                            if (!urlState) {
-                                newUrls = mediaUtils.reacquireMediaUrl(downloadedDetailMedia.mainId, downloadedDetailMedia.subId);
+                        if (downloadedDetailMedia.downloadState == 0) {
+                            reacquire(downloadedDetailMedia, new MediaUtils(context));
+                            downloadedDetailMedia.downloadState = 1;
 
-                                downloadedDetailMedia.videoUrl = newUrls[0];
-                                downloadedDetailMedia.audioUrl = newUrls[1];
-                            }
-                        } else {
-                            urlState = checkUrlState(null, downloadedDetailMedia.audioUrl);
-                            if (!urlState) {
-                                newUrls = mediaUtils.reacquireMediaUrl(downloadedDetailMedia.mainId, 0);
-                                downloadedDetailMedia.audioUrl = newUrls[0];
-                            }
-                        }
+                            holder.setImage(R.id.downloaded_item_detail_imageView_state, R.drawable.downloading_animation);
+                            AnimationDrawable animationDrawable = (AnimationDrawable) imageView.getDrawable();
+                            animationDrawable.start();
 
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (downloadedDetailMedia.isVideo) {
-                                    mediaUtils.saveVideo(newUrls[0], newUrls[1], downloadedDetailMedia.fileName);
-                                } else {
-                                    mediaUtils.saveMusic(newUrls[1], downloadedDetailMedia.fileName);
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    MediaUtils mediaUtils = new MediaUtils(context);
+
+                                    if (downloadedDetailMedia.isVideo) {
+                                        mediaUtils.saveVideo(downloadedDetailMedia.videoUrl, downloadedDetailMedia.audioUrl, downloadedDetailMedia.fileName);
+                                    } else {
+                                        mediaUtils.saveMusic(downloadedDetailMedia.audioUrl, downloadedDetailMedia.fileName);
+                                    }
                                 }
-                            }
-                        });
-
-                        //更新本地链接
-                        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.DownloadDetailsForVideo);
-                        DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
-                        downloadRecordsDatabaseUtils.updateUrl(newUrls, downloadedDetailMedia.fileName);
-                        downloadRecordsDatabaseUtils.close();
+                            }).start();
+                        } else {
+                            Toast.makeText(context, "该资源正在下载中", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
     }
@@ -110,9 +102,33 @@ public class DownloadedFailListAdapter extends BaseAdapter<DownloadedDetailMedia
      */
     private boolean checkUrlState(String videoUrl, String audioUrl) {
         if (videoUrl != null) {
-            return ResourceUtils.getResourcesSize(videoUrl) + ResourceUtils.getResourcesSize(audioUrl) != 0;
+            return ResourceUtils.getResourcesSize(videoUrl) + ResourceUtils.getResourcesSize(audioUrl) > 0;
         } else {
-            return ResourceUtils.getResourcesSize(audioUrl) != 0;
+            return ResourceUtils.getResourcesSize(audioUrl) > 0;
+        }
+    }
+
+    /**
+     * 重新获取资源链接
+     *
+     * @param downloadedDetailMedia downloadedDetailMedia对象
+     * @param mediaUtils    mediaUtils
+     */
+    private void reacquire(DownloadedDetailMedia downloadedDetailMedia, MediaUtils mediaUtils) {
+        boolean urlState = checkUrlState(downloadedDetailMedia.videoUrl, downloadedDetailMedia.audioUrl);
+        if (!urlState) {
+            String[] newUrls = mediaUtils.reacquireMediaUrl(downloadedDetailMedia.mainId, downloadedDetailMedia.subId, downloadedDetailMedia.qualityId);
+            downloadedDetailMedia.videoUrl = newUrls[0];
+
+            if (newUrls.length == 2) {
+                downloadedDetailMedia.audioUrl = newUrls[1];
+            }
+
+            //更新本地链接
+            SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.DownloadDetailsForVideo);
+            DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
+            downloadRecordsDatabaseUtils.updateUrl(newUrls, downloadedDetailMedia.fileName);
+            downloadRecordsDatabaseUtils.close();
         }
     }
 }

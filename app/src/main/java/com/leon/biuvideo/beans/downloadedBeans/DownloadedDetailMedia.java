@@ -11,6 +11,7 @@ public class DownloadedDetailMedia implements Serializable {
     public long subId;
     public String videoUrl;
     public String audioUrl;
+    public int qualityId;   // 清晰度ID
     public boolean isVideo;
 
     /**

@@ -124,6 +124,7 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
             downloadedDetailMedia.subId = cursor.getLong(cursor.getColumnIndex("subId"));
             downloadedDetailMedia.videoUrl = cursor.getString(cursor.getColumnIndex("videoUrl"));
             downloadedDetailMedia.audioUrl = cursor.getString(cursor.getColumnIndex("audioUrl"));
+            downloadedDetailMedia.qualityId = cursor.getInt(cursor.getColumnIndex("qualityId"));
             downloadedDetailMedia.isVideo = true;
             downloadedDetailMedia.downloadState = cursor.getInt(cursor.getColumnIndex("downloadState"));
 
@@ -154,6 +155,7 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
             downloadedDetailMedia.subId = cursor.getLong(cursor.getColumnIndex("subId"));
             downloadedDetailMedia.videoUrl = cursor.getString(cursor.getColumnIndex("videoUrl"));
             downloadedDetailMedia.audioUrl = cursor.getString(cursor.getColumnIndex("audioUrl"));
+            downloadedDetailMedia.qualityId = cursor.getInt(cursor.getColumnIndex("qualityId"));
             downloadedDetailMedia.downloadState = cursor.getInt(cursor.getColumnIndex("downloadState"));
 
             return downloadedDetailMedia;
@@ -246,9 +248,26 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
         contentValues.put("subId", downloadedDetailMedia.subId);
         contentValues.put("videoUrl", downloadedDetailMedia.videoUrl);
         contentValues.put("audioUrl", downloadedDetailMedia.audioUrl);
+        contentValues.put("qualityId", downloadedDetailMedia.qualityId);
         contentValues.put("isVideo", downloadedDetailMedia.isVideo ? 1 : 0);
 
         sqLiteDatabase.insert(videoDetail, null, contentValues);
+    }
+
+    /**
+     * 查询对应视频的对应清晰度是否已下载
+     *
+     * @param mainId
+     * @param subId
+     * @param qualityId
+     * @return
+     */
+    public boolean queryVideoDownloadState(String mainId, long subId, int qualityId) {
+        Cursor cursor = sqLiteDatabase.query(videoDetail, null, "mainId = ? AND subId = ? AND qualityId = ? AND downloadState = ?", new String[]{mainId, String.valueOf(subId), String.valueOf(qualityId), "2"}, null, null, null);
+        int count = cursor.getCount();
+
+        cursor.close();
+        return count > 0;
     }
 
     /**
@@ -299,6 +318,7 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
             downloadedDetailMedia.subId = cursor.getLong(cursor.getColumnIndex("subId"));
             downloadedDetailMedia.videoUrl = cursor.getString(cursor.getColumnIndex("videoUrl"));
             downloadedDetailMedia.audioUrl = cursor.getString(cursor.getColumnIndex("audioUrl"));
+            downloadedDetailMedia.qualityId = cursor.getInt(cursor.getColumnIndex("qualityId"));
             downloadedDetailMedia.isVideo = cursor.getInt(cursor.getColumnIndex("isVideo")) == 1;
             downloadedDetailMedia.downloadState = cursor.getInt(cursor.getColumnIndex("downloadState"));
 

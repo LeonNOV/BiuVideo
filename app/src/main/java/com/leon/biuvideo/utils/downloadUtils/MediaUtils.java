@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -58,23 +57,29 @@ public class MediaUtils {
 
         String outPath = folderPath + "/" + fileName + ".mp4";
 
+        Fuck.blue("VideoUrl:" + videoPath);
+        Fuck.blue("AudioUrl:" + audioPath);
+
         long begin = System.currentTimeMillis();
 
         // 设置downloadState状态为“正在下载”状态
         setDownloadState(fileName, false);
         setNotificationState(fileName, false, true);
 
+        MediaExtractor videoExtractor = null;
+        MediaExtractor audioExtractor = null;
+
         try {
             //设置头信息
             HashMap<String, String> headers = HttpUtils.getHeaders();
 
             //创建视频Extractor
-            MediaExtractor videoExtractor = getVideoExtractor(videoPath, headers);
+            videoExtractor = getVideoExtractor(videoPath, headers);
             MediaFormat videoFormat = videoExtractor.getTrackFormat(0);
             videoExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
 
             //创建音频Extractor
-            MediaExtractor audioExtractor = getAudioExtractor(audioPath, headers);
+            audioExtractor = getAudioExtractor(audioPath, headers);
             MediaFormat audioFormat = audioExtractor.getTrackFormat(0);
             audioExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
 
@@ -172,6 +177,13 @@ public class MediaUtils {
             generalNotification.setNotificationOnSDK26("缓存视频", "缓存失败\t" + fileName, R.drawable.notification_biu_video);
 
             e.printStackTrace();
+        } finally {
+            if (videoExtractor != null) {
+                videoExtractor.release();
+            }
+            if (audioExtractor != null) {
+                audioExtractor.release();
+            }
         }
     }
 
@@ -283,12 +295,12 @@ public class MediaUtils {
      * @param subId 子ID（cid）
      * @return  返回资源链接
      */
-    public String[] reacquireMediaUrl(String mainId, long subId) {
+    public String[] reacquireMediaUrl(String mainId, long subId, int qualityId) {
         String[] urls;
         if (subId != 0) {
             urls = new String[2];
             Play play = MediaParseUtils.parseMedia(mainId, 0, subId);
-            urls[0] = play.videos.get(0).baseUrl;
+            urls[0] = play.videos.get(qualityId).baseUrl;
             urls[1] = play.audios.get(0).baseUrl;
 
         } else {

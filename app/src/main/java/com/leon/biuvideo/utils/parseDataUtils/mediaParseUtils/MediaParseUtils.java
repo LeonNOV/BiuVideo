@@ -1,21 +1,20 @@
 package com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils;
 
-import android.util.Log;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.videoBean.play.Media;
 import com.leon.biuvideo.beans.videoBean.play.Play;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.values.Paths;
+import com.leon.biuvideo.values.Qualitys;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MediaParseUtils {
-    private static final String TAG = "LeonLogCat-red";
 
     /**
      * 解析playUrl接口
@@ -45,35 +44,21 @@ public class MediaParseUtils {
 
             if (data != null) {
                 Play play = new Play();
-                play.videoQualitys = new ArrayList<>();
-
-                //获取清晰度
-                JSONArray accept_description = data.getJSONArray("accept_description");
-                for (Object o : accept_description) {
-                    play.videoQualitys.add(o.toString());
-                }
-
-                //删除有大会员限制的视频清晰度
-                play.videoQualitys.remove("超清 4K");
-                play.videoQualitys.remove("高清 1080P+");
-                play.videoQualitys.remove("高清 1080P60");
 
                 JSONObject dash = data.getJSONObject("dash");
 
                 //获取videos
-                play.videos = new ArrayList<>();
                 JSONArray video = dash.getJSONArray("video");
-                play.videos = parseVideo(video);
+                play.videos = parseJSONArray(video);
 
                 //获取audios
-                play.audios = new ArrayList<>();
                 JSONArray audio = dash.getJSONArray("audio");
-                play.audios = parseAudio(audio);
+                play.audios = parseJSONArray(audio);
 
                 return play;
             }
         } catch (NullPointerException e) {
-            Log.e(TAG, "parseView: 数据解析出错");
+            e.printStackTrace();
         }
 
         return null;
@@ -85,90 +70,30 @@ public class MediaParseUtils {
      * @param videoJsonArray json数组
      * @return  返回解析结果
      */
-    private static List<Media> parseVideo(JSONArray videoJsonArray) {
-        List<Media> videos = new ArrayList<>();
+    private static Map<Integer, Media> parseJSONArray(JSONArray videoJsonArray) {
+        Map<Integer, Media> mediaMap = new LinkedHashMap<>();
 
-        /*
-         * 由于响应体中可能出现有两个id相同的视频，但两个video的编码格式不同
-         * avc格式默认为第一个，没有avc格式的话，则仅有一个hev格式的video
-         * 先根据上面的规则对videoJsonArray中的数据进行处理
-         * */
-        Map<Integer, JSONObject> videoMap = new HashMap<>();
         for (Object o : videoJsonArray) {
-            JSONObject videoObject = (JSONObject) o;
-
-            //获取id将id相同的放到一个数组内
-            int id = videoObject.getIntValue("id");
-
-            if (id <= 80) {
-                if (!videoMap.containsKey(id)) {
-                    videoMap.put(id, videoObject);
-                }
-            }
-        }
-
-        //获取media对象
-        for (Map.Entry<Integer, JSONObject> entry : videoMap.entrySet()) {
-            JSONObject jsonObject = entry.getValue();
+            JSONObject jsonObject = (JSONObject) o;
 
             Media media = new Media();
-            media.backupUrl = new ArrayList<>();
 
-            //获取视频/音频链接
+            int id = jsonObject.getIntValue("id");
+
+            // 根据ID获取清晰度字符串
+            media.quality = Qualitys.getQualityStr(id, jsonObject.getString("frameRate"));
+
             media.baseUrl = jsonObject.getString("baseUrl");
 
-            //获取备用视频/音频链接
-            JSONArray backupUrl = jsonObject.getJSONArray("backupUrl");
-            for (Object value : backupUrl) {
-                media.backupUrl.add(String.valueOf(value));
+            List<String> list = new ArrayList<>();
+            for (Object backupUrl : jsonObject.getJSONArray("backupUrl")) {
+                list.add(backupUrl.toString());
             }
 
-            //获取视频编解码器
-//                Object codecs = videoObject.get("codecs");
-
-            //获取视频帧率
-//                Object frameRate = videoObject.get("frameRate");
-
-            videos.add(media);
+            media.backupUrl = list;
+            mediaMap.put(id, media);
         }
 
-        return videos;
-    }
-
-    /**
-     * 解析audioJSONArray
-     *
-     * @param audioJsonArray json数组
-     * @return  返回解析结果
-     */
-    private static List<Media> parseAudio(JSONArray audioJsonArray) {
-        List<Media> audios = new ArrayList<>();
-
-        for (int i = 0, videoSize = audioJsonArray.size(); i < videoSize; i++) {
-            Object o = audioJsonArray.get(i);
-            JSONObject videoObject = (JSONObject) o;
-
-            Media media = new Media();
-            media.backupUrl = new ArrayList<>();
-
-            //获取视频/音频链接
-            media.baseUrl = videoObject.getString("baseUrl");
-
-            //获取备用视频/音频链接
-            JSONArray backupUrl = videoObject.getJSONArray("backupUrl");
-            for (Object value : backupUrl) {
-                media.backupUrl.add(String.valueOf(value));
-            }
-
-            //获取视频编解码器
-//                Object codecs = videoObject.get("codecs");
-
-            //获取视频帧率
-//                Object frameRate = videoObject.get("frameRate");
-
-            audios.add(media);
-        }
-
-        return audios;
+        return mediaMap;
     }
 }

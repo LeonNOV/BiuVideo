@@ -9,6 +9,8 @@ import java.util.List;
 public class Media implements Serializable {
     public String baseUrl;
     public List<String> backupUrl;
+    public String quality;
+    public boolean isDownloaded;    //是否已下载过，适合在VideoActivity中进行赋值
 
     //暂不使用
     public String codecs;

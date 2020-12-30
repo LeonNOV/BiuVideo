@@ -186,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             userInfo = UserInfoParser.userInfoParse(cookie);
             isLogin = true;
+            sharedPreferences.edit().putBoolean("isVIP", userInfo.isVip).apply();
             refreshUserInfo();
         }
     }

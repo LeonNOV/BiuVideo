@@ -1,15 +1,21 @@
 package com.leon.biuvideo;
 
 import com.leon.biuvideo.beans.userBeans.UserFolderData;
+import com.leon.biuvideo.beans.videoBean.play.Media;
+import com.leon.biuvideo.beans.videoBean.play.Play;
 import com.leon.biuvideo.utils.IDUtils;
+import com.leon.biuvideo.utils.downloadUtils.MediaUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
+import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParseUtils;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserFolderParser;
 import com.leon.biuvideo.values.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.values.Qualitys;
 
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -21,13 +27,14 @@ public class ExampleUnitTest {
     //avid转bvid测试
     @Test
     public void avidTobvid() {
-//        String s1 = IDUtils.avidToBvid(373342471);
-//        String s2 = IDUtils.avidToBvid(455017605);
-//        String s3 = IDUtils.avidToBvid(882584971);
+        Play play = MediaParseUtils.parseMedia("BV1vX4y1T7T9", 0, 272552274);
 
-//        System.out.println(s1);
-//        System.out.println(s2);
-//        System.out.println(s3);
+        Map<Integer, Media> videos = play.videos;
+        Map<Integer, Media> audios = play.audios;
+
+//        System.out.println(play.videoQualitys());
+
+//        System.out.println(Qualitys.valueOf("16"));
     }
 
     //解析输入的内容

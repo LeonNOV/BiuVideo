@@ -16,4 +16,13 @@
         android:textColor="@color/black"
         android:textSize="15sp" />
 
+    <ImageView
+        android:id="@+id/single_video_quality_item_isDownloaded"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/icon_complete" />
+
 </RelativeLayout>

@@ -11,9 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.SingleVideoQualityAdapter;
+import com.leon.biuvideo.beans.videoBean.play.Media;
 import com.leon.biuvideo.layoutManager.SingleQualityLinearLayoutManager;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 显示缓存视频时选择的清晰度弹窗
@@ -23,13 +25,13 @@ public class SingleVideoQualityDialog extends AlertDialog implements View.OnClic
     private Button single_video_quality_button_cancel;
 
     private final Context context;
-    private List<String> qualitys;
+    private List<Map.Entry<Integer, Media>> videoEntries;
     public static OnQualityItemListener onQualityItemListener;
 
-    public SingleVideoQualityDialog(@NonNull Context context, List<String> qualitys) {
+    public SingleVideoQualityDialog(@NonNull Context context, List<Map.Entry<Integer, Media>> videoEntries) {
         super(context);
         this.context = context;
-        this.qualitys = qualitys;
+        this.videoEntries = videoEntries;
     }
 
     @Override
@@ -53,14 +55,14 @@ public class SingleVideoQualityDialog extends AlertDialog implements View.OnClic
 
     private void initValue() {
         SingleQualityLinearLayoutManager linearLayoutManager = new SingleQualityLinearLayoutManager(context);
-        SingleVideoQualityAdapter videoQualityAdapter = new SingleVideoQualityAdapter(qualitys, context);
+        SingleVideoQualityAdapter videoQualityAdapter = new SingleVideoQualityAdapter(videoEntries, context);
 
         single_video_recyclerView_quality.setAdapter(videoQualityAdapter);
         single_video_recyclerView_quality.setLayoutManager(linearLayoutManager);
     }
 
     public interface OnQualityItemListener {
-        void onItemClickListener(int position);
+        void onItemClickListener(Map.Entry<Integer, Media> videoEntry);
     }
 
     @Override
