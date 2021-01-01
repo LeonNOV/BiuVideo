@@ -259,14 +259,13 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
     }
 
     /**
-     * 查询对应视频的对应清晰度是否已下载
+     * 查询对应视频/音频的对应清晰度是否已下载
      *
-     * @param subId     子ID
-     * @param qualityId     清晰度ID
-     * @return  返回是否已下载
+     * @param resourceMark  资源标记
+     * @return  返回已下载状态
      */
-    public boolean queryVideoDownloadState(long subId, int qualityId) {
-        Cursor cursor = sqLiteDatabase.query(videoDetail, null, "resourceMark = ? AND downloadState = ?", new String[]{subId + "-" + qualityId, "2"}, null, null, null);
+    public boolean queryVideoDownloadState(String resourceMark) {
+        Cursor cursor = sqLiteDatabase.query(videoDetail, null, "resourceMark = ? AND downloadState = ?", new String[]{resourceMark, "2"}, null, null, null);
         int count = cursor.getCount();
 
         cursor.close();

@@ -4,6 +4,7 @@ import com.leon.biuvideo.beans.userBeans.UserFolderData;
 import com.leon.biuvideo.beans.videoBean.play.Media;
 import com.leon.biuvideo.beans.videoBean.play.Play;
 import com.leon.biuvideo.utils.IDUtils;
+import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.downloadUtils.MediaUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParseUtils;
@@ -16,6 +17,8 @@ import org.junit.Test;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -27,7 +30,25 @@ public class ExampleUnitTest {
     //avid转bvid测试
     @Test
     public void avidTobvid() {
-        System.out.println();
+        SimpleThreadPool simpleThreadPool = new SimpleThreadPool(5, "count");
+
+//        for (int i = 0; i < 5; i++) {
+//            System.out.println("task" + i);
+//            simpleThreadPool.submit(new FutureTask<>(new CountThread()), "task" + i);
+//        }
+        simpleThreadPool.submit(new FutureTask<>(new CountThread()), "task" + 0);
+    }
+
+    class CountThread implements Callable<String> {
+
+        @Override
+        public String call() throws Exception {
+            for (int i = 0; i < 10; i++) {
+                System.out.println(i);
+            }
+
+            return null;
+        }
     }
 
     //解析输入的内容

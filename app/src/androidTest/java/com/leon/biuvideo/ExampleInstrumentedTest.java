@@ -10,12 +10,15 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.leon.biuvideo.utils.IDUtils;
 import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.SimpleThreadPool;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
 
 import static org.junit.Assert.*;
 
@@ -77,5 +80,30 @@ public class ExampleInstrumentedTest {
         headers.put("Referer", "https://www.bilibili.com/");
         headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36 Edg/86.0.622.51");
         headers.put("Host", uri.getHost());
+    }
+
+    @Test
+    public void avidTobvid() {
+
+        for (int i = 0; i < 5; i++) {
+            SimpleThreadPool simpleThreadPool = new SimpleThreadPool(5, "count");
+            for (int i1 = 0; i1 < 5; i1++) {
+                simpleThreadPool.submit(new FutureTask<>(new CountThread()), "task" + i);
+            }
+//            Log.d("SimpleThreadPool", "avidTobvid: " + i);
+        }
+//        simpleThreadPool.submit(new FutureTask<>(new CountThread()), "task" + 0);
+    }
+
+    class CountThread implements Callable<String> {
+
+        @Override
+        public String call() throws Exception {
+            for (int i = 0; i < 10; i++) {
+                Log.d("SimpleThreadPool", "call: " + i);
+            }
+
+            return null;
+        }
     }
 }

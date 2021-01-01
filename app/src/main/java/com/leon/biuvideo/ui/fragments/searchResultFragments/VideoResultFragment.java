@@ -21,6 +21,7 @@ import com.leon.biuvideo.adapters.UserFragmentAdapters.UserVideoAdapter;
 import com.leon.biuvideo.beans.upMasterBean.Video;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.values.OrderType;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.VideoParser;
 import com.leon.biuvideo.values.SortType;
@@ -31,6 +32,9 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
 /**
  * SearchResultActivity-video Fragment
@@ -122,13 +126,13 @@ public class VideoResultFragment extends Fragment {
             }
 
             //获取第一页数据
-            List<Video> newVideos = videoParser.videoParse(keyword, pageNum, SortType.DEFAULT);
+            videos = videoParser.videoParse(keyword, pageNum, SortType.DEFAULT);
 
             //获取第一页结果总数，最大为20，最小为0
-            currentCount += newVideos.size();
+            currentCount += videos.size();
 
             //判断第一次加载是否已加载完所有数据
-            if (count == newVideos.size()) {
+            if (count == videos.size()) {
                 dataState = false;
                 //关闭上滑加载
                 search_result_smartRefresh.setEnabled(false);
@@ -136,10 +140,8 @@ public class VideoResultFragment extends Fragment {
 
             if (linearLayoutManager == null || userVideoAdapter == null) {
                 linearLayoutManager = new LinearLayoutManager(context);
-                userVideoAdapter = new UserVideoAdapter(newVideos, context);
+                userVideoAdapter = new UserVideoAdapter(videos, context);
             }
-
-            videos = newVideos;
 
             initAttr();
         }

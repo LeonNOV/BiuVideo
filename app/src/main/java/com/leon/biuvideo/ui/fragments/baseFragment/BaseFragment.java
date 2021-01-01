@@ -54,6 +54,6 @@ public abstract class BaseFragment extends Fragment {
      * @return  返回控件对象
      */
     public <T extends View> T findView(int id) {
-        return this.view.findViewById(id);
+        return view.findViewById(id);
     }
 }

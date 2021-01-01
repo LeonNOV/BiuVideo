@@ -31,8 +31,12 @@ import com.leon.biuvideo.beans.musicBeans.MusicInfo;
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
 import com.leon.biuvideo.service.MusicService;
 import com.leon.biuvideo.ui.dialogs.MusicListDialog;
+import com.leon.biuvideo.ui.dialogs.SingleVideoQualityDialog;
+import com.leon.biuvideo.ui.dialogs.WarnDialog;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.SimpleDownloadThread;
+import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.downloadUtils.MediaUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
@@ -45,6 +49,7 @@ import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicUrlParseU
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.FutureTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -378,39 +383,27 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                     mediaUtils = new MediaUtils(getApplicationContext());
                 }
 
-                DownloadedDetailMedia downloadedDetailMedia = new DownloadedDetailMedia();
-                downloadedDetailMedia.fileName = musicInfo.title + "-" + musicInfo.uname;
-                downloadedDetailMedia.cover = musicInfo.cover;
-                downloadedDetailMedia.title = musicInfo.title + "-" + musicInfo.uname;
-                downloadedDetailMedia.audioUrl = musicUrl;
-
-                // 获取视频和音频总大小
-                downloadedDetailMedia.size = ResourceUtils.getResourcesSize(musicUrl);
-                downloadedDetailMedia.mainId = String.valueOf(musicInfo.sid);
-                downloadedDetailMedia.resourceMark = downloadedDetailMedia.mainId;
-                downloadedDetailMedia.isVideo = false;
-
-                // 添加至DownloadDetailsForMedia
                 if (downloadRecordsDatabaseUtils == null) {
                     SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.DownloadDetailsForVideo);
                     downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
                 }
-                downloadRecordsDatabaseUtils.addMediaDetail(downloadedDetailMedia);
 
-                Toast.makeText(this, "已添加至缓存队列", Toast.LENGTH_SHORT).show();
+                downloadRecordsDatabaseUtils.queryAudioByFileName(musicInfo.title + "-" + musicInfo.uname);
+                boolean downloadState = downloadRecordsDatabaseUtils.queryVideoDownloadState(String.valueOf(musicInfo.sid));
+                if (downloadState) {
+                    WarnDialog warnDialog = new WarnDialog(MusicActivity.this, "提示", "检测到本地已存在该音频，是否要覆盖本地资源文件？");
+                    warnDialog.setOnConfirmListener(new WarnDialog.OnConfirmListener() {
+                        @Override
+                        public void onConfirm() {
+                            downloadAudio();
+                            warnDialog.dismiss();
+                        }
+                    });
+                    warnDialog.show();
+                } else {
+                    downloadAudio();
+                }
 
-                //保存歌曲线程
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        boolean saveState = mediaUtils.saveMusic(musicUrl, musicInfo.title + "-" + musicInfo.uname);
-
-                        Looper.prepare();
-                        Toast.makeText(MusicActivity.this, saveState ? "缓存成功" : "缓存失败", Toast.LENGTH_SHORT).show();
-                        Looper.loop();
-                        //添加到下载任务界面中
-                    }
-                }).start();
                 break;
             case R.id.music_imageView_addFavorite:
 
@@ -576,6 +569,33 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
 
         //开始动画
         rotation.start();
+    }
+
+    /**
+     * 下载音频
+     */
+    private void downloadAudio() {
+        DownloadedDetailMedia downloadedDetailMedia = new DownloadedDetailMedia();
+        downloadedDetailMedia.fileName = musicInfo.title + "-" + musicInfo.uname;
+        downloadedDetailMedia.cover = musicInfo.cover;
+        downloadedDetailMedia.title = musicInfo.title + "-" + musicInfo.uname;
+        downloadedDetailMedia.audioUrl = musicUrl;
+
+        // 获取视频和音频总大小
+        downloadedDetailMedia.size = ResourceUtils.getResourcesSize(musicUrl);
+        downloadedDetailMedia.mainId = String.valueOf(musicInfo.sid);
+        downloadedDetailMedia.resourceMark = downloadedDetailMedia.mainId;
+        downloadedDetailMedia.isVideo = false;
+
+        // 添加至DownloadDetailsForMedia
+        downloadRecordsDatabaseUtils.addMediaDetail(downloadedDetailMedia);
+
+        Toast.makeText(this, "已添加至缓存队列", Toast.LENGTH_SHORT).show();
+
+        //保存歌曲线程
+        SimpleThreadPool simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.DownloadTaskNum, SimpleThreadPool.DownloadTask);
+        SimpleDownloadThread simpleDownloadThread = new SimpleDownloadThread(getApplicationContext(), musicUrl, musicInfo.title + "-" + musicInfo.uname);
+        simpleThreadPool.submit(new FutureTask<>(simpleDownloadThread));
     }
 
     /**

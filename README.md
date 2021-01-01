@@ -5,6 +5,10 @@
 
 ## 📘开发日志
 
+### 2021/01/01
+- 本次提交的版本需要在**2GB运行内存**的机器上才能完整运行，否则会在`UserActivity`界面中出现闪退
+- 更改了视频/音频的下载方式
+
 ### 2020/12/31
 - 在`downloadDetailsForMedia`中加入了`resourceMark`字段，该字段为`UNIQUE`，用来标识已下载过的媒体资源
 - `resourceMark`字段格式：

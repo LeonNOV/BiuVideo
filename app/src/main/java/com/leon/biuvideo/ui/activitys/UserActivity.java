@@ -3,6 +3,9 @@ package com.leon.biuvideo.ui.activitys;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -25,6 +28,8 @@ import com.leon.biuvideo.ui.fragments.userFragments.UserArticlesFragment;
 import com.leon.biuvideo.ui.fragments.userFragments.UserAudiosFragment;
 import com.leon.biuvideo.ui.fragments.userFragments.UserPicturesFragment;
 import com.leon.biuvideo.ui.fragments.userFragments.UserVideosFragment;
+import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
@@ -36,6 +41,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
 
 /**
  * 用户界面activity
@@ -57,6 +64,8 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
     private UserInfo userInfo;
 
     private FavoriteDatabaseUtils favoriteDatabaseUtils;
+
+    private Handler handler;
 
     public UserActivity() {
         super();
@@ -126,14 +135,30 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
         //更新visit
         favoriteDatabaseUtils.updateVisit(mid);
 
-        setValue(mid);
-        initViewPage();
+        SimpleThreadPool simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.LoadTaskNum, SimpleThreadPool.LoadTask);
+        simpleThreadPool.submit(new FutureTask<>(new UserActivityThread()), "loadUserInfo");
+
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                userInfo = (UserInfo) msg.getData().getSerializable("userInfo");
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (userInfo != null) {
+                            setValue(mid);
+                        }
+                    }
+                });
+
+                return true;
+            }
+        });
     }
 
     //设置控件的数据
     private void setValue(long mid) {
-        userInfo = UserInfoParseUtils.parseUpInfo(mid);
-
         //设置顶部图片
         Glide.with(getApplicationContext()).load(userInfo.topPhoto).into(up_imageView_cover);
 
@@ -156,6 +181,8 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
             up_imageView_favoriteIconState.setImageResource(R.drawable.no_favorite);
             up_textView_favoriteStrState.setText("未关注");
         }
+
+        initViewPage();
     }
 
     //设置ViewPage
@@ -175,6 +202,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
         fragments.add(new UserPicturesFragment(mid));
 
         viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
+
         up_viewPage.setAdapter(viewPageAdapter);
     }
 
@@ -302,5 +330,25 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
     protected void onDestroy() {
         super.onDestroy();
         favoriteDatabaseUtils.close();
+    }
+
+    private class UserActivityThread implements Callable<String> {
+
+        @Override
+        public String call() {
+            UserInfo userInfo = UserInfoParseUtils.parseUpInfo(mid);
+
+//            Message message = new Message();
+            Message message = handler.obtainMessage();
+            message.what = 0;
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("userInfo", userInfo);
+
+            message.setData(bundle);
+            handler.sendMessage(message);
+
+            return null;
+        }
     }
 }

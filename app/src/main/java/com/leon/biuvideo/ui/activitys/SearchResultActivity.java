@@ -31,6 +31,7 @@ import com.leon.biuvideo.utils.InternetUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
  /**
   * 搜索结果Activity

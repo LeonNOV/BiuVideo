@@ -12,6 +12,8 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
+import com.leon.biuvideo.utils.SimpleDownloadThread;
+import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
@@ -21,11 +23,14 @@ import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.values.Tables;
 
 import java.util.List;
+import java.util.concurrent.FutureTask;
 
 public class DownloadedFailListAdapter extends BaseAdapter<DownloadedDetailMedia> {
     private final Context context;
     private final List<DownloadedDetailMedia> downloadedDetailMedias;
     private DownloadedDetailMedia downloadedDetailMedia;
+
+    private SimpleThreadPool simpleThreadPool;
 
     public DownloadedFailListAdapter(Context context, List<DownloadedDetailMedia> downloadedDetailMedias) {
         super(downloadedDetailMedias, context);
@@ -64,18 +69,15 @@ public class DownloadedFailListAdapter extends BaseAdapter<DownloadedDetailMedia
                             AnimationDrawable animationDrawable = (AnimationDrawable) imageView.getDrawable();
                             animationDrawable.start();
 
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    MediaUtils mediaUtils = new MediaUtils(context);
+                            if (simpleThreadPool == null) {
+                                simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.DownloadTaskNum, SimpleThreadPool.DownloadTask);
+                            }
 
-                                    if (downloadedDetailMedia.isVideo) {
-                                        mediaUtils.saveVideo(downloadedDetailMedia.videoUrl, downloadedDetailMedia.audioUrl, downloadedDetailMedia.fileName);
-                                    } else {
-                                        mediaUtils.saveMusic(downloadedDetailMedia.audioUrl, downloadedDetailMedia.fileName);
-                                    }
-                                }
-                            }).start();
+                            if (downloadedDetailMedia.isVideo) {
+                                simpleThreadPool.submit(new FutureTask<>(new SimpleDownloadThread(context, downloadedDetailMedia.videoUrl, downloadedDetailMedia.audioUrl, downloadedDetailMedia.fileName)));
+                            } else {
+                                simpleThreadPool.submit(new FutureTask<>(new SimpleDownloadThread(context, downloadedDetailMedia.audioUrl, downloadedDetailMedia.fileName)));
+                            }
                         } else {
                             Toast.makeText(context, "该资源正在下载中", Toast.LENGTH_SHORT).show();
                         }

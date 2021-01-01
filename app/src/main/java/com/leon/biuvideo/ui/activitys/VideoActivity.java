@@ -30,6 +30,8 @@ import com.leon.biuvideo.beans.videoBean.view.ViewPage;
 import com.leon.biuvideo.ui.dialogs.SingleVideoQualityDialog;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.SimpleDownloadThread;
+import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.downloadUtils.MediaUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -46,6 +48,7 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.FutureTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -87,6 +90,8 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
     private List<Map.Entry<Integer, Media>> videoEntries = null;
     private List<Map.Entry<Integer, Media>> audioEntries = null;
+
+    private SimpleThreadPool simpleThreadPool;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -300,8 +305,8 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 if (videoEntries == null) {
                     videoEntries = play.videoEntries();
                     for (Map.Entry<Integer, Media> entry : videoEntries) {
-                       entry.getValue().isDownloaded = downloadRecordsDatabaseUtils
-                                .queryVideoDownloadState(viewPage.singleVideoInfoList.get(singleVideoSelectedIndex).cid, entry.getKey());
+                        entry.getValue().isDownloaded = downloadRecordsDatabaseUtils
+                                .queryVideoDownloadState(String.valueOf(viewPage.singleVideoInfoList.get(singleVideoSelectedIndex).cid + entry.getKey()));
                     }
 
                     audioEntries = play.audioEntries();
@@ -368,16 +373,12 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                         downloadRecordsDatabaseUtils.addVideo(downloadedRecordsForVideo);
                         downloadRecordsDatabaseUtils.addMediaDetail(downloadedDetailMedia);
 
-                        //获取视频线程
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                MediaUtils mediaUtils = new MediaUtils(getApplicationContext());
+                        if (simpleThreadPool == null) {
+                            simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.DownloadTaskNum, SimpleThreadPool.DownloadTask);
+                        }
 
-                                //缓存视频
-                                mediaUtils.saveVideo(videoUrlBase, audioUrlBase, fileName);
-                            }
-                        }).start();
+                        SimpleDownloadThread simpleDownloadThread = new SimpleDownloadThread(getApplicationContext(), videoUrlBase, audioUrlBase, fileName);
+                        simpleThreadPool.submit(new FutureTask<>(simpleDownloadThread));
                     }
                 };
 

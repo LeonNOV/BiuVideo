@@ -1,7 +1,5 @@
 package com.leon.biuvideo.values;
 
-import androidx.annotation.NonNull;
-
 public class Qualitys {
     public static final int F16 = 16;   //流畅 360P
     public static final int F32 = 32;   //清晰 480P
@@ -28,12 +26,17 @@ public class Qualitys {
                 String quality = "高清 720P";
 
                 // 判断是否为720P 60帧
+
                 if (frameRate != null) {
                     String[] split = frameRate.split("/");
-                    int var1 = Integer.parseInt(split[0]);
-                    int var2 = Integer.parseInt(split[1]);
+                    if (split.length >= 2) {
+                        int var1 = Integer.parseInt(split[0]);
+                        int var2 = Integer.parseInt(split[1]);
 
-                    if (var1 / var2 > 60) {
+                        if (var1 / var2 > 60) {
+                            quality = "高清 720P60";
+                        }
+                    } else if (Integer.parseInt(frameRate) > 30) {
                         quality = "高清 720P60";
                     }
                 }
