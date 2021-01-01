@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.videoBean.view.SingleVideoInfo;
+import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
 import com.leon.biuvideo.beans.videoBean.view.UserInfo;
 import com.leon.biuvideo.beans.videoBean.view.VideoInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
@@ -73,7 +73,7 @@ public class ViewParseUtils {
                 viewPage.videoInfo = parseVideoInfo(dataObject.getJSONObject("stat"));
 
                 //获取选集信息
-                viewPage.singleVideoInfoList = parseSingleVideoInfo(dataObject.getJSONArray("pages"));
+                viewPage.anthologyInfoList = parseSingleVideoInfo(dataObject.getJSONArray("pages"));
 
                 return viewPage;
             }
@@ -91,31 +91,31 @@ public class ViewParseUtils {
      * @param pages json数组
      * @return  返回所有选集视频信息
      */
-    private static List<SingleVideoInfo> parseSingleVideoInfo(JSONArray pages) {
-        List<SingleVideoInfo> singleVideoInfoList = new ArrayList<>();
+    private static List<AnthologyInfo> parseSingleVideoInfo(JSONArray pages) {
+        List<AnthologyInfo> anthologyInfoList = new ArrayList<>();
 
         for (Object object : pages) {
 
-            SingleVideoInfo singleVideoInfo = new SingleVideoInfo();
+            AnthologyInfo anthologyInfo = new AnthologyInfo();
 
             JSONObject jsonObject = (JSONObject) object;
 
             //选集cid
-            singleVideoInfo.cid = jsonObject.getLong("cid");
+            anthologyInfo.cid = jsonObject.getLong("cid");
 
             //选集索引
-            singleVideoInfo.page = jsonObject.getIntValue("page");
+            anthologyInfo.page = jsonObject.getIntValue("page");
 
             //选集标题
-            singleVideoInfo.part = jsonObject.getString("part");
+            anthologyInfo.part = jsonObject.getString("part");
 
             //视频长度
-            singleVideoInfo.duration = jsonObject.getIntValue("duration");
+            anthologyInfo.duration = jsonObject.getIntValue("duration");
 
-            singleVideoInfoList.add(singleVideoInfo);
+            anthologyInfoList.add(anthologyInfo);
         }
 
-        return singleVideoInfoList;
+        return anthologyInfoList;
     }
 
     /**+

@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseViewHolder;
-import com.leon.biuvideo.beans.videoBean.view.SingleVideoInfo;
+import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -23,9 +23,9 @@ import java.util.List;
 /**
  * videoActivity播放列表控件的适配器
  */
-public class AnthologyAdapter extends BaseAdapter<SingleVideoInfo> {
+public class AnthologyAdapter extends BaseAdapter<AnthologyInfo> {
     private final ViewPage viewPage;
-    private final List<SingleVideoInfo> singleVideoInfos;
+    private final List<AnthologyInfo> anthologyInfos;
     private final Context context;
 
     private final WebView webView;
@@ -35,9 +35,9 @@ public class AnthologyAdapter extends BaseAdapter<SingleVideoInfo> {
     private int singleVideoSelectedIndex = 0;
 
     public AnthologyAdapter(ViewPage viewPage, Context context, WebView webView) {
-        super(viewPage.singleVideoInfoList, context);
+        super(viewPage.anthologyInfoList, context);
         this.viewPage = viewPage;
-        this.singleVideoInfos = viewPage.singleVideoInfoList;
+        this.anthologyInfos = viewPage.anthologyInfoList;
         this.context = context;
         this.webView = webView;
     }
@@ -59,7 +59,7 @@ public class AnthologyAdapter extends BaseAdapter<SingleVideoInfo> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        SingleVideoInfo singleVideoInfo = singleVideoInfos.get(position);
+        AnthologyInfo anthologyInfo = anthologyInfos.get(position);
 
         //设置选集封面
         holder.setImage(R.id.single_video_item_imageView_cover, viewPage.coverUrl, ImagePixelSize.COVER)
@@ -68,7 +68,7 @@ public class AnthologyAdapter extends BaseAdapter<SingleVideoInfo> {
                 .setText(R.id.single_video_item_textView_index, "P" + (position + 1))
 
                 //设置选集标题
-                .setText(R.id.single_video_item_textView_title, singleVideoInfo.part)
+                .setText(R.id.single_video_item_textView_title, anthologyInfo.part)
 
                 //设置监听
                 .setOnClickListener(new View.OnClickListener() {
@@ -87,13 +87,13 @@ public class AnthologyAdapter extends BaseAdapter<SingleVideoInfo> {
                             }
 
                             //设置webView的链接
-                            webViewUtils.setWebViewUrl(viewPage.aid, singleVideoInfo.cid, position);
+                            webViewUtils.setWebViewUrl(viewPage.aid, anthologyInfo.cid, position);
 
                             //重置nowPosition
                             singleVideoSelectedIndex = position;
 
                             //重置当前play变量
-                            VideoActivity.play = MediaParseUtils.parseMedia(viewPage.bvid, viewPage.aid, singleVideoInfo.cid);
+                            VideoActivity.play = MediaParseUtils.parseMedia(viewPage.bvid, viewPage.aid, anthologyInfo.cid);
 
                             if (onClickAnthologyListener != null) {
                                 onClickAnthologyListener.onClick(singleVideoSelectedIndex);

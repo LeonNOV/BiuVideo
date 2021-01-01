@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * 单个视频选集信息
  */
-public class SingleVideoInfo implements Serializable {
+public class AnthologyInfo implements Serializable {
     public long cid;
     public int page;
     public String part;

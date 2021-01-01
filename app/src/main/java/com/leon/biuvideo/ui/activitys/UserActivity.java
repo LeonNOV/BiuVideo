@@ -143,14 +143,9 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
             public boolean handleMessage(@NonNull Message msg) {
                 userInfo = (UserInfo) msg.getData().getSerializable("userInfo");
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (userInfo != null) {
-                            setValue(mid);
-                        }
-                    }
-                });
+                if (userInfo != null) {
+                    setValue(mid);
+                }
 
                 return true;
             }

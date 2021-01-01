@@ -18,7 +18,7 @@ public class ViewPage implements Serializable {
     public String desc;
     public UserInfo userInfo;
     public VideoInfo videoInfo;
-    public List<SingleVideoInfo> singleVideoInfoList;
+    public List<AnthologyInfo> anthologyInfoList;
 
     @Override
     public String toString() {
@@ -34,7 +34,7 @@ public class ViewPage implements Serializable {
                 ", desc='" + desc + '\'' +
                 ", upInfo=" + userInfo +
                 ", videoInfo=" + videoInfo +
-                ", singleVideoInfoList=" + singleVideoInfoList +
+                ", singleVideoInfoList=" + anthologyInfoList +
                 '}';
     }
 }

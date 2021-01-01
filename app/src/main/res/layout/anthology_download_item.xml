@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_gravity="center"
+    android:padding="@dimen/small_view_padding_5dp"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/anthology_download_item_textView_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="7dp"
+        android:textColor="@color/black"
+        android:textSize="13sp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:background="@drawable/anthology_download_item_bg"
+        android:text="AnthologyNameAnthologyNameAnthologyNameAnthologyNameAnthologyName"/>
+
+</RelativeLayout>

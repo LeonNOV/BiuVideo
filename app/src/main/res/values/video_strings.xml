@@ -6,4 +6,9 @@
     <string name="video_textView_saveOther_str">保存其他资源</string>
     <string name="video_button_saveCover_str">保存视频封面</string>
     <string name="video_button_saveFace_str">保存UP头像</string>
+
+    <string name="anthology_download_dialog_title">缓存视频</string>
+    <string name="anthology_download_dialog_saveAll">缓存所有视频</string>
+    <string name="anthology_download_dialog_checkAll">查看已缓存资源</string>
+    <string name="anthology_download_dialog_qualityStr">当前已选择画质</string>
 </resources>

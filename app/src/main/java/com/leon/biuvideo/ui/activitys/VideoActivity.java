@@ -25,15 +25,15 @@ import com.leon.biuvideo.beans.downloadedBeans.DownloadedRecordsForVideo;
 import com.leon.biuvideo.beans.upMasterBean.VideoPlayList;
 import com.leon.biuvideo.beans.videoBean.play.Media;
 import com.leon.biuvideo.beans.videoBean.play.Play;
-import com.leon.biuvideo.beans.videoBean.view.SingleVideoInfo;
+import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
+import com.leon.biuvideo.ui.dialogs.AnthologyDownloadDialog;
 import com.leon.biuvideo.ui.dialogs.SingleVideoQualityDialog;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.SimpleDownloadThread;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
-import com.leon.biuvideo.utils.downloadUtils.MediaUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
@@ -46,7 +46,6 @@ import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParseUtils;
 import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.ViewParseUtils;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.FutureTask;
 
@@ -158,7 +157,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         viewPage = ViewParseUtils.parseView(bvid);
 
         //获取视频选集信息
-        play = MediaParseUtils.parseMedia(viewPage.bvid, viewPage.aid, viewPage.singleVideoInfoList.get(0).cid);
+        play = MediaParseUtils.parseMedia(viewPage.bvid, viewPage.aid, viewPage.anthologyInfoList.get(0).cid);
 
         //设置显示头像
         Glide.with(getApplicationContext()).load(viewPage.userInfo.faceUrl + ImagePixelSize.FACE.value).into(video_circleImageView_face);
@@ -188,11 +187,8 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         String danmaku = ValueFormat.generateCN(viewPage.videoInfo.danmaku) + "弹幕";
         video_textView_danmaku.setText(danmaku);
 
-        //设置上传时间(UTC+8)
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
-
         //秒转毫秒
-        video_textView_upTime.setText(sdf.format(new Date(viewPage.upTime * 1000)));
+        video_textView_upTime.setText(ValueFormat.generateTime(viewPage.upTime, true, "-"));
 
         //设置点赞数
         String like = ValueFormat.generateCN(viewPage.videoInfo.like) + "点赞";
@@ -231,7 +227,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         video_recyclerView_singleVideoList.setAdapter(anthologyAdapter);
 
         //设置默认的选集
-        new WebViewUtils(webView).setWebViewUrl(viewPage.aid, viewPage.singleVideoInfoList.get(0).cid, 0);
+        new WebViewUtils(webView).setWebViewUrl(viewPage.aid, viewPage.anthologyInfoList.get(0).cid, 0);
 
     }
 
@@ -274,7 +270,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                     videoPlayList.uname = viewPage.userInfo.name;
                     videoPlayList.title = viewPage.title;
                     videoPlayList.coverUrl = viewPage.coverUrl;
-                    videoPlayList.length = viewPage.singleVideoInfoList.get(0).duration;//只获取第一个视频的长度
+                    videoPlayList.length = viewPage.anthologyInfoList.get(0).duration;//只获取第一个视频的长度
                     videoPlayList.play = viewPage.videoInfo.view;
                     videoPlayList.danmaku = viewPage.videoInfo.danmaku;
 
@@ -297,93 +293,99 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                     break;
                 }
 
-                if (downloadRecordsDatabaseUtils == null) {
-                    SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.DownloadDetailsForVideo);
-                    downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
-                }
-
-                if (videoEntries == null) {
-                    videoEntries = play.videoEntries();
-                    for (Map.Entry<Integer, Media> entry : videoEntries) {
-                        entry.getValue().isDownloaded = downloadRecordsDatabaseUtils
-                                .queryVideoDownloadState(String.valueOf(viewPage.singleVideoInfoList.get(singleVideoSelectedIndex).cid + entry.getKey()));
+                // 如果选集数量大于1，就显示选集列表对话框
+                if (viewPage.anthologyInfoList.size() > 1) {
+                    AnthologyDownloadDialog anthologyDownloadDialog = new AnthologyDownloadDialog(VideoActivity.this, viewPage.anthologyInfoList);
+                    anthologyDownloadDialog.show();
+                } else {
+                    if (downloadRecordsDatabaseUtils == null) {
+                        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.DownloadDetailsForVideo);
+                        downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
                     }
 
-                    audioEntries = play.audioEntries();
-                }
+                    if (videoEntries == null) {
+                        videoEntries = play.videoEntries();
+                        for (Map.Entry<Integer, Media> entry : videoEntries) {
+                            entry.getValue().isDownloaded = downloadRecordsDatabaseUtils
+                                    .queryVideoDownloadState(String.valueOf(viewPage.anthologyInfoList.get(singleVideoSelectedIndex).cid + entry.getKey()));
+                        }
 
-                //创建清晰度选择dialog
-                singleVideoQualityDialog = new SingleVideoQualityDialog(VideoActivity.this, videoEntries);
-                SingleVideoQualityDialog.onQualityItemListener = new SingleVideoQualityDialog.OnQualityItemListener() {
-                    @Override
-                    public void onItemClickListener(Map.Entry<Integer, Media> mediaEntry) {
-                        // 判断该清晰度是否需要大会员
-                        if (mediaEntry.getKey() > 80) {
-                            SharedPreferences sharedPreferences = getSharedPreferences("initValues", Activity.MODE_PRIVATE);
-                            boolean isVIP = sharedPreferences.getBoolean("isVIP", false);
+                        audioEntries = play.audioEntries();
+                    }
 
-                            // 判断是否为大会员
-                            if (!isVIP) {
-                                Toast.makeText(VideoActivity.this, "不好依稀，该清晰度只有大会员才能下载~", Toast.LENGTH_SHORT).show();
-                                return;
+                    //创建清晰度选择dialog
+                    singleVideoQualityDialog = new SingleVideoQualityDialog(VideoActivity.this, videoEntries);
+                    SingleVideoQualityDialog.onQualityItemListener = new SingleVideoQualityDialog.OnQualityItemListener() {
+                        @Override
+                        public void onItemClickListener(Map.Entry<Integer, Media> mediaEntry) {
+                            // 判断该清晰度是否需要大会员
+                            if (mediaEntry.getKey() > 80) {
+                                SharedPreferences sharedPreferences = getSharedPreferences("initValues", Activity.MODE_PRIVATE);
+                                boolean isVIP = sharedPreferences.getBoolean("isVIP", false);
+
+                                // 判断是否为大会员
+                                if (!isVIP) {
+                                    Toast.makeText(VideoActivity.this, "不好依稀，该清晰度只有大会员才能下载~", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
                             }
+
+                            //获取权限
+                            FileUtils.verifyPermissions(VideoActivity.this);
+
+                            //获取视频路径
+                            String videoUrlBase = mediaEntry.getValue().baseUrl;
+
+                            //获取音频路径,默认只获取第一个
+                            String audioUrlBase = audioEntries.get(0).getValue().baseUrl;
+
+                            Toast.makeText(getApplicationContext(), "已加入缓存队列中", Toast.LENGTH_SHORT).show();
+
+                            //隐藏dialog
+                            singleVideoQualityDialog.dismiss();
+
+                            // 添加至
+                            DownloadedRecordsForVideo downloadedRecordsForVideo = new DownloadedRecordsForVideo();
+                            downloadedRecordsForVideo.title = viewPage.title;
+                            downloadedRecordsForVideo.upName = viewPage.userInfo.name;
+                            downloadedRecordsForVideo.mainId = viewPage.bvid;
+                            downloadedRecordsForVideo.cover = viewPage.coverUrl;
+
+                            // 添加至DownloadDetailsForMedia
+                            DownloadedDetailMedia downloadedDetailMedia = new DownloadedDetailMedia();
+
+                            AnthologyInfo anthologyInfo = viewPage.anthologyInfoList.get(singleVideoSelectedIndex);
+                            String fileName = viewPage.bvid + "-" + anthologyInfo.part + "-" + mediaEntry.getValue().quality.split(" ")[1];
+
+                            downloadedDetailMedia.fileName = fileName;
+                            downloadedDetailMedia.cover = viewPage.coverUrl;
+                            downloadedDetailMedia.title = viewPage.anthologyInfoList.get(singleVideoSelectedIndex).part;
+                            downloadedDetailMedia.videoUrl = videoUrlBase;
+                            downloadedDetailMedia.audioUrl = audioUrlBase;
+                            downloadedDetailMedia.qualityId = mediaEntry.getKey();
+
+                            // 获取视频和音频总大小
+                            downloadedDetailMedia.size = ResourceUtils.getResourcesSize(videoUrlBase) + ResourceUtils.getResourcesSize(audioUrlBase);
+                            downloadedDetailMedia.mainId = viewPage.bvid;
+                            downloadedDetailMedia.subId = viewPage.anthologyInfoList.get(singleVideoSelectedIndex).cid;
+                            downloadedDetailMedia.resourceMark = downloadedDetailMedia.subId + "-" + downloadedDetailMedia.qualityId;
+                            downloadedDetailMedia.isVideo = true;
+
+                            downloadRecordsDatabaseUtils.addVideo(downloadedRecordsForVideo);
+                            downloadRecordsDatabaseUtils.addMediaDetail(downloadedDetailMedia);
+
+                            if (simpleThreadPool == null) {
+                                simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.DownloadTaskNum, SimpleThreadPool.DownloadTask);
+                            }
+
+                            SimpleDownloadThread simpleDownloadThread = new SimpleDownloadThread(getApplicationContext(), videoUrlBase, audioUrlBase, fileName);
+                            simpleThreadPool.submit(new FutureTask<>(simpleDownloadThread));
                         }
+                    };
 
-                        //获取权限
-                        FileUtils.verifyPermissions(VideoActivity.this);
-
-                        //获取视频路径
-                        String videoUrlBase = mediaEntry.getValue().baseUrl;
-
-                        //获取音频路径,默认只获取第一个
-                        String audioUrlBase = audioEntries.get(0).getValue().baseUrl;
-
-                        Toast.makeText(getApplicationContext(), "已加入缓存队列中", Toast.LENGTH_SHORT).show();
-
-                        //隐藏dialog
-                        singleVideoQualityDialog.dismiss();
-
-                        // 添加至
-                        DownloadedRecordsForVideo downloadedRecordsForVideo = new DownloadedRecordsForVideo();
-                        downloadedRecordsForVideo.title = viewPage.title;
-                        downloadedRecordsForVideo.upName = viewPage.userInfo.name;
-                        downloadedRecordsForVideo.mainId = viewPage.bvid;
-                        downloadedRecordsForVideo.cover = viewPage.coverUrl;
-
-                        // 添加至DownloadDetailsForMedia
-                        DownloadedDetailMedia downloadedDetailMedia = new DownloadedDetailMedia();
-
-                        SingleVideoInfo singleVideoInfo = viewPage.singleVideoInfoList.get(singleVideoSelectedIndex);
-                        String fileName = viewPage.bvid + "-" + singleVideoInfo.part + "-" + mediaEntry.getValue().quality.split(" ")[1];
-
-                        downloadedDetailMedia.fileName = fileName;
-                        downloadedDetailMedia.cover = viewPage.coverUrl;
-                        downloadedDetailMedia.title = viewPage.singleVideoInfoList.get(singleVideoSelectedIndex).part;
-                        downloadedDetailMedia.videoUrl = videoUrlBase;
-                        downloadedDetailMedia.audioUrl = audioUrlBase;
-                        downloadedDetailMedia.qualityId = mediaEntry.getKey();
-
-                        // 获取视频和音频总大小
-                        downloadedDetailMedia.size = ResourceUtils.getResourcesSize(videoUrlBase) + ResourceUtils.getResourcesSize(audioUrlBase);
-                        downloadedDetailMedia.mainId = viewPage.bvid;
-                        downloadedDetailMedia.subId = viewPage.singleVideoInfoList.get(singleVideoSelectedIndex).cid;
-                        downloadedDetailMedia.resourceMark = downloadedDetailMedia.subId + "-" + downloadedDetailMedia.qualityId;
-                        downloadedDetailMedia.isVideo = true;
-
-                        downloadRecordsDatabaseUtils.addVideo(downloadedRecordsForVideo);
-                        downloadRecordsDatabaseUtils.addMediaDetail(downloadedDetailMedia);
-
-                        if (simpleThreadPool == null) {
-                            simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.DownloadTaskNum, SimpleThreadPool.DownloadTask);
-                        }
-
-                        SimpleDownloadThread simpleDownloadThread = new SimpleDownloadThread(getApplicationContext(), videoUrlBase, audioUrlBase, fileName);
-                        simpleThreadPool.submit(new FutureTask<>(simpleDownloadThread));
-                    }
-                };
-
-                //显示选择清晰度dialog
-                singleVideoQualityDialog.show();
+                    //显示选择清晰度dialog
+                    singleVideoQualityDialog.show();
+                }
 
                 break;
             case R.id.video_button_saveCover:

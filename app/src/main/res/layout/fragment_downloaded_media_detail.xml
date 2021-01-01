@@ -15,7 +15,7 @@
             android:layout_width="@dimen/small_view_w_h"
             android:layout_height="@dimen/small_view_w_h"
             android:background="?selectableItemBackgroundBorderless"
-            android:padding="@dimen/small_view_padding"
+            android:padding="@dimen/small_view_padding_5dp"
             android:src="@drawable/icon_back"
             app:tint="#E3E3E3" />
 
