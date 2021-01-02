@@ -74,8 +74,6 @@ public class AnthologyAdapter extends BaseAdapter<AnthologyInfo> {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        webViewUtils = new WebViewUtils(webView);
-
                         //判断当前观看的视频cid是否和选择的一样
                         if (singleVideoSelectedIndex != position) {
                             //判断是否有网络
@@ -84,6 +82,10 @@ public class AnthologyAdapter extends BaseAdapter<AnthologyInfo> {
                             if (!isHaveNetwork) {
                                 Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
                                 return;
+                            }
+
+                            if (webViewUtils == null) {
+                                webViewUtils = new WebViewUtils(webView);
                             }
 
                             //设置webView的链接

@@ -41,16 +41,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void initView() {
 
-        close = findViewById(R.id.close);
+        close = findViewById(R.id.login_close);
         close.setOnClickListener(this);
 
-        textView_title = findViewById(R.id.textView_title);
+        textView_title = findViewById(R.id.login_textView_title);
 
-        refresh = findViewById(R.id.refresh);
+        refresh = findViewById(R.id.login_refresh);
         refresh.setOnClickListener(this);
 
-        progress = findViewById(R.id.progress);
-        webView = findViewById(R.id.webView);
+        progress = findViewById(R.id.login_progress);
+        webView = findViewById(R.id.login_webView);
     }
 
     private void initWebView() {
@@ -139,10 +139,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.close:
+            case R.id.login_close:
                 this.finish();
                 break;
-            case R.id.refresh:
+            case R.id.login_refresh:
                 webView.reload();
                 break;
             default:

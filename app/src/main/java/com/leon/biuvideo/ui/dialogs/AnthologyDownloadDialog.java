@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -18,12 +16,15 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UserFragmentAdapters.AnthologyDownloadDialogAdapter;
 import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
 import com.leon.biuvideo.ui.activitys.DownloadedActivity;
+import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.values.Qualitys;
 
 import java.util.List;
 
 public class AnthologyDownloadDialog extends AlertDialog implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     private final List<AnthologyInfo> anthologyInfoList;
     private final Context context;
+    private int qualityId;
 
     private RecyclerView anthology_download_dialog_recyclerView;
 
@@ -42,25 +43,45 @@ public class AnthologyDownloadDialog extends AlertDialog implements View.OnClick
         initValue();
     }
 
+    private OnDownloadListener onDownloadListener;
+
+    public interface OnDownloadListener {
+        void onDownload(int qualityId, long cid, int position, String subTitle);
+        void onSaveAll(int qualityId);
+    }
+
+    public void setOnDownloadListener(OnDownloadListener onDownloadListener) {
+        this.onDownloadListener = onDownloadListener;
+    }
+
     private void initView() {
         Spinner anthology_download_dialog_spinner = findViewById(R.id.anthology_download_dialog_spinner);
+        anthology_download_dialog_spinner.setSelection(3);
         anthology_download_dialog_spinner.setOnItemSelectedListener(this);
 
-        ImageView anthology_download_dialog_imageView_close = findViewById(R.id.anthology_download_dialog_imageView_close);
-        anthology_download_dialog_imageView_close.setOnClickListener(this);
-
-        TextView anthology_download_dialog_textView_saveAll = findViewById(R.id.anthology_download_dialog_textView_saveAll);
-        anthology_download_dialog_textView_saveAll.setOnClickListener(this);
-
-        TextView anthology_download_dialog_textView_checkAll = findViewById(R.id.anthology_download_dialog_textView_checkAll);
-        anthology_download_dialog_textView_checkAll.setOnClickListener(this);
+        BindingUtils bindingUtils = new BindingUtils(getWindow().getDecorView(), getContext());
+        bindingUtils
+                .setOnClickListener(R.id.anthology_download_dialog_textView_qualityWarn, this)
+                .setOnClickListener(R.id.anthology_download_dialog_imageView_close, this)
+                .setOnClickListener(R.id.anthology_download_dialog_textView_saveAll, this)
+                .setOnClickListener(R.id.anthology_download_dialog_textView_checkAll, this);
 
         anthology_download_dialog_recyclerView = findViewById(R.id.anthology_download_dialog_recyclerView);
     }
 
     private void initValue() {
         anthology_download_dialog_recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        anthology_download_dialog_recyclerView.setAdapter(new AnthologyDownloadDialogAdapter(anthologyInfoList, context));
+
+        AnthologyDownloadDialogAdapter anthologyDownloadDialogAdapter = new AnthologyDownloadDialogAdapter(anthologyInfoList, context);
+        anthologyDownloadDialogAdapter.setOnAnthologyItemClickListener(new AnthologyDownloadDialogAdapter.OnAnthologyItemClickListener() {
+            @Override
+            public void onItemClickListener(long cid, int position, String subTitle) {
+                if (onDownloadListener != null) {
+                    onDownloadListener.onDownload(qualityId, cid, position, subTitle);
+                }
+            }
+        });
+        anthology_download_dialog_recyclerView.setAdapter(anthologyDownloadDialogAdapter);
     }
 
     @Override
@@ -72,13 +93,43 @@ public class AnthologyDownloadDialog extends AlertDialog implements View.OnClick
             case R.id.anthology_download_dialog_textView_checkAll:
                 Intent intent = new Intent(context, DownloadedActivity.class);
                 context.startActivity(intent);
+            case R.id.anthology_download_dialog_textView_saveAll:
+                if (onDownloadListener != null) {
+                    onDownloadListener.onSaveAll(qualityId);
+                }
+                break;
+            default:
                 break;
         }
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+        switch (position) {
+            case 0:
+                qualityId = Qualitys.F120;
+                break;
+            case 1:
+                qualityId = Qualitys.F116;
+                break;
+            case 2:
+                qualityId = Qualitys.F112;
+                break;
+            case 3:
+                qualityId = Qualitys.F80;
+                break;
+            case 4:
+                qualityId = Qualitys.F64;
+                break;
+            case 5:
+                qualityId = Qualitys.F32;
+                break;
+            case 6:
+                qualityId = Qualitys.F16;
+                break;
+            default:
+                break;
+        }
     }
 
     @Override

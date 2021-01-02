@@ -20,7 +20,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/close"
+                android:id="@+id/login_close"
                 android:layout_width="34dp"
                 android:layout_height="34dp"
                 android:layout_centerVertical="true"
@@ -30,7 +30,7 @@
                 app:tint="#000" />
 
             <TextView
-                android:id="@+id/textView_title"
+                android:id="@+id/login_textView_title"
                 android:layout_width="290dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -42,7 +42,7 @@
                 android:textSize="15sp" />
 
             <ImageView
-                android:id="@+id/refresh"
+                android:id="@+id/login_refresh"
                 android:layout_width="34dp"
                 android:layout_height="34dp"
                 android:layout_alignParentEnd="true"
@@ -61,12 +61,12 @@
         android:layout_height="match_parent">
 
         <WebView
-            android:id="@+id/webView"
+            android:id="@+id/login_webView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
         <ProgressBar
-            android:id="@+id/progress"
+            android:id="@+id/login_progress"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="2dp"

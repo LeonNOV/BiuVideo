@@ -11,4 +11,15 @@
     <string name="anthology_download_dialog_saveAll">缓存所有视频</string>
     <string name="anthology_download_dialog_checkAll">查看已缓存资源</string>
     <string name="anthology_download_dialog_qualityStr">当前已选择画质</string>
+
+    <string name="anthology_download_dialog_qualityWarn">第一次使用建议点击这里</string>
+    <array name="anthologyQuality">
+        <item>超清 4K</item>
+        <item>高清 1080P60</item>
+        <item>高清 1080P高码率</item>
+        <item>高清 1080P</item>
+        <item>高清 720P/720P60</item>
+        <item>清晰 480P</item>
+        <item>流畅 360P</item>
+    </array>
 </resources>

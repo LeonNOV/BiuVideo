@@ -21,6 +21,16 @@ public class AnthologyDownloadDialogAdapter extends BaseAdapter<AnthologyInfo> {
         this.anthologyInfoList = anthologyInfoList;
     }
 
+    private OnAnthologyItemClickListener onAnthologyItemClickListener;
+
+    public interface OnAnthologyItemClickListener {
+        void onItemClickListener(long cid, int position, String subTitle);
+    }
+
+    public void setOnAnthologyItemClickListener(OnAnthologyItemClickListener onAnthologyItemClickListener) {
+        this.onAnthologyItemClickListener = onAnthologyItemClickListener;
+    }
+
     @Override
     public int getLayout(int viewType) {
         return R.layout.anthology_download_item;
@@ -34,7 +44,9 @@ public class AnthologyDownloadDialogAdapter extends BaseAdapter<AnthologyInfo> {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Fuck.blue("AnthologyCid:" + anthologyInfo.cid + "----Part:" + anthologyInfo.part);
+                        if (onAnthologyItemClickListener != null) {
+                            onAnthologyItemClickListener.onItemClickListener(anthologyInfo.cid, position, anthologyInfo.part);
+                        }
                     }
                 });
     }

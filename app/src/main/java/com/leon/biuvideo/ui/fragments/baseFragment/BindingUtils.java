@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.values.ImagePixelSize;
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 /**
  * 用于绑定Fragment中控件的资源
@@ -29,14 +30,19 @@ public class BindingUtils {
      * @return  返回该对象本身
      */
     public BindingUtils setText(int id, String text) {
-        TextView view = this.view.findViewById(id);
-        view.setText(text);
+        View view = this.view.findViewById(id);
+
+        if (view instanceof TextView) {
+            ((TextView) view).setText(text);
+        } else if (view instanceof ExpandableTextView) {
+            ((ExpandableTextView) view).setText(text);
+        }
 
         return this;
     }
 
     /**
-     * 对可以设置图片资源的控件设置图片
+     * 对可以设置图片资源的控件设置图片(网络图片)
      *
      * @param id    控件ID
      * @param url   图片网络路径
@@ -46,6 +52,20 @@ public class BindingUtils {
     public BindingUtils setImage(int id, String url, ImagePixelSize imagePixelSize) {
         ImageView imageView = this.view.findViewById(id);
         Glide.with(context).load(url + imagePixelSize.value).into(imageView);
+
+        return this;
+    }
+
+    /**
+     * 对可以设置图片资源的控件设置图片(本地图片)
+     *
+     * @param id    控件ID
+     * @param resId  图片资源ID
+     * @return  返回该对象本身
+     */
+    public BindingUtils setImage(int id,int resId) {
+        ImageView imageView = this.view.findViewById(id);
+        imageView.setImageResource(resId);
 
         return this;
     }

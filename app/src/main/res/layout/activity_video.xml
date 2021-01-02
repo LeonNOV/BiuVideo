@@ -13,7 +13,7 @@
         android:layout_height="230dp">
 
         <WebView
-            android:id="@+id/webView"
+            android:id="@+id/video_webView"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:hardwareAccelerated="true" />
@@ -264,6 +264,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/video_anthology_cardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
