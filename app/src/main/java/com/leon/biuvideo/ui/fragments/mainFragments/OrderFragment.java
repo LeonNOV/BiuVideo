@@ -3,6 +3,7 @@ package com.leon.biuvideo.ui.fragments.mainFragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -27,8 +28,10 @@ import java.util.Map;
 
 public class OrderFragment extends BaseFragment implements View.OnClickListener, ViewPager.OnPageChangeListener {
     private ViewPager order_view_pager;
-    private TextView order_video, order_bangumi, order_series, order_article;
+    private TextView order_video, order_bangumi, order_series, order_article, order_view_textView_warn;
     private Map<Integer, TextView> textViewMap;
+
+    private LinearLayout order_view_linearLayout;
 
     @Override
     public int setLayout() {
@@ -37,6 +40,10 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void initView(BindingUtils bindingUtils) {
+        order_view_textView_warn = findView(R.id.order_view_textView_warn);
+
+        order_view_linearLayout = findView(R.id.order_view_linearLayout);
+
         order_view_pager = findView(R.id.order_view_pager);
         order_video =  findView(R.id.order_video);
         order_bangumi =  findView(R.id.order_bangumi);
@@ -46,35 +53,46 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
 
     @Override
     public void initValues() {
-        textViewMap = new HashMap<>();
-
-        order_video.setOnClickListener(this);
-        textViewMap.put(0, order_video);
-
-        order_bangumi.setOnClickListener(this);
-        textViewMap.put(1, order_bangumi);
-
-        order_series.setOnClickListener(this);
-        textViewMap.put(2, order_series);
-
-        order_article.setOnClickListener(this);
-        textViewMap.put(3, order_article);
-
-        order_view_pager.setOffscreenPageLimit(3);
-
         SharedPreferences initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
         String cookie = initValues.getString("cookie", null);
-        long mid = initValues.getLong("mid", -1);
+        if (cookie == null) {
+            order_view_textView_warn.setVisibility(View.VISIBLE);
+            order_view_pager.setVisibility(View.GONE);
+            order_view_linearLayout.setVisibility(View.GONE);
+        } else {
+            order_view_textView_warn.setVisibility(View.GONE);
+            order_view_pager.setVisibility(View.VISIBLE);
+            order_view_linearLayout.setVisibility(View.VISIBLE);
 
-        List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new VideoListFragment(mid, cookie));
-        fragments.add(new OrderInnerFragment(mid, cookie, OrderType.BANGUMI, OrderFollowType.ALL));
-        fragments.add(new OrderInnerFragment(mid, cookie, OrderType.SERIES, OrderFollowType.ALL));
-        fragments.add(new UserOrderArticleFragment(cookie));
+            textViewMap = new HashMap<>();
 
-        ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getParentFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
-        order_view_pager.setAdapter(viewPageAdapter);
-        order_view_pager.addOnPageChangeListener(this);
+            order_video.setOnClickListener(this);
+            textViewMap.put(0, order_video);
+
+            order_bangumi.setOnClickListener(this);
+            textViewMap.put(1, order_bangumi);
+
+            order_series.setOnClickListener(this);
+            textViewMap.put(2, order_series);
+
+            order_article.setOnClickListener(this);
+            textViewMap.put(3, order_article);
+
+            order_view_pager.setOffscreenPageLimit(3);
+
+            long mid = initValues.getLong("mid", -1);
+
+            List<Fragment> fragments = new ArrayList<>();
+            fragments.add(new VideoListFragment(mid, cookie));
+            fragments.add(new OrderInnerFragment(mid, cookie, OrderType.BANGUMI, OrderFollowType.ALL));
+            fragments.add(new OrderInnerFragment(mid, cookie, OrderType.SERIES, OrderFollowType.ALL));
+            fragments.add(new UserOrderArticleFragment(cookie));
+
+            ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getParentFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
+            order_view_pager.setAdapter(viewPageAdapter);
+            order_view_pager.addOnPageChangeListener(this);
+        }
+
     }
 
     @Override

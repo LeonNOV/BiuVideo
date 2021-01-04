@@ -3,6 +3,7 @@ package com.leon.biuvideo.ui.activitys;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -124,6 +125,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     Log.d(TAG, cookieStr);
 
+                    setResult(1004);
                     finish();
                 }
 

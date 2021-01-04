@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_homeFragment_to_preferenceFragment"
             app:destination="@id/preferenceFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_orderFragment"
+            app:destination="@id/orderFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
@@ -43,4 +46,8 @@
         android:id="@+id/historyFragment"
         android:name="com.leon.biuvideo.ui.fragments.mainFragments.HistoryFragment"
         android:label="HistoryFragment" />
+    <fragment
+        android:id="@+id/orderFragment"
+        android:name="com.leon.biuvideo.ui.fragments.mainFragments.OrderFragment"
+        android:label="OrderFragment" />
 </navigation>

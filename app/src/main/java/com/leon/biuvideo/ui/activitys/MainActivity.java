@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.view.*;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
@@ -233,7 +234,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigation_header_progress_level.setProgress(0);
 
         //删除本地Cookie
-        //测试期间不使用
 //        SharedPreferences.Editor editor = getSharedPreferences("initValues", Activity.MODE_PRIVATE).edit();
 //        editor.remove("cookie").apply();
 
@@ -282,7 +282,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 switchFragment(playListFragment);
                 break;
             case R.id.navigation_menu_order:
-
                 if (orderFragment == null) {
                     orderFragment = new OrderFragment();
                 }
@@ -367,9 +366,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //跳转到登陆界面
                 if (!isLogin) {
                     Intent intent = new Intent(this, LoginActivity.class);
-                    startActivity(intent);
-
-                    initUserInfo();
+                    startActivityForResult(intent, 1003);
                 }
 
                 break;
@@ -388,6 +385,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1003 && resultCode == 1004) {
+            initUserInfo();
         }
     }
 
