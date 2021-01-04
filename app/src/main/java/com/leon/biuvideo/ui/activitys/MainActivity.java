@@ -1,7 +1,6 @@
 package com.leon.biuvideo.ui.activitys;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -35,16 +34,19 @@ import com.leon.biuvideo.ui.fragments.mainFragments.HomeFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.OrderFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.PlayListFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.PreferenceFragment;
-import com.leon.biuvideo.ui.views.RoundPopupWindow;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserInfoParser;
 import com.leon.biuvideo.values.Tables;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
 
 /**
  * 主activity
@@ -129,6 +131,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // 获取权限
         FileUtils.verifyPermissions(this);
+
+        initDownloadFailList();
     }
 
     /**
@@ -235,6 +239,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         isLogin = false;
         cookie = null;
+    }
+
+    /**
+     * 初始化未完成下载的媒体资源
+     */
+    private void initDownloadFailList() {
+        SimpleThreadPool simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.LoadTaskNum, SimpleThreadPool.LoadTask);
+        simpleThreadPool.submit(new FutureTask<>(new SimpleInitFailListThread()));
     }
 
     /**
@@ -376,6 +388,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             default:
                 break;
+        }
+    }
+
+    private class SimpleInitFailListThread implements Callable<String> {
+        @Override
+        public String call() {
+            // 处理未完成下载的媒体资源
+            SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.DownloadDetailsForVideo);
+            DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
+            downloadRecordsDatabaseUtils.setFailed();
+
+            // 删除未完成下载的媒体资源文件
+            List<DownloadedDetailMedia> downloadedDetailMedia = downloadRecordsDatabaseUtils.queryDownloadFailMedia();
+            File mediaFile;
+            String folderPath = FileUtils.createFolder(FileUtils.ResourcesFolder.VIDEOS);
+            for (DownloadedDetailMedia detailMedia : downloadedDetailMedia) {
+                String fileName = detailMedia.fileName;
+                if (detailMedia.isVideo) {
+                    mediaFile = new File(folderPath + "/" + fileName + ".mp4");
+                } else {
+                    mediaFile = new File(folderPath + "/" + fileName + ".mp3");
+                }
+
+                if (mediaFile.exists()) {
+                    mediaFile.delete();
+                }
+            }
+
+            downloadRecordsDatabaseUtils.close();
+            return null;
         }
     }
 }

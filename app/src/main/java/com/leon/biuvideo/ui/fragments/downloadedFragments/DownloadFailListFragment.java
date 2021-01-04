@@ -48,7 +48,7 @@ public class DownloadFailListFragment extends BaseFragment {
     public void initValues() {
         SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.DownloadDetailsForVideo);
         DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
-        downloadedDetailMedias = downloadRecordsDatabaseUtils.getDownloadFailMedias();
+        downloadedDetailMedias = downloadRecordsDatabaseUtils.queryDownloadFailMedia();
 
         downloadedFailListAdapter = new DownloadedFailListAdapter(context, downloadedDetailMedias);
         fragment_downloaded_media_detail_recyclerView.setAdapter(downloadedFailListAdapter);

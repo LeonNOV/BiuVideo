@@ -360,9 +360,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                     @Override
                     public void refreshMusic(long sid) {
                         //判断是否有网络
-                        boolean isHaveNetwork = InternetUtils.checkNetwork(getApplicationContext());
-
-                        if (!isHaveNetwork) {
+                        if (!InternetUtils.checkNetwork(getApplicationContext())) {
                             Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -379,6 +377,12 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                 //获取权限
                 FileUtils.verifyPermissions(this);
 
+                //判断是否有网络
+                if (!InternetUtils.checkNetwork(getApplicationContext())) {
+                    Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    break;
+                }
+
                 if (mediaUtils == null) {
                     mediaUtils = new MediaUtils(getApplicationContext());
                 }
@@ -388,7 +392,6 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                     downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
                 }
 
-                downloadRecordsDatabaseUtils.queryAudioByFileName(musicInfo.title + "-" + musicInfo.uname);
                 boolean downloadState = downloadRecordsDatabaseUtils.queryVideoDownloadState(String.valueOf(musicInfo.sid));
                 if (downloadState) {
                     WarnDialog warnDialog = new WarnDialog(MusicActivity.this, "提示", "检测到本地已存在该音频，是否要覆盖本地资源文件？");
@@ -440,9 +443,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                 break;
             case R.id.music_imageView_control:
                 //判断是否有网络
-                boolean isHaveNetwork = InternetUtils.checkNetwork(getApplicationContext());
-
-                if (!isHaveNetwork) {
+                if (!InternetUtils.checkNetwork(getApplicationContext())) {
                     Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
                     break;
                 }
@@ -485,9 +486,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                 break;
             case R.id.music_imageView_up:
                 //判断是否有网络
-                boolean isHaveNetworkUp = InternetUtils.checkNetwork(getApplicationContext());
-
-                if (!isHaveNetworkUp) {
+                if (!InternetUtils.checkNetwork(getApplicationContext())) {
                     Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
                     break;
                 }
@@ -506,9 +505,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                 break;
             case R.id.music_imageView_next:
                 //判断是否有网络
-                boolean isHaveNetworkNext = InternetUtils.checkNetwork(getApplicationContext());
-
-                if (!isHaveNetworkNext) {
+                if (!InternetUtils.checkNetwork(getApplicationContext())) {
                     Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
                     break;
                 }

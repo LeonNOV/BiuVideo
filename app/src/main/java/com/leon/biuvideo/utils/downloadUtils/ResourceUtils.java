@@ -5,12 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.media.MediaCodec;
-import android.media.MediaExtractor;
-import android.media.MediaFormat;
-import android.media.MediaMuxer;
 import android.net.Uri;
-import android.util.Log;
 import android.webkit.WebView;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -19,7 +14,6 @@ import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.InternetUtils;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -27,11 +21,12 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.ByteBuffer;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
+/**
+ * 保存图片等资源
+ */
 public class ResourceUtils {
     private static boolean isHaveNetwork;
 

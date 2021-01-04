@@ -34,6 +34,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+/**
+ * 下载媒体资源(视频/音频)
+ */
 public class MediaUtils {
     private final Context context;
     private final int tag;
@@ -175,6 +178,7 @@ public class MediaUtils {
                 generalNotification = new GeneralNotification(context, "缓存媒体资源", this.tag);
             }
             generalNotification.setNotificationOnSDK26("缓存视频", "缓存失败\t" + fileName, R.drawable.notification_biu_video);
+            setDownloadFailState(fileName);
 
             e.printStackTrace();
         } finally {
@@ -281,6 +285,7 @@ public class MediaUtils {
                 generalNotification = new GeneralNotification(context, "缓存媒体资源", this.tag);
             }
             generalNotification.setNotificationOnSDK26("缓存音频", "缓存失败\t" + fileName, R.drawable.notification_biu_video);
+            setDownloadFailState(fileName);
 
             e.printStackTrace();
         }
@@ -326,6 +331,20 @@ public class MediaUtils {
         } else {
             downloadRecordsDatabaseUtils.setDownloading(fileName);
         }
+
+        downloadRecordsDatabaseUtils.close();
+    }
+
+    /**
+     * 设置下载条目的状态为失败状态
+     *
+     * @param fileName  文件名称
+     */
+    private void setDownloadFailState(String fileName) {
+        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.DownloadDetailsForVideo);
+        DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
+
+        downloadRecordsDatabaseUtils.setFailed(fileName);
 
         downloadRecordsDatabaseUtils.close();
     }
