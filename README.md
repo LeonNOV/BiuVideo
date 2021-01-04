@@ -10,6 +10,7 @@
   - 在`MainActivity`中设置下载失败的资源，在`DownloadFailListFragment`中获取下载失败的资源
   - 更改了部分代码
 - 修改了`MainActivity`中的代码，如果在已打开`OrderFragment`的情况下，进行登录，会出现订阅数据不更新的情况
+- 修复了部分已知BUG
 
 ### 2021/01/03
 - 更改了`VideoActivity`的代码

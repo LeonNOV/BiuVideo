@@ -100,29 +100,31 @@ public class UserFolderParser {
             userFolderData.medias = new ArrayList<>();
             JSONArray medias = data.getJSONArray("medias");
 
-            for (Object o : medias) {
-                JSONObject jsonObject = (JSONObject) o;
-                UserFolderData.Media media = new UserFolderData.Media();
+            if (medias != null) {
+                for (Object o : medias) {
+                    JSONObject jsonObject = (JSONObject) o;
+                    UserFolderData.Media media = new UserFolderData.Media();
 
-                media.bvid = jsonObject.getString("bvid");
-                media.cover = jsonObject.getString("cover");
-                media.addTime = jsonObject.getLongValue("fav_time");
-                media.duration = jsonObject.getIntValue("duration");
-                media.title = jsonObject.getString("title");
-                media.desc = jsonObject.getString("intro");
-                media.link = jsonObject.getString("link");
+                    media.bvid = jsonObject.getString("bvid");
+                    media.cover = jsonObject.getString("cover");
+                    media.addTime = jsonObject.getLongValue("fav_time");
+                    media.duration = jsonObject.getIntValue("duration");
+                    media.title = jsonObject.getString("title");
+                    media.desc = jsonObject.getString("intro");
+                    media.link = jsonObject.getString("link");
 
-                JSONObject cnt_info = jsonObject.getJSONObject("cnt_info");
-                media.collect = cnt_info.getIntValue("collect");
-                media.danmaku = cnt_info.getIntValue("danmaku");
-                media.play = cnt_info.getIntValue("play");
+                    JSONObject cnt_info = jsonObject.getJSONObject("cnt_info");
+                    media.collect = cnt_info.getIntValue("collect");
+                    media.danmaku = cnt_info.getIntValue("danmaku");
+                    media.play = cnt_info.getIntValue("play");
 
-                JSONObject innerUpper = jsonObject.getJSONObject("upper");
+                    JSONObject innerUpper = jsonObject.getJSONObject("upper");
 
-                media.mid = innerUpper.getLongValue("mid");
-                media.name = innerUpper.getString("name");
+                    media.mid = innerUpper.getLongValue("mid");
+                    media.name = innerUpper.getString("name");
 
-                userFolderData.medias.add(media);
+                    userFolderData.medias.add(media);
+                }
             }
 
             return userFolderData;

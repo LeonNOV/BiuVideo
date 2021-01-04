@@ -93,6 +93,7 @@ public class AnthologyDownloadDialog extends AlertDialog implements View.OnClick
             case R.id.anthology_download_dialog_textView_checkAll:
                 Intent intent = new Intent(context, DownloadedActivity.class);
                 context.startActivity(intent);
+                break;
             case R.id.anthology_download_dialog_textView_saveAll:
                 if (onDownloadListener != null) {
                     onDownloadListener.onSaveAll(qualityId);
