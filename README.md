@@ -5,6 +5,10 @@
 
 ## 📘开发日志
 
+### 2021/01/05
+- 加入了用户的退出或登录会影响`OrderFragment`和`HistoryFragment`的数据
+- 修改了`LoginActivity`的布局代码
+
 ### 2021/01/04
 - 修改了`获取/设置`下载失败资源列表的方式
   - 在`MainActivity`中设置下载失败的资源，在`DownloadFailListFragment`中获取下载失败的资源

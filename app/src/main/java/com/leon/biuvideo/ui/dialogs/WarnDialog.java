@@ -12,8 +12,12 @@ import androidx.appcompat.app.AlertDialog;
 import com.leon.biuvideo.R;
 
 public class WarnDialog extends AlertDialog implements View.OnClickListener {
-    private final String title;
-    private final String content;
+    private String title;
+    private String content;
+
+    public WarnDialog(@NonNull Context context) {
+        super(context);
+    }
 
     public WarnDialog(@NonNull Context context, String title, String content) {
         super(context);
@@ -71,5 +75,13 @@ public class WarnDialog extends AlertDialog implements View.OnClickListener {
             default:
                 break;
         }
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
@@ -29,6 +30,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.beans.userBeans.UserInfo;
 import com.leon.biuvideo.ui.dialogs.AboutBiuVideoDialog;
+import com.leon.biuvideo.ui.dialogs.WarnDialog;
 import com.leon.biuvideo.ui.fragments.mainFragments.FavoriteFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.HistoryFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.HomeFragment;
@@ -44,6 +46,7 @@ import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserInfoParser;
 import com.leon.biuvideo.values.Tables;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -358,7 +361,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fragmentTransaction.commit();
     }
 
-    //设置main中的打开侧滑菜单按钮的监听和侧滑菜单中的返回按钮
+    // 设置main中的打开侧滑菜单按钮的监听和侧滑菜单中的返回按钮
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -371,13 +374,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.navigation_header_logout:
+                WarnDialog warnDialog = new WarnDialog(MainActivity.this);
+
                 if (isLogin) {
-                    //清除当前存储的Cookie
-                    resetUserIfo();
-                    Toast.makeText(this, "用户已退出", Toast.LENGTH_SHORT).show();
+                    warnDialog.setTitle("提示");
+                    warnDialog.setContent("是否要退出当前账户？");
+                    warnDialog.setOnConfirmListener(new WarnDialog.OnConfirmListener() {
+                        @Override
+                        public void onConfirm() {
+                            //清除当前存储的Cookie
+                            resetUserIfo();
+
+                            // 发送本地广播，用户已退出
+                            LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+                            Intent intent = new Intent("UserLogout");
+                            localBroadcastManager.sendBroadcast(intent);
+
+                            warnDialog.dismiss();
+                        }
+                    });
+
                 } else {
-                    Toast.makeText(this, "还未登录哦~", Toast.LENGTH_SHORT).show();
+                    warnDialog.setTitle("提示");
+                    warnDialog.setContent("还未进行登录，是否要登录账户？");
+                    warnDialog.setOnConfirmListener(new WarnDialog.OnConfirmListener() {
+                        @Override
+                        public void onConfirm() {
+                            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivityForResult(intent, 1003);
+
+                            warnDialog.dismiss();
+                        }
+                    });
                 }
+
+                warnDialog.show();
 
                 break;
             case R.id.toolBar_imageView_menu:
@@ -394,6 +425,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (requestCode == 1003 && resultCode == 1004) {
             initUserInfo();
+
+            // 发送本地广播，用户已登录
+            LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+            Intent intent = new Intent("UserLogin");
+            localBroadcastManager.sendBroadcast(intent);
         }
     }
 

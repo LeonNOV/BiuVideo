@@ -3,11 +3,9 @@ package com.leon.biuvideo.ui.activitys;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
@@ -25,9 +23,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    private String TAG = "BiliBiliCookie";
     private TextView textView_title;
-    private ImageView close, refresh;
     private ProgressBar progress;
     private WebView webView;
 
@@ -42,12 +38,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void initView() {
 
-        close = findViewById(R.id.login_close);
+        ImageView close = findViewById(R.id.login_close);
         close.setOnClickListener(this);
 
         textView_title = findViewById(R.id.login_textView_title);
 
-        refresh = findViewById(R.id.login_refresh);
+        ImageView refresh = findViewById(R.id.login_refresh);
         refresh.setOnClickListener(this);
 
         progress = findViewById(R.id.login_progress);
@@ -74,7 +70,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 progress.setProgress(newProgress);
-                Log.d(TAG, "onProgressChanged: " + newProgress);
                 if (newProgress == 100) {
                     //700毫秒后进度条消失
                     handler.postDelayed(new Runnable() {
@@ -123,13 +118,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     editor.putLong("mid", Long.parseLong(Objects.requireNonNull(cookieMap.get("DedeUserID")))).apply();
 
-                    Log.d(TAG, cookieStr);
-
                     setResult(1004);
                     finish();
                 }
-
-                Log.d(TAG, "onPageFinished----NowPage: " + url);
 
                 super.onPageFinished(view, url);
             }

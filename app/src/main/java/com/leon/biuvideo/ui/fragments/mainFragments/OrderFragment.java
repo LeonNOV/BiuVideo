@@ -1,6 +1,7 @@
 package com.leon.biuvideo.ui.fragments.mainFragments;
 
 import android.content.Context;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.leon.biuvideo.R;
@@ -45,16 +47,27 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
         order_view_linearLayout = findView(R.id.order_view_linearLayout);
 
         order_view_pager = findView(R.id.order_view_pager);
+
         order_video =  findView(R.id.order_video);
+        order_video.setOnClickListener(this);
+
         order_bangumi =  findView(R.id.order_bangumi);
+        order_bangumi.setOnClickListener(this);
+
         order_series =  findView(R.id.order_series);
+        order_series.setOnClickListener(this);
+
         order_article =  findView(R.id.order_article);
+        order_article.setOnClickListener(this);
+
+        initBroadcast();
     }
 
     @Override
     public void initValues() {
         SharedPreferences initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
         String cookie = initValues.getString("cookie", null);
+
         if (cookie == null) {
             order_view_textView_warn.setVisibility(View.VISIBLE);
             order_view_pager.setVisibility(View.GONE);
@@ -66,16 +79,9 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
 
             textViewMap = new HashMap<>();
 
-            order_video.setOnClickListener(this);
             textViewMap.put(0, order_video);
-
-            order_bangumi.setOnClickListener(this);
             textViewMap.put(1, order_bangumi);
-
-            order_series.setOnClickListener(this);
             textViewMap.put(2, order_series);
-
-            order_article.setOnClickListener(this);
             textViewMap.put(3, order_article);
 
             order_view_pager.setOffscreenPageLimit(3);
@@ -93,6 +99,14 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
             order_view_pager.addOnPageChangeListener(this);
         }
 
+    }
+
+    @Override
+    public void onResume() {
+
+
+
+        super.onResume();
     }
 
     @Override
@@ -128,5 +142,25 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    /**
+     * 初始化接收者
+     */
+    public void initBroadcast() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("UserLogin");
+        intentFilter.addAction("UserLogout");
+
+        UserLoginLocalReceiver userLoginLocalReceiver = new UserLoginLocalReceiver();
+        userLoginLocalReceiver.setOnUserLoginListener(new OnUserLoginListener() {
+            @Override
+            public void onUserLogin() {
+                // 刷新当前界面数据
+                initValues();
+            }
+        });
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
+        localBroadcastManager.registerReceiver(userLoginLocalReceiver, intentFilter);
     }
 }
