@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.upMasterBean.Video;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.values.OrderType;
 import com.leon.biuvideo.values.Paths;
 import com.leon.biuvideo.values.SearchType;
 import com.leon.biuvideo.values.SortType;
@@ -40,7 +39,7 @@ public class VideoParser {
 
         List<Video> videos = new ArrayList<>();
         if (data != null) {
-            videos = parseData(data, keyword);
+            videos = parseData(data);
         }
 
         return videos;
@@ -52,7 +51,7 @@ public class VideoParser {
      * @param data  JSONObject对象
      * @return  返回解析结果
      */
-    private List<Video> parseData(JSONObject data, String keyword) {
+    private List<Video> parseData(JSONObject data) {
         JSONArray result = data.getJSONArray("result");
 
         List<Video> videos;

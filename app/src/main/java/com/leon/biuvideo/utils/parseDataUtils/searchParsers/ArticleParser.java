@@ -39,7 +39,7 @@ public class ArticleParser {
 
         List<Article> articles = new ArrayList<>();
         if (data != null) {
-            articles = parseData(data, keyword);
+            articles = parseData(data);
         }
 
         return articles;
@@ -51,7 +51,7 @@ public class ArticleParser {
      * @param data  JSONObject对象
      * @return  返回解析结果
      */
-    private List<Article> parseData(JSONObject data, String keyword) {
+    private List<Article> parseData(JSONObject data) {
         JSONArray result = data.getJSONArray("result");
 
         List<Article> articles;
