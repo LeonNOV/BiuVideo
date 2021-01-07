@@ -53,8 +53,6 @@ public class VideoParser {
      * @return  返回解析结果
      */
     private List<Video> parseData(JSONObject data, String keyword) {
-        String oldStr = "<em class=\"keyword\">" + keyword + "</em>";
-
         JSONArray result = data.getJSONArray("result");
 
         List<Video> videos;
@@ -78,7 +76,7 @@ public class VideoParser {
                 video.bvid = jsonObject.getString("bvid");
 
                 //获取标题
-                video.title = jsonObject.getString("title").replaceAll(oldStr, keyword);
+                video.title = jsonObject.getString("title").replaceAll("<em class=\"keyword\">", "").replaceAll("</em>", "");
 
                 //获取视频说明
                 video.description = jsonObject.getString("description");

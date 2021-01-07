@@ -1,24 +1,18 @@
 package com.leon.biuvideo;
 
+import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
 import com.leon.biuvideo.beans.userBeans.UserFolderData;
-import com.leon.biuvideo.beans.videoBean.play.Media;
-import com.leon.biuvideo.beans.videoBean.play.Play;
 import com.leon.biuvideo.utils.IDUtils;
-import com.leon.biuvideo.utils.SimpleThreadPool;
-import com.leon.biuvideo.utils.downloadUtils.MediaUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
-import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BangumiParser;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserFolderParser;
 import com.leon.biuvideo.values.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
-import com.leon.biuvideo.values.Qualitys;
+import com.leon.biuvideo.values.SortType;
 
 import org.junit.Test;
 
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -30,25 +24,16 @@ public class ExampleUnitTest {
     //avid转bvid测试
     @Test
     public void avidTobvid() {
-        SimpleThreadPool simpleThreadPool = new SimpleThreadPool(5, "count");
+        BangumiParser bangumiParser = new BangumiParser();
+        List<Bangumi> bangumiList = bangumiParser.bangumiParse("刀剑神域", 1, SortType.DEFAULT);
+        int count = bangumiParser.getSearchBangumiCount("刀剑神域");
 
-//        for (int i = 0; i < 5; i++) {
-//            System.out.println("task" + i);
-//            simpleThreadPool.submit(new FutureTask<>(new CountThread()), "task" + i);
-//        }
-        simpleThreadPool.submit(new FutureTask<>(new CountThread()), "task" + 0);
-    }
-
-    class CountThread implements Callable<String> {
-
-        @Override
-        public String call() throws Exception {
-            for (int i = 0; i < 10; i++) {
-                System.out.println(i);
-            }
-
-            return null;
+        for (Bangumi bangumi : bangumiList) {
+            System.out.println("mediaId:" + bangumi.mediaId + "----title:" + bangumi.title);
+            System.out.println("epSize:" + bangumi.eps.size());
         }
+
+        System.out.println("count:" + count);
     }
 
     //解析输入的内容

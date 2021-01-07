@@ -1,4 +1,4 @@
-package com.leon.biuvideo.beans;
+package com.leon.biuvideo.beans.searchBean;
 
 /**
  * 搜索结果-用户数据

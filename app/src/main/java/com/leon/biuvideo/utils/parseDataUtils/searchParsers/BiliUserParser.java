@@ -2,9 +2,8 @@ package com.leon.biuvideo.utils.parseDataUtils.searchParsers;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.BiliUser;
+import com.leon.biuvideo.beans.searchBean.BiliUser;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.values.OrderType;
 import com.leon.biuvideo.values.Paths;
 import com.leon.biuvideo.values.SearchType;
 import com.leon.biuvideo.values.SortType;
