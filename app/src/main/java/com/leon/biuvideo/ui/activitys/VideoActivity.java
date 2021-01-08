@@ -227,7 +227,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         video_textView_title.setText(viewPage.title);
         video_textView_view.setText(ValueFormat.generateCN(viewPage.videoInfo.view) + "次观看");
         video_textView_danmaku.setText(ValueFormat.generateCN(viewPage.videoInfo.danmaku) + "弹幕");
-        video_textView_upTime.setText(ValueFormat.generateTime(viewPage.upTime, true, "-"));
+        video_textView_upTime.setText(ValueFormat.generateTime(viewPage.upTime, true, false, "-"));
         video_textView_like.setText(ValueFormat.generateCN(viewPage.videoInfo.like) + "点赞");
         video_textView_coin.setText(ValueFormat.generateCN(viewPage.videoInfo.coin) + "投币");
         video_textView_favorite.setText(ValueFormat.generateCN(viewPage.videoInfo.favorite) + "收藏");

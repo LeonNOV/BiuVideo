@@ -3,6 +3,7 @@
 
     <string name="search_result_hint">输入关键字，进行搜索</string>
     <string name="search_result_video">视频</string>
+    <string name="search_result_bangumi">番剧</string>
     <string name="search_result_article">专栏</string>
     <string name="search_result_bili_user">用户</string>
 </resources>

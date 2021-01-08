@@ -49,6 +49,7 @@ public class BangumiParser {
                 bangumi.mediaId = jsonObject.getLongValue("media_id");
                 bangumi.seasonId = jsonObject.getLongValue("season_id");
                 bangumi.title = jsonObject.getString("title").replaceAll("<em class=\"keyword\">", "").replaceAll("</em>", "");
+                bangumi.cover = "http:" + jsonObject.getString("cover");
                 bangumi.styles = jsonObject.getString("styles");
                 bangumi.area = jsonObject.getString("areas");
                 bangumi.playTime = jsonObject.getLongValue("pubtime");

@@ -24,16 +24,6 @@ public class ExampleUnitTest {
     //avid转bvid测试
     @Test
     public void avidTobvid() {
-        BangumiParser bangumiParser = new BangumiParser();
-        List<Bangumi> bangumiList = bangumiParser.bangumiParse("刀剑神域", 1, SortType.DEFAULT);
-        int count = bangumiParser.getSearchBangumiCount("刀剑神域");
-
-        for (Bangumi bangumi : bangumiList) {
-            System.out.println("mediaId:" + bangumi.mediaId + "----title:" + bangumi.title);
-            System.out.println("epSize:" + bangumi.eps.size());
-        }
-
-        System.out.println("count:" + count);
     }
 
     //解析输入的内容

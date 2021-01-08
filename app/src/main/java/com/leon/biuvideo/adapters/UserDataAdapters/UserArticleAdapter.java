@@ -39,7 +39,7 @@ public class UserArticleAdapter extends BaseAdapter<Article> {
         holder.setText(R.id.user_article_item_title, article.title)
                 .setImage(R.id.user_article_item_cover, article.coverUrl, ImagePixelSize.COVER)
                 .setText(R.id.user_article_item_desc, article.summary)
-                .setText(R.id.user_article_item_addTime, "收藏于 " + ValueFormat.generateTime(article.ctime, true, "-"))
+                .setText(R.id.user_article_item_addTime, "收藏于 " + ValueFormat.generateTime(article.ctime, true, false, "-"))
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

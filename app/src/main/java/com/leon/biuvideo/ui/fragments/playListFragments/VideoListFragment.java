@@ -154,7 +154,7 @@ public class VideoListFragment extends BaseFragment {
                 .setImage(R.id.fragment_favorite_video_imageView_cover, userFolderData.cover, ImagePixelSize.COVER)
                 .setText(R.id.fragment_favorite_video_textView_creator, userFolderData.userName)
                 .setText(R.id.fragment_favorite_video_textView_total, userFolderData.total + "个内容")
-                .setText(R.id.fragment_favorite_video_textView_ctime, "创建于" + ValueFormat.generateTime(userFolderData.ctime, true, "/"));
+                .setText(R.id.fragment_favorite_video_textView_ctime, "创建于" + ValueFormat.generateTime(userFolderData.ctime, true, false, "/"));
     }
 
     /**

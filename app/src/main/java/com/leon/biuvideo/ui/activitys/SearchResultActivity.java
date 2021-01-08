@@ -24,13 +24,17 @@ import android.widget.Toast;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.ViewPageAdapter;
 import com.leon.biuvideo.ui.fragments.searchResultFragments.ArticleResultFragment;
+import com.leon.biuvideo.ui.fragments.searchResultFragments.BangumiResultFragment;
 import com.leon.biuvideo.ui.fragments.searchResultFragments.BiliUserResultFragment;
 import com.leon.biuvideo.ui.fragments.searchResultFragments.VideoResultFragment;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.ViewUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
  /**
@@ -40,12 +44,13 @@ import java.util.concurrent.Callable;
 //     private ProgressBar search_progressBar;
      private ImageView search_imageView_back, search_imageView_clean;
      private EditText search_editText_searchBox;
-     private TextView search_textView_result_video, search_textView_result_article, search_textView_result_user;
+     private TextView search_textView_result_video, search_textView_result_article, search_textView_result_user, search_textView_result_bangumi;
      private ViewPager search_viewPager;
 
     private String keyword;
     private List<Fragment> fragments;
     private ViewPageAdapter viewPageAdapter;
+    private Map<Integer, TextView> textViewMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +112,9 @@ import java.util.concurrent.Callable;
         search_textView_result_user = findViewById(R.id.search_textView_result_user);
         search_textView_result_user.setOnClickListener(this);
 
+        search_textView_result_bangumi = findViewById(R.id.search_textView_result_bangumi);
+        search_textView_result_bangumi.setOnClickListener(this);
+
         search_viewPager = findViewById(R.id.search_viewPager);
         search_viewPager.addOnPageChangeListener(this);
     }
@@ -117,6 +125,12 @@ import java.util.concurrent.Callable;
         keyword = intent.getStringExtra("keyword");
 
         search_editText_searchBox.setText(keyword);
+
+        textViewMap = new HashMap<>();
+        textViewMap.put(0, search_textView_result_video);
+        textViewMap.put(1, search_textView_result_bangumi);
+        textViewMap.put(2, search_textView_result_article);
+        textViewMap.put(3, search_textView_result_user);
     }
 
     private void initViewPage() {
@@ -125,6 +139,7 @@ import java.util.concurrent.Callable;
         }
 
         fragments.add(VideoResultFragment.getInstance(keyword));
+        fragments.add(new BangumiResultFragment(keyword));
         fragments.add(ArticleResultFragment.getInstance(keyword));
         fragments.add(BiliUserResultFragment.getInstance(keyword));
 
@@ -141,9 +156,12 @@ import java.util.concurrent.Callable;
             } else if (fragment instanceof ArticleResultFragment){
                 ArticleResultFragment articleResultFragment = (ArticleResultFragment) fragment;
                 articleResultFragment.updateData(keyword);
-            } else {
+            } else if (fragment instanceof BiliUserResultFragment) {
                 BiliUserResultFragment biliUserResultFragment = (BiliUserResultFragment) fragment;
                 biliUserResultFragment.updateData(keyword);
+            } else {
+                BangumiResultFragment bangumiResultFragment = (BangumiResultFragment) fragment;
+                bangumiResultFragment.updateData(keyword);
             }
         }
     }
@@ -170,6 +188,9 @@ import java.util.concurrent.Callable;
             case R.id.search_textView_result_user:
                 search_viewPager.setCurrentItem(2);
 
+            case R.id.search_textView_result_bangumi:
+                search_viewPager.setCurrentItem(3);
+
                 break;
             default:
                 break;
@@ -178,33 +199,7 @@ import java.util.concurrent.Callable;
 
     @Override
     public void onPageSelected(int position) {
-        int point_bilibili_pink = R.drawable.shape_bilibili_pink;
-        int point_bilibili_pink_lite = R.drawable.ripple_bilibili_pink_lite;
-
-        switch (position) {
-            case 0:
-                search_textView_result_video.setBackgroundResource(point_bilibili_pink);
-                search_textView_result_article.setBackgroundResource(point_bilibili_pink_lite);
-                search_textView_result_user.setBackgroundResource(point_bilibili_pink_lite);
-
-                break;
-            case 1:
-                search_textView_result_video.setBackgroundResource(point_bilibili_pink_lite);
-                search_textView_result_article.setBackgroundResource(point_bilibili_pink);
-                search_textView_result_user.setBackgroundResource(point_bilibili_pink_lite);
-
-                break;
-            case 2:
-                search_textView_result_video.setBackgroundResource(point_bilibili_pink_lite);
-                search_textView_result_article.setBackgroundResource(point_bilibili_pink_lite);
-                search_textView_result_user.setBackgroundResource(point_bilibili_pink);
-
-                break;
-            default:
-                break;
-        }
-
-        Fuck.blue("pageIndex:" + position);
+        ViewUtils.changeText(textViewMap, position);
     }
 
     @Override

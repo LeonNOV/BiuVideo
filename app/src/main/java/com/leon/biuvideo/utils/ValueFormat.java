@@ -99,18 +99,19 @@ public class ValueFormat {
      *
      * @param time  毫秒值/秒值
      * @param isSecond  是否为秒值
+     * @param isMonth   是否只取月份（年/月/日）
      * @param delimiter     分隔符号
      * @return  返回格式化后的时间
      */
-    public static String generateTime(long time, boolean isSecond , String delimiter) {
+    public static String generateTime(long time, boolean isSecond, boolean isMonth, String delimiter) {
+        String format = "yyyy" + delimiter + "MM" + delimiter + "dd HH:mm";
+        Date date = new Date(isSecond ? time * 1000 : time);
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy" + delimiter + "MM" + delimiter + "dd HH:mm", Locale.CHINA);
-
-        if (isSecond) {
-            return simpleDateFormat.format(new Date(time * 1000));
-        } else {
-            return simpleDateFormat.format(new Date(time));
+        if (isMonth) {
+            format = "yyyy" + delimiter + "MM" + delimiter + "dd";
         }
+
+        return new SimpleDateFormat(format, Locale.CHINA).format(date);
 
     }
 }
