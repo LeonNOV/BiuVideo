@@ -9,12 +9,14 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
-import com.leon.biuvideo.utils.Fuck;
 
 import java.util.List;
 
+/**
+ * 缓存视频选集时用到的选集列表适配器
+ */
 public class AnthologyDownloadDialogAdapter extends BaseAdapter<AnthologyInfo> {
-    private List<AnthologyInfo> anthologyInfoList;
+    private final List<AnthologyInfo> anthologyInfoList;
 
     public AnthologyDownloadDialogAdapter(List<AnthologyInfo> anthologyInfoList, Context context) {
         super(anthologyInfoList, context);
@@ -24,6 +26,13 @@ public class AnthologyDownloadDialogAdapter extends BaseAdapter<AnthologyInfo> {
     private OnAnthologyItemClickListener onAnthologyItemClickListener;
 
     public interface OnAnthologyItemClickListener {
+        /**
+         * 缓存已点击的选集
+         *
+         * @param cid   选集cid
+         * @param position  选集position
+         * @param subTitle  选集标题
+         */
         void onItemClickListener(long cid, int position, String subTitle);
     }
 

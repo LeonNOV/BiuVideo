@@ -26,7 +26,7 @@ import java.util.Locale;
  * 用户界面，相簿fragment适配器
  */
 public class UserPictureAdapter extends BaseAdapter<Picture> {
-    private List<Picture> pictures;
+    private final List<Picture> pictures;
     private final Context context;
 
     public UserPictureAdapter(List<Picture> pictures, Context context) {

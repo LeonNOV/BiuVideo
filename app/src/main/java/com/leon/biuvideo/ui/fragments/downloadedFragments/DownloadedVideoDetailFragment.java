@@ -24,6 +24,9 @@ import com.leon.biuvideo.values.Tables;
 
 import java.util.List;
 
+/**
+ * 显示已缓存的同一bvid视频的fragment
+ */
 public class DownloadedVideoDetailFragment extends BaseFragment {
     private RecyclerView fragment_downloaded_media_detail_recyclerView;
 

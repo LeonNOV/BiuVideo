@@ -14,7 +14,6 @@ import com.leon.biuvideo.adapters.BaseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.utils.FileUtils;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
@@ -23,6 +22,9 @@ import com.leon.biuvideo.values.Tables;
 
 import java.util.List;
 
+/**
+ * 如果多个视频的bvid相同,则会用到该适配器
+ */
 public class DownloadedDetailAdapter extends BaseAdapter<DownloadedDetailMedia> {
     private final Context context;
     private final List<DownloadedDetailMedia> downloadedDetailMedias;
@@ -53,8 +55,8 @@ public class DownloadedDetailAdapter extends BaseAdapter<DownloadedDetailMedia> 
                         folderPath = downloadedDetailMedia.isVideo ? FileUtils.createFolder(FileUtils.ResourcesFolder.VIDEOS) : FileUtils.createFolder(FileUtils.ResourcesFolder.MUSIC);
                         String path = folderPath + "/" + downloadedDetailMedia.fileName + (downloadedDetailMedia.isVideo ? ".mp4" : ".mp3");
 
+                        // 根据isVideo来打开媒体播放器选择窗口
                         Intent intentMediaPlayer;
-                        Fuck.blue("isVideo:" + downloadedDetailMedia.isVideo + "");
                         if (downloadedDetailMedia.isVideo) {
                             intentMediaPlayer = new Intent(Intent.ACTION_VIEW);
                             Uri uri = Uri.parse(path);

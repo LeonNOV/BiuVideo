@@ -13,6 +13,9 @@ import com.leon.biuvideo.utils.Fuck;
 
 import java.util.List;
 
+/**
+ * 用户收藏的视频文件夹适配器
+ */
 public class UserFavoriteFolderAdapter extends BaseAdapter<UserFolder> {
     private final List<UserFolder> userFolders;
 

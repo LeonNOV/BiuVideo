@@ -22,6 +22,9 @@ import com.leon.biuvideo.values.Tables;
 
 import java.util.List;
 
+/**
+ * 视频下载列表适配器
+ */
 public class DownloadedListAdapter extends BaseAdapter<DownloadedRecordsForVideo> {
     private final List<DownloadedRecordsForVideo> downloadRecords;
     private final Context context;

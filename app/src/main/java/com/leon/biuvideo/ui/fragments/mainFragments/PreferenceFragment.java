@@ -34,6 +34,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 设置fragment
+ */
 public class PreferenceFragment extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private TextView preference_textView_cache_size;
     private SwitchCompat preference_switch_visitState;

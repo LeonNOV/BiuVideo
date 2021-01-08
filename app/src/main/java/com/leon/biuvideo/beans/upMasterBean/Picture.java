@@ -2,7 +2,6 @@ package com.leon.biuvideo.beans.upMasterBean;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 相簿

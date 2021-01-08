@@ -17,6 +17,9 @@ import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.List;
 
+/**
+ * 用户收藏的专栏列表适配器
+ */
 public class UserArticleAdapter extends BaseAdapter<Article> {
     private final List<Article> articles;
     private final Context context;

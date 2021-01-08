@@ -11,6 +11,9 @@ import com.leon.biuvideo.values.Tables;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 处理musicPlayList表的工具类
+ */
 public class MusicListDatabaseUtils extends SQLiteHelper {
     private final SQLiteHelper sqLiteHelper;
     private final SQLiteDatabase sqLiteDatabase;

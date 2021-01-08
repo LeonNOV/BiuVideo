@@ -22,6 +22,9 @@ import com.leon.biuvideo.values.Tables;
 
 import java.util.List;
 
+/**
+ * 缓存失败fragment
+ */
 public class DownloadFailListFragment extends BaseFragment {
     private RecyclerView fragment_downloaded_media_detail_recyclerView;
 

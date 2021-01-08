@@ -18,6 +18,9 @@ import androidx.appcompat.app.AlertDialog;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.utils.HeroImages;
 
+/**
+ * 设置主界面‘Hero’弹窗
+ */
 public class SetHeroDialog extends AlertDialog implements View.OnClickListener, AdapterView.OnItemSelectedListener, RadioGroup.OnCheckedChangeListener {
     private RadioGroup set_hero_radio_group;
     private RadioButton set_hero_radioButton_auto, set_hero_radioButton_custom;

@@ -16,6 +16,9 @@ import com.leon.biuvideo.values.Tables;
 import java.io.File;
 import java.util.List;
 
+/**
+ * 下载界面
+ */
 public class DownloadedActivity extends AppCompatActivity {
 
     @Override

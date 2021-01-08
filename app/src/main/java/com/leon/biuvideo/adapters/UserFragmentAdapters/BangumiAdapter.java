@@ -16,6 +16,9 @@ import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.List;
 
+/**
+ * 搜索结果界面-番剧列表适配器
+ */
 public class BangumiAdapter extends BaseAdapter<Bangumi> {
     private final List<Bangumi> bangumiList;
     private final Context context;
@@ -50,6 +53,7 @@ public class BangumiAdapter extends BaseAdapter<Bangumi> {
                     }
                 });
 
+        // 如果角标题为空的话就不显示该控件
         if (bangumi.angleTitle.equals("")) {
             holder.setVisibility(R.id.search_result_bangumi_textView_angleTitle, View.GONE);
         } else {

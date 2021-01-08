@@ -11,6 +11,9 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.leon.biuvideo.R;
 
+/**
+ * 提醒/警告通用弹窗
+ */
 public class WarnDialog extends AlertDialog implements View.OnClickListener {
     private String title;
     private String content;

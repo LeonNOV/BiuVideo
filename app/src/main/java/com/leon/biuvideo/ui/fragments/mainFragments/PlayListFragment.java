@@ -13,12 +13,14 @@ import com.leon.biuvideo.adapters.ViewPageAdapter;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.fragments.playListFragments.MusicListFragment;
-import com.leon.biuvideo.ui.fragments.playListFragments.VideoListFragment;
 import com.leon.biuvideo.utils.Fuck;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 播放列表fragment
+ */
 public class PlayListFragment extends BaseFragment implements ViewPager.OnPageChangeListener, View.OnClickListener {
     private TextView play_list_textView_video, play_list_textView_music;
     private ViewPager play_list_viewPage;

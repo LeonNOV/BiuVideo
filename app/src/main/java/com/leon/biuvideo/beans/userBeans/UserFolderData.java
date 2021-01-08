@@ -2,6 +2,9 @@ package com.leon.biuvideo.beans.userBeans;
 
 import java.util.List;
 
+/**
+ * 用户收藏文件夹中的具体数据实体类
+ */
 public class UserFolderData {
     public long id;
     public long ctime;

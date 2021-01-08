@@ -22,6 +22,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * 登录界面
+ */
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView textView_title;
     private ProgressBar progress;

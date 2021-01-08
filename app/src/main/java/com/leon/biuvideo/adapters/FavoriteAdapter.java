@@ -24,8 +24,8 @@ import java.util.List;
  * 收藏fragment适配器
  */
 public class FavoriteAdapter extends BaseAdapter<Favorite> {
-    private List<Favorite> favorites;
-    private Context context;
+    private final List<Favorite> favorites;
+    private final Context context;
 
     private FavoriteDatabaseUtils favoriteDatabaseUtils;
 

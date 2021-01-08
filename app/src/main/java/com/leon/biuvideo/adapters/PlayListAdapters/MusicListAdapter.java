@@ -22,7 +22,7 @@ import java.util.List;
  * music播放列表适配器
  */
 public class MusicListAdapter extends BaseAdapter<MusicPlayList> {
-    private List<MusicPlayList> musicPlayLists;
+    private final List<MusicPlayList> musicPlayLists;
     private final Context context;
 
     public MusicListAdapter(List<MusicPlayList> musicPlayLists, Context context) {

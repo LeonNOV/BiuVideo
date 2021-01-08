@@ -25,7 +25,7 @@ import java.util.Locale;
  * 用户界面，音频/音乐fragment适配器
  */
 public class UserAudioAdapter extends BaseAdapter<Audio> {
-    private List<Audio> audio;
+    private final List<Audio> audio;
     private final Context context;
 
     public UserAudioAdapter(List<Audio> audio, Context context) {

@@ -21,6 +21,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * 用户收藏的文件夹详情列表适配器
+ */
 public class UserFavoriteFolderDetailAdapter extends BaseAdapter<UserFolderData.Media> {
     private final List<UserFolderData.Media> userFolderDatas;
     private final Context context;

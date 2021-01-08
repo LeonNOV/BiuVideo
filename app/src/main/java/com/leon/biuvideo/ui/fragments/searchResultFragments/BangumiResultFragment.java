@@ -11,8 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UserFragmentAdapters.BangumiAdapter;
-import com.leon.biuvideo.adapters.UserFragmentAdapters.BiliUserAdapter;
-import com.leon.biuvideo.beans.searchBean.BiliUser;
 import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
@@ -28,6 +26,9 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 番剧搜索结果fragment
+ */
 public class BangumiResultFragment extends BaseFragment {
     private SmartRefreshLayout search_result_smartRefresh;
     private RecyclerView search_result_recyclerView;

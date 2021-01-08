@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.DownloadAdapter.DownloadedDetailAdapter;
-import com.leon.biuvideo.adapters.DownloadAdapter.DownloadedFailListAdapter;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
@@ -24,6 +23,9 @@ import com.leon.biuvideo.values.Tables;
 
 import java.util.List;
 
+/**
+ * 音频缓存fragment
+ */
 public class DownloadedMusicListFragment extends BaseFragment {
     private RecyclerView fragment_downloaded_media_detail_recyclerView;
     private ImageView fragment_downloaded_media_detail_imageView_back;

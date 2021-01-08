@@ -1,6 +1,5 @@
 package com.leon.biuvideo.beans.searchBean.bangumi;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

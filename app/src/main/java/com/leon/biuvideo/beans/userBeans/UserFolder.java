@@ -1,5 +1,8 @@
 package com.leon.biuvideo.beans.userBeans;
 
+/**
+ * 用户订阅文件夹实体类
+ */
 public class UserFolder {
     public long id;
     public int total;

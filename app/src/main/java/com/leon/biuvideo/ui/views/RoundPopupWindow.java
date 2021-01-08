@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+/**
+ * 圆角弹窗(适用于单文字条目展示)
+ */
 public class RoundPopupWindow extends PopupWindow {
     public final static int SHOW_AS_DROP_DOWN = 1;
     public final static int SHOW_AS_LEFT = 2;

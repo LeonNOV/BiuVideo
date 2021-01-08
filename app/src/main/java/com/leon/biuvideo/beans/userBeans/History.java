@@ -2,6 +2,9 @@ package com.leon.biuvideo.beans.userBeans;
 
 import java.util.List;
 
+/**
+ * 观看历史实体类
+ */
 public class History {
     public long max;
     public long viewAt;

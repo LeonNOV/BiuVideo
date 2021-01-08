@@ -22,7 +22,7 @@ import java.util.List;
  * video播放列表适配器
  */
 public class VideoListAdapter extends BaseAdapter<VideoPlayList> {
-    private List<VideoPlayList> videoPlayLists;
+    private final List<VideoPlayList> videoPlayLists;
     private final Context context;
 
     public VideoListAdapter(List<VideoPlayList> videoPlayLists, Context context) {

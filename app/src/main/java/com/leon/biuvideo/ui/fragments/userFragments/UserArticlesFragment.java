@@ -1,12 +1,10 @@
 package com.leon.biuvideo.ui.fragments.userFragments;
 
 import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +22,9 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.List;
 
+/**
+ * 用户已发布专栏fragment
+ */
 public class UserArticlesFragment extends BaseFragment {
     private final long mid;
 

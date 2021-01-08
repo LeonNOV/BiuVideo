@@ -18,6 +18,9 @@ import com.leon.biuvideo.values.Tables;
 
 import java.util.List;
 
+/**
+ * 已缓存视频fragment
+ */
 public class DownloadedVideoListFragment extends BaseFragment implements View.OnClickListener {
     private RecyclerView fragment_downloaded_video_list_recyclerView;
     private TextView fragment_downloaded_video_list_no_data;

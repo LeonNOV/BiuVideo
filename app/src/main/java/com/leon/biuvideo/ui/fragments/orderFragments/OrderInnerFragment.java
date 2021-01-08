@@ -25,6 +25,9 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.List;
 
+/**
+ * 用户订阅文件夹的详细数据fragment
+ */
 public class OrderInnerFragment extends BaseFragment {
     private final String cookie;
     private final OrderType orderType;

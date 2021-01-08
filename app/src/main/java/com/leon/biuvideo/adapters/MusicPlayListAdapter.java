@@ -25,6 +25,7 @@ public class MusicPlayListAdapter extends BaseAdapter<MusicPlayList> {
 
     public MusicPlayListAdapter(List<MusicPlayList> musicPlayLists, Context context) {
         super(musicPlayLists, context);
+
         this.musicPlayLists = musicPlayLists;
         this.context = context;
     }

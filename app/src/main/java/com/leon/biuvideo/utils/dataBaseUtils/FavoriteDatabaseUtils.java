@@ -11,6 +11,9 @@ import com.leon.biuvideo.values.Tables;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 处理favorite_up表的工具类
+ */
 public class FavoriteDatabaseUtils extends SQLiteHelper {
     private final SQLiteHelper sqLiteHelper;
     private final SQLiteDatabase sqLiteDatabase;

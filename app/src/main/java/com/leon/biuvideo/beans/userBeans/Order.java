@@ -1,9 +1,10 @@
 package com.leon.biuvideo.beans.userBeans;
 
-import androidx.annotation.NonNull;
-
 import com.leon.biuvideo.values.OrderFollowType;
 
+/**
+ * 订阅信息实体类
+ */
 public class Order {
     public String title;
     public String desc;

@@ -13,6 +13,9 @@ import com.leon.biuvideo.utils.Fuck;
 
 import java.util.List;
 
+/**
+ * 搜索结果界面-番剧选集适配器
+ */
 public class BangumiEpAdapter extends BaseAdapter<Ep> {
     private final List<Ep> eps;
 

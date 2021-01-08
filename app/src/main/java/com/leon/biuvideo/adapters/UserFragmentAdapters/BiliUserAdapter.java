@@ -26,8 +26,8 @@ import java.util.List;
  * 搜索结果-用户列表适配器
  */
 public class BiliUserAdapter extends BaseAdapter<BiliUser> {
-    private List<BiliUser> biliUsers;
-    private Context context;
+    private final List<BiliUser> biliUsers;
+    private final Context context;
 
     private SQLiteHelperFactory sqLiteHelperFactory;
     private FavoriteDatabaseUtils favoriteDatabaseUtils;

@@ -25,7 +25,7 @@ import java.util.Locale;
  * 文章列表适配器
  */
 public class UserArticleAdapter extends BaseAdapter<Article> {
-    private List<Article> articles;
+    private final List<Article> articles;
     private final Context context;
 
     public UserArticleAdapter(List<Article> articles, Context context) {

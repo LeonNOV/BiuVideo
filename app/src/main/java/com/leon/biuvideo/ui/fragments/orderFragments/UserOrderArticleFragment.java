@@ -25,6 +25,9 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.List;
 
+/**
+ * 用户订阅的专栏fragment
+ */
 public class UserOrderArticleFragment extends BaseFragment {
     private final String cookie;
 

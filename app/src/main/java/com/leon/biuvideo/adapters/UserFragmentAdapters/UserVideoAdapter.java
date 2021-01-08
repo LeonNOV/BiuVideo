@@ -25,7 +25,7 @@ import java.util.Locale;
  * 用户界面，视频fragment适配器
  */
 public class UserVideoAdapter extends BaseAdapter<Video> {
-    private List<Video> videos;
+    private final List<Video> videos;
     private final Context context;
 
     public UserVideoAdapter(List<Video> videos, Context context) {

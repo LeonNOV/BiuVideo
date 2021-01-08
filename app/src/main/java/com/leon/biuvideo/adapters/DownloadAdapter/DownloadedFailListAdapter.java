@@ -25,6 +25,9 @@ import com.leon.biuvideo.values.Tables;
 import java.util.List;
 import java.util.concurrent.FutureTask;
 
+/**
+ * 下载失败列表适配器
+ */
 public class DownloadedFailListAdapter extends BaseAdapter<DownloadedDetailMedia> {
     private final Context context;
     private final List<DownloadedDetailMedia> downloadedDetailMedias;

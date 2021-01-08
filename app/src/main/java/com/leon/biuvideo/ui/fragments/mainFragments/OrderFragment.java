@@ -28,6 +28,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 用户订阅数据fragment
+ */
 public class OrderFragment extends BaseFragment implements View.OnClickListener, ViewPager.OnPageChangeListener {
     private ViewPager order_view_pager;
     private TextView order_video, order_bangumi, order_series, order_article, order_view_textView_warn;

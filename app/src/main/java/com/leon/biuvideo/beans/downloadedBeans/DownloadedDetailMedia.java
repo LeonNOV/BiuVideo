@@ -2,6 +2,9 @@ package com.leon.biuvideo.beans.downloadedBeans;
 
 import java.io.Serializable;
 
+/**
+ * 下载列表中相同bvid的视频的实体类，音频条目也使用该类
+ */
 public class DownloadedDetailMedia implements Serializable {
     public String fileName;
     public String cover;
