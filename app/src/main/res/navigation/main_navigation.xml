@@ -8,31 +8,31 @@
     <fragment
         android:id="@+id/nav_homeFragment"
         android:name="com.leon.biuvideo.ui.fragments.mainFragments.HomeFragment"
-        tools:layout="@layout/main_fragment_home"
-        android:label="HomeFragment"/>
+        android:label="HomeFragment"
+        tools:layout="@layout/main_fragment_home" />
     <fragment
         android:id="@+id/nav_favoriteFragment"
         android:name="com.leon.biuvideo.ui.fragments.mainFragments.FavoriteFragment"
-        tools:layout="@layout/main_fragment_recycler_view"
-        android:label="FavoriteFragment"/>
+        android:label="FavoriteFragment"
+        tools:layout="@layout/main_fragment_recycler_view" />
     <fragment
         android:id="@+id/nav_playListFragment"
         android:name="com.leon.biuvideo.ui.fragments.mainFragments.PlayListFragment"
-        tools:layout="@layout/main_fragment_play_list_fragment"
-        android:label="PlayListFragment"/>
+        android:label="PlayListFragment"
+        tools:layout="@layout/main_fragment_play_list_fragment" />
     <fragment
         android:id="@+id/nav_preferenceFragment"
         android:name="com.leon.biuvideo.ui.fragments.mainFragments.PreferenceFragment"
-        tools:layout="@layout/fragment_preference"
-        android:label="PreferenceFragment" />
+        android:label="PreferenceFragment"
+        tools:layout="@layout/fragment_preference" />
     <fragment
         android:id="@+id/nav_historyFragment"
         android:name="com.leon.biuvideo.ui.fragments.mainFragments.HistoryFragment"
-        tools:layout="@layout/main_fragment_history"
-        android:label="HistoryFragment" />
+        android:label="HistoryFragment"
+        tools:layout="@layout/main_fragment_history" />
     <fragment
         android:id="@+id/nav_orderFragment"
         android:name="com.leon.biuvideo.ui.fragments.mainFragments.OrderFragment"
-        tools:layout="@layout/main_fragment_order"
-        android:label="OrderFragment" />
+        android:label="OrderFragment"
+        tools:layout="@layout/main_fragment_order" />
 </navigation>
