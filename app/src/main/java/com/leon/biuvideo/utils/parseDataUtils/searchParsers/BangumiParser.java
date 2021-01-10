@@ -61,8 +61,13 @@ public class BangumiParser {
                 bangumi.angleTitle = jsonObject.getString("angle_title");
 
                 JSONObject mediaScore = jsonObject.getJSONObject("media_score");
-                bangumi.score = mediaScore.getFloatValue("score");
-                bangumi.reviewNum = mediaScore.getIntValue("user_count");
+                if (mediaScore != null) {
+                    bangumi.score = mediaScore.getFloatValue("score");
+                    bangumi.reviewNum = mediaScore.getIntValue("user_count");
+                } else {
+                    bangumi.score = 0;
+                    bangumi.reviewNum = 0;
+                }
 
                 JSONArray eps = jsonObject.getJSONArray("eps");
                 List<Ep> epList = new ArrayList<>();

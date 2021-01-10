@@ -17,7 +17,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.activitys.BangumiActivity"></activity>
+        <activity android:name=".ui.activitys.BangumiActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity
             android:name=".ui.activitys.DownloadedActivity"
             android:exported="false"
