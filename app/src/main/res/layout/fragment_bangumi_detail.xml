@@ -11,7 +11,16 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <ImageView
+            android:id="@+id/fragment_bangumi_detail_imageView_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/ripple_bilibili_pink_lite"
+            android:padding="10dp"
+            android:src="@drawable/icon_back"/>
+
         <LinearLayout
+            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -63,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:textColor="@color/gray"
-                    android:textSize="13p"
+                    android:textSize="13sp"
                     android:text="2020年7月5日开播"/>
 
                 <LinearLayout
@@ -153,130 +162,51 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:text="@string/bangumi_originalName"
+                android:textColor="@color/black"
+                android:textSize="17sp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/bangumi_originalName"
-                    android:textColor="@color/gray"
-                    android:textSize="15sp"/>
-
-                <TextView
-                    android:id="@+id/fragment_bangumi_detail_textView_originalName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:textColor="@color/black"
-                    android:textSize="17sp"
-                    android:text="orgNameorgNameorgNameorgNameorgNameorgNameorgNameorgNameorgNameorgName"/>
-
-
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/fragment_bangumi_detail_textView_originalName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
+                android:textColor="@color/gray"
+                android:textSize="17sp"
+                android:text="-"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:textColor="@color/black"
+                android:textSize="17sp"
+                android:text="@string/bangumi_otherInfo"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/gray"
-                    android:textSize="15sp"
-                    android:text="@string/bangumi_alias"/>
-
-                <TextView
-                    android:id="@+id/fragment_bangumi_detail_textView_alias"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:textColor="@color/black"
-                    android:textSize="17sp"
-                    android:text="AliasAliasAliasAliasAliasAliasAliasAliasAliasAliasAliasAliasAliasAlias"/>
-
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/fragment_bangumi_detail_textView_otherInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/gray"
-                    android:textSize="15sp"
-                    android:text="@string/bangumi_original"/>
-
-                <TextView
-                    android:id="@+id/fragment_bangumi_detail_textView_original"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:textColor="@color/black"
-                    android:textSize="17sp"
-                    android:text="OriginalOriginalOriginalOriginalOriginalOriginalOriginalOriginalOriginal"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/gray"
-                    android:textSize="15sp"
-                    android:text="@string/bangumi_originalCharacter"/>
-
-                <TextView
-                    android:id="@+id/fragment_bangumi_detail_textView_originalCharacter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:textColor="@color/black"
-                    android:textSize="17sp"
-                    android:text="OriginalCharacterOriginalCharacterOriginalCharacterOriginalCharacterOriginalCharacter"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/gray"
-                    android:textSize="15sp"
-                    android:text="@string/bangumi_supervise"/>
-
-                <TextView
-                    android:id="@+id/fragment_bangumi_detail_textView_supervise"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:textColor="@color/black"
-                    android:textSize="17sp"
-                    android:text="SuperviseSuperviseSuperviseSuperviseSuperviseSuperviseSuperviseSupervise"/>
-
-            </LinearLayout>
+                android:textColor="@color/gray"
+                android:textSize="17sp"
+                android:text="-"/>
 
         </LinearLayout>
 
@@ -300,7 +230,7 @@
                 android:textColor="@color/gray"
                 android:layout_marginTop="10dp"
                 android:textSize="17sp"
-                android:text="DescDescDescDescDescDescDescDescDescDescDescDescDescDescDesc"/>
+                android:text="-"/>
 
         </LinearLayout>
 

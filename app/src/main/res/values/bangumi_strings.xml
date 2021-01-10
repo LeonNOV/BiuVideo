@@ -4,11 +4,7 @@
     <string name="bangumi_jump">点击这里跳转到官方页面观看</string>
     <string name="bangumi_detail">详情</string>
     <string name="bangumi_originalName">原名</string>
-    <string name="bangumi_alias">别名</string>
-    <string name="bangumi_original">原作</string>
-    <string name="bangumi_originalCharacter">原作人物原案</string>
-    <string name="bangumi_supervise">监督</string>
+    <string name="bangumi_otherInfo">其他信息</string>
     <string name="bangumi_desc">简介</string>
-
     <string name="bangumi_score">分</string>
 </resources>

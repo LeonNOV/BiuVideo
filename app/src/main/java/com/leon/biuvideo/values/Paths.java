@@ -187,6 +187,15 @@ public class Paths {
      */
     public static String bangumi = "https://api.bilibili.com/x/space/bangumi/follow/list";
 
+    /**
+     * 获取番剧观看数、投币数、弹幕数等信息<br/>
+     *
+     * 参数
+     *      season_id:seasonId，必须
+     *
+     */
+    public static String bangumiState = "https://api.bilibili.com/pgc/web/season/stat";
+
     //========================以下接口数据的获取需要在请求头中添加Cookie========================
 
     /**

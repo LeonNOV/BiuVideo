@@ -1,6 +1,8 @@
 package com.leon.biuvideo.adapters.UserFragmentAdapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -10,6 +12,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
+import com.leon.biuvideo.ui.activitys.BangumiActivity;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -49,7 +52,13 @@ public class BangumiAdapter extends BaseAdapter<Bangumi> {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Fuck.blue("title:" + bangumi.title + "----mid:" + bangumi.mediaId + "----sid:" + bangumi.seasonId);
+                        Intent intent = new Intent(context, BangumiActivity.class);
+
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("bangumi", bangumi);
+                        intent.putExtras(bundle);
+
+                        context.startActivity(intent);
                     }
                 });
 
@@ -61,7 +70,15 @@ public class BangumiAdapter extends BaseAdapter<Bangumi> {
         }
 
         RecyclerView recyclerView = holder.findById(R.id.search_result_bangumi_recyclerView_eps);
-        recyclerView.setAdapter(new BangumiEpAdapter(bangumi.eps, context));
+
+        BangumiEpAdapter bangumiEpAdapter = new BangumiEpAdapter(bangumi.eps, context);
+        bangumiEpAdapter.setOnEpClickListener(new BangumiEpAdapter.OnEpClickListener() {
+            @Override
+            public Bangumi onEpClick(int position) {
+                return bangumiList.get(position);
+            }
+        });
+        recyclerView.setAdapter(bangumiEpAdapter);
 
     }
 }

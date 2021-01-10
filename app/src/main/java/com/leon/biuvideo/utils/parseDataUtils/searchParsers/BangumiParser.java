@@ -49,17 +49,19 @@ public class BangumiParser {
                 bangumi.mediaId = jsonObject.getLongValue("media_id");
                 bangumi.seasonId = jsonObject.getLongValue("season_id");
                 bangumi.title = jsonObject.getString("title").replaceAll("<em class=\"keyword\">", "").replaceAll("</em>", "");
+                bangumi.originalTitle = jsonObject.getString("org_title");
                 bangumi.cover = "http:" + jsonObject.getString("cover");
                 bangumi.styles = jsonObject.getString("styles");
                 bangumi.area = jsonObject.getString("areas");
                 bangumi.playTime = jsonObject.getLongValue("pubtime");
                 bangumi.voiceActors = jsonObject.getString("cv");
+                bangumi.otherInfo = jsonObject.getString("staff");
                 bangumi.desc = jsonObject.getString("desc");
                 bangumi.epSize = jsonObject.getIntValue("ep_size");
                 bangumi.angleTitle = jsonObject.getString("angle_title");
 
                 JSONObject mediaScore = jsonObject.getJSONObject("media_score");
-                bangumi.score = mediaScore.getDoubleValue("score");
+                bangumi.score = mediaScore.getFloatValue("score");
                 bangumi.reviewNum = mediaScore.getIntValue("user_count");
 
                 JSONArray eps = jsonObject.getJSONArray("eps");
