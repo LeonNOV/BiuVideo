@@ -22,9 +22,10 @@ public class MediaParseUtils {
      * @param cid   cid
      * @return  返回选集视频信息
      */
-    public static Play parseMedia(long cid, boolean isBangumi) {
+    public static Play parseMedia(String bvid, long cid, boolean isBangumi) {
         try {
             Map<String, String> params = new HashMap<>();
+            params.put("bvid", String.valueOf(bvid));
             params.put("cid", String.valueOf(cid));
             params.put("qn", "0");
             params.put("otype", "json");

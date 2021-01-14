@@ -158,7 +158,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                 // 如果番剧选集个数为1，则直接显示SingleVideoQualityDialog
                 if (isSingleAnthology) {
                     if (videoEntries == null) {
-                        Play play = MediaParseUtils.parseMedia(bangumi.eps.get(selectAnthologyIndex).cid, true);
+                        Play play = MediaParseUtils.parseMedia(null, bangumi.eps.get(selectAnthologyIndex).cid, true);
 
                         videoEntries = play.videoEntries();
                         for (Map.Entry<Integer, Media> entry : videoEntries) {
@@ -186,7 +186,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                             Fuck.blue("saveSingleVideo----cid:" + cid + "--qualityIndex:" + qualityId + "--subTitle:" + subTitle);
 
                             //获取视频选集信息
-                            Play playWithDownload = MediaParseUtils.parseMedia(cid, true);
+                            Play playWithDownload = MediaParseUtils.parseMedia(null, cid, true);
 
                             videoEntries = playWithDownload.videoEntries();
                             for (Map.Entry<Integer, Media> entry : videoEntries) {

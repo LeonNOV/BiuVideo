@@ -304,7 +304,7 @@ public class MediaUtils {
         String[] urls;
         if (subId != 0) {
             urls = new String[2];
-            Play play = MediaParseUtils.parseMedia(subId, false);
+            Play play = MediaParseUtils.parseMedia(mainId, subId, false);
             urls[0] = play.videos.get(qualityId).baseUrl;
             urls[1] = play.audios.get(0).baseUrl;
 
@@ -382,6 +382,7 @@ public class MediaUtils {
         } else {
             mediaIntent = new Intent("DownloadAudio");
         }
+
         mediaIntent.putExtra("fileName", fileName);
         localBroadcastManager.sendBroadcast(mediaIntent);
     }

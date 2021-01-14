@@ -161,7 +161,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         viewPage = ViewParseUtils.parseView(bvid);
 
         //获取视频选集信息
-        play = MediaParseUtils.parseMedia(viewPage.anthologyInfoList.get(0).cid, false);
+        play = MediaParseUtils.parseMedia(bvid, viewPage.anthologyInfoList.get(0).cid, false);
 
         SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.VideoPlayList);
         videoListDatabaseUtils = (VideoListDatabaseUtils) sqLiteHelperFactory.getInstance();
@@ -203,7 +203,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                     anthologySelectedIndex = position;
 
                     //重置当前play变量
-                    play = MediaParseUtils.parseMedia(cid, false);
+                    play = MediaParseUtils.parseMedia(bvid, cid, false);
                 }
             });
 
@@ -312,7 +312,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                             Fuck.blue("saveSingleVideo----cid:" + cid + "--qualityIndex:" + qualityId + "--subTitle:" + subTitle);
 
                             //获取视频选集信息
-                            Play playWithDownload = MediaParseUtils.parseMedia(cid, false);
+                            Play playWithDownload = MediaParseUtils.parseMedia(viewPage.bvid, cid, false);
 
                             anthologySelectedIndex = position;
 
