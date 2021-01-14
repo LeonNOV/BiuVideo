@@ -275,9 +275,9 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
      *
      * @param fileName  资源文件名称
      */
-    public void setDelete(String fileName) {
+    public void setDelete(String fileName, boolean isDelete) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("isDelete", 1);
+        contentValues.put("isDelete", isDelete ? 1 : 0);
         sqLiteDatabase.update(videoDetail, contentValues, "fileName = ?", new String[]{fileName});
     }
 

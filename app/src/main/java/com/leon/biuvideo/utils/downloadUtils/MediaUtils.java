@@ -326,6 +326,9 @@ public class MediaUtils {
         SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.DownloadDetailsForVideo);
         DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
 
+        // 将已存在的条目的isDelete设置为0
+        downloadRecordsDatabaseUtils.setDelete(fileName, false);
+
         if (isComplete) {
             downloadRecordsDatabaseUtils.setComplete(fileName);
         } else {

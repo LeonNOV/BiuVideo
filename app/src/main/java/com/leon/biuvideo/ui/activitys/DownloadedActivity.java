@@ -53,7 +53,7 @@ public class DownloadedActivity extends AppCompatActivity {
 
             mediaFile = new File(path);
             if (!mediaFile.exists()) {
-                downloadRecordsDatabaseUtils.setDelete(detailMedia.fileName);
+                downloadRecordsDatabaseUtils.setDelete(detailMedia.fileName, true);
             }
         }
 
