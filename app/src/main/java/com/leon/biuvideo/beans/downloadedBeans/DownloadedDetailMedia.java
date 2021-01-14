@@ -21,6 +21,7 @@ public class DownloadedDetailMedia implements Serializable {
      * 格式：
      *      视频：subId + "-" + qualityId
      *      音频：mainId
+     *      番剧：subId + "-" + qualityId
      */
     public String resourceMark;
     public boolean isVideo;

@@ -2,6 +2,7 @@ package com.leon.biuvideo.adapters;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -9,8 +10,6 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.videoBean.play.Media;
-import com.leon.biuvideo.ui.dialogs.SingleVideoQualityDialog;
-import com.leon.biuvideo.ui.dialogs.WarnDialog;
 
 import java.util.List;
 import java.util.Map;
@@ -29,6 +28,16 @@ public class SingleVideoQualityAdapter extends BaseAdapter<Map.Entry<Integer, Me
         this.context = context;
     }
 
+    private OnSingleVideoQualityClickListener onSingleVideoQualityClickListener;
+
+    public interface OnSingleVideoQualityClickListener {
+        void onClickListener(Map.Entry<Integer, Media> mediaEntry);
+    }
+
+    public void setOnSingleVideoQualityClickListener(OnSingleVideoQualityClickListener onSingleVideoQualityClickListener) {
+        this.onSingleVideoQualityClickListener = onSingleVideoQualityClickListener;
+    }
+
     @Override
     public int getLayout(int viewType) {
         return R.layout.single_video_quality_dialog_item;
@@ -37,25 +46,21 @@ public class SingleVideoQualityAdapter extends BaseAdapter<Map.Entry<Integer, Me
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         Map.Entry<Integer, Media> mediaEntry = videoEntrys.get(position);
+        Media media = mediaEntry.getValue();
+
         holder
-                .setVisibility(R.id.single_video_quality_item_isDownloaded, mediaEntry.getValue().isDownloaded ? View.VISIBLE : View.INVISIBLE)
-                .setText(R.id.single_video_quality_item_quality, mediaEntry.getValue().quality)
+                .setVisibility(R.id.single_video_quality_item_isDownloaded, media.isDownloaded ? View.VISIBLE : View.INVISIBLE)
+                .setText(R.id.single_video_quality_item_quality, media.quality)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // 检查是否已下载过该媒体资源
-                        if (mediaEntry.getValue().isDownloaded) {
-                            WarnDialog warnDialog = new WarnDialog(context, "提示", "检测到本地已存在该视频，是否要覆盖本地资源文件？");
-                            warnDialog.setOnConfirmListener(new WarnDialog.OnConfirmListener() {
-                                @Override
-                                public void onConfirm() {
-                                    SingleVideoQualityDialog.onQualityItemListener.onItemClickListener(mediaEntry);
-                                    warnDialog.dismiss();
-                                }
-                            });
-                            warnDialog.show();
+                        if (media.isDownloaded) {
+                            Toast.makeText(context, "该资源已缓存过了", Toast.LENGTH_SHORT).show();
                         } else {
-                            SingleVideoQualityDialog.onQualityItemListener.onItemClickListener(mediaEntry);
+                            if (onSingleVideoQualityClickListener != null) {
+                                onSingleVideoQualityClickListener.onClickListener(mediaEntry);
+                            }
                         }
                     }
                 });

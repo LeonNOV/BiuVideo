@@ -20,18 +20,26 @@ import java.util.Map;
 /**
  * 显示缓存视频时选择的清晰度弹窗
  */
-public class SingleVideoQualityDialog extends AlertDialog implements View.OnClickListener {
+public class SingleVideoQualityDialog extends AlertDialog {
     private RecyclerView single_video_recyclerView_quality;
-    private Button single_video_quality_button_cancel;
 
     private final Context context;
-    private List<Map.Entry<Integer, Media>> videoEntries;
-    public static OnQualityItemListener onQualityItemListener;
+    private final List<Map.Entry<Integer, Media>> videoEntries;
 
     public SingleVideoQualityDialog(@NonNull Context context, List<Map.Entry<Integer, Media>> videoEntries) {
         super(context);
         this.context = context;
         this.videoEntries = videoEntries;
+    }
+
+    private OnQualityClickListener onQualityClickListener;
+
+    public interface OnQualityClickListener {
+        void onClickListener(Map.Entry<Integer, Media> mediaEntry);
+    }
+
+    public void setOnQualityClickListener(OnQualityClickListener onQualityClickListener) {
+        this.onQualityClickListener = onQualityClickListener;
     }
 
     @Override
@@ -49,34 +57,28 @@ public class SingleVideoQualityDialog extends AlertDialog implements View.OnClic
 
         single_video_recyclerView_quality = findViewById(R.id.single_video_recyclerView_quality);
 
-        single_video_quality_button_cancel = findViewById(R.id.single_video_quality_button_cancel);
-        single_video_quality_button_cancel.setOnClickListener(this);
+        Button single_video_quality_button_cancel = findViewById(R.id.single_video_quality_button_cancel);
+        single_video_quality_button_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
     }
 
     private void initValue() {
         SingleQualityLinearLayoutManager linearLayoutManager = new SingleQualityLinearLayoutManager(context);
         SingleVideoQualityAdapter videoQualityAdapter = new SingleVideoQualityAdapter(videoEntries, context);
+        videoQualityAdapter.setOnSingleVideoQualityClickListener(new SingleVideoQualityAdapter.OnSingleVideoQualityClickListener() {
+            @Override
+            public void onClickListener(Map.Entry<Integer, Media> mediaEntry) {
+                if (onQualityClickListener != null) {
+                    onQualityClickListener.onClickListener(mediaEntry);
+                }
+            }
+        });
 
         single_video_recyclerView_quality.setAdapter(videoQualityAdapter);
         single_video_recyclerView_quality.setLayoutManager(linearLayoutManager);
-    }
-
-    public interface OnQualityItemListener {
-        void onItemClickListener(Map.Entry<Integer, Media> videoEntry);
-    }
-
-    @Override
-    public void show() {
-        super.show();
-    }
-
-    @Override
-    public void dismiss() {
-        super.dismiss();
-    }
-
-    @Override
-    public void onClick(View v) {
-        dismiss();
     }
 }

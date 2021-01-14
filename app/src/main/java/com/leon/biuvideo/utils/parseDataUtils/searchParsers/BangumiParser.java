@@ -9,6 +9,11 @@ import com.leon.biuvideo.values.Paths;
 import com.leon.biuvideo.values.SearchType;
 import com.leon.biuvideo.values.SortType;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,6 +74,9 @@ public class BangumiParser {
                     bangumi.reviewNum = 0;
                 }
 
+                // 获取番剧更新信息
+                bangumi.bangumiState = getBangumiState(bangumi.mediaId);
+
                 JSONArray eps = jsonObject.getJSONArray("eps");
                 List<Ep> epList = new ArrayList<>();
                 for (Object epo : eps) {
@@ -78,13 +86,14 @@ public class BangumiParser {
                     ep.title = epObject.getString("title");
                     ep.longTitle = epObject.getString("long_title");
                     ep.url = epObject.getString("url");
+                    ep.cover = jsonObject.getString("cover");
 
                     JSONArray badges = epObject.getJSONArray("badges");
-                    if (badges.size() != 0) {
+                    if (badges.size() > 0) {
                         JSONObject badgeObject = (JSONObject) badges.get(0);
-                        ep.isVIP = badgeObject.getString("text").equals("会员");
-                    } else {
-                        ep.isVIP = false;
+                        String text = badgeObject.getString("text");
+                        ep.badge = text.equals("") ? null : text;
+                        ep.isVIP = ep.badge.equals("会员");
                     }
 
                     epList.add(ep);
@@ -99,6 +108,30 @@ public class BangumiParser {
         }
 
         return null;
+    }
+
+    /**
+     * 获取番剧状态
+     *
+     * @param mediaId   mid
+     * @return  返回番剧状态
+     */
+    private String getBangumiState(long mediaId) {
+        HttpUtils httpUtils = new HttpUtils(Paths.bangumiStateWhiteMid + mediaId, null);
+        String data = httpUtils.getData();
+
+        Document document = Jsoup.parse(data);
+
+        Elements elements = document.getElementsByClass("media-info-time");
+        Element first = elements.first();
+        Elements spans = first.getElementsByTag("span");
+
+        // 只获取第二个span中的内容
+        if (spans.size() > 1) {
+            return spans.get(1).text();
+        } else {
+            return "未知状态";
+        }
     }
 
     /**
@@ -122,5 +155,31 @@ public class BangumiParser {
         }
 
         return 0;
+    }
+
+    /**
+     * 获取番剧各选集cid
+     *
+     * @param seasonId  sid/seasonId
+     * @param eps   eps
+     * @return  返回eps
+     */
+    public List<Ep> getEpCids(long seasonId, List<Ep> eps) {
+        Map<String, String> params = new HashMap<>();
+        params.put("season_id", String.valueOf(seasonId));
+
+        JSONObject responseObject = HttpUtils.getResponse(Paths.bangumiEpCid, params);
+        JSONObject result = responseObject.getJSONObject("result");
+        JSONObject mainSection = result.getJSONObject("main_section");
+        JSONArray episodes = mainSection.getJSONArray("episodes");
+
+        for (int i = 0; i < episodes.size(); i++) {
+            JSONObject jsonObject = (JSONObject) episodes.get(i);
+
+            eps.get(i).aid = jsonObject.getLongValue("aid");
+            eps.get(i).cid = jsonObject.getLongValue("cid");
+        }
+
+        return eps;
     }
 }

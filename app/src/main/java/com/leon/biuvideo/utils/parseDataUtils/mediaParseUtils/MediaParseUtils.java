@@ -19,19 +19,12 @@ public class MediaParseUtils {
     /**
      * 解析playUrl接口
      *
-     * @param bvid  bvid
-     * @param aid   aid,可选
      * @param cid   cid
      * @return  返回选集视频信息
      */
-    public static Play parseMedia(String bvid, long aid, long cid) {
+    public static Play parseMedia(long cid, boolean isBangumi) {
         try {
-
             Map<String, String> params = new HashMap<>();
-            if (aid != 0) {
-                params.put("avid", String.valueOf(aid));
-            }
-            params.put("bvid", String.valueOf(bvid));
             params.put("cid", String.valueOf(cid));
             params.put("qn", "0");
             params.put("otype", "json");
@@ -39,8 +32,9 @@ public class MediaParseUtils {
             params.put("fnver", "0");
             params.put("fnval", "80");
 
-            JSONObject responseObject = HttpUtils.getResponse(Paths.playUrl, params);
-            JSONObject data = responseObject.getJSONObject("data");
+            JSONObject responseObject = HttpUtils.getResponse(isBangumi ? Paths.playUrlForBangumi : Paths.playUrl, params);
+
+            JSONObject data = responseObject.getJSONObject(isBangumi ? "result" : "data");
 
             if (data != null) {
                 Play play = new Play();

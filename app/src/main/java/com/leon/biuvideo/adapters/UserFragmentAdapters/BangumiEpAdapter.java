@@ -1,8 +1,6 @@
 package com.leon.biuvideo.adapters.UserFragmentAdapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
@@ -11,9 +9,7 @@ import androidx.annotation.NonNull;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseViewHolder;
-import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
 import com.leon.biuvideo.beans.searchBean.bangumi.Ep;
-import com.leon.biuvideo.ui.activitys.BangumiActivity;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.VerifyUtils;
 
@@ -23,12 +19,11 @@ import java.util.List;
  * 搜索结果界面-番剧选集适配器
  */
 public class BangumiEpAdapter extends BaseAdapter<Ep> {
-    private final List<Ep> eps;
     private final Context context;
+    private final List<Ep> eps;
 
-    public BangumiEpAdapter(List<Ep> eps, Context context) {
+    public BangumiEpAdapter(Context context, List<Ep> eps) {
         super(eps, context);
-
         this.eps = eps;
         this.context = context;
     }
@@ -36,7 +31,7 @@ public class BangumiEpAdapter extends BaseAdapter<Ep> {
     private OnEpClickListener onEpClickListener;
 
     public interface OnEpClickListener {
-        Bangumi onEpClick(int position);
+        void onEpClick(int position);
     }
 
     public void setOnEpClickListener(OnEpClickListener onEpClickListener) {
@@ -51,6 +46,12 @@ public class BangumiEpAdapter extends BaseAdapter<Ep> {
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         Ep ep = eps.get(position);
+
+        if (ep.badge != null) {
+            holder.setText(R.id.search_result_bangumi_ep_item_textView_badge, ep.badge);
+        } else {
+            holder.setVisibility(R.id.search_result_bangumi_ep_item_textView_badge, View.GONE);
+        }
 
         holder
                 .setText(R.id.search_result_bangumi_ep_item_textView_indexTitle, ep.title)
@@ -82,23 +83,8 @@ public class BangumiEpAdapter extends BaseAdapter<Ep> {
     }
 
     public void toBangumi (int position) {
-        Bangumi bangumi = null;
-
         if (onEpClickListener != null) {
-            bangumi = onEpClickListener.onEpClick(position);
-        }
-
-        if (bangumi != null) {
-            Intent intent = new Intent(context, BangumiActivity.class);
-
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("bangumi", bangumi);
-            bundle.putInt("selectAnthologyIndex", position);
-            intent.putExtras(bundle);
-
-            context.startActivity(intent);
-        } else {
-            Toast.makeText(context, "貌似出了点问题~~~", Toast.LENGTH_SHORT).show();
+            onEpClickListener.onEpClick(position);
         }
     }
 }

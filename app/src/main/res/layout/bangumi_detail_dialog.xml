@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/round_white_bg"
-    android:layout_height="match_parent">
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,15 +15,15 @@
             android:id="@+id/bangumi_detail_dialog_imageView_back"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_gravity="end"
             android:background="@drawable/ripple_image_view_pressed"
             android:padding="10dp"
-            android:layout_gravity="end"
-            android:src="@drawable/icon_close"/>
+            android:src="@drawable/icon_close" />
 
         <LinearLayout
-            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <androidx.cardview.widget.CardView
@@ -51,18 +51,18 @@
                     android:id="@+id/bangumi_detail_dialog_textView_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLines="2"
                     android:ellipsize="end"
-                    android:textStyle="bold"
+                    android:maxLines="2"
                     android:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:baselineAligned="false">
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -74,8 +74,8 @@
                             android:id="@+id/bangumi_detail_dialog_textView_area"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="日本"
                             android:layout_marginTop="10dp"
+                            android:text="日本"
                             android:textColor="@color/gray"
                             android:textSize="13sp" />
 
@@ -84,9 +84,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
+                            android:text="2020年7月5日开播"
                             android:textColor="@color/gray"
-                            android:textSize="13sp"
-                            android:text="2020年7月5日开播"/>
+                            android:textSize="13sp" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -98,25 +98,9 @@
                                 android:id="@+id/bangumi_detail_dialog_textView_bangumiState"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:text="-"
                                 android:textColor="@color/gray"
-                                android:textSize="13sp"
-                                android:text="已完结"/>
-
-                            <View
-                                android:layout_width="4dp"
-                                android:layout_height="4dp"
-                                android:layout_gravity="center"
-                                android:layout_marginStart="10dp"
-                                android:layout_marginEnd="10dp"
-                                android:background="@drawable/pointer"/>
-
-                            <TextView
-                                android:id="@+id/bangumi_detail_dialog_textView_epSize"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/gray"
-                                android:textSize="13sp"
-                                android:text="全12话"/>
+                                android:textSize="13sp" />
 
                         </LinearLayout>
 
@@ -125,8 +109,8 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_gravity="center_vertical"
+                        android:gravity="center"
                         android:orientation="vertical">
 
                         <LinearLayout
@@ -139,9 +123,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="9.1"
-                                android:textStyle="bold"
                                 android:textColor="@color/blue"
-                                android:textSize="25sp" />
+                                android:textSize="25sp"
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -154,23 +138,23 @@
 
                         <RatingBar
                             android:id="@+id/bangumi_detail_dialog_ratingBar"
+                            style="@style/Widget.AppCompat.RatingBar.Small"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            style="@style/Widget.AppCompat.RatingBar.Small"
+                            android:isIndicator="true"
                             android:numStars="5"
+                            android:progressTint="@color/blue"
                             android:rating="1.5"
                             android:secondaryProgressTint="@color/blue"
-                            android:isIndicator="true"
-                            android:stepSize="0.1"
-                            android:progressTint="@color/blue" />
+                            android:stepSize="0.1" />
 
                         <TextView
                             android:id="@+id/bangumi_detail_dialog_textView_reviews"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="5.2万人点评"
-                            android:textSize="10sp"
-                            android:textColor="@color/black" />
+                            android:textColor="@color/black"
+                            android:textSize="10sp" />
 
                     </LinearLayout>
 
@@ -191,48 +175,48 @@
                 android:layout_height="wrap_content"
                 android:text="@string/bangumi_originalName"
                 android:textColor="@color/black"
-                android:textSize="17sp"/>
+                android:textSize="17sp" />
 
             <TextView
                 android:id="@+id/bangumi_detail_dialog_textView_originalName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:text="-"
                 android:textColor="@color/gray"
-                android:textSize="17sp"
-                android:text="-"/>
+                android:textSize="17sp" />
 
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/bangumi_otherInfo"
                 android:textColor="@color/black"
-                android:textSize="17sp"
-                android:text="@string/bangumi_otherInfo"/>
+                android:textSize="17sp" />
 
             <TextView
                 android:id="@+id/bangumi_detail_dialog_textView_otherInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:text="-"
                 android:textColor="@color/gray"
-                android:textSize="17sp"
-                android:text="-"/>
+                android:textSize="17sp" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:orientation="vertical">
 
             <TextView
@@ -240,16 +224,16 @@
                 android:layout_height="wrap_content"
                 android:text="@string/bangumi_desc"
                 android:textColor="@color/black"
-                android:textSize="17sp"/>
+                android:textSize="17sp" />
 
             <TextView
                 android:id="@+id/bangumi_detail_dialog_textView_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/gray"
                 android:layout_marginTop="10dp"
-                android:textSize="17sp"
-                android:text="-"/>
+                android:text="-"
+                android:textColor="@color/gray"
+                android:textSize="17sp" />
 
         </LinearLayout>
 

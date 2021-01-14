@@ -9,8 +9,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@color/white"
-        android:layout_height="250dp">
+        android:layout_height="250dp"
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/bangumi_imageView_back"
@@ -51,8 +51,8 @@
                 android:paddingTop="5dp"
                 android:paddingEnd="10dp"
                 android:paddingBottom="5dp"
-                android:textColor="@color/black"
-                android:text="@string/bangumi_jump" />
+                android:text="@string/bangumi_jump"
+                android:textColor="@color/black" />
 
         </LinearLayout>
 
@@ -114,7 +114,7 @@
                             android:layout_gravity="center"
                             android:layout_marginStart="10dp"
                             android:layout_marginEnd="10dp"
-                            android:background="@drawable/pointer"/>
+                            android:background="@drawable/pointer" />
 
                         <TextView
                             android:id="@+id/bangumi_textView_epSize"
@@ -131,8 +131,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
+                        android:background="@drawable/ripple_rectangle_bilibbili_pink_light"
                         android:text="@string/bangumi_detail"
-                        android:background="@drawable/ripple_bilibili_pink_light"
                         android:textColor="@color/gray"
                         android:textSize="15sp" />
 
@@ -159,7 +159,7 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
-                        android:background="@drawable/pointer"/>
+                        android:background="@drawable/pointer" />
 
                     <TextView
                         android:id="@+id/bangumi_textView_play"
@@ -175,7 +175,7 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
-                        android:background="@drawable/pointer"/>
+                        android:background="@drawable/pointer" />
 
                     <TextView
                         android:id="@+id/bangumi_textView_follow"

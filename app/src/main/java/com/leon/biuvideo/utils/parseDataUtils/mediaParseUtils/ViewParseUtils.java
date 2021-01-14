@@ -103,9 +103,6 @@ public class ViewParseUtils {
             //选集cid
             anthologyInfo.cid = jsonObject.getLong("cid");
 
-            //选集索引
-            anthologyInfo.page = jsonObject.getIntValue("page");
-
             //选集标题
             anthologyInfo.part = jsonObject.getString("part");
 

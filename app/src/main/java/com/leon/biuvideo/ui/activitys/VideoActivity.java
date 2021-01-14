@@ -1,7 +1,5 @@
 package com.leon.biuvideo.ui.activitys;
 
-import android.app.Activity;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Looper;
 import android.view.*;
@@ -76,12 +74,9 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
             video_textView_share;
 
     private ViewPage viewPage;
-    public static Play play;
+    private Play play;
 
     private WebView webView;
-
-    //选择的画质dialog
-    private SingleVideoQualityDialog singleVideoQualityDialog;
 
     //当前webView中播放的选集索引，默认为0
     private int anthologySelectedIndex = 0;
@@ -166,7 +161,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         viewPage = ViewParseUtils.parseView(bvid);
 
         //获取视频选集信息
-        play = MediaParseUtils.parseMedia(viewPage.bvid, viewPage.aid, viewPage.anthologyInfoList.get(0).cid);
+        play = MediaParseUtils.parseMedia(viewPage.anthologyInfoList.get(0).cid, false);
 
         SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.VideoPlayList);
         videoListDatabaseUtils = (VideoListDatabaseUtils) sqLiteHelperFactory.getInstance();
@@ -208,7 +203,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                     anthologySelectedIndex = position;
 
                     //重置当前play变量
-                    play = MediaParseUtils.parseMedia(viewPage.bvid, viewPage.aid, cid);
+                    play = MediaParseUtils.parseMedia(cid, false);
                 }
             });
 
@@ -317,7 +312,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                             Fuck.blue("saveSingleVideo----cid:" + cid + "--qualityIndex:" + qualityId + "--subTitle:" + subTitle);
 
                             //获取视频选集信息
-                            Play playWithDownload = MediaParseUtils.parseMedia(viewPage.bvid, viewPage.aid, cid);
+                            Play playWithDownload = MediaParseUtils.parseMedia(cid, false);
 
                             anthologySelectedIndex = position;
 
@@ -359,13 +354,14 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                     }
 
                     //创建清晰度选择dialog
-                    singleVideoQualityDialog = new SingleVideoQualityDialog(VideoActivity.this, videoEntries);
-                    SingleVideoQualityDialog.onQualityItemListener = new SingleVideoQualityDialog.OnQualityItemListener() {
+                    SingleVideoQualityDialog singleVideoQualityDialog = new SingleVideoQualityDialog(VideoActivity.this, videoEntries);
+                    singleVideoQualityDialog.setOnQualityClickListener(new SingleVideoQualityDialog.OnQualityClickListener() {
                         @Override
-                        public void onItemClickListener(Map.Entry<Integer, Media> mediaEntry) {
+                        public void onClickListener(Map.Entry<Integer, Media> mediaEntry) {
+                            singleVideoQualityDialog.dismiss();
                             saveSingleVideo(mediaEntry);
                         }
-                    };
+                    });
 
                     //显示选择清晰度dialog
                     singleVideoQualityDialog.show();
@@ -420,18 +416,6 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void saveSingleVideo(Map.Entry<Integer, Media> mediaEntry) {
-        // 判断该清晰度是否需要大会员
-        if (mediaEntry.getKey() > 80) {
-            SharedPreferences sharedPreferences = getSharedPreferences("initValues", Activity.MODE_PRIVATE);
-            boolean isVIP = sharedPreferences.getBoolean("isVIP", false);
-
-            // 判断是否为大会员
-            if (!isVIP) {
-                Toast.makeText(VideoActivity.this, "不好依稀，该清晰度只有大会员才能下载~", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }
-
         //获取权限
         FileUtils.verifyPermissions(VideoActivity.this);
 
@@ -442,11 +426,6 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         String audioUrlBase = audioEntries.get(0).getValue().baseUrl;
 
         Toast.makeText(getApplicationContext(), "已加入缓存队列中", Toast.LENGTH_SHORT).show();
-
-        //隐藏dialog
-        if (singleVideoQualityDialog != null) {
-            singleVideoQualityDialog.dismiss();
-        }
 
         // 添加至downloadedRecordsForVideo
         addToDownloadedRecordsForVideo();

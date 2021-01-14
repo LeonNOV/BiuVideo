@@ -1,6 +1,9 @@
 package com.leon.biuvideo.beans.searchBean.bangumi;
 
+import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,8 +23,29 @@ public class Bangumi implements Serializable {
     public String otherInfo;    // 其他信息
     public String desc;     //简介
     public int epSize;  // 番剧选集数
+    public String bangumiState;
 
-    public List<Ep>  eps;   // 所有选集具体信息
+    public List<Ep> eps;   // 所有选集具体信息
+
+    /**
+     * 获取AnthologyInfo集合
+     *
+     * @return  AnthologyInfo集合
+     */
+    public List<AnthologyInfo> getAnthologyInfoList() {
+        List<AnthologyInfo> anthologyInfoList = new ArrayList<>();
+
+        for (Ep ep : eps) {
+            AnthologyInfo anthologyInfo = new AnthologyInfo();
+            anthologyInfo.cid = ep.cid;
+            anthologyInfo.part = ep.longTitle;
+            anthologyInfo.duration = 0;
+
+            anthologyInfoList.add(anthologyInfo);
+        }
+
+        return anthologyInfoList;
+    }
 
     public String angleTitle;
     public float score;

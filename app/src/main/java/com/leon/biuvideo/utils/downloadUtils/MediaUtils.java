@@ -304,7 +304,7 @@ public class MediaUtils {
         String[] urls;
         if (subId != 0) {
             urls = new String[2];
-            Play play = MediaParseUtils.parseMedia(mainId, 0, subId);
+            Play play = MediaParseUtils.parseMedia(subId, false);
             urls[0] = play.videos.get(qualityId).baseUrl;
             urls[1] = play.audios.get(0).baseUrl;
 

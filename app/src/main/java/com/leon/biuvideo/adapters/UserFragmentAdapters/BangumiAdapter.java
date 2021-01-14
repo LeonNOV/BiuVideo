@@ -13,7 +13,6 @@ import com.leon.biuvideo.adapters.BaseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
 import com.leon.biuvideo.ui.activitys.BangumiActivity;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.values.ImagePixelSize;
 
@@ -71,14 +70,20 @@ public class BangumiAdapter extends BaseAdapter<Bangumi> {
 
         RecyclerView recyclerView = holder.findById(R.id.search_result_bangumi_recyclerView_eps);
 
-        BangumiEpAdapter bangumiEpAdapter = new BangumiEpAdapter(bangumi.eps, context);
+        BangumiEpAdapter bangumiEpAdapter = new BangumiEpAdapter(context, bangumi.eps);
         bangumiEpAdapter.setOnEpClickListener(new BangumiEpAdapter.OnEpClickListener() {
             @Override
-            public Bangumi onEpClick(int position) {
-                return bangumiList.get(position);
+            public void onEpClick(int position) {
+                Intent intent = new Intent(context, BangumiActivity.class);
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("bangumi", bangumi);
+                bundle.putInt("selectAnthologyIndex", position);
+                intent.putExtras(bundle);
+
+                context.startActivity(intent);
             }
         });
         recyclerView.setAdapter(bangumiEpAdapter);
-
     }
 }

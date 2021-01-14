@@ -15,12 +15,20 @@ public class Paths {
     /**
      * 获取选集信息，返回视频和音频原链接<br/>
      *      参数：
-     *          aid：aid，必须
+     *          aid：aid，可选
      *          cid：cid，必须
-     *          bvid：视频id，必须
+     *          bvid：视频id，可选
      *          其他参数默认即可
      */
     public static String playUrl = "https://api.bilibili.com/x/player/playurl";
+
+    /**
+     * 获取番剧选集信息，返回番剧视频和音频原链接<br/>
+     *      参数：
+     *          cid：cid，必须
+     *          其他参数默认即可
+     */
+    public static String playUrlForBangumi = "https://api.bilibili.com/pgc/player/web/playurl";
 
     /**
      * 视频播放请求地址<br/>
@@ -195,6 +203,22 @@ public class Paths {
      *
      */
     public static String bangumiState = "https://api.bilibili.com/pgc/web/season/stat";
+
+    /**
+     * 获取番剧状态信息
+     * 参数
+     *      后跟番剧MID(MediaId)
+     */
+    public static String bangumiStateWhiteMid = "https://www.bilibili.com/bangumi/media/md";
+
+    /**
+     * 获取番剧各选集cid
+     *
+     * 参数
+     *      season_id：seasonId/sid，必须
+     *
+     */
+    public static String bangumiEpCid = "https://api.bilibili.com/pgc/web/season/section";
 
     //========================以下接口数据的获取需要在请求头中添加Cookie========================
 
