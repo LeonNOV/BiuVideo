@@ -35,10 +35,11 @@ public class Bangumi implements Serializable {
     public List<AnthologyInfo> getAnthologyInfoList() {
         List<AnthologyInfo> anthologyInfoList = new ArrayList<>();
 
-        for (Ep ep : eps) {
+        for (int i = 0; i < eps.size(); i++) {
+            Ep ep = eps.get(i);
             AnthologyInfo anthologyInfo = new AnthologyInfo();
             anthologyInfo.cid = ep.cid;
-            anthologyInfo.part = ep.longTitle;
+            anthologyInfo.part = (ep.title == null || ep.title.equals("") ? i : ep.title) + "-" + ep.longTitle;
             anthologyInfo.duration = 0;
 
             anthologyInfoList.add(anthologyInfo);

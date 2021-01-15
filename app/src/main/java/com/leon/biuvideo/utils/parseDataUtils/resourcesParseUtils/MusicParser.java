@@ -14,14 +14,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MusicParseUtils {
+public class MusicParser {
     /**
      * musicInfo接口数据的解析
      *
      * @param sid   musicID
      * @return  返回MusicInfo对象
      */
-    public static MusicInfo parseMusic(long sid) {
+    public MusicInfo parseMusic(long sid) {
         Map<String, String> params = new HashMap<>();
         params.put("sid", String.valueOf(sid));
 

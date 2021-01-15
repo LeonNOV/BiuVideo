@@ -1,9 +1,12 @@
 package com.leon.biuvideo.utils.parseDataUtils.userParseUtils;
 
+import android.content.Context;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.userBeans.Order;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.OrderFollowType;
 import com.leon.biuvideo.values.OrderType;
 import com.leon.biuvideo.values.Paths;
@@ -16,17 +19,22 @@ import java.util.Map;
 import okhttp3.Headers;
 
 public class OrderParser {
+    private final Map<String, String> requestHeader;
+
+    public OrderParser(Context context) {
+        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
+    }
+
     /**
      * 获取指定订阅类型、订阅状态的数据
      *
      * @param mid   用户ID
-     * @param cookie    用户Cookie，可为null
      * @param orderType  订阅类型， 1：番剧、2：其他剧，不包括标签（纪录片、电视剧等）
      * @param orderFollowType     订阅状态
      * @param pageNum   页码
      * @return  返回Bangumi集合
      */
-    public List<Order> parseOrder(long mid, String cookie, OrderType orderType, OrderFollowType orderFollowType, int pageNum) {
+    public List<Order> parseOrder(long mid, OrderType orderType, OrderFollowType orderFollowType, int pageNum) {
         Map<String, String> params = new HashMap<>();
         params.put("vmid", String.valueOf(mid));
         params.put("pn", String.valueOf(pageNum));
@@ -34,13 +42,7 @@ public class OrderParser {
         params.put("type", String.valueOf(orderType.value));
         params.put("follow_status", String.valueOf(orderFollowType.value));
 
-        JSONObject responseObject;
-        if (cookie != null) {
-            responseObject = HttpUtils.getResponse(Paths.bangumi, Headers.of("Cookie", cookie), params);
-        } else {
-            responseObject = HttpUtils.getResponse(Paths.bangumi, params);
-        }
-
+        JSONObject responseObject = HttpUtils.getResponse(Paths.bangumi, Headers.of(requestHeader), params);
         JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {
@@ -125,12 +127,11 @@ public class OrderParser {
      * 获取指定订阅类型、订阅状态的条目总数
      *
      * @param mid  用户ID
-     * @param cookie    用户Cookie
      * @param orderType  订阅类型
      * @param orderFollowType     订阅状态
      * @return  返回条目总数
      */
-    public int getOrderCount(long mid, String cookie, OrderType orderType, OrderFollowType orderFollowType) {
+    public int getOrderCount(long mid, OrderType orderType, OrderFollowType orderFollowType) {
         Map<String, String> params = new HashMap<>();
         params.put("vmid", String.valueOf(mid));
         params.put("pn", "1");
@@ -139,11 +140,7 @@ public class OrderParser {
         params.put("follow_status", String.valueOf(orderFollowType.value));
 
         JSONObject responseObject;
-        if (cookie != null) {
-            responseObject = HttpUtils.getResponse(Paths.bangumi, Headers.of("Cookie", cookie), params);
-        } else {
-            responseObject = HttpUtils.getResponse(Paths.bangumi, params);
-        }
+        responseObject = HttpUtils.getResponse(Paths.bangumi, Headers.of(requestHeader), params);
 
         return responseObject.getJSONObject("data").getIntValue("total");
     }

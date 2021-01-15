@@ -1,9 +1,12 @@
 package com.leon.biuvideo.utils.parseDataUtils.articleParseUtils;
 
+import android.content.Context;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.Paths;
 
 import java.util.ArrayList;
@@ -14,19 +17,24 @@ import java.util.Map;
 import okhttp3.Headers;
 
 public class UserArticleParser {
+    private final Map<String, String> requestHeader;
+
+    public UserArticleParser(Context context) {
+        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
+    }
+
     /**
      * 使用Cookie获取用户收藏的所有专栏
      *
-     * @param cookie        用户Cookie
      * @param pageNum       页码
      * @return      返回Article集合
      */
-    public List<Article> parseArticle (String cookie, int pageNum) {
+    public List<Article> parseArticle (int pageNum) {
         Map<String, String> params = new HashMap<>();
         params.put("pn", String.valueOf(pageNum));
         params.put("ps", "16");
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.userArticle, Headers.of("Cookie", cookie), params);
+        JSONObject responseObject = HttpUtils.getResponse(Paths.userArticle, Headers.of(requestHeader), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {
@@ -71,15 +79,14 @@ public class UserArticleParser {
     /**
      * 获取用户专栏收藏总数
      *
-     * @param cookie        用户Cookie
      * @return      返回收藏的专栏总数
      */
-    public int getTotal(String cookie) {
+    public int getTotal() {
         Map<String, String> params = new HashMap<>();
         params.put("pn", "1");
         params.put("ps", "16");
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.userArticle, Headers.of("Cookie", cookie), params);
+        JSONObject responseObject = HttpUtils.getResponse(Paths.userArticle, Headers.of(requestHeader), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {

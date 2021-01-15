@@ -46,7 +46,6 @@ import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserInfoParser;
 import com.leon.biuvideo.values.Tables;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -192,7 +191,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             Toast.makeText(this, "未获取到Cookie", Toast.LENGTH_SHORT).show();
         } else {
-            userInfo = UserInfoParser.userInfoParse(cookie);
+            UserInfoParser userInfoParser = new UserInfoParser(getApplicationContext());
+            userInfo = userInfoParser.userInfoParse();
             isLogin = true;
             sharedPreferences.edit().putBoolean("isVIP", userInfo.isVip).apply();
             refreshUserInfo();

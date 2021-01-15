@@ -1,25 +1,34 @@
 package com.leon.biuvideo.utils.parseDataUtils.userParseUtils;
 
+import android.content.Context;
+
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.userBeans.UserInfo;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.Paths;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 
 import okhttp3.Headers;
 
 public class UserInfoParser {
+    private final Map<String, String> requestHeader;
+
+    public UserInfoParser(Context context) {
+        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
+    }
+
     /**
      * 通过Cookie获取用户基本信息
      *
-     * @param cookie    cookie
      * @return  返回UserInfo对象
      */
-    public static UserInfo userInfoParse(String cookie) {
-        JSONObject responseObject = HttpUtils.getResponse(Paths.nav, Headers.of("Cookie", cookie), null);
+    public UserInfo userInfoParse() {
+        JSONObject responseObject = HttpUtils.getResponse(Paths.nav, Headers.of(requestHeader), null);
         JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {

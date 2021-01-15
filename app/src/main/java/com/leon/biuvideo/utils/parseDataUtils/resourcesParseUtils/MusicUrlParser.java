@@ -1,11 +1,13 @@
 package com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.Paths;
 
 import java.util.ArrayList;
@@ -13,7 +15,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MusicUrlParseUtils {
+import okhttp3.Headers;
+
+public class MusicUrlParser {
+    private final Map<String, String> requestHeader;
+
+    public MusicUrlParser(Context context) {
+        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
+    }
 
     /**
      * 获取音频播放地址
@@ -21,11 +30,11 @@ public class MusicUrlParseUtils {
      * @param sid   音频ID
      * @return  返回第一个music链接
      */
-    public static String parseMusicUrl(String sid) {
+    public String parseMusicUrl(String sid) {
         Map<String, String> params = new HashMap<>();
         params.put("sid", sid);
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.musicUrl, params);
+        JSONObject responseObject = HttpUtils.getResponse(Paths.musicUrl, Headers.of(requestHeader), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {

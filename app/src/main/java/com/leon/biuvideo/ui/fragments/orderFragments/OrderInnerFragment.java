@@ -73,7 +73,7 @@ public class OrderInnerFragment extends BaseFragment {
 
     @Override
     public void initValues() {
-        orderParser = new OrderParser();
+        orderParser = new OrderParser(context);
 
         switch (orderType) {
             case VIDEO:
@@ -86,7 +86,7 @@ public class OrderInnerFragment extends BaseFragment {
                 break;
         }
 
-        total = orderParser.getOrderCount(mid, cookie, orderType, orderFollowType);
+        total = orderParser.getOrderCount(mid, orderType, orderFollowType);
 
         if (total <= 0) {
             //设置无数据提示界面
@@ -98,7 +98,7 @@ public class OrderInnerFragment extends BaseFragment {
             recyclerView.setVisibility(View.VISIBLE);
             smartRefresh.setEnabled(true);
 
-            orders = orderParser.parseOrder(mid, cookie, orderType, orderFollowType, pageNum);
+            orders = orderParser.parseOrder(mid, orderType, orderFollowType, pageNum);
             currentCount += orders.size();
             pageNum++;
 
@@ -175,7 +175,7 @@ public class OrderInnerFragment extends BaseFragment {
      * 获取下一页订阅数据
      */
     private void getOrder() {
-        this.orders = orderParser.parseOrder(mid, cookie, orderType, orderFollowType, pageNum);
+        this.orders = orderParser.parseOrder(mid, orderType, orderFollowType, pageNum);
 
         currentCount += this.orders.size();
 

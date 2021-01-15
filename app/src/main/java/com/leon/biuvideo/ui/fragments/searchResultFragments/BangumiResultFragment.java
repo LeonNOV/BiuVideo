@@ -67,7 +67,7 @@ public class BangumiResultFragment extends BaseFragment {
 
     @Override
     public void initValues() {
-        bangumiParser = new BangumiParser();
+        bangumiParser = new BangumiParser(context);
         count = bangumiParser.getSearchBangumiCount(keyword);
 
         if (count == 0) {
@@ -176,9 +176,10 @@ public class BangumiResultFragment extends BaseFragment {
 
         initValues();
 
-        ArrayList<Bangumi> temp = new ArrayList<>(bangumiList);
-
-        bangumiAdapter.removeAll();
-        bangumiAdapter.append(temp);
+        if (bangumiList != null) {
+            ArrayList<Bangumi> temp = new ArrayList<>(bangumiList);
+            bangumiAdapter.removeAll();
+            bangumiAdapter.append(temp);
+        }
     }
 }

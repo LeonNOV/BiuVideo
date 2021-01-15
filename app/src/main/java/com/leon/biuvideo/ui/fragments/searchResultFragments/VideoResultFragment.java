@@ -102,11 +102,13 @@ public class VideoResultFragment extends Fragment {
      * 初始化控件Visibility
      */
     private void initVisibility() {
+        videoParser = new VideoParser(context);
+
         //获取总条目数，最大为1000，最小为0
-        count = VideoParser.getSearchVideoCount(keyword);
+        count = videoParser.getSearchVideoCount(keyword);
 
         //判断结果是否与搜索关键词匹配
-        if (VideoParser.dataState(keyword) || count == 0) {
+        if (videoParser.dataState(keyword) || count == 0) {
             //设置无数据提示界面
             search_result_no_data.setVisibility(View.VISIBLE);
             search_result_recyclerView.setVisibility(View.GONE);
@@ -115,10 +117,6 @@ public class VideoResultFragment extends Fragment {
             search_result_no_data.setVisibility(View.GONE);
             search_result_recyclerView.setVisibility(View.VISIBLE);
             search_result_smartRefresh.setEnabled(true);
-
-            if (videoParser == null) {
-                videoParser = new VideoParser();
-            }
 
             //获取第一页数据
             videos = videoParser.videoParse(keyword, pageNum, SortType.DEFAULT);

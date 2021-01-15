@@ -65,12 +65,12 @@ public class VideoListFragment extends BaseFragment {
 
     @Override
     public void initValues() {
-        userFolderParser = new UserFolderParser();
-        List<UserFolder> userFolders = userFolderParser.parseUserFolder(mid, cookie);
+        userFolderParser = new UserFolderParser(context);
+        List<UserFolder> userFolders = userFolderParser.parseUserFolder(mid);
 
         //获取第一个收藏夹ID
         nowFolderId = userFolders.get(0).id;
-        userFolderData = userFolderParser.parseUserFolderData(cookie, nowFolderId, pageNum);
+        userFolderData = userFolderParser.parseUserFolderData(nowFolderId, pageNum);
 
         // 设置收藏夹参数
         setFolderInfo(userFolderData);
@@ -84,7 +84,7 @@ public class VideoListFragment extends BaseFragment {
                 nowFolderId = folderId;
                 fragment_favorite_smartRefresh.setEnabled(true);
 
-                UserFolderData innerUserFolderData = userFolderParser.parseUserFolderData(cookie, nowFolderId, pageNum);
+                UserFolderData innerUserFolderData = userFolderParser.parseUserFolderData(nowFolderId, pageNum);
                 userFavoriteFolderDetailAdapter.reset(innerUserFolderData.medias);
                 setFolderInfo(innerUserFolderData);
             }
@@ -162,7 +162,7 @@ public class VideoListFragment extends BaseFragment {
      */
     private void getFavoriteVideo() {
         pageNum++;
-        userFolderData = userFolderParser.parseUserFolderData(cookie, nowFolderId, pageNum);
+        userFolderData = userFolderParser.parseUserFolderData(nowFolderId, pageNum);
 
         if (userFolderData.medias.size() < 20) {
             dataState = false;

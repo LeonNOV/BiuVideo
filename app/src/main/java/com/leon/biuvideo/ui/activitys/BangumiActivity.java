@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.leon.biuvideo.R;
@@ -32,7 +33,7 @@ import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
-import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParser;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BangumiParser;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BangumiStateParse;
 import com.leon.biuvideo.values.Tables;
@@ -45,6 +46,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
     private Bangumi bangumi;
     private BangumiState bangumiState;
     private int selectAnthologyIndex;
+    private TextView bangumi_textView_selectedBangumiName;
 
     private boolean isSingleAnthology  = false;
 
@@ -53,6 +55,10 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
 
     private SimpleThreadPool simpleThreadPool;
     private DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils;
+    private MediaParser mediaParser;
+    private Ep ep;
+    private String selectedAnthologyName;
+    private static final String PROMPT = "当前已选择的选集为：";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,10 +83,10 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
         selectAnthologyIndex = extras.getInt("selectAnthologyIndex", 0);
 
         // 获取番剧选集cid及其各选集cover
-        BangumiParser bangumiParser = new BangumiParser();
+        BangumiParser bangumiParser = new BangumiParser(getApplicationContext());
         bangumi.eps = bangumiParser.getEpCids(bangumi.seasonId, bangumi.eps);
 
-        BangumiStateParse bangumiStateParse = new BangumiStateParse();
+        BangumiStateParse bangumiStateParse = new BangumiStateParse(getApplicationContext());
         bangumiState = bangumiStateParse.bangumiStateParse(bangumi.seasonId);
     }
 
@@ -100,6 +106,8 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                 .setOnClickListener(R.id.bangumi_imageView_download, this)
                 .setOnClickListener(R.id.bangumi_imageView_favorite, this)
                 .setOnClickListener(R.id.bangumi_textView_jumpToOriginal, this);
+        bangumi_textView_selectedBangumiName = findViewById(R.id.bangumi_textView_selectedBangumiName);
+        setSelectedAnthologyName();
 
         CardView cardView = findViewById(R.id.video_anthology_cardView);
         if (isSingleAnthology) {
@@ -114,12 +122,22 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                         Toast.makeText(BangumiActivity.this, "选择的视频已经在播放了~~", Toast.LENGTH_SHORT).show();
                     } else {
                         selectAnthologyIndex = position;
+                        setSelectedAnthologyName();
                     }
                 }
             });
             recyclerView.setAdapter(bangumiEpAdapter);
         }
 
+    }
+
+    /**
+     * 设置已选择选集提示的文本信息
+     */
+    private void setSelectedAnthologyName() {
+        ep = bangumi.eps.get(selectAnthologyIndex);
+        selectedAnthologyName = PROMPT + ep.title + "-" + ep.longTitle;
+        bangumi_textView_selectedBangumiName.setText(selectedAnthologyName);
     }
 
     @Override
@@ -155,10 +173,15 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                     downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
                 }
 
+                if (mediaParser == null) {
+                    mediaParser = new MediaParser(getApplicationContext());
+                }
+
                 // 如果番剧选集个数为1，则直接显示SingleVideoQualityDialog
                 if (isSingleAnthology) {
                     if (videoEntries == null) {
-                        Play play = MediaParseUtils.parseMedia(null, bangumi.eps.get(selectAnthologyIndex).cid, true);
+
+                        Play play = mediaParser.parseMedia(null, bangumi.eps.get(selectAnthologyIndex).cid, true);
 
                         videoEntries = play.videoEntries();
                         for (Map.Entry<Integer, Media> entry : videoEntries) {
@@ -186,7 +209,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                             Fuck.blue("saveSingleVideo----cid:" + cid + "--qualityIndex:" + qualityId + "--subTitle:" + subTitle);
 
                             //获取视频选集信息
-                            Play playWithDownload = MediaParseUtils.parseMedia(null, cid, true);
+                            Play playWithDownload = mediaParser.parseMedia(null, cid, true);
 
                             videoEntries = playWithDownload.videoEntries();
                             for (Map.Entry<Integer, Media> entry : videoEntries) {

@@ -7,6 +7,8 @@
 
 ### 2021/01/15
 - 修复了`e7d4aa8c`中的第三个问题
+- 修改了获取接口数据的流程，大部分的接口数据都需要通过`Cookie`获取，所有获取接口数据的`Parser类`都需要通过构造方法来创建
+  - `Cookie`的获取统一通过`ParserUtils-getInterfaceRequestHeader (Context context)`来获取
 
 ### 2021/01/14
 - 修复了一个很SD的BUG

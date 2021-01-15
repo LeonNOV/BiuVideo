@@ -1,9 +1,12 @@
 package com.leon.biuvideo.utils.parseDataUtils.articleParseUtils;
 
+import android.content.Context;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.Paths;
 
 import java.util.ArrayList;
@@ -14,20 +17,36 @@ import java.util.Map;
 import okhttp3.Headers;
 
 public class ArticleParser {
+    private final Map<String, String> requestHeader;
+    private long mid;
+
+    public ArticleParser(Context context) {
+        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
+    }
+
+    /**
+     * construct
+     *
+     * @param context   context
+     * @param mid   用户id
+     */
+    public ArticleParser(Context context, long mid) {
+        this.mid = mid;
+        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
+    }
 
     /**
      * 解析article接口
-     * @param mid   用户id
      * @param pn    页码
      * @return  返回Article集合
      */
-    public List<Article> parseArticle (long mid, int pn) {
+    public List<Article> parseArticle (int pn) {
         Map<String, String> params = new HashMap<>();
-        params.put("mid", String.valueOf(mid));
+        params.put("mid", String.valueOf(this.mid));
         params.put("pn", String.valueOf(pn));
         params.put("ps", "12");
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.article, params);
+        JSONObject responseObject = HttpUtils.getResponse(Paths.article, Headers.of(requestHeader), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {
@@ -124,20 +143,13 @@ public class ArticleParser {
      * 获取单个专栏信息
      *
      * @param articleId     专栏ID
-     * @param cookie    cookie
      * @return      返回Article
      */
-    public static Article getArticle(long articleId, String cookie) {
+    public Article getArticle(long articleId) {
         Map<String, String> params = new HashMap<>();
         params.put("id", String.valueOf(articleId));
 
-        JSONObject responseObject;
-        if (cookie != null) {
-            responseObject = HttpUtils.getResponse(Paths.articleInfo, Headers.of("Cookie", cookie), params);
-        } else {
-            responseObject = HttpUtils.getResponse(Paths.articleInfo, params);
-        }
-
+        JSONObject responseObject = HttpUtils.getResponse(Paths.articleInfo, Headers.of(requestHeader), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {
@@ -161,12 +173,11 @@ public class ArticleParser {
     /**
      * 获取总条目数
      *
-     * @param mid   用户ID
      * @return  返回文章总条目数
      */
-    public int getArticleTotal(long mid) {
+    public int getArticleTotal() {
         Map<String, String> params = new HashMap<>();
-        params.put("mid", String.valueOf(mid));
+        params.put("mid", String.valueOf(this.mid));
         params.put("pn", "1");
 
         JSONObject responseObject = HttpUtils.getResponse(Paths.article, params);

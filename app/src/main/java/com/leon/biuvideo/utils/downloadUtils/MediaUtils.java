@@ -19,8 +19,8 @@ import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
-import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParseUtils;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicUrlParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParser;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicUrlParser;
 import com.leon.biuvideo.values.Tables;
 
 import java.io.BufferedInputStream;
@@ -42,6 +42,7 @@ public class MediaUtils {
     private final int tag;
 
     private GeneralNotification generalNotification;
+    private MusicUrlParser musicUrlParser;
 
     public MediaUtils(Context context) {
         this.context = context;
@@ -304,13 +305,21 @@ public class MediaUtils {
         String[] urls;
         if (subId != 0) {
             urls = new String[2];
-            Play play = MediaParseUtils.parseMedia(mainId, subId, false);
+
+            MediaParser mediaParser = new MediaParser(context);
+            Play play = mediaParser.parseMedia(mainId, subId, false);
+
             urls[0] = play.videos.get(qualityId).baseUrl;
             urls[1] = play.audios.get(0).baseUrl;
 
         } else {
             urls = new String[1];
-            urls[0] = MusicUrlParseUtils.parseMusicUrl(mainId);;
+
+            if (musicUrlParser == null) {
+                musicUrlParser = new MusicUrlParser(context);
+            }
+
+            urls[0] = musicUrlParser.parseMusicUrl(mainId);;
         }
 
         return urls;

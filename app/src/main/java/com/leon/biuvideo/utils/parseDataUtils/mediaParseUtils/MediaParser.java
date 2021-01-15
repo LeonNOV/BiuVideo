@@ -1,10 +1,13 @@
 package com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils;
 
+import android.content.Context;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.videoBean.play.Media;
 import com.leon.biuvideo.beans.videoBean.play.Play;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.Paths;
 import com.leon.biuvideo.values.Qualitys;
 
@@ -14,7 +17,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MediaParseUtils {
+import okhttp3.Headers;
+
+public class MediaParser {
+    private final Map<String, String> requestHeader;
+
+    public MediaParser(Context context) {
+        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
+    }
 
     /**
      * 解析playUrl接口
@@ -22,7 +32,7 @@ public class MediaParseUtils {
      * @param cid   cid
      * @return  返回选集视频信息
      */
-    public static Play parseMedia(String bvid, long cid, boolean isBangumi) {
+    public Play parseMedia(String bvid, long cid, boolean isBangumi) {
         try {
             Map<String, String> params = new HashMap<>();
             params.put("bvid", String.valueOf(bvid));
@@ -33,7 +43,7 @@ public class MediaParseUtils {
             params.put("fnver", "0");
             params.put("fnval", "80");
 
-            JSONObject responseObject = HttpUtils.getResponse(isBangumi ? Paths.playUrlForBangumi : Paths.playUrl, params);
+            JSONObject responseObject = HttpUtils.getResponse(isBangumi ? Paths.playUrlForBangumi : Paths.playUrl, Headers.of(requestHeader), params);
 
             JSONObject data = responseObject.getJSONObject(isBangumi ? "result" : "data");
 
@@ -65,7 +75,7 @@ public class MediaParseUtils {
      * @param videoJsonArray json数组
      * @return  返回解析结果
      */
-    private static Map<Integer, Media> parseJSONArray(JSONArray videoJsonArray) {
+    private Map<Integer, Media> parseJSONArray(JSONArray videoJsonArray) {
         Map<Integer, Media> mediaMap = new LinkedHashMap<>();
 
         for (Object o : videoJsonArray) {

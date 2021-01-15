@@ -28,7 +28,6 @@ import java.util.UUID;
  * 保存图片等资源
  */
 public class ResourceUtils {
-    private static boolean isHaveNetwork;
 
     /**
      * 保存图片资源至系统相册
@@ -39,7 +38,7 @@ public class ResourceUtils {
      */
     public static boolean savePicture(Context context, String picUrl) {
         //判断是否有网络
-        isHaveNetwork = InternetUtils.checkNetwork(context);
+        boolean isHaveNetwork = InternetUtils.checkNetwork(context);
 
         if (!isHaveNetwork) {
             return false;

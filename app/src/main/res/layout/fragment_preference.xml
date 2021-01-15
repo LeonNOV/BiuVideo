@@ -202,20 +202,6 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/preference_textView_about_biu_video"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?selectableItemBackground"
-                        android:padding="10dp"
-                        android:text="@string/preference_about_biu_video"
-                        android:textColor="@color/preference_item" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.43dp"
-                        android:background="#CF879B" />
-
-                    <TextView
                         android:id="@+id/preference_textView_open_source_license"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -1,5 +1,6 @@
 package com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSONArray;
@@ -10,6 +11,7 @@ import com.leon.biuvideo.beans.videoBean.view.VideoInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.Paths;
 
 import java.util.ArrayList;
@@ -17,10 +19,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.Headers;
+
 /**
  * view接口解析工具
  */
-public class ViewParseUtils {
+public class ViewParser {
+    private final Map<String, String> requestHeader;
+
+    public ViewParser(Context context) {
+        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
+    }
 
     /**
      * 解析view接口响应的数据
@@ -28,12 +37,12 @@ public class ViewParseUtils {
      * @param bvid  视频bvid
      * @return  返回viewPage对象
      */
-    public static ViewPage parseView(String bvid) {
+    public ViewPage parseView(String bvid) {
         try {
             Map<String, String> params = new HashMap<>();
             params.put("bvid", bvid);
 
-            JSONObject responseObject = HttpUtils.getResponse(Paths.view, params);
+            JSONObject responseObject = HttpUtils.getResponse(Paths.view, Headers.of(requestHeader), params);
             JSONObject dataObject = responseObject.getJSONObject("data");
 
             if (dataObject != null) {
@@ -91,7 +100,7 @@ public class ViewParseUtils {
      * @param pages json数组
      * @return  返回所有选集视频信息
      */
-    private static List<AnthologyInfo> parseSingleVideoInfo(JSONArray pages) {
+    private List<AnthologyInfo> parseSingleVideoInfo(JSONArray pages) {
         List<AnthologyInfo> anthologyInfoList = new ArrayList<>();
 
         for (Object object : pages) {
@@ -121,7 +130,7 @@ public class ViewParseUtils {
      * @param stat  json对象
      * @return  返回视频信息
      */
-    private static VideoInfo parseVideoInfo(JSONObject stat) {
+    private VideoInfo parseVideoInfo(JSONObject stat) {
 
         VideoInfo videoInfo = new VideoInfo();
 
@@ -155,7 +164,7 @@ public class ViewParseUtils {
      * @param owner json对象
      * @return  返回up主信息
      */
-    private static UserInfo parseUpInfo(JSONObject owner) {
+    private UserInfo parseUpInfo(JSONObject owner) {
         UserInfo userInfo = new UserInfo();
 
         //up主mid（b站ID）

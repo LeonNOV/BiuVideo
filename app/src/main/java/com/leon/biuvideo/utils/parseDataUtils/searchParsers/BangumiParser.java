@@ -1,10 +1,13 @@
 package com.leon.biuvideo.utils.parseDataUtils.searchParsers;
 
+import android.content.Context;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
 import com.leon.biuvideo.beans.searchBean.bangumi.Ep;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.Paths;
 import com.leon.biuvideo.values.SearchType;
 import com.leon.biuvideo.values.SortType;
@@ -25,6 +28,18 @@ import okhttp3.Headers;
  * 解析搜索结果-番剧
  */
 public class BangumiParser {
+    private final Map<String, String> requestHeader;
+
+    public BangumiParser(Context context) {
+        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
+        for (Map.Entry<String, String> entry : this.requestHeader.entrySet()) {
+            if (entry.getKey().equals("Referer")) {
+                entry.setValue("https://search.bilibili.com");
+                break;
+            }
+        }
+    }
+
     /**
      * 获取番剧
      *
@@ -40,7 +55,7 @@ public class BangumiParser {
         params.put("page", String.valueOf(pn));
         params.put("order", sortType.value);
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
+        JSONObject responseObject = HttpUtils.getResponse(Paths.search, Headers.of(requestHeader), params);
         JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {
@@ -147,7 +162,7 @@ public class BangumiParser {
         params.put("page", "1");
         params.put("order", SortType.DEFAULT.value);
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
+        JSONObject responseObject = HttpUtils.getResponse(Paths.search, Headers.of(requestHeader), params);
         JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {
@@ -168,7 +183,7 @@ public class BangumiParser {
         Map<String, String> params = new HashMap<>();
         params.put("season_id", String.valueOf(seasonId));
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.bangumiEpCid, params);
+        JSONObject responseObject = HttpUtils.getResponse(Paths.bangumiEpCid, Headers.of(requestHeader), params);
         JSONObject result = responseObject.getJSONObject("result");
         JSONObject mainSection = result.getJSONObject("main_section");
         JSONArray episodes = mainSection.getJSONArray("episodes");

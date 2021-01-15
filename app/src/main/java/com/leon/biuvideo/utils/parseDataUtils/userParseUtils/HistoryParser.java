@@ -1,10 +1,13 @@
 package com.leon.biuvideo.utils.parseDataUtils.userParseUtils;
 
+import android.content.Context;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.userBeans.History;
 import com.leon.biuvideo.beans.userBeans.HistoryType;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.Paths;
 
 import java.util.ArrayList;
@@ -15,6 +18,11 @@ import java.util.Map;
 import okhttp3.Headers;
 
 public class HistoryParser {
+    private final Map<String, String> requestHeader;
+
+    public HistoryParser(Context context) {
+        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
+    }
 
     /**
      * 获取历史记录
@@ -32,7 +40,7 @@ public class HistoryParser {
         params.put("type", historyType.value);
 
         if (cookie != null) {
-            JSONObject responseObject = HttpUtils.getResponse(Paths.history, Headers.of("Cookie", cookie), params);
+            JSONObject responseObject = HttpUtils.getResponse(Paths.history, Headers.of(requestHeader), params);
             JSONObject data = responseObject.getJSONObject("data");
 
             if (data != null) {

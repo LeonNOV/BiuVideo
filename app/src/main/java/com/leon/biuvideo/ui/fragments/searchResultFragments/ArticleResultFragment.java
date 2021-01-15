@@ -102,6 +102,8 @@ public class ArticleResultFragment extends Fragment {
      * 初始化控件Visibility
      */
     private void initVisibility() {
+        articleParser = new ArticleParser(context);
+
         if (getDataState()) {
             //设置无数据提示界面
             search_result_no_data.setVisibility(View.VISIBLE);
@@ -111,10 +113,6 @@ public class ArticleResultFragment extends Fragment {
             search_result_no_data.setVisibility(View.GONE);
             search_result_recyclerView.setVisibility(View.VISIBLE);
             search_result_smartRefresh.setEnabled(true);
-
-            if (articleParser == null) {
-                articleParser = new ArticleParser();
-            }
 
             List<Article> newArticles = articleParser.articleParse(keyword, pageNum, SortType.DEFAULT);
 
@@ -196,7 +194,7 @@ public class ArticleResultFragment extends Fragment {
      */
     private boolean getDataState() {
         //获取结果总数，最大为1000， 最小为0
-        count = ArticleParser.getSearchArticleCount(keyword);
+        count = articleParser.getSearchArticleCount(keyword);
         return count == 0;
     }
 

@@ -14,7 +14,7 @@ import com.leon.biuvideo.beans.upMasterBean.Audio;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.AudioParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.AudioParser;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
@@ -32,7 +32,7 @@ public class UserAudiosFragment extends BaseFragment {
     private SmartRefreshLayout smartRefresh;
     private TextView no_data;
 
-    private AudioParseUtils audioParseUtils;
+    private AudioParser audioParser;
 
     private int pageNum = 1;
     private int currentCount;
@@ -64,9 +64,9 @@ public class UserAudiosFragment extends BaseFragment {
 
     @Override
     public void initValues() {
-        audioParseUtils = new AudioParseUtils();
+        audioParser = new AudioParser(mid);
 
-        int total = audioParseUtils.getAudioTotal(mid);
+        int total = audioParser.getAudioTotal();
 
         if (total == 0) {
             //设置无数据提示界面
@@ -79,7 +79,7 @@ public class UserAudiosFragment extends BaseFragment {
             smartRefresh.setEnabled(true);
 
             //获取初始数据
-            audios = audioParseUtils.parseAudio(mid, pageNum);
+            audios = audioParser.parseAudio(pageNum);
             currentCount += audios.size();
             pageNum++;
 
@@ -128,7 +128,7 @@ public class UserAudiosFragment extends BaseFragment {
                             @Override
                             public void run() {
                                 //获取新数据
-                                getAudios(mid, pageNum);
+                                getAudios();
                                 pageNum++;
 
                                 //添加新数据
@@ -151,12 +151,9 @@ public class UserAudiosFragment extends BaseFragment {
 
     /**
      * 获取数据
-     *
-     * @param mid     up主id
-     * @param pageNum 页码
      */
-    private void getAudios(long mid, int pageNum) {
-        audios = audioParseUtils.parseAudio(mid, pageNum);
+    private void getAudios() {
+        audios = audioParser.parseAudio(pageNum);
         currentCount += audios.size();
 
         //如果第一次获取的条目数小于30则设置dataState

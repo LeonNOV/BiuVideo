@@ -1,6 +1,7 @@
 package com.leon.biuvideo.utils.parseDataUtils;
 
-import com.alibaba.fastjson.JSON;
+import android.content.Context;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.Favorite;
@@ -17,17 +18,30 @@ import okhttp3.Headers;
 /**
  * 获取Ta的关注列表数据
  */
-public class FollowParseUtils {
+public class FollowParse {
+    private final Map<String, String> requestHeader;
+    private final long vmid;
+    public int pn;
+
+    /**
+     * construct
+     *
+     * @param context   context
+     * @param vmid  用户ID
+     */
+    public FollowParse(Context context, long vmid) {
+        this.vmid = vmid;
+        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
+    }
 
     /**
      * 获取Ta的关注列表信息
      * 从该响应体获取的信息可以使用Favorite当作数据结构
      *
-     * @param vmid  用户ID
      * @param pn    页码，从1开始
      * @return  返回Favorite集合
      */
-    public static List<Favorite> parseFollow(long vmid, String cookie, int pn) {
+    public List<Favorite> parseFollow(int pn) {
         Map<String, String> params = new HashMap<>();
         params.put("vmid", String.valueOf(vmid));
         params.put("pn", String.valueOf(pn));
@@ -35,15 +49,9 @@ public class FollowParseUtils {
         params.put("order", "desc");
         params.put("order_type", "attention");//按照最常访问获取
 
-        JSONObject responseObject;
-        //判断cookie是否为空
-        if (cookie.equals("")) {
-            responseObject = HttpUtils.getResponse(Paths.follow, params);
-        } else {
-            responseObject = HttpUtils.getResponse(Paths.follow, Headers.of("Cookie", cookie), params);
-        }
-
+        JSONObject responseObject = HttpUtils.getResponse(Paths.follow, Headers.of(requestHeader), params);
         JSONObject data = responseObject.getJSONObject("data");
+
         if (data != null) {
             List<Favorite> followings = new ArrayList<>();
 
@@ -77,22 +85,18 @@ public class FollowParseUtils {
     /**
      * 获取关注总数
      *
-     * @param mid   用户ID
      * @return  返回total
      */
-    public static int getTotal(long mid) {
+    public int getTotal() {
         Map<String, String> params = new HashMap<>();
-        params.put("vmid", String.valueOf(mid));
+        params.put("vmid", String.valueOf(this.vmid));
         params.put("pn", "1");
         params.put("ps", "20");
         params.put("order", "desc");
 
-        HttpUtils httpUtils = new HttpUtils(Paths.follow, params);
-
-        String response = httpUtils.getData();
-
-        JSONObject responseObject = JSON.parseObject(response);
+        JSONObject responseObject = HttpUtils.getResponse(Paths.follow, params);
         JSONObject data = responseObject.getJSONObject("data");
+
         if (data != null) {
             return data.getIntValue("total");
         } else {

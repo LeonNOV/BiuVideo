@@ -64,9 +64,9 @@ public class UserArticlesFragment extends BaseFragment {
 
     @Override
     public void initValues() {
-        articleParser = new ArticleParser();
+        articleParser = new ArticleParser(context, mid);
 
-        int total = articleParser.getArticleTotal(mid);
+        int total = articleParser.getArticleTotal();
 
         if (total == 0) {
             //设置无数据提示界面
@@ -79,7 +79,7 @@ public class UserArticlesFragment extends BaseFragment {
             smartRefresh.setEnabled(true);
 
             //获取初始数据
-            articles = articleParser.parseArticle(mid, pageNum);
+            articles = articleParser.parseArticle(pageNum);
             currentCount += articles.size();
             pageNum++;
 
@@ -156,7 +156,7 @@ public class UserArticlesFragment extends BaseFragment {
      * @param pageNum   页码
      */
     private void getArticles(long mid, int pageNum) {
-        articles = articleParser.parseArticle(mid, pageNum);
+        articles = articleParser.parseArticle(pageNum);
         currentCount += articles.size();
 
         //如果第一次获取的条目数小于30则设置dataState

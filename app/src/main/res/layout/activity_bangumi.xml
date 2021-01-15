@@ -54,6 +54,18 @@
                 android:text="@string/bangumi_jump"
                 android:textColor="@color/black" />
 
+            <TextView
+                android:id="@+id/bangumi_textView_selectedBangumiName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:text="当前已选择的选集为：--"
+                android:textStyle="bold"
+                android:textColor="@color/black" />
+
         </LinearLayout>
 
     </RelativeLayout>
@@ -84,7 +96,7 @@
                     android:layout_weight="9"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle"
+                    android:text="@string/defaultStr"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -104,7 +116,7 @@
                             android:id="@+id/bangumi_textView_bangumiState"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="已完结"
+                            android:text="@string/defaultStr"
                             android:textColor="@color/gray"
                             android:textSize="15sp" />
 
@@ -120,7 +132,7 @@
                             android:id="@+id/bangumi_textView_epSize"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="共12话"
+                            android:text="共--话"
                             android:textColor="@color/gray"
                             android:textSize="15sp" />
 
@@ -148,7 +160,7 @@
                         android:id="@+id/bangumi_textView_score"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="4.8分"
+                        android:text="0.0分"
                         android:textColor="@color/blue"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -165,7 +177,7 @@
                         android:id="@+id/bangumi_textView_play"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="8100.9万播放"
+                        android:text="0.0万播放"
                         android:textColor="@color/gray"
                         android:textSize="15sp" />
 
@@ -181,7 +193,7 @@
                         android:id="@+id/bangumi_textView_follow"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="704.4万系列追番"
+                        android:text="0.0万系列追番"
                         android:textColor="@color/gray"
                         android:textSize="15sp" />
 
@@ -211,7 +223,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="2.5万点赞"
+                            android:text="0.0万点赞"
                             android:textColor="@color/black"
                             android:textSize="12sp" />
 
@@ -235,7 +247,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="1.8万投币"
+                            android:text="0.0万投币"
                             android:textColor="@color/black"
                             android:textSize="12sp" />
 
@@ -259,7 +271,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="2.1万收藏"
+                            android:text="0.0万收藏"
                             android:textColor="@color/black"
                             android:textSize="12sp" />
 

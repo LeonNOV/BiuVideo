@@ -14,7 +14,7 @@ import com.leon.biuvideo.beans.upMasterBean.Picture;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.PictureParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.PictureParser;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
@@ -32,7 +32,7 @@ public class UserPicturesFragment extends BaseFragment {
     private SmartRefreshLayout smartRefresh;
     private TextView no_data;
 
-    private PictureParseUtils pictureParseUtils;
+    private PictureParser pictureParser;
 
     private int pageNum = 0;
     private int currentCount;
@@ -64,9 +64,9 @@ public class UserPicturesFragment extends BaseFragment {
 
     @Override
     public void initValues() {
-        pictureParseUtils = new PictureParseUtils();
+        pictureParser = new PictureParser(context);
 
-        int total = pictureParseUtils.getPictureTotal(mid);
+        int total = pictureParser.getPictureTotal(mid);
 
         if (total == 0) {
             //设置无数据提示界面
@@ -79,7 +79,7 @@ public class UserPicturesFragment extends BaseFragment {
             smartRefresh.setEnabled(true);
 
             //获取初始数据
-            pictures = pictureParseUtils.parsePicture(mid, pageNum);
+            pictures = pictureParser.parsePicture(mid, pageNum);
             currentCount += pictures.size();
             pageNum++;
 
@@ -156,7 +156,7 @@ public class UserPicturesFragment extends BaseFragment {
      * @param pageNum 页码
      */
     private void getPictures(long mid, int pageNum) {
-        pictures = pictureParseUtils.parsePicture(mid, pageNum);
+        pictures = pictureParser.parsePicture(mid, pageNum);
 
         //记录获取的总数
         currentCount += pictures.size();

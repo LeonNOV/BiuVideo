@@ -1,10 +1,13 @@
 package com.leon.biuvideo.utils.parseDataUtils.userParseUtils;
 
+import android.content.Context;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.userBeans.UserFolder;
 import com.leon.biuvideo.beans.userBeans.UserFolderData;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.Paths;
 
 import java.util.ArrayList;
@@ -15,24 +18,23 @@ import java.util.Map;
 import okhttp3.Headers;
 
 public class UserFolderParser {
+    private final Map<String, String> requestHeader;
+
+    public UserFolderParser(Context context) {
+        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
+    }
+
     /**
      * 获取用户所有收藏夹数据
      *
      * @param mid   用户ID
-     * @param cookie    用户Cookie
      * @return  返回UserFolder集合
      */
-    public List<UserFolder> parseUserFolder(long mid, String cookie) {
+    public List<UserFolder> parseUserFolder(long mid) {
         Map<String, String> params = new HashMap<>();
         params.put("up_mid", String.valueOf(mid));
 
-        JSONObject responseObject;
-        if (cookie != null) {
-            responseObject = HttpUtils.getResponse(Paths.userAllFolder, Headers.of("Cookie", cookie), params);
-        } else {
-            responseObject = HttpUtils.getResponse(Paths.userAllFolder, params);
-        }
-
+        JSONObject responseObject = HttpUtils.getResponse(Paths.userAllFolder, Headers.of(requestHeader), params);
         JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {
@@ -60,12 +62,11 @@ public class UserFolderParser {
     /**
      * 获取用户指定收藏夹的所有数据
      *
-     * @param cookie    用户Cookie
      * @param mediaId   收藏夹ID
      * @param pageNum   页码
      * @return  返回UserFolderData对象
      */
-    public UserFolderData parseUserFolderData(String cookie, long mediaId, int pageNum) {
+    public UserFolderData parseUserFolderData(long mediaId, int pageNum) {
         Map<String, String> params = new HashMap<>();
         params.put("media_id", String.valueOf(mediaId));
         params.put("pn", String.valueOf(pageNum));
@@ -74,14 +75,9 @@ public class UserFolderParser {
         params.put("type", "0");
         params.put("tid", "0");
 
-        JSONObject responseObject;
-        if (cookie != null) {
-            responseObject = HttpUtils.getResponse(Paths.userFolderData, Headers.of("Cookie", cookie), params);
-        } else {
-            responseObject = HttpUtils.getResponse(Paths.userFolderData, params);
-        }
-
+        JSONObject responseObject = HttpUtils.getResponse(Paths.userFolderData, Headers.of(requestHeader), params);
         JSONObject data = responseObject.getJSONObject("data");
+
         if (data != null) {
             UserFolderData userFolderData = new UserFolderData();
 

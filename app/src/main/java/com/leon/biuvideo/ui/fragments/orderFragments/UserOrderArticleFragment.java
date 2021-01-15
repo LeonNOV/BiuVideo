@@ -67,8 +67,8 @@ public class UserOrderArticleFragment extends BaseFragment {
 
     @Override
     public void initValues() {
-        userArticleParser = new UserArticleParser();
-        total = userArticleParser.getTotal(cookie);
+        userArticleParser = new UserArticleParser(context);
+        total = userArticleParser.getTotal();
 
         if (total <= 0) {
             //设置无数据提示界面
@@ -80,7 +80,7 @@ public class UserOrderArticleFragment extends BaseFragment {
             recyclerView.setVisibility(View.VISIBLE);
             smartRefresh.setEnabled(true);
 
-            articles = userArticleParser.parseArticle(cookie, pageNum);
+            articles = userArticleParser.parseArticle(pageNum);
             currentCount += articles.size();
             pageNum++;
 
@@ -168,7 +168,7 @@ public class UserOrderArticleFragment extends BaseFragment {
     }
 
     private void getUserArticleData() {
-        this.articles = userArticleParser.parseArticle(cookie, pageNum);
+        this.articles = userArticleParser.parseArticle(pageNum);
 
         currentCount += articles.size();
 

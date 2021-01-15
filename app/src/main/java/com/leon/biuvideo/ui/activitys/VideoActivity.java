@@ -41,8 +41,8 @@ import com.leon.biuvideo.utils.WebViewUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.values.Tables;
 import com.leon.biuvideo.utils.dataBaseUtils.VideoListDatabaseUtils;
-import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParseUtils;
-import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.ViewParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParser;
+import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.ViewParser;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import org.jetbrains.annotations.NotNull;
@@ -92,6 +92,8 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
     private List<Map.Entry<Integer, Media>> audioEntries = null;
 
     private SimpleThreadPool simpleThreadPool;
+    private MediaParser mediaParser;
+    private ViewParser viewParser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,10 +160,17 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         Fuck.blue("query-----bvid:" + bvid);
 
         //获取ViewPage实体类（视频基本信息）
-        viewPage = ViewParseUtils.parseView(bvid);
+        if (viewParser == null) {
+            viewParser = new ViewParser(getApplicationContext());
+        }
+        viewPage = viewParser.parseView(bvid);
+
+        if (mediaParser == null) {
+            mediaParser = new MediaParser(getApplicationContext());
+        }
 
         //获取视频选集信息
-        play = MediaParseUtils.parseMedia(bvid, viewPage.anthologyInfoList.get(0).cid, false);
+        play = mediaParser.parseMedia(bvid, viewPage.anthologyInfoList.get(0).cid, false);
 
         SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.VideoPlayList);
         videoListDatabaseUtils = (VideoListDatabaseUtils) sqLiteHelperFactory.getInstance();
@@ -203,7 +212,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                     anthologySelectedIndex = position;
 
                     //重置当前play变量
-                    play = MediaParseUtils.parseMedia(bvid, cid, false);
+                    play = mediaParser.parseMedia(bvid, cid, false);
                 }
             });
 
@@ -312,7 +321,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                             Fuck.blue("saveSingleVideo----cid:" + cid + "--qualityIndex:" + qualityId + "--subTitle:" + subTitle);
 
                             //获取视频选集信息
-                            Play playWithDownload = MediaParseUtils.parseMedia(viewPage.bvid, cid, false);
+                            Play playWithDownload = mediaParser.parseMedia(viewPage.bvid, cid, false);
 
                             anthologySelectedIndex = position;
 

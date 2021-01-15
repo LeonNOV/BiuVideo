@@ -27,7 +27,7 @@ import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.values.Tables;
-import com.leon.biuvideo.utils.parseDataUtils.FollowParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.FollowParse;
 import com.leon.biuvideo.values.ThanksList;
 
 import java.io.File;
@@ -40,7 +40,8 @@ import java.util.List;
 public class PreferenceFragment extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private TextView preference_textView_cache_size;
     private SwitchCompat preference_switch_visitState;
-    
+    private FollowParse followParse;
+
     @Override
     public int setLayout() {
         return R.layout.fragment_preference;
@@ -53,7 +54,6 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                 .setOnClickListener(R.id.preference_textView_import, this)
                 .setOnCheckedChangeListener(R.id.preference_switch_visitState, this)
                 .setOnClickListener(R.id.preference_textView_cache, this)
-                .setOnClickListener(R.id.preference_textView_about_biu_video, this)
                 .setOnClickListener(R.id.preference_textView_open_source_license, this)
                 .setOnClickListener(R.id.preference_textView_thanks_list, this)
                 .setOnClickListener(R.id.preference_textView_feed_back, this);
@@ -193,9 +193,13 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
      * @return  返回插入状态
      */
     private boolean getFollowings(long mid, String cookie) {
+        if (followParse == null) {
+            followParse = new FollowParse(context, mid);
+        }
+
         if (mid != 0) {
             //获取总数
-            int total = FollowParseUtils.getTotal(mid);
+            int total = followParse.getTotal();
             if (total == 0) {
                 return true;
             }
@@ -214,7 +218,7 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
             FavoriteDatabaseUtils favoriteDatabaseUtils = (FavoriteDatabaseUtils) sqLiteHelperFactory.getInstance();
 
             while (currentTotal != total) {
-                List<Favorite> favorites = FollowParseUtils.parseFollow(mid, cookie, pn);
+                List<Favorite> favorites = followParse.parseFollow(pn);
                 if (favorites != null) {
                     currentTotal += favorites.size();
 

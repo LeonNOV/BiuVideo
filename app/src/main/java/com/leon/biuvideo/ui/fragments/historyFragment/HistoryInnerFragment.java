@@ -64,7 +64,7 @@ public class HistoryInnerFragment extends BaseFragment {
 
     @Override
     public void initValues() {
-        historyParser = new HistoryParser();
+        historyParser = new HistoryParser(context);
 
         this.history = historyParser.parseHistory(cookie, -1, -1, historyType);
 

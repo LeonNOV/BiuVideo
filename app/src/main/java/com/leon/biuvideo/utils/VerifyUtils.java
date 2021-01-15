@@ -11,7 +11,7 @@ public class VerifyUtils {
      * @return  登陆状态
      */
     public static boolean isLogin(Context context) {
-        SharedPreferences initValue = context.getSharedPreferences("initValue", Context.MODE_PRIVATE);
+        SharedPreferences initValue = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
         String cookie = initValue.getString("cookie", null);
 
         return cookie != null;

@@ -32,7 +32,7 @@ import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.values.Tables;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UserInfoParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UserInfoParser;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -329,7 +329,8 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         @Override
         public String call() {
-            UserInfo userInfo = UserInfoParseUtils.parseUpInfo(mid);
+            UserInfoParser userInfoParser = new UserInfoParser(getApplicationContext());
+            UserInfo userInfo = userInfoParser.parseUpInfo(mid);
 
 //            Message message = new Message();
             Message message = handler.obtainMessage();

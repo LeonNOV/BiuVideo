@@ -17,15 +17,23 @@ import java.util.Map;
 /**
  * 音频接口解析
  */
-public class AudioParseUtils {
+public class AudioParser {
+    private final long mid;
+
+    /**
+     * @param mid   up主id
+     */
+    public AudioParser(long mid) {
+        this.mid = mid;
+    }
+
     /**
      * 音频接口解析
      *
-     * @param mid   up主id
      * @param pageNum   页码，从1开始
      * @return  返回UpAudio类型集合
      */
-    public List<Audio> parseAudio(long mid, int pageNum) {
+    public List<Audio> parseAudio(int pageNum) {
         Map<String, String> params = new HashMap<>();
         params.put("uid", String.valueOf(mid));
         params.put("pn", String.valueOf(pageNum));
@@ -79,10 +87,9 @@ public class AudioParseUtils {
     /**
      * 获取歌曲总数
      *
-     * @param mid   用户ID
      * @return  返回歌曲总数
      */
-    public int getAudioTotal(long mid) {
+    public int getAudioTotal() {
         Map<String, String> params = new HashMap<>();
         params.put("uid", String.valueOf(mid));
         params.put("pn", "1");

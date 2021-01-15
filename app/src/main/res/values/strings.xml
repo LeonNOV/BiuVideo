@@ -49,4 +49,7 @@
     <!-- 下载页面 -->
     <string name="downloading">缓存中</string>
     <string name="downloaded">已缓存</string>
+
+    <!-- 加载数据中显示的默认文字 -->
+    <string name="defaultStr">--</string>
 </resources>

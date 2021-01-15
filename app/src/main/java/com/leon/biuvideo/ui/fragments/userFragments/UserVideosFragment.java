@@ -14,7 +14,7 @@ import com.leon.biuvideo.beans.upMasterBean.Video;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.VideoParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.VideoParser;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
@@ -32,7 +32,7 @@ public class UserVideosFragment extends BaseFragment {
     private SmartRefreshLayout smartRefresh;
     private TextView no_data;
 
-    private VideoParseUtils videoParseUtils;
+    private VideoParser videoParser;
 
     private int pageNum = 1;
     private int currentCount;
@@ -64,9 +64,9 @@ public class UserVideosFragment extends BaseFragment {
 
     @Override
     public void initValues() {
-        videoParseUtils = new VideoParseUtils();
+        videoParser = new VideoParser(context);
 
-        int total = videoParseUtils.getVideoTotal(mid);
+        int total = videoParser.getVideoTotal(mid);
 
         if (total == 0) {
             //设置无数据提示界面
@@ -79,7 +79,7 @@ public class UserVideosFragment extends BaseFragment {
             smartRefresh.setEnabled(true);
 
             //获取初始数据
-            videos = videoParseUtils.parseVideo(mid, pageNum);
+            videos = videoParser.parseVideo(mid, pageNum);
             currentCount += videos.size();
             pageNum++;
 
@@ -156,7 +156,7 @@ public class UserVideosFragment extends BaseFragment {
      * @param pageNum 页码
      */
     private void getVideos(long mid, int pageNum) {
-        videos = videoParseUtils.parseVideo(mid, pageNum);
+        videos = videoParser.parseVideo(mid, pageNum);
 
         //记录获取的总数
         currentCount += videos.size();

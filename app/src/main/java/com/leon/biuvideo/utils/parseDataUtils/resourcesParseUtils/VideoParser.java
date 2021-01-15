@@ -1,5 +1,6 @@
 package com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSONArray;
@@ -7,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.upMasterBean.Video;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.Paths;
 
 import java.util.ArrayList;
@@ -15,10 +17,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import okhttp3.Headers;
+
 /**
  * 视频接口解析
  */
-public class VideoParseUtils {
+public class VideoParser {
+    private final Map<String, String> requestHeader;
+
+    public VideoParser(Context context) {
+        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
+    }
+
     /**
      * 视频接口解析
      *
@@ -35,7 +45,7 @@ public class VideoParseUtils {
         params.put("tid", "0");
         params.put("jsonp", "jsonp");
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.videos, params);
+        JSONObject responseObject = HttpUtils.getResponse(Paths.videos, Headers.of(requestHeader), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {
@@ -111,7 +121,7 @@ public class VideoParseUtils {
         params.put("tid", "0");
         params.put("jsonp", "jsonp");
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.videos, params);
+        JSONObject responseObject = HttpUtils.getResponse(Paths.videos, Headers.of(requestHeader), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
         JSONObject page = dataObject.getJSONObject("page");
 

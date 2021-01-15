@@ -33,6 +33,7 @@ public class HistoryAdapter extends BaseAdapter<History.InnerHistory> {
     private final List<History.InnerHistory> historys;
     private final Context context;
     private final HistoryType historyType;
+    private ArticleParser articleParser;
 
     public HistoryAdapter(List<History.InnerHistory> historys, Context context, HistoryType historyType) {
         super(historys, context);
@@ -113,7 +114,11 @@ public class HistoryAdapter extends BaseAdapter<History.InnerHistory> {
                     case ARTICLE:
                         intent = new Intent(context, ArticleActivity.class);
 
-                        Article article = ArticleParser.getArticle(history.oid, null);
+                        if (articleParser == null) {
+                            articleParser = new ArticleParser(context);
+                        }
+
+                        Article article = articleParser.getArticle(history.oid);
                         article.coverUrl = history.cover;
                         article.face = history.authorFace;
                         article.title = history.title;

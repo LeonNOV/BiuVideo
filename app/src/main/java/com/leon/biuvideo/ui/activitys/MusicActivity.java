@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.Message;
 import android.view.View;
 import android.view.Window;
@@ -31,7 +30,6 @@ import com.leon.biuvideo.beans.musicBeans.MusicInfo;
 import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
 import com.leon.biuvideo.service.MusicService;
 import com.leon.biuvideo.ui.dialogs.MusicListDialog;
-import com.leon.biuvideo.ui.dialogs.SingleVideoQualityDialog;
 import com.leon.biuvideo.ui.dialogs.WarnDialog;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.InternetUtils;
@@ -44,8 +42,8 @@ import com.leon.biuvideo.utils.dataBaseUtils.MusicListDatabaseUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.values.Tables;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicParseUtils;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicUrlParseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicParser;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicUrlParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,6 +116,8 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
 
     private MediaUtils mediaUtils;
     private DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils;
+    private MusicParser musicParser;
+    private MusicUrlParser musicUrlParser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,11 +156,19 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
         if (position != -1) {
             long sid = sids.get(position);
 
+            if (musicParser == null) {
+                musicParser = new MusicParser();
+            }
+
             //获取music信息
-            musicInfo = MusicParseUtils.parseMusic(sid);
+            musicInfo = musicParser.parseMusic(sid);
 
             //获取music文件
-            musicUrl = MusicUrlParseUtils.parseMusicUrl(String.valueOf(sid));
+
+            if (musicUrlParser == null) {
+                musicUrlParser = new MusicUrlParser(getApplicationContext());
+            }
+            musicUrl = musicUrlParser.parseMusicUrl(String.valueOf(sid));
         } else {
             Toast.makeText(this, "获取数据失败~~~", Toast.LENGTH_SHORT).show();
             finish();
@@ -553,10 +561,10 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
         musicState = 1;
         music_imageView_control.setImageResource(R.drawable.music_icon_play);
 
-        musicInfo = MusicParseUtils.parseMusic(sid);
+        musicInfo = musicParser.parseMusic(sid);
 
         //切换当前歌曲
-        musicUrl = MusicUrlParseUtils.parseMusicUrl(String.valueOf(sid));
+        musicUrl = musicUrlParser.parseMusicUrl(String.valueOf(sid));
 
         //播放音乐
         musicControl.play(musicUrl);

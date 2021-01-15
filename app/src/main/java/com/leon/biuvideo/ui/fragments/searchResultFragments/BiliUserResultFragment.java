@@ -98,6 +98,8 @@ public class BiliUserResultFragment extends Fragment {
      * 初始化控件Visibility
      */
     private void initVisibility() {
+        biliUserParser = new BiliUserParser(context);
+
         if (getDataState()) {
             //设置无数据提示界面
             search_result_no_data.setVisibility(View.VISIBLE);
@@ -107,10 +109,6 @@ public class BiliUserResultFragment extends Fragment {
             search_result_no_data.setVisibility(View.GONE);
             search_result_recyclerView.setVisibility(View.VISIBLE);
             search_result_smartRefresh.setEnabled(true);
-
-            if (biliUserParser == null) {
-                biliUserParser = new BiliUserParser();
-            }
 
             List<BiliUser> newBiliUsers = biliUserParser.userParse(keyword, pageNum, SortType.DEFAULT);
 
@@ -192,7 +190,7 @@ public class BiliUserResultFragment extends Fragment {
      */
     public boolean getDataState() {
         //获取结果总数，最大为1000， 最小为0
-        count = BiliUserParser.getSearchUserCount(keyword);
+        count = biliUserParser.getSearchUserCount(keyword);
 
         return count == 0;
     }
