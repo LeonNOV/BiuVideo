@@ -33,7 +33,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="20dp"
                     android:background="@drawable/ripple_image_view_pressed"
-                    android:padding="@dimen/small_view_padding_5dp"
+                    android:padding="@dimen/small_view_padding_10dp"
                     android:src="@drawable/icon_close" />
 
             </RelativeLayout>

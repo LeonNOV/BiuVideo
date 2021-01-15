@@ -13,7 +13,6 @@ import com.leon.biuvideo.adapters.OrderAdapter;
 import com.leon.biuvideo.beans.userBeans.Order;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.OrderParser;
 import com.leon.biuvideo.values.OrderFollowType;
@@ -29,7 +28,6 @@ import java.util.List;
  * 用户订阅文件夹的详细数据fragment
  */
 public class OrderInnerFragment extends BaseFragment {
-    private final String cookie;
     private final OrderType orderType;
     private final long mid;
     private final OrderFollowType orderFollowType;
@@ -49,9 +47,8 @@ public class OrderInnerFragment extends BaseFragment {
     private LinearLayoutManager linearLayoutManager;
     private OrderAdapter orderAdapter;
 
-    public OrderInnerFragment(long mid, String cookie, OrderType orderType, OrderFollowType orderFollowType) {
+    public OrderInnerFragment(long mid, OrderType orderType, OrderFollowType orderFollowType) {
         this.mid = mid;
-        this.cookie = cookie;
         this.orderType = orderType;
         this.orderFollowType = orderFollowType;
     }
@@ -74,17 +71,6 @@ public class OrderInnerFragment extends BaseFragment {
     @Override
     public void initValues() {
         orderParser = new OrderParser(context);
-
-        switch (orderType) {
-            case VIDEO:
-                //判断是否已登陆
-            case ARTICLE:
-                //判断是否已登陆
-                if (mid == -1 || cookie == null) {
-
-                }
-                break;
-        }
 
         total = orderParser.getOrderCount(mid, orderType, orderFollowType);
 
@@ -111,7 +97,6 @@ public class OrderInnerFragment extends BaseFragment {
 
             if (linearLayoutManager == null || orderAdapter == null) {
                 linearLayoutManager = new LinearLayoutManager(context);
-                Fuck.blue("linearLayoutManager" + linearLayoutManager);
                 orderAdapter = new OrderAdapter(orders, context, orderType);
             }
 

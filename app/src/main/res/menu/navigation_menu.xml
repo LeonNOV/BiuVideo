@@ -15,10 +15,10 @@
             android:icon="@drawable/navigation_menu_favorite"
             android:title="@string/navigation_menu_favorite" />
         <item
-            android:id="@+id/navigation_menu_play_list"
+            android:id="@+id/navigation_menu_localOrder"
             android:checkable="true"
             android:icon="@drawable/navigation_menu_play_list"
-            android:title="@string/navigation_menu_play_list" />
+            android:title="@string/navigation_menu_localOrder" />
         <item
             android:id="@+id/navigation_menu_order"
             android:checkable="true"

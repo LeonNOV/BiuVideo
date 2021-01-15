@@ -4,7 +4,7 @@
     android:layout_height="70dp"
     android:layout_gravity="center"
     android:background="@drawable/ripple_anthology_item_gb"
-    android:layout_margin="@dimen/small_view_padding_5dp"
+    android:layout_margin="@dimen/small_view_padding_10dp"
     android:orientation="vertical">
 
     <TextView

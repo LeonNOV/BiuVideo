@@ -65,8 +65,8 @@
                     <View
                         android:layout_width="0.5dp"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/small_view_padding_5dp"
-                        android:layout_marginEnd="@dimen/small_view_padding_5dp"
+                        android:layout_marginStart="@dimen/small_view_padding_10dp"
+                        android:layout_marginEnd="@dimen/small_view_padding_10dp"
                         android:background="@color/gray" />
 
                     <TextView

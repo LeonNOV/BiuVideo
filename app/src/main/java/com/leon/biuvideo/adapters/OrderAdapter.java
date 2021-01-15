@@ -1,6 +1,8 @@
 package com.leon.biuvideo.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -8,19 +10,25 @@ import androidx.annotation.NonNull;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseViewHolder;
+import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
 import com.leon.biuvideo.beans.userBeans.Order;
+import com.leon.biuvideo.ui.activitys.BangumiActivity;
+import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BangumiParser;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.values.OrderType;
+import com.leon.biuvideo.values.SortType;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class OrderAdapter extends BaseAdapter<Order> {
+    private final Context context;
     private final List<Order> orders;
     private final OrderType orderType;
 
     public OrderAdapter(List<Order> orders, Context context, OrderType orderType) {
         super(orders, context);
+        this.context = context;
         this.orders = orders;
         this.orderType = orderType;
     }
@@ -44,20 +52,8 @@ public class OrderAdapter extends BaseAdapter<Order> {
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         Order order = orders.get(position);
 
-        int backgroundTint = R.color.bilibili_pink;
-        switch (order.badgeType) {
-            case "独家":
-            case "出品":
-                backgroundTint = R.color.blue;
-                break;
-            default:
-                break;
-        }
-
         if (order.badgeType.equals("")) {
             holder.setVisibility(R.id.order_item_textView_badge, View.GONE);
-        } else {
-            holder.findById(R.id.order_item_textView_badge).getBackground().setTint(backgroundTint);
         }
 
         if (order.seasonTitle.equals("")) {
@@ -74,6 +70,39 @@ public class OrderAdapter extends BaseAdapter<Order> {
                 .setText(R.id.order_item_textView_type, order.seasonType)
                 .setText(R.id.order_item_textView_area, Arrays.toString(order.areas))
                 .setText(R.id.order_item_textView_progress, order.progress.equals("") ? "尚未观看" : order.progress)
-                .setText(R.id.order_item_textView_total, order.total);
+                .setText(R.id.order_item_textView_total, order.total)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // 如果为番剧则跳转到BangumiActivity
+                        if (orderType == OrderType.BANGUMI) {
+                            int pageNum = 1;
+                            Bangumi targetBangumi = null;
+
+                            BangumiParser bangumiParser = new BangumiParser(context);
+                            List<Bangumi> bangumiList;
+
+                            while (targetBangumi == null) {
+                                bangumiList = bangumiParser.bangumiParse(order.title, pageNum, SortType.DEFAULT);
+                                pageNum++;
+                                for (Bangumi bangumi : bangumiList) {
+                                    if (bangumi.title.equals(order.title)) {
+                                        targetBangumi = bangumi;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (targetBangumi != null) {
+                                Intent intent = new Intent(context, BangumiActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("bangumi", targetBangumi);
+                                intent.putExtras(bundle);
+
+                                context.startActivity(intent);
+                            }
+                        }
+                    }
+                });
     }
 }

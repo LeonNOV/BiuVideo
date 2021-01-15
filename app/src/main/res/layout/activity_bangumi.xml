@@ -18,7 +18,7 @@
             android:layout_height="@dimen/small_view_w_h"
             android:layout_margin="10dp"
             android:background="?android:selectableItemBackground"
-            android:padding="@dimen/small_view_padding_5dp"
+            android:padding="@dimen/small_view_padding_10dp"
             android:src="@drawable/icon_back"
             app:tint="@color/black" />
 

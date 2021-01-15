@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/round_white_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:gravity="center_vertical"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:id="@+id/video_add_dialog_imageView_close"
+            android:layout_width="@dimen/small_view_w_h"
+            android:layout_height="@dimen/small_view_w_h"
+            android:src="@drawable/icon_close"
+            android:layout_alignParentStart="true"
+            android:padding="@dimen/small_view_padding_10dp"/>
+
+        <ImageView
+            android:id="@+id/video_add_dialog_imageView_add"
+            android:layout_width="@dimen/small_view_w_h"
+            android:layout_height="@dimen/small_view_w_h"
+            android:padding="@dimen/small_view_padding_10dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/icon_add"/>
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="由于该版本未与B站订阅数据进行同步，所以这里的订阅数据是保存在本地的，在下一个版本中会加入同步功能"
+        android:textStyle="bold"
+        android:textColor="@color/red"
+        android:textSize="15sp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/video_add_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:orientation="vertical"/>
+
+</LinearLayout>

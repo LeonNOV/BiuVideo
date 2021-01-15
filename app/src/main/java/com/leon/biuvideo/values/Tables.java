@@ -6,6 +6,9 @@ public enum  Tables {
     VideoPlayList("videoPlayList"),
     Article("article"),
 
+    LocalVideoFolders("localVideoFolders"),
+    LocalOrders("localOrders"),
+
     DownloadRecordsForVideo("downloadRecordsForVideo"),
     DownloadDetailsForVideo("downloadDetailsForVideo");
 

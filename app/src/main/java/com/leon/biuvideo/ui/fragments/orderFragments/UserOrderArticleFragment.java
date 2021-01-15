@@ -29,8 +29,6 @@ import java.util.List;
  * 用户订阅的专栏fragment
  */
 public class UserOrderArticleFragment extends BaseFragment {
-    private final String cookie;
-
     private RecyclerView recyclerView;
     private SmartRefreshLayout smartRefresh;
     private TextView no_data;
@@ -45,10 +43,6 @@ public class UserOrderArticleFragment extends BaseFragment {
 
     private LinearLayoutManager linearLayoutManager;
     private UserArticleAdapter userArticleAdapter;
-
-    public UserOrderArticleFragment(String cookie) {
-        this.cookie = cookie;
-    }
 
     @Override
     public int setLayout() {

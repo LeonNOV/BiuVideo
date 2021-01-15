@@ -92,10 +92,10 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
             long mid = initValues.getLong("mid", -1);
 
             List<Fragment> fragments = new ArrayList<>();
-            fragments.add(new VideoListFragment(mid, cookie));
-            fragments.add(new OrderInnerFragment(mid, cookie, OrderType.BANGUMI, OrderFollowType.ALL));
-            fragments.add(new OrderInnerFragment(mid, cookie, OrderType.SERIES, OrderFollowType.ALL));
-            fragments.add(new UserOrderArticleFragment(cookie));
+            fragments.add(new VideoListFragment(mid));
+            fragments.add(new OrderInnerFragment(mid, OrderType.BANGUMI, OrderFollowType.ALL));
+            fragments.add(new OrderInnerFragment(mid, OrderType.SERIES, OrderFollowType.ALL));
+            fragments.add(new UserOrderArticleFragment());
 
             ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getParentFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
             order_view_pager.setAdapter(viewPageAdapter);

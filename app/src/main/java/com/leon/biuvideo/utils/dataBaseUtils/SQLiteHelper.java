@@ -85,6 +85,39 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "\"isDelete\"  INTEGER DEFAULT 0\n" +
             ");";
 
+    // 视频收藏夹
+    private static final String localVideoFolders = "CREATE TABLE \"localVideoFolders\" (\n" +
+            "\"id\"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+            "\"folderName\"  TEXT UNIQUE,\n" +
+            "\"creator\"  LONG,\n" +
+            "\"createTime\"  LONG,\n" +
+            "\"isDelete\"  INTEGER DEFAULT 0\n" +
+            ");";
+
+    /**
+     * 订阅、收藏表，用于存放番剧、音频、专栏数据
+     * 其中orderType为订阅数据类型(LocalOrderType)
+     *      0：video
+     *      1：bangumi
+     *      2：audio
+     *      3：article
+     */
+    private static final String localOrders = "CREATE TABLE \"localOrders\" (\n" +
+            "\"id\"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+            "\"title\"  TEXT,\n" +
+            "\"desc\"  TEXT,\n" +
+            "\"area\"  TEXT,\n" +
+            "\"progress\"  TEXT,\n" +
+            "\"count\"  INTEGER,\n" +
+            "\"mainId\"  TEXT,\n" +
+            "\"subId\"  TEXT UNIQUE,\n" +
+            "\"orderType\"  INTEGER,\n" +
+            "\"adder\"  LONG,\n" +
+            "\"addTime\"  LONG,\n" +
+            "\"folderName\"  TEXT,\n" +
+            "\"isDelete\"  INTEGER DEFAULT 0\n" +
+            ");";
+
     public SQLiteHelper(@Nullable Context context, int version) {
         super(context, "biu_video.db", null, version);
     }

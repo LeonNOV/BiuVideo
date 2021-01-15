@@ -29,7 +29,6 @@ import java.util.List;
  */
 public class VideoListFragment extends BaseFragment {
     private final long mid;
-    private final String cookie;
 
     private long nowFolderId;
     private int pageNum = 1;
@@ -44,9 +43,8 @@ public class VideoListFragment extends BaseFragment {
 
     private UserFavoriteFolderDetailAdapter userFavoriteFolderDetailAdapter;
 
-    public VideoListFragment(long mid, String cookie) {
+    public VideoListFragment(long mid) {
         this.mid = mid;
-        this.cookie = cookie;
     }
 
     @Override

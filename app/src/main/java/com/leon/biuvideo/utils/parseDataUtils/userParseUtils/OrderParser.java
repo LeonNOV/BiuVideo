@@ -76,6 +76,7 @@ public class OrderParser {
             order.seasonId = jsonObject.getLongValue("season_id");
             order.seasonType = jsonObject.getString("season_type_name");
             order.shortUrl = jsonObject.getString("short_url");
+            order.mediaId = jsonObject.getLongValue("media_id");
 
             int follow_status = jsonObject.getIntValue("follow_status");
 

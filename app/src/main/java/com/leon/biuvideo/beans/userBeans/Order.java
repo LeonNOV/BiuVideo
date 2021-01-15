@@ -12,6 +12,7 @@ public class Order {
     public String[] areas;      //地区
     public String badgeType;    //独家、出品、会员专享、限时免费
     public long seasonId;     //番剧ID
+    public long mediaId;
     public String seasonType;   //订阅类型（番剧、国创、纪录片、电视剧）
     public String shortUrl;     //短链
     public String url;

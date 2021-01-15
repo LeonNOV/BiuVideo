@@ -276,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 switchFragment(favoriteFragment);
                 break;
-            case R.id.navigation_menu_play_list:
+            case R.id.navigation_menu_localOrder:
 
                 if (playListFragment == null) {
                     playListFragment = new PlayListFragment();
