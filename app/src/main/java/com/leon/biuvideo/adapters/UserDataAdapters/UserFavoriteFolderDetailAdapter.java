@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseViewHolder;
-import com.leon.biuvideo.beans.userBeans.UserFolderData;
+import com.leon.biuvideo.beans.orderBeans.UserFolderData;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueFormat;

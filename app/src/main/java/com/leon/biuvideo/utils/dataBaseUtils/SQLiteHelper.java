@@ -19,28 +19,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "\"isDelete\"  INTEGER DEFAULT 0\n" +
             ");";
 
-    private static final String musicPlayList = "CREATE TABLE \"musicPlayList\" (\n" +
-            "\"id\"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
-            "\"sid\"  INTEGER,\n" +
-            "\"bvid\"  TEXT,\n" +
-            "\"author\"  TEXT,\n" +
-            "\"musicName\"  TEXT,\n" +
-            "\"isHaveVideo\"  INTEGER,\n" +
-            "\"isDelete\"  INTEGER DEFAULT 0\n" +
-            ");";
-
-    private static final String videoPlayList = "CREATE TABLE \"videoPlayList\" (\n" +
-            "\"id\"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
-            "\"bvid\"  TEXT,\n" +
-            "\"uname\"  TEXT,\n" +
-            "\"title\"  TEXT,\n" +
-            "\"coverUrl\"  TEXT,\n" +
-            "\"length\"  INTEGER,\n" +
-            "\"play\"  INTEGER,\n" +
-            "\"danmaku\"  INTEGER,\n" +
-            "\"isDelete\"  INTEGER DEFAULT 0\n" +
-            ");";
-
     private static final String article = "CREATE TABLE \"article\" (\n" +
             "\"id\"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
             "\"mid\"  INTEGER,\n" +
@@ -95,12 +73,14 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             ");";
 
     /**
-     * 订阅、收藏表，用于存放番剧、音频、专栏数据
+     * 订阅、收藏表，用于存放番剧、音频、专栏数据<br/>
      * 其中orderType为订阅数据类型(LocalOrderType)
      *      0：video
      *      1：bangumi
      *      2：audio
      *      3：article
+     * <br/>
+     *  如果为音频，则mainId表示为sid而subId表示音频对应的视频bvid<br/>
      */
     private static final String localOrders = "CREATE TABLE \"localOrders\" (\n" +
             "\"id\"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
@@ -108,9 +88,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "\"desc\"  TEXT,\n" +
             "\"area\"  TEXT,\n" +
             "\"progress\"  TEXT,\n" +
+            "\"duration\"  INTEGER,\n" +
             "\"count\"  INTEGER,\n" +
             "\"mainId\"  TEXT,\n" +
-            "\"subId\"  TEXT UNIQUE,\n" +
+            "\"subId\"  TEXT,\n" +
             "\"orderType\"  INTEGER,\n" +
             "\"adder\"  LONG,\n" +
             "\"addTime\"  LONG,\n" +
@@ -136,6 +117,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 e.printStackTrace();
             }
         }
+
+        // 初始化LocalVideoFolder
+        String initLocalVideoFolder = "INSERT INTO 'localVideoFolders' (folderName, creator, createTime) VALUES ('默认收藏夹', 0, " + System.currentTimeMillis() + ");";
+        sqLiteDatabase.execSQL(initLocalVideoFolder);
     }
 
     @Override

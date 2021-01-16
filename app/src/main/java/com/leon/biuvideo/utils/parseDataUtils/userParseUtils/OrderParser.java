@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.userBeans.Order;
+import com.leon.biuvideo.beans.orderBeans.Order;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.OrderFollowType;

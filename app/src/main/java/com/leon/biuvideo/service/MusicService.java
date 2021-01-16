@@ -97,24 +97,28 @@ public class MusicService extends Service {
             TimerTask timerTask = new TimerTask() {
                 @Override
                 public void run() {
-                    //该线程用来获取当前播放进度
-                    int currentPosition = mediaPlayer.getCurrentPosition();
+                    try {
+                        //该线程用来获取当前播放进度
+                        int currentPosition = mediaPlayer.getCurrentPosition();
 
-                    //获取总长度
-                    int duration = mediaPlayer.getDuration();
+                        //获取总长度
+                        int duration = mediaPlayer.getDuration();
 
-                    //利用message给主线程发消息更新seekBar进度
-                    Message message = MusicActivity.handler.obtainMessage();
+                        //利用message给主线程发消息更新seekBar进度
+                        Message message = MusicActivity.handler.obtainMessage();
 
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("duration", duration);
-                    bundle.putInt("currentPosition", currentPosition);
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("duration", duration);
+                        bundle.putInt("currentPosition", currentPosition);
 
-                    //设置发送的消息内容
-                    message.setData(bundle);
+                        //设置发送的消息内容
+                        message.setData(bundle);
 
-                    //发送消息给主线程
-                    MusicActivity.handler.sendMessage(message);
+                        //发送消息给主线程
+                        MusicActivity.handler.sendMessage(message);
+                    } catch (IllegalStateException e) {
+                        e.printStackTrace();
+                    }
                 }
             };
 
@@ -134,7 +138,9 @@ public class MusicService extends Service {
         }
 
         public void pause() {
-            mediaPlayer.pause();
+            if (mediaPlayer != null) {
+                mediaPlayer.pause();
+            }
         }
 
         public void continuePlay() {

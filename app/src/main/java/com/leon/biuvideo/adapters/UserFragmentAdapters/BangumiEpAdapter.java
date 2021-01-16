@@ -11,7 +11,7 @@ import com.leon.biuvideo.adapters.BaseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.searchBean.bangumi.Ep;
 import com.leon.biuvideo.utils.Fuck;
-import com.leon.biuvideo.utils.VerifyUtils;
+import com.leon.biuvideo.utils.InitValueUtils;
 
 import java.util.List;
 
@@ -61,9 +61,9 @@ public class BangumiEpAdapter extends BaseAdapter<Ep> {
                         // 先检查是否为VIP资源
                         if (ep.isVIP) {
                             // 判断当前是否已登录账号
-                            if (VerifyUtils.isLogin(context)) {
+                            if (InitValueUtils.isLogin(context)) {
                                 // 判断已登录账号是否为大会员
-                                if (VerifyUtils.isVIP(context)) {
+                                if (InitValueUtils.isVIP(context)) {
                                     Toast.makeText(context, "该番剧需要成为大会员才能进行观看", Toast.LENGTH_SHORT).show();
                                     return;
                                 } else {

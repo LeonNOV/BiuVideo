@@ -67,6 +67,16 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     }
 
     /**
+     * 刷新加载数据
+     *
+     * @param addOn    要加入的数据
+     */
+    public void append (T addOn) {
+        this.beans.add(addOn);
+        notifyDataSetChanged();
+    }
+
+    /**
      * 清空上次搜索后的数据缓存
      */
     public void removeAll() {

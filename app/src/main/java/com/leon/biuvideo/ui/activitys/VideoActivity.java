@@ -21,11 +21,13 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.AnthologyAdapter;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedRecordsForVideo;
-import com.leon.biuvideo.beans.upMasterBean.VideoPlayList;
+import com.leon.biuvideo.beans.orderBeans.LocalOrder;
+import com.leon.biuvideo.beans.orderBeans.LocalVideoFolder;
 import com.leon.biuvideo.beans.videoBean.play.Media;
 import com.leon.biuvideo.beans.videoBean.play.Play;
 import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
+import com.leon.biuvideo.ui.dialogs.AddVideoDialog;
 import com.leon.biuvideo.ui.dialogs.AnthologyDownloadDialog;
 import com.leon.biuvideo.ui.dialogs.SingleVideoQualityDialog;
 import com.leon.biuvideo.utils.FileUtils;
@@ -33,14 +35,15 @@ import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.SimpleDownloadThread;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.LocalOrdersDatabaseUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.WebViewUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
+import com.leon.biuvideo.values.LocalOrderType;
 import com.leon.biuvideo.values.Tables;
-import com.leon.biuvideo.utils.dataBaseUtils.VideoListDatabaseUtils;
 import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParser;
 import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.ViewParser;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
@@ -82,7 +85,8 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
     private int anthologySelectedIndex = 0;
     private WebViewUtils webViewUtils;
 
-    private VideoListDatabaseUtils videoListDatabaseUtils;
+    private final static LocalOrderType localOrderType = LocalOrderType.VIDEO;
+    private LocalOrdersDatabaseUtils localOrdersDatabaseUtils;
     private DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils;
 
     //视频在videoPlayList库中的状态
@@ -172,10 +176,10 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         //获取视频选集信息
         play = mediaParser.parseMedia(bvid, viewPage.anthologyInfoList.get(0).cid, false);
 
-        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.VideoPlayList);
-        videoListDatabaseUtils = (VideoListDatabaseUtils) sqLiteHelperFactory.getInstance();
+        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.LocalOrders);
+        localOrdersDatabaseUtils = (LocalOrdersDatabaseUtils) sqLiteHelperFactory.getInstance();
 
-        videoFavoriteState = videoListDatabaseUtils.queryFavoriteVideo(viewPage.bvid);
+        videoFavoriteState = localOrdersDatabaseUtils.queryLocalOrder(String.valueOf(viewPage.bvid), null, localOrderType);
 
         // 初始化视频信息
         initVideoInfo();
@@ -269,8 +273,8 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 //根据videoState判断是否保存获取删除该video
                 if (videoFavoriteState) {
                     //从videoPlayList中删除此video
-                    boolean state = videoListDatabaseUtils.removeVideo(viewPage.bvid);
-                    Toast.makeText(this, state ? "已从播放列表中删除" : "删除失败~~~", Toast.LENGTH_SHORT).show();
+                    boolean state = localOrdersDatabaseUtils.deleteLocalOrder(viewPage.title, String.valueOf(viewPage.bvid), null, localOrderType);
+                    Toast.makeText(this, state ? "已从收藏夹中删除" : "删除失败~~~", Toast.LENGTH_SHORT).show();
 
                     if (state) {
                         video_imageView_addFavorite.setImageResource(R.drawable.no_favorite);
@@ -278,22 +282,31 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                     }
                 } else {
                     //添加该video至videoPlayList中
-                    VideoPlayList videoPlayList = new VideoPlayList();
-                    videoPlayList.bvid = viewPage.bvid;
-                    videoPlayList.uname = viewPage.userInfo.name;
-                    videoPlayList.title = viewPage.title;
-                    videoPlayList.coverUrl = viewPage.coverUrl;
-                    videoPlayList.length = viewPage.anthologyInfoList.get(0).duration;//只获取第一个视频的长度
-                    videoPlayList.play = viewPage.videoInfo.view;
-                    videoPlayList.danmaku = viewPage.videoInfo.danmaku;
+                    AddVideoDialog addVideoDialog = new AddVideoDialog(VideoActivity.this);
+                    addVideoDialog.setOnAddOrderCallback(new AddVideoDialog.OnAddOrderCallback() {
+                        @Override
+                        public LocalOrder callBack(LocalVideoFolder localVideoFolder) {
+                            LocalOrder localOrder = new LocalOrder();
+                            localOrder.title = viewPage.title;
+                            localOrder.duration = viewPage.anthologyInfoList.get(0).duration;
+                            localOrder.mainId = viewPage.bvid;
+                            localOrder.orderType = localOrderType;
+                            localOrder.addTime = System.currentTimeMillis();
+                            localOrder.folderName = localVideoFolder.folderName;
 
-                    boolean state = videoListDatabaseUtils.addFavoriteVideo(videoPlayList);
-                    Toast.makeText(getApplicationContext(), state ? "已成功添加到播放列表中" : "添加失败~~~", Toast.LENGTH_SHORT).show();
+                            return localOrder;
+                        }
 
-                    if (state) {
-                        video_imageView_addFavorite.setImageResource(R.drawable.favorite);
-                        videoFavoriteState = true;
-                    }
+                        @Override
+                        public void onFavoriteIcon(boolean addState) {
+                            if (addState) {
+                                video_imageView_addFavorite.setImageResource(R.drawable.favorite);
+                                videoFavoriteState = true;
+                                Toast.makeText(VideoActivity.this, "已成功加入至收藏夹中", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                    addVideoDialog.show();
                 }
 
                 break;
@@ -514,8 +527,8 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
         webView.destroy();
 
-        if (videoListDatabaseUtils != null) {
-            videoListDatabaseUtils.close();
+        if (localOrdersDatabaseUtils != null) {
+            localOrdersDatabaseUtils.close();
         }
 
         if (downloadRecordsDatabaseUtils != null) {

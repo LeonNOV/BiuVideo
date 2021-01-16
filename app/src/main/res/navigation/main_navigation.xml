@@ -17,7 +17,7 @@
         tools:layout="@layout/main_fragment_recycler_view" />
     <fragment
         android:id="@+id/nav_playListFragment"
-        android:name="com.leon.biuvideo.ui.fragments.mainFragments.PlayListFragment"
+        android:name="com.leon.biuvideo.ui.fragments.mainFragments.LocalOrderFragment"
         android:label="PlayListFragment"
         tools:layout="@layout/main_fragment_play_list_fragment" />
     <fragment

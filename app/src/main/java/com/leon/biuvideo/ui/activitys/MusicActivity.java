@@ -25,27 +25,30 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.adapters.UserFragmentAdapters.OnMusicListListener;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.beans.musicBeans.MusicInfo;
-import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
+import com.leon.biuvideo.beans.orderBeans.LocalOrder;
 import com.leon.biuvideo.service.MusicService;
-import com.leon.biuvideo.ui.dialogs.MusicListDialog;
+import com.leon.biuvideo.ui.dialogs.MusicPlayListDialog;
 import com.leon.biuvideo.ui.dialogs.WarnDialog;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleDownloadThread;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.LocalOrdersDatabaseUtils;
 import com.leon.biuvideo.utils.downloadUtils.MediaUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
-import com.leon.biuvideo.utils.dataBaseUtils.MusicListDatabaseUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
+import com.leon.biuvideo.values.LocalOrderType;
 import com.leon.biuvideo.values.Tables;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicParser;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicUrlParser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.FutureTask;
 
@@ -77,7 +80,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
     public static ImageView music_imageView_control;
 
     //所有的sid
-    private List<Long> sids;
+    private List<String> sids;
 
     //当前sid在sids中的索引位置
     public int position;
@@ -108,11 +111,13 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
     //消息处理器
     public static Handler handler;
 
+    private final static LocalOrderType localOrderType = LocalOrderType.AUDIO;
+
     //music数据库的helper对象
-    private MusicListDatabaseUtils musicDatabaseUtils;
+    private LocalOrdersDatabaseUtils localOrdersDatabaseUtils;
 
     //播放列表弹窗
-    private MusicListDialog musicListDialog;
+    private MusicPlayListDialog musicPlayListDialog;
 
     private MediaUtils mediaUtils;
     private DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils;
@@ -142,19 +147,16 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
         //获取sid的position
         position = intent.getIntExtra("position", -1);
 
-        long[] sidsArray = intent.getLongArrayExtra("sids");
+        String[] sidsArray = intent.getStringArrayExtra("sids");
 
         // 获取所有的sid,转换为List集合
         if (sidsArray.length != 0) {
             this.sids = new ArrayList<>();
-
-            for (long l : sidsArray) {
-                this.sids.add(l);
-            }
+            this.sids.addAll(Arrays.asList(sidsArray));
         }
 
         if (position != -1) {
-            long sid = sids.get(position);
+            String sid = sids.get(position);
 
             if (musicParser == null) {
                 musicParser = new MusicParser();
@@ -168,7 +170,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
             if (musicUrlParser == null) {
                 musicUrlParser = new MusicUrlParser(getApplicationContext());
             }
-            musicUrl = musicUrlParser.parseMusicUrl(String.valueOf(sid));
+            musicUrl = musicUrlParser.parseMusicUrl(sid);
         } else {
             Toast.makeText(this, "获取数据失败~~~", Toast.LENGTH_SHORT).show();
             finish();
@@ -215,8 +217,8 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
         });
 
         //创建sqLiteHelper对象
-        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.MusicPlayList);
-        musicDatabaseUtils = (MusicListDatabaseUtils) sqLiteHelperFactory.getInstance();
+        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.LocalOrders);
+        localOrdersDatabaseUtils = (LocalOrdersDatabaseUtils) sqLiteHelperFactory.getInstance();
     }
 
     /**
@@ -291,7 +293,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
         music_imageView_isHaveVideo.setEnabled(!musicInfo.bvid.equals(""));
 
         //判断是否在播放列表中,更改addFavoriteIcon
-        isHavePlayList = musicDatabaseUtils.queryMusic(musicInfo.sid);
+        isHavePlayList = localOrdersDatabaseUtils.queryLocalOrder(musicInfo.sid, musicInfo.bvid, localOrderType);
         if (isHavePlayList) {
             music_imageView_addFavorite.setImageResource(R.drawable.favorite);
         } else {
@@ -349,24 +351,23 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                 break;
             case R.id.music_imageView_musicList:
                 //获取播放列表数据
-                List<MusicPlayList> musicPlayLists = musicDatabaseUtils.queryPlayList();
+                List<LocalOrder> localOrderList = localOrdersDatabaseUtils.queryLocalOrder(localOrderType);
 
-                musicListDialog = new MusicListDialog(MusicActivity.this, musicPlayLists);
-                MusicListDialog.priorityListener = new MusicListDialog.PriorityListener() {
+                musicPlayListDialog = new MusicPlayListDialog(MusicActivity.this, localOrderList);
+                musicPlayListDialog.setOnMusicListListener(new OnMusicListListener() {
                     @Override
-                    public void refreshFavoriteIcon() {
-                        //判断当前歌曲是否从playList中删除
-                        boolean state = musicDatabaseUtils.queryMusic(musicInfo.sid);
-
+                    public void onRefreshFavoriteIcon(LocalOrder localOrder) {
+                        boolean state = localOrdersDatabaseUtils.deleteLocalOrder(localOrder.title, localOrder.mainId, localOrder.subId, localOrderType);
                         if (state) {
-                            music_imageView_addFavorite.setImageResource(R.drawable.favorite);
-                        } else {
                             music_imageView_addFavorite.setImageResource(R.drawable.no_favorite);
                             isHavePlayList = false;
+                        } else {
+                            music_imageView_addFavorite.setImageResource(R.drawable.favorite);
                         }
                     }
+
                     @Override
-                    public void refreshMusic(long sid) {
+                    public void onSwitchMusic(String sid) {
                         //判断是否有网络
                         if (!InternetUtils.checkNetwork(getApplicationContext())) {
                             Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
@@ -375,10 +376,10 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
 
                         switchMusic(sid);
 
-                        musicListDialog.dismiss();
+                        musicPlayListDialog.dismiss();
                     }
-                };
-                musicListDialog.show();
+                });
+                musicPlayListDialog.show();
 
                 break;
             case R.id.music_imageView_download:
@@ -400,7 +401,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                     downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
                 }
 
-                boolean downloadState = downloadRecordsDatabaseUtils.queryVideoDownloadState(String.valueOf(musicInfo.sid));
+                boolean downloadState = downloadRecordsDatabaseUtils.queryVideoDownloadState(musicInfo.sid);
                 if (downloadState) {
                     WarnDialog warnDialog = new WarnDialog(MusicActivity.this, "提示", "检测到本地已存在该音频，是否要覆盖本地资源文件？");
                     warnDialog.setOnConfirmListener(new WarnDialog.OnConfirmListener() {
@@ -420,7 +421,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
 
                 if (isHavePlayList) {
                     //从playList中移除
-                    musicDatabaseUtils.removeMusicItem(musicInfo.sid);
+                    localOrdersDatabaseUtils.deleteLocalOrder(musicInfo.title, musicInfo.sid, musicInfo.bvid, localOrderType);
 
                     music_imageView_addFavorite.setImageResource(R.drawable.no_favorite);
 
@@ -430,15 +431,17 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                     sids.remove(position);
 
                 } else {
-                    MusicPlayList musicPlayList = new MusicPlayList();
-                    musicPlayList.sid = musicInfo.sid;
-                    musicPlayList.bvid = musicInfo.bvid.equals("") ? "" : musicInfo.bvid;
-                    musicPlayList.author = musicInfo.uname;
-                    musicPlayList.musicName = musicInfo.title;
-                    musicPlayList.isHaveVideo = !musicInfo.bvid.equals("");
+                    LocalOrder localOrder = new LocalOrder();
+                    localOrder.title = musicInfo.title;
+                    localOrder.desc = musicInfo.authors.get(0);
+                    localOrder.duration = musicInfo.duration;
+                    localOrder.mainId = musicInfo.sid;
+                    localOrder.subId = musicInfo.bvid;
+                    localOrder.orderType = localOrderType;
+                    localOrder.addTime = System.currentTimeMillis();
 
                     //添加至播放列表
-                    boolean addState = musicDatabaseUtils.addPlayList(musicPlayList);
+                    boolean addState = localOrdersDatabaseUtils.addLocalOrder(localOrder);
 
                     if (addState) {
                         music_imageView_addFavorite.setImageResource(R.drawable.favorite);
@@ -502,7 +505,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                 //判断当前播放的歌曲是否处于第一个
                 if (position != 0) {
                     //获取上一个music的sid
-                    long sid = sids.get(--position);
+                    String sid = sids.get(--position);
 
                     //切换歌曲
                     switchMusic(sid);
@@ -521,7 +524,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                 //判断当前播放的歌曲是否处于最后一个
                 if (position != sids.size() - 1) {
                     //获取下一个music的sid
-                    long sid = sids.get(++position);
+                    String sid = sids.get(++position);
 
                     //切换歌曲
                     switchMusic(sid);
@@ -550,7 +553,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
      *
      * @param sid   下一首歌曲的sid
      */
-    private void switchMusic(long sid) {
+    private void switchMusic(String sid) {
         //暂停音乐
         musicControl.pause();
 
@@ -564,7 +567,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
         musicInfo = musicParser.parseMusic(sid);
 
         //切换当前歌曲
-        musicUrl = musicUrlParser.parseMusicUrl(String.valueOf(sid));
+        musicUrl = musicUrlParser.parseMusicUrl(sid);
 
         //播放音乐
         musicControl.play(musicUrl);
@@ -588,7 +591,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
 
         // 获取视频和音频总大小
         downloadedDetailMedia.size = ResourceUtils.getResourcesSize(musicUrl);
-        downloadedDetailMedia.mainId = String.valueOf(musicInfo.sid);
+        downloadedDetailMedia.mainId = musicInfo.sid;
         downloadedDetailMedia.resourceMark = downloadedDetailMedia.mainId;
         downloadedDetailMedia.isVideo = false;
 
@@ -656,8 +659,8 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
         unbind();
         musicState = 0;
 
-        if (musicDatabaseUtils != null) {
-            musicDatabaseUtils.close();
+        if (localOrdersDatabaseUtils != null) {
+            localOrdersDatabaseUtils.close();
         }
 
         if (downloadRecordsDatabaseUtils != null) {

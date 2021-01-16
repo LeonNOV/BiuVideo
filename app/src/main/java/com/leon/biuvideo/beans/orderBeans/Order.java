@@ -1,4 +1,4 @@
-package com.leon.biuvideo.beans.userBeans;
+package com.leon.biuvideo.beans.orderBeans;
 
 import com.leon.biuvideo.values.OrderFollowType;
 

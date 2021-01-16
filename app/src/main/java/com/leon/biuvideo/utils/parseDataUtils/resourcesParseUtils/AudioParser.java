@@ -56,7 +56,7 @@ public class AudioParser {
                     JSONObject datumObject = (JSONObject) innerDatum;
 
                     //获取音频id
-                    audio.sid = datumObject.getLong("id");
+                    audio.sid = datumObject.getString("id");
 
                     //获取封面
                     audio.cover = datumObject.getString("cover");

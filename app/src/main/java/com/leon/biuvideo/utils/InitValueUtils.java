@@ -3,7 +3,7 @@ package com.leon.biuvideo.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class VerifyUtils {
+public class InitValueUtils {
     /**
      * 检查是否已登录账号
      *
@@ -26,5 +26,15 @@ public class VerifyUtils {
     public static boolean isVIP(Context context) {
         SharedPreferences initValue = context.getSharedPreferences("initValue", Context.MODE_PRIVATE);
         return initValue.getBoolean("isVIP", false);
+    }
+
+    /**
+     * 获取当前用户ID，如果未登录则默认UID为0
+     *
+     * @return  UID
+     */
+    public static long getUID(Context context) {
+        SharedPreferences initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
+        return initValues.getLong("mid", 0);
     }
 }

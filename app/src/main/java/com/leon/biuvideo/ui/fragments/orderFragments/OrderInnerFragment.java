@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.OrderAdapter;
-import com.leon.biuvideo.beans.userBeans.Order;
+import com.leon.biuvideo.adapters.UserOrderAdapter;
+import com.leon.biuvideo.beans.orderBeans.Order;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
@@ -45,7 +45,7 @@ public class OrderInnerFragment extends BaseFragment {
     private List<Order> orders;
 
     private LinearLayoutManager linearLayoutManager;
-    private OrderAdapter orderAdapter;
+    private UserOrderAdapter userOrderAdapter;
 
     public OrderInnerFragment(long mid, OrderType orderType, OrderFollowType orderFollowType) {
         this.mid = mid;
@@ -95,9 +95,9 @@ public class OrderInnerFragment extends BaseFragment {
                 smartRefresh.setEnabled(false);
             }
 
-            if (linearLayoutManager == null || orderAdapter == null) {
+            if (linearLayoutManager == null || userOrderAdapter == null) {
                 linearLayoutManager = new LinearLayoutManager(context);
-                orderAdapter = new OrderAdapter(orders, context, orderType);
+                userOrderAdapter = new UserOrderAdapter(orders, context, orderType);
             }
 
             initAttr();
@@ -107,7 +107,7 @@ public class OrderInnerFragment extends BaseFragment {
 
     private void initAttr() {
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(orderAdapter);
+        recyclerView.setAdapter(userOrderAdapter);
 
         Handler handler = new Handler();
 
@@ -139,7 +139,7 @@ public class OrderInnerFragment extends BaseFragment {
                                 getOrder();
 
                                 //添加新数据
-                                orderAdapter.append(orders);
+                                userOrderAdapter.append(orders);
                             }
                         }, 1000);
                     } else {

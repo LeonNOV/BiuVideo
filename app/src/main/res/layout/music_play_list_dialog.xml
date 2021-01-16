@@ -13,6 +13,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/music_recyclerView_playList"
             android:layout_width="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="vertical"
             android:layout_height="match_parent"
             android:layout_marginStart="25dp"
             android:layout_marginTop="10dp"

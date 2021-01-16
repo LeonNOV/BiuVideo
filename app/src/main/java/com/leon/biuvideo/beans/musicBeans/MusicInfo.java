@@ -6,7 +6,7 @@ import java.util.List;
  * 音频/音乐实体类
  */
 public class MusicInfo {
-    public long sid;
+    public String sid;
     public long uid;
     public String uname;
     public String bvid;

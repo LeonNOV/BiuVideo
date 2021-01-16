@@ -1,4 +1,4 @@
-package com.leon.biuvideo.ui.fragments.playListFragments;
+package com.leon.biuvideo.ui.fragments.orderFragments;
 
 import android.os.Handler;
 import android.widget.Toast;
@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UserDataAdapters.UserFavoriteFolderAdapter;
 import com.leon.biuvideo.adapters.UserDataAdapters.UserFavoriteFolderDetailAdapter;
-import com.leon.biuvideo.beans.userBeans.UserFolder;
-import com.leon.biuvideo.beans.userBeans.UserFolderData;
+import com.leon.biuvideo.beans.orderBeans.UserFolder;
+import com.leon.biuvideo.beans.orderBeans.UserFolderData;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * PlayListFragment中的video片段
  */
-public class VideoListFragment extends BaseFragment {
+public class UserOrderVideoFragment extends BaseFragment {
     private final long mid;
 
     private long nowFolderId;
@@ -43,13 +43,13 @@ public class VideoListFragment extends BaseFragment {
 
     private UserFavoriteFolderDetailAdapter userFavoriteFolderDetailAdapter;
 
-    public VideoListFragment(long mid) {
+    public UserOrderVideoFragment(long mid) {
         this.mid = mid;
     }
 
     @Override
     public int setLayout() {
-        return R.layout.fragment_favorite_video;
+        return R.layout.fragment_user_order_video;
     }
 
     @Override

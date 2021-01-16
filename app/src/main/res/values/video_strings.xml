@@ -13,6 +13,8 @@
     <string name="anthology_download_dialog_qualityStr">当前已选择画质</string>
 
     <string name="anthology_download_dialog_qualityWarn">第一次使用建议点击这里</string>
+    <string name="newVideoFolderHint">输入文件夹名称</string>
+    <string name="createNewVideoFolderTitle">创建新的收藏文件夹</string>
     <array name="anthologyQuality">
         <item>超清 4K</item>
         <item>高清 1080P60</item>

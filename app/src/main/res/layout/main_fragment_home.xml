@@ -45,6 +45,7 @@
                 android:layout_height="40dp"
                 android:background="@null"
                 android:ems="10"
+                android:imeOptions="actionSearch"
                 android:gravity="center"
                 android:hint="@string/main_editText_hint1"
                 android:inputType="text"

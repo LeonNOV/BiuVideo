@@ -35,7 +35,7 @@ import com.leon.biuvideo.ui.fragments.mainFragments.FavoriteFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.HistoryFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.HomeFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.OrderFragment;
-import com.leon.biuvideo.ui.fragments.mainFragments.PlayListFragment;
+import com.leon.biuvideo.ui.fragments.mainFragments.LocalOrderFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.PreferenceFragment;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.InternetUtils;
@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.navigation_menu_localOrder:
 
                 if (playListFragment == null) {
-                    playListFragment = new PlayListFragment();
+                    playListFragment = new LocalOrderFragment();
                 }
 
                 switchFragment(playListFragment);

@@ -6,6 +6,11 @@
 ## 📘开发日志
 
 ### 2021/01/16
+- 删除了`videoPlayList`和`musicPlayList`两个表
+  - 以上两个表将由`localVideoFolders`和`localOrders`代替
+  - 在`VideoActivity`中点亮红心时，会弹出一个选择要添加进的收藏夹弹窗，第一次启动APP会默认添加一个`默认收藏夹`
+  - 修改了`MusicActivity`中的部分代码
+  - 播放列表更名为`本地订阅`，这样做是为了能够将喜欢的视频、音频及专栏保存在本地，下一个版本会加入同步(已保存的数据将会根据自已的意愿选择是否进行和B站账户数据同步)，**该功能并不是为了同步，而是尽可能的保持离线化**
 - 增加了两个SQLite表格
   - `localVideoFolders`
   - `localOrders`

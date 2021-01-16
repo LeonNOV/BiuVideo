@@ -30,18 +30,16 @@ public class SQLiteHelperFactory {
             case FavoriteUp:
                 sqLiteHelper = new FavoriteDatabaseUtils(context);
                 break;
-            case VideoPlayList:
-                sqLiteHelper = new VideoListDatabaseUtils(context);
-                break;
-            case MusicPlayList:
-                sqLiteHelper = new MusicListDatabaseUtils(context);
-                break;
             case Article:
                 sqLiteHelper = new ArticleDatabaseUtils(context);
                 break;
             case DownloadDetailsForVideo:
             case DownloadRecordsForVideo:
                 sqLiteHelper = new DownloadRecordsDatabaseUtils(context);
+                break;
+            case LocalOrders:
+            case LocalVideoFolders:
+                sqLiteHelper = new LocalOrdersDatabaseUtils(context);
                 break;
             default:
                 sqLiteHelper = new SQLiteHelper(context, 1);

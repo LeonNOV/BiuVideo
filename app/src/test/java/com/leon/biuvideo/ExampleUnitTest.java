@@ -1,19 +1,14 @@
 package com.leon.biuvideo;
 
-import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
-import com.leon.biuvideo.beans.userBeans.UserFolderData;
+import com.leon.biuvideo.beans.orderBeans.UserFolderData;
 import com.leon.biuvideo.utils.IDUtils;
-import com.leon.biuvideo.utils.downloadUtils.MediaUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
-import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BangumiParser;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserFolderParser;
 import com.leon.biuvideo.values.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
-import com.leon.biuvideo.values.SortType;
 
 import org.junit.Test;
 
-import java.io.File;
 import java.util.List;
 
 /**

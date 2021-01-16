@@ -74,7 +74,7 @@ public class UserAudioAdapter extends BaseAdapter<Audio> {
                         }
 
                         //获取所有sid
-                        long[] sids = new long[UserAudioAdapter.this.audio.size()];
+                        String[] sids = new String[UserAudioAdapter.this.audio.size()];
                         for (int i = 0; i < UserAudioAdapter.this.audio.size(); i++) {
                             sids[i] = (UserAudioAdapter.this.audio.get(i).sid);
                         }

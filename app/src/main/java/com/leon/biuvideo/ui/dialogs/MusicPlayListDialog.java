@@ -9,28 +9,32 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.MusicPlayListAdapter;
-import com.leon.biuvideo.beans.musicBeans.MusicPlayList;
+import com.leon.biuvideo.adapters.UserFragmentAdapters.OnMusicListListener;
+import com.leon.biuvideo.beans.orderBeans.LocalOrder;
 
 import java.util.List;
 
 /**
  * music播放列表弹窗，只在UpSongActivity中出现
  */
-public class MusicListDialog extends AlertDialog {
-    private List<MusicPlayList> musicPlayLists;
+public class MusicPlayListDialog extends AlertDialog {
+    private List<LocalOrder> localOrderList;
     private final Context context;
 
-    public static PriorityListener priorityListener;
-
-    public MusicListDialog(@NonNull Context context, List<MusicPlayList> musicPlayLists) {
+    public MusicPlayListDialog(@NonNull Context context, List<LocalOrder> localOrderList) {
         super(context);
         this.context = context;
-        this.musicPlayLists = musicPlayLists;
+        this.localOrderList = localOrderList;
+    }
+
+    private OnMusicListListener onMusicListListener;
+
+    public void setOnMusicListListener(OnMusicListListener onMusicListListener) {
+        this.onMusicListListener = onMusicListListener;
     }
 
     @Override
@@ -43,6 +47,23 @@ public class MusicListDialog extends AlertDialog {
 
     private void initView() {
         RecyclerView music_recyclerView_playList = findViewById(R.id.music_recyclerView_playList);
+        MusicPlayListAdapter musicPlayListAdapter = new MusicPlayListAdapter(localOrderList, context);
+        musicPlayListAdapter.setOnMusicListListener(new OnMusicListListener() {
+            @Override
+            public void onRefreshFavoriteIcon(LocalOrder localOrder) {
+                if (onMusicListListener != null) {
+                    onMusicListListener.onRefreshFavoriteIcon(localOrder);
+                }
+            }
+
+            @Override
+            public void onSwitchMusic(String sid) {
+                if (onMusicListListener != null) {
+                    onMusicListListener.onSwitchMusic(sid);
+                }
+            }
+        });
+        music_recyclerView_playList.setAdapter(musicPlayListAdapter);
 
         Button music_button_close = findViewById(R.id.music_button_close);
         music_button_close.setOnClickListener(new View.OnClickListener() {
@@ -51,12 +72,6 @@ public class MusicListDialog extends AlertDialog {
                 dismiss();
             }
         });
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        MusicPlayListAdapter musicPlayListAdapter = new MusicPlayListAdapter(musicPlayLists, context);
-
-        music_recyclerView_playList.setLayoutManager(layoutManager);
-        music_recyclerView_playList.setAdapter(musicPlayListAdapter);
 
         //获取window
         Window window = this.getWindow();
@@ -77,14 +92,5 @@ public class MusicListDialog extends AlertDialog {
     @Override
     public void show() {
         super.show();
-    }
-
-    public interface PriorityListener {
-
-        //回调函数，用于刷新UpSongActivity
-        void refreshFavoriteIcon();
-
-        //回调函数，用于切换歌曲
-        void refreshMusic(long sid);
     }
 }

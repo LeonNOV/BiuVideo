@@ -11,7 +11,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
-import com.leon.biuvideo.beans.userBeans.Order;
+import com.leon.biuvideo.beans.orderBeans.Order;
 import com.leon.biuvideo.ui.activitys.BangumiActivity;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BangumiParser;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -21,12 +21,12 @@ import com.leon.biuvideo.values.SortType;
 import java.util.Arrays;
 import java.util.List;
 
-public class OrderAdapter extends BaseAdapter<Order> {
+public class UserOrderAdapter extends BaseAdapter<Order> {
     private final Context context;
     private final List<Order> orders;
     private final OrderType orderType;
 
-    public OrderAdapter(List<Order> orders, Context context, OrderType orderType) {
+    public UserOrderAdapter(List<Order> orders, Context context, OrderType orderType) {
         super(orders, context);
         this.context = context;
         this.orders = orders;

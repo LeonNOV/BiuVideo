@@ -1,4 +1,4 @@
-package com.leon.biuvideo.beans.userBeans;
+package com.leon.biuvideo.beans.orderBeans;
 
 /**
  * 用户订阅文件夹实体类

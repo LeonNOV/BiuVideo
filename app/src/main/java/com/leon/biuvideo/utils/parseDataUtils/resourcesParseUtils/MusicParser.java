@@ -21,9 +21,9 @@ public class MusicParser {
      * @param sid   musicID
      * @return  返回MusicInfo对象
      */
-    public MusicInfo parseMusic(long sid) {
+    public MusicInfo parseMusic(String sid) {
         Map<String, String> params = new HashMap<>();
-        params.put("sid", String.valueOf(sid));
+        params.put("sid", sid);
 
         JSONObject responseObject = HttpUtils.getResponse(Paths.musicInfo, params);
         JSONObject dataObject = responseObject.getJSONObject("data");
