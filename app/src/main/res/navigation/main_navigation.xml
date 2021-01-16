@@ -19,7 +19,7 @@
         android:id="@+id/nav_playListFragment"
         android:name="com.leon.biuvideo.ui.fragments.mainFragments.LocalOrderFragment"
         android:label="PlayListFragment"
-        tools:layout="@layout/main_fragment_play_list_fragment" />
+        tools:layout="@layout/main_fragment_local_order" />
     <fragment
         android:id="@+id/nav_preferenceFragment"
         android:name="com.leon.biuvideo.ui.fragments.mainFragments.PreferenceFragment"

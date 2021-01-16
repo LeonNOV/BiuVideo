@@ -5,6 +5,11 @@
 
 ## 📘开发日志
 
+### 2021/01/17
+- 完善了`VideoActivity`、`BangumiActivity`和`ArticleActivity`中的部分代码
+  - **删除了`article`表，将由`LocalOrders`代替，涉及到的其他代码还未进行清理**
+  - **在`LocalOrders`表中加入了cover字段，涉及到代码还未完成修改**
+
 ### 2021/01/16
 - 删除了`videoPlayList`和`musicPlayList`两个表
   - 以上两个表将由`localVideoFolders`和`localOrders`代替

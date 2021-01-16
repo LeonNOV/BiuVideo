@@ -47,6 +47,7 @@ public class AddVideoDialog extends AlertDialog implements View.OnClickListener 
 
     public interface OnAddOrderCallback {
         LocalOrder callBack(LocalVideoFolder localVideoFolder);
+
         void onFavoriteIcon(boolean addState);
     }
 

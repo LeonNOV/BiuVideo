@@ -79,6 +79,7 @@ public class MusicService extends Service {
     /**
      * 任意一次unbindService()方法，都会触发这个方法
      * 用于释放一些绑定时使用的资源
+     *
      * @param intent
      * @return
      */
@@ -211,9 +212,9 @@ public class MusicService extends Service {
                 public boolean onError(MediaPlayer mp, int what, int extra) {
 
                     if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-                            mediaPlayer.seekTo(0);
-                            Toast.makeText(MusicService.this, "重新播放中", Toast.LENGTH_SHORT).show();
-                        }
+                        mediaPlayer.seekTo(0);
+                        Toast.makeText(MusicService.this, "重新播放中", Toast.LENGTH_SHORT).show();
+                    }
                     return false;
                 }
             });

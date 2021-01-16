@@ -90,7 +90,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
     private DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils;
 
     //视频在videoPlayList库中的状态
-    private boolean videoFavoriteState;
+    private boolean isHaveLocalOrder;
 
     private List<Map.Entry<Integer, Media>> videoEntries = null;
     private List<Map.Entry<Integer, Media>> audioEntries = null;
@@ -102,7 +102,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video);
@@ -179,7 +179,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.LocalOrders);
         localOrdersDatabaseUtils = (LocalOrdersDatabaseUtils) sqLiteHelperFactory.getInstance();
 
-        videoFavoriteState = localOrdersDatabaseUtils.queryLocalOrder(String.valueOf(viewPage.bvid), null, localOrderType);
+        isHaveLocalOrder = localOrdersDatabaseUtils.queryLocalOrder(String.valueOf(viewPage.bvid), null, localOrderType);
 
         // 初始化视频信息
         initVideoInfo();
@@ -231,7 +231,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
     private void initVideoInfo() {
         Glide.with(getApplicationContext()).load(viewPage.userInfo.faceUrl + ImagePixelSize.FACE.value).into(video_circleImageView_face);
         video_textView_name.setText(viewPage.userInfo.name);
-        video_imageView_addFavorite.setImageResource(videoFavoriteState ? R.drawable.favorite : R.drawable.no_favorite);
+        video_imageView_addFavorite.setImageResource(isHaveLocalOrder ? R.drawable.favorite : R.drawable.no_favorite);
         video_textView_title.setText(viewPage.title);
         video_textView_view.setText(ValueFormat.generateCN(viewPage.videoInfo.view) + "次观看");
         video_textView_danmaku.setText(ValueFormat.generateCN(viewPage.videoInfo.danmaku) + "弹幕");
@@ -271,14 +271,14 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.video_imageView_addFavorite:
                 //根据videoState判断是否保存获取删除该video
-                if (videoFavoriteState) {
+                if (isHaveLocalOrder) {
                     //从videoPlayList中删除此video
                     boolean state = localOrdersDatabaseUtils.deleteLocalOrder(viewPage.title, String.valueOf(viewPage.bvid), null, localOrderType);
-                    Toast.makeText(this, state ? "已从收藏夹中删除" : "删除失败~~~", Toast.LENGTH_SHORT).show();
 
                     if (state) {
                         video_imageView_addFavorite.setImageResource(R.drawable.no_favorite);
-                        videoFavoriteState = false;
+                        Toast.makeText(this, R.string.remFavoriteSign, Toast.LENGTH_SHORT).show();
+                        isHaveLocalOrder = false;
                     }
                 } else {
                     //添加该video至videoPlayList中
@@ -301,8 +301,8 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                         public void onFavoriteIcon(boolean addState) {
                             if (addState) {
                                 video_imageView_addFavorite.setImageResource(R.drawable.favorite);
-                                videoFavoriteState = true;
-                                Toast.makeText(VideoActivity.this, "已成功加入至收藏夹中", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(VideoActivity.this, R.string.addFavoriteSign, Toast.LENGTH_SHORT).show();
+                                isHaveLocalOrder = true;
                             }
                         }
                     });
@@ -539,9 +539,9 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
     /**
      * 权限回调
      *
-     * @param requestCode   请求码
-     * @param permissions   文件读写权限
-     * @param grantResults  授权结果
+     * @param requestCode  请求码
+     * @param permissions  文件读写权限
+     * @param grantResults 授权结果
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

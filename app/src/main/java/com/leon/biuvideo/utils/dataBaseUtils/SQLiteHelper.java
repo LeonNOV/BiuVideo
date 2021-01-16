@@ -19,7 +19,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "\"isDelete\"  INTEGER DEFAULT 0\n" +
             ");";
 
-    private static final String article = "CREATE TABLE \"article\" (\n" +
+    /*private static final String article = "CREATE TABLE \"article\" (\n" +
             "\"id\"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
             "\"mid\"  INTEGER,\n" +
             "\"face\"  TEXT,\n" +
@@ -34,7 +34,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "\"like\"  INTEGER,\n" +
             "\"reply\"  INTEGER,\n" +
             "\"isDelete\"  INTEGER DEFAULT 0\n" +
-            ");";
+            ");";*/
 
     // 视频下载记录
     private static final String downloadRecordsForVideo = "CREATE TABLE \"downloadRecordsForVideo\" (\n" +
@@ -75,19 +75,19 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     /**
      * 订阅、收藏表，用于存放番剧、音频、专栏数据<br/>
      * 其中orderType为订阅数据类型(LocalOrderType)
-     *      0：video
-     *      1：bangumi
-     *      2：audio
-     *      3：article
+     * 0：video
+     * 1：bangumi
+     * 2：audio
+     * 3：article
      * <br/>
-     *  如果为音频，则mainId表示为sid而subId表示音频对应的视频bvid<br/>
+     * 如果为音频，则mainId表示为sid而subId表示音频对应的视频bvid<br/>
      */
     private static final String localOrders = "CREATE TABLE \"localOrders\" (\n" +
             "\"id\"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+            "\"cover\"  TEXT,\n" +
             "\"title\"  TEXT,\n" +
             "\"desc\"  TEXT,\n" +
             "\"area\"  TEXT,\n" +
-            "\"progress\"  TEXT,\n" +
             "\"duration\"  INTEGER,\n" +
             "\"count\"  INTEGER,\n" +
             "\"mainId\"  TEXT,\n" +

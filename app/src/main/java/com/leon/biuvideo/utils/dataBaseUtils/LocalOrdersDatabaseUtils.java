@@ -112,7 +112,6 @@ public class LocalOrdersDatabaseUtils extends SQLiteHelper {
                 localOrder.title = cursor.getString(cursor.getColumnIndex("title"));
                 localOrder.desc = cursor.getString(cursor.getColumnIndex("desc"));
                 localOrder.area = cursor.getString(cursor.getColumnIndex("area"));
-                localOrder.progress = cursor.getString(cursor.getColumnIndex("progress"));
                 localOrder.duration = cursor.getInt(cursor.getColumnIndex("duration"));
                 localOrder.count = cursor.getInt(cursor.getColumnIndex("count"));
                 localOrder.mainId = cursor.getString(cursor.getColumnIndex("mainId"));
@@ -159,7 +158,6 @@ public class LocalOrdersDatabaseUtils extends SQLiteHelper {
         contentValues.put("title", localOrder.title);
         contentValues.put("desc", localOrder.desc);
         contentValues.put("area", localOrder.area);
-        contentValues.put("progress", localOrder.progress);
         contentValues.put("duration", localOrder.duration);
         contentValues.put("count", localOrder.count);
         contentValues.put("mainId", localOrder.mainId);

@@ -30,9 +30,6 @@ public class SQLiteHelperFactory {
             case FavoriteUp:
                 sqLiteHelper = new FavoriteDatabaseUtils(context);
                 break;
-            case Article:
-                sqLiteHelper = new ArticleDatabaseUtils(context);
-                break;
             case DownloadDetailsForVideo:
             case DownloadRecordsForVideo:
                 sqLiteHelper = new DownloadRecordsDatabaseUtils(context);

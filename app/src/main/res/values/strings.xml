@@ -43,6 +43,10 @@
     <!-- 无网络提示 -->
     <string name="network_sign">网络貌似有点问题哎~</string>
 
+    <!-- 加入/删除提示 -->
+    <string name="addFavoriteSign">已加入到本地订阅中</string>
+    <string name="remFavoriteSign">已从本地订阅中删除</string>
+
     <!-- 帮助链接 -->
     <string name="help_link">https://www.yuque.com/books/share/0544c9b3-9de9-4d3b-ad1e-0d7defd7e8be?# 《BiuVideo帮助文档》</string>
 

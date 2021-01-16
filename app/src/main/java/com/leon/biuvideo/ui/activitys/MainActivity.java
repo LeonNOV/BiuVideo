@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Fragment homeFragment;
     private Fragment favoriteFragment;
-    private Fragment playListFragment;
+    private Fragment localOrderFragment;
     private Fragment historyFragment;
     private Fragment preferenceFragment;
     private Fragment orderFragment;
@@ -278,11 +278,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.navigation_menu_localOrder:
 
-                if (playListFragment == null) {
-                    playListFragment = new LocalOrderFragment();
+                if (localOrderFragment == null) {
+                    localOrderFragment = new LocalOrderFragment();
                 }
 
-                switchFragment(playListFragment);
+                switchFragment(localOrderFragment);
                 break;
             case R.id.navigation_menu_order:
                 if (orderFragment == null) {

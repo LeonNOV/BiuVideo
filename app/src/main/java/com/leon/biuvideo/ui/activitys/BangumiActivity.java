@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UserFragmentAdapters.BangumiEpAdapter;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedRecordsForVideo;
+import com.leon.biuvideo.beans.orderBeans.LocalOrder;
 import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
 import com.leon.biuvideo.beans.searchBean.bangumi.BangumiState;
 import com.leon.biuvideo.beans.searchBean.bangumi.Ep;
@@ -31,11 +33,13 @@ import com.leon.biuvideo.utils.SimpleDownloadThread;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.LocalOrdersDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParser;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BangumiParser;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BangumiStateParse;
+import com.leon.biuvideo.values.LocalOrderType;
 import com.leon.biuvideo.values.Tables;
 
 import java.util.List;
@@ -56,9 +60,12 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
     private SimpleThreadPool simpleThreadPool;
     private DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils;
     private MediaParser mediaParser;
-    private Ep ep;
-    private String selectedAnthologyName;
-    private static final String PROMPT = "当前已选择的选集为：";
+    private LocalOrdersDatabaseUtils localOrdersDatabaseUtils;
+    private ImageView bangumi_imageView_favorite;
+
+    private final static String PROMPT = "当前已选择的选集为：";
+    private final static LocalOrderType localOrderType = LocalOrderType.BANGUMI;
+    private boolean isHaveLocalOrder = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +95,9 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
 
         BangumiStateParse bangumiStateParse = new BangumiStateParse(getApplicationContext());
         bangumiState = bangumiStateParse.bangumiStateParse(bangumi.seasonId);
+
+        localOrdersDatabaseUtils = new LocalOrdersDatabaseUtils(getApplicationContext());
+        isHaveLocalOrder = localOrdersDatabaseUtils.queryLocalOrder(String.valueOf(bangumi.mediaId), String.valueOf(bangumi.seasonId), localOrderType);
     }
 
     private void initView() {
@@ -104,8 +114,12 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                 .setOnClickListener(R.id.bangumi_imageView_back, this)
                 .setOnClickListener(R.id.bangumi_textView_toDetail, this)
                 .setOnClickListener(R.id.bangumi_imageView_download, this)
-                .setOnClickListener(R.id.bangumi_imageView_favorite, this)
                 .setOnClickListener(R.id.bangumi_textView_jumpToOriginal, this);
+
+        bangumi_imageView_favorite = findViewById(R.id.bangumi_imageView_favorite);
+        bangumi_imageView_favorite.setImageResource(isHaveLocalOrder ? R.drawable.favorite : R.drawable.no_favorite);
+        bangumi_imageView_favorite.setOnClickListener(this);
+
         bangumi_textView_selectedBangumiName = findViewById(R.id.bangumi_textView_selectedBangumiName);
         setSelectedAnthologyName();
 
@@ -135,8 +149,8 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
      * 设置已选择选集提示的文本信息
      */
     private void setSelectedAnthologyName() {
-        ep = bangumi.eps.get(selectAnthologyIndex);
-        selectedAnthologyName = PROMPT + ep.title + "-" + ep.longTitle;
+        Ep ep = bangumi.eps.get(selectAnthologyIndex);
+        String selectedAnthologyName = PROMPT + ep.title + "-" + ep.longTitle;
         bangumi_textView_selectedBangumiName.setText(selectedAnthologyName);
     }
 
@@ -157,7 +171,6 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.bangumi_textView_toDetail:
                 BangumiDetailDialog bangumiDetailDialog = new BangumiDetailDialog(BangumiActivity.this, bangumi);
                 bangumiDetailDialog.show();
-
                 break;
             case R.id.bangumi_imageView_download:
                 //判断是否有网络
@@ -242,7 +255,35 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
 
                 break;
             case R.id.bangumi_imageView_favorite:
+                boolean operatingStatus;
 
+                if (isHaveLocalOrder) {
+                    operatingStatus = localOrdersDatabaseUtils.deleteLocalOrder(bangumi.title, String.valueOf(bangumi.mediaId), String.valueOf(bangumi.seasonId), localOrderType);
+
+                    if (operatingStatus) {
+                        bangumi_imageView_favorite.setImageResource(R.drawable.no_favorite);
+                        Toast.makeText(this, R.string.remFavoriteSign, Toast.LENGTH_SHORT).show();
+                        isHaveLocalOrder = false;
+                    }
+                } else {
+                    LocalOrder localOrder = new LocalOrder();
+                    localOrder.title = bangumi.title;
+                    localOrder.desc = bangumi.desc;
+                    localOrder.area = bangumi.area;
+                    localOrder.count = bangumi.epSize;
+                    localOrder.mainId = String.valueOf(bangumi.mediaId);
+                    localOrder.subId = String.valueOf(bangumi.seasonId);
+                    localOrder.orderType = localOrderType;
+                    localOrder.addTime = System.currentTimeMillis();
+
+                    operatingStatus = localOrdersDatabaseUtils.addLocalOrder(localOrder);
+
+                    if (operatingStatus) {
+                        bangumi_imageView_favorite.setImageResource(R.drawable.favorite);
+                        Toast.makeText(this, R.string.addFavoriteSign, Toast.LENGTH_SHORT).show();
+                        isHaveLocalOrder = true;
+                    }
+                }
                 break;
             default:
                 break;
@@ -310,6 +351,10 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
     protected void onDestroy() {
         if (downloadRecordsDatabaseUtils != null) {
             downloadRecordsDatabaseUtils.close();
+        }
+
+        if (localOrdersDatabaseUtils != null) {
+            localOrdersDatabaseUtils.close();
         }
         super.onDestroy();
     }

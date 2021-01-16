@@ -174,17 +174,17 @@ import java.util.Map;
                 search_viewPager.setCurrentItem(0);
 
                 break;
-            case R.id.search_textView_result_article:
+            case R.id.search_textView_result_bangumi:
                 search_viewPager.setCurrentItem(1);
 
                 break;
-            case R.id.search_textView_result_user:
+            case R.id.search_textView_result_article:
                 search_viewPager.setCurrentItem(2);
 
-            case R.id.search_textView_result_bangumi:
-                search_viewPager.setCurrentItem(3);
-
                 break;
+
+            case R.id.search_textView_result_user:
+                search_viewPager.setCurrentItem(3);
             default:
                 break;
         }
