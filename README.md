@@ -9,7 +9,7 @@
 - 对`localOrders`表进行的修改
   - mainId：用于Video的bvid、Bangumi的mediaId、Music的sid、Article的articleId
   - subId：用于Bangumi的seasonId、Music的bvid、article的mid
-  - jsonObject：用于存放跳转到对应Activity时用到的数据，或进行显示的数据
+  - json：用于存放跳转到对应Activity时用到的数据，或进行显示的数据
 - `本地订阅`功能已基本完成
 - **该项目的整体代码和文件还需要进行大规模清理**
 
