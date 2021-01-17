@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
 import com.leon.biuvideo.beans.orderBeans.LocalVideoFolder;
 import com.leon.biuvideo.utils.InitValueUtils;
@@ -109,11 +110,7 @@ public class LocalOrdersDatabaseUtils extends SQLiteHelper {
             while (cursor.moveToNext()) {
                 LocalOrder localOrder = new LocalOrder();
                 localOrder.id = cursor.getInt(cursor.getColumnIndex("id"));
-                localOrder.title = cursor.getString(cursor.getColumnIndex("title"));
-                localOrder.desc = cursor.getString(cursor.getColumnIndex("desc"));
-                localOrder.area = cursor.getString(cursor.getColumnIndex("area"));
-                localOrder.duration = cursor.getInt(cursor.getColumnIndex("duration"));
-                localOrder.count = cursor.getInt(cursor.getColumnIndex("count"));
+                localOrder.jsonObject = JSONObject.parseObject(cursor.getString(cursor.getColumnIndex("json")));
                 localOrder.mainId = cursor.getString(cursor.getColumnIndex("mainId"));
                 localOrder.subId = cursor.getString(cursor.getColumnIndex("subId"));
                 localOrder.orderType = LocalOrderType.getType(cursor.getInt(cursor.getColumnIndex("orderType")));
@@ -155,11 +152,7 @@ public class LocalOrdersDatabaseUtils extends SQLiteHelper {
      */
     public boolean addLocalOrder(LocalOrder localOrder) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("title", localOrder.title);
-        contentValues.put("desc", localOrder.desc);
-        contentValues.put("area", localOrder.area);
-        contentValues.put("duration", localOrder.duration);
-        contentValues.put("count", localOrder.count);
+        contentValues.put("json", localOrder.jsonObject.toJSONString());
         contentValues.put("mainId", localOrder.mainId);
         contentValues.put("subId", localOrder.subId);
         contentValues.put("orderType", localOrder.orderType.value);
@@ -175,16 +168,15 @@ public class LocalOrdersDatabaseUtils extends SQLiteHelper {
     /**
      * 删除订阅数据
      *
-     * @param title 标题
      * @param mainId    mainId
      * @param subId subId
      */
-    public boolean deleteLocalOrder(String title, String mainId, String subId, LocalOrderType localOrderType) {
+    public boolean deleteLocalOrder(String mainId, String subId, LocalOrderType localOrderType) {
         int deleteState;
         if (subId == null) {
-            deleteState = sqLiteDatabase.delete(LocalOrders, "title = ? AND mainId = ? AND adder = ? AND orderType = ?", new String[]{title, mainId, String.valueOf(InitValueUtils.getUID(context)), String.valueOf(localOrderType.value)});
+            deleteState = sqLiteDatabase.delete(LocalOrders, "mainId = ? AND adder = ? AND orderType = ?", new String[]{mainId, String.valueOf(InitValueUtils.getUID(context)), String.valueOf(localOrderType.value)});
         } else {
-            deleteState = sqLiteDatabase.delete(LocalOrders, "title = ? AND mainId = ? AND subId = ? AND adder = ? AND orderType = ?", new String[]{title, mainId, subId, String.valueOf(InitValueUtils.getUID(context)), String.valueOf(localOrderType.value)});
+            deleteState = sqLiteDatabase.delete(LocalOrders, "mainId = ? AND subId = ? AND adder = ? AND orderType = ?", new String[]{mainId, subId, String.valueOf(InitValueUtils.getUID(context)), String.valueOf(localOrderType.value)});
         }
 
         return deleteState > 0;

@@ -5,10 +5,18 @@
 
 ## 📘开发日志
 
+### 2021/01/18
+- 对`localOrders`表进行的修改
+  - mainId：用于Video的bvid、Bangumi的mediaId、Music的sid、Article的articleId
+  - subId：用于Bangumi的seasonId、Music的bvid、article的mid
+  - jsonObject：用于存放跳转到对应Activity时用到的数据，或进行显示的数据
+- `本地订阅`功能已基本完成
+- **该项目的整体代码和文件还需要进行大规模清理**
+
 ### 2021/01/17
 - 完善了`VideoActivity`、`BangumiActivity`和`ArticleActivity`中的部分代码
-  - **删除了`article`表，将由`LocalOrders`代替，涉及到的其他代码还未进行清理**
-  - **在`LocalOrders`表中加入了cover字段，涉及到代码还未完成修改**
+  - ~~**删除了`article`表，将由`LocalOrders`代替，涉及到的其他代码还未进行清理**~~
+  - ~~**在`LocalOrders`表中加入了cover字段，涉及到代码还未完成修改**~~
 
 ### 2021/01/16
 - 删除了`videoPlayList`和`musicPlayList`两个表

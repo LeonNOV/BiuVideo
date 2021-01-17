@@ -5,6 +5,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseViewHolder;
@@ -39,10 +40,11 @@ public class MusicPlayListAdapter extends BaseAdapter<LocalOrder> {
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         LocalOrder localOrder = localOrderList.get(position);
+        JSONObject jsonObject = localOrder.jsonObject;
 
         holder
-                .setText(R.id.music_textView_playList_title, localOrder.title)
-                .setText(R.id.music_textView_playList_author, localOrder.desc)
+                .setText(R.id.music_textView_playList_title, jsonObject.getString("title"))
+                .setText(R.id.music_textView_playList_author, jsonObject.getString("author"))
                 .setOnClickListener(R.id.music_imageView_playList_delete, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

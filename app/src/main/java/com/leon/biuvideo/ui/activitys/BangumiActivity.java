@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UserFragmentAdapters.BangumiEpAdapter;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
@@ -42,6 +43,7 @@ import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BangumiStateParse;
 import com.leon.biuvideo.values.LocalOrderType;
 import com.leon.biuvideo.values.Tables;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.FutureTask;
@@ -258,7 +260,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                 boolean operatingStatus;
 
                 if (isHaveLocalOrder) {
-                    operatingStatus = localOrdersDatabaseUtils.deleteLocalOrder(bangumi.title, String.valueOf(bangumi.mediaId), String.valueOf(bangumi.seasonId), localOrderType);
+                    operatingStatus = localOrdersDatabaseUtils.deleteLocalOrder(String.valueOf(bangumi.mediaId), String.valueOf(bangumi.seasonId), localOrderType);
 
                     if (operatingStatus) {
                         bangumi_imageView_favorite.setImageResource(R.drawable.no_favorite);
@@ -267,10 +269,14 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 } else {
                     LocalOrder localOrder = new LocalOrder();
-                    localOrder.title = bangumi.title;
-                    localOrder.desc = bangumi.desc;
-                    localOrder.area = bangumi.area;
-                    localOrder.count = bangumi.epSize;
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("title", bangumi.title);
+                    map.put("cover", bangumi.cover);
+                    map.put("desc", bangumi.desc);
+                    map.put("area", bangumi.area);
+                    map.put("bangumiState", bangumi.bangumiState);
+                    map.put("angleTitle", bangumi.angleTitle);
+                    localOrder.jsonObject = new JSONObject(map);
                     localOrder.mainId = String.valueOf(bangumi.mediaId);
                     localOrder.subId = String.valueOf(bangumi.seasonId);
                     localOrder.orderType = localOrderType;

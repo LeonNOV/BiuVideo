@@ -16,6 +16,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.AnthologyAdapter;
@@ -273,7 +274,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 //根据videoState判断是否保存获取删除该video
                 if (isHaveLocalOrder) {
                     //从videoPlayList中删除此video
-                    boolean state = localOrdersDatabaseUtils.deleteLocalOrder(viewPage.title, String.valueOf(viewPage.bvid), null, localOrderType);
+                    boolean state = localOrdersDatabaseUtils.deleteLocalOrder(String.valueOf(viewPage.bvid), null, localOrderType);
 
                     if (state) {
                         video_imageView_addFavorite.setImageResource(R.drawable.no_favorite);
@@ -287,8 +288,11 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                         @Override
                         public LocalOrder callBack(LocalVideoFolder localVideoFolder) {
                             LocalOrder localOrder = new LocalOrder();
-                            localOrder.title = viewPage.title;
-                            localOrder.duration = viewPage.anthologyInfoList.get(0).duration;
+                            Map<String, Object> map = new HashMap<>();
+                            map.put("title", viewPage.title);
+                            map.put("cover", viewPage.coverUrl);
+                            map.put("duration", viewPage.anthologyInfoList.get(0).duration);
+                            localOrder.jsonObject = new JSONObject(map);
                             localOrder.mainId = viewPage.bvid;
                             localOrder.orderType = localOrderType;
                             localOrder.addTime = System.currentTimeMillis();

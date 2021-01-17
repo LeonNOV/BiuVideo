@@ -23,6 +23,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UserFragmentAdapters.OnMusicListListener;
@@ -49,7 +50,9 @@ import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicUrlParser
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.FutureTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -357,7 +360,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                 musicPlayListDialog.setOnMusicListListener(new OnMusicListListener() {
                     @Override
                     public void onRefreshFavoriteIcon(LocalOrder localOrder) {
-                        boolean state = localOrdersDatabaseUtils.deleteLocalOrder(localOrder.title, localOrder.mainId, localOrder.subId, localOrderType);
+                        boolean state = localOrdersDatabaseUtils.deleteLocalOrder(localOrder.mainId, localOrder.subId, localOrderType);
                         if (state) {
                             music_imageView_addFavorite.setImageResource(R.drawable.no_favorite);
                             isHavePlayList = false;
@@ -421,7 +424,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
 
                 if (isHavePlayList) {
                     //从playList中移除
-                    localOrdersDatabaseUtils.deleteLocalOrder(musicInfo.title, musicInfo.sid, musicInfo.bvid, localOrderType);
+                    localOrdersDatabaseUtils.deleteLocalOrder(musicInfo.sid, musicInfo.bvid, localOrderType);
 
                     music_imageView_addFavorite.setImageResource(R.drawable.no_favorite);
 
@@ -432,9 +435,10 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
 
                 } else {
                     LocalOrder localOrder = new LocalOrder();
-                    localOrder.title = musicInfo.title;
-                    localOrder.desc = musicInfo.authors.get(0);
-                    localOrder.duration = musicInfo.duration;
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("title", musicInfo.title);
+                    map.put("author", musicInfo.authors.get(0));
+                    localOrder.jsonObject = new JSONObject(map);
                     localOrder.mainId = musicInfo.sid;
                     localOrder.subId = musicInfo.bvid;
                     localOrder.orderType = localOrderType;

@@ -14,9 +14,6 @@ import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.dataBaseUtils.ArticleDatabaseUtils;
-import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
-import com.leon.biuvideo.values.Tables;
 import com.leon.biuvideo.utils.parseDataUtils.articleParseUtils.UserArticleParser;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -141,24 +138,6 @@ public class UserOrderArticleFragment extends BaseFragment {
                 smartRefresh.finishLoadMore();
             }
         });
-    }
-
-    private void addArticle() {
-        //判断设置中的‘将用户数据保存至本地’开关是否已打开
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.Article);
-                ArticleDatabaseUtils articleDatabaseUtils = (ArticleDatabaseUtils) sqLiteHelperFactory.getInstance();
-
-                for (Article article : articles) {
-                    articleDatabaseUtils.addArticle(article);
-                }
-
-                articleDatabaseUtils.close();
-            }
-        }).start();
     }
 
     private void getUserArticleData() {

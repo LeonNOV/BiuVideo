@@ -77,7 +77,6 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
             android:id="@+id/fragment_favorite_smartRefresh"
             android:layout_width="match_parent"

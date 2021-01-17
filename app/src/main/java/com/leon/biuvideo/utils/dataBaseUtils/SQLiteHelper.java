@@ -19,23 +19,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             "\"isDelete\"  INTEGER DEFAULT 0\n" +
             ");";
 
-    /*private static final String article = "CREATE TABLE \"article\" (\n" +
-            "\"id\"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
-            "\"mid\"  INTEGER,\n" +
-            "\"face\"  TEXT,\n" +
-            "\"title\"  TEXT,\n" +
-            "\"summary\"  TEXT,\n" +
-            "\"coverUrl\"  TEXT,\n" +
-            "\"articleId\"  INTEGER UNIQUE,\n" +
-            "\"author\"  TEXT,\n" +
-            "\"category\"  TEXT,\n" +
-            "\"ctime\"  INTEGER,\n" +
-            "\"view\"  INTEGER,\n" +
-            "\"like\"  INTEGER,\n" +
-            "\"reply\"  INTEGER,\n" +
-            "\"isDelete\"  INTEGER DEFAULT 0\n" +
-            ");";*/
-
     // 视频下载记录
     private static final String downloadRecordsForVideo = "CREATE TABLE \"downloadRecordsForVideo\" (\n" +
             "\"id\"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
@@ -84,17 +67,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
      */
     private static final String localOrders = "CREATE TABLE \"localOrders\" (\n" +
             "\"id\"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
-            "\"cover\"  TEXT,\n" +
-            "\"title\"  TEXT,\n" +
-            "\"desc\"  TEXT,\n" +
-            "\"area\"  TEXT,\n" +
-            "\"duration\"  INTEGER,\n" +
-            "\"count\"  INTEGER,\n" +
             "\"mainId\"  TEXT,\n" +
             "\"subId\"  TEXT,\n" +
-            "\"orderType\"  INTEGER,\n" +
-            "\"adder\"  LONG,\n" +
+            "\"json\"  TEXT,\n" +
             "\"addTime\"  LONG,\n" +
+            "\"adder\"  LONG,\n" +
+            "\"orderType\"  INTEGER,\n" +
             "\"folderName\"  TEXT,\n" +
             "\"isDelete\"  INTEGER DEFAULT 0\n" +
             ");";

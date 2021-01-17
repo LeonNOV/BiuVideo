@@ -1,5 +1,6 @@
 package com.leon.biuvideo;
 
+import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.orderBeans.UserFolderData;
 import com.leon.biuvideo.utils.IDUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
@@ -9,7 +10,9 @@ import com.leon.biuvideo.utils.ValueFormat;
 
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -21,6 +24,14 @@ public class ExampleUnitTest {
     //avid转bvid测试
     @Test
     public void avidTobvid() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", 123456);
+        map.put("pwd", "wasd123");
+
+        JSONObject jsonObject = new JSONObject(map);
+        System.out.println(jsonObject.getLongValue("id"));
+        System.out.println(jsonObject.getString("pwd"));
+        System.out.println(jsonObject.toString());
     }
 
     //解析输入的内容
@@ -112,19 +123,6 @@ public class ExampleUnitTest {
 
     @Test
     public void HistoryTest() {
-        UserFolderParser userFolderParser = new UserFolderParser();
-//        List<UserFolder> userFolders = userFolderParser.parseUserFolder(49405324, null);
-//
-//        for (UserFolder userFolder : userFolders) {
-//            System.out.println(userFolder.id + "----" + userFolder.title);
-//        }
-
-        UserFolderData userFolderData = userFolderParser.parseUserFolderData(null, 153608924, 1);
-        List<UserFolderData.Media> medias = userFolderData.medias;
-
-        for (UserFolderData.Media media : medias) {
-            System.out.println(media.title);
-        }
     }
 
     @Test

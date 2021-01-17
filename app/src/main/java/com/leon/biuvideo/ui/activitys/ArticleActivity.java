@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.articleBeans.Article;
@@ -41,7 +42,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import okhttp3.Headers;
 
@@ -133,8 +136,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
             article_textView_category.setText(article.category);
 
             //设置创建时间
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
-            article_textView_ctime.setText(sdf.format(new Date(article.ctime * 1000)));
+            article_textView_ctime.setText(ValueFormat.generateTime(article.ctime, true, true, "-"));
         }
 
         //设置观看量
@@ -330,7 +332,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                                 boolean operatingStatus;
 
                                 if (isHaveLocalOrder) {
-                                    operatingStatus = localOrdersDatabaseUtils.deleteLocalOrder(article.title, String.valueOf(article.articleId), null, localOrderType);
+                                    operatingStatus = localOrdersDatabaseUtils.deleteLocalOrder(String.valueOf(article.articleId), null, localOrderType);
                                     if (operatingStatus) {
                                         roundPopupWindow.setText(R.id.article_more_menu_favorite, "收藏该文章");
                                         Toast.makeText(ArticleActivity.this, R.string.remFavoriteSign, Toast.LENGTH_SHORT).show();
@@ -338,10 +340,21 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                                     }
                                 } else {
                                     LocalOrder localOrder = new LocalOrder();
-                                    localOrder.title = article.title;
-                                    localOrder.cover = article.coverUrl;
-                                    localOrder.desc = article.summary;
+                                    Map<String, Object> map = new HashMap<>();
+                                    map.put("face", article.face);
+                                    map.put("title", article.title);
+                                    map.put("summary", article.summary);
+                                    map.put("author", article.author);
+                                    map.put("cover", article.coverUrl);
+                                    map.put("category", article.category);
+                                    map.put("ctime", article.ctime);
+                                    map.put("favoriteTime", article.favoriteTime);
+                                    map.put("view", article.view);
+                                    map.put("like", article.like);
+                                    map.put("reply", article.reply);
+                                    localOrder.jsonObject = new JSONObject(map);
                                     localOrder.mainId = String.valueOf(article.articleId);
+                                    localOrder.subId = String.valueOf(article.mid);
                                     localOrder.orderType = localOrderType;
                                     localOrder.addTime = System.currentTimeMillis();
 
