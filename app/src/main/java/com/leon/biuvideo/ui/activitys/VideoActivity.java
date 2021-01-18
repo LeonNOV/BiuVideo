@@ -142,14 +142,14 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
         expand_text_view = findViewById(R.id.expand_text_view);
 
-        Button video_button_saveVideo = findViewById(R.id.video_button_saveVideo);
-        video_button_saveVideo.setOnClickListener(this);
+        TextView video_textView_saveCover = findViewById(R.id.video_textView_saveCover);
+        video_textView_saveCover.setOnClickListener(this);
 
-        Button video_button_saveCover = findViewById(R.id.video_button_saveCover);
-        video_button_saveCover.setOnClickListener(this);
+        TextView video_textView_saveFace = findViewById(R.id.video_textView_saveFace);
+        video_textView_saveFace.setOnClickListener(this);
 
-        Button video_button_saveFace = findViewById(R.id.video_button_saveFace);
-        video_button_saveFace.setOnClickListener(this);
+        TextView video_textView_saveVideo = findViewById(R.id.video_textView_saveVideo);
+        video_textView_saveVideo.setOnClickListener(this);
 
         webView = findViewById(R.id.video_webView);
     }
@@ -314,7 +314,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 }
 
                 break;
-            case R.id.video_button_saveVideo://保存选定画质的视频
+            case R.id.video_textView_saveVideo://保存选定画质的视频
                 //判断是否有网络
                 boolean isHaveNetworkSaveVideo = InternetUtils.checkNetwork(getApplicationContext());
 
@@ -394,7 +394,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 }
 
                 break;
-            case R.id.video_button_saveCover:
+            case R.id.video_textView_saveCover:
                 //获取权限
                 FileUtils.verifyPermissions(this);
 
@@ -414,7 +414,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 }).start();
 
                 break;
-            case R.id.video_button_saveFace:
+            case R.id.video_textView_saveFace:
                 //获取权限
                 FileUtils.verifyPermissions(this);
 

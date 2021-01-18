@@ -20,12 +20,12 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_weight="1"
-            android:background="@drawable/shape_bilibili_pink"
+            android:background="@drawable/lndicator_bar_selected"
             android:gravity="center"
             android:text="@string/localOrder_bangumi"
             android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/main_fragment_local_order_textView_video"
@@ -34,7 +34,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_weight="1"
-            android:background="@drawable/ripple_bilibili_pink_lite"
+            android:background="@drawable/lndicator_bar_unselected"
             android:gravity="center"
             android:text="@string/localOrder_video"
             android:textColor="@color/black"
@@ -47,7 +47,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_weight="1"
-            android:background="@drawable/ripple_bilibili_pink_lite"
+            android:background="@drawable/lndicator_bar_unselected"
             android:gravity="center"
             android:text="@string/localOrder_article"
             android:textColor="@color/black"
@@ -60,7 +60,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_weight="1"
-            android:background="@drawable/ripple_bilibili_pink_lite"
+            android:background="@drawable/lndicator_bar_unselected"
             android:gravity="center"
             android:text="@string/localOrder_audio"
             android:textColor="@color/black"

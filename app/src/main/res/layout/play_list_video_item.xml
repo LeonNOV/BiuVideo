@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/play_list_video_relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:selectableItemBackground"
@@ -12,7 +11,7 @@
         android:id="@+id/play_list_video_cardView"
         android:layout_width="150dp"
         android:layout_height="125dp"
-        app:cardCornerRadius="15dp">
+        app:cardCornerRadius="@dimen/corner_6dp">
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -26,13 +25,12 @@
                 android:src="@drawable/ic_launcher_background" />
 
             <TextView
-                android:id="@+id/play_list_video_textView_length"
-                android:layout_width="40dp"
+                android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:layout_alignEnd="@id/play_list_video_imageView_cover"
                 android:layout_alignBottom="@id/play_list_video_imageView_cover"
                 android:layout_margin="10dp"
-                android:background="@drawable/shape_gray"
+                android:background="@drawable/round_gray_with_media_length_bg"
                 android:gravity="center"
                 android:text="02:49"
                 android:textSize="12sp"
@@ -75,7 +73,6 @@
                 app:tint="@color/black" />
 
             <TextView
-                android:id="@+id/play_list_video_imageView_userName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
@@ -98,7 +95,6 @@
                 android:src="@drawable/icon_video_play" />
 
             <TextView
-                android:id="@+id/play_list_video_textView_play"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
@@ -115,7 +111,6 @@
                 app:tint="@color/black" />
 
             <TextView
-                android:id="@+id/play_list_video_textView_danmaku"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"

@@ -1,60 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ui.activitys.LoginActivity">
 
-    <androidx.appcompat.widget.Toolbar
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#fff">
+        android:layout_height="@dimen/topBar_height"
+        android:background="@color/white">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/login_close"
+            android:layout_width="@dimen/small_view_w_h"
+            android:layout_height="@dimen/small_view_w_h"
+            android:layout_centerVertical="true"
+            android:background="@drawable/ripple_round_white_bg"
+            android:padding="@dimen/small_view_padding_10dp"
+            android:src="@drawable/icon_close" />
+
+        <TextView
+            android:id="@+id/login_textView_title"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:background="#fff"
-            android:orientation="horizontal">
+            android:layout_centerInParent="true"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
 
-            <ImageView
-                android:id="@+id/login_close"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
-                android:layout_centerVertical="true"
-                android:background="@drawable/ripple_image_view_pressed"
-                android:padding="7dp"
-                android:src="@drawable/icon_close"
-                app:tint="#000" />
+        <ImageView
+            android:id="@+id/login_refresh"
+            android:layout_width="@dimen/small_view_w_h"
+            android:layout_height="@dimen/small_view_w_h"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/ripple_round_white_bg"
+            android:padding="@dimen/small_view_padding_10dp"
+            android:src="@drawable/icon_refresh" />
 
-            <TextView
-                android:id="@+id/login_textView_title"
-                android:layout_width="290dp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="40dp"
-                android:layout_marginEnd="25dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textColor="#000"
-                android:textSize="15sp" />
-
-            <ImageView
-                android:id="@+id/login_refresh"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@drawable/ripple_image_view_pressed"
-                android:padding="7dp"
-                android:src="@drawable/icon_refresh"
-                app:tint="#000" />
-
-        </RelativeLayout>
-
-    </androidx.appcompat.widget.Toolbar>
+    </RelativeLayout>
 
     <FrameLayout
         android:layout_width="match_parent"

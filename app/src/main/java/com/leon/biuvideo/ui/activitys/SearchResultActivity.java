@@ -34,16 +34,13 @@ import java.util.Map;
   * 搜索结果Activity
   */
  public class SearchResultActivity extends AppCompatActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
-//     private ProgressBar search_progressBar;
-     private ImageView search_imageView_back, search_imageView_clean;
      private EditText search_editText_searchBox;
      private TextView search_textView_result_video, search_textView_result_article, search_textView_result_user, search_textView_result_bangumi;
      private ViewPager search_viewPager;
 
     private String keyword;
     private List<Fragment> fragments;
-    private ViewPageAdapter viewPageAdapter;
-    private Map<Integer, TextView> textViewMap;
+     private Map<Integer, TextView> textViewMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +55,10 @@ import java.util.Map;
     }
 
     private void initView() {
-        search_imageView_back = findViewById(R.id.search_imageView_back);
+        ImageView search_imageView_back = findViewById(R.id.search_imageView_back);
         search_imageView_back.setOnClickListener(this);
 
-        search_imageView_clean = findViewById(R.id.search_imageView_clean);
+        ImageView search_imageView_clean = findViewById(R.id.search_imageView_clean);
         search_imageView_clean.setOnClickListener(this);
 
         search_editText_searchBox = findViewById(R.id.search_editText_searchBox);
@@ -136,7 +133,7 @@ import java.util.Map;
         fragments.add(new ArticleResultFragment(keyword));
         fragments.add(new BiliUserResultFragment(keyword));
 
-        viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
+        ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
         search_viewPager.setAdapter(viewPageAdapter);
         search_viewPager.setOffscreenPageLimit(fragments.size());
     }

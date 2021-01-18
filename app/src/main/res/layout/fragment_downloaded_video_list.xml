@@ -12,17 +12,16 @@
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="@dimen/topBar_height"
             android:background="@color/bilibili_pink">
 
             <ImageView
-                android:id="@+id/fragment_downloaded_video_list_imageView_back"
+                android:id="@+id/fragment_downloaded_video_list_imageView_close"
                 android:layout_width="@dimen/small_view_w_h"
                 android:layout_height="@dimen/small_view_w_h"
-                android:background="?android:selectableItemBackgroundBorderless"
+                android:background="@drawable/ripple_round_bilibili_pink_bg"
                 android:padding="@dimen/small_view_padding_10dp"
-                android:src="@drawable/icon_back"
-                app:tint="#E3E3E3" />
+                android:src="@drawable/icon_close" />
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -62,7 +61,7 @@
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:layout_marginBottom="5dp"
-                android:background="@drawable/ripple_round_white"
+                android:background="@drawable/ripple_rectangle_bilibbili_pink"
                 android:textColor="@color/black"
                 android:text="@string/downloaded_check_str"/>
 
@@ -76,7 +75,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
-                android:background="@drawable/ripple_round_white"
+                android:background="@drawable/ripple_rectangle_bilibbili_pink"
                 android:textColor="@color/black"
                 android:text="@string/downloaded_check_fail_str"/>
 

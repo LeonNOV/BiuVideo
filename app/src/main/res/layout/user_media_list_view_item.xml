@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/user_media_cardView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     app:cardCornerRadius="@dimen/corner_6dp"
     app:cardUseCompatPadding="true">
 
     <RelativeLayout
-        android:id="@+id/user_media_relativeLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/ripple_item_bilibili_lite">
@@ -36,7 +34,7 @@
 
         <TextView
             android:id="@+id/up_media_textView_mediaLength"
-            android:layout_width="50dp"
+            android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_alignEnd="@id/up_media_imageView_cover"
             android:layout_alignBottom="@id/up_media_imageView_cover"
@@ -75,7 +73,6 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/up_media_imageView_play"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/icon_video_play" />

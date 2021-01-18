@@ -22,7 +22,6 @@ public class AddVideoDialog extends AlertDialog implements View.OnClickListener 
     private final Context context;
 
     private RecyclerView video_add_recyclerView;
-    private List<LocalVideoFolder> localVideoFolderList;
     private LocalOrdersDatabaseUtils localOrdersDatabaseUtils;
     private LocalOrderAddVideoFolderAdapter localOrderAddVideoFolderAdapter;
 
@@ -67,7 +66,7 @@ public class AddVideoDialog extends AlertDialog implements View.OnClickListener 
     private void initValues() {
         localOrdersDatabaseUtils = new LocalOrdersDatabaseUtils(context);
 
-        localVideoFolderList = localOrdersDatabaseUtils.queryAllLocalVideoFolder();
+        List<LocalVideoFolder> localVideoFolderList = localOrdersDatabaseUtils.queryAllLocalVideoFolder();
 
         localOrderAddVideoFolderAdapter = new LocalOrderAddVideoFolderAdapter(context, localVideoFolderList);
         localOrderAddVideoFolderAdapter.setOnVideoFolderClickListener(new LocalOrderAddVideoFolderAdapter.OnVideoFolderClickListener() {

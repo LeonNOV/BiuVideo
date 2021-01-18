@@ -31,8 +31,8 @@ import java.util.Locale;
  * 主fragment
  */
 public class HomeFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
-    private ImageView hero_imageView;
-    private EditText main_editText_value;
+    private ImageView home_fragment_imageView_hero, home_fragment_imageView_clear;
+    private EditText home_fragment_editText_keyword;
 
     //spinner索引
     private int spinnerIndex;
@@ -44,15 +44,17 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void initView(BindingUtils bindingUtils) {
-        hero_imageView = findView(R.id.home_imageView_hero);
-        hero_imageView.setOnClickListener(this);
+        home_fragment_imageView_hero = findView(R.id.home_fragment_imageView_hero);
+        home_fragment_imageView_hero.setOnClickListener(this);
 
         Spinner home_spinner = findView(R.id.home_spinner);
         home_spinner.setOnItemSelectedListener(this);
 
-        main_editText_value = findView(R.id.home_editText_value);
+        home_fragment_editText_keyword = findView(R.id.home_fragment_editText_keyword);
 
-        bindingUtils.setOnClickListener(R.id.home_button_confirm, this);
+        bindingUtils
+                .setOnClickListener(R.id.home_button_confirm, this)
+                .setOnClickListener(R.id.home_fragment_imageView_clear, this);
     }
 
     @Override
@@ -67,7 +69,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         } else {
             //设置自定义的hero
             int customHeroIndex = initValues.getInt("customHeroIndex", 0);
-            hero_imageView.setImageResource(HeroImages.heroImages[customHeroIndex]);
+            home_fragment_imageView_hero.setImageResource(HeroImages.heroImages[customHeroIndex]);
         }
     }
 
@@ -96,7 +98,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             }
         }
 
-        hero_imageView.setImageResource(HeroImages.heroImages[heroIndex]);
+        home_fragment_imageView_hero.setImageResource(HeroImages.heroImages[heroIndex]);
         edit.putLong("startTime", getTime());
         edit.putInt("heroIndex", heroIndex);
         edit.apply();
@@ -127,12 +129,15 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.home_imageView_hero:
+            case R.id.home_fragment_imageView_clear:
+                home_fragment_editText_keyword.getText().clear();
+                break;
+            case R.id.home_fragment_imageView_hero:
                 //抖一抖！！！
                 Animation animation = AnimationUtils.loadAnimation(context, R.anim.hero_anim);
                 animation.setDuration(1000);
                 animation.setRepeatMode(Animation.INFINITE);
-                hero_imageView.startAnimation(animation);
+                home_fragment_imageView_hero.startAnimation(animation);
 
                 break;
             case R.id.home_button_confirm:
@@ -147,7 +152,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 switch (spinnerIndex) {
                     case 0:
                         //获取输入内容
-                        String keywordUnCoded = main_editText_value.getText().toString();
+                        String keywordUnCoded = home_fragment_editText_keyword.getText().toString();
                         if (!keywordUnCoded.equals("")) {
 
                             Intent intent = new Intent(context, SearchResultActivity.class);
@@ -160,7 +165,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                         break;
                     //获取数据，进入VideoActivity
                     case 1:
-                        String value_bvid = main_editText_value.getText().toString().trim();
+                        String value_bvid = home_fragment_editText_keyword.getText().toString().trim();
 
                         if (value_bvid.length() != 0) {
                             String bvid = IDUtils.getBvid(value_bvid);
@@ -178,7 +183,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                     //获取数据，进入UpMasterActivity
                     case 2:
                         //获取mid
-                        String value_mid = main_editText_value.getText().toString().trim();
+                        String value_mid = home_fragment_editText_keyword.getText().toString().trim();
 
                         if (value_mid.length() != 0) {
 
@@ -217,9 +222,9 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         if (i == 0) {
-            main_editText_value.setHint(R.string.main_editText_hint1);
+            home_fragment_editText_keyword.setHint(R.string.main_editText_hint1);
         } else {
-            main_editText_value.setHint(R.string.main_editText_hint2);
+            home_fragment_editText_keyword.setHint(R.string.main_editText_hint2);
         }
         spinnerIndex = i;
     }

@@ -28,8 +28,8 @@
 
                 <ImageView
                     android:id="@+id/anthology_download_dialog_imageView_close"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="@dimen/small_view_w_h"
+                    android:layout_height="@dimen/small_view_w_h"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="20dp"
                     android:background="@drawable/ripple_image_view_pressed"
@@ -96,7 +96,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:layout_weight="1" />
 
     <LinearLayout
@@ -107,10 +106,8 @@
         <TextView
             android:id="@+id/anthology_download_dialog_textView_saveAll"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_height="45dp"
+            android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@drawable/ripple_round_gray"
             android:gravity="center"
@@ -121,10 +118,8 @@
         <TextView
             android:id="@+id/anthology_download_dialog_textView_checkAll"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_height="45dp"
+            android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@drawable/ripple_round_gray"
             android:gravity="center"
@@ -133,6 +128,5 @@
             android:textSize="13sp" />
 
     </LinearLayout>
-
 
 </LinearLayout>

@@ -40,9 +40,11 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 app:cardBackgroundColor="@color/bilibili_pink_light"
-                app:cardCornerRadius="15dp">
+                app:cardCornerRadius="@dimen/corner_6dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -269,8 +271,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
                 app:cardBackgroundColor="@color/bilibili_pink_light"
-                app:cardCornerRadius="15dp">
+                app:cardCornerRadius="@dimen/corner_6dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -281,8 +284,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="7dp"
                         android:text="@string/video_textView_choiceSingleVideo_str"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
@@ -291,7 +292,7 @@
                         android:id="@+id/video_recyclerView_singleVideoList"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp" />
+                        android:layout_marginTop="10dp" />
 
                 </LinearLayout>
 
@@ -302,62 +303,58 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 app:cardBackgroundColor="@color/bilibili_pink_light"
-                app:cardCornerRadius="15dp">
+                app:cardCornerRadius="@dimen/corner_6dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
                         android:text="@string/video_textView_saveOther_str"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginTop="10dp"
-                        android:gravity="center"
                         android:orientation="horizontal">
 
-                        <Button
-                            android:id="@+id/video_button_saveCover"
-                            android:layout_width="wrap_content"
+                        <TextView
+                            android:id="@+id/video_textView_saveCover"
+                            android:layout_width="100dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="10dp"
-                            android:background="@drawable/shape_bilibili_pink"
+                            android:background="@drawable/ripple_rectangle_bilibbili_pink"
+                            android:gravity="center"
                             android:padding="10dp"
                             android:text="@string/video_button_saveCover_str"
                             android:textColor="@color/black"
                             android:textSize="12sp" />
 
-                        <Button
-                            android:id="@+id/video_button_saveFace"
-                            android:layout_width="wrap_content"
+                        <TextView
+                            android:id="@+id/video_textView_saveFace"
+                            android:layout_width="100dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="10dp"
-                            android:background="@drawable/shape_bilibili_pink"
+                            android:layout_marginStart="10dp"
+                            android:background="@drawable/ripple_rectangle_bilibbili_pink"
+                            android:gravity="center"
                             android:padding="10dp"
                             android:text="@string/video_button_saveFace_str"
                             android:textColor="@color/black"
                             android:textSize="12sp" />
 
-                        <Button
-                            android:id="@+id/video_button_saveVideo"
-                            android:layout_width="wrap_content"
+                        <TextView
+                            android:id="@+id/video_textView_saveVideo"
+                            android:layout_width="100dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="10dp"
-                            android:background="@drawable/shape_bilibili_pink"
+                            android:layout_marginStart="10dp"
+                            android:background="@drawable/ripple_rectangle_bilibbili_pink"
+                            android:gravity="center"
                             android:padding="10dp"
                             android:text="@string/video_button_saveVideo_str"
                             android:textColor="@color/black"

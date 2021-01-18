@@ -10,7 +10,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="130dp"
         android:layout_height="180dp"
-        app:cardCornerRadius="6dp">
+        app:cardCornerRadius="@dimen/corner_6dp">
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -30,7 +30,6 @@
                 android:layout_alignParentEnd="true"
                 android:layout_margin="5dp"
                 android:background="@drawable/order_item_badge_type_background"
-                android:backgroundTint="@color/bilibili_pink"
                 android:textSize="13sp"
                 android:textColor="@color/white"
                 android:text="限时免费"/>

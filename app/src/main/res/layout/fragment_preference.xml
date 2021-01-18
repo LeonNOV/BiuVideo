@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardBackgroundColor="@color/bilibili_pink_light"
-                app:cardCornerRadius="15dp">
+                app:cardCornerRadius="@dimen/corner_6dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -104,7 +104,6 @@
                             android:layout_height="wrap_content">
 
                             <TextView
-                                android:id="@+id/preference_textView_import_userData"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
@@ -112,7 +111,6 @@
                                 android:textColor="@color/preference_item" />
 
                             <androidx.appcompat.widget.SwitchCompat
-                                android:id="@+id/preference_switch_importDataState"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
@@ -138,7 +136,6 @@
                         android:background="#CF879B" />
 
                     <TextView
-                        android:id="@+id/preference_textView_userData"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="?selectableItemBackground"
@@ -185,7 +182,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 app:cardBackgroundColor="@color/bilibili_pink_light"
-                app:cardCornerRadius="15dp">
+                app:cardCornerRadius="@dimen/corner_6dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -233,7 +230,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 app:cardBackgroundColor="@color/bilibili_pink_light"
-                app:cardCornerRadius="15dp">
+                app:cardCornerRadius="@dimen/corner_6dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"

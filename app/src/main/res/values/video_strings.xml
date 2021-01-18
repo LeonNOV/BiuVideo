@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="video_textView_choiceSingleVideo_str">选择剧集</string>
-    <string name="video_textView_choiceQuality_str">选择视频清晰度</string>
     <string name="video_button_saveVideo_str">保存视频</string>
     <string name="video_textView_saveOther_str">保存其他资源</string>
     <string name="video_button_saveCover_str">保存视频封面</string>

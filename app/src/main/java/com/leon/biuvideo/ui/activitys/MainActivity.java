@@ -25,6 +25,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.internal.NavigationMenuView;
 import com.google.android.material.navigation.NavigationView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
@@ -146,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         navigation_view = findViewById(R.id.navigation_view);
         navigation_view.setNavigationItemSelectedListener(this);
+        removeNavigationViewScrollbar(navigation_view);
 
         View headerView = navigation_view.getHeaderView(0);
 
@@ -176,6 +178,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initInternet() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+    }
+
+    /**
+     * 移除侧滑栏的滑动条
+     *
+     * @param navigationView navigationView
+     */
+    private void removeNavigationViewScrollbar(NavigationView navigationView){
+        if (navigationView != null){
+            NavigationMenuView navigationMenuView =  (NavigationMenuView) navigationView.getChildAt(0);
+            if (navigationMenuView != null){
+                navigationMenuView.setVerticalScrollBarEnabled(false);
+            }
+        }
     }
 
     /**

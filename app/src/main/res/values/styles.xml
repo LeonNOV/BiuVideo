@@ -7,15 +7,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
     <!-- dialog动画 -->
     <style name="music_list_dialog">
         <!-- 进入时的动画 -->
@@ -45,10 +36,6 @@
 
     <style name="set_hero_dialog_spinner">
         <item name="android:textColor">@color/black</item>
-    </style>
-
-    <style name="CustomRadioTheme" parent="@android:style/Widget.CompoundButton.CheckBox">
-        <item name="android:button">@drawable/radio_button</item>
     </style>
 
     <style name="CustomSwitchCompat" parent="Theme.AppCompat.Light">

@@ -9,23 +9,25 @@
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/home_imageView_hero"
+        android:id="@+id/home_fragment_imageView_hero"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:src="@drawable/vector_hero_marvel_ironman" />
 
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        app:cardCornerRadius="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        app:cardCornerRadius="@dimen/corner_6dp"
         app:cardElevation="20dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/bilibili_pink_lite"
-            android:gravity="center"
+            android:layout_gravity="center"
             android:orientation="horizontal"
             android:padding="10dp">
 
@@ -40,26 +42,40 @@
                 android:theme="@style/home_fragment_spinner" />
 
             <EditText
-                android:id="@+id/home_editText_value"
-                android:layout_width="200dp"
+                android:id="@+id/home_fragment_editText_keyword"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:background="@null"
                 android:ems="10"
-                android:imeOptions="actionSearch"
                 android:gravity="center"
+                android:layout_weight="1"
                 android:hint="@string/main_editText_hint1"
+                android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:theme="@style/CustomEditText" />
+
+            <ImageView
+                android:id="@+id/home_fragment_imageView_clear"
+                android:layout_width="@dimen/small_view_w_h"
+                android:layout_height="@dimen/small_view_w_h"
+                android:background="@drawable/ripple_round_bilibili_pink_lite"
+                android:padding="@dimen/small_view_padding_10dp"
+                android:src="@drawable/icon_close" />
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 
     <Button
         android:id="@+id/home_button_confirm"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
-        android:background="@drawable/shape_bilibili_pink"
+        android:background="@drawable/ripple_rectangle_bilibbili_pink"
+        android:gravity="center"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
         android:text="@string/main_button_start"
         android:textColor="@color/black" />
 

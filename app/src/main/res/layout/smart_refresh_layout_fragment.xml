@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="啥都没有哎~~~"
-        android:textColor="#000"
+        android:textColor="@color/black"
         android:textSize="30sp" />
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout

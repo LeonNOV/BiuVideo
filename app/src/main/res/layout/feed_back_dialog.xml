@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_margin="10dp"
-    app:cardBackgroundColor="#fff"
-    app:cardCornerRadius="15dp">
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/corner_6dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -20,8 +20,7 @@
             android:id="@+id/feed_back_editText"
             android:layout_width="wrap_content"
             android:layout_height="270dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/shape_feed_back"
+            android:background="@drawable/round_feed_back_bg"
             android:ems="17"
             android:gravity="start|top"
             android:hint="@string/feed_back_dialog_hint"
@@ -35,10 +34,11 @@
 
         <Button
             android:id="@+id/feed_back_button_submit"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@drawable/shape_bilibili_pink_lite"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/ripple_rectangle_bilibbili_pink_lite"
             android:text="@string/feed_back_dialog_submit" />
     </LinearLayout>
 

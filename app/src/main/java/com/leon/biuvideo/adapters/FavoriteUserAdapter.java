@@ -70,7 +70,7 @@ public class FavoriteUserAdapter extends BaseAdapter<Favorite> {
                 })
 
                 //设置'取消关注'按钮监听
-                .setOnClickListener(R.id.favorite_imageView_cancel_favoriteIcon, new View.OnClickListener() {
+                .setOnClickListener(R.id.favorite_button_cancel_favorite, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.FavoriteUp);

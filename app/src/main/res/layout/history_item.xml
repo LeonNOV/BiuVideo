@@ -9,11 +9,10 @@
     android:padding="8dp">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/history_item_cardView"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        app:cardCornerRadius="5dp">
+        app:cardCornerRadius="@dimen/corner_6dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -42,7 +41,7 @@
                 android:layout_above="@id/history_item_progress"
                 android:layout_alignEnd="@id/history_item_imageView_cover"
                 android:layout_margin="5dp"
-                android:background="@drawable/history_length_background"
+                android:background="@drawable/round_gray_with_media_length_bg"
                 android:text="已看完"
                 android:textColor="@color/white" />
 

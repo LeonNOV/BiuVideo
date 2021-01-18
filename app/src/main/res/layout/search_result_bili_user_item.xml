@@ -36,7 +36,9 @@
                 android:id="@+id/search_bili_user_textView_name"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
-                android:text="我是name"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="我是name爱我多久啦我的骄傲未来的"
                 android:textColor="@color/black"
                 android:textSize="17sp"
                 android:textStyle="bold" />
@@ -81,14 +83,17 @@
 
         <Button
             android:id="@+id/search_bili_user_button_follow"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="70dp"
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"
-            android:layout_margin="10dp"
-            android:background="@drawable/shape_bilibili_pink"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/ripple_rectangle_bilibbili_pink"
             android:text="关注"
             android:textColor="@color/black"
             android:textSize="13sp" />
+
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

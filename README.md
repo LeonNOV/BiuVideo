@@ -5,6 +5,11 @@
 
 ## 📘开发日志
 
+### 2021/01/19
+- 所有的`layout`资源已整理完成
+- 删除了为引用的`drawable`文件
+- 对部分Java代码进行了整理
+
 ### 2021/01/18
 - 对`localOrders`表进行的修改
   - mainId：用于Video的bvid、Bangumi的mediaId、Music的sid、Article的articleId

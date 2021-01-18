@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#fff" />
-    <corners android:radius="2dp" />
+    <solid android:color="@color/bilibili_pink" />
+    <corners android:radius="3dp" />
     <padding
         android:left="8dp"
         android:right="8dp" />

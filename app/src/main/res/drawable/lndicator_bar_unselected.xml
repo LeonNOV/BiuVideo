@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#8A8A8A"> <!--波纹颜色-->
+    <item>
+        <shape android:shape="rectangle">
+            <!-- 填充背景色-->
+            <solid android:color="@color/bilibili_pink_lite"/>
+            <corners android:radius="@dimen/corner_6dp"/>
+            <padding
+                android:top="3dp"
+                android:bottom="3dp"
+                android:right="5dp"
+                android:left="5dp"/>
+        </shape>
+    </item>
+</ripple>

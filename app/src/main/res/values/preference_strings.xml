@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="preference_title">设置</string>
-
     <string name="preference_category_baseSetting">基本设置</string>
 
     <string name="preference_import">导入外部数据</string>
@@ -19,22 +17,17 @@
 
     <string name="preference_category_about">关于</string>
 
-    <string name="preference_about_biu_video">关于本APP</string>
-    <string name="preference_version">版本</string>
     <string name="preference_open_source_license">开源许可</string>
     <string name="preference_thanks_list">感谢列表</string>
 
     <string name="preference_category_feed_back">反馈</string>
 
     <string name="preference_star_rating">提交反馈</string>
-    <string name="preference_feed_back_bug">提交BUG</string>
 
-<!--    <string name="set_hero_preview">预览</string>-->
+    <!--    <string name="set_hero_preview">预览</string>-->
     <string name="set_hero_auto">自动更换</string>
-    <string name="set_hero_custom">自定义</string>
+
 <!--    <string name="set_hero_title">设置主界面显示Hero的方式</string>-->
-    <string name="set_hero_save">保存</string>
-    <string name="set_hero_close">关闭</string>
 
     <array name="heroNames">
         <item>DC-原子侠</item>

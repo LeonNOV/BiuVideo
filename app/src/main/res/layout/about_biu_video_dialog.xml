@@ -152,7 +152,7 @@
                     android:background="@drawable/ripple_rectangle_bilibbili_pink"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="@string/set_hero_close"
+                    android:text="@string/close"
                     android:textColor="@color/black" />
 
             </LinearLayout>

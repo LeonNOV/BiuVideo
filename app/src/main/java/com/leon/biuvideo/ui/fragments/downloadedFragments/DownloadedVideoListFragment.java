@@ -25,9 +25,6 @@ public class DownloadedVideoListFragment extends BaseFragment implements View.On
     private RecyclerView fragment_downloaded_video_list_recyclerView;
     private TextView fragment_downloaded_video_list_no_data;
 
-    private DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils;
-    private List<DownloadedRecordsForVideo> downloadedRecordsForVideos;
-
     @Override
     public int setLayout() {
         return R.layout.fragment_downloaded_video_list;
@@ -39,7 +36,7 @@ public class DownloadedVideoListFragment extends BaseFragment implements View.On
         fragment_downloaded_video_list_no_data = findView(R.id.fragment_downloaded_video_list_no_data);
         bindingUtils
                 .setOnClickListener(R.id.fragment_downloaded_video_list_textView_toAudio, this)
-                .setOnClickListener(R.id.fragment_downloaded_video_list_imageView_back, this)
+                .setOnClickListener(R.id.fragment_downloaded_video_list_imageView_close, this)
                 .setOnClickListener(R.id.fragment_downloaded_video_list_textView_toFailList, this);
 
     }
@@ -47,8 +44,8 @@ public class DownloadedVideoListFragment extends BaseFragment implements View.On
     @Override
     public void initValues() {
         SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.DownloadDetailsForVideo);
-        downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
-        downloadedRecordsForVideos = downloadRecordsDatabaseUtils.queryAllVideo();
+        DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
+        List<DownloadedRecordsForVideo> downloadedRecordsForVideos = downloadRecordsDatabaseUtils.queryAllVideo();
 
         if (downloadedRecordsForVideos.size() == 0) {
             fragment_downloaded_video_list_no_data.setVisibility(View.VISIBLE);
@@ -68,7 +65,7 @@ public class DownloadedVideoListFragment extends BaseFragment implements View.On
             case R.id.fragment_downloaded_video_list_textView_toAudio:
                 Navigation.findNavController(v).navigate(R.id.action_downloadedVideoListFragment_to_downloadedMusicListFragment);
                 break;
-            case R.id.fragment_downloaded_video_list_imageView_back:
+            case R.id.fragment_downloaded_video_list_imageView_close:
                 getActivity().finish();
                 break;
             case R.id.fragment_downloaded_video_list_textView_toFailList:

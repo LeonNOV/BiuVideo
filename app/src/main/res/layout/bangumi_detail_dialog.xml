@@ -13,11 +13,11 @@
 
         <ImageView
             android:id="@+id/bangumi_detail_dialog_imageView_back"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/small_view_w_h"
+            android:layout_height="@dimen/small_view_w_h"
             android:layout_gravity="end"
             android:background="@drawable/ripple_image_view_pressed"
-            android:padding="10dp"
+            android:padding="@dimen/small_view_padding_10dp"
             android:src="@drawable/icon_close" />
 
         <LinearLayout

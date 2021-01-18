@@ -28,6 +28,7 @@ import com.leon.biuvideo.ui.fragments.userFragments.UserAudiosFragment;
 import com.leon.biuvideo.ui.fragments.userFragments.UserPicturesFragment;
 import com.leon.biuvideo.ui.fragments.userFragments.UserVideosFragment;
 import com.leon.biuvideo.utils.SimpleThreadPool;
+import com.leon.biuvideo.utils.ViewUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
@@ -38,7 +39,9 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
@@ -47,16 +50,13 @@ import java.util.concurrent.FutureTask;
  * 由于用户粉丝数、获赞数和观看数的获取需要使用cookie获取，所以暂不添加该三项
  */
 public class UserActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
-    private ImageView up_imageView_cover, up_imageView_back;
+    private ImageView up_imageView_cover;
     private CircleImageView up_circleImageView_face;
     private TextView up_textView_name;
     private ImageView up_imageView_favoriteIconState;
     private TextView up_textView_favoriteStrState;
     private ExpandableTextView up_textView_sign;
-    private TextView user_textView_video, user_textView_audio, user_textView_articles, user_textView_picture;
     private ViewPager up_viewPage;
-
-    private ViewPageAdapter viewPageAdapter;
 
     private long mid;
     private UserInfo userInfo;
@@ -64,6 +64,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
     private FavoriteUserDatabaseUtils favoriteUserDatabaseUtils;
 
     private Handler handler;
+    private Map<Integer, TextView> textViewMap;
 
     public UserActivity() {
         super();
@@ -78,7 +79,6 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
         setContentView(R.layout.activity_user);
 
         initView();
-
         initValue();
     }
 
@@ -86,7 +86,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
     private void initView() {
         up_imageView_cover = findViewById(R.id.up_imageView_cover);
 
-        up_imageView_back = findViewById(R.id.up_imageView_back);
+        ImageView up_imageView_back = findViewById(R.id.up_imageView_back);
         up_imageView_back.setOnClickListener(this);
 
         up_circleImageView_face = findViewById(R.id.up_circleImageView_face);
@@ -99,17 +99,22 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         up_textView_sign = findViewById(R.id.up_textView_sign);
 
-        user_textView_video = findViewById(R.id.user_textView_video);
+        textViewMap = new HashMap<>();
+        TextView user_textView_video = findViewById(R.id.user_textView_video);
         user_textView_video.setOnClickListener(this);
+        textViewMap.put(0, user_textView_video);
 
-        user_textView_audio = findViewById(R.id.user_textView_audio);
+        TextView user_textView_audio = findViewById(R.id.user_textView_audio);
         user_textView_audio.setOnClickListener(this);
+        textViewMap.put(1, user_textView_audio);
 
-        user_textView_articles = findViewById(R.id.user_textView_articles);
+        TextView user_textView_articles = findViewById(R.id.user_textView_articles);
         user_textView_articles.setOnClickListener(this);
+        textViewMap.put(2, user_textView_articles);
 
-        user_textView_picture = findViewById(R.id.user_textView_picture);
+        TextView user_textView_picture = findViewById(R.id.user_textView_picture);
         user_textView_picture.setOnClickListener(this);
+        textViewMap.put(3, user_textView_picture);
 
         up_viewPage = findViewById(R.id.up_viewPage);
         up_viewPage.addOnPageChangeListener(this);
@@ -194,48 +199,9 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
         //获取相簿数据
         fragments.add(new UserPicturesFragment(mid));
 
-        viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
+        ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
 
         up_viewPage.setAdapter(viewPageAdapter);
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        int point_bilibili_pink = R.drawable.shape_bilibili_pink;
-        int point_bilibili_pink_lite = R.drawable.ripple_bilibili_pink_lite;
-
-        switch (position) {
-            case 0:
-                user_textView_video.setBackgroundResource(point_bilibili_pink);
-                user_textView_audio.setBackgroundResource(point_bilibili_pink_lite);
-                user_textView_articles.setBackgroundResource(point_bilibili_pink_lite);
-                user_textView_picture.setBackgroundResource(point_bilibili_pink_lite);
-
-                break;
-            case 1:
-                user_textView_video.setBackgroundResource(point_bilibili_pink_lite);
-                user_textView_audio.setBackgroundResource(point_bilibili_pink);
-                user_textView_articles.setBackgroundResource(point_bilibili_pink_lite);
-                user_textView_picture.setBackgroundResource(point_bilibili_pink_lite);
-
-                break;
-            case 2:
-                user_textView_video.setBackgroundResource(point_bilibili_pink_lite);
-                user_textView_audio.setBackgroundResource(point_bilibili_pink_lite);
-                user_textView_articles.setBackgroundResource(point_bilibili_pink);
-                user_textView_picture.setBackgroundResource(point_bilibili_pink_lite);
-
-                break;
-            case 3:
-                user_textView_video.setBackgroundResource(point_bilibili_pink_lite);
-                user_textView_audio.setBackgroundResource(point_bilibili_pink_lite);
-                user_textView_articles.setBackgroundResource(point_bilibili_pink_lite);
-                user_textView_picture.setBackgroundResource(point_bilibili_pink);
-
-                break;
-            default:
-                break;
-        }
     }
 
     @Override
@@ -245,7 +211,6 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
                 this.finish();
                 break;
             case R.id.up_imageView_favoriteIconState:
-
                 //判断是否存在于数据库中
                 boolean state = favoriteUserDatabaseUtils.queryFavoriteState(mid);
 
@@ -292,7 +257,13 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
     }
 
     @Override
+    public void onPageSelected(int position) {
+        ViewUtils.changeText(textViewMap, position);
+    }
+
+    @Override
     public void onPageScrollStateChanged(int state) {
+
     }
 
     @Override
@@ -321,8 +292,10 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     protected void onDestroy() {
+        if (favoriteUserDatabaseUtils != null) {
+            favoriteUserDatabaseUtils.close();
+        }
         super.onDestroy();
-        favoriteUserDatabaseUtils.close();
     }
 
     private class UserActivityThread implements Callable<String> {

@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="more_menu_help">帮助</string>
-    <string name="more_menu_about">关于</string>
-    <string name="more_menu_thanks">感谢名单</string>
-
     <string name="picture_menu_saveAll">保存所有图片</string>
     <string name="picture_menu_jumpToOrigin">跳转至原网站</string>
 

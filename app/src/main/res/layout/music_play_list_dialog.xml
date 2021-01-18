@@ -4,10 +4,11 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="#fff"
-    app:cardCornerRadius="15dp">
+    app:cardCornerRadius="@dimen/corner_6dp">
 
     <RelativeLayout
         android:layout_width="wrap_content"
+        android:padding="10dp"
         android:layout_height="wrap_content">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -15,11 +16,7 @@
             android:layout_width="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="vertical"
-            android:layout_height="match_parent"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="70dp" />
+            android:layout_height="match_parent" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,10 +28,10 @@
                 android:id="@+id/music_button_close"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/shape_gray"
+                android:layout_margin="15dp"
+                style="?android:attr/borderlessButtonStyle"
+                android:background="@drawable/ripple_rectangle_bilibbili_pink_light"
+                android:textSize="15sp"
                 android:text="@string/close" />
 
         </LinearLayout>
