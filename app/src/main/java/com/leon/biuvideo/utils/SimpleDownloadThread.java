@@ -8,11 +8,11 @@ import com.leon.biuvideo.utils.downloadUtils.MediaUtils;
 import java.util.concurrent.Callable;
 
 public class SimpleDownloadThread implements Callable<String> {
-    private Context context;
-    private String videoPath;
-    private String audioPath;
-    private String fileName;
+    private final Context context;
+    private final String audioPath;
+    private final String fileName;
 
+    private String videoPath;
     private MediaUtils mediaUtils;
 
     public SimpleDownloadThread(Context context, String videoPath, String audioPath, String fileName) {

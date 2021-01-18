@@ -24,11 +24,11 @@ import java.util.Locale;
 /**
  * 用户收藏的文件夹详情列表适配器
  */
-public class UserFavoriteFolderDetailAdapter extends BaseAdapter<UserFolderData.Media> {
+public class UserOrderVideoFolderDetailAdapter extends BaseAdapter<UserFolderData.Media> {
     private final List<UserFolderData.Media> userFolderDatas;
     private final Context context;
     
-    public UserFavoriteFolderDetailAdapter(List<UserFolderData.Media> userFolderDatas, Context context) {
+    public UserOrderVideoFolderDetailAdapter(List<UserFolderData.Media> userFolderDatas, Context context) {
         super(userFolderDatas, context);
         this.userFolderDatas = userFolderDatas;
         this.context = context;

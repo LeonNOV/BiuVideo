@@ -37,6 +37,7 @@ public class UserPicturesFragment extends BaseFragment {
     private int pageNum = 0;
     private int currentCount;
     private boolean dataState = true;
+    private int count;
 
     private List<Picture> pictures;
 
@@ -66,9 +67,9 @@ public class UserPicturesFragment extends BaseFragment {
     public void initValues() {
         pictureParser = new PictureParser(context);
 
-        int total = pictureParser.getPictureTotal(mid);
+        count = pictureParser.getPictureTotal(mid);
 
-        if (total == 0) {
+        if (count == 0) {
             //设置无数据提示界面
             no_data.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
@@ -83,7 +84,7 @@ public class UserPicturesFragment extends BaseFragment {
             currentCount += pictures.size();
             pageNum++;
 
-            if (currentCount < 30) {
+            if (currentCount == count) {
                 dataState = false;
                 smartRefresh.setEnabled(false);
             }
@@ -124,12 +125,13 @@ public class UserPicturesFragment extends BaseFragment {
                 //判断是否处于拖拽已释放的状态
                 if (state.finishing == RefreshState.ReleaseToLoad.finishing) {
                     if (dataState) {
+                        pageNum++;
+
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 //获取新数据
-                                getPictures(mid, pageNum);
-                                pageNum++;
+                                getPictures();
 
                                 //添加新数据
                                 userPictureAdapter.append(pictures);
@@ -151,18 +153,15 @@ public class UserPicturesFragment extends BaseFragment {
 
     /**
      * 获取下一页数据
-     *
-     * @param mid     用户ID
-     * @param pageNum 页码
      */
-    private void getPictures(long mid, int pageNum) {
+    private void getPictures() {
         pictures = pictureParser.parsePicture(mid, pageNum);
 
         //记录获取的总数
         currentCount += pictures.size();
 
         //判断是否已获取完所有的数据
-        if (pictures.size() < 30) {
+        if (currentCount == count) {
             dataState = false;
             smartRefresh.setEnabled(false);
         }

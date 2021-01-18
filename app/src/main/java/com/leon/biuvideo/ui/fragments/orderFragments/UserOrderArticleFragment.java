@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.UserDataAdapters.UserArticleAdapter;
+import com.leon.biuvideo.adapters.UserDataAdapters.UserOrderArticleAdapter;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
@@ -39,7 +39,7 @@ public class UserOrderArticleFragment extends BaseFragment {
     private List<Article> articles;
 
     private LinearLayoutManager linearLayoutManager;
-    private UserArticleAdapter userArticleAdapter;
+    private UserOrderArticleAdapter userOrderArticleAdapter;
 
     @Override
     public int setLayout() {
@@ -80,9 +80,9 @@ public class UserOrderArticleFragment extends BaseFragment {
                 smartRefresh.setEnabled(false);
             }
 
-            if (linearLayoutManager == null || userArticleAdapter == null) {
+            if (linearLayoutManager == null || userOrderArticleAdapter == null) {
                 linearLayoutManager = new LinearLayoutManager(context);
-                userArticleAdapter = new UserArticleAdapter(articles, context);
+                userOrderArticleAdapter = new UserOrderArticleAdapter(articles, context);
             }
 
             initAttr();
@@ -91,7 +91,7 @@ public class UserOrderArticleFragment extends BaseFragment {
 
     private void initAttr() {
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(userArticleAdapter);
+        recyclerView.setAdapter(userOrderArticleAdapter);
 
         Handler handler = new Handler();
 
@@ -123,7 +123,7 @@ public class UserOrderArticleFragment extends BaseFragment {
                                 getUserArticleData();
 
                                 //添加新数据
-                                userArticleAdapter.append(articles);
+                                userOrderArticleAdapter.append(articles);
                             }
                         }, 1000);
                     } else {

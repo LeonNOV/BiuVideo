@@ -31,7 +31,7 @@ import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.beans.userBeans.UserInfo;
 import com.leon.biuvideo.ui.dialogs.AboutBiuVideoDialog;
 import com.leon.biuvideo.ui.dialogs.WarnDialog;
-import com.leon.biuvideo.ui.fragments.mainFragments.FavoriteFragment;
+import com.leon.biuvideo.ui.fragments.mainFragments.FavoriteUserFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.HistoryFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.HomeFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.OrderFragment;
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<Fragment> fragmentList;
 
     private Fragment homeFragment;
-    private Fragment favoriteFragment;
+    private Fragment favoriteUserFragment;
     private Fragment localOrderFragment;
     private Fragment historyFragment;
     private Fragment preferenceFragment;
@@ -270,11 +270,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.navigation_menu_favorite:
 
-                if (favoriteFragment == null) {
-                    favoriteFragment = new FavoriteFragment();
+                if (favoriteUserFragment == null) {
+                    favoriteUserFragment = new FavoriteUserFragment();
                 }
 
-                switchFragment(favoriteFragment);
+                switchFragment(favoriteUserFragment);
                 break;
             case R.id.navigation_menu_localOrder:
 

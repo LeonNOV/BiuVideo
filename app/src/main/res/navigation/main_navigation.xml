@@ -12,7 +12,7 @@
         tools:layout="@layout/main_fragment_home" />
     <fragment
         android:id="@+id/nav_favoriteFragment"
-        android:name="com.leon.biuvideo.ui.fragments.mainFragments.FavoriteFragment"
+        android:name="com.leon.biuvideo.ui.fragments.mainFragments.FavoriteUserFragment"
         android:label="FavoriteFragment"
         tools:layout="@layout/main_fragment_recycler_view" />
     <fragment

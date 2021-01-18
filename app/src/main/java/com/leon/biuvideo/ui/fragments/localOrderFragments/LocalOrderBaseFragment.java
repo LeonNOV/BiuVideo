@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.orderAdapters.LocalOrderAdapter;
+import com.leon.biuvideo.adapters.orderAdapters.LocalOrderBaseAdapter;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
@@ -57,8 +57,8 @@ public class LocalOrderBaseFragment extends BaseFragment {
             textView_noDataStr.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
 
-            LocalOrderAdapter localOrderAdapter = new LocalOrderAdapter(context, localOrderList, localOrderType);
-            recyclerView.setAdapter(localOrderAdapter);
+            LocalOrderBaseAdapter localOrderBaseAdapter = new LocalOrderBaseAdapter(context, localOrderList, localOrderType);
+            recyclerView.setAdapter(localOrderBaseAdapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
         }
     }

@@ -7,7 +7,7 @@ import android.webkit.WebView;
 import com.leon.biuvideo.values.Paths;
 
 public class WebViewUtils {
-    private WebView webView;
+    private final WebView webView;
 
     public WebViewUtils(WebView webView) {
         this.webView = webView;

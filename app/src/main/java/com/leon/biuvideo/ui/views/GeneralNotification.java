@@ -19,7 +19,7 @@ public class GeneralNotification {
     public Notification notification;
 
     private final String description; //描述
-    private int tag;    //该通知的id，用于取消通知的推送
+    private final int tag;    //该通知的id，用于取消通知的推送
 
     public GeneralNotification(Context context, String description, int tag) {
         this.context = context;

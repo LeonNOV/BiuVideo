@@ -2,7 +2,7 @@
 <resources>
 
     <string name="navigation_menu_home">主页</string>
-    <string name="navigation_menu_favorite">收藏</string>
+    <string name="navigation_menu_favorite">关注</string>
     <string name="navigation_menu_localOrder">本地订阅</string>
     <string name="navigation_menu_order">订阅</string>
     <string name="navigation_menu_history">播放历史</string>

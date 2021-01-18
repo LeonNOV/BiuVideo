@@ -26,12 +26,15 @@ import com.leon.biuvideo.values.SortType;
 
 import java.util.List;
 
-public class LocalOrderAdapter extends BaseAdapter<LocalOrder> {
+/**
+ * 本地订阅：显示Bangumi、Article和Audio，需要配合LocalOrderType使用
+ */
+public class LocalOrderBaseAdapter extends BaseAdapter<LocalOrder> {
     private final List<LocalOrder> localOrderList;
     private final Context context;
     private final LocalOrderType localOrderType;
 
-    public LocalOrderAdapter(Context context, List<LocalOrder> localOrderList, LocalOrderType localOrderType) {
+    public LocalOrderBaseAdapter(Context context, List<LocalOrder> localOrderList, LocalOrderType localOrderType) {
         super(localOrderList, context);
 
         this.context = context;

@@ -26,7 +26,7 @@ public class SimpleThreadPool extends ThreadPoolExecutor {
     public static final int LoadTaskNum = 5;
     public static final String LoadTask = "loading";
 
-    private Map<String, FutureTask<String>> futureTaskMap;
+    private final Map<String, FutureTask<String>> futureTaskMap;
 
     public SimpleThreadPool(int maxRunningThread, String poolName) {
         super(maxRunningThread, maxRunningThread, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), new SimpleThreadFactory(poolName));

@@ -42,6 +42,7 @@ public class UserVideosFragment extends BaseFragment {
 
     private UserVideoAdapter userVideoAdapter;
     private LinearLayoutManager linearLayoutManager;
+    private int count;
 
     public UserVideosFragment(long mid) {
         this.mid = mid;
@@ -65,10 +66,9 @@ public class UserVideosFragment extends BaseFragment {
     @Override
     public void initValues() {
         videoParser = new VideoParser(context);
+        count = videoParser.getVideoTotal(mid);
 
-        int total = videoParser.getVideoTotal(mid);
-
-        if (total == 0) {
+        if (count == 0) {
             //设置无数据提示界面
             no_data.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
@@ -124,12 +124,13 @@ public class UserVideosFragment extends BaseFragment {
                 //判断是否处于拖拽已释放的状态
                 if (state.finishing == RefreshState.ReleaseToLoad.finishing) {
                     if (dataState) {
+                        pageNum++;
+
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 //获取新数据
-                                getVideos(mid, pageNum);
-                                pageNum++;
+                                getVideos();
 
                                 //添加新数据
                                 userVideoAdapter.append(videos);
@@ -150,19 +151,16 @@ public class UserVideosFragment extends BaseFragment {
     }
 
     /**
-     * 获取数据
-     *
-     * @param mid     up主id
-     * @param pageNum 页码
+     * 获取下一页数据
      */
-    private void getVideos(long mid, int pageNum) {
+    private void getVideos() {
         videos = videoParser.parseVideo(mid, pageNum);
 
         //记录获取的总数
         currentCount += videos.size();
 
         //判断是否已获取完所有的数据
-        if (videos.size() < 30) {
+        if (currentCount == count) {
             dataState = false;
             smartRefresh.setEnabled(false);
         }

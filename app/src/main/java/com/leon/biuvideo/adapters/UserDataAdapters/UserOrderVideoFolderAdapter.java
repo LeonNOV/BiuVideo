@@ -16,10 +16,10 @@ import java.util.List;
 /**
  * 用户收藏的视频文件夹适配器
  */
-public class UserFavoriteFolderAdapter extends BaseAdapter<UserFolder> {
+public class UserOrderVideoFolderAdapter extends BaseAdapter<UserFolder> {
     private final List<UserFolder> userFolders;
 
-    public UserFavoriteFolderAdapter(List<UserFolder> userFolders, Context context) {
+    public UserOrderVideoFolderAdapter(List<UserFolder> userFolders, Context context) {
         super(userFolders, context);
         this.userFolders = userFolders;
     }

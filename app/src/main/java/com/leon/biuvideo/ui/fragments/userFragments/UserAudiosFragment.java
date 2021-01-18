@@ -37,6 +37,7 @@ public class UserAudiosFragment extends BaseFragment {
     private int pageNum = 1;
     private int currentCount;
     private boolean dataState = true;
+    private int count;
 
     private List<Audio> audios;
 
@@ -66,9 +67,9 @@ public class UserAudiosFragment extends BaseFragment {
     public void initValues() {
         audioParser = new AudioParser(mid);
 
-        int total = audioParser.getAudioTotal();
+        count = audioParser.getAudioTotal();
 
-        if (total == 0) {
+        if (count == 0) {
             //设置无数据提示界面
             no_data.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
@@ -83,7 +84,7 @@ public class UserAudiosFragment extends BaseFragment {
             currentCount += audios.size();
             pageNum++;
 
-            if (currentCount < 30) {
+            if (currentCount == count) {
                 dataState = false;
                 smartRefresh.setEnabled(false);
             }
@@ -124,12 +125,13 @@ public class UserAudiosFragment extends BaseFragment {
                 //判断是否处于拖拽已释放的状态
                 if (state.finishing == RefreshState.ReleaseToLoad.finishing) {
                     if (dataState) {
+                        pageNum++;
+
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 //获取新数据
                                 getAudios();
-                                pageNum++;
 
                                 //添加新数据
                                 userAudioAdapter.append(audios);
@@ -157,7 +159,7 @@ public class UserAudiosFragment extends BaseFragment {
         currentCount += audios.size();
 
         //如果第一次获取的条目数小于30则设置dataState
-        if (audios.size() < 30) {
+        if (currentCount == count) {
             dataState = false;
             smartRefresh.setEnabled(false);
         }

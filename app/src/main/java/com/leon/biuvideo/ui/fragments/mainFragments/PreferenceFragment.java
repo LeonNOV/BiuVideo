@@ -24,7 +24,7 @@ import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueFormat;
-import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.values.Tables;
 import com.leon.biuvideo.utils.parseDataUtils.FollowParse;
@@ -215,7 +215,7 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
             int currentTotal = 0;
 
             SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.FavoriteUp);
-            FavoriteDatabaseUtils favoriteDatabaseUtils = (FavoriteDatabaseUtils) sqLiteHelperFactory.getInstance();
+            FavoriteUserDatabaseUtils favoriteUserDatabaseUtils = (FavoriteUserDatabaseUtils) sqLiteHelperFactory.getInstance();
 
             while (currentTotal != total) {
                 List<Favorite> favorites = followParse.parseFollow(pn);
@@ -224,7 +224,7 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
 
                     //将数据添加至favorites_up
                     for (Favorite favorite : favorites) {
-                        boolean insertState = favoriteDatabaseUtils.addFavorite(favorite);
+                        boolean insertState = favoriteUserDatabaseUtils.addFavorite(favorite);
 
                         if (!insertState) {
                             return false;
@@ -237,7 +237,7 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                 }
             }
 
-            favoriteDatabaseUtils.close();
+            favoriteUserDatabaseUtils.close();
 
             return true;
         } else {

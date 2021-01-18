@@ -14,22 +14,22 @@ import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.ui.activitys.UserActivity;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.values.Tables;
 
 import java.util.List;
 
 /**
- * 收藏fragment适配器
+ * 已关注用户列表适配器
  */
-public class FavoriteAdapter extends BaseAdapter<Favorite> {
+public class FavoriteUserAdapter extends BaseAdapter<Favorite> {
     private final List<Favorite> favorites;
     private final Context context;
 
-    private FavoriteDatabaseUtils favoriteDatabaseUtils;
+    private FavoriteUserDatabaseUtils favoriteUserDatabaseUtils;
 
-    public FavoriteAdapter(List<Favorite> favorites, Context context) {
+    public FavoriteUserAdapter(List<Favorite> favorites, Context context) {
         super(favorites, context);
         this.favorites = favorites;
         this.context = context;
@@ -74,8 +74,8 @@ public class FavoriteAdapter extends BaseAdapter<Favorite> {
                     @Override
                     public void onClick(View v) {
                         SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.FavoriteUp);
-                        favoriteDatabaseUtils = (FavoriteDatabaseUtils) sqLiteHelperFactory.getInstance();
-                        favoriteDatabaseUtils.removeFavorite(favorites.get(position).mid);
+                        favoriteUserDatabaseUtils = (FavoriteUserDatabaseUtils) sqLiteHelperFactory.getInstance();
+                        favoriteUserDatabaseUtils.removeFavorite(favorites.get(position).mid);
 
                         favorites.remove(position);
                         notifyItemRemoved(position);
@@ -83,7 +83,9 @@ public class FavoriteAdapter extends BaseAdapter<Favorite> {
                 });
     }
 
-    //加载数据使用
+    /**
+     * 加载数据使用
+     */
     public void refresh(List<Favorite> addOns) {
         //清空原有数据
         if (addOns.size() > 0) {

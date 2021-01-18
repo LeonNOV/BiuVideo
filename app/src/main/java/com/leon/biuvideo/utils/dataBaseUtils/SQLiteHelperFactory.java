@@ -28,7 +28,7 @@ public class SQLiteHelperFactory {
         //根据table来创建对应的对象
         switch (table) {
             case FavoriteUp:
-                sqLiteHelper = new FavoriteDatabaseUtils(context);
+                sqLiteHelper = new FavoriteUserDatabaseUtils(context);
                 break;
             case DownloadDetailsForVideo:
             case DownloadRecordsForVideo:

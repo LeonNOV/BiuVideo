@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.UserOrderAdapter;
+import com.leon.biuvideo.adapters.UserDataAdapters.UserOrderBaseAdapter;
 import com.leon.biuvideo.beans.orderBeans.Order;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
@@ -45,7 +45,7 @@ public class OrderInnerFragment extends BaseFragment {
     private List<Order> orders;
 
     private LinearLayoutManager linearLayoutManager;
-    private UserOrderAdapter userOrderAdapter;
+    private UserOrderBaseAdapter userOrderBaseAdapter;
 
     public OrderInnerFragment(long mid, OrderType orderType, OrderFollowType orderFollowType) {
         this.mid = mid;
@@ -95,9 +95,9 @@ public class OrderInnerFragment extends BaseFragment {
                 smartRefresh.setEnabled(false);
             }
 
-            if (linearLayoutManager == null || userOrderAdapter == null) {
+            if (linearLayoutManager == null || userOrderBaseAdapter == null) {
                 linearLayoutManager = new LinearLayoutManager(context);
-                userOrderAdapter = new UserOrderAdapter(orders, context, orderType);
+                userOrderBaseAdapter = new UserOrderBaseAdapter(orders, context, orderType);
             }
 
             initAttr();
@@ -107,7 +107,7 @@ public class OrderInnerFragment extends BaseFragment {
 
     private void initAttr() {
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(userOrderAdapter);
+        recyclerView.setAdapter(userOrderBaseAdapter);
 
         Handler handler = new Handler();
 
@@ -139,7 +139,7 @@ public class OrderInnerFragment extends BaseFragment {
                                 getOrder();
 
                                 //添加新数据
-                                userOrderAdapter.append(orders);
+                                userOrderBaseAdapter.append(orders);
                             }
                         }, 1000);
                     } else {

@@ -12,8 +12,11 @@ import com.leon.biuvideo.beans.orderBeans.LocalVideoFolder;
 
 import java.util.List;
 
+/**
+ * 本地订阅-视频文件夹
+ */
 public class LocalOrderVideoFolderAdapter extends BaseAdapter<LocalVideoFolder> {
-    private List<LocalVideoFolder> localVideoFolderList;
+    private final List<LocalVideoFolder> localVideoFolderList;
 
     public LocalOrderVideoFolderAdapter(Context context, List<LocalVideoFolder> localVideoFolderList) {
         super(localVideoFolderList, context);
@@ -23,6 +26,9 @@ public class LocalOrderVideoFolderAdapter extends BaseAdapter<LocalVideoFolder> 
     private OnClickFolderListener onClickFolderListener;
 
     public interface OnClickFolderListener {
+        /**
+         * 点击视频文件夹的回调方法
+         */
         void OnClick(LocalVideoFolder localVideoFolder);
     }
 

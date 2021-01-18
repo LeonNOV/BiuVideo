@@ -75,9 +75,7 @@ public class DownloadedDetailAdapter extends BaseAdapter<DownloadedDetailMedia> 
                 });
 
         if (downloadedDetailMedia.downloadState == 1) {
-            holder
-                    .setVisibility(R.id.downloaded_item_detail_imageView_state, View.VISIBLE)
-                    .setImage(R.id.downloaded_item_detail_imageView_state, R.drawable.icon_error2);
+            holder.setVisibility(R.id.downloaded_item_detail_imageView_error, View.VISIBLE);
         }
     }
 

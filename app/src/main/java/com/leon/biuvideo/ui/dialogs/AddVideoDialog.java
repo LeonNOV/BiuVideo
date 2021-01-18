@@ -10,7 +10,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.orderAdapters.LocalVideoFolderAdapter;
+import com.leon.biuvideo.adapters.orderAdapters.LocalOrderAddVideoFolderAdapter;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
 import com.leon.biuvideo.beans.orderBeans.LocalVideoFolder;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
@@ -24,7 +24,7 @@ public class AddVideoDialog extends AlertDialog implements View.OnClickListener 
     private RecyclerView video_add_recyclerView;
     private List<LocalVideoFolder> localVideoFolderList;
     private LocalOrdersDatabaseUtils localOrdersDatabaseUtils;
-    private LocalVideoFolderAdapter localVideoFolderAdapter;
+    private LocalOrderAddVideoFolderAdapter localOrderAddVideoFolderAdapter;
 
     public AddVideoDialog(@NonNull Context context) {
         super(context);
@@ -69,22 +69,22 @@ public class AddVideoDialog extends AlertDialog implements View.OnClickListener 
 
         localVideoFolderList = localOrdersDatabaseUtils.queryAllLocalVideoFolder();
 
-        localVideoFolderAdapter = new LocalVideoFolderAdapter(context, localVideoFolderList);
-        localVideoFolderAdapter.setOnVideoFolderClickListener(new LocalVideoFolderAdapter.OnVideoFolderClickListener() {
+        localOrderAddVideoFolderAdapter = new LocalOrderAddVideoFolderAdapter(context, localVideoFolderList);
+        localOrderAddVideoFolderAdapter.setOnVideoFolderClickListener(new LocalOrderAddVideoFolderAdapter.OnVideoFolderClickListener() {
             @Override
             public void OnClick(LocalVideoFolder localVideoFolder) {
                 if (onAddOrderCallback != null) {
                     LocalOrder localOrder = onAddOrderCallback.callBack(localVideoFolder);
                     boolean addState = localOrdersDatabaseUtils.addLocalOrder(localOrder);
                     if (addState) {
-                        localVideoFolderAdapter.refresh(localVideoFolder);
+                        localOrderAddVideoFolderAdapter.refresh(localVideoFolder);
                     }
                     onAddOrderCallback.onFavoriteIcon(addState);
                 }
             }
         });
 
-        video_add_recyclerView.setAdapter(localVideoFolderAdapter);
+        video_add_recyclerView.setAdapter(localOrderAddVideoFolderAdapter);
     }
 
     @Override
@@ -100,7 +100,7 @@ public class AddVideoDialog extends AlertDialog implements View.OnClickListener 
                     public void onConfirm(LocalVideoFolder localVideoFolder) {
                         boolean addState = localOrdersDatabaseUtils.addLocalVideoFolder(localVideoFolder);
                         if (addState) {
-                            localVideoFolderAdapter.append(localVideoFolder);
+                            localOrderAddVideoFolderAdapter.append(localVideoFolder);
                         }
                     }
                 });

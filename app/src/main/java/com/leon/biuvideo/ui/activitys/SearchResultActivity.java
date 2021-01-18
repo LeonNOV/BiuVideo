@@ -131,10 +131,10 @@ import java.util.Map;
             fragments = new ArrayList<>();
         }
 
-        fragments.add(VideoResultFragment.getInstance(keyword));
+        fragments.add(new VideoResultFragment(keyword));
         fragments.add(new BangumiResultFragment(keyword));
-        fragments.add(ArticleResultFragment.getInstance(keyword));
-        fragments.add(BiliUserResultFragment.getInstance(keyword));
+        fragments.add(new ArticleResultFragment(keyword));
+        fragments.add(new BiliUserResultFragment(keyword));
 
         viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
         search_viewPager.setAdapter(viewPageAdapter);

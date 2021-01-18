@@ -59,13 +59,24 @@
                 android:textSize="15sp" />
 
             <ImageView
-                android:id="@+id/downloaded_item_detail_imageView_state"
+                android:id="@+id/downloaded_item_detail_imageView_error"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="10dp"
                 android:src="@drawable/icon_error2"
                 android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/downloaded_item_detail_imageView_downloading"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:indeterminateTint="@color/blue"
+                android:indeterminateTintMode="src_atop"
+                android:visibility="gone" />
+
         </RelativeLayout>
 
     </RelativeLayout>

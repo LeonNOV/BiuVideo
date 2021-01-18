@@ -57,18 +57,24 @@ public class LocalOrderVideoFragment extends BaseFragment {
         localOrderVideoFolderAdapter.setOnClickFolderListener(new LocalOrderVideoFolderAdapter.OnClickFolderListener() {
             @Override
             public void OnClick(LocalVideoFolder localVideoFolder) {
-                fragment_local_order_textView_folderName.setText(localVideoFolder.folderName);
-                fragment_local_order_textView_total.setText(localVideoFolder.videoCount + "个内容");
-                fragment_local_order_textView_ctime.setText(ValueFormat.generateTime(localVideoFolder.createTime, false, false, "/"));
+                // 如果点击的文件夹不是已选择的文件夹，则进行重置
+                if (!localVideoFolder.folderName.equals(fragment_local_order_textView_folderName.getText().toString())) {
+                    fragment_local_order_textView_folderName.setText(localVideoFolder.folderName);
+                    fragment_local_order_textView_total.setText(localVideoFolder.videoCount + "个内容");
+                    fragment_local_order_textView_ctime.setText(ValueFormat.generateTime(localVideoFolder.createTime, false, false, "/"));
 
-                // 查询和localVideoFolder中的folderName对应的数据
-                List<LocalOrder> nextLocalOrderList = localOrdersDatabaseUtils.queryLocalOrder(localVideoFolder.folderName);
-                localOrderVideoDetailAdapter.reset(nextLocalOrderList);
+                    // 查询和localVideoFolder中的folderName对应的数据
+                    List<LocalOrder> nextLocalOrderList = localOrdersDatabaseUtils.queryLocalOrder(localVideoFolder.folderName);
+                    localOrderVideoDetailAdapter.reset(nextLocalOrderList);
+                }
             }
         });
         fragment_local_order_recyclerView_folderList.setAdapter(localOrderVideoFolderAdapter);
     }
 
+    /**
+     * 为了使数据能够正常的显示需要使用该方法来刷新数据
+     */
     @Override
     public void onResume() {
         initValues();

@@ -149,7 +149,7 @@
                     android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:layout_margin="10dp"
-                    android:background="@drawable/ripple_bilibili_pink_lite"
+                    android:background="@drawable/ripple_rectangle_bilibbili_pink"
                     android:gravity="center"
                     android:padding="10dp"
                     android:text="@string/set_hero_close"

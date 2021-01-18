@@ -29,7 +29,7 @@ import com.leon.biuvideo.ui.fragments.userFragments.UserPicturesFragment;
 import com.leon.biuvideo.ui.fragments.userFragments.UserVideosFragment;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.values.ImagePixelSize;
-import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.values.Tables;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UserInfoParser;
@@ -61,7 +61,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
     private long mid;
     private UserInfo userInfo;
 
-    private FavoriteDatabaseUtils favoriteDatabaseUtils;
+    private FavoriteUserDatabaseUtils favoriteUserDatabaseUtils;
 
     private Handler handler;
 
@@ -119,7 +119,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
     //初始化数据
     private void initValue() {
         SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.FavoriteUp);
-        favoriteDatabaseUtils = (FavoriteDatabaseUtils) sqLiteHelperFactory.getInstance();
+        favoriteUserDatabaseUtils = (FavoriteUserDatabaseUtils) sqLiteHelperFactory.getInstance();
 
         //获取mid
         Intent intent = getIntent();
@@ -131,7 +131,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
         }
 
         //更新visit
-        favoriteDatabaseUtils.updateVisit(mid);
+        favoriteUserDatabaseUtils.updateVisit(mid);
 
         SimpleThreadPool simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.LoadTaskNum, SimpleThreadPool.LoadTask);
         simpleThreadPool.submit(new FutureTask<>(new UserActivityThread()), "loadUserInfo");
@@ -165,7 +165,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
         up_textView_sign.setText(userInfo.sign);
 
         //获取关注状态
-        boolean favorite_state = favoriteDatabaseUtils.queryFavoriteState(mid);
+        boolean favorite_state = favoriteUserDatabaseUtils.queryFavoriteState(mid);
 
         if (favorite_state) {
             up_imageView_favoriteIconState.setImageResource(R.drawable.favorite);
@@ -247,14 +247,14 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
             case R.id.up_imageView_favoriteIconState:
 
                 //判断是否存在于数据库中
-                boolean state = favoriteDatabaseUtils.queryFavoriteState(mid);
+                boolean state = favoriteUserDatabaseUtils.queryFavoriteState(mid);
 
                 if (state) {
                     //从数据库中移除
                     up_imageView_favoriteIconState.setImageResource(R.drawable.no_favorite);
                     up_textView_favoriteStrState.setText("未关注");
 
-                    boolean removeState = favoriteDatabaseUtils.removeFavorite(mid);
+                    boolean removeState = favoriteUserDatabaseUtils.removeFavorite(mid);
 
                     Toast.makeText(this, removeState ? "已取消关注" : "取消关注失败", Toast.LENGTH_SHORT).show();
                 } else {
@@ -268,7 +268,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
                     favorite.faceUrl = userInfo.face;
                     favorite.name = userInfo.name;
 
-                    boolean addState = favoriteDatabaseUtils.addFavorite(favorite);
+                    boolean addState = favoriteUserDatabaseUtils.addFavorite(favorite);
 
                     Toast.makeText(this, addState ? "已加入至关注列表" : "关注失败", Toast.LENGTH_SHORT).show();
                 }
@@ -322,7 +322,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        favoriteDatabaseUtils.close();
+        favoriteUserDatabaseUtils.close();
     }
 
     private class UserActivityThread implements Callable<String> {

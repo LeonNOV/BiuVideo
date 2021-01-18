@@ -16,7 +16,7 @@ import com.leon.biuvideo.ui.activitys.UserActivity;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueFormat;
-import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.values.Tables;
 
@@ -30,7 +30,7 @@ public class BiliUserAdapter extends BaseAdapter<BiliUser> {
     private final Context context;
 
     private SQLiteHelperFactory sqLiteHelperFactory;
-    private FavoriteDatabaseUtils favoriteDatabaseUtils;
+    private FavoriteUserDatabaseUtils favoriteUserDatabaseUtils;
 
     private boolean followState;
 
@@ -74,8 +74,8 @@ public class BiliUserAdapter extends BaseAdapter<BiliUser> {
 
         //查询对应用户是否存在于Favorite_up中
         sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.FavoriteUp);
-        favoriteDatabaseUtils = (FavoriteDatabaseUtils) sqLiteHelperFactory.getInstance();
-        followState = favoriteDatabaseUtils.queryFavoriteState(biliUser.mid);
+        favoriteUserDatabaseUtils = (FavoriteUserDatabaseUtils) sqLiteHelperFactory.getInstance();
+        followState = favoriteUserDatabaseUtils.queryFavoriteState(biliUser.mid);
 
         if (followState) {
             holder.setText(R.id.search_bili_user_button_follow, "已关注");
@@ -83,18 +83,18 @@ public class BiliUserAdapter extends BaseAdapter<BiliUser> {
             holder.setText(R.id.search_bili_user_button_follow, "关注");
         }
 
-        favoriteDatabaseUtils.close();
+        favoriteUserDatabaseUtils.close();
 
         //设置按钮监听
         holder.setOnClickListener(R.id.search_bili_user_button_follow, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.FavoriteUp);
-                favoriteDatabaseUtils = (FavoriteDatabaseUtils) sqLiteHelperFactory.getInstance();
+                favoriteUserDatabaseUtils = (FavoriteUserDatabaseUtils) sqLiteHelperFactory.getInstance();
 
                 //已关注的话则进行移除
                 if (followState) {
-                    favoriteDatabaseUtils.removeFavorite(biliUser.mid);
+                    favoriteUserDatabaseUtils.removeFavorite(biliUser.mid);
                     holder.setText(R.id.search_bili_user_button_follow, "关注");
 
                     followState = false;
@@ -106,7 +106,7 @@ public class BiliUserAdapter extends BaseAdapter<BiliUser> {
                     favorite.faceUrl = biliUser.face;
                     favorite.desc = biliUser.usign;
 
-                    favoriteDatabaseUtils.addFavorite(favorite);
+                    favoriteUserDatabaseUtils.addFavorite(favorite);
                     holder.setText(R.id.search_bili_user_button_follow, "已关注");
 
                     followState = true;

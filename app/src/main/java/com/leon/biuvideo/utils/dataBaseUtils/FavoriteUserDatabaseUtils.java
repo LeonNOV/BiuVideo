@@ -14,12 +14,12 @@ import java.util.List;
 /**
  * 处理favorite_up表的工具类
  */
-public class FavoriteDatabaseUtils extends SQLiteHelper {
+public class FavoriteUserDatabaseUtils extends SQLiteHelper {
     private final SQLiteHelper sqLiteHelper;
     private final SQLiteDatabase sqLiteDatabase;
     private final String dbName  = Tables.FavoriteUp.value;
 
-    public FavoriteDatabaseUtils(Context context) {
+    public FavoriteUserDatabaseUtils(Context context) {
         super(context, 1);
 
         this.sqLiteHelper = new SQLiteHelper(context, 1);
@@ -60,8 +60,13 @@ public class FavoriteDatabaseUtils extends SQLiteHelper {
      *
      * @return  返回favorites
      */
-    public List<Favorite> queryFavorites() {
-        Cursor cursor = sqLiteDatabase.query(dbName, null, "isDelete = ?", new String [] {"0"}, null, null, "id DESC");
+    public List<Favorite> queryFavorites(boolean isByVisit) {
+        Cursor cursor;
+        if (isByVisit) {
+            cursor = sqLiteDatabase.query(dbName, null, "isDelete = ?", new String [] {"0"}, null, null, "visit DESC");
+        } else {
+            cursor = sqLiteDatabase.query(dbName, null, "isDelete = ?", new String[]{"0"}, null, null, "id DESC");
+        }
 
         List<Favorite> favorites = new ArrayList<>();
         while (cursor.moveToNext()) {
@@ -92,30 +97,6 @@ public class FavoriteDatabaseUtils extends SQLiteHelper {
         long insert = sqLiteDatabase.insert(dbName, null, values);
 
         return insert > 0;
-    }
-
-    /**
-     * 查询关注列表数据，按照访问量进行排序
-     *
-     * @return  返回favorites
-     */
-    public List<Favorite> queryFavoritesByVisit() {
-        Cursor cursor = sqLiteDatabase.query(dbName, null, "isDelete = ?", new String [] {"0"}, null, null, "visit DESC");
-
-        List<Favorite> favorites = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            Favorite favorite = new Favorite();
-
-            favorite.mid = cursor.getLong(cursor.getColumnIndex("mid"));
-            favorite.name = cursor.getString(cursor.getColumnIndex("name"));
-            favorite.faceUrl = cursor.getString(cursor.getColumnIndex("faceUrl"));
-            favorite.desc = cursor.getString(cursor.getColumnIndex("desc"));
-
-            favorites.add(favorite);
-        }
-
-        cursor.close();
-        return favorites;
     }
 
     /**

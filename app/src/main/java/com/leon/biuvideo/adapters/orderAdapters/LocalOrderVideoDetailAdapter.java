@@ -11,13 +11,15 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.BaseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
-import com.leon.biuvideo.beans.orderBeans.UserFolderData;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.List;
 
+/**
+ * 本地订阅-显示视频文件夹中的所有视频
+ */
 public class LocalOrderVideoDetailAdapter extends BaseAdapter<LocalOrder> {
     private final Context context;
     private final List<LocalOrder> localOrderList;

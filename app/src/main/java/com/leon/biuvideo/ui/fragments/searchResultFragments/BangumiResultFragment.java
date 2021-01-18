@@ -57,9 +57,9 @@ public class BangumiResultFragment extends BaseFragment {
 
     @Override
     public void initView(BindingUtils bindingUtils) {
-        search_result_no_data = view.findViewById(R.id.smart_refresh_layout_fragment_no_data);
-        search_result_smartRefresh = view.findViewById(R.id.smart_refresh_layout_fragment_smartRefresh);
-        search_result_recyclerView = view.findViewById(R.id.smart_refresh_layout_fragment_recyclerView);
+        search_result_no_data = findView(R.id.smart_refresh_layout_fragment_no_data);
+        search_result_smartRefresh = findView(R.id.smart_refresh_layout_fragment_smartRefresh);
+        search_result_recyclerView = findView(R.id.smart_refresh_layout_fragment_recyclerView);
 
         //关闭下拉刷新
         search_result_smartRefresh.setEnableRefresh(false);
@@ -81,11 +81,11 @@ public class BangumiResultFragment extends BaseFragment {
             search_result_smartRefresh.setVisibility(View.VISIBLE);
 
             bangumiList = bangumiParser.bangumiParse(keyword, pageNum, SortType.DEFAULT);
+            currentCount = bangumiList.size();
             pageNum++;
 
-            currentCount = bangumiList.size();
 
-            if (bangumiList.size() == count) {
+            if (currentCount == count) {
                 dataState = false;
                 search_result_smartRefresh.setEnabled(false);
             }
@@ -102,6 +102,8 @@ public class BangumiResultFragment extends BaseFragment {
     private void initAttr() {
         search_result_recyclerView.setAdapter(bangumiAdapter);
         search_result_recyclerView.setLayoutManager(linearLayoutManager);
+
+        Handler handler = new Handler();
 
         //添加加载更多监听事件
         search_result_smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -126,13 +128,11 @@ public class BangumiResultFragment extends BaseFragment {
                     if (dataState) {
                         pageNum++;
 
-                        new Handler().postDelayed(new Runnable() {
+                        handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 //获取新数据
                                 getBangumi();
-
-                                Log.d(Fuck.blue, "成功获取了第" + pageNum + "页的" + bangumiList.size() + "条数据");
 
                                 //添加新数据
                                 bangumiAdapter.append(bangumiList);
@@ -152,6 +152,9 @@ public class BangumiResultFragment extends BaseFragment {
         });
     }
 
+    /**
+     * 获取下一页数据
+     */
     private void getBangumi() {
         this.bangumiList = bangumiParser.bangumiParse(keyword, pageNum, SortType.DEFAULT);
 

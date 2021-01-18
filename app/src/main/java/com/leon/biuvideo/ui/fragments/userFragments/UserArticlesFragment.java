@@ -39,6 +39,7 @@ public class UserArticlesFragment extends BaseFragment {
     private boolean dataState = true;
 
     private List<Article> articles;
+    private int count;
 
     public UserArticlesFragment(long mid) {
         this.mid = mid;
@@ -65,10 +66,9 @@ public class UserArticlesFragment extends BaseFragment {
     @Override
     public void initValues() {
         articleParser = new ArticleParser(context, mid);
+        count = articleParser.getArticleTotal();
 
-        int total = articleParser.getArticleTotal();
-
-        if (total == 0) {
+        if (count == 0) {
             //设置无数据提示界面
             no_data.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
@@ -83,7 +83,7 @@ public class UserArticlesFragment extends BaseFragment {
             currentCount += articles.size();
             pageNum++;
 
-            if (currentCount < 12) {
+            if (currentCount == count) {
                 dataState = false;
                 smartRefresh.setEnabled(false);
             }
@@ -124,12 +124,13 @@ public class UserArticlesFragment extends BaseFragment {
                 //判断是否处于拖拽已释放的状态
                 if (state.finishing == RefreshState.ReleaseToLoad.finishing) {
                     if (dataState) {
+                        pageNum++;
+
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 //获取新数据
-                                getArticles(mid, pageNum);
-                                pageNum++;
+                                getArticles();
 
                                 //添加新数据
                                 userArticleAdapter.append(articles);
@@ -151,16 +152,13 @@ public class UserArticlesFragment extends BaseFragment {
 
     /**
      * 获取下一页数据
-     *
-     * @param mid   用户ID
-     * @param pageNum   页码
      */
-    private void getArticles(long mid, int pageNum) {
+    private void getArticles() {
         articles = articleParser.parseArticle(pageNum);
         currentCount += articles.size();
 
         //如果第一次获取的条目数小于30则设置dataState
-        if (articles.size() < 12) {
+        if (currentCount == count) {
             dataState = false;
             smartRefresh.setEnabled(false);
         }

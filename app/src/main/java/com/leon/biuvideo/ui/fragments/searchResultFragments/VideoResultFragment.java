@@ -1,25 +1,18 @@
 package com.leon.biuvideo.ui.fragments.searchResultFragments;
 
-import android.content.Context;
-import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.UserFragmentAdapters.UserVideoAdapter;
 import com.leon.biuvideo.beans.upMasterBean.Video;
-import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
+import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.VideoParser;
 import com.leon.biuvideo.values.SortType;
@@ -34,7 +27,7 @@ import java.util.List;
 /**
  * SearchResultActivity-video Fragment
  */
-public class VideoResultFragment extends Fragment {
+public class VideoResultFragment extends BaseFragment {
     private SmartRefreshLayout search_result_smartRefresh;
     private RecyclerView search_result_recyclerView;
     private TextView search_result_no_data;
@@ -47,14 +40,11 @@ public class VideoResultFragment extends Fragment {
     private VideoParser videoParser;
     private List<Video> videos;
 
-    private Context context;
     private LinearLayoutManager linearLayoutManager;
     private UserVideoAdapter userVideoAdapter;
 
     private boolean dataState = true;
     private int pageNum = 1;
-
-    private View view;
 
     public VideoResultFragment() {
     }
@@ -63,45 +53,23 @@ public class VideoResultFragment extends Fragment {
         this.keyword = keyword;
     }
 
-    public static VideoResultFragment getInstance(String keyword) {
-        VideoResultFragment videoResultFragment = new VideoResultFragment(keyword);
-
-        Bundle bundle = new Bundle();
-        bundle.putString("keyword", keyword);
-        videoResultFragment.setArguments(bundle);
-
-        return videoResultFragment;
-    }
-
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.smart_refresh_layout_fragment, container, false);
-
-        initView();
-        initVisibility();
-
-        return view;
+    public int setLayout() {
+        return R.layout.smart_refresh_layout_fragment;
     }
 
-    /**
-     * 初始控件
-     */
-    private void initView() {
-        context = getContext();
-
-        search_result_no_data = view.findViewById(R.id.smart_refresh_layout_fragment_no_data);
-        search_result_smartRefresh = view.findViewById(R.id.smart_refresh_layout_fragment_smartRefresh);
-        search_result_recyclerView = view.findViewById(R.id.smart_refresh_layout_fragment_recyclerView);
+    @Override
+    public void initView(BindingUtils bindingUtils) {
+        search_result_no_data = findView(R.id.smart_refresh_layout_fragment_no_data);
+        search_result_smartRefresh = findView(R.id.smart_refresh_layout_fragment_smartRefresh);
+        search_result_recyclerView = findView(R.id.smart_refresh_layout_fragment_recyclerView);
 
         //关闭下拉刷新
         search_result_smartRefresh.setEnableRefresh(false);
     }
 
-    /**
-     * 初始化控件Visibility
-     */
-    private void initVisibility() {
+    @Override
+    public void initValues() {
         videoParser = new VideoParser(context);
 
         //获取总条目数，最大为1000，最小为0
@@ -147,6 +115,8 @@ public class VideoResultFragment extends Fragment {
         search_result_recyclerView.setLayoutManager(linearLayoutManager);
         search_result_recyclerView.setAdapter(userVideoAdapter);
 
+        Handler handler = new Handler();
+
         //添加加载更多监听事件
         search_result_smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
@@ -170,16 +140,14 @@ public class VideoResultFragment extends Fragment {
                     if (dataState) {
                         pageNum++;
 
-                        new Handler().postDelayed(new Runnable() {
+                        handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 //获取新数据
-                                List<Video> addOns = getVideos(pageNum);
-
-                                Log.d(Fuck.blue, "成功获取了第" + pageNum + "页的" + addOns.size() + "条数据");
+                                getVideos();
 
                                 //添加新数据
-                                userVideoAdapter.append(addOns);
+                                userVideoAdapter.append(videos);
                             }
                         }, 1000);
                     } else {
@@ -198,22 +166,18 @@ public class VideoResultFragment extends Fragment {
 
     /**
      * 获取下一页的数据
-     *
-     * @param pageNum   页码
-     * @return  返回下一页的数据
      */
-    public List<Video> getVideos(int pageNum) {
-        List<Video> newVideos = videoParser.videoParse(keyword, pageNum, SortType.DEFAULT);
+    public void getVideos() {
+        videos = videoParser.videoParse(keyword, pageNum, SortType.DEFAULT);
 
         //记录获取的总数
-        currentCount += newVideos.size();
+        currentCount += videos.size();
 
         //判断是否已获取完所有的数据
-        if (newVideos.size() < 20 || currentCount == count) {
+        if (currentCount == count) {
             dataState = false;
+            search_result_smartRefresh.setEnabled(false);
         }
-
-        return newVideos;
     }
 
     /**
@@ -228,15 +192,17 @@ public class VideoResultFragment extends Fragment {
         this.dataState = true;
 
         //获取二次搜索的数据
-        initVisibility();
+        initValues();
 
         /**
          * 需要将二次搜索的第一个页面的数据放入一个临时的变量中
          * 以防userVideoAdapter.removeAll()将其清空
          */
-        List<Video> temp = new ArrayList<>(videos);
+        if (videos != null) {
+            List<Video> temp = new ArrayList<>(videos);
 
-        userVideoAdapter.removeAll();
-        userVideoAdapter.append(temp);
+            userVideoAdapter.removeAll();
+            userVideoAdapter.append(temp);
+        }
     }
 }

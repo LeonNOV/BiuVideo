@@ -12,10 +12,13 @@ import com.leon.biuvideo.beans.orderBeans.LocalVideoFolder;
 
 import java.util.List;
 
-public class LocalVideoFolderAdapter extends BaseAdapter<LocalVideoFolder> {
+/**
+ * 将视频添加至localOrders时使用该Adapter来显示已存在的VideoFolder
+ */
+public class LocalOrderAddVideoFolderAdapter extends BaseAdapter<LocalVideoFolder> {
     private final List<LocalVideoFolder> localVideoFolderList;
 
-    public LocalVideoFolderAdapter(Context context, List<LocalVideoFolder> localVideoFolderList) {
+    public LocalOrderAddVideoFolderAdapter(Context context, List<LocalVideoFolder> localVideoFolderList) {
         super(localVideoFolderList, context);
         this.localVideoFolderList = localVideoFolderList;
     }
@@ -28,6 +31,9 @@ public class LocalVideoFolderAdapter extends BaseAdapter<LocalVideoFolder> {
     private OnVideoFolderClickListener onVideoFolderClickListener;
 
     public interface OnVideoFolderClickListener {
+        /**
+         * 点击文件夹，将视频‘保存’至文件夹中
+         */
         void OnClick(LocalVideoFolder localVideoFolder);
     }
 

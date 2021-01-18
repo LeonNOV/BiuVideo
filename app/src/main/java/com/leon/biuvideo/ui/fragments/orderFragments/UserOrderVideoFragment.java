@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.UserDataAdapters.UserFavoriteFolderAdapter;
-import com.leon.biuvideo.adapters.UserDataAdapters.UserFavoriteFolderDetailAdapter;
+import com.leon.biuvideo.adapters.UserDataAdapters.UserOrderVideoFolderAdapter;
+import com.leon.biuvideo.adapters.UserDataAdapters.UserOrderVideoFolderDetailAdapter;
 import com.leon.biuvideo.beans.orderBeans.UserFolder;
 import com.leon.biuvideo.beans.orderBeans.UserFolderData;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
@@ -41,7 +41,7 @@ public class UserOrderVideoFragment extends BaseFragment {
     private RecyclerView folderList;
     private RecyclerView folderDetail;
 
-    private UserFavoriteFolderDetailAdapter userFavoriteFolderDetailAdapter;
+    private UserOrderVideoFolderDetailAdapter userOrderVideoFolderDetailAdapter;
 
     public UserOrderVideoFragment(long mid) {
         this.mid = mid;
@@ -73,8 +73,8 @@ public class UserOrderVideoFragment extends BaseFragment {
         // 设置收藏夹参数
         setFolderInfo(userFolderData);
 
-        UserFavoriteFolderAdapter userFavoriteFolderAdapter = new UserFavoriteFolderAdapter(userFolders, context);
-        userFavoriteFolderAdapter.setOnClickFolderListener(new UserFavoriteFolderAdapter.OnClickFolderListener() {
+        UserOrderVideoFolderAdapter userOrderVideoFolderAdapter = new UserOrderVideoFolderAdapter(userFolders, context);
+        userOrderVideoFolderAdapter.setOnClickFolderListener(new UserOrderVideoFolderAdapter.OnClickFolderListener() {
             @Override
             public void OnClick(long folderId) {
                 pageNum = 1;
@@ -83,14 +83,14 @@ public class UserOrderVideoFragment extends BaseFragment {
                 fragment_favorite_smartRefresh.setEnabled(true);
 
                 UserFolderData innerUserFolderData = userFolderParser.parseUserFolderData(nowFolderId, pageNum);
-                userFavoriteFolderDetailAdapter.reset(innerUserFolderData.medias);
+                userOrderVideoFolderDetailAdapter.reset(innerUserFolderData.medias);
                 setFolderInfo(innerUserFolderData);
             }
         });
 
-        userFavoriteFolderDetailAdapter = new UserFavoriteFolderDetailAdapter(userFolderData.medias, context);
-        folderList.setAdapter(userFavoriteFolderAdapter);
-        folderDetail.setAdapter(userFavoriteFolderDetailAdapter);
+        userOrderVideoFolderDetailAdapter = new UserOrderVideoFolderDetailAdapter(userFolderData.medias, context);
+        folderList.setAdapter(userOrderVideoFolderAdapter);
+        folderDetail.setAdapter(userOrderVideoFolderDetailAdapter);
 
         folderList.setLayoutManager(new LinearLayoutManager(context));
         folderDetail.setLayoutManager(new LinearLayoutManager(context));
@@ -126,7 +126,7 @@ public class UserOrderVideoFragment extends BaseFragment {
                                 getFavoriteVideo();
 
                                 //添加新数据
-                                userFavoriteFolderDetailAdapter.append(userFolderData.medias);
+                                userOrderVideoFolderDetailAdapter.append(userFolderData.medias);
                             }
                         }, 1000);
                     } else {

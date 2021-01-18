@@ -1,9 +1,7 @@
 package com.leon.biuvideo.adapters.DownloadAdapter;
 
 import android.content.Context;
-import android.graphics.drawable.AnimationDrawable;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -53,13 +51,12 @@ public class DownloadedFailListAdapter extends BaseAdapter<DownloadedDetailMedia
 
         downloadedDetailMedia = downloadedDetailMedias.get(position);
 
-        ImageView imageView = holder.findById(R.id.downloaded_item_detail_imageView_state);
         holder
                 .setImage(R.id.downloaded_item_detail_imageView_mark, downloadedDetailMedia.isVideo ? videoIcon : audioIcon)
                 .setImage(R.id.downloaded_item_detail_imageView_cover, downloadedDetailMedia.cover, ImagePixelSize.COVER)
                 .setText(R.id.downloaded_item_detail_textView_title, downloadedDetailMedia.title)
                 .setText(R.id.downloaded_item_detail_textView_mediaInfo, ValueFormat.sizeFormat(downloadedDetailMedia.size, true))
-                .setVisibility(R.id.downloaded_item_detail_imageView_state, View.VISIBLE)
+                .setVisibility(R.id.downloaded_item_detail_imageView_error, View.VISIBLE)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -68,9 +65,9 @@ public class DownloadedFailListAdapter extends BaseAdapter<DownloadedDetailMedia
                             reacquire(downloadedDetailMedia, new MediaUtils(context));
                             downloadedDetailMedia.downloadState = 1;
 
-                            holder.setImage(R.id.downloaded_item_detail_imageView_state, R.drawable.downloading_animation);
-                            AnimationDrawable animationDrawable = (AnimationDrawable) imageView.getDrawable();
-                            animationDrawable.start();
+                            holder
+                                    .setVisibility(R.id.downloaded_item_detail_imageView_downloading, View.VISIBLE)
+                                    .setVisibility(R.id.downloaded_item_detail_imageView_error, View.GONE);
 
                             if (simpleThreadPool == null) {
                                 simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.DownloadTaskNum, SimpleThreadPool.DownloadTask);

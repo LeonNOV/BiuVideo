@@ -1,4 +1,4 @@
-package com.leon.biuvideo.adapters;
+package com.leon.biuvideo.adapters.UserDataAdapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,12 +21,12 @@ import com.leon.biuvideo.values.SortType;
 import java.util.Arrays;
 import java.util.List;
 
-public class UserOrderAdapter extends BaseAdapter<Order> {
+public class UserOrderBaseAdapter extends BaseAdapter<Order> {
     private final Context context;
     private final List<Order> orders;
     private final OrderType orderType;
 
-    public UserOrderAdapter(List<Order> orders, Context context, OrderType orderType) {
+    public UserOrderBaseAdapter(List<Order> orders, Context context, OrderType orderType) {
         super(orders, context);
         this.context = context;
         this.orders = orders;

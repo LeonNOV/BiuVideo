@@ -26,15 +26,12 @@ import java.util.List;
 public class PictureViewer extends PopupWindow implements View.OnClickListener, ViewPager.OnPageChangeListener {
     private final int selectedPosition;
     private final List<String> pictures;
-    private List<ImageView> imageViews;
-
     private final Context context;
+
+    private List<ImageView> imageViews;
     private View pictureViewerView;
-    private ImageView picture_viewer_imageView_back, picture_viewer_imageView_savePic;
     private ViewPager picture_viewer_viewPager;
     private TextView picture_viewer_textView_index;
-
-    private PictureViewerAdapter pictureViewerAdapter;
 
     public PictureViewer(Context context, int selectedPosition, List<String> pictures) {
         super(context);
@@ -58,10 +55,10 @@ public class PictureViewer extends PopupWindow implements View.OnClickListener, 
     private void initView() {
         pictureViewerView = LayoutInflater.from(context).inflate(R.layout.picture_viewer, null);
 
-        picture_viewer_imageView_back = pictureViewerView.findViewById(R.id.picture_viewer_imageView_back);
+        ImageView picture_viewer_imageView_back = pictureViewerView.findViewById(R.id.picture_viewer_imageView_back);
         picture_viewer_imageView_back.setOnClickListener(this);
 
-        picture_viewer_imageView_savePic = pictureViewerView.findViewById(R.id.picture_viewer_imageView_savePic);
+        ImageView picture_viewer_imageView_savePic = pictureViewerView.findViewById(R.id.picture_viewer_imageView_savePic);
         picture_viewer_imageView_savePic.setOnClickListener(this);
 
         picture_viewer_viewPager = pictureViewerView.findViewById(R.id.picture_viewer_viewPager);
@@ -75,7 +72,7 @@ public class PictureViewer extends PopupWindow implements View.OnClickListener, 
         String indexStr = (selectedPosition + 1) + "/" + pictures.size();
         picture_viewer_textView_index.setText(indexStr);
 
-        pictureViewerAdapter = new PictureViewerAdapter(context, pictures, imageViews);
+        PictureViewerAdapter pictureViewerAdapter = new PictureViewerAdapter(context, pictures, imageViews);
         picture_viewer_viewPager.setAdapter(pictureViewerAdapter);
         picture_viewer_viewPager.setCurrentItem(selectedPosition);
         picture_viewer_viewPager.setPageMargin(40);
