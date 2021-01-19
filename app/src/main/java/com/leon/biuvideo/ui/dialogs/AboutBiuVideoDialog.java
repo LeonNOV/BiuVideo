@@ -7,11 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 
 /**
@@ -79,7 +79,7 @@ public class AboutBiuVideoDialog extends AlertDialog implements View.OnClickList
                 try {
                     context.startActivity(intent);
                 } catch (Exception e) {
-                    Toast.makeText(context, "调起QQ失败，请检查QQ是否为最新版或是否已安装QQ", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(v, "调起QQ失败，请检查QQ是否为最新版或是否已安装QQ", Snackbar.LENGTH_SHORT).show();
                 }
 
                 break;

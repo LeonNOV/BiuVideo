@@ -1,16 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="order_video">视频</string>
-    <string name="order_bangumi">追番</string>
-    <string name="order_series">追剧</string>
-    <string name="order_article">专栏</string>
-
-    <string name="localOrder_bangumi">番剧</string>
-    <string name="localOrder_video">视频</string>
-    <string name="localOrder_article">专栏</string>
-    <string name="localOrder_audio">音频</string>
-
     <string name="order_warn">非常抱歉，该功能需要登录才能正常使用，后期版本将会添加离线版，请谅解＞︿＜</string>
-
 </resources>

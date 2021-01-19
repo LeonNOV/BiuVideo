@@ -18,7 +18,6 @@ import android.os.StrictMode;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -27,6 +26,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.bumptech.glide.Glide;
 import com.google.android.material.internal.NavigationMenuView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.beans.userBeans.UserInfo;
@@ -108,23 +108,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * app参数初始化
      */
     private void init() {
-        //检查网络状态
-        InternetUtils.InternetState internetState = InternetUtils.internetState(getApplicationContext());
-        switch (internetState) {
-            case INTERNET_NoAvailable:
-                Toast.makeText(getApplicationContext(), "没有网络哦~~~", Toast.LENGTH_SHORT).show();
-                break;
-//            case INTERNET_WIFI:
-//                Toast.makeText(getApplicationContext(), "WIFI", Toast.LENGTH_SHORT).show();
-//                break;
-            case INTERNET_MOBILE:
-                Toast.makeText(getApplicationContext(), "现处于移动网络状态下，请注意流量的使用", Toast.LENGTH_SHORT).show();
-                break;
-            default:
-//                Toast.makeText(getApplicationContext(), "未知类型", Toast.LENGTH_SHORT).show();
-                break;
-        }
-
         //初始化fragment
         fragmentList = new ArrayList<>();
         //默认显示HomeFragment
@@ -178,6 +161,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initInternet() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
+        // 检查网络状态
+        InternetUtils.InternetState internetState = InternetUtils.internetState(getApplicationContext());
+        switch (internetState) {
+            case INTERNET_NoAvailable:
+                Snackbar.make(drawer_layout, "没有网络哦~", Snackbar.LENGTH_SHORT).show();
+                break;
+//            case INTERNET_WIFI:
+//                Toast.makeText(getApplicationContext(), "WIFI", Toast.LENGTH_SHORT).show();
+//                break;
+            case INTERNET_MOBILE:
+                Snackbar.make(drawer_layout, "现处于移动网络状态下，请注意流量的使用", Snackbar.LENGTH_SHORT).show();
+                break;
+            default:
+//                Toast.makeText(getApplicationContext(), "未知类型", Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     /**
@@ -185,10 +185,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      *
      * @param navigationView navigationView
      */
-    private void removeNavigationViewScrollbar(NavigationView navigationView){
-        if (navigationView != null){
-            NavigationMenuView navigationMenuView =  (NavigationMenuView) navigationView.getChildAt(0);
-            if (navigationMenuView != null){
+    private void removeNavigationViewScrollbar(NavigationView navigationView) {
+        if (navigationView != null) {
+            NavigationMenuView navigationMenuView = (NavigationMenuView) navigationView.getChildAt(0);
+            if (navigationMenuView != null) {
                 navigationMenuView.setVerticalScrollBarEnabled(false);
             }
         }
@@ -198,20 +198,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 初始化用户数据
      */
     private void initUserInfo() {
-        SharedPreferences sharedPreferences = getSharedPreferences("initValues", Activity.MODE_PRIVATE);
-        cookie = sharedPreferences.getString("cookie", null);
+        boolean network = InternetUtils.checkNetwork(getApplicationContext());
+        if (network) {
+            SharedPreferences sharedPreferences = getSharedPreferences("initValues", Activity.MODE_PRIVATE);
+            cookie = sharedPreferences.getString("cookie", null);
 
-        if (cookie == null) {
-            //创建未登录弹窗
-            //do something...
+            if (cookie == null) {
+                Snackbar.make(drawer_layout, "还未登录哦~", Snackbar.LENGTH_LONG)
+                        .setAction("这就去登录", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                startActivityForResult(intent, 1003);
+                            }
+                        })
+                        .setActionTextColor(getResources().getColor(R.color.blue))
+                        .show();
+            } else {
+                UserInfoParser userInfoParser = new UserInfoParser(getApplicationContext());
+                userInfo = userInfoParser.userInfoParse();
+                if (userInfo != null) {
+                    isLogin = true;
+                    sharedPreferences.edit().putBoolean("isVIP", userInfo.isVip).apply();
+                    refreshUserInfo();
+                } else {
+                    Snackbar.make(drawer_layout, "用户凭证已过期，需要重新登录", Snackbar.LENGTH_SHORT)
+                            .setAction("登录", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                    startActivityForResult(intent, 1003);
+                                }
+                            })
+                            .setActionTextColor(getResources().getColor(R.color.blue))
+                            .show();
 
-            Toast.makeText(this, "未获取到Cookie", Toast.LENGTH_SHORT).show();
-        } else {
-            UserInfoParser userInfoParser = new UserInfoParser(getApplicationContext());
-            userInfo = userInfoParser.userInfoParse();
-            isLogin = true;
-            sharedPreferences.edit().putBoolean("isVIP", userInfo.isVip).apply();
-            refreshUserInfo();
+                }
+            }
         }
     }
 
@@ -253,11 +276,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigation_header_progress_level.setProgress(0);
 
         //删除本地Cookie
-//        SharedPreferences.Editor editor = getSharedPreferences("initValues", Activity.MODE_PRIVATE).edit();
-//        editor.remove("cookie").apply();
+        SharedPreferences.Editor editor = getSharedPreferences("initValues", Activity.MODE_PRIVATE).edit();
+        editor.remove("cookie").apply();
 
         isLogin = false;
         cookie = null;
+
+        Snackbar.make(drawer_layout, "当前账号已成功退出", Snackbar.LENGTH_SHORT).show();
     }
 
     /**
@@ -329,7 +354,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.navigation_menu_help:
-
                 //跳转至帮助文档页面
                 Intent intentHelp = new Intent();
                 intentHelp.setAction("android.intent.action.VIEW");
@@ -425,7 +449,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 warnDialog.show();
-
                 break;
             case R.id.toolBar_imageView_menu:
                 drawer_layout.openDrawer(GravityCompat.START);

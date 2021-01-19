@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Looper;
 import android.util.Base64;
 import android.view.View;
 import android.view.Window;
@@ -13,11 +12,12 @@ import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
@@ -40,10 +40,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import okhttp3.Headers;
@@ -68,6 +65,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
 
     private boolean isHaveLocalOrder = false;
     private final static LocalOrderType localOrderType = LocalOrderType.ARTICLE;
+    private LinearLayout article_linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +80,8 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initView() {
+        article_linearLayout = findViewById(R.id.article_linearLayout);
+
         article_imageView_face = findViewById(R.id.article_imageView_face);
         article_imageView_face.setOnClickListener(this);
 
@@ -165,6 +165,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
 
         localOrdersDatabaseUtils = new LocalOrdersDatabaseUtils(getApplicationContext());
         isHaveLocalOrder = localOrdersDatabaseUtils.queryLocalOrder(String.valueOf(article.articleId), null, localOrderType);
+        Fuck.blue(isHaveLocalOrder + "");
     }
 
     /**
@@ -277,12 +278,8 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.article_imageView_face:
-
                 Intent intent = new Intent(this, UserActivity.class);
                 intent.putExtra("mid", article.mid);
-
-                Fuck.blue("跳转至----" + article.author + "----" + article.mid + "----的主页");
-
                 startActivity(intent);
 
                 break;
@@ -303,10 +300,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                                     @Override
                                     public void run() {
                                         boolean saveState = ResourceUtils.saveArticle(article_webView, getApplicationContext());
-
-                                        Looper.prepare();
-                                        Toast.makeText(ArticleActivity.this, saveState ? "保存成功" : "保存失败", Toast.LENGTH_SHORT).show();
-                                        Looper.loop();
+                                        Snackbar.make(article_linearLayout, saveState ? "保存成功" : "保存失败", Snackbar.LENGTH_SHORT).show();
                                     }
                                 }).start();
 
@@ -335,7 +329,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                                     operatingStatus = localOrdersDatabaseUtils.deleteLocalOrder(String.valueOf(article.articleId), null, localOrderType);
                                     if (operatingStatus) {
                                         roundPopupWindow.setText(R.id.article_more_menu_favorite, "收藏该文章");
-                                        Toast.makeText(ArticleActivity.this, R.string.remFavoriteSign, Toast.LENGTH_SHORT).show();
+                                        Snackbar.make(v, R.string.remFavoriteSign, Snackbar.LENGTH_SHORT).show();
                                         isHaveLocalOrder = false;
                                     }
                                 } else {
@@ -362,7 +356,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
 
                                     if (operatingStatus) {
                                         roundPopupWindow.setText(R.id.article_more_menu_favorite, "取消收藏");
-                                        Toast.makeText(ArticleActivity.this, R.string.addFavoriteSign, Toast.LENGTH_SHORT).show();
+                                        Snackbar.make(v, R.string.addFavoriteSign, Snackbar.LENGTH_SHORT).show();
                                         isHaveLocalOrder = true;
                                     }
                                 }
@@ -374,5 +368,13 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (localOrdersDatabaseUtils != null) {
+            localOrdersDatabaseUtils.close();
+        }
+        super.onDestroy();
     }
 }

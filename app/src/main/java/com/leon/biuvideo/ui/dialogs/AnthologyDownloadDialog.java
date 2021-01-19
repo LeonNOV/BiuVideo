@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.UserFragmentAdapters.AnthologyDownloadDialogAdapter;
+import com.leon.biuvideo.adapters.userFragmentAdapters.AnthologyDownloadDialogAdapter;
 import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
 import com.leon.biuvideo.ui.activitys.DownloadedActivity;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
@@ -25,6 +25,7 @@ public class AnthologyDownloadDialog extends AlertDialog implements View.OnClick
     private final List<AnthologyInfo> anthologyInfoList;
     private final Context context;
     private int qualityId;
+    public View view;
 
     private RecyclerView anthology_download_dialog_recyclerView;
 
@@ -32,6 +33,8 @@ public class AnthologyDownloadDialog extends AlertDialog implements View.OnClick
         super(context);
         this.context = context;
         this.anthologyInfoList = anthologyInfoList;
+
+        this.view = getWindow().getDecorView();
     }
 
     @Override

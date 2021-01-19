@@ -7,9 +7,9 @@ import androidx.annotation.NonNull;
 
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.BaseAdapters.BaseAdapter;
-import com.leon.biuvideo.adapters.BaseAdapters.BaseViewHolder;
-import com.leon.biuvideo.adapters.UserFragmentAdapters.OnMusicListListener;
+import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
+import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
+import com.leon.biuvideo.adapters.userFragmentAdapters.OnMusicListListener;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
 
 import java.util.List;

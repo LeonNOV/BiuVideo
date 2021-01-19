@@ -23,7 +23,7 @@
             android:layout_weight="1"
             android:background="@drawable/lndicator_bar_selected"
             android:gravity="center"
-            android:text="@string/history_video"
+            android:text="@string/video"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -37,7 +37,7 @@
             android:layout_weight="1"
             android:background="@drawable/lndicator_bar_unselected"
             android:gravity="center"
-            android:text="@string/history_live"
+            android:text="@string/live"
             android:textColor="@color/black"
             android:textSize="15sp" />
 
@@ -50,7 +50,7 @@
             android:layout_weight="1"
             android:background="@drawable/lndicator_bar_unselected"
             android:gravity="center"
-            android:text="@string/history_article"
+            android:text="@string/article"
             android:textColor="@color/black"
             android:textSize="15sp" />
 

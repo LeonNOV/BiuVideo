@@ -10,12 +10,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.UserFragmentAdapters.BangumiEpAdapter;
+import com.leon.biuvideo.adapters.userFragmentAdapters.BangumiEpAdapter;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedRecordsForVideo;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
@@ -68,6 +70,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
     private final static String PROMPT = "当前已选择的选集为：";
     private final static LocalOrderType localOrderType = LocalOrderType.BANGUMI;
     private boolean isHaveLocalOrder = false;
+    private LinearLayout bangumi_linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +107,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
 
     private void initView() {
         BindingUtils bindingUtils = new BindingUtils(getWindow().getDecorView(), getApplicationContext());
+        bangumi_linearLayout = findViewById(R.id.bangumi_linearLayout);
         bindingUtils.setText(R.id.bangumi_textView_title, bangumi.title)
                 .setText(R.id.bangumi_textView_bangumiState, bangumi.eps.size() == bangumi.epSize ? "已完结" : "连载中")
                 .setText(R.id.bangumi_textView_epSize, "共" + bangumi.epSize + "话")
@@ -135,7 +139,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void onEpClick(int position) {
                     if (position == selectAnthologyIndex) {
-                        Toast.makeText(BangumiActivity.this, "选择的视频已经在播放了~~", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(bangumi_linearLayout, R.string.isPlaying, Snackbar.LENGTH_SHORT).show();
                     } else {
                         selectAnthologyIndex = position;
                         setSelectedAnthologyName();
@@ -179,7 +183,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                 boolean isHaveNetworkSaveVideo = InternetUtils.checkNetwork(getApplicationContext());
 
                 if (!isHaveNetworkSaveVideo) {
-                    Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -220,9 +224,6 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                     anthologyDownloadDialog.setOnDownloadListener(new AnthologyDownloadDialog.OnDownloadListener() {
                         @Override
                         public void onDownload(int qualityId, long cid, int position, String subTitle) {
-                            // 保存选定视频
-                            Fuck.blue("saveSingleVideo----cid:" + cid + "--qualityIndex:" + qualityId + "--subTitle:" + subTitle);
-
                             //获取视频选集信息
                             Play playWithDownload = mediaParser.parseMedia(null, cid, true);
 
@@ -248,7 +249,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                         @Override
                         public void onSaveAll(int qualityId) {
                             // 保存所有视频
-                            Toast.makeText(getApplicationContext(), "Sorry~该功能暂未进行开发，请谅解＞︿＜", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(v, "Sorry~该功能暂未进行开发，请谅解＞︿＜", Snackbar.LENGTH_SHORT).show();
                         }
                     });
 
@@ -264,7 +265,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
 
                     if (operatingStatus) {
                         bangumi_imageView_favorite.setImageResource(R.drawable.no_favorite);
-                        Toast.makeText(this, R.string.remFavoriteSign, Toast.LENGTH_SHORT).show();
+                        Snackbar.make(v, R.string.remFavoriteSign, Snackbar.LENGTH_SHORT).show();
                         isHaveLocalOrder = false;
                     }
                 } else {
@@ -286,7 +287,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
 
                     if (operatingStatus) {
                         bangumi_imageView_favorite.setImageResource(R.drawable.favorite);
-                        Toast.makeText(this, R.string.addFavoriteSign, Toast.LENGTH_SHORT).show();
+                        Snackbar.make(v, R.string.addFavoriteSign, Snackbar.LENGTH_SHORT).show();
                         isHaveLocalOrder = true;
                     }
                 }
@@ -313,7 +314,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
         // 添加至DownloadDetailsForMedia
         String fileName = addToDownloadDetailMedia(mediaEntry, videoUrlBase, audioUrlBase);
 
-        Toast.makeText(getApplicationContext(), "已加入缓存队列中", Toast.LENGTH_SHORT).show();
+        Snackbar.make(bangumi_linearLayout, R.string.isDownloading, Snackbar.LENGTH_SHORT).show();
 
         SimpleDownloadThread simpleDownloadThread = new SimpleDownloadThread(getApplicationContext(), videoUrlBase, audioUrlBase, fileName);
         simpleThreadPool.submit(new FutureTask<>(simpleDownloadThread));

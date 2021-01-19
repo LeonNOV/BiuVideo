@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.ViewPageAdapter;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
@@ -19,6 +20,7 @@ import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.fragments.orderFragments.OrderInnerFragment;
 import com.leon.biuvideo.ui.fragments.orderFragments.UserOrderArticleFragment;
 import com.leon.biuvideo.ui.fragments.orderFragments.UserOrderVideoFragment;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ViewUtils;
 import com.leon.biuvideo.values.OrderFollowType;
 import com.leon.biuvideo.values.OrderType;
@@ -72,41 +74,45 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
         String cookie = initValues.getString("cookie", null);
 
         if (cookie == null) {
-            order_view_textView_warn.setVisibility(View.VISIBLE);
-            order_view_pager.setVisibility(View.GONE);
-            order_view_linearLayout.setVisibility(View.GONE);
+            setNoData();
         } else {
-            order_view_textView_warn.setVisibility(View.GONE);
-            order_view_pager.setVisibility(View.VISIBLE);
-            order_view_linearLayout.setVisibility(View.VISIBLE);
+            boolean network = InternetUtils.checkNetwork(context);
+            if (network) {
+                order_view_textView_warn.setVisibility(View.GONE);
+                order_view_pager.setVisibility(View.VISIBLE);
+                order_view_linearLayout.setVisibility(View.VISIBLE);
 
-            textViewMap = new HashMap<>();
+                textViewMap = new HashMap<>();
 
-            textViewMap.put(0, order_video);
-            textViewMap.put(1, order_bangumi);
-            textViewMap.put(2, order_series);
-            textViewMap.put(3, order_article);
+                textViewMap.put(0, order_video);
+                textViewMap.put(1, order_bangumi);
+                textViewMap.put(2, order_series);
+                textViewMap.put(3, order_article);
 
-            order_view_pager.setOffscreenPageLimit(3);
+                order_view_pager.setOffscreenPageLimit(3);
 
-            long mid = initValues.getLong("mid", -1);
+                long mid = initValues.getLong("mid", -1);
 
-            List<Fragment> fragments = new ArrayList<>();
-            fragments.add(new UserOrderVideoFragment(mid));
-            fragments.add(new OrderInnerFragment(mid, OrderType.BANGUMI, OrderFollowType.ALL));
-            fragments.add(new OrderInnerFragment(mid, OrderType.SERIES, OrderFollowType.ALL));
-            fragments.add(new UserOrderArticleFragment());
+                List<Fragment> fragments = new ArrayList<>();
+                fragments.add(new UserOrderVideoFragment(mid));
+                fragments.add(new OrderInnerFragment(mid, OrderType.BANGUMI, OrderFollowType.ALL));
+                fragments.add(new OrderInnerFragment(mid, OrderType.SERIES, OrderFollowType.ALL));
+                fragments.add(new UserOrderArticleFragment());
 
-            ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getParentFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
-            order_view_pager.setAdapter(viewPageAdapter);
-            order_view_pager.addOnPageChangeListener(this);
+                ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getParentFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
+                order_view_pager.setAdapter(viewPageAdapter);
+                order_view_pager.addOnPageChangeListener(this);
+            } else {
+                setNoData();
+                Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+            }
         }
-
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    private void setNoData () {
+        order_view_textView_warn.setVisibility(View.VISIBLE);
+        order_view_pager.setVisibility(View.GONE);
+        order_view_linearLayout.setVisibility(View.GONE);
     }
 
     @Override

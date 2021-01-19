@@ -10,7 +10,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.orderAdapters.LocalOrderAddVideoFolderAdapter;
+import com.leon.biuvideo.adapters.localOrderAdapters.LocalOrderAddVideoFolderAdapter;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
 import com.leon.biuvideo.beans.orderBeans.LocalVideoFolder;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;

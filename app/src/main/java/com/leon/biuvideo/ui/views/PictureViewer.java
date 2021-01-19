@@ -9,13 +9,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
@@ -99,9 +99,7 @@ public class PictureViewer extends PopupWindow implements View.OnClickListener, 
                     public void run() {
                         boolean saveState = ResourceUtils.savePicture(context, pictures.get(picture_viewer_viewPager.getCurrentItem()));
 
-                        Looper.prepare();
-                        Toast.makeText(context, saveState ? "保存成功" : "保存失败", Toast.LENGTH_SHORT).show();
-                        Looper.loop();
+                        Snackbar.make(getContentView(), saveState ? R.string.saveSuccess : R.string.saveFail, Snackbar.LENGTH_SHORT).show();
                     }
                 }).start();
 

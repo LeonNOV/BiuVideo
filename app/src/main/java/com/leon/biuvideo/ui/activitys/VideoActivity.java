@@ -1,7 +1,6 @@
 package com.leon.biuvideo.ui.activitys;
 
 import android.content.pm.PackageManager;
-import android.os.Looper;
 import android.view.*;
 import android.webkit.WebView;
 import android.widget.*;
@@ -18,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.AnthologyAdapter;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
@@ -162,8 +162,6 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         Intent intent = getIntent();
         String bvid = intent.getStringExtra("bvid");
 
-        Fuck.blue("query-----bvid:" + bvid);
-
         //获取ViewPage实体类（视频基本信息）
         if (viewParser == null) {
             viewParser = new ViewParser(getApplicationContext());
@@ -202,7 +200,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                     boolean isHaveNetwork = InternetUtils.checkNetwork(getApplicationContext());
 
                     if (!isHaveNetwork) {
-                        Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                        Snackbar.make(video_textView_view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -261,7 +259,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 boolean isHaveNetwork = InternetUtils.checkNetwork(getApplicationContext());
 
                 if (!isHaveNetwork) {
-                    Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -278,7 +276,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
                     if (state) {
                         video_imageView_addFavorite.setImageResource(R.drawable.no_favorite);
-                        Toast.makeText(this, R.string.remFavoriteSign, Toast.LENGTH_SHORT).show();
+                        Snackbar.make(view, R.string.remFavoriteSign, Snackbar.LENGTH_SHORT).show();
                         isHaveLocalOrder = false;
                     }
                 } else {
@@ -305,7 +303,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                         public void onFavoriteIcon(boolean addState) {
                             if (addState) {
                                 video_imageView_addFavorite.setImageResource(R.drawable.favorite);
-                                Toast.makeText(VideoActivity.this, R.string.addFavoriteSign, Toast.LENGTH_SHORT).show();
+                                Snackbar.make(view, R.string.addFavoriteSign, Snackbar.LENGTH_SHORT).show();
                                 isHaveLocalOrder = true;
                             }
                         }
@@ -319,7 +317,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 boolean isHaveNetworkSaveVideo = InternetUtils.checkNetwork(getApplicationContext());
 
                 if (!isHaveNetworkSaveVideo) {
-                    Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -364,7 +362,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                         @Override
                         public void onSaveAll(int qualityId) {
                             // 保存所有视频
-                            Toast.makeText(VideoActivity.this, "Sorry~该功能暂未进行开发，请谅解＞︿＜", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(video_anthology_cardView, "Sorry~该功能暂未进行开发，请谅解＞︿＜", Snackbar.LENGTH_SHORT).show();
                         }
                     });
                     anthologyDownloadDialog.show();
@@ -407,9 +405,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                     public void run() {
                         boolean coverSaveState = ResourceUtils.savePicture(getApplicationContext(), coverUrl);
 
-                        Looper.prepare();
-                        Toast.makeText(getApplicationContext(), coverSaveState ? "保存成功" : "保存失败", Toast.LENGTH_SHORT).show();
-                        Looper.loop();
+                        Snackbar.make(view, coverSaveState ? R.string.saveSuccess : R.string.saveFail, Snackbar.LENGTH_SHORT).show();
                     }
                 }).start();
 
@@ -428,9 +424,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
                         boolean faceSaveState = ResourceUtils.savePicture(getApplicationContext(), faceUrl);
 
-                        Looper.prepare();
-                        Toast.makeText(getApplicationContext(), faceSaveState ? "保存成功" : "保存失败", Toast.LENGTH_SHORT).show();
-                        Looper.loop();
+                        Snackbar.make(view, faceSaveState ? R.string.saveSuccess : R.string.saveFail, Snackbar.LENGTH_SHORT).show();
                     }
                 }).start();
 
@@ -451,7 +445,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         //获取音频路径,默认只获取第一个
         String audioUrlBase = audioEntries.get(0).getValue().baseUrl;
 
-        Toast.makeText(getApplicationContext(), "已加入缓存队列中", Toast.LENGTH_SHORT).show();
+        Snackbar.make(video_anthology_cardView, R.string.isDownloading, Snackbar.LENGTH_SHORT).show();
 
         // 添加至downloadedRecordsForVideo
         addToDownloadedRecordsForVideo();
@@ -553,9 +547,9 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
         if (requestCode == 1024) {
             if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                Toast.makeText(getApplicationContext(), "权限申请成功", Toast.LENGTH_LONG).show();
+                Snackbar.make(video_anthology_cardView, "权限申请成功", Snackbar.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getApplicationContext(), "权限申请失败", Toast.LENGTH_SHORT).show();
+                Snackbar.make(video_anthology_cardView, "权限申请失败", Snackbar.LENGTH_SHORT).show();
             }
         }
     }

@@ -25,7 +25,7 @@
             android:layout_weight="1"
             android:background="@drawable/lndicator_bar_selected"
             android:gravity="center"
-            android:text="@string/order_video"
+            android:text="@string/video"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -39,7 +39,7 @@
             android:layout_weight="1"
             android:background="@drawable/lndicator_bar_unselected"
             android:gravity="center"
-            android:text="@string/order_bangumi"
+            android:text="@string/fBangumi"
             android:textColor="@color/black"
             android:textSize="15sp" />
 
@@ -52,7 +52,7 @@
             android:layout_weight="1"
             android:background="@drawable/lndicator_bar_unselected"
             android:gravity="center"
-            android:text="@string/order_series"
+            android:text="@string/fSeries"
             android:textColor="@color/black"
             android:textSize="15sp" />
 
@@ -65,7 +65,7 @@
             android:layout_weight="1"
             android:background="@drawable/lndicator_bar_unselected"
             android:gravity="center"
-            android:text="@string/order_article"
+            android:text="@string/article"
             android:textColor="@color/black"
             android:textSize="15sp" />
 

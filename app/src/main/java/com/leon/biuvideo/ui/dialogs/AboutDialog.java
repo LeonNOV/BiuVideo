@@ -5,12 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.AboutDialogAdapter;
@@ -47,9 +45,7 @@ public class AboutDialog extends AlertDialog {
         aboutDialog_textView_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (onClickBottomListener != null) {
-                    onClickBottomListener.onCloseClick();
-                }
+                dismiss();
             }
         });
 
@@ -64,20 +60,5 @@ public class AboutDialog extends AlertDialog {
         WindowManager.LayoutParams attributes = window.getAttributes();
         attributes.width = (int) (widthPixels * 0.9f);
         attributes.height = (int) (heightPixels * 0.9f);
-    }
-
-    @Override
-    public void show() {
-        super.show();
-    }
-
-    public interface OnClickBottomListener {
-        void onCloseClick();
-    }
-
-    public OnClickBottomListener onClickBottomListener;
-
-    public void setOnClickBottomListener(OnClickBottomListener onClickBottomListener) {
-        this.onClickBottomListener = onClickBottomListener;
     }
 }

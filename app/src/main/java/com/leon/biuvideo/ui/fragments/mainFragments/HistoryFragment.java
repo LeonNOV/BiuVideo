@@ -12,12 +12,14 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.ViewPageAdapter;
 import com.leon.biuvideo.beans.userBeans.HistoryType;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.fragments.historyFragment.HistoryInnerFragment;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ViewUtils;
 
 import java.util.ArrayList;
@@ -67,28 +69,38 @@ public class HistoryFragment extends BaseFragment implements View.OnClickListene
         String cookie = initValues.getString("cookie", null);
 
         if (cookie == null) {
-            history_view_textView_warn.setVisibility(View.VISIBLE);
-            history_view_pager.setVisibility(View.GONE);
-            history_linearLayout.setVisibility(View.GONE);
+            setNoData();
         } else {
-            history_view_textView_warn.setVisibility(View.GONE);
-            history_view_pager.setVisibility(View.VISIBLE);
-            history_linearLayout.setVisibility(View.VISIBLE);
+            boolean network = InternetUtils.checkNetwork(context);
+            if (network) {
+                history_view_textView_warn.setVisibility(View.GONE);
+                history_view_pager.setVisibility(View.VISIBLE);
+                history_linearLayout.setVisibility(View.VISIBLE);
 
-            textViewMap = new HashMap<>();
-            textViewMap.put(0, history_video);
-            textViewMap.put(1, history_live);
-            textViewMap.put(2, history_article);
+                textViewMap = new HashMap<>();
+                textViewMap.put(0, history_video);
+                textViewMap.put(1, history_live);
+                textViewMap.put(2, history_article);
 
-            List<Fragment> fragments = new ArrayList<>();
-            fragments.add(new HistoryInnerFragment(cookie, HistoryType.VIDEO));
-            fragments.add(new HistoryInnerFragment(cookie, HistoryType.LIVE));
-            fragments.add(new HistoryInnerFragment(cookie, HistoryType.ARTICLE));
+                List<Fragment> fragments = new ArrayList<>();
+                fragments.add(new HistoryInnerFragment(cookie, HistoryType.VIDEO));
+                fragments.add(new HistoryInnerFragment(cookie, HistoryType.LIVE));
+                fragments.add(new HistoryInnerFragment(cookie, HistoryType.ARTICLE));
 
-            ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getParentFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
-            history_view_pager.setAdapter(viewPageAdapter);
-            history_view_pager.addOnPageChangeListener(this);
+                ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getParentFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
+                history_view_pager.setAdapter(viewPageAdapter);
+                history_view_pager.addOnPageChangeListener(this);
+            } else {
+                setNoData();
+                Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+            }
         }
+    }
+
+    private void setNoData() {
+        history_view_textView_warn.setVisibility(View.VISIBLE);
+        history_view_pager.setVisibility(View.GONE);
+        history_linearLayout.setVisibility(View.GONE);
     }
 
     @Override

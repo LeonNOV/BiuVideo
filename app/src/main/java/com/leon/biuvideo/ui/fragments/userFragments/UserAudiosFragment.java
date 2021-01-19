@@ -3,13 +3,13 @@ package com.leon.biuvideo.ui.fragments.userFragments;
 import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.UserFragmentAdapters.UserAudioAdapter;
+import com.leon.biuvideo.adapters.userFragmentAdapters.UserAudioAdapter;
 import com.leon.biuvideo.beans.upMasterBean.Audio;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
@@ -112,7 +112,7 @@ public class UserAudiosFragment extends BaseFragment {
                 boolean isHaveNetwork = InternetUtils.checkNetwork(context);
 
                 if (!isHaveNetwork) {
-                    Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
 
                     //结束加载更多动画
                     smartRefresh.finishLoadMore();
@@ -141,7 +141,7 @@ public class UserAudiosFragment extends BaseFragment {
                         //关闭上滑刷新
                         smartRefresh.setEnabled(false);
 
-                        Toast.makeText(context, "只有这么多数据了~~~", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(view, R.string.isDone, Snackbar.LENGTH_SHORT).show();
                     }
                 }
 

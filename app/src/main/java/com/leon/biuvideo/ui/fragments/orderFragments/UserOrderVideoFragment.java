@@ -1,14 +1,14 @@
 package com.leon.biuvideo.ui.fragments.orderFragments;
 
 import android.os.Handler;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.UserDataAdapters.UserOrderVideoFolderAdapter;
-import com.leon.biuvideo.adapters.UserDataAdapters.UserOrderVideoFolderDetailAdapter;
+import com.leon.biuvideo.adapters.userOrderAdapters.UserOrderVideoFolderAdapter;
+import com.leon.biuvideo.adapters.userOrderAdapters.UserOrderVideoFolderDetailAdapter;
 import com.leon.biuvideo.beans.orderBeans.UserFolder;
 import com.leon.biuvideo.beans.orderBeans.UserFolderData;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
@@ -106,7 +106,7 @@ public class UserOrderVideoFragment extends BaseFragment {
                 boolean isHaveNetwork = InternetUtils.checkNetwork(context);
 
                 if (!isHaveNetwork) {
-                    Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
 
                     //结束加载更多动画
                     fragment_favorite_smartRefresh.finishLoadMore();
@@ -133,7 +133,7 @@ public class UserOrderVideoFragment extends BaseFragment {
                         //关闭上滑刷新
                         fragment_favorite_smartRefresh.setEnabled(false);
 
-                        Toast.makeText(context, "只有这么多数据了~~~", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(view, R.string.isDone, Snackbar.LENGTH_SHORT).show();
                     }
                 }
 

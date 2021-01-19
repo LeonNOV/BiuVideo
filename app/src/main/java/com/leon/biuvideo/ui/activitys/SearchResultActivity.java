@@ -14,8 +14,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.ViewPageAdapter;
 import com.leon.biuvideo.ui.fragments.searchResultFragments.ArticleResultFragment;
@@ -70,7 +70,7 @@ import java.util.Map;
                 boolean isHaveNetwork = InternetUtils.checkNetwork(getApplicationContext());
 
                 if (!isHaveNetwork) {
-                    Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(textView, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
                     return false;
                 }
 
@@ -80,7 +80,7 @@ import java.util.Map;
                     String value = search_editText_searchBox.getText().toString();
 
                     if (value.equals("")) {
-                        Toast.makeText(SearchResultActivity.this, "不输点啥就搜吗？", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(textView, "不输点儿啥吗？", Snackbar.LENGTH_SHORT).show();
                         return false;
                     } else {
                         //刷新当前界面数据

@@ -2,13 +2,13 @@ package com.leon.biuvideo.adapters;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.BaseAdapters.BaseAdapter;
-import com.leon.biuvideo.adapters.BaseAdapters.BaseViewHolder;
+import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
+import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
 import com.leon.biuvideo.utils.ValueFormat;
@@ -20,7 +20,6 @@ import java.util.List;
  */
 public class AnthologyAdapter extends BaseAdapter<AnthologyInfo> {
     private final List<AnthologyInfo> anthologyInfos;
-    private final Context context;
 
     //当前webView中播放的选集索引，默认为0
     private int anthologySelectedIndex = 0;
@@ -28,7 +27,6 @@ public class AnthologyAdapter extends BaseAdapter<AnthologyInfo> {
     public AnthologyAdapter(ViewPage viewPage, Context context) {
         super(viewPage.anthologyInfoList, context);
         this.anthologyInfos = viewPage.anthologyInfoList;
-        this.context = context;
     }
 
     private OnClickAnthologyListener onClickAnthologyListener;
@@ -70,7 +68,7 @@ public class AnthologyAdapter extends BaseAdapter<AnthologyInfo> {
                                 onClickAnthologyListener.onClick(anthologySelectedIndex, anthologyInfo.cid);
                             }
                         } else {
-                            Toast.makeText(context, "选择的视频已经在播放了~~", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(v, "选择的视频已经在播放了~", Snackbar.LENGTH_SHORT).show();
                         }
                     }
                 });

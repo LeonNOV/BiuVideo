@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.DownloadAdapter.DownloadedFailListAdapter;
+import com.leon.biuvideo.adapters.downloadAdapter.DownloadedFailListAdapter;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
@@ -29,7 +29,6 @@ public class DownloadFailListFragment extends BaseFragment {
     private RecyclerView fragment_downloaded_media_detail_recyclerView;
 
     private DownloadedFailListAdapter downloadedFailListAdapter;
-    private List<DownloadedDetailMedia> downloadedDetailMedias;
 
     @Override
     public int setLayout() {
@@ -51,7 +50,7 @@ public class DownloadFailListFragment extends BaseFragment {
     public void initValues() {
         SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.DownloadDetailsForVideo);
         DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
-        downloadedDetailMedias = downloadRecordsDatabaseUtils.queryDownloadFailMedia();
+        List<DownloadedDetailMedia> downloadedDetailMedias = downloadRecordsDatabaseUtils.queryDownloadFailMedia();
 
         downloadedFailListAdapter = new DownloadedFailListAdapter(context, downloadedDetailMedias);
         fragment_downloaded_media_detail_recyclerView.setAdapter(downloadedFailListAdapter);

@@ -7,11 +7,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.orderBeans.LocalVideoFolder;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
@@ -65,7 +65,7 @@ public class NewVideoFolderDialog extends AlertDialog implements View.OnClickLis
             case R.id.new_video_folder_dialog_textView_confirm:
                 String folderName = editText.getText().toString();
                 if (folderName.equals("")) {
-                    Toast.makeText(context, "请输入完整的文件名称", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(v, "请输入完整的文件名称", Snackbar.LENGTH_SHORT).show();
                     break;
                 } else {
                     if (onConfirmListener != null) {

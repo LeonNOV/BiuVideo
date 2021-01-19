@@ -6,14 +6,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Looper;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.PictureListAdapter;
 import com.leon.biuvideo.beans.upMasterBean.Picture;
@@ -31,7 +30,7 @@ import java.util.Locale;
  * 相簿界面Activity
  */
 public class PictureActivity extends AppCompatActivity implements View.OnClickListener {
-    private ImageView picture_back, picture_more;
+    private ImageView picture_more;
 
     private TextView
             picture_textView_time,
@@ -64,7 +63,7 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initView() {
-        picture_back = findViewById(R.id.picture_back);
+        ImageView picture_back = findViewById(R.id.picture_back);
         picture_back.setOnClickListener(this);
 
         picture_more = findViewById(R.id.picture_more);
@@ -117,9 +116,6 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
                         .setOnClickListener(R.id.picture_more_saveAll, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //保存所有图片
-                                Toast.makeText(getApplicationContext(), "正在保存图片", Toast.LENGTH_SHORT).show();
-
                                 roundPopupWindow.dismiss();
                                 new Thread(new Runnable() {
                                     @Override
@@ -132,11 +128,7 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
                                             if (b) saveCounts++;
                                         }
 
-                                        Looper.prepare();
-                                        Toast.makeText(getApplicationContext(),
-                                                "保存成功" + saveCounts + "张,失败" + (picture.pictures.size() - saveCounts) + "张",
-                                                Toast.LENGTH_SHORT).show();
-                                        Looper.loop();
+                                        Snackbar.make(v, "保存成功" + saveCounts + "张,失败" + (picture.pictures.size() - saveCounts) + "张", Snackbar.LENGTH_SHORT).show();
                                     }
                                 }).start();
                             }

@@ -1,16 +1,14 @@
 package com.leon.biuvideo.ui.fragments.mainFragments;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.widget.SwitchCompat;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.AboutBean;
 import com.leon.biuvideo.beans.Favorite;
@@ -20,6 +18,7 @@ import com.leon.biuvideo.ui.dialogs.ImportFollowDialog;
 import com.leon.biuvideo.ui.dialogs.ImportStateDialog;
 import com.leon.biuvideo.ui.dialogs.LicenseDialog;
 import com.leon.biuvideo.ui.dialogs.SetHeroDialog;
+import com.leon.biuvideo.ui.dialogs.WarnDialog;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
@@ -91,7 +90,7 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                 boolean isHaveNetwork = InternetUtils.checkNetwork(context);
 
                 if (!isHaveNetwork) {
-                    Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -106,7 +105,7 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                         //隐藏importFollowDialog
                         importFollowDialog.dismiss();
 
-                        Toast.makeText(context, "正在导入数据中，请不要随意进行任何操作", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(view, "正在导入数据中，请不要随意进行任何操作", Snackbar.LENGTH_SHORT).show();
 
                         ImportStateDialog importStateDialog = new ImportStateDialog(context);
                         importStateDialog.show();
@@ -121,28 +120,19 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                 break;
             case R.id.preference_textView_cache: //清除缓存
                 //创建弹窗
-                AlertDialog.Builder builder = new AlertDialog.Builder(context)
-                        .setTitle("清除缓存")
-                        .setMessage("是否要清除缓存？如果选择清除则之前加载过的数据将要重新加载一遍！")
-                        .setPositiveButton("是", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
+                WarnDialog warnDialog = new WarnDialog(context, "清除缓存", "是否要清除缓存？如果选择清除则之前加载过的数据将要重新加载一遍！");
+                warnDialog.setOnConfirmListener(new WarnDialog.OnConfirmListener() {
+                    @Override
+                    public void onConfirm() {
+                        warnDialog.dismiss();
 
-                                //删除缓存
-                                cleanCache(context.getCacheDir());
+                        //删除缓存
+                        cleanCache(context.getCacheDir());
 
-                                //刷新显示的缓存大小
-                                preference_textView_cache_size.setText("0B");
-                            }
-                        })
-                        .setNegativeButton("否", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                builder.create().show();
+                        //刷新显示的缓存大小
+                        preference_textView_cache_size.setText("0B");
+                    }
+                });
 
                 break;
             case R.id.preference_textView_open_source_license:
@@ -166,12 +156,6 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
 
                 //显示Dialog
                 AboutDialog aboutDialog = new AboutDialog(context, aboutBeans);
-                aboutDialog.setOnClickBottomListener(new AboutDialog.OnClickBottomListener() {
-                    @Override
-                    public void onCloseClick() {
-                        aboutDialog.dismiss();
-                    }
-                });
                 aboutDialog.show();
 
                 break;

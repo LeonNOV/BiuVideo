@@ -5,8 +5,8 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.orderAdapters.LocalOrderVideoDetailAdapter;
-import com.leon.biuvideo.adapters.orderAdapters.LocalOrderVideoFolderAdapter;
+import com.leon.biuvideo.adapters.localOrderAdapters.LocalOrderVideoDetailAdapter;
+import com.leon.biuvideo.adapters.localOrderAdapters.LocalOrderVideoFolderAdapter;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
 import com.leon.biuvideo.beans.orderBeans.LocalVideoFolder;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;

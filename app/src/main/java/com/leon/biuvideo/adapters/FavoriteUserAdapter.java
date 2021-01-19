@@ -3,13 +3,13 @@ package com.leon.biuvideo.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.BaseAdapters.BaseAdapter;
-import com.leon.biuvideo.adapters.BaseAdapters.BaseViewHolder;
+import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
+import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.ui.activitys.UserActivity;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -59,7 +59,7 @@ public class FavoriteUserAdapter extends BaseAdapter<Favorite> {
                         boolean isHaveNetwork = InternetUtils.checkNetwork(context);
 
                         if (!isHaveNetwork) {
-                            Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+                            Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
                             return;
                         }
 

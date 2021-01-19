@@ -42,7 +42,7 @@ public class FeedbackDialog extends AlertDialog {
                 boolean isHaveNetwork = InternetUtils.checkNetwork(getContext());
 
                 if (!isHaveNetwork) {
-                    Toast.makeText(getContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.networkWarn, Toast.LENGTH_SHORT).show();
                     return;
                 }
 

@@ -82,7 +82,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/lndicator_bar_selected"
                 android:gravity="center"
-                android:text="@string/search_result_video"
+                android:text="@string/video"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -96,7 +96,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/lndicator_bar_unselected"
                 android:gravity="center"
-                android:text="@string/search_result_bangumi"
+                android:text="@string/bangumi"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
 
@@ -109,7 +109,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/lndicator_bar_unselected"
                 android:gravity="center"
-                android:text="@string/search_result_article"
+                android:text="@string/article"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
 
@@ -122,7 +122,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/lndicator_bar_unselected"
                 android:gravity="center"
-                android:text="@string/search_result_bili_user"
+                android:text="@string/biliUser"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
 

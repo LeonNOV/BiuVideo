@@ -19,14 +19,16 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.UserFragmentAdapters.OnMusicListListener;
+import com.leon.biuvideo.adapters.userFragmentAdapters.OnMusicListListener;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.beans.musicBeans.MusicInfo;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
@@ -126,6 +128,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
     private DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils;
     private MusicParser musicParser;
     private MusicUrlParser musicUrlParser;
+    private LinearLayout music_linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,9 +176,10 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
             if (musicUrlParser == null) {
                 musicUrlParser = new MusicUrlParser(getApplicationContext());
             }
+
             musicUrl = musicUrlParser.parseMusicUrl(sid);
         } else {
-            Toast.makeText(this, "获取数据失败~~~", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "数据获取失败", Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -228,6 +232,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
      * 初始化控件
      */
     private void initView() {
+        music_linearLayout = findViewById(R.id.music_linearLayout);
         //返回、播放列表
         ImageView music_imageView_back = findViewById(R.id.music_imageView_back);
         music_imageView_back.setOnClickListener(this);
@@ -327,7 +332,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                 boolean isHaveNetworkVideo = InternetUtils.checkNetwork(getApplicationContext());
 
                 if (!isHaveNetworkVideo) {
-                    Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -342,7 +347,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                 boolean isHaveNetworkAuthor = InternetUtils.checkNetwork(getApplicationContext());
 
                 if (!isHaveNetworkAuthor) {
-                    Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -373,7 +378,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                     public void onSwitchMusic(String sid) {
                         //判断是否有网络
                         if (!InternetUtils.checkNetwork(getApplicationContext())) {
-                            Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                            Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
                             return;
                         }
 
@@ -391,7 +396,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
 
                 //判断是否有网络
                 if (!InternetUtils.checkNetwork(getApplicationContext())) {
-                    Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -452,14 +457,14 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                         isHavePlayList = true;
                     }
 
-                    Toast.makeText(this, addState ? "已添加至播放列表" : "添加失败~~~", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(v, addState ? "已添加至播放列表" : "添加失败~", Snackbar.LENGTH_SHORT).show();
                 }
 
                 break;
             case R.id.music_imageView_control:
                 //判断是否有网络
                 if (!InternetUtils.checkNetwork(getApplicationContext())) {
-                    Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -502,7 +507,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
             case R.id.music_imageView_up:
                 //判断是否有网络
                 if (!InternetUtils.checkNetwork(getApplicationContext())) {
-                    Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -514,14 +519,14 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                     //切换歌曲
                     switchMusic(sid);
                 } else {
-                    Toast.makeText(this, "当前播放的就是第一个了~~~", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(v, "当前播放的就是第一个了~", Snackbar.LENGTH_SHORT).show();
                 }
 
                 break;
             case R.id.music_imageView_next:
                 //判断是否有网络
                 if (!InternetUtils.checkNetwork(getApplicationContext())) {
-                    Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -533,7 +538,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                     //切换歌曲
                     switchMusic(sid);
                 } else {
-                    Toast.makeText(this, "当前播放的就是最后一个了~~~", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(v, "当前播放的就是最后一个了~", Snackbar.LENGTH_SHORT).show();
                 }
 
                 break;
@@ -602,7 +607,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
         // 添加至DownloadDetailsForMedia
         downloadRecordsDatabaseUtils.addMediaDetail(downloadedDetailMedia);
 
-        Toast.makeText(this, "已添加至缓存队列", Toast.LENGTH_SHORT).show();
+        Snackbar.make(music_linearLayout, R.string.isDownloading, Snackbar.LENGTH_SHORT).show();
 
         //保存歌曲线程
         SimpleThreadPool simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.DownloadTaskNum, SimpleThreadPool.DownloadTask);
@@ -714,9 +719,9 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
 
         if (requestCode == 1024) {
             if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                Toast.makeText(getApplicationContext(), "权限申请成功", Toast.LENGTH_LONG).show();
+                Snackbar.make(music_linearLayout, "权限申请成功", Snackbar.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getApplicationContext(), "权限申请失败", Toast.LENGTH_SHORT).show();
+                Snackbar.make(music_linearLayout, "权限申请失败", Snackbar.LENGTH_SHORT).show();
             }
         }
     }

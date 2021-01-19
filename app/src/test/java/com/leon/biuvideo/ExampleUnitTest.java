@@ -1,18 +1,8 @@
 package com.leon.biuvideo;
 
-import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.orderBeans.UserFolderData;
 import com.leon.biuvideo.utils.IDUtils;
-import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
-import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserFolderParser;
-import com.leon.biuvideo.values.Paths;
-import com.leon.biuvideo.utils.ValueFormat;
 
 import org.junit.Test;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -21,17 +11,9 @@ import java.util.Map;
  */
 public class ExampleUnitTest {
 
-    //avid转bvid测试
     @Test
-    public void avidTobvid() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", 123456);
-        map.put("pwd", "wasd123");
+    public void test() {
 
-        JSONObject jsonObject = new JSONObject(map);
-        System.out.println(jsonObject.getLongValue("id"));
-        System.out.println(jsonObject.getString("pwd"));
-        System.out.println(jsonObject.toString());
     }
 
     //解析输入的内容
@@ -91,46 +73,5 @@ public class ExampleUnitTest {
         bp_video_offset_49405324=457166987692434151;
         bfe_id=393becc67cde8e85697ff111d724b3c8
         */
-    }
-
-    @Test
-    public void numTest() {
-        //12345.6万
-        String s = ValueFormat.generateCN(12345678);
-        System.out.println(s);
-    }
-
-    //网页源码获取测试
-    @Test
-    public void HtmlSource() {
-        String path = Paths.articleWebPage + "8107744";
-    }
-
-    //size转换测试
-    @Test
-    public void sizeFormat() {
-        //4653470B
-
-        //2,719,458,939
-//        long size = 2719458939L;
-
-        long size = 465347 * 1024 * 10;
-
-//        String s = ValueFormat.sizeFormat(size);
-
-//        System.out.println(s);
-    }
-
-    @Test
-    public void HistoryTest() {
-    }
-
-    @Test
-    public void ContentSize() {
-        long resourcesSize1 = ResourceUtils.getResourcesSize("https://upos-sz-mirrorks3.bilivideo.com/upgcxcode/77/38/205363877/205363877-1-30011.m4s");
-        long resourcesSize2 = ResourceUtils.getResourcesSize("https://upos-sz-mirrorkodo.bilivideo.com/upgcxcode/77/38/205363877/205363877_nb2-1-30280.m4s");
-
-        System.out.println(resourcesSize1);
-        System.out.println(resourcesSize2);
     }
 }

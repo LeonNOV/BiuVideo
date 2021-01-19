@@ -21,9 +21,6 @@ import com.leon.biuvideo.R;
  */
 public class ImportFollowDialog extends AlertDialog implements View.OnClickListener {
     private EditText import_follow_editText;
-    private Button import_follow_button_cancel, import_follow_button_confirm;
-
-    private ImageView import_follow_imageView_expansion;
     private LinearLayout import_follow_linearLayout_cookie;
     private EditText import_follow_editText_cookie;
 
@@ -44,13 +41,13 @@ public class ImportFollowDialog extends AlertDialog implements View.OnClickListe
     private void initView() {
         import_follow_editText = findViewById(R.id.import_follow_editText);
 
-        import_follow_button_cancel = findViewById(R.id.import_follow_button_cancel);
+        Button import_follow_button_cancel = findViewById(R.id.import_follow_button_cancel);
         import_follow_button_cancel.setOnClickListener(this);
 
-        import_follow_button_confirm = findViewById(R.id.import_follow_button_confirm);
+        Button import_follow_button_confirm = findViewById(R.id.import_follow_button_confirm);
         import_follow_button_confirm.setOnClickListener(this);
 
-        import_follow_imageView_expansion = findViewById(R.id.import_follow_imageView_expansion);
+        ImageView import_follow_imageView_expansion = findViewById(R.id.import_follow_imageView_expansion);
         import_follow_imageView_expansion.setOnClickListener(this);
 
         import_follow_linearLayout_cookie = findViewById(R.id.import_follow_linearLayout_cookie);

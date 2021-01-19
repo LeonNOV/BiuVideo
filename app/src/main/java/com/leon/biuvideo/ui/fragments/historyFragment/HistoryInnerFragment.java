@@ -3,18 +3,17 @@ package com.leon.biuvideo.ui.fragments.historyFragment;
 import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.HistoryAdapters.HistoryAdapter;
+import com.leon.biuvideo.adapters.historyAdapters.HistoryAdapter;
 import com.leon.biuvideo.beans.userBeans.History;
 import com.leon.biuvideo.beans.userBeans.HistoryType;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.HistoryParser;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -88,7 +87,6 @@ public class HistoryInnerFragment extends BaseFragment {
 
             if (linearLayoutManager == null || historyAdapter == null) {
                 linearLayoutManager = new LinearLayoutManager(context);
-                Fuck.blue("linearLayoutManager" + linearLayoutManager);
                 historyAdapter = new HistoryAdapter(history.innerHistory, context, historyType);
             }
 
@@ -113,7 +111,7 @@ public class HistoryInnerFragment extends BaseFragment {
                 boolean isHaveNetwork = InternetUtils.checkNetwork(context);
 
                 if (!isHaveNetwork) {
-                    Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
 
                     //结束加载更多动画
                     smartRefresh.finishLoadMore();
@@ -140,7 +138,7 @@ public class HistoryInnerFragment extends BaseFragment {
                         //关闭上滑刷新
                         smartRefresh.setEnabled(false);
 
-                        Toast.makeText(context, "只有这么多数据了~~~", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(view, "只有这么多数据了~", Snackbar.LENGTH_SHORT).show();
                     }
                 }
 

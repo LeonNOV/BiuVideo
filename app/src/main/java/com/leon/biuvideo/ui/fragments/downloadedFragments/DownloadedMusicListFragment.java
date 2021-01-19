@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.DownloadAdapter.DownloadedDetailAdapter;
+import com.leon.biuvideo.adapters.downloadAdapter.DownloadedDetailAdapter;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
@@ -31,7 +31,6 @@ public class DownloadedMusicListFragment extends BaseFragment {
     private ImageView fragment_downloaded_media_detail_imageView_back;
 
     private DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils;
-    private List<DownloadedDetailMedia> downloadedDetailMedias;
     private DownloadedDetailAdapter downloadedDetailAdapter;
 
     @Override
@@ -55,7 +54,7 @@ public class DownloadedMusicListFragment extends BaseFragment {
 
     @Override
     public void onResume() {
-        downloadedDetailMedias = downloadRecordsDatabaseUtils.queryAllMusic();
+        List<DownloadedDetailMedia> downloadedDetailMedias = downloadRecordsDatabaseUtils.queryAllMusic();
 
         downloadedDetailAdapter = new DownloadedDetailAdapter(downloadedDetailMedias, context);
         fragment_downloaded_media_detail_recyclerView.setAdapter(downloadedDetailAdapter);

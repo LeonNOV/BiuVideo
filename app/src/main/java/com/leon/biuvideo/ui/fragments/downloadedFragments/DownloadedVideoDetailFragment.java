@@ -6,15 +6,15 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.DownloadAdapter.DownloadedDetailAdapter;
+import com.leon.biuvideo.adapters.downloadAdapter.DownloadedDetailAdapter;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
@@ -28,10 +28,6 @@ import java.util.List;
  * 显示已缓存的同一bvid视频的fragment
  */
 public class DownloadedVideoDetailFragment extends BaseFragment {
-    private RecyclerView fragment_downloaded_media_detail_recyclerView;
-
-    private List<DownloadedDetailMedia> downloadedDetailMedia;
-
     private DownloadedDetailAdapter downloadedDetailAdapter;
 
     @Override
@@ -47,9 +43,9 @@ public class DownloadedVideoDetailFragment extends BaseFragment {
 
             SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.DownloadDetailsForVideo);
             DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
-            downloadedDetailMedia = downloadRecordsDatabaseUtils.queryAllSubVideo(mainId);
+            List<DownloadedDetailMedia> downloadedDetailMedia = downloadRecordsDatabaseUtils.queryAllSubVideo(mainId);
 
-            fragment_downloaded_media_detail_recyclerView = findView(R.id.fragment_downloaded_media_detail_recyclerView);
+            RecyclerView fragment_downloaded_media_detail_recyclerView = findView(R.id.fragment_downloaded_media_detail_recyclerView);
             bindingUtils.setOnClickListener(R.id.fragment_downloaded_media_detail_imageView_back, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -67,7 +63,7 @@ public class DownloadedVideoDetailFragment extends BaseFragment {
                 }
             });
         } else {
-            Toast.makeText(context, "找不到此视频选集信息", Toast.LENGTH_SHORT).show();
+            Snackbar.make(view, "找不到此视频选集信息~", Snackbar.LENGTH_SHORT).show();
             Navigation.findNavController(view).popBackStack();
         }
     }

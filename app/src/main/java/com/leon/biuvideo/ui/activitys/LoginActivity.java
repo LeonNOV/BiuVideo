@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 
 import java.util.HashMap;
@@ -101,6 +102,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onPageFinished(WebView view, String url) {
                 //判断加载完成的页面是否为B站手机版主页
                 if (url.equals("https://m.bilibili.com/index.html")) {
+                    Snackbar.make(view, "正在获取用户信息中，请不要进行任何操作", Snackbar.LENGTH_LONG).show();
                     CookieManager cookieManager = CookieManager.getInstance();
                     String cookieStr = cookieManager.getCookie(url).trim();
 

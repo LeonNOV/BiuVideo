@@ -10,15 +10,16 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.ViewPageAdapter;
 import com.leon.biuvideo.beans.Favorite;
@@ -65,6 +66,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     private Handler handler;
     private Map<Integer, TextView> textViewMap;
+    private CoordinatorLayout user_linearLayout;
 
     public UserActivity() {
         super();
@@ -84,6 +86,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     //初始化控件
     private void initView() {
+        user_linearLayout = findViewById(R.id.user_linearLayout);
         up_imageView_cover = findViewById(R.id.up_imageView_cover);
 
         ImageView up_imageView_back = findViewById(R.id.up_imageView_back);
@@ -131,7 +134,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
         mid = intent.getLongExtra("mid", -1);
 
         if (mid == -1) {
-            Toast.makeText(this, "信息获取失败", Toast.LENGTH_SHORT).show();
+            Snackbar.make(user_linearLayout, "信息获取失败", Snackbar.LENGTH_SHORT).show();
             onDestroy();
         }
 
@@ -221,7 +224,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
 
                     boolean removeState = favoriteUserDatabaseUtils.removeFavorite(mid);
 
-                    Toast.makeText(this, removeState ? "已取消关注" : "取消关注失败", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(v, removeState ? "已取消关注" : "取消关注失败", Snackbar.LENGTH_SHORT).show();
                 } else {
                     //添加至数据库中
                     up_imageView_favoriteIconState.setImageResource(R.drawable.favorite);
@@ -235,7 +238,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
 
                     boolean addState = favoriteUserDatabaseUtils.addFavorite(favorite);
 
-                    Toast.makeText(this, addState ? "已加入至关注列表" : "关注失败", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(v, addState ? "已加入至关注列表" : "关注失败", Snackbar.LENGTH_SHORT).show();
                 }
 
                 break;
@@ -283,9 +286,9 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         if (requestCode == 1024) {
             if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                Toast.makeText(getApplicationContext(), "权限申请成功", Toast.LENGTH_LONG).show();
+                Snackbar.make(user_linearLayout, "权限申请成功", Snackbar.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getApplicationContext(), "权限申请失败", Toast.LENGTH_SHORT).show();
+                Snackbar.make(user_linearLayout, "权限申请失败", Snackbar.LENGTH_SHORT).show();
             }
         }
     }

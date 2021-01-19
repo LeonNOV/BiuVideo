@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/user_linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bilibili_pink_lite"
@@ -172,7 +173,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/lndicator_bar_selected"
                 android:gravity="center"
-                android:text="@string/up_item_videos"
+                android:text="@string/video"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -186,7 +187,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/lndicator_bar_unselected"
                 android:gravity="center"
-                android:text="@string/up_item_audios"
+                android:text="@string/audio"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
 
@@ -199,7 +200,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/lndicator_bar_unselected"
                 android:gravity="center"
-                android:text="@string/up_item_articles"
+                android:text="@string/article"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
 
@@ -212,7 +213,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/lndicator_bar_unselected"
                 android:gravity="center"
-                android:text="@string/up_item_pictures"
+                android:text="@string/picture"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
 

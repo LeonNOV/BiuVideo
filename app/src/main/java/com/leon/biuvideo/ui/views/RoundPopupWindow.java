@@ -67,6 +67,10 @@ public class RoundPopupWindow extends PopupWindow {
         return this;
     }
 
+    public View getPopupView() {
+        return popupView;
+    }
+
     /**
      * 设置popupWindow显示的位置
      * 不调用该方法的话则按默认位置显示

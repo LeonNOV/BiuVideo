@@ -6,9 +6,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.BaseAdapters.BaseAdapter;
-import com.leon.biuvideo.adapters.BaseAdapters.BaseViewHolder;
+import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
+import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.videoBean.play.Media;
 
 import java.util.List;
@@ -56,7 +57,7 @@ public class SingleVideoQualityAdapter extends BaseAdapter<Map.Entry<Integer, Me
                     public void onClick(View v) {
                         // 检查是否已下载过该媒体资源
                         if (media.isDownloaded) {
-                            Toast.makeText(context, "该资源已缓存过了", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(v, "该资源已缓存过了", Snackbar.LENGTH_SHORT).show();
                         } else {
                             if (onSingleVideoQualityClickListener != null) {
                                 onSingleVideoQualityClickListener.onClickListener(mediaEntry);

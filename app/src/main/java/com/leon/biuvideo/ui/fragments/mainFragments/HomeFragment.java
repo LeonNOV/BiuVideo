@@ -10,8 +10,8 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.activitys.SearchResultActivity;
 import com.leon.biuvideo.ui.activitys.UserActivity;
@@ -31,7 +31,7 @@ import java.util.Locale;
  * 主fragment
  */
 public class HomeFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
-    private ImageView home_fragment_imageView_hero, home_fragment_imageView_clear;
+    private ImageView home_fragment_imageView_hero;
     private EditText home_fragment_editText_keyword;
 
     //spinner索引
@@ -119,7 +119,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             Date ymd_long = sdf.parse(ymd);
             return ymd_long.getTime();
         } catch (ParseException e) {
-            Toast.makeText(context, "时间解析出错", Toast.LENGTH_SHORT).show();
+            Snackbar.make(view, "时间解析出错", Snackbar.LENGTH_SHORT).show();
             e.printStackTrace();
         }
 
@@ -138,14 +138,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 animation.setDuration(1000);
                 animation.setRepeatMode(Animation.INFINITE);
                 home_fragment_imageView_hero.startAnimation(animation);
-
                 break;
             case R.id.home_button_confirm:
                 //判断是否有网络
                 boolean isHaveNetwork = InternetUtils.checkNetwork(context);
 
                 if (!isHaveNetwork) {
-                    Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -159,7 +158,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                             intent.putExtra("keyword", keywordUnCoded);
                             startActivity(intent);
                         } else {
-                            Toast.makeText(getContext(), "不输点啥,就想搜吗？", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(view, "不输点儿啥吗？", Snackbar.LENGTH_SHORT).show();
                             return;
                         }
                         break;
@@ -175,7 +174,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                                 intent.putExtra("bvid", bvid);
                                 startActivity(intent);
                             } else {
-                                Toast.makeText(context, "ERROR~~~\n可通过右上角中的帮助来了解正确的获取方式", Toast.LENGTH_SHORT).show();
+                                Snackbar.make(view, "使用姿势有点不对哦~\n可通过“帮助”来了解正确的姿势", Snackbar.LENGTH_SHORT).show();
                             }
                         }
                         break;
@@ -194,7 +193,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                                 intent.putExtra("mid", mid);
                                 startActivity(intent);
                             } else {
-                                Toast.makeText(context, "ERROR~~~\n可通过右上角中的帮助来了解正确的获取方式", Toast.LENGTH_SHORT).show();
+                                Snackbar.make(view, "使用姿势有点不对哦~\n可通过“帮助”来了解正确的姿势", Snackbar.LENGTH_SHORT).show();
                             }
                         }
                         break;
