@@ -24,6 +24,7 @@ import com.leon.biuvideo.beans.orderBeans.LocalOrder;
 import com.leon.biuvideo.ui.views.RoundPopupWindow;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.LocalOrdersDatabaseUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.values.LocalOrderType;
@@ -278,6 +279,11 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.article_imageView_face:
+                if (!InternetUtils.checkNetwork(getApplicationContext())) {
+                    Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    break;
+                }
+
                 Intent intent = new Intent(this, UserActivity.class);
                 intent.putExtra("mid", article.mid);
                 startActivity(intent);

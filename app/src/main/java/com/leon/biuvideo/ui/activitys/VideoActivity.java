@@ -196,14 +196,6 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 public void onClick(int position, long cid) {
                     anthologySelectedIndex = position;
 
-                    //判断是否有网络
-                    boolean isHaveNetwork = InternetUtils.checkNetwork(getApplicationContext());
-
-                    if (!isHaveNetwork) {
-                        Snackbar.make(video_textView_view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
-                        return;
-                    }
-
                     if (webViewUtils == null) {
                         webViewUtils = new WebViewUtils(webView);
                     }
@@ -332,9 +324,6 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                     anthologyDownloadDialog.setOnDownloadListener(new AnthologyDownloadDialog.OnDownloadListener() {
                         @Override
                         public void onDownload(int qualityId, long cid, int position, String subTitle) {
-                            // 保存选定视频
-                            Fuck.blue("saveSingleVideo----cid:" + cid + "--qualityIndex:" + qualityId + "--subTitle:" + subTitle);
-
                             //获取视频选集信息
                             Play playWithDownload = mediaParser.parseMedia(viewPage.bvid, cid, false);
 
@@ -393,6 +382,11 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
                 break;
             case R.id.video_textView_saveCover:
+                if (!InternetUtils.checkNetwork(getApplicationContext())) {
+                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    break;
+                }
+
                 //获取权限
                 FileUtils.verifyPermissions(this);
 

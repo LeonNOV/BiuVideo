@@ -141,6 +141,11 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                     if (position == selectAnthologyIndex) {
                         Snackbar.make(bangumi_linearLayout, R.string.isPlaying, Snackbar.LENGTH_SHORT).show();
                     } else {
+                        if (!InternetUtils.checkNetwork(getApplicationContext())) {
+                            Snackbar.make(bangumi_linearLayout, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         selectAnthologyIndex = position;
                         setSelectedAnthologyName();
                     }
@@ -215,6 +220,10 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                     singleVideoQualityDialog.setOnQualityClickListener(new SingleVideoQualityDialog.OnQualityClickListener() {
                         @Override
                         public void onClickListener(Map.Entry<Integer, Media> mediaEntry) {
+                            if (!InternetUtils.checkNetwork(getApplicationContext())) {
+                                Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                                return;
+                            }
                             saveSingleVideo(mediaEntry);
                         }
                     });
@@ -224,6 +233,11 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                     anthologyDownloadDialog.setOnDownloadListener(new AnthologyDownloadDialog.OnDownloadListener() {
                         @Override
                         public void onDownload(int qualityId, long cid, int position, String subTitle) {
+                            if (!InternetUtils.checkNetwork(getApplicationContext())) {
+                                Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                                return;
+                            }
+
                             //获取视频选集信息
                             Play playWithDownload = mediaParser.parseMedia(null, cid, true);
 

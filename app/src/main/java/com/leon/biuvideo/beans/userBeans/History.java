@@ -15,6 +15,9 @@ public class History {
         public long authorMid;
         public String authorFace;
         public String cover;
+        public String badge;
+        public String newDesc;
+        public String showTitle;
         public long viewDate;   //观看日期(秒)
 
         public HistoryType historyType;     //历史记录类别

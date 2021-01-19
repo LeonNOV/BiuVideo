@@ -7,12 +7,14 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
 import com.leon.biuvideo.beans.orderBeans.Order;
 import com.leon.biuvideo.ui.activitys.BangumiActivity;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BangumiParser;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.values.OrderType;
@@ -74,6 +76,11 @@ public class UserOrderBaseAdapter extends BaseAdapter<Order> {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (!InternetUtils.checkNetwork(context)) {
+                            Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         // 如果为番剧则跳转到BangumiActivity
                         if (orderType == OrderType.BANGUMI) {
                             int pageNum = 1;

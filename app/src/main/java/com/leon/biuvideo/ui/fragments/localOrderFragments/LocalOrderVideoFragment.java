@@ -43,7 +43,7 @@ public class LocalOrderVideoFragment extends BaseFragment {
 
         // 默认第一个显示‘默认收藏夹’中的数据
         List<LocalOrder> localOrderList = localOrdersDatabaseUtils.queryLocalOrder("默认收藏夹");
-        LocalOrderVideoDetailAdapter localOrderVideoDetailAdapter = new LocalOrderVideoDetailAdapter(context, localOrderList);
+        LocalOrderVideoDetailAdapter localOrderVideoDetailAdapter = new LocalOrderVideoDetailAdapter(context, view, localOrderList);
         fragment_local_order_recyclerView_folderDetail.setAdapter(localOrderVideoDetailAdapter);
 
         List<LocalVideoFolder> localVideoFolderList = localOrdersDatabaseUtils.queryAllLocalVideoFolder();

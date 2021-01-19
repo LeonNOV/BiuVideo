@@ -2,7 +2,6 @@ package com.leon.biuvideo.adapters;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -11,6 +10,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.videoBean.play.Media;
+import com.leon.biuvideo.utils.InternetUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -59,6 +59,11 @@ public class SingleVideoQualityAdapter extends BaseAdapter<Map.Entry<Integer, Me
                         if (media.isDownloaded) {
                             Snackbar.make(v, "该资源已缓存过了", Snackbar.LENGTH_SHORT).show();
                         } else {
+                            if (!InternetUtils.checkNetwork(context)) {
+                                Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                                return;
+                            }
+
                             if (onSingleVideoQualityClickListener != null) {
                                 onSingleVideoQualityClickListener.onClickListener(mediaEntry);
                             }

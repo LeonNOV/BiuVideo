@@ -12,6 +12,7 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.searchBean.bangumi.Ep;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InitValueUtils;
+import com.leon.biuvideo.utils.InternetUtils;
 
 import java.util.List;
 
@@ -58,6 +59,11 @@ public class BangumiEpAdapter extends BaseAdapter<Ep> {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (!InternetUtils.checkNetwork(context)) {
+                            Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         // 先检查是否为VIP资源
                         if (ep.isVIP) {
                             // 判断当前是否已登录账号
@@ -76,8 +82,6 @@ public class BangumiEpAdapter extends BaseAdapter<Ep> {
                         } else {
                             toBangumi(position);
                         }
-
-                        Fuck.blue("id:" + ep.id + "----isVIP:" + ep.isVIP + "----position:" + position);
                     }
                 });
     }

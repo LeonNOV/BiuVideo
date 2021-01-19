@@ -27,11 +27,13 @@ import java.util.Locale;
 public class UserOrderVideoFolderDetailAdapter extends BaseAdapter<UserFolderData.Media> {
     private final List<UserFolderData.Media> userFolderDatas;
     private final Context context;
+    private final View view;
     
-    public UserOrderVideoFolderDetailAdapter(List<UserFolderData.Media> userFolderDatas, Context context) {
+    public UserOrderVideoFolderDetailAdapter(List<UserFolderData.Media> userFolderDatas, Context context, View view) {
         super(userFolderDatas, context);
         this.userFolderDatas = userFolderDatas;
         this.context = context;
+        this.view = view;
     }
 
     @Override
@@ -59,17 +61,14 @@ public class UserOrderVideoFolderDetailAdapter extends BaseAdapter<UserFolderDat
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //判断是否有网络
-                        boolean isHaveNetwork = InternetUtils.checkNetwork(context);
-
-                        if (!isHaveNetwork) {
-                            Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                        if (!InternetUtils.checkNetwork(context)) {
+                            Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
                             return;
                         }
 
                         // 判断视频是否已失效
                         if (media.title.equals("已失效视频")) {
-                            Snackbar.make(v, "该视频已失效", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(view, "该视频已失效", Snackbar.LENGTH_SHORT).show();
                             return;
                         }
 

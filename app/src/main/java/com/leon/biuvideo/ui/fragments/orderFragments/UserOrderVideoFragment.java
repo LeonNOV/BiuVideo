@@ -77,6 +77,11 @@ public class UserOrderVideoFragment extends BaseFragment {
         userOrderVideoFolderAdapter.setOnClickFolderListener(new UserOrderVideoFolderAdapter.OnClickFolderListener() {
             @Override
             public void OnClick(long folderId) {
+                if (!InternetUtils.checkNetwork(context)) {
+                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    return;
+                }
+
                 pageNum = 1;
                 dataState = true;
                 nowFolderId = folderId;
@@ -88,7 +93,7 @@ public class UserOrderVideoFragment extends BaseFragment {
             }
         });
 
-        userOrderVideoFolderDetailAdapter = new UserOrderVideoFolderDetailAdapter(userFolderData.medias, context);
+        userOrderVideoFolderDetailAdapter = new UserOrderVideoFolderDetailAdapter(userFolderData.medias, context, view);
         folderList.setAdapter(userOrderVideoFolderAdapter);
         folderDetail.setAdapter(userOrderVideoFolderDetailAdapter);
 

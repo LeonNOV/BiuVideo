@@ -18,6 +18,7 @@ import com.leon.biuvideo.adapters.PictureListAdapter;
 import com.leon.biuvideo.beans.upMasterBean.Picture;
 import com.leon.biuvideo.layoutManager.PictureGridLayoutManager;
 import com.leon.biuvideo.ui.views.RoundPopupWindow;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.values.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
@@ -116,6 +117,11 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
                         .setOnClickListener(R.id.picture_more_saveAll, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                if (!InternetUtils.checkNetwork(getApplicationContext())) {
+                                    Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                                    return;
+                                }
+
                                 roundPopupWindow.dismiss();
                                 new Thread(new Runnable() {
                                     @Override

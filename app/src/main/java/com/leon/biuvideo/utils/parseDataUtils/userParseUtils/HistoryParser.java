@@ -67,12 +67,10 @@ public class HistoryParser {
             History.InnerHistory innerHistory = new History.InnerHistory();
 
             innerHistory.authorName = jsonObject.getString("author_name");
-
             innerHistory.authorMid = jsonObject.getLongValue("author_mid");
-
             innerHistory.authorFace = jsonObject.getString("author_face");
-
             innerHistory.viewDate = jsonObject.getLongValue("view_at");
+            innerHistory.badge = jsonObject.getString("badge");
 
             //获取cover和covers两个值，那个有就获取那个
             String cover = jsonObject.getString("cover");
@@ -88,18 +86,29 @@ public class HistoryParser {
             switch (business) {
                 case "archive":
                     innerHistory.historyType = HistoryType.VIDEO;
-
+                    if (innerHistory.badge.equals("")) {
+                        innerHistory.badge = "视频";
+                    }
                     break;
+                case "article-list":
                 case "article":
                     innerHistory.historyType = HistoryType.ARTICLE;
-
                     break;
                 case "live":
                     innerHistory.historyType = HistoryType.LIVE;
-
+                    break;
+                case "pgc":
+                    innerHistory.historyType = HistoryType.BANGUMI;
+                    innerHistory.newDesc = jsonObject.getString("new_desc");
+                    innerHistory.showTitle = jsonObject.getString("show_title");
                     break;
                 default:
                     break;
+            }
+
+            // 如果不存在以上business类型则不获取该历史记录
+            if (innerHistory.historyType == null) {
+                break;
             }
 
             innerHistory.bvid = object.getString("bvid");

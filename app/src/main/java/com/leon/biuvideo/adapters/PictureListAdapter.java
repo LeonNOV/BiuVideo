@@ -6,10 +6,12 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.ui.views.PictureViewer;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.List;
@@ -46,10 +48,15 @@ public class PictureListAdapter extends BaseAdapter<String> {
             imagePixelSize = ImagePixelSize.SINGLE;
         }
 
-        holder.setImage(R.id.picture_imageView_item, pictures.get(position), imagePixelSize)
+        holder
+                .setImage(R.id.picture_imageView_item, pictures.get(position), imagePixelSize)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (!InternetUtils.checkNetwork(context)) {
+                            Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                            return;
+                        }
 
                         //创建图片查看器
                         PictureViewer pictureViewer = new PictureViewer(context, position, pictures);

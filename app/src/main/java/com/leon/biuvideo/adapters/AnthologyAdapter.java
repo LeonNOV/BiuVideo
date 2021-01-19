@@ -11,6 +11,7 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
  */
 public class AnthologyAdapter extends BaseAdapter<AnthologyInfo> {
     private final List<AnthologyInfo> anthologyInfos;
+    private final Context context;
 
     //当前webView中播放的选集索引，默认为0
     private int anthologySelectedIndex = 0;
@@ -27,6 +29,7 @@ public class AnthologyAdapter extends BaseAdapter<AnthologyInfo> {
     public AnthologyAdapter(ViewPage viewPage, Context context) {
         super(viewPage.anthologyInfoList, context);
         this.anthologyInfos = viewPage.anthologyInfoList;
+        this.context = context;
     }
 
     private OnClickAnthologyListener onClickAnthologyListener;
@@ -61,6 +64,11 @@ public class AnthologyAdapter extends BaseAdapter<AnthologyInfo> {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (!InternetUtils.checkNetwork(context)) {
+                            Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         //判断当前观看的视频cid是否和选择的一样
                         if (anthologySelectedIndex != position) {
                             if (onClickAnthologyListener != null) {

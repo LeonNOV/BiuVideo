@@ -56,9 +56,7 @@ public class FavoriteUserAdapter extends BaseAdapter<Favorite> {
                     @Override
                     public void onClick(View v) {
                         //判断是否有网络
-                        boolean isHaveNetwork = InternetUtils.checkNetwork(context);
-
-                        if (!isHaveNetwork) {
+                        if (!InternetUtils.checkNetwork(context)) {
                             Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
                             return;
                         }

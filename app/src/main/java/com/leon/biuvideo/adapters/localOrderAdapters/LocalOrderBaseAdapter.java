@@ -8,6 +8,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
@@ -18,6 +19,7 @@ import com.leon.biuvideo.ui.activitys.ArticleActivity;
 import com.leon.biuvideo.ui.activitys.BangumiActivity;
 import com.leon.biuvideo.ui.activitys.MusicActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BangumiParser;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -76,6 +78,11 @@ public class LocalOrderBaseAdapter extends BaseAdapter<LocalOrder> {
                         .setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                if (!InternetUtils.checkNetwork(context)) {
+                                    Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                                    return;
+                                }
+
                                 int pageNum = 1;
                                 Bangumi targetBangumi = null;
 
@@ -113,6 +120,11 @@ public class LocalOrderBaseAdapter extends BaseAdapter<LocalOrder> {
                         .setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                if (!InternetUtils.checkNetwork(context)) {
+                                    Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                                    return;
+                                }
+
                                 Article article = new Article();
                                 article.mid = Long.parseLong(localOrder.subId);
                                 article.face = jsonObject.getString("face");
@@ -147,6 +159,11 @@ public class LocalOrderBaseAdapter extends BaseAdapter<LocalOrder> {
                             @Override
                             public void onClick(View v) {
                                 if (!localOrder.subId.equals("")) {
+                                    if (!InternetUtils.checkNetwork(context)) {
+                                        Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                                        return;
+                                    }
+
                                     Intent videoIntent = new Intent(context, VideoActivity.class);
                                     videoIntent.putExtra("bvid", localOrder.subId);
                                     context.startActivity(videoIntent);
@@ -156,6 +173,11 @@ public class LocalOrderBaseAdapter extends BaseAdapter<LocalOrder> {
                         .setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                if (!InternetUtils.checkNetwork(context)) {
+                                    Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                                    return;
+                                }
+
                                 String[] sids = new String[localOrderList.size()];
                                 for (int i = 0; i < localOrderList.size(); i++) {
                                     sids[i] = localOrderList.get(i).mainId;

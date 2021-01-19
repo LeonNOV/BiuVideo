@@ -87,7 +87,7 @@ public class HistoryInnerFragment extends BaseFragment {
 
             if (linearLayoutManager == null || historyAdapter == null) {
                 linearLayoutManager = new LinearLayoutManager(context);
-                historyAdapter = new HistoryAdapter(history.innerHistory, context, historyType);
+                historyAdapter = new HistoryAdapter(history.innerHistory, context);
             }
 
             initAttr();

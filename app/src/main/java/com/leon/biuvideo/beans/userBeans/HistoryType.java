@@ -5,6 +5,7 @@ package com.leon.biuvideo.beans.userBeans;
  */
 public enum HistoryType {
     VIDEO("archive"),
+    BANGUMI("bangumi"),
     ARTICLE("article"),
     LIVE("live");
 

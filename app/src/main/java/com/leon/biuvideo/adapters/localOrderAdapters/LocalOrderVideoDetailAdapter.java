@@ -7,11 +7,13 @@ import android.view.View;
 import androidx.annotation.NonNull;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.values.ImagePixelSize;
 
@@ -22,12 +24,14 @@ import java.util.List;
  */
 public class LocalOrderVideoDetailAdapter extends BaseAdapter<LocalOrder> {
     private final Context context;
+    private final View view;
     private final List<LocalOrder> localOrderList;
 
-    public LocalOrderVideoDetailAdapter(Context context, List<LocalOrder> localOrderList) {
+    public LocalOrderVideoDetailAdapter(Context context, View view, List<LocalOrder> localOrderList) {
         super(localOrderList, context);
 
         this.context = context;
+        this.view = view;
         this.localOrderList = localOrderList;
     }
 
@@ -49,6 +53,11 @@ public class LocalOrderVideoDetailAdapter extends BaseAdapter<LocalOrder> {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (!InternetUtils.checkNetwork(context)) {
+                            Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         Intent intent = new Intent(context, VideoActivity.class);
                         intent.putExtra("bvid", localOrder.mainId);
                         context.startActivity(intent);
