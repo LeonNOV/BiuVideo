@@ -1,10 +1,13 @@
 package com.leon.biuvideo.ui.activitys;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Base64;
 import android.view.View;
 import android.view.Window;
@@ -21,10 +24,13 @@ import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.views.RoundPopupWindow;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.LocalOrdersDatabaseUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.values.LocalOrderType;
@@ -43,7 +49,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.FutureTask;
 
+import kotlin.reflect.KVariance;
 import okhttp3.Headers;
 
 /**
@@ -67,6 +75,8 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
     private boolean isHaveLocalOrder = false;
     private final static LocalOrderType localOrderType = LocalOrderType.ARTICLE;
     private LinearLayout article_linearLayout;
+    private LoadingDialog loadingDialog;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +87,6 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_article);
 
         initView();
-        initValue();
     }
 
     private void initView() {
@@ -111,13 +120,55 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         article_textView_view = findViewById(R.id.article_textView_view);
         article_textView_like = findViewById(R.id.article_textView_like);
         article_textView_replay = findViewById(R.id.article_textView_replay);
+
+        loadingDialog = new LoadingDialog(ArticleActivity.this);
+        loadingDialog.show();
+
+        loadData();
     }
 
-    private void initValue() {
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        article = (Article) extras.getSerializable("article");
+    private void loadData() {
+        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+            @Override
+            public void load() {
+                Intent intent = getIntent();
+                Bundle extras = intent.getExtras();
+                article = (Article) extras.getSerializable("article");
+                boolean isHistory = extras.getBoolean("isHistory", false);
 
+                Message message = handler.obtainMessage();
+                message.what = 0;
+
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("loadState", true);
+                bundle.putBoolean("isHistory", isHistory);
+
+                message.setData(bundle);
+                handler.sendMessage(message);
+            }
+        };
+
+        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadArticleInfo");
+
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                boolean loadState = msg.getData().getBoolean("loadState");
+                boolean isHistory = msg.getData().getBoolean("isHistory");
+
+                if (loadState) {
+                    initValue(isHistory);
+                }
+
+                loadingDialog.dismiss();
+
+                return true;
+            }
+        });
+    }
+
+    private void initValue(boolean isHistory) {
         //设置头像
         Glide.with(getApplicationContext()).load(article.face).into(article_imageView_face);
 
@@ -127,11 +178,9 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         //设置标题
         article_textView_title.setText(article.title);
 
-        boolean isHistory = extras.getBoolean("isHistory", false);
         if (isHistory) {
             article_textView_category.setVisibility(View.GONE);
             article_textView_ctime.setVisibility(View.GONE);
-
         } else {
             //设置文章分类
             article_textView_category.setText(article.category);

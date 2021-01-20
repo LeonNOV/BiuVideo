@@ -106,7 +106,7 @@ public class MusicService extends Service {
                         int duration = mediaPlayer.getDuration();
 
                         //利用message给主线程发消息更新seekBar进度
-                        Message message = MusicActivity.handler.obtainMessage();
+                        Message message = MusicActivity.musicPlayHandler.obtainMessage();
 
                         Bundle bundle = new Bundle();
                         bundle.putInt("duration", duration);
@@ -116,7 +116,7 @@ public class MusicService extends Service {
                         message.setData(bundle);
 
                         //发送消息给主线程
-                        MusicActivity.handler.sendMessage(message);
+                        MusicActivity.musicPlayHandler.sendMessage(message);
                     } catch (IllegalStateException e) {
                         e.printStackTrace();
                     }

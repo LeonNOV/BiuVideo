@@ -8,13 +8,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.ViewPageAdapter;
+import com.leon.biuvideo.adapters.FragmentViewPagerAdapter;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.fragments.orderFragments.OrderInnerFragment;
@@ -99,8 +98,8 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
                 fragments.add(new OrderInnerFragment(mid, OrderType.SERIES, OrderFollowType.ALL));
                 fragments.add(new UserOrderArticleFragment());
 
-                ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getParentFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
-                order_view_pager.setAdapter(viewPageAdapter);
+                FragmentViewPagerAdapter fragmentViewPagerAdapter = new FragmentViewPagerAdapter(getParentFragmentManager(), fragments);
+                order_view_pager.setAdapter(fragmentViewPagerAdapter);
                 order_view_pager.addOnPageChangeListener(this);
             } else {
                 setNoData();

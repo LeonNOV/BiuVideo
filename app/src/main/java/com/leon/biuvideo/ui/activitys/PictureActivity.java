@@ -1,11 +1,14 @@
 package com.leon.biuvideo.ui.activitys;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,8 +20,11 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.PictureListAdapter;
 import com.leon.biuvideo.beans.upMasterBean.Picture;
 import com.leon.biuvideo.layoutManager.PictureGridLayoutManager;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.views.RoundPopupWindow;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.values.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
@@ -26,6 +32,7 @@ import com.leon.biuvideo.utils.ValueFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.FutureTask;
 
 /**
  * 相簿界面Activity
@@ -42,6 +49,8 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
     private RecyclerView picture_recyclerView;
 
     private Picture picture;
+    private LoadingDialog loadingDialog;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +60,7 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picture);
 
-        init();
         initView();
-        initValue();
-    }
-
-    private void init() {
-        //获取数据
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        picture = (Picture) extras.getSerializable("picture");
     }
 
     private void initView() {
@@ -76,6 +76,49 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
         picture_textView_desc =findViewById(R.id.picture_textView_desc);
 
         picture_recyclerView = findViewById(R.id.picture_recyclerView);
+
+        loadingDialog = new LoadingDialog(PictureActivity.this);
+        loadingDialog.show();
+
+        loadData();
+    }
+
+    private void loadData() {
+        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+            @Override
+            public void load() {
+                Intent intent = getIntent();
+                Bundle extras = intent.getExtras();
+                picture = (Picture) extras.getSerializable("picture");
+
+                Message message = handler.obtainMessage();
+                message.what = 0;
+
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("loadState", true);
+
+                message.setData(bundle);
+                handler.sendMessage(message);
+            }
+        };
+
+        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadPictureInfo");
+
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                boolean loadState = msg.getData().getBoolean("loadState");
+
+                if (loadState) {
+                    initValue();
+                }
+
+                loadingDialog.dismiss();
+
+                return true;
+            }
+        });
     }
 
     private void initValue() {

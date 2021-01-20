@@ -1,9 +1,13 @@
 package com.leon.biuvideo.ui.fragments.searchResultFragments;
 
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,9 +15,11 @@ import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.userFragmentAdapters.BiliUserAdapter;
 import com.leon.biuvideo.beans.searchBean.BiliUser;
-import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BiliUserParser;
 import com.leon.biuvideo.values.SortType;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -23,11 +29,13 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.FutureTask;
 
 /**
  * SearchResultActivity-BiliUser Fragment
  */
-public class BiliUserResultFragment extends BaseFragment {
+public class BiliUserResultFragment extends BaseLazyFragment {
+    private LinearLayout smart_refresh_layout_fragment_linearLayout;
     private SmartRefreshLayout search_result_smartRefresh;
     private RecyclerView search_result_recyclerView;
     private TextView search_result_no_data;
@@ -38,13 +46,14 @@ public class BiliUserResultFragment extends BaseFragment {
     private int currentCount;
 
     private BiliUserParser biliUserParser;
-    private List<BiliUser> biliUsers;
+    private List<BiliUser> biliUserList;
 
     private BiliUserAdapter biliUserAdapter;
     private LinearLayoutManager linearLayoutManager;
 
     private boolean dataState = true;
     private int pageNum = 1;
+    private Handler handler;
 
     public BiliUserResultFragment() {
     }
@@ -60,6 +69,7 @@ public class BiliUserResultFragment extends BaseFragment {
 
     @Override
     public void initView(BindingUtils bindingUtils) {
+        smart_refresh_layout_fragment_linearLayout = findView(R.id.smart_refresh_layout_fragment_linearLayout);
         search_result_no_data = findView(R.id.smart_refresh_layout_fragment_no_data);
         search_result_smartRefresh = findView(R.id.smart_refresh_layout_fragment_smartRefresh);
         search_result_recyclerView = findView(R.id.smart_refresh_layout_fragment_recyclerView);
@@ -69,24 +79,61 @@ public class BiliUserResultFragment extends BaseFragment {
     }
 
     @Override
-    public void initValues() {
-        biliUserParser = new BiliUserParser(context);
-        count = biliUserParser.getSearchUserCount(keyword);
+    public void loadData() {
+        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+            @Override
+            public void load() {
+                if (biliUserParser == null) {
+                    biliUserParser = new BiliUserParser(context);
+                }
+                count = biliUserParser.getSearchUserCount(keyword);
 
+                Message message = handler.obtainMessage();
+                message.what = 0;
+
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("loadState", true);
+
+                message.setData(bundle);
+                handler.sendMessage(message);
+            }
+        };
+
+        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadBiliUserResult");
+
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                boolean loadState = msg.getData().getBoolean("loadState");
+                smart_refresh_layout_fragment_linearLayout.setVisibility(View.GONE);
+
+                if (loadState) {
+                    initValues();
+                }
+
+                simpleThreadPool.cancelTask("loadBiliUserResult");
+
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void initValues() {
         if (count == 0) {
             //设置无数据提示界面
             search_result_no_data.setVisibility(View.VISIBLE);
             search_result_recyclerView.setVisibility(View.GONE);
             search_result_smartRefresh.setEnabled(false);
         } else {
-            search_result_no_data.setVisibility(View.GONE);
             search_result_recyclerView.setVisibility(View.VISIBLE);
             search_result_smartRefresh.setEnabled(true);
 
-            biliUsers = biliUserParser.userParse(keyword, pageNum, SortType.DEFAULT);
-            currentCount += biliUsers.size();
+            biliUserList = biliUserParser.userParse(keyword, pageNum, SortType.DEFAULT);
+            currentCount += biliUserList.size();
 
-            if (count == biliUsers.size()) {
+            if (count == biliUserList.size()) {
                 dataState = false;
                 //关闭上滑加载
                 search_result_smartRefresh.setEnabled(false);
@@ -94,8 +141,10 @@ public class BiliUserResultFragment extends BaseFragment {
 
             if (linearLayoutManager == null || biliUserAdapter == null) {
                 linearLayoutManager = new LinearLayoutManager(context);
-                biliUserAdapter = new BiliUserAdapter(biliUsers, context);
+                biliUserAdapter = new BiliUserAdapter(biliUserList, context);
             }
+
+            biliUserAdapter.append(biliUserList);
 
             initAttr();
         }
@@ -140,7 +189,7 @@ public class BiliUserResultFragment extends BaseFragment {
                                 getBiliUsers();
 
                                 //添加新数据
-                                biliUserAdapter.append(biliUsers);
+                                biliUserAdapter.append(biliUserList);
                             }
                         }, 1000);
                     } else {
@@ -161,10 +210,10 @@ public class BiliUserResultFragment extends BaseFragment {
      * 获取下一页用户数据
      */
     public void getBiliUsers() {
-        biliUsers = biliUserParser.userParse(keyword, pageNum, SortType.DEFAULT);
+        biliUserList = biliUserParser.userParse(keyword, pageNum, SortType.DEFAULT);
 
         //记录获取的总数
-        currentCount += biliUsers.size();
+        currentCount += biliUserList.size();
 
         //判断是否已获取完所有的数据
         if (currentCount == count) {
@@ -184,13 +233,13 @@ public class BiliUserResultFragment extends BaseFragment {
         this.currentCount = 0;
         this.dataState = true;
 
-        initValues();
+        // 将isLoaded状态设置为“未加载状态”
+        this.isLoaded = false;
+        onResume();
+        this.smart_refresh_layout_fragment_linearLayout.setVisibility(View.VISIBLE);
 
-        if (biliUsers != null) {
-            ArrayList<BiliUser> temp = new ArrayList<>(biliUsers);
-
+        if (biliUserList != null) {
             biliUserAdapter.removeAll();
-            biliUserAdapter.append(temp);
         }
     }
 }

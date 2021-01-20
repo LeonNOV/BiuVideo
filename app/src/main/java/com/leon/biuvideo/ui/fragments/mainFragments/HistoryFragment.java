@@ -8,13 +8,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.ViewPageAdapter;
+import com.leon.biuvideo.adapters.FragmentViewPagerAdapter;
 import com.leon.biuvideo.beans.userBeans.HistoryType;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
@@ -87,8 +86,8 @@ public class HistoryFragment extends BaseFragment implements View.OnClickListene
                 fragments.add(new HistoryInnerFragment(cookie, HistoryType.LIVE));
                 fragments.add(new HistoryInnerFragment(cookie, HistoryType.ARTICLE));
 
-                ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getParentFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
-                history_view_pager.setAdapter(viewPageAdapter);
+                FragmentViewPagerAdapter fragmentViewPagerAdapter = new FragmentViewPagerAdapter(getParentFragmentManager(), fragments);
+                history_view_pager.setAdapter(fragmentViewPagerAdapter);
                 history_view_pager.addOnPageChangeListener(this);
             } else {
                 setNoData();

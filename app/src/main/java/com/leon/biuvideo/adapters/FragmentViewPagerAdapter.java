@@ -9,13 +9,13 @@ import androidx.viewpager.widget.PagerAdapter;
 import java.util.List;
 
 /**
- * viewPage通用适配器
+ * fragmentViewPager通用适配器
  */
-public class ViewPageAdapter extends FragmentPagerAdapter {
+public class FragmentViewPagerAdapter extends FragmentPagerAdapter {
     private final List<Fragment> fragments;
 
-    public ViewPageAdapter(@NonNull FragmentManager fm, int behavior, List<Fragment> fragments) {
-        super(fm, behavior);
+    public FragmentViewPagerAdapter(@NonNull FragmentManager fm, List<Fragment> fragments) {
+        super(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.fragments = fragments;
     }
 

@@ -38,8 +38,11 @@ public class ValueFormat {
         int minute = length / 60;
         int second = length % 60;
 
-        String minuteStr = minute < 10 ? "0" + minute : String.valueOf(minute);
-        String secondStr = second < 10 ? "0" + second : String.valueOf(second);
+        String minuteStr = String.valueOf(minute);
+        String secondStr = String.valueOf(second);
+
+        minuteStr = minuteStr.length() < 2 ? "0" + minuteStr : minuteStr;
+        secondStr = secondStr.length() < 2 ? "0" + secondStr : secondStr;
 
         return minuteStr + ":" + secondStr;
     }

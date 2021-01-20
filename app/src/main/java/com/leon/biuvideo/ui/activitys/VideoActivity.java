@@ -1,6 +1,8 @@
 package com.leon.biuvideo.ui.activitys;
 
 import android.content.pm.PackageManager;
+import android.os.Handler;
+import android.os.Message;
 import android.view.*;
 import android.webkit.WebView;
 import android.widget.*;
@@ -28,11 +30,12 @@ import com.leon.biuvideo.beans.videoBean.play.Media;
 import com.leon.biuvideo.beans.videoBean.play.Play;
 import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.dialogs.AddVideoDialog;
 import com.leon.biuvideo.ui.dialogs.AnthologyDownloadDialog;
+import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.dialogs.SingleVideoQualityDialog;
 import com.leon.biuvideo.utils.FileUtils;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.SimpleDownloadThread;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
@@ -99,6 +102,9 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
     private SimpleThreadPool simpleThreadPool;
     private MediaParser mediaParser;
     private ViewParser viewParser;
+    private LoadingDialog loadingDialog;
+    private Handler handler;
+    private String bvid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +115,6 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_video);
 
         initView();
-        initValues();
     }
 
     /**
@@ -152,36 +157,77 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         video_textView_saveVideo.setOnClickListener(this);
 
         webView = findViewById(R.id.video_webView);
+
+        loadingDialog = new LoadingDialog(VideoActivity.this);
+        loadingDialog.show();
+
+        loadData();
+    }
+
+    /**
+     * 开启一个线程来加载数据
+     */
+    private void loadData() {
+        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+            @Override
+            public void load() {
+                //获取视频bvid
+                Intent intent = getIntent();
+                bvid = intent.getStringExtra("bvid");
+
+                //获取ViewPage实体类（视频基本信息）
+                if (viewParser == null) {
+                    viewParser = new ViewParser(getApplicationContext());
+                }
+                viewPage = viewParser.parseView(bvid);
+
+                if (mediaParser == null) {
+                    mediaParser = new MediaParser(getApplicationContext());
+                }
+
+                //获取视频选集信息
+                play = mediaParser.parseMedia(bvid, viewPage.anthologyInfoList.get(0).cid, false);
+
+                Message message = handler.obtainMessage();
+                message.what = 0;
+
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("loadState", true);
+
+                message.setData(bundle);
+                handler.sendMessage(message);
+            }
+        };
+
+        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadVideoInfo");
+
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                boolean loadState = msg.getData().getBoolean("loadState");
+
+                if (loadState) {
+                    initValues();
+                }
+
+                loadingDialog.dismiss();
+
+                return true;
+            }
+        });
     }
 
     /**
      * 初始化数据
      */
     private void initValues() {
-        //获取视频bvid
-        Intent intent = getIntent();
-        String bvid = intent.getStringExtra("bvid");
 
-        //获取ViewPage实体类（视频基本信息）
-        if (viewParser == null) {
-            viewParser = new ViewParser(getApplicationContext());
-        }
-        viewPage = viewParser.parseView(bvid);
-
-        if (mediaParser == null) {
-            mediaParser = new MediaParser(getApplicationContext());
-        }
-
-        //获取视频选集信息
-        play = mediaParser.parseMedia(bvid, viewPage.anthologyInfoList.get(0).cid, false);
 
         SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.LocalOrders);
         localOrdersDatabaseUtils = (LocalOrdersDatabaseUtils) sqLiteHelperFactory.getInstance();
 
         isHaveLocalOrder = localOrdersDatabaseUtils.queryLocalOrder(String.valueOf(viewPage.bvid), null, localOrderType);
-
-        // 初始化视频信息
-        initVideoInfo();
 
         // 如果为单个视频则不显示选集列表
         if (!(viewPage.anthologyInfoList.size() <= 1)) {
@@ -217,6 +263,9 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         } else {
             video_anthology_cardView.setVisibility(View.GONE);
         }
+
+        // 初始化视频信息
+        initVideoInfo();
     }
 
     private void initVideoInfo() {

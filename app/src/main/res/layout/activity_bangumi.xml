@@ -95,7 +95,6 @@
                     android:layout_weight="9"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:text="@string/defaultStr"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -115,7 +114,6 @@
                             android:id="@+id/bangumi_textView_bangumiState"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/defaultStr"
                             android:textColor="@color/gray"
                             android:textSize="15sp" />
 
@@ -131,7 +129,6 @@
                             android:id="@+id/bangumi_textView_epSize"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="共--话"
                             android:textColor="@color/gray"
                             android:textSize="15sp" />
 
@@ -159,7 +156,7 @@
                         android:id="@+id/bangumi_textView_score"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0.0分"
+                        android:text="0分"
                         android:textColor="@color/blue"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -176,7 +173,6 @@
                         android:id="@+id/bangumi_textView_play"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0.0万播放"
                         android:textColor="@color/gray"
                         android:textSize="15sp" />
 
@@ -192,7 +188,6 @@
                         android:id="@+id/bangumi_textView_follow"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="0.0万系列追番"
                         android:textColor="@color/gray"
                         android:textSize="15sp" />
 
@@ -222,7 +217,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="0.0万点赞"
                             android:textColor="@color/black"
                             android:textSize="12sp" />
 
@@ -246,7 +240,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="0.0万投币"
                             android:textColor="@color/black"
                             android:textSize="12sp" />
 
@@ -270,7 +263,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="0.0万收藏"
                             android:textColor="@color/black"
                             android:textSize="12sp" />
 

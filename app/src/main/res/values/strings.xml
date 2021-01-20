@@ -62,4 +62,5 @@
 
     <!-- 加载数据中显示的默认文字 -->
     <string name="defaultStr">--</string>
+    <string name="loading">加载数据中</string>
 </resources>

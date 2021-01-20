@@ -81,6 +81,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
      */
     public void removeAll() {
         this.beans.clear();
+        notifyDataSetChanged();
     }
 
     /**

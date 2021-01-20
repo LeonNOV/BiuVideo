@@ -22,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
@@ -33,6 +32,8 @@ import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.beans.musicBeans.MusicInfo;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
 import com.leon.biuvideo.service.MusicService;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.dialogs.MusicPlayListDialog;
 import com.leon.biuvideo.ui.dialogs.WarnDialog;
 import com.leon.biuvideo.utils.FileUtils;
@@ -114,7 +115,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
     private MusicConnection musicConnection;
 
     //消息处理器
-    public static Handler handler;
+    public static Handler musicPlayHandler;
 
     private final static LocalOrderType localOrderType = LocalOrderType.AUDIO;
 
@@ -129,6 +130,8 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
     private MusicParser musicParser;
     private MusicUrlParser musicUrlParser;
     private LinearLayout music_linearLayout;
+    private Handler initDataHandler;
+    private LoadingDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,94 +141,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music);
 
-        init();
         initView();
-        initValue();
-    }
-
-    /**
-     * 初始化
-     */
-    private void init() {
-        //获取music信息
-        Intent intent = getIntent();
-
-        //获取sid的position
-        position = intent.getIntExtra("position", -1);
-
-        String[] sidsArray = intent.getStringArrayExtra("sids");
-
-        // 获取所有的sid,转换为List集合
-        if (sidsArray.length != 0) {
-            this.sids = new ArrayList<>();
-            this.sids.addAll(Arrays.asList(sidsArray));
-        }
-
-        if (position != -1) {
-            String sid = sids.get(position);
-
-            if (musicParser == null) {
-                musicParser = new MusicParser();
-            }
-
-            //获取music信息
-            musicInfo = musicParser.parseMusic(sid);
-
-            //获取music文件
-
-            if (musicUrlParser == null) {
-                musicUrlParser = new MusicUrlParser(getApplicationContext());
-            }
-
-            musicUrl = musicUrlParser.parseMusicUrl(sid);
-        } else {
-            Toast.makeText(this, "数据获取失败", Toast.LENGTH_SHORT).show();
-            finish();
-        }
-
-        musicConnection = new MusicConnection();
-        musicIntent = new Intent(this, MusicService.class);
-
-        //开启服务
-        //退出UpSongActivity后，Music在后台播放
-//        startService(musicIntent);
-
-        //绑定服务
-        bindService(musicIntent, musicConnection, Context.BIND_AUTO_CREATE);
-
-        //处理消息
-        handler = new Handler(new Handler.Callback() {
-            @Override
-            public boolean handleMessage(@NonNull Message msg) {
-                Bundle bundle = msg.getData();
-
-                //获取总长度
-                int duration = bundle.getInt("duration");
-
-                //获取当前进度
-                int currentPosition = bundle.getInt("currentPosition");
-
-                //设置进度条最大值
-                music_seekBar.setMax(duration);
-
-                //设置进度条当前进度
-                music_seekBar.setProgress(currentPosition);
-
-                int minute = currentPosition / 1000 / 60;
-                int second = currentPosition / 1000 % 60;
-
-                String length = (minute < 10 ? "0" + minute : minute + "") + ":" + (second < 10 ? "0" + second : second + "");
-
-                //设置时间进度
-                music_textView_nowProgress.setText(length);
-
-                return true;
-            }
-        });
-
-        //创建sqLiteHelper对象
-        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.LocalOrders);
-        localOrdersDatabaseUtils = (LocalOrdersDatabaseUtils) sqLiteHelperFactory.getInstance();
     }
 
     /**
@@ -284,6 +200,134 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
 
         ImageView music_imageView_next = findViewById(R.id.music_imageView_next);
         music_imageView_next.setOnClickListener(this);
+
+        loadingDialog = new LoadingDialog(MusicActivity.this);
+        loadingDialog.show();
+
+        loadData();
+    }
+
+    private void loadData() {
+        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+            @Override
+            public void load() {
+                //获取music信息
+                Intent intent = getIntent();
+
+                //获取sid的position
+                position = intent.getIntExtra("position", -1);
+
+                String[] sidsArray = intent.getStringArrayExtra("sids");
+
+                // 获取所有的sid,转换为List集合
+                if (sidsArray.length != 0) {
+                    sids = new ArrayList<>();
+                    sids.addAll(Arrays.asList(sidsArray));
+                }
+
+                Message message = initDataHandler.obtainMessage();
+                message.what = 0;
+
+                Bundle bundle = new Bundle();
+
+                if (position != -1) {
+                    String sid = sids.get(position);
+
+                    if (musicParser == null) {
+                        musicParser = new MusicParser();
+                    }
+
+                    //获取music信息
+                    musicInfo = musicParser.parseMusic(sid);
+
+                    //获取music文件
+
+                    if (musicUrlParser == null) {
+                        musicUrlParser = new MusicUrlParser(getApplicationContext());
+                    }
+
+                    musicUrl = musicUrlParser.parseMusicUrl(sid);
+
+                    bundle.putBoolean("loadState", true);
+                } else {
+                    Snackbar.make(music_circleImageView_cover, "数据获取失败", Snackbar.LENGTH_SHORT).show();
+                    bundle.putBoolean("loadState", false);
+
+                    finish();
+                }
+
+                //创建sqLiteHelper对象
+                SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.LocalOrders);
+                localOrdersDatabaseUtils = (LocalOrdersDatabaseUtils) sqLiteHelperFactory.getInstance();
+
+                message.setData(bundle);
+                initDataHandler.sendMessage(message);
+            }
+        };
+
+        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadMusicInfo");
+
+        initDataHandler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                boolean loadState = msg.getData().getBoolean("loadState");
+
+                if (loadState) {
+                    initValue();
+                    connectionMusicService();
+                }
+
+                loadingDialog.dismiss();
+
+                return true;
+            }
+        });
+    }
+
+    /**
+     * 与MusicService建立连接
+     */
+    private void connectionMusicService() {
+        musicConnection = new MusicConnection();
+        musicIntent = new Intent(getApplicationContext(), MusicService.class);
+
+        //开启服务
+        //退出UpSongActivity后，Music在后台播放
+//                startService(musicIntent);
+
+        //绑定服务
+        bindService(musicIntent, musicConnection, Context.BIND_AUTO_CREATE);
+
+        //处理消息
+        musicPlayHandler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                Bundle bundle = msg.getData();
+
+                //获取总长度
+                int duration = bundle.getInt("duration");
+
+                //获取当前进度
+                int currentPosition = bundle.getInt("currentPosition");
+
+                //设置进度条最大值
+                music_seekBar.setMax(duration);
+
+                //设置进度条当前进度
+                music_seekBar.setProgress(currentPosition);
+
+                int minute = currentPosition / 1000 / 60;
+                int second = currentPosition / 1000 % 60;
+
+                String length = (minute < 10 ? "0" + minute : minute + "") + ":" + (second < 10 ? "0" + second : second + "");
+
+                //设置时间进度
+                music_textView_nowProgress.setText(length);
+
+                return true;
+            }
+        });
     }
 
     /**

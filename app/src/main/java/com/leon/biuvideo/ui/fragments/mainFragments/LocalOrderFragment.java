@@ -4,11 +4,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.ViewPageAdapter;
+import com.leon.biuvideo.adapters.FragmentViewPagerAdapter;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.fragments.localOrderFragments.LocalOrderBaseFragment;
@@ -63,8 +62,8 @@ public class LocalOrderFragment extends BaseFragment implements View.OnClickList
         fragmentList.add(new LocalOrderBaseFragment(LocalOrderType.ARTICLE));
         fragmentList.add(new LocalOrderBaseFragment(LocalOrderType.AUDIO));
 
-        ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getActivity().getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragmentList);
-        viewPager.setAdapter(viewPageAdapter);
+        FragmentViewPagerAdapter fragmentViewPagerAdapter = new FragmentViewPagerAdapter(getActivity().getSupportFragmentManager(), fragmentList);
+        viewPager.setAdapter(fragmentViewPagerAdapter);
         viewPager.addOnPageChangeListener(this);
     }
 

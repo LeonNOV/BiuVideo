@@ -1,9 +1,13 @@
 package com.leon.biuvideo.ui.fragments.searchResultFragments;
 
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,9 +15,11 @@ import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.userFragmentAdapters.UserVideoAdapter;
 import com.leon.biuvideo.beans.upMasterBean.Video;
-import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.VideoParser;
 import com.leon.biuvideo.values.SortType;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -21,13 +27,14 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.FutureTask;
 
 /**
  * SearchResultActivity-video Fragment
  */
-public class VideoResultFragment extends BaseFragment {
+public class VideoResultFragment extends BaseLazyFragment {
+    private LinearLayout smart_refresh_layout_fragment_linearLayout;
     private SmartRefreshLayout search_result_smartRefresh;
     private RecyclerView search_result_recyclerView;
     private TextView search_result_no_data;
@@ -38,13 +45,14 @@ public class VideoResultFragment extends BaseFragment {
     private int currentCount;
 
     private VideoParser videoParser;
-    private List<Video> videos;
+    private List<Video> videoList;
 
     private LinearLayoutManager linearLayoutManager;
     private UserVideoAdapter userVideoAdapter;
 
     private boolean dataState = true;
     private int pageNum = 1;
+    private Handler handler;
 
     public VideoResultFragment() {
     }
@@ -60,6 +68,7 @@ public class VideoResultFragment extends BaseFragment {
 
     @Override
     public void initView(BindingUtils bindingUtils) {
+        smart_refresh_layout_fragment_linearLayout = findView(R.id.smart_refresh_layout_fragment_linearLayout);
         search_result_no_data = findView(R.id.smart_refresh_layout_fragment_no_data);
         search_result_smartRefresh = findView(R.id.smart_refresh_layout_fragment_smartRefresh);
         search_result_recyclerView = findView(R.id.smart_refresh_layout_fragment_recyclerView);
@@ -69,12 +78,50 @@ public class VideoResultFragment extends BaseFragment {
     }
 
     @Override
+    public void loadData() {
+        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+            @Override
+            public void load() {
+                if (videoParser == null) {
+                    videoParser = new VideoParser(context);
+                }
+
+                //获取总条目数，最大为1000，最小为0
+                count = videoParser.getSearchVideoCount(keyword);
+
+                Message message = handler.obtainMessage();
+                message.what = 0;
+
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("loadState", true);
+
+                message.setData(bundle);
+                handler.sendMessage(message);
+            }
+        };
+
+        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadVideoResult");
+
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                boolean loadState = msg.getData().getBoolean("loadState");
+                smart_refresh_layout_fragment_linearLayout.setVisibility(View.GONE);
+
+                if (loadState) {
+                    initValues();
+                }
+
+                simpleThreadPool.cancelTask("loadVideoResult");
+
+                return true;
+            }
+        });
+    }
+
+    @Override
     public void initValues() {
-        videoParser = new VideoParser(context);
-
-        //获取总条目数，最大为1000，最小为0
-        count = videoParser.getSearchVideoCount(keyword);
-
         //判断结果是否与搜索关键词匹配
         if (videoParser.dataState(keyword) || count == 0) {
             //设置无数据提示界面
@@ -87,13 +134,13 @@ public class VideoResultFragment extends BaseFragment {
             search_result_smartRefresh.setEnabled(true);
 
             //获取第一页数据
-            videos = videoParser.videoParse(keyword, pageNum, SortType.DEFAULT);
+            videoList = videoParser.videoParse(keyword, pageNum, SortType.DEFAULT);
 
             //获取第一页结果总数，最大为20，最小为0
-            currentCount += videos.size();
+            currentCount += videoList.size();
 
             //判断第一次加载是否已加载完所有数据
-            if (count == videos.size()) {
+            if (count == videoList.size()) {
                 dataState = false;
                 //关闭上滑加载
                 search_result_smartRefresh.setEnabled(false);
@@ -101,8 +148,10 @@ public class VideoResultFragment extends BaseFragment {
 
             if (linearLayoutManager == null || userVideoAdapter == null) {
                 linearLayoutManager = new LinearLayoutManager(context);
-                userVideoAdapter = new UserVideoAdapter(videos, context);
+                userVideoAdapter = new UserVideoAdapter(videoList, context);
             }
+
+            userVideoAdapter.append(videoList);
 
             initAttr();
         }
@@ -147,7 +196,7 @@ public class VideoResultFragment extends BaseFragment {
                                 getVideos();
 
                                 //添加新数据
-                                userVideoAdapter.append(videos);
+                                userVideoAdapter.append(videoList);
                             }
                         }, 1000);
                     } else {
@@ -168,10 +217,10 @@ public class VideoResultFragment extends BaseFragment {
      * 获取下一页的数据
      */
     public void getVideos() {
-        videos = videoParser.videoParse(keyword, pageNum, SortType.DEFAULT);
+        videoList = videoParser.videoParse(keyword, pageNum, SortType.DEFAULT);
 
         //记录获取的总数
-        currentCount += videos.size();
+        currentCount += videoList.size();
 
         //判断是否已获取完所有的数据
         if (currentCount == count) {
@@ -191,18 +240,17 @@ public class VideoResultFragment extends BaseFragment {
         this.currentCount = 0;      //重置现数据数量
         this.dataState = true;
 
-        //获取二次搜索的数据
-        initValues();
+        // 将isLoaded状态设置为“未加载状态”,并重置当前界面
+        this.isLoaded = false;
+        onResume();
+        this.smart_refresh_layout_fragment_linearLayout.setVisibility(View.VISIBLE);
 
         /**
          * 需要将二次搜索的第一个页面的数据放入一个临时的变量中
          * 以防userVideoAdapter.removeAll()将其清空
          */
-        if (videos != null) {
-            List<Video> temp = new ArrayList<>(videos);
-
+        if (videoList != null) {
             userVideoAdapter.removeAll();
-            userVideoAdapter.append(temp);
         }
     }
 }

@@ -1,9 +1,13 @@
 package com.leon.biuvideo.ui.fragments.searchResultFragments;
 
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,9 +15,11 @@ import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.userFragmentAdapters.UserArticleAdapter;
 import com.leon.biuvideo.beans.articleBeans.Article;
-import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.ArticleParser;
 import com.leon.biuvideo.values.SortType;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -22,11 +28,13 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.FutureTask;
 
 /**
  * SearchResultActivity-article Fragment
  */
-public class ArticleResultFragment extends BaseFragment {
+public class ArticleResultFragment extends BaseLazyFragment {
+    private LinearLayout smart_refresh_layout_fragment_linearLayout;
     private SmartRefreshLayout search_result_smartRefresh;
     private RecyclerView search_result_recyclerView;
     private TextView search_result_no_data;
@@ -37,13 +45,14 @@ public class ArticleResultFragment extends BaseFragment {
     private int currentCount;
 
     private ArticleParser articleParser;
-    private List<Article> articles;
+    private List<Article> articleList;
 
     private UserArticleAdapter userArticleAdapter;
     private LinearLayoutManager linearLayoutManager;
 
     private boolean dataState = true;
     private int pageNum = 1;
+    private Handler handler;
 
     public ArticleResultFragment() {
     }
@@ -59,6 +68,7 @@ public class ArticleResultFragment extends BaseFragment {
 
     @Override
     public void initView(BindingUtils bindingUtils) {
+        smart_refresh_layout_fragment_linearLayout = findView(R.id.smart_refresh_layout_fragment_linearLayout);
         search_result_no_data = findView(R.id.smart_refresh_layout_fragment_no_data);
         search_result_smartRefresh = findView(R.id.smart_refresh_layout_fragment_smartRefresh);
         search_result_recyclerView = findView(R.id.smart_refresh_layout_fragment_recyclerView);
@@ -68,10 +78,48 @@ public class ArticleResultFragment extends BaseFragment {
     }
 
     @Override
-    public void initValues() {
-        articleParser = new ArticleParser(context);
-        count = articleParser.getSearchArticleCount(keyword);
+    public void loadData() {
+        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+            @Override
+            public void load() {
+                if (articleParser == null) {
+                    articleParser = new ArticleParser(context);
+                }
+                count = articleParser.getSearchArticleCount(keyword);
 
+                Message message = handler.obtainMessage();
+                message.what = 0;
+
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("loadState", true);
+
+                message.setData(bundle);
+                handler.sendMessage(message);
+            }
+        };
+
+        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadArticleResult");
+
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                boolean loadState = msg.getData().getBoolean("loadState");
+                smart_refresh_layout_fragment_linearLayout.setVisibility(View.GONE);
+
+                if (loadState) {
+                    initValues();
+                }
+
+                simpleThreadPool.cancelTask("loadArticleResult");
+
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void initValues() {
         if (count == 0) {
             //设置无数据提示界面
             search_result_no_data.setVisibility(View.VISIBLE);
@@ -82,11 +130,11 @@ public class ArticleResultFragment extends BaseFragment {
             search_result_recyclerView.setVisibility(View.VISIBLE);
             search_result_smartRefresh.setEnabled(true);
 
-            List<Article> newArticles = articleParser.articleParse(keyword, pageNum, SortType.DEFAULT);
+            articleList = articleParser.articleParse(keyword, pageNum, SortType.DEFAULT);
 
-            currentCount += newArticles.size();
+            currentCount += articleList.size();
 
-            if (count == newArticles.size()) {
+            if (count == articleList.size()) {
                 dataState = false;
 
                 search_result_smartRefresh.setEnabled(false);
@@ -94,10 +142,10 @@ public class ArticleResultFragment extends BaseFragment {
 
             if (linearLayoutManager == null || userArticleAdapter == null) {
                 linearLayoutManager = new LinearLayoutManager(context);
-                userArticleAdapter = new UserArticleAdapter(newArticles, context);
+                userArticleAdapter = new UserArticleAdapter(articleList, context);
             }
 
-            articles = newArticles;
+            userArticleAdapter.append(articleList);
 
             initAttr();
         }
@@ -139,7 +187,7 @@ public class ArticleResultFragment extends BaseFragment {
                             getArticles();
 
                             //添加新数据
-                            userArticleAdapter.append(articles);
+                            userArticleAdapter.append(articleList);
                         }
                     }, 1000);
                 } else {
@@ -159,10 +207,10 @@ public class ArticleResultFragment extends BaseFragment {
      * 获取下一页数据
      */
     private void getArticles() {
-        articles = articleParser.articleParse(keyword, pageNum, SortType.DEFAULT);
+        articleList = articleParser.articleParse(keyword, pageNum, SortType.DEFAULT);
 
         //记录获取的总数
-        currentCount += articles.size();
+        currentCount += articleList.size();
 
         //判断是否已获取完所有的数据
         if (currentCount == count) {
@@ -182,12 +230,13 @@ public class ArticleResultFragment extends BaseFragment {
         this.currentCount = 0;
         this.dataState = true;
 
-        initValues();
+        // 将isLoaded状态设置为“未加载状态”
+        this.isLoaded = false;
+        onResume();
+        this.smart_refresh_layout_fragment_linearLayout.setVisibility(View.VISIBLE);
 
-        if (articles != null) {
-            ArrayList<Article> temp = new ArrayList<>(this.articles);
+        if (articleList != null) {
             userArticleAdapter.removeAll();
-            userArticleAdapter.append(temp);
         }
     }
 }

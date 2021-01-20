@@ -63,7 +63,7 @@
                             android:layout_width="64dp"
                             android:layout_height="64dp"
                             android:layout_marginStart="5dp"
-                            android:src="@drawable/ic_launcher_background"
+                            android:src="@color/gray"
                             app:civ_border_color="@color/black"
                             app:civ_border_width="2dp" />
 
@@ -72,7 +72,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="15dp"
-                            android:text="我是name"
                             android:textColor="@color/black"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -92,7 +91,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:text="我是标题"
                         android:textColor="@color/black"
                         android:textSize="18sp" />
 
@@ -108,7 +106,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="15.1W次观看"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
 
@@ -117,7 +114,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="600弹幕"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
 
@@ -126,7 +122,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="2020-10-17 18:15"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
 
@@ -181,7 +176,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
-                                android:text="2.5万点赞"
                                 android:textColor="@color/black"
                                 android:textSize="12sp" />
 
@@ -205,7 +199,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
-                                android:text="1.8万投币"
                                 android:textColor="@color/black"
                                 android:textSize="12sp" />
 
@@ -229,7 +222,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
-                                android:text="2.1万收藏"
                                 android:textColor="@color/black"
                                 android:textSize="12sp" />
 
@@ -253,7 +245,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
-                                android:text="3671分享"
                                 android:textColor="@color/black"
                                 android:textSize="12sp" />
 

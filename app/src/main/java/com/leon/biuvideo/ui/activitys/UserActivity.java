@@ -15,15 +15,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.ViewPageAdapter;
+import com.leon.biuvideo.adapters.FragmentViewPagerAdapter;
 import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.beans.upMasterBean.UserInfo;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.fragments.userFragments.UserArticlesFragment;
 import com.leon.biuvideo.ui.fragments.userFragments.UserAudiosFragment;
 import com.leon.biuvideo.ui.fragments.userFragments.UserPicturesFragment;
@@ -32,8 +33,6 @@ import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.ViewUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
-import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
-import com.leon.biuvideo.values.Tables;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UserInfoParser;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
@@ -43,7 +42,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
 /**
@@ -67,6 +65,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
     private Handler handler;
     private Map<Integer, TextView> textViewMap;
     private CoordinatorLayout user_linearLayout;
+    private LoadingDialog loadingDialog;
 
     public UserActivity() {
         super();
@@ -81,7 +80,6 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
         setContentView(R.layout.activity_user);
 
         initView();
-        initValue();
     }
 
     //初始化控件
@@ -122,36 +120,58 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
         up_viewPage = findViewById(R.id.up_viewPage);
         up_viewPage.addOnPageChangeListener(this);
         up_viewPage.setOffscreenPageLimit(4);
+
+        loadingDialog = new LoadingDialog(UserActivity.this);
+        loadingDialog.show();
+
+        loadData();
     }
 
     //初始化数据
-    private void initValue() {
-        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.FavoriteUp);
-        favoriteUserDatabaseUtils = (FavoriteUserDatabaseUtils) sqLiteHelperFactory.getInstance();
+    private void loadData() {
+        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+            @Override
+            public void load() {
+                //获取mid
+                Intent intent = getIntent();
+                mid = intent.getLongExtra("mid", -1);
 
-        //获取mid
-        Intent intent = getIntent();
-        mid = intent.getLongExtra("mid", -1);
+                if (mid == -1) {
+                    Snackbar.make(user_linearLayout, "信息获取失败", Snackbar.LENGTH_SHORT).show();
+                    finish();
+                }
 
-        if (mid == -1) {
-            Snackbar.make(user_linearLayout, "信息获取失败", Snackbar.LENGTH_SHORT).show();
-            onDestroy();
-        }
+                UserInfoParser userInfoParser = new UserInfoParser(getApplicationContext());
+                userInfo = userInfoParser.parseUpInfo(mid);
 
-        //更新visit
-        favoriteUserDatabaseUtils.updateVisit(mid);
+                favoriteUserDatabaseUtils = new FavoriteUserDatabaseUtils(getApplicationContext());
 
-        SimpleThreadPool simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.LoadTaskNum, SimpleThreadPool.LoadTask);
-        simpleThreadPool.submit(new FutureTask<>(new UserActivityThread()), "loadUserInfo");
+                //更新visit
+                favoriteUserDatabaseUtils.updateVisit(mid);
+
+                Message message = handler.obtainMessage();
+                message.what = 0;
+
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("loadState", true);
+
+                message.setData(bundle);
+                handler.sendMessage(message);
+            }
+        };
+
+        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadUserInfo");
 
         handler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(@NonNull Message msg) {
-                userInfo = (UserInfo) msg.getData().getSerializable("userInfo");
+                boolean loadState = msg.getData().getBoolean("loadState");
 
-                if (userInfo != null) {
-                    setValue(mid);
+                if (loadState) {
+                    initValue();
                 }
+                loadingDialog.dismiss();
 
                 return true;
             }
@@ -159,7 +179,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
     }
 
     //设置控件的数据
-    private void setValue(long mid) {
+    private void initValue() {
         //设置顶部图片
         Glide.with(getApplicationContext()).load(userInfo.topPhoto).into(up_imageView_cover);
 
@@ -202,9 +222,9 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
         //获取相簿数据
         fragments.add(new UserPicturesFragment(mid));
 
-        ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
+        FragmentViewPagerAdapter fragmentViewPagerAdapter = new FragmentViewPagerAdapter(getSupportFragmentManager(), fragments);
 
-        up_viewPage.setAdapter(viewPageAdapter);
+        up_viewPage.setAdapter(fragmentViewPagerAdapter);
     }
 
     @Override
@@ -299,26 +319,5 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
             favoriteUserDatabaseUtils.close();
         }
         super.onDestroy();
-    }
-
-    private class UserActivityThread implements Callable<String> {
-
-        @Override
-        public String call() {
-            UserInfoParser userInfoParser = new UserInfoParser(getApplicationContext());
-            UserInfo userInfo = userInfoParser.parseUpInfo(mid);
-
-//            Message message = new Message();
-            Message message = handler.obtainMessage();
-            message.what = 0;
-
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("userInfo", userInfo);
-
-            message.setData(bundle);
-            handler.sendMessage(message);
-
-            return null;
-        }
     }
 }

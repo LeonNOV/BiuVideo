@@ -1,5 +1,6 @@
 package com.leon.biuvideo.ui.activitys;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -7,12 +8,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.android.material.snackbar.Snackbar;
@@ -26,8 +28,10 @@ import com.leon.biuvideo.beans.searchBean.bangumi.BangumiState;
 import com.leon.biuvideo.beans.searchBean.bangumi.Ep;
 import com.leon.biuvideo.beans.videoBean.play.Media;
 import com.leon.biuvideo.beans.videoBean.play.Play;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.dialogs.AnthologyDownloadDialog;
 import com.leon.biuvideo.ui.dialogs.BangumiDetailDialog;
+import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.dialogs.SingleVideoQualityDialog;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.Fuck;
@@ -51,6 +55,17 @@ import java.util.Map;
 import java.util.concurrent.FutureTask;
 
 public class BangumiActivity extends AppCompatActivity implements View.OnClickListener {
+    private TextView
+            bangumi_textView_title,
+            bangumi_textView_bangumiState,
+            bangumi_textView_epSize,
+            bangumi_textView_score,
+            bangumi_textView_play,
+            bangumi_textView_follow,
+            bangumi_textView_like,
+            bangumi_textView_coin,
+            bangumi_textView_favorite;
+
     private Bangumi bangumi;
     private BangumiState bangumiState;
     private int selectAnthologyIndex;
@@ -71,6 +86,8 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
     private final static LocalOrderType localOrderType = LocalOrderType.BANGUMI;
     private boolean isHaveLocalOrder = false;
     private LinearLayout bangumi_linearLayout;
+    private LoadingDialog loadingDialog;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,54 +96,107 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bangumi);
 
-        init();
         initView();
     }
 
-    private void init() {
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-
-        // 获取初始数据
-        bangumi = (Bangumi) extras.getSerializable("bangumi");
-        if (bangumi.epSize < 2) {
-            isSingleAnthology = true;
-        }
-        selectAnthologyIndex = extras.getInt("selectAnthologyIndex", 0);
-
-        // 获取番剧选集cid及其各选集cover
-        BangumiParser bangumiParser = new BangumiParser(getApplicationContext());
-        bangumi.eps = bangumiParser.getEpCids(bangumi.seasonId, bangumi.eps);
-
-        BangumiStateParse bangumiStateParse = new BangumiStateParse(getApplicationContext());
-        bangumiState = bangumiStateParse.bangumiStateParse(bangumi.seasonId);
-
-        localOrdersDatabaseUtils = new LocalOrdersDatabaseUtils(getApplicationContext());
-        isHaveLocalOrder = localOrdersDatabaseUtils.queryLocalOrder(String.valueOf(bangumi.mediaId), String.valueOf(bangumi.seasonId), localOrderType);
-    }
-
     private void initView() {
-        BindingUtils bindingUtils = new BindingUtils(getWindow().getDecorView(), getApplicationContext());
         bangumi_linearLayout = findViewById(R.id.bangumi_linearLayout);
-        bindingUtils.setText(R.id.bangumi_textView_title, bangumi.title)
-                .setText(R.id.bangumi_textView_bangumiState, bangumi.eps.size() == bangumi.epSize ? "已完结" : "连载中")
-                .setText(R.id.bangumi_textView_epSize, "共" + bangumi.epSize + "话")
-                .setText(R.id.bangumi_textView_score, bangumi.score + "分")
-                .setText(R.id.bangumi_textView_play, ValueFormat.generateCN(bangumiState.views) + "播放")
-                .setText(R.id.bangumi_textView_follow, ValueFormat.generateCN(bangumiState.seriesFollow) + "系列追番")
-                .setText(R.id.bangumi_textView_like, ValueFormat.generateCN(bangumiState.likes) + "点赞")
-                .setText(R.id.bangumi_textView_coin, ValueFormat.generateCN(bangumiState.coins) + "投币")
-                .setText(R.id.bangumi_textView_favorite, ValueFormat.generateCN(bangumiState.follow) + "收藏")
+
+        bangumi_textView_title = findViewById(R.id.bangumi_textView_title);
+        bangumi_textView_bangumiState = findViewById(R.id.bangumi_textView_bangumiState);
+        bangumi_textView_epSize = findViewById(R.id.bangumi_textView_epSize);
+        bangumi_textView_score = findViewById(R.id.bangumi_textView_score);
+        bangumi_textView_play = findViewById(R.id.bangumi_textView_play);
+        bangumi_textView_follow = findViewById(R.id.bangumi_textView_follow);
+        bangumi_textView_like = findViewById(R.id.bangumi_textView_like);
+        bangumi_textView_coin = findViewById(R.id.bangumi_textView_coin);
+        bangumi_textView_favorite = findViewById(R.id.bangumi_textView_favorite);
+
+        BindingUtils bindingUtils = new BindingUtils(getWindow().getDecorView(), getApplicationContext());
+        bindingUtils
                 .setOnClickListener(R.id.bangumi_imageView_back, this)
                 .setOnClickListener(R.id.bangumi_textView_toDetail, this)
                 .setOnClickListener(R.id.bangumi_imageView_download, this)
                 .setOnClickListener(R.id.bangumi_textView_jumpToOriginal, this);
 
         bangumi_imageView_favorite = findViewById(R.id.bangumi_imageView_favorite);
-        bangumi_imageView_favorite.setImageResource(isHaveLocalOrder ? R.drawable.favorite : R.drawable.no_favorite);
         bangumi_imageView_favorite.setOnClickListener(this);
 
         bangumi_textView_selectedBangumiName = findViewById(R.id.bangumi_textView_selectedBangumiName);
+
+        loadingDialog = new LoadingDialog(BangumiActivity.this);
+        loadingDialog.show();
+
+        loadData();
+    }
+
+    private void loadData() {
+        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+            @Override
+            public void load() {
+                Intent intent = getIntent();
+                Bundle extras = intent.getExtras();
+
+                // 获取初始数据
+                bangumi = (Bangumi) extras.getSerializable("bangumi");
+                if (bangumi.epSize < 2) {
+                    isSingleAnthology = true;
+                }
+                selectAnthologyIndex = extras.getInt("selectAnthologyIndex", 0);
+
+                // 获取番剧选集cid及其各选集cover
+                BangumiParser bangumiParser = new BangumiParser(getApplicationContext());
+                bangumi.eps = bangumiParser.getEpCids(bangumi.seasonId, bangumi.eps);
+
+                BangumiStateParse bangumiStateParse = new BangumiStateParse(getApplicationContext());
+                bangumiState = bangumiStateParse.bangumiStateParse(bangumi.seasonId);
+
+                localOrdersDatabaseUtils = new LocalOrdersDatabaseUtils(getApplicationContext());
+                isHaveLocalOrder = localOrdersDatabaseUtils.queryLocalOrder(String.valueOf(bangumi.mediaId), String.valueOf(bangumi.seasonId), localOrderType);
+
+                Message message = handler.obtainMessage();
+                message.what = 0;
+
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("loadState", true);
+
+                message.setData(bundle);
+                handler.sendMessage(message);
+            }
+        };
+
+        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadBangumiInfo");
+
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                boolean loadState = msg.getData().getBoolean("loadState");
+
+                if (loadState) {
+                    initValue();
+                }
+
+                loadingDialog.dismiss();
+
+                return true;
+            }
+        });
+    }
+
+    private void initValue() {
+        bangumi_textView_title.setText(bangumi.title);
+        bangumi_textView_bangumiState.setText(bangumi.eps.size() == bangumi.epSize ? "已完结" : "连载中");
+        bangumi_textView_epSize.setText("共" + bangumi.epSize + "话");
+        bangumi_textView_score.setText(bangumi.score + "分");
+        bangumi_textView_play.setText(ValueFormat.generateCN(bangumiState.views) + "播放");
+        bangumi_textView_follow.setText(ValueFormat.generateCN(bangumiState.seriesFollow) + "系列追番");
+        bangumi_textView_like.setText(ValueFormat.generateCN(bangumiState.likes) + "点赞");
+        bangumi_textView_coin.setText(ValueFormat.generateCN(bangumiState.coins) + "投币");
+        bangumi_textView_favorite.setText(ValueFormat.generateCN(bangumiState.follow) + "收藏");
+
+        bangumi_imageView_favorite.setImageResource(isHaveLocalOrder ? R.drawable.favorite : R.drawable.no_favorite);
+
         setSelectedAnthologyName();
 
         CardView cardView = findViewById(R.id.video_anthology_cardView);
@@ -153,7 +223,6 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
             });
             recyclerView.setAdapter(bangumiEpAdapter);
         }
-
     }
 
     /**

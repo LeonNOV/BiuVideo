@@ -1,8 +1,7 @@
- package com.leon.biuvideo.ui.activitys;
+package com.leon.biuvideo.ui.activitys;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
@@ -17,7 +16,7 @@ import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.ViewPageAdapter;
+import com.leon.biuvideo.adapters.FragmentViewPagerAdapter;
 import com.leon.biuvideo.ui.fragments.searchResultFragments.ArticleResultFragment;
 import com.leon.biuvideo.ui.fragments.searchResultFragments.BangumiResultFragment;
 import com.leon.biuvideo.ui.fragments.searchResultFragments.BiliUserResultFragment;
@@ -30,17 +29,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
- /**
-  * 搜索结果Activity
-  */
- public class SearchResultActivity extends AppCompatActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
-     private EditText search_editText_searchBox;
-     private TextView search_textView_result_video, search_textView_result_article, search_textView_result_user, search_textView_result_bangumi;
-     private ViewPager search_viewPager;
+/**
+ * 搜索结果Activity
+ */
+public class SearchResultActivity extends AppCompatActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
+    private EditText search_editText_searchBox;
+    private TextView search_textView_result_video, search_textView_result_article, search_textView_result_user, search_textView_result_bangumi;
+    private ViewPager search_viewPager;
 
     private String keyword;
     private List<Fragment> fragments;
-     private Map<Integer, TextView> textViewMap;
+    private Map<Integer, TextView> textViewMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,25 +132,27 @@ import java.util.Map;
         fragments.add(new ArticleResultFragment(keyword));
         fragments.add(new BiliUserResultFragment(keyword));
 
-        ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
-        search_viewPager.setAdapter(viewPageAdapter);
+        FragmentViewPagerAdapter fragmentViewPagerAdapter = new FragmentViewPagerAdapter(getSupportFragmentManager(), fragments);
+        search_viewPager.setAdapter(fragmentViewPagerAdapter);
         search_viewPager.setOffscreenPageLimit(fragments.size());
     }
 
     private void refreshFragments() {
         for (Fragment fragment : fragments) {
-            if (fragment instanceof VideoResultFragment) {
-                VideoResultFragment videoResultFragment = (VideoResultFragment) fragment;
-                videoResultFragment.updateData(keyword);
-            } else if (fragment instanceof ArticleResultFragment){
-                ArticleResultFragment articleResultFragment = (ArticleResultFragment) fragment;
-                articleResultFragment.updateData(keyword);
-            } else if (fragment instanceof BiliUserResultFragment) {
-                BiliUserResultFragment biliUserResultFragment = (BiliUserResultFragment) fragment;
-                biliUserResultFragment.updateData(keyword);
-            } else {
-                BangumiResultFragment bangumiResultFragment = (BangumiResultFragment) fragment;
-                bangumiResultFragment.updateData(keyword);
+            if (!fragment.isHidden()) {
+                if (fragment instanceof VideoResultFragment) {
+                    VideoResultFragment videoResultFragment = (VideoResultFragment) fragment;
+                    videoResultFragment.updateData(keyword);
+                } else if (fragment instanceof ArticleResultFragment) {
+                    ArticleResultFragment articleResultFragment = (ArticleResultFragment) fragment;
+                    articleResultFragment.updateData(keyword);
+                } else if (fragment instanceof BiliUserResultFragment) {
+                    BiliUserResultFragment biliUserResultFragment = (BiliUserResultFragment) fragment;
+                    biliUserResultFragment.updateData(keyword);
+                } else {
+                    BangumiResultFragment bangumiResultFragment = (BangumiResultFragment) fragment;
+                    bangumiResultFragment.updateData(keyword);
+                }
             }
         }
     }
@@ -164,7 +165,7 @@ import java.util.Map;
 
                 break;
             case R.id.search_imageView_clean:
-                search_editText_searchBox.setText("");
+                search_editText_searchBox.getText().clear();
 
                 break;
             case R.id.search_textView_result_video:

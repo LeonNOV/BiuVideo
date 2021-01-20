@@ -28,7 +28,7 @@
                     android:layout_height="140dp"
                     android:layout_gravity="center"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_launcher_background" />
+                    android:src="@color/gray" />
 
                 <ImageView
                     android:id="@+id/up_imageView_back"
@@ -71,7 +71,7 @@
                                 android:layout_width="64dp"
                                 android:layout_height="64dp"
                                 android:layout_margin="10dp"
-                                android:src="@drawable/ic_launcher_background"
+                                android:src="@color/gray"
                                 app:civ_border_color="#FF000000"
                                 app:civ_border_width="2dp" />
 
@@ -80,7 +80,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="5dp"
-                                android:text="我是name"
                                 android:textColor="@color/black"
                                 android:textSize="23sp"
                                 android:textStyle="bold" />
