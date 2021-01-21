@@ -38,7 +38,10 @@ public class Bangumi implements Serializable {
         for (int i = 0; i < eps.size(); i++) {
             Ep ep = eps.get(i);
             AnthologyInfo anthologyInfo = new AnthologyInfo();
+            anthologyInfo.mainId = String.valueOf(seasonId);
             anthologyInfo.cid = ep.cid;
+            anthologyInfo.isVIP = ep.isVIP;
+            anthologyInfo.badge = ep.badge;
             anthologyInfo.part = (ep.title == null || ep.title.equals("") ? i : ep.title) + "-" + ep.longTitle;
             anthologyInfo.duration = 0;
 

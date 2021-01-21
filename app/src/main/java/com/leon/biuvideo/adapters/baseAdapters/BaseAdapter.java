@@ -77,11 +77,33 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     }
 
     /**
-     * 清空上次搜索后的数据缓存
+     * 根据其对象进行删除
+     *
+     * @param t     对象
+     */
+    public void remove(T t) {
+        this.beans.remove(t);
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 根据索引进行删除
+     *
+     * @param index 索引值
+     */
+    public void remove(int index) {
+        this.beans.remove(index);
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 清空已存在的数据
      */
     public void removeAll() {
-        this.beans.clear();
-        notifyDataSetChanged();
+        if (this.beans != null) {
+            this.beans.clear();
+            notifyDataSetChanged();
+        }
     }
 
     /**

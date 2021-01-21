@@ -20,6 +20,7 @@ import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleThreadPool;
+import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BiliUserParser;
 import com.leon.biuvideo.values.SortType;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -27,7 +28,6 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.FutureTask;
 
@@ -50,6 +50,7 @@ public class BiliUserResultFragment extends BaseLazyFragment {
 
     private BiliUserAdapter biliUserAdapter;
     private LinearLayoutManager linearLayoutManager;
+    private FavoriteUserDatabaseUtils favoriteUserDatabaseUtils;
 
     private boolean dataState = true;
     private int pageNum = 1;
@@ -140,8 +141,13 @@ public class BiliUserResultFragment extends BaseLazyFragment {
             }
 
             if (linearLayoutManager == null || biliUserAdapter == null) {
+
+                if (favoriteUserDatabaseUtils == null) {
+                    favoriteUserDatabaseUtils = new FavoriteUserDatabaseUtils(context);
+                }
+
                 linearLayoutManager = new LinearLayoutManager(context);
-                biliUserAdapter = new BiliUserAdapter(biliUserList, context);
+                biliUserAdapter = new BiliUserAdapter(biliUserList, context, favoriteUserDatabaseUtils);
             }
 
             biliUserAdapter.append(biliUserList);
@@ -241,5 +247,13 @@ public class BiliUserResultFragment extends BaseLazyFragment {
         if (biliUserList != null) {
             biliUserAdapter.removeAll();
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (favoriteUserDatabaseUtils != null) {
+            favoriteUserDatabaseUtils.close();
+        }
+        super.onDestroyView();
     }
 }

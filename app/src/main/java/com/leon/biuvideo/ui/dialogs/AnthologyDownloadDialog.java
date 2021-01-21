@@ -17,6 +17,7 @@ import com.leon.biuvideo.adapters.userFragmentAdapters.AnthologyDownloadDialogAd
 import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
 import com.leon.biuvideo.ui.activitys.DownloadedActivity;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.values.Qualitys;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class AnthologyDownloadDialog extends AlertDialog implements View.OnClick
     public View view;
 
     private RecyclerView anthology_download_dialog_recyclerView;
+    private DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils;
 
     public AnthologyDownloadDialog(@NonNull Context context, List<AnthologyInfo> anthologyInfoList) {
         super(context);
@@ -74,6 +76,14 @@ public class AnthologyDownloadDialog extends AlertDialog implements View.OnClick
 
     private void initValue() {
         anthology_download_dialog_recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        if (downloadRecordsDatabaseUtils == null) {
+            downloadRecordsDatabaseUtils = new DownloadRecordsDatabaseUtils(context);
+        }
+
+        for (AnthologyInfo anthologyInfo : anthologyInfoList) {
+            anthologyInfo.isDownloaded = downloadRecordsDatabaseUtils.queryVideo(anthologyInfo.mainId, String.valueOf(anthologyInfo.cid));
+        }
 
         AnthologyDownloadDialogAdapter anthologyDownloadDialogAdapter = new AnthologyDownloadDialogAdapter(anthologyInfoList, context);
         anthologyDownloadDialogAdapter.setOnAnthologyItemClickListener(new AnthologyDownloadDialogAdapter.OnAnthologyItemClickListener() {
@@ -139,5 +149,13 @@ public class AnthologyDownloadDialog extends AlertDialog implements View.OnClick
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public void dismiss() {
+        if (downloadRecordsDatabaseUtils != null) {
+            downloadRecordsDatabaseUtils.close();
+        }
+        super.dismiss();
     }
 }

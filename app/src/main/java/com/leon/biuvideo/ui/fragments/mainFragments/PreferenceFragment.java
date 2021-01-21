@@ -1,37 +1,36 @@
 package com.leon.biuvideo.ui.fragments.mainFragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.AboutBean;
-import com.leon.biuvideo.beans.Favorite;
-import com.leon.biuvideo.ui.dialogs.AboutDialog;
+import com.leon.biuvideo.ui.dialogs.ThanksListDialog;
 import com.leon.biuvideo.ui.dialogs.FeedbackDialog;
 import com.leon.biuvideo.ui.dialogs.ImportFollowDialog;
-import com.leon.biuvideo.ui.dialogs.ImportStateDialog;
 import com.leon.biuvideo.ui.dialogs.LicenseDialog;
 import com.leon.biuvideo.ui.dialogs.SetHeroDialog;
 import com.leon.biuvideo.ui.dialogs.WarnDialog;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
-import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
-import com.leon.biuvideo.values.Tables;
-import com.leon.biuvideo.utils.parseDataUtils.FollowParse;
+import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.FollowParser;
 import com.leon.biuvideo.values.ThanksList;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 /**
  * 设置fragment
@@ -39,7 +38,6 @@ import java.util.List;
 public class PreferenceFragment extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private TextView preference_textView_cache_size;
     private SwitchCompat preference_switch_visitState;
-    private FollowParse followParse;
 
     @Override
     public int setLayout() {
@@ -49,12 +47,14 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
     @Override
     public void initView(BindingUtils bindingUtils) {
         bindingUtils
+//                .setOnCheckedChangeListener(R.id.preference_switch_isImport, this)
+                .setOnCheckedChangeListener(R.id.preference_switch_visitState, this)
                 .setOnClickListener(R.id.preference_textView_set_hero, this)
                 .setOnClickListener(R.id.preference_textView_import, this)
-                .setOnCheckedChangeListener(R.id.preference_switch_visitState, this)
                 .setOnClickListener(R.id.preference_textView_cache, this)
                 .setOnClickListener(R.id.preference_textView_open_source_license, this)
                 .setOnClickListener(R.id.preference_textView_thanks_list, this)
+                .setOnClickListener(R.id.preference_switch_cleanImport, this)
                 .setOnClickListener(R.id.preference_textView_feed_back, this);
 
         preference_textView_cache_size = findView(R.id.preference_textView_cache_size);
@@ -101,19 +101,22 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                 importFollowDialog.setPriorityListener(new ImportFollowDialog.PriorityListener() {
                     @Override
                     public void setActivityText(long mid, String cookie) {
-
                         //隐藏importFollowDialog
                         importFollowDialog.dismiss();
 
-                        Snackbar.make(view, "正在导入数据中，请不要随意进行任何操作", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(view, "正在导入数据中，请不要随意进行任何操作", Snackbar.LENGTH_LONG).show();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Map<String, Long> importMap = FollowParser.getFollowings(context, mid, cookie);
 
-                        ImportStateDialog importStateDialog = new ImportStateDialog(context);
-                        importStateDialog.show();
-
-                        boolean insertState = getFollowings(mid, cookie);
-
-                        //修改等待对话框的显示资源
-                        importStateDialog.setResourceState(insertState);
+                                if (importMap == null) {
+                                    Snackbar.make(view, "导入成功0个，导入失败0个", Snackbar.LENGTH_LONG).show();
+                                } else {
+                                    Snackbar.make(view, "导入成功" + importMap.get("successNum") + "个，导入失败" + importMap.get("failNum") + "个", Snackbar.LENGTH_LONG).show();
+                                }
+                            }
+                        }).start();
                     }
                 });
 
@@ -133,6 +136,7 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                         preference_textView_cache_size.setText("0B");
                     }
                 });
+                warnDialog.show();
 
                 break;
             case R.id.preference_textView_open_source_license:
@@ -142,8 +146,6 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
 
                 break;
             case R.id.preference_textView_thanks_list:
-                //显示感谢列表
-
                 //设置Dialog显示内容
                 ArrayList<AboutBean> aboutBeans = new ArrayList<>();
                 for (int i = 0; i < ThanksList.titles.length; i++) {
@@ -155,8 +157,8 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                 }
 
                 //显示Dialog
-                AboutDialog aboutDialog = new AboutDialog(context, aboutBeans);
-                aboutDialog.show();
+                ThanksListDialog thanksListDialog = new ThanksListDialog(context, aboutBeans);
+                thanksListDialog.show();
 
                 break;
             case R.id.preference_textView_feed_back:
@@ -164,68 +166,16 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                 FeedbackDialog feedbackDialog = new FeedbackDialog(context);
                 feedbackDialog.show();
                 break;
+            case R.id.preference_switch_cleanImport:
+                FavoriteUserDatabaseUtils favoriteUserDatabaseUtils = new FavoriteUserDatabaseUtils(context);
+                favoriteUserDatabaseUtils.removeFavorite();
+
+                Snackbar.make(view, "已删除所有来自账户中的数据", Snackbar.LENGTH_SHORT).show();
+                favoriteUserDatabaseUtils.close();
+
+                sendLocalBroadcast();
             default:
                 break;
-        }
-    }
-
-    /**
-     * 获取关注列表并进行添加
-     *
-     * @param mid   用户ID
-     * @param cookie 用户cookie
-     * @return  返回插入状态
-     */
-    private boolean getFollowings(long mid, String cookie) {
-        if (followParse == null) {
-            followParse = new FollowParse(context, mid);
-        }
-
-        if (mid != 0) {
-            //获取总数
-            int total = followParse.getTotal();
-            if (total == 0) {
-                return true;
-            }
-
-            //由于官方的限制
-            //在没有cookie的情况下，关注列表最多只能获取100条
-            if (total > 100 && cookie.equals("")) {
-                total = 100;
-            }
-
-            //获取数据
-            int pn = 1;
-            int currentTotal = 0;
-
-            SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.FavoriteUp);
-            FavoriteUserDatabaseUtils favoriteUserDatabaseUtils = (FavoriteUserDatabaseUtils) sqLiteHelperFactory.getInstance();
-
-            while (currentTotal != total) {
-                List<Favorite> favorites = followParse.parseFollow(pn);
-                if (favorites != null) {
-                    currentTotal += favorites.size();
-
-                    //将数据添加至favorites_up
-                    for (Favorite favorite : favorites) {
-                        boolean insertState = favoriteUserDatabaseUtils.addFavorite(favorite);
-
-                        if (!insertState) {
-                            return false;
-                        }
-                    }
-
-                    pn++;
-                } else {
-                    return false;
-                }
-            }
-
-            favoriteUserDatabaseUtils.close();
-
-            return true;
-        } else {
-            return false;
         }
     }
 
@@ -277,5 +227,14 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
         editor.putBoolean("isVisit", isChecked);
 
         editor.apply();
+    }
+
+    /**
+     * 清除用户关注数据后发送本地广播
+     */
+    private void sendLocalBroadcast() {
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
+        Intent intent = new Intent("cleanUserFavoriteUp");
+        localBroadcastManager.sendBroadcast(intent);
     }
 }

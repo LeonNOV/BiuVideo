@@ -1,9 +1,13 @@
 package com.leon.biuvideo.ui.fragments.userFragments;
 
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,9 +15,11 @@ import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.userFragmentAdapters.UserVideoAdapter;
 import com.leon.biuvideo.beans.upMasterBean.Video;
-import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.VideoParser;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -21,13 +27,15 @@ import com.scwang.smartrefresh.layout.constant.RefreshState;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.List;
+import java.util.concurrent.FutureTask;
 
 /**
  * UpMasterActivity-video fragment
  */
-public class UserVideosFragment extends BaseFragment {
+public class UserVideosFragment extends BaseLazyFragment {
     private final long mid;
 
+    private LinearLayout smart_refresh_layout_fragment_linearLayout;
     private RecyclerView recyclerView;
     private SmartRefreshLayout smartRefresh;
     private TextView no_data;
@@ -43,6 +51,7 @@ public class UserVideosFragment extends BaseFragment {
     private UserVideoAdapter userVideoAdapter;
     private LinearLayoutManager linearLayoutManager;
     private int count;
+    private Handler handler;
 
     public UserVideosFragment(long mid) {
         this.mid = mid;
@@ -55,6 +64,7 @@ public class UserVideosFragment extends BaseFragment {
 
     @Override
     public void initView(BindingUtils bindingUtils) {
+        smart_refresh_layout_fragment_linearLayout = findView(R.id.smart_refresh_layout_fragment_linearLayout);
         recyclerView = findView(R.id.smart_refresh_layout_fragment_recyclerView);
         smartRefresh = findView(R.id.smart_refresh_layout_fragment_smartRefresh);
         no_data = findView(R.id.smart_refresh_layout_fragment_no_data);
@@ -64,10 +74,46 @@ public class UserVideosFragment extends BaseFragment {
     }
 
     @Override
-    public void initValues() {
-        videoParser = new VideoParser(context);
-        count = videoParser.getVideoTotal(mid);
+    public void loadData() {
+        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+            @Override
+            public void load() {
+                videoParser = new VideoParser(context);
+                count = videoParser.getVideoTotal(mid);
 
+                Message message = handler.obtainMessage();
+                message.what = 0;
+
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("loadState", true);
+
+                message.setData(bundle);
+                handler.sendMessage(message);
+            }
+        };
+
+        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadUserVideos");
+
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                boolean loadState = msg.getData().getBoolean("loadState");
+                smart_refresh_layout_fragment_linearLayout.setVisibility(View.GONE);
+
+                if (loadState) {
+                    initValues();
+                }
+
+                simpleThreadPool.cancelTask("loadUserVideos");
+
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void initValues() {
         if (count == 0) {
             //设置无数据提示界面
             no_data.setVisibility(View.VISIBLE);

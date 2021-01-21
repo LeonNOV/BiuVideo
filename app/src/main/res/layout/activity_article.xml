@@ -36,7 +36,7 @@
                 android:id="@+id/article_imageView_face"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
-                android:src="@drawable/ic_launcher_background"
+                android:src="@color/gray"
                 app:civ_border_width="1dp" />
 
             <TextView
@@ -45,7 +45,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="15dp"
-                android:text="*"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
@@ -79,7 +78,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:text="*"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -94,7 +92,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="-"
                     android:textColor="@color/light_gray"
                     android:textSize="12sp" />
 
@@ -103,7 +100,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="**"
                     android:textColor="@color/light_gray"
                     android:textSize="12sp" />
 
@@ -112,7 +108,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="*阅读"
                     android:textColor="@color/light_gray"
                     android:textSize="12sp" />
 
@@ -121,7 +116,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="*点赞"
                     android:textColor="@color/light_gray"
                     android:textSize="12sp" />
 
@@ -130,7 +124,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="*评论"
                     android:textColor="@color/light_gray"
                     android:textSize="12sp" />
 

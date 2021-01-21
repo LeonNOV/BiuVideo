@@ -71,12 +71,12 @@ public class FavoriteUserAdapter extends BaseAdapter<Favorite> {
                 .setOnClickListener(R.id.favorite_button_cancel_favorite, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.FavoriteUp);
-                        favoriteUserDatabaseUtils = (FavoriteUserDatabaseUtils) sqLiteHelperFactory.getInstance();
-                        favoriteUserDatabaseUtils.removeFavorite(favorites.get(position).mid);
+                        if (favoriteUserDatabaseUtils == null) {
+                            favoriteUserDatabaseUtils = new FavoriteUserDatabaseUtils(context);
+                        }
 
-                        favorites.remove(position);
-                        notifyItemRemoved(position);
+                        favoriteUserDatabaseUtils.removeFavorite(favorite.mid);
+                        remove(favorite);
                     }
                 });
     }
@@ -85,14 +85,10 @@ public class FavoriteUserAdapter extends BaseAdapter<Favorite> {
      * 加载数据使用
      */
     public void refresh(List<Favorite> addOns) {
-        //清空原有数据
         if (addOns.size() > 0) {
-            if (favorites.size() > 0) {
-                favorites.clear();
-            }
-
-            favorites.addAll(addOns);
-            notifyDataSetChanged();
+            //清空原有数据
+            removeAll();
+            append(addOns);
         }
     }
 }

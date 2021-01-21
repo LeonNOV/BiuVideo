@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.utils.Fuck;
 
 /**
  * 导入关注列表弹窗
@@ -69,7 +70,7 @@ public class ImportFollowDialog extends AlertDialog implements View.OnClickListe
                 String mid = import_follow_editText.getText().toString().trim();
 
                 if (mid.equals("")) {
-                    Toast.makeText(getContext(), "不要搞这些骚操作好吗？", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "请输入正确的用户ID", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -79,15 +80,14 @@ public class ImportFollowDialog extends AlertDialog implements View.OnClickListe
                         long vmid = Long.parseLong(mid);
                         String cookie = import_follow_editText_cookie.getText().toString();
 
-                        priorityListener.setActivityText(vmid, cookie);
-                    } catch (Exception e) {
+                        priorityListener.setActivityText(vmid, cookie.equals("") ? null : cookie);
+                    } catch (NumberFormatException e) {
                         Toast.makeText(getContext(), "输入内容需要为全数字，请检查输入内容", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 break;
             case R.id.import_follow_imageView_expansion:
-
                 if (expansionState) {
                     import_follow_linearLayout_cookie.setVisibility(View.VISIBLE);
                     expansionState = false;

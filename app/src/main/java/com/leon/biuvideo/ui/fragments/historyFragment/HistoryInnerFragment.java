@@ -1,9 +1,13 @@
 package com.leon.biuvideo.ui.fragments.historyFragment;
 
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,22 +16,29 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.historyAdapters.HistoryAdapter;
 import com.leon.biuvideo.beans.userBeans.History;
 import com.leon.biuvideo.beans.userBeans.HistoryType;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
+import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.SimpleThreadPool;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.VideoParser;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.HistoryParser;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
+import java.util.concurrent.FutureTask;
+
 /**
  * 根据HistoryType创建对应的Fragment
  */
-public class HistoryInnerFragment extends BaseFragment {
+public class HistoryInnerFragment extends BaseLazyFragment {
     private final String cookie;
     private final HistoryType historyType;
 
+    private LinearLayout smart_refresh_layout_fragment_linearLayout;
     private RecyclerView recyclerView;
     private SmartRefreshLayout smartRefresh;
     private TextView no_data;
@@ -39,6 +50,7 @@ public class HistoryInnerFragment extends BaseFragment {
 
     private LinearLayoutManager linearLayoutManager;
     private HistoryAdapter historyAdapter;
+    private Handler handler;
 
     public HistoryInnerFragment(String cookie, HistoryType historyType) {
         this.cookie = cookie;
@@ -52,7 +64,7 @@ public class HistoryInnerFragment extends BaseFragment {
 
     @Override
     public void initView(BindingUtils bindingUtils) {
-        //获取初始数据
+        smart_refresh_layout_fragment_linearLayout = findView(R.id.smart_refresh_layout_fragment_linearLayout);
         recyclerView = findView(R.id.smart_refresh_layout_fragment_recyclerView);
         smartRefresh = findView(R.id.smart_refresh_layout_fragment_smartRefresh);
         no_data = findView(R.id.smart_refresh_layout_fragment_no_data);
@@ -62,11 +74,46 @@ public class HistoryInnerFragment extends BaseFragment {
     }
 
     @Override
+    public void loadData() {
+        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+            @Override
+            public void load() {
+                historyParser = new HistoryParser(context);
+                history = historyParser.parseHistory(cookie, -1, -1, historyType);
+
+                Message message = handler.obtainMessage();
+                message.what = 0;
+
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("loadState", true);
+
+                message.setData(bundle);
+                handler.sendMessage(message);
+            }
+        };
+
+        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadHistory");
+
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                boolean loadState = msg.getData().getBoolean("loadState");
+                smart_refresh_layout_fragment_linearLayout.setVisibility(View.GONE);
+
+                if (loadState) {
+                    initValues();
+                }
+
+                simpleThreadPool.cancelTask("loadHistory");
+
+                return true;
+            }
+        });
+    }
+
+    @Override
     public void initValues() {
-        historyParser = new HistoryParser(context);
-
-        this.history = historyParser.parseHistory(cookie, -1, -1, historyType);
-
         //判断当前条目数量是否大于0
         if (this.history.innerHistory.size() <= 0) {
             //设置无数据提示界面

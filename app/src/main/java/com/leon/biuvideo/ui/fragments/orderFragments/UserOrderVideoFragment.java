@@ -1,7 +1,12 @@
 package com.leon.biuvideo.ui.fragments.orderFragments;
 
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
+import android.view.View;
+import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,10 +16,14 @@ import com.leon.biuvideo.adapters.userOrderAdapters.UserOrderVideoFolderAdapter;
 import com.leon.biuvideo.adapters.userOrderAdapters.UserOrderVideoFolderDetailAdapter;
 import com.leon.biuvideo.beans.orderBeans.UserFolder;
 import com.leon.biuvideo.beans.orderBeans.UserFolderData;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
+import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.VideoParser;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserFolderParser;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -23,25 +32,30 @@ import com.scwang.smartrefresh.layout.constant.RefreshState;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.List;
+import java.util.concurrent.FutureTask;
 
 /**
  * PlayListFragment中的video片段
  */
-public class UserOrderVideoFragment extends BaseFragment {
+public class UserOrderVideoFragment extends BaseLazyFragment {
     private final long mid;
 
     private long nowFolderId;
     private int pageNum = 1;
     private boolean dataState = true;
+
+    private List<UserFolder> userFolders;
     private UserFolderData userFolderData;
     private UserFolderParser userFolderParser;
 
+    private LinearLayout fragment_favorite_video_linearLayout;
     private SmartRefreshLayout fragment_favorite_smartRefresh;
 
     private RecyclerView folderList;
     private RecyclerView folderDetail;
 
     private UserOrderVideoFolderDetailAdapter userOrderVideoFolderDetailAdapter;
+    private Handler handler;
 
     public UserOrderVideoFragment(long mid) {
         this.mid = mid;
@@ -54,6 +68,7 @@ public class UserOrderVideoFragment extends BaseFragment {
 
     @Override
     public void initView(BindingUtils bindingUtils) {
+        fragment_favorite_video_linearLayout = findView(R.id.fragment_favorite_video_linearLayout);
         folderList = findView(R.id.fragment_favorite_video_recyclerView_folderList);
         folderDetail = findView(R.id.fragment_favorite_video_recyclerView_folderDetail);
 
@@ -62,14 +77,50 @@ public class UserOrderVideoFragment extends BaseFragment {
     }
 
     @Override
+    public void loadData() {
+        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+            @Override
+            public void load() {
+                userFolderParser = new UserFolderParser(context);
+                userFolders = userFolderParser.parseUserFolder(mid);
+
+                //获取第一个收藏夹ID
+                nowFolderId = userFolders.get(0).id;
+                userFolderData = userFolderParser.parseUserFolderData(nowFolderId, pageNum);
+
+                Message message = handler.obtainMessage();
+                message.what = 0;
+
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("loadState", true);
+
+                message.setData(bundle);
+                handler.sendMessage(message);
+            }
+        };
+
+        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadOrderVideo");
+
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                boolean loadState = msg.getData().getBoolean("loadState");
+                fragment_favorite_video_linearLayout.setVisibility(View.GONE);
+
+                if (loadState) {
+                    initValues();
+                }
+
+                simpleThreadPool.cancelTask("loadOrderVideo");
+
+                return true;
+            }
+        });
+    }
+
+    @Override
     public void initValues() {
-        userFolderParser = new UserFolderParser(context);
-        List<UserFolder> userFolders = userFolderParser.parseUserFolder(mid);
-
-        //获取第一个收藏夹ID
-        nowFolderId = userFolders.get(0).id;
-        userFolderData = userFolderParser.parseUserFolderData(nowFolderId, pageNum);
-
         // 设置收藏夹参数
         setFolderInfo(userFolderData);
 

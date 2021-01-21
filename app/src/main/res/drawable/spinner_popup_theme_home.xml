@@ -5,7 +5,7 @@
             <stroke
                 android:width="3dp"
                 android:color="@color/bilibili_pink" />
-            <corners android:radius="10dp" />
+            <corners android:radius="@dimen/corner_6dp" />
             <solid android:color="@color/bilibili_pink_lite" />
             <padding
                 android:bottom="5dp"

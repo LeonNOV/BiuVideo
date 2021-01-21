@@ -9,12 +9,13 @@ import androidx.annotation.Nullable;
 import java.lang.reflect.Field;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
-    private static final String favorite_up = "CREATE TABLE \"favorite_up\" (\n" +
+    private static final String favoriteUp = "CREATE TABLE \"favoriteUp\" (\n" +
             "\"id\"  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
-            "\"mid\"  INTEGER NOT NULL,\n" +
+            "\"mid\"  INTEGER NOT NULL UNIQUE,\n" +
             "\"name\"  TEXT,\n" +
             "\"faceUrl\"  TEXT,\n" +
             "\"desc\"  TEXT,\n" +
+            "\"isUser\"  INTEGER DEFAULT 0,\n" +
             "\"visit\"  INTEGER DEFAULT 0,\n" +
             "\"isDelete\"  INTEGER DEFAULT 0\n" +
             ");";

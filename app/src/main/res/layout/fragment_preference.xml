@@ -89,46 +89,47 @@
 
                     </RelativeLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.43dp"
-                        android:background="#CF879B" />
+<!--                    <View-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="0.43dp"-->
+<!--                        android:background="#CF879B" />-->
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp">
+<!--                    <RelativeLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:padding="10dp">-->
 
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+<!--                        <RelativeLayout-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content">-->
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:text="@string/preference_importData"
-                                android:textColor="@color/preference_item" />
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_centerVertical="true"-->
+<!--                                android:text="@string/preference_importData"-->
+<!--                                android:textColor="@color/preference_item" />-->
 
-                            <androidx.appcompat.widget.SwitchCompat
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                android:checked="true"
-                                android:theme="@style/CustomSwitchCompat" />
+<!--                            <androidx.appcompat.widget.SwitchCompat-->
+<!--                                android:id="@+id/preference_switch_isImport"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_alignParentEnd="true"-->
+<!--                                android:layout_centerVertical="true"-->
+<!--                                android:checked="false"-->
+<!--                                android:theme="@style/CustomSwitchCompat" />-->
 
-                        </RelativeLayout>
+<!--                        </RelativeLayout>-->
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="30dp"
-                            android:text="@string/preference_importDataStr"
-                            android:textColor="@color/gray"
-                            android:textSize="12sp" />
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="30dp"-->
+<!--                            android:text="@string/preference_importDataStr"-->
+<!--                            android:textColor="@color/gray"-->
+<!--                            android:textSize="12sp" />-->
 
-                    </RelativeLayout>
+<!--                    </RelativeLayout>-->
 
                     <View
                         android:layout_width="match_parent"
@@ -136,6 +137,7 @@
                         android:background="#CF879B" />
 
                     <TextView
+                        android:id="@+id/preference_switch_cleanImport"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="?selectableItemBackground"

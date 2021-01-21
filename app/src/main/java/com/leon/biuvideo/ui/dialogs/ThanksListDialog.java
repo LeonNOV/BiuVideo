@@ -19,11 +19,11 @@ import java.util.List;
 /**
  * 关于弹窗
  */
-public class AboutDialog extends AlertDialog {
+public class ThanksListDialog extends AlertDialog {
     private final Context context;
     private final List<AboutBean> aboutBeans;
 
-    public AboutDialog(@NonNull Context context, List<AboutBean> aboutBeans) {
+    public ThanksListDialog(@NonNull Context context, List<AboutBean> aboutBeans) {
         super(context);
         this.context = context;
         this.aboutBeans = aboutBeans;

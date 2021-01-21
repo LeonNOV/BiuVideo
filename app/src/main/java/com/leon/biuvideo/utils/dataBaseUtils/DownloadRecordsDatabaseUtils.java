@@ -271,6 +271,21 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
     }
 
     /**
+     * 根据mainId和subId查询已下载/正在下载的视频
+     *
+     * @param mainId    mainId
+     * @param subId     subId
+     * @return  返回是否已下载
+     */
+    public boolean queryVideo(String mainId, String subId) {
+        Cursor cursor = sqLiteDatabase.query(videoDetail, null, "mainId = ? AND subId = ? AND downloadState != ?", new String[]{mainId, subId, "0"}, null, null, null);
+        int count = cursor.getCount();
+
+        cursor.close();
+        return count > 0;
+    }
+
+    /**
      * 设置对应资源文件状态为已删除状态
      *
      * @param fileName  资源文件名称

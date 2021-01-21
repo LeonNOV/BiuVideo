@@ -28,6 +28,7 @@ import com.leon.biuvideo.beans.searchBean.bangumi.BangumiState;
 import com.leon.biuvideo.beans.searchBean.bangumi.Ep;
 import com.leon.biuvideo.beans.videoBean.play.Media;
 import com.leon.biuvideo.beans.videoBean.play.Play;
+import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
 import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.dialogs.AnthologyDownloadDialog;
 import com.leon.biuvideo.ui.dialogs.BangumiDetailDialog;
@@ -303,12 +304,17 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                         @Override
                         public void onDownload(int qualityId, long cid, int position, String subTitle) {
                             if (!InternetUtils.checkNetwork(getApplicationContext())) {
-                                Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(anthologyDownloadDialog.view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
                                 return;
                             }
 
                             //获取视频选集信息
                             Play playWithDownload = mediaParser.parseMedia(null, cid, true);
+
+                            if (playWithDownload == null) {
+                                Snackbar.make(anthologyDownloadDialog.view, "获取不到该番剧的下载数据，可能该番剧有地区限制", Snackbar.LENGTH_SHORT).show();
+                                return;
+                            }
 
                             videoEntries = playWithDownload.videoEntries();
                             for (Map.Entry<Integer, Media> entry : videoEntries) {

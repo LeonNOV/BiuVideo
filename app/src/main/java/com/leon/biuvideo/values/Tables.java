@@ -1,7 +1,7 @@
 package com.leon.biuvideo.values;
 
 public enum  Tables {
-    FavoriteUp("favorite_up"),
+    FavoriteUp("favoriteUp"),
 
     LocalVideoFolders("localVideoFolders"),
     LocalOrders("localOrders"),

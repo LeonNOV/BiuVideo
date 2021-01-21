@@ -82,7 +82,7 @@ public class ViewParser {
                 viewPage.videoInfo = parseVideoInfo(dataObject.getJSONObject("stat"));
 
                 //获取选集信息
-                viewPage.anthologyInfoList = parseSingleVideoInfo(dataObject.getJSONArray("pages"));
+                viewPage.anthologyInfoList = parseSingleVideoInfo(bvid, dataObject.getJSONArray("pages"));
 
                 return viewPage;
             }
@@ -100,7 +100,7 @@ public class ViewParser {
      * @param pages json数组
      * @return  返回所有选集视频信息
      */
-    private List<AnthologyInfo> parseSingleVideoInfo(JSONArray pages) {
+    private List<AnthologyInfo> parseSingleVideoInfo(String bvid, JSONArray pages) {
         List<AnthologyInfo> anthologyInfoList = new ArrayList<>();
 
         for (Object object : pages) {
@@ -108,6 +108,8 @@ public class ViewParser {
             AnthologyInfo anthologyInfo = new AnthologyInfo();
 
             JSONObject jsonObject = (JSONObject) object;
+
+            anthologyInfo.mainId = bvid;
 
             //选集cid
             anthologyInfo.cid = jsonObject.getLong("cid");

@@ -1,6 +1,7 @@
 package com.leon.biuvideo;
 
 import com.leon.biuvideo.utils.IDUtils;
+import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.FollowParser;
 
 import org.junit.Test;
 
@@ -13,7 +14,6 @@ public class ExampleUnitTest {
 
     @Test
     public void test() {
-
     }
 
     //解析输入的内容
