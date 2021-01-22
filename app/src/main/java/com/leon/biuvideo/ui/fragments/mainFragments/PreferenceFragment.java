@@ -167,12 +167,16 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                 break;
             case R.id.preference_switch_cleanImport:
                 FavoriteUserDatabaseUtils favoriteUserDatabaseUtils = new FavoriteUserDatabaseUtils(context);
-                favoriteUserDatabaseUtils.removeFavorite();
+                boolean removeFavorite = favoriteUserDatabaseUtils.removeFavorite();
 
-                Snackbar.make(view, "已删除所有来自账户中的数据", Snackbar.LENGTH_SHORT).show();
+                if (removeFavorite) {
+                    Snackbar.make(v, "已删除所有来自账户中的数据", Snackbar.LENGTH_SHORT).show();
+                    sendLocalBroadcast();
+                } else {
+                    Snackbar.make(v, "清除失败，数据还没有导入进来哦~", Snackbar.LENGTH_SHORT).show();
+                }
+
                 favoriteUserDatabaseUtils.close();
-
-                sendLocalBroadcast();
             default:
                 break;
         }

@@ -275,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //删除本地Cookie
         SharedPreferences.Editor editor = getSharedPreferences("initValues", Activity.MODE_PRIVATE).edit();
-        editor.remove("cookie").remove("isVIP").apply();
+        editor.remove("cookie").remove("isVIP").remove("mid").apply();
 
         isLogin = false;
         cookie = null;
