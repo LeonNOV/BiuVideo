@@ -77,7 +77,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
     private DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils;
     private MediaParser mediaParser;
     private LocalOrdersDatabaseUtils localOrdersDatabaseUtils;
-    private ImageView bangumi_imageView_favorite;
+    private ImageView bangumi_imageView_favoriteMark;
 
     private final static String PROMPT = "当前已选择的选集为：";
     private final static LocalOrderType localOrderType = LocalOrderType.BANGUMI;
@@ -114,10 +114,11 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                 .setOnClickListener(R.id.bangumi_imageView_back, this)
                 .setOnClickListener(R.id.bangumi_textView_toDetail, this)
                 .setOnClickListener(R.id.bangumi_imageView_download, this)
+                .setOnClickListener(R.id.bangumi_linearLayout_addFavorite, this)
+                .setOnClickListener(R.id.bangumi_imageView_toDownloadList, this)
                 .setOnClickListener(R.id.bangumi_textView_jumpToOriginal, this);
 
-        bangumi_imageView_favorite = findViewById(R.id.bangumi_imageView_favorite);
-        bangumi_imageView_favorite.setOnClickListener(this);
+        bangumi_imageView_favoriteMark = findViewById(R.id.bangumi_imageView_favoriteMark);
 
         bangumi_textView_selectedBangumiName = findViewById(R.id.bangumi_textView_selectedBangumiName);
 
@@ -192,7 +193,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
         bangumi_textView_coin.setText(ValueFormat.generateCN(bangumiState.coins) + "投币");
         bangumi_textView_favorite.setText(ValueFormat.generateCN(bangumiState.follow) + "收藏");
 
-        bangumi_imageView_favorite.setImageResource(isHaveLocalOrder ? R.drawable.favorite : R.drawable.no_favorite);
+        bangumi_imageView_favoriteMark.setImageResource(isHaveLocalOrder ? R.drawable.icon_video_favorite : R.drawable.icon_video_no_favorite);
 
         setSelectedAnthologyName();
 
@@ -236,6 +237,10 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.bangumi_imageView_back:
                 this.finish();
+                break;
+            case R.id.bangumi_imageView_toDownloadList:
+                Intent toDownloadIntent = new Intent(this, DownloadedActivity.class);
+                startActivity(toDownloadIntent);
                 break;
             case R.id.bangumi_textView_jumpToOriginal:
                 //跳转到源网站
@@ -341,14 +346,14 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                 }
 
                 break;
-            case R.id.bangumi_imageView_favorite:
+            case R.id.bangumi_linearLayout_addFavorite:
                 boolean operatingStatus;
 
                 if (isHaveLocalOrder) {
                     operatingStatus = localOrdersDatabaseUtils.deleteLocalOrder(String.valueOf(bangumi.mediaId), String.valueOf(bangumi.seasonId), localOrderType);
 
                     if (operatingStatus) {
-                        bangumi_imageView_favorite.setImageResource(R.drawable.no_favorite);
+                        bangumi_imageView_favoriteMark.setImageResource(R.drawable.icon_video_no_favorite);
                         Snackbar.make(v, R.string.remFavoriteSign, Snackbar.LENGTH_SHORT).show();
                         isHaveLocalOrder = false;
                     }
@@ -370,7 +375,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                     operatingStatus = localOrdersDatabaseUtils.addLocalOrder(localOrder);
 
                     if (operatingStatus) {
-                        bangumi_imageView_favorite.setImageResource(R.drawable.favorite);
+                        bangumi_imageView_favoriteMark.setImageResource(R.drawable.icon_video_favorite);
                         Snackbar.make(v, R.string.addFavoriteSign, Snackbar.LENGTH_SHORT).show();
                         isHaveLocalOrder = true;
                     }

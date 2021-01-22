@@ -89,7 +89,7 @@ public class FavoriteUserFragment extends BaseFragment {
                         snackbar.dismiss();
 
                         if (favorites != null && favorites.size() == 0) {
-                            Snackbar.make(view, "现在还没有任何数据，试着刷新一下吧", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(v, "现在还没有任何数据，试着刷新一下吧", Snackbar.LENGTH_SHORT).show();
                         }
                     }
                 })

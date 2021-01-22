@@ -35,6 +35,7 @@ import com.leon.biuvideo.ui.dialogs.AddVideoDialog;
 import com.leon.biuvideo.ui.dialogs.AnthologyDownloadDialog;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.dialogs.SingleVideoQualityDialog;
+import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.SimpleDownloadThread;
 import com.leon.biuvideo.utils.SimpleThreadPool;
@@ -65,7 +66,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
     private RecyclerView video_recyclerView_singleVideoList;
 
     private CircleImageView video_circleImageView_face;
-    private ImageView video_imageView_addFavorite;
+    private ImageView video_imageView_favoriteMark;
     private ExpandableTextView expand_text_view;
     private TextView
             video_textView_name,
@@ -125,11 +126,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         video_circleImageView_face = findViewById(R.id.video_circleImageView_face);
         video_circleImageView_face.setOnClickListener(this);
 
-        ImageView video_imageView_back = findViewById(R.id.video_imageView_back);
-        video_imageView_back.setOnClickListener(this);
-
-        video_imageView_addFavorite = findViewById(R.id.video_imageView_addFavorite);
-        video_imageView_addFavorite.setOnClickListener(this);
+        video_imageView_favoriteMark = findViewById(R.id.video_imageView_favoriteMark);
 
         video_recyclerView_singleVideoList = findViewById(R.id.video_recyclerView_singleVideoList);
 
@@ -145,14 +142,14 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
         expand_text_view = findViewById(R.id.expand_text_view);
 
-        TextView video_textView_saveCover = findViewById(R.id.video_textView_saveCover);
-        video_textView_saveCover.setOnClickListener(this);
-
-        TextView video_textView_saveFace = findViewById(R.id.video_textView_saveFace);
-        video_textView_saveFace.setOnClickListener(this);
-
-        TextView video_textView_saveVideo = findViewById(R.id.video_textView_saveVideo);
-        video_textView_saveVideo.setOnClickListener(this);
+        BindingUtils bindingUtils = new BindingUtils(getWindow().getDecorView(), getApplicationContext());
+        bindingUtils
+                .setOnClickListener(R.id.video_imageView_back, this)
+                .setOnClickListener(R.id.video_linearLayout_addFavorite, this)
+                .setOnClickListener(R.id.video_textView_saveCover, this)
+                .setOnClickListener(R.id.video_textView_saveFace, this)
+                .setOnClickListener(R.id.video_textView_saveVideo, this)
+                .setOnClickListener(R.id.video_textView_toDownload, this);
 
         webView = findViewById(R.id.video_webView);
 
@@ -266,7 +263,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
     private void initVideoInfo() {
         Glide.with(getApplicationContext()).load(viewPage.userInfo.faceUrl + ImagePixelSize.FACE.value).into(video_circleImageView_face);
         video_textView_name.setText(viewPage.userInfo.name);
-        video_imageView_addFavorite.setImageResource(isHaveLocalOrder ? R.drawable.favorite : R.drawable.no_favorite);
+        video_imageView_favoriteMark.setImageResource(isHaveLocalOrder ? R.drawable.icon_video_favorite : R.drawable.icon_video_no_favorite);
         video_textView_title.setText(viewPage.title);
         video_textView_view.setText(ValueFormat.generateCN(viewPage.videoInfo.view) + "次观看");
         video_textView_danmaku.setText(ValueFormat.generateCN(viewPage.videoInfo.danmaku) + "弹幕");
@@ -290,6 +287,10 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
             case R.id.video_imageView_back:
                 this.finish();
                 break;
+            case R.id.video_textView_toDownload:
+                Intent toDownloadIntent = new Intent(this, DownloadedActivity.class);
+                startActivity(toDownloadIntent);
+                break;
             case R.id.video_circleImageView_face:
                 //判断是否有网络
                 boolean isHaveNetwork = InternetUtils.checkNetwork(getApplicationContext());
@@ -304,14 +305,14 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 intent.putExtra("mid", viewPage.userInfo.mid);
                 startActivity(intent);
                 break;
-            case R.id.video_imageView_addFavorite:
+            case R.id.video_linearLayout_addFavorite:
                 //根据videoState判断是否保存获取删除该video
                 if (isHaveLocalOrder) {
                     //从videoPlayList中删除此video
                     boolean state = localOrdersDatabaseUtils.deleteLocalOrder(String.valueOf(viewPage.bvid), null, localOrderType);
 
                     if (state) {
-                        video_imageView_addFavorite.setImageResource(R.drawable.no_favorite);
+                        video_imageView_favoriteMark.setImageResource(R.drawable.icon_video_no_favorite);
                         Snackbar.make(view, R.string.remFavoriteSign, Snackbar.LENGTH_SHORT).show();
                         isHaveLocalOrder = false;
                     }
@@ -338,7 +339,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                         @Override
                         public void onFavoriteIcon(boolean addState) {
                             if (addState) {
-                                video_imageView_addFavorite.setImageResource(R.drawable.favorite);
+                                video_imageView_favoriteMark.setImageResource(R.drawable.icon_video_favorite);
                                 Snackbar.make(view, R.string.addFavoriteSign, Snackbar.LENGTH_SHORT).show();
                                 isHaveLocalOrder = true;
                             }

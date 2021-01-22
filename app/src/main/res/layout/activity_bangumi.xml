@@ -246,17 +246,19 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/bangumi_linearLayout_addFavorite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
+                        android:background="?selectableItemBackground"
                         android:orientation="vertical">
 
                         <ImageView
+                            android:id="@+id/bangumi_imageView_favoriteMark"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@drawable/icon_video_favorite"
-                            app:tint="@color/black" />
+                            android:src="@drawable/icon_video_no_favorite" />
 
                         <TextView
                             android:id="@+id/bangumi_textView_favorite"
@@ -274,20 +276,21 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
-                        android:background="?android:selectableItemBackground"
+                        android:background="?selectableItemBackground"
                         android:padding="5dp"
                         android:src="@drawable/icon_download_music"
                         app:tint="@color/black" />
 
                     <ImageView
-                        android:id="@+id/bangumi_imageView_favorite"
+                        android:id="@+id/bangumi_imageView_toDownloadList"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:src="@drawable/icon_download_list"
+                        android:padding="5dp"
+                        android:background="?selectableItemBackground"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
-                        android:background="?android:selectableItemBackground"
-                        android:padding="5dp"
-                        android:src="@drawable/no_favorite" />
+                        app:tint="@color/black" />
 
                 </LinearLayout>
 

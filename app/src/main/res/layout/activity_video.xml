@@ -40,8 +40,8 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 app:cardBackgroundColor="@color/bilibili_pink_light"
                 app:cardCornerRadius="@dimen/corner_6dp">
@@ -75,14 +75,6 @@
                             android:textColor="@color/black"
                             android:textSize="20sp"
                             android:textStyle="bold" />
-
-                        <ImageView
-                            android:id="@+id/video_imageView_addFavorite"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            android:background="?selectableItemBackgroundBorderless"
-                            android:src="@drawable/no_favorite" />
 
                     </LinearLayout>
 
@@ -205,17 +197,19 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/video_linearLayout_addFavorite"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
+                            android:background="?selectableItemBackground"
                             android:orientation="vertical">
 
                             <ImageView
+                                android:id="@+id/video_imageView_favoriteMark"
                                 android:layout_width="25dp"
                                 android:layout_height="25dp"
-                                android:src="@drawable/icon_video_favorite"
-                                app:tint="@color/black" />
+                                android:src="@drawable/icon_video_no_favorite" />
 
                             <TextView
                                 android:id="@+id/video_textView_favorite"
@@ -261,8 +255,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
                 app:cardBackgroundColor="@color/bilibili_pink_light"
                 app:cardCornerRadius="@dimen/corner_6dp">
 
@@ -318,8 +312,9 @@
 
                         <TextView
                             android:id="@+id/video_textView_saveCover"
-                            android:layout_width="100dp"
+                            android:layout_width="80dp"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:background="@drawable/ripple_rectangle_bilibbili_pink"
                             android:gravity="center"
                             android:padding="10dp"
@@ -329,9 +324,10 @@
 
                         <TextView
                             android:id="@+id/video_textView_saveFace"
-                            android:layout_width="100dp"
+                            android:layout_width="80dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
+                            android:layout_weight="1"
                             android:background="@drawable/ripple_rectangle_bilibbili_pink"
                             android:gravity="center"
                             android:padding="10dp"
@@ -341,13 +337,27 @@
 
                         <TextView
                             android:id="@+id/video_textView_saveVideo"
-                            android:layout_width="100dp"
+                            android:layout_width="80dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
+                            android:layout_weight="1"
                             android:background="@drawable/ripple_rectangle_bilibbili_pink"
                             android:gravity="center"
                             android:padding="10dp"
                             android:text="@string/video_button_saveVideo_str"
+                            android:textColor="@color/black"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/video_textView_toDownload"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/ripple_rectangle_bilibbili_pink"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="@string/video_button_toDownload_str"
                             android:textColor="@color/black"
                             android:textSize="12sp" />
 

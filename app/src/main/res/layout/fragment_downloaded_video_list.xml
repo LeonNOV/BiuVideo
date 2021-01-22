@@ -49,6 +49,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
             <TextView
@@ -57,10 +58,9 @@
                 android:layout_height="60dp"
                 android:gravity="center"
                 android:textSize="13sp"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
-                android:layout_marginBottom="5dp"
                 android:background="@drawable/ripple_rectangle_bilibbili_pink"
                 android:textColor="@color/black"
                 android:text="@string/downloaded_check_str"/>
@@ -73,8 +73,7 @@
                 android:gravity="center"
                 android:textSize="13sp"
                 android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/ripple_rectangle_bilibbili_pink"
                 android:textColor="@color/black"
                 android:text="@string/downloaded_check_fail_str"/>
