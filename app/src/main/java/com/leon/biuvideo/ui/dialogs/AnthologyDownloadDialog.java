@@ -2,6 +2,7 @@ package com.leon.biuvideo.ui.dialogs;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -106,6 +107,13 @@ public class AnthologyDownloadDialog extends AlertDialog implements View.OnClick
             case R.id.anthology_download_dialog_textView_checkAll:
                 Intent intent = new Intent(context, DownloadedActivity.class);
                 context.startActivity(intent);
+                break;
+            case R.id.anthology_download_dialog_textView_qualityWarn:
+                //跳转到源网站
+                Intent intentHelp = new Intent();
+                intentHelp.setAction("android.intent.action.VIEW");
+                intentHelp.setData(Uri.parse(context.getString(R.string.anthologyHelpLink)));
+                context.startActivity(intentHelp);
                 break;
             case R.id.anthology_download_dialog_textView_saveAll:
                 if (onDownloadListener != null) {
