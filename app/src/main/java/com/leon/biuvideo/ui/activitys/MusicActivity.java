@@ -45,9 +45,7 @@ import com.leon.biuvideo.utils.dataBaseUtils.LocalOrdersDatabaseUtils;
 import com.leon.biuvideo.utils.downloadUtils.MediaUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.utils.ValueFormat;
-import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.values.LocalOrderType;
-import com.leon.biuvideo.values.Tables;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicParser;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicUrlParser;
 
@@ -257,8 +255,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                 }
 
                 //创建sqLiteHelper对象
-                SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.LocalOrders);
-                localOrdersDatabaseUtils = (LocalOrdersDatabaseUtils) sqLiteHelperFactory.getInstance();
+                localOrdersDatabaseUtils = new LocalOrdersDatabaseUtils(getApplicationContext());
 
                 message.setData(bundle);
                 initDataHandler.sendMessage(message);
@@ -449,8 +446,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                 }
 
                 if (downloadRecordsDatabaseUtils == null) {
-                    SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.DownloadDetailsForVideo);
-                    downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
+                    downloadRecordsDatabaseUtils = new DownloadRecordsDatabaseUtils(getApplicationContext());
                 }
 
                 boolean downloadState = downloadRecordsDatabaseUtils.queryVideoDownloadState(musicInfo.sid);

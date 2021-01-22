@@ -14,11 +14,9 @@ import com.leon.biuvideo.utils.SimpleDownloadThread;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
-import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.utils.downloadUtils.MediaUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
-import com.leon.biuvideo.values.Tables;
 
 import java.util.List;
 import java.util.concurrent.FutureTask;
@@ -131,8 +129,7 @@ public class DownloadedFailListAdapter extends BaseAdapter<DownloadedDetailMedia
             }
 
             //更新本地链接
-            SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.DownloadDetailsForVideo);
-            DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
+            DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = new DownloadRecordsDatabaseUtils(context);
             downloadRecordsDatabaseUtils.updateUrl(newUrls, downloadedDetailMedia.fileName);
             downloadRecordsDatabaseUtils.close();
         }

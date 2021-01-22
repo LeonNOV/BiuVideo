@@ -10,7 +10,6 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
-import com.leon.biuvideo.ui.dialogs.WarnDialog;
 import com.leon.biuvideo.utils.InitValueUtils;
 
 import java.util.List;

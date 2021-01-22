@@ -45,9 +45,7 @@ import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.WebViewUtils;
-import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.values.LocalOrderType;
-import com.leon.biuvideo.values.Tables;
 import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParser;
 import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.ViewParser;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
@@ -222,10 +220,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
      * 初始化数据
      */
     private void initValues() {
-
-
-        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.LocalOrders);
-        localOrdersDatabaseUtils = (LocalOrdersDatabaseUtils) sqLiteHelperFactory.getInstance();
+        localOrdersDatabaseUtils = new LocalOrdersDatabaseUtils(getApplicationContext());
 
         isHaveLocalOrder = localOrdersDatabaseUtils.queryLocalOrder(String.valueOf(viewPage.bvid), null, localOrderType);
 
@@ -363,8 +358,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 }
 
                 if (downloadRecordsDatabaseUtils == null) {
-                    SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.DownloadDetailsForVideo);
-                    downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
+                    downloadRecordsDatabaseUtils = new DownloadRecordsDatabaseUtils(getApplicationContext());
                 }
 
                 // 如果选集数量大于1，就显示选集列表对话框

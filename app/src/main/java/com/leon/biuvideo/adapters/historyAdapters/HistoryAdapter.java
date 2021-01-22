@@ -15,7 +15,6 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
 import com.leon.biuvideo.beans.userBeans.History;
-import com.leon.biuvideo.beans.userBeans.HistoryType;
 import com.leon.biuvideo.ui.activitys.ArticleActivity;
 import com.leon.biuvideo.ui.activitys.BangumiActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;

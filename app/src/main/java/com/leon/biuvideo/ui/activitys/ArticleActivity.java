@@ -51,7 +51,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.FutureTask;
 
-import kotlin.reflect.KVariance;
 import okhttp3.Headers;
 
 /**

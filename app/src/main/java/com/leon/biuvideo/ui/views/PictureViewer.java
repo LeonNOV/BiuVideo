@@ -2,7 +2,6 @@ package com.leon.biuvideo.ui.views;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,9 @@ import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 图片查看器
+ */
 public class PictureViewer extends PopupWindow implements View.OnClickListener, ViewPager.OnPageChangeListener {
     private final int selectedPosition;
     private final List<String> pictures;

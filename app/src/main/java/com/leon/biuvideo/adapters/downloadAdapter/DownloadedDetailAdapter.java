@@ -16,9 +16,7 @@ import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
-import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.values.ImagePixelSize;
-import com.leon.biuvideo.values.Tables;
 
 import java.util.List;
 
@@ -81,8 +79,7 @@ public class DownloadedDetailAdapter extends BaseAdapter<DownloadedDetailMedia> 
 
     @Override
     public void refresh(String filename) {
-        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.DownloadDetailsForVideo);
-        DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
+        DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = new DownloadRecordsDatabaseUtils(context);
 
         DownloadedDetailMedia downloadedDetailMedia = downloadRecordsDatabaseUtils.queryVideoByFileName(filename);
         this.downloadedDetailMedias.add(downloadedDetailMedia);

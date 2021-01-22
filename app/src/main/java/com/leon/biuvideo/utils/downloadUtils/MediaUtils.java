@@ -18,10 +18,8 @@ import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
-import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParser;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicUrlParser;
-import com.leon.biuvideo.values.Tables;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -332,8 +330,7 @@ public class MediaUtils {
      * @param isComplete    是否已下载完毕
      */
     private void setDownloadState(String fileName, boolean isComplete) {
-        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.DownloadDetailsForVideo);
-        DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
+        DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = new DownloadRecordsDatabaseUtils(context);
 
         // 将已存在的条目的isDelete设置为0
         downloadRecordsDatabaseUtils.setDelete(fileName, false);
@@ -353,8 +350,7 @@ public class MediaUtils {
      * @param fileName  文件名称
      */
     private void setDownloadFailState(String fileName) {
-        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.DownloadDetailsForVideo);
-        DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
+        DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = new DownloadRecordsDatabaseUtils(context);
 
         downloadRecordsDatabaseUtils.setFailed(fileName);
 

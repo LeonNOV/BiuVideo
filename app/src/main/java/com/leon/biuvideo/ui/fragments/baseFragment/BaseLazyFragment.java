@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+/**
+ * 基本的懒加载fragment
+ */
 public abstract class BaseLazyFragment extends Fragment {
     protected View view;
     protected Context context;

@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.utils.Fuck;
 
 /**
  * 导入关注列表弹窗

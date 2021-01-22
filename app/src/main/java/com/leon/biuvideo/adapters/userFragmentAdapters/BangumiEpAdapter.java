@@ -10,7 +10,6 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.searchBean.bangumi.Ep;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InitValueUtils;
 import com.leon.biuvideo.utils.InternetUtils;
 

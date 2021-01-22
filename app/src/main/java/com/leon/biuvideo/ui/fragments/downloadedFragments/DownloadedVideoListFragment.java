@@ -13,8 +13,6 @@ import com.leon.biuvideo.beans.downloadedBeans.DownloadedRecordsForVideo;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
-import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
-import com.leon.biuvideo.values.Tables;
 
 import java.util.List;
 
@@ -43,8 +41,7 @@ public class DownloadedVideoListFragment extends BaseFragment implements View.On
 
     @Override
     public void initValues() {
-        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(context, Tables.DownloadDetailsForVideo);
-        DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
+        DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = new DownloadRecordsDatabaseUtils(context);
         List<DownloadedRecordsForVideo> downloadedRecordsForVideos = downloadRecordsDatabaseUtils.queryAllVideo();
 
         if (downloadedRecordsForVideos.size() == 0) {

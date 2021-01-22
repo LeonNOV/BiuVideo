@@ -7,7 +7,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.leon.biuvideo.beans.Favorite;
-import com.leon.biuvideo.utils.InitValueUtils;
 import com.leon.biuvideo.values.Tables;
 
 import java.util.ArrayList;

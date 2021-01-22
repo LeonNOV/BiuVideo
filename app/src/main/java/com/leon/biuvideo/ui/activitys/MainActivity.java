@@ -42,9 +42,7 @@ import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
-import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserInfoParser;
-import com.leon.biuvideo.values.Tables;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -476,8 +474,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public String call() {
             // 处理未完成下载的媒体资源
-            SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.DownloadDetailsForVideo);
-            DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = (DownloadRecordsDatabaseUtils) sqLiteHelperFactory.getInstance();
+            DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = new DownloadRecordsDatabaseUtils(getApplicationContext());
             downloadRecordsDatabaseUtils.setFailed();
 
             // 删除未完成下载的媒体资源文件
