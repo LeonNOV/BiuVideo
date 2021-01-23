@@ -10,7 +10,7 @@ android {
         applicationId "com.leon.biuvideo"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 2
+        versionCode 3
         versionName "2.6.1-beta"
         multiDexEnabled true
 
