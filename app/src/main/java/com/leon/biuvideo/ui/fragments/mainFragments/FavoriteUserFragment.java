@@ -145,7 +145,7 @@ public class FavoriteUserFragment extends BaseFragment {
      */
     public void initBroadcast() {
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("cleanUserFavoriteUp");
+        intentFilter.addAction("updateFavoriteUp");
 
         DataChangeReceiver dataChangeReceiver = new DataChangeReceiver();
 
@@ -157,7 +157,7 @@ public class FavoriteUserFragment extends BaseFragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals("cleanUserFavoriteUp")) {
+            if (intent.getAction().equals("updateFavoriteUp")) {
                 initValues();
             }
         }

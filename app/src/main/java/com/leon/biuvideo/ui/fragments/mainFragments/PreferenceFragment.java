@@ -113,6 +113,7 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                                     Snackbar.make(view, "导入成功0个，导入失败0个", Snackbar.LENGTH_LONG).show();
                                 } else {
                                     Snackbar.make(view, "导入成功" + importMap.get("successNum") + "个，导入失败" + importMap.get("failNum") + "个", Snackbar.LENGTH_LONG).show();
+                                    sendLocalBroadcast();
                                 }
                             }
                         }).start();
@@ -237,7 +238,7 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
      */
     private void sendLocalBroadcast() {
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
-        Intent intent = new Intent("cleanUserFavoriteUp");
+        Intent intent = new Intent("updateFavoriteUp");
         localBroadcastManager.sendBroadcast(intent);
     }
 }
