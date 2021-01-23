@@ -1,39 +1,40 @@
 package com.leon.biuvideo.ui.fragments.searchResultFragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.os.Message;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.UserFragmentAdapters.UserArticleAdapter;
+import com.leon.biuvideo.adapters.userFragmentAdapters.UserArticleAdapter;
 import com.leon.biuvideo.beans.articleBeans.Article;
-import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
+import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.values.OrderType;
+import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.ArticleParser;
+import com.leon.biuvideo.values.SortType;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.FutureTask;
 
 /**
  * SearchResultActivity-article Fragment
  */
-public class ArticleResultFragment extends Fragment {
+public class ArticleResultFragment extends BaseLazyFragment {
+    private LinearLayout smart_refresh_layout_fragment_linearLayout;
     private SmartRefreshLayout search_result_smartRefresh;
     private RecyclerView search_result_recyclerView;
     private TextView search_result_no_data;
@@ -44,16 +45,14 @@ public class ArticleResultFragment extends Fragment {
     private int currentCount;
 
     private ArticleParser articleParser;
-    private List<Article> articles;
+    private List<Article> articleList;
 
-    private Context context;
     private UserArticleAdapter userArticleAdapter;
     private LinearLayoutManager linearLayoutManager;
 
     private boolean dataState = true;
     private int pageNum = 1;
-
-    private View view;
+    private Handler handler;
 
     public ArticleResultFragment() {
     }
@@ -62,46 +61,66 @@ public class ArticleResultFragment extends Fragment {
         this.keyword = keyword;
     }
 
-    public static ArticleResultFragment getInstance(String keyword) {
-        ArticleResultFragment articleResultFragment = new ArticleResultFragment(keyword);
-
-        Bundle bundle = new Bundle();
-        bundle.putString("keyword", keyword);
-        articleResultFragment.setArguments(bundle);
-
-        return articleResultFragment;
-    }
-
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.search_result_fragment, container, false);
-
-        initView();
-        initVisibility();
-
-        return view;
+    public int setLayout() {
+        return R.layout.smart_refresh_layout_fragment;
     }
 
-    /**
-     * 初始化控件
-     */
-    private void initView() {
-        context = getContext();
-
-        search_result_no_data = view.findViewById(R.id.search_result_no_data);
-        search_result_smartRefresh = view.findViewById(R.id.search_result_smartRefresh);
-        search_result_recyclerView = view.findViewById(R.id.search_result_recyclerView);
+    @Override
+    public void initView(BindingUtils bindingUtils) {
+        smart_refresh_layout_fragment_linearLayout = findView(R.id.smart_refresh_layout_fragment_linearLayout);
+        search_result_no_data = findView(R.id.smart_refresh_layout_fragment_no_data);
+        search_result_smartRefresh = findView(R.id.smart_refresh_layout_fragment_smartRefresh);
+        search_result_recyclerView = findView(R.id.smart_refresh_layout_fragment_recyclerView);
 
         //关闭下拉刷新
         search_result_smartRefresh.setEnableRefresh(false);
     }
 
-    /**
-     * 初始化控件Visibility
-     */
-    private void initVisibility() {
-        if (getDataState()) {
+    @Override
+    public void loadData() {
+        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+            @Override
+            public void load() {
+                if (articleParser == null) {
+                    articleParser = new ArticleParser(context);
+                }
+                count = articleParser.getSearchArticleCount(keyword);
+
+                Message message = handler.obtainMessage();
+                message.what = 0;
+
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("loadState", true);
+
+                message.setData(bundle);
+                handler.sendMessage(message);
+            }
+        };
+
+        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadArticleResult");
+
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                boolean loadState = msg.getData().getBoolean("loadState");
+                smart_refresh_layout_fragment_linearLayout.setVisibility(View.GONE);
+
+                if (loadState) {
+                    initValues();
+                }
+
+                simpleThreadPool.cancelTask("loadArticleResult");
+
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void initValues() {
+        if (count == 0) {
             //设置无数据提示界面
             search_result_no_data.setVisibility(View.VISIBLE);
             search_result_recyclerView.setVisibility(View.GONE);
@@ -111,15 +130,11 @@ public class ArticleResultFragment extends Fragment {
             search_result_recyclerView.setVisibility(View.VISIBLE);
             search_result_smartRefresh.setEnabled(true);
 
-            if (articleParser == null) {
-                articleParser = new ArticleParser();
-            }
+            articleList = articleParser.articleParse(keyword, pageNum, SortType.DEFAULT);
 
-            List<Article> newArticles = articleParser.articleParse(keyword, pageNum, OrderType.DEFAULT);
+            currentCount += articleList.size();
 
-            currentCount += newArticles.size();
-
-            if (count == newArticles.size()) {
+            if (count == articleList.size()) {
                 dataState = false;
 
                 search_result_smartRefresh.setEnabled(false);
@@ -127,10 +142,10 @@ public class ArticleResultFragment extends Fragment {
 
             if (linearLayoutManager == null || userArticleAdapter == null) {
                 linearLayoutManager = new LinearLayoutManager(context);
-                userArticleAdapter = new UserArticleAdapter(newArticles, context);
+                userArticleAdapter = new UserArticleAdapter(articleList, context);
             }
 
-            articles = newArticles;
+            userArticleAdapter.append(articleList);
 
             initAttr();
         }
@@ -143,6 +158,8 @@ public class ArticleResultFragment extends Fragment {
         search_result_recyclerView.setLayoutManager(linearLayoutManager);
         search_result_recyclerView.setAdapter(userArticleAdapter);
 
+        Handler handler = new Handler();
+
         //添加加载更多监听事件
         search_result_smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
@@ -152,7 +169,7 @@ public class ArticleResultFragment extends Fragment {
                 boolean isHaveNetwork = InternetUtils.checkNetwork(context);
 
                 if (!isHaveNetwork) {
-                    Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
 
                     //结束加载更多动画
                     search_result_smartRefresh.finishLoadMore();
@@ -163,23 +180,21 @@ public class ArticleResultFragment extends Fragment {
                 if (dataState) {
                     pageNum++;
 
-                    new Handler().postDelayed(new Runnable() {
+                    handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             //获取新数据
-                            List<Article> addOns = getArticles(pageNum);
-
-                            Log.d(Fuck.blue, "成功获取了第" + pageNum + "页的" + addOns.size() + "条数据");
+                            getArticles();
 
                             //添加新数据
-                            userArticleAdapter.append(addOns);
+                            userArticleAdapter.append(articleList);
                         }
                     }, 1000);
                 } else {
                     //关闭上滑刷新
                     search_result_smartRefresh.setEnabled(false);
 
-                    Toast.makeText(context, "只有这么多数据了~~~", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view, R.string.isDone, Snackbar.LENGTH_SHORT).show();
                 }
 
                 //结束加载更多动画
@@ -189,34 +204,19 @@ public class ArticleResultFragment extends Fragment {
     }
 
     /**
-     * 获取数据状态，同时对总数量进行赋值
-     *
-     * @return  返回是否等于0
-     */
-    private boolean getDataState() {
-        //获取结果总数，最大为1000， 最小为0
-        count = ArticleParser.getSearchArticleCount(keyword);
-        return count == 0;
-    }
-
-    /**
      * 获取下一页数据
-     *
-     * @param pageNum   页码
-     * @return  返回下一页数据
      */
-    private List<Article> getArticles(int pageNum) {
-        List<Article> articles = articleParser.articleParse(keyword, pageNum, OrderType.DEFAULT);
+    private void getArticles() {
+        articleList = articleParser.articleParse(keyword, pageNum, SortType.DEFAULT);
 
         //记录获取的总数
-        currentCount += articles.size();
+        currentCount += articleList.size();
 
         //判断是否已获取完所有的数据
-        if (articles.size() < 20 || currentCount == count) {
+        if (currentCount == count) {
             dataState = false;
+            search_result_smartRefresh.setEnabled(false);
         }
-
-        return articles;
     }
 
     /**
@@ -230,11 +230,13 @@ public class ArticleResultFragment extends Fragment {
         this.currentCount = 0;
         this.dataState = true;
 
-        initVisibility();
+        // 将isLoaded状态设置为“未加载状态”
+        this.isLoaded = false;
+        onResume();
+        this.smart_refresh_layout_fragment_linearLayout.setVisibility(View.VISIBLE);
 
-        ArrayList<Article> temp = new ArrayList<>(this.articles);
-
-        userArticleAdapter.removeAll();
-        userArticleAdapter.append(temp);
+        if (articleList != null) {
+            userArticleAdapter.removeAll();
+        }
     }
 }

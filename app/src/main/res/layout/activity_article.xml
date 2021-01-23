@@ -1,80 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/article_linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
+    android:background="@color/white"
+    android:orientation="vertical"
     tools:context=".ui.activitys.ArticleActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/article_toolBar"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/topBar_height"
         android:background="@color/bilibili_pink">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/article_imageView_back"
+            android:layout_width="@dimen/small_view_w_h"
+            android:layout_height="@dimen/small_view_w_h"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:padding="@dimen/small_view_padding_10dp"
+            android:src="@drawable/icon_back" />
 
-            <ImageView
-                android:id="@+id/article_imageView_back"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:background="?selectableItemBackgroundBorderless"
-                android:padding="5dp"
-                android:src="@drawable/icon_back"
-                app:tint="@color/normal" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@id/article_imageView_back"
+            android:orientation="horizontal">
 
-            <LinearLayout
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/article_imageView_face"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:src="@color/gray"
+                app:civ_border_width="1dp" />
+
+            <TextView
+                android:id="@+id/article_textView_author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="30dp"
-                android:layout_toEndOf="@id/article_imageView_back"
-                android:orientation="horizontal">
+                android:layout_gravity="center"
+                android:layout_marginStart="15dp"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/article_imageView_face"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:src="@drawable/ic_launcher_background"
-                    app:civ_border_width="1dp" />
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/article_textView_author"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="15dp"
-                    android:text="Name"
-                    android:textColor="@color/normal"
-                    android:textSize="18sp" />
+        <ImageView
+            android:id="@+id/article_imageView_more"
+            android:layout_width="@dimen/small_view_w_h"
+            android:layout_height="@dimen/small_view_w_h"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:padding="@dimen/small_view_padding_10dp"
+            android:src="@drawable/more_icon" />
 
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/article_imageView_more"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:background="?selectableItemBackgroundBorderless"
-                android:padding="5dp"
-                android:src="@drawable/more_icon"
-                app:tint="@color/normal" />
-
-        </RelativeLayout>
-
-    </androidx.appcompat.widget.Toolbar>
+    </RelativeLayout>
 
     <ScrollView
-        android:id="@+id/article_relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/article_toolBar">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -87,8 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle"
-                android:textColor="@color/normal"
+                android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -102,7 +92,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="单机游戏"
                     android:textColor="@color/light_gray"
                     android:textSize="12sp" />
 
@@ -111,7 +100,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="2020-11-08-16:35"
                     android:textColor="@color/light_gray"
                     android:textSize="12sp" />
 
@@ -120,7 +108,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="16.3万阅读"
                     android:textColor="@color/light_gray"
                     android:textSize="12sp" />
 
@@ -129,7 +116,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="915点赞"
                     android:textColor="@color/light_gray"
                     android:textSize="12sp" />
 
@@ -138,7 +124,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="436评论"
                     android:textColor="@color/light_gray"
                     android:textSize="12sp" />
 
@@ -150,10 +135,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:background="#fff" />
+                android:background="@color/white" />
 
         </LinearLayout>
 
     </ScrollView>
 
-</RelativeLayout>
+</LinearLayout>

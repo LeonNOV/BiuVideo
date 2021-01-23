@@ -5,11 +5,11 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Environment;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.leon.biuvideo.ui.dialogs.WarnDialog;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -52,26 +52,15 @@ public class FileUtils {
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             //如果应用之前请求过此权限但用户拒绝了请求，此方法将返回 true
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-                //创建对话框
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setTitle("读写权限");
-                builder.setMessage("由于保存资源文件时需要用到\"读写权限\"，否则将无法正常使用");
-                builder.setPositiveButton("开启", new DialogInterface.OnClickListener() {
+                WarnDialog warnDialog = new WarnDialog(activity, "读写权限", "由于保存资源文件时需要用到\"读写权限\"，否则将无法正常使用");
+                warnDialog.setOnConfirmListener(new WarnDialog.OnConfirmListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onConfirm() {
+                        warnDialog.dismiss();
                         ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1024);
                     }
                 });
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(activity.getApplicationContext(), "请自行开启对应权限，否则应用将无法正常使用", Toast.LENGTH_SHORT).show();
-                        builder.create().dismiss();
-                    }
-                });
-
-                builder.create().show();
+                warnDialog.show();
             } else {
                 //申请读写权限
                 ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1024);

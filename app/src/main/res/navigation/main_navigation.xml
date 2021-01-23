@@ -1,33 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_navigation"
-    app:startDestination="@id/homeFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/nav_homeFragment">
 
     <fragment
-        android:id="@+id/homeFragment"
+        android:id="@+id/nav_homeFragment"
         android:name="com.leon.biuvideo.ui.fragments.mainFragments.HomeFragment"
-        android:label="HomeFragment">
-        <action
-            android:id="@+id/action_homeFragment_to_favoriteFragment"
-            app:destination="@id/favoriteFragment" />
-    </fragment>
+        android:label="HomeFragment"
+        tools:layout="@layout/main_fragment_home" />
     <fragment
-        android:id="@+id/favoriteFragment"
-        android:name="com.leon.biuvideo.ui.fragments.mainFragments.FavoriteFragment"
-        android:label="FavoriteFragment">
-        <action
-            android:id="@+id/action_favoriteFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-        <action
-            android:id="@+id/action_favoriteFragment_to_playListFragment"
-            app:destination="@id/playListFragment" />
-    </fragment>
-
+        android:id="@+id/nav_favoriteFragment"
+        android:name="com.leon.biuvideo.ui.fragments.mainFragments.FavoriteUserFragment"
+        android:label="FavoriteFragment"
+        tools:layout="@layout/main_fragment_recycler_view" />
     <fragment
-        android:id="@+id/playListFragment"
-        android:name="com.leon.biuvideo.ui.fragments.mainFragments.PlayListFragment"
-        android:label="PlayListFragment">
-
-    </fragment>
+        android:id="@+id/nav_playListFragment"
+        android:name="com.leon.biuvideo.ui.fragments.mainFragments.LocalOrderFragment"
+        android:label="PlayListFragment"
+        tools:layout="@layout/main_fragment_local_order" />
+    <fragment
+        android:id="@+id/nav_preferenceFragment"
+        android:name="com.leon.biuvideo.ui.fragments.mainFragments.PreferenceFragment"
+        android:label="PreferenceFragment"
+        tools:layout="@layout/fragment_preference" />
+    <fragment
+        android:id="@+id/nav_historyFragment"
+        android:name="com.leon.biuvideo.ui.fragments.mainFragments.HistoryFragment"
+        android:label="HistoryFragment"
+        tools:layout="@layout/main_fragment_history" />
+    <fragment
+        android:id="@+id/nav_orderFragment"
+        android:name="com.leon.biuvideo.ui.fragments.mainFragments.OrderFragment"
+        android:label="OrderFragment"
+        tools:layout="@layout/main_fragment_order" />
 </navigation>

@@ -2,25 +2,26 @@ package com.leon.biuvideo.ui.dialogs;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.utils.HeroImages;
 
-public class SetHeroDialog extends AlertDialog implements View.OnClickListener, AdapterView.OnItemSelectedListener, RadioGroup.OnCheckedChangeListener {
-    private RadioGroup set_hero_radio_group;
-    private RadioButton set_hero_radioButton_auto, set_hero_radioButton_custom;
+/**
+ * 设置主界面‘Hero’弹窗
+ */
+public class SetHeroDialog extends AlertDialog implements View.OnClickListener, AdapterView.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener {
+    private SwitchCompat set_hero_dialog_switch;
     private Spinner set_hero_spinner;
     private ImageView set_hero_imageView_preview;
 
@@ -46,21 +47,18 @@ public class SetHeroDialog extends AlertDialog implements View.OnClickListener, 
     }
 
     private void initView() {
-        set_hero_radio_group = findViewById(R.id.set_hero_radio_group);
-        set_hero_radio_group.setOnCheckedChangeListener(this);
+        set_hero_dialog_switch = findViewById(R.id.set_hero_dialog_switch);
+        set_hero_dialog_switch.setOnCheckedChangeListener(this);
 
-        set_hero_radioButton_auto = findViewById(R.id.set_hero_radioButton_auto);
-        set_hero_radioButton_custom = findViewById(R.id.set_hero_radioButton_custom);
-
-        set_hero_spinner = findViewById(R.id.set_hero_spinner);
+        set_hero_spinner = findViewById(R.id.set_hero_dialog_spinner);
         set_hero_spinner.setOnItemSelectedListener(this);
 
-        set_hero_imageView_preview = findViewById(R.id.set_hero_imageView_preview);
+        set_hero_imageView_preview = findViewById(R.id.set_hero_dialog_imageView_preview);
 
-        TextView set_hero_textView_save = findViewById(R.id.set_hero_textView_save);
+        TextView set_hero_textView_save = findViewById(R.id.set_hero_dialog_textView_save);
         set_hero_textView_save.setOnClickListener(this);
 
-        TextView set_hero_textView_close = findViewById(R.id.set_hero_textView_close);
+        TextView set_hero_textView_close = findViewById(R.id.set_hero_dialog_textView_close);
         set_hero_textView_close.setOnClickListener(this);
     }
 
@@ -74,12 +72,12 @@ public class SetHeroDialog extends AlertDialog implements View.OnClickListener, 
 
         //判断是否为自动更换
         if (isAutoChange) {
-            set_hero_radioButton_auto.setChecked(true);
+            set_hero_dialog_switch.setChecked(true);
 
             //设置上一次设置的heroIndex
             set_hero_spinner.setEnabled(false);
         } else {
-            set_hero_radioButton_custom.setChecked(true);
+            set_hero_dialog_switch.setChecked(true);
 
             //设置上一次设置的heroIndex
             set_hero_spinner.setEnabled(true);
@@ -92,7 +90,7 @@ public class SetHeroDialog extends AlertDialog implements View.OnClickListener, 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.set_hero_textView_save:
+            case R.id.set_hero_dialog_textView_save:
                 //保存当前选项
                 SharedPreferences initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = initValues.edit();
@@ -102,7 +100,7 @@ public class SetHeroDialog extends AlertDialog implements View.OnClickListener, 
 
                 dismiss();
                 break;
-            case R.id.set_hero_textView_close:
+            case R.id.set_hero_dialog_textView_close:
                 dismiss();
                 break;
             default:
@@ -111,25 +109,9 @@ public class SetHeroDialog extends AlertDialog implements View.OnClickListener, 
     }
 
     @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-        switch (checkedId) {
-            case R.id.set_hero_radioButton_auto:
-                isAutoChange = true;
-                set_hero_radioButton_auto.setTypeface(Typeface.DEFAULT_BOLD);
-                set_hero_radioButton_custom.setTypeface(Typeface.DEFAULT);
-                set_hero_spinner.setEnabled(false);
-
-                break;
-            case R.id.set_hero_radioButton_custom:
-                isAutoChange = false;
-                set_hero_radioButton_auto.setTypeface(Typeface.DEFAULT);
-                set_hero_radioButton_custom.setTypeface(Typeface.DEFAULT_BOLD);
-                set_hero_spinner.setEnabled(true);
-
-                break;
-            default:
-                break;
-        }
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        isAutoChange = isChecked;
+        set_hero_spinner.setEnabled(!isChecked);
     }
 
     @Override

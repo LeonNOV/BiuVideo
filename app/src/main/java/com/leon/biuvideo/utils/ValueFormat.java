@@ -1,8 +1,9 @@
 package com.leon.biuvideo.utils;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class ValueFormat {
     /**
@@ -37,8 +38,11 @@ public class ValueFormat {
         int minute = length / 60;
         int second = length % 60;
 
-        String minuteStr = minute < 10 ? "0" + minute : String.valueOf(minute);
-        String secondStr = second < 10 ? "0" + second : String.valueOf(second);
+        String minuteStr = String.valueOf(minute);
+        String secondStr = String.valueOf(second);
+
+        minuteStr = minuteStr.length() < 2 ? "0" + minuteStr : minuteStr;
+        secondStr = secondStr.length() < 2 ? "0" + secondStr : secondStr;
 
         return minuteStr + ":" + secondStr;
     }
@@ -49,7 +53,7 @@ public class ValueFormat {
      * @param size  需要转换的大小(单位：byte)
      * @return  返回转换后的数据
      */
-    public static String sizeFormat(long size) {
+    public static String sizeFormat(long size, boolean withSuffix) {
         DecimalFormat decimalFormat = new DecimalFormat("#.00");
 
         if (size > 1024) {
@@ -65,18 +69,50 @@ public class ValueFormat {
                     if (gb > 1024) {
                         double tb = mb / 1024;
 
-                        return decimalFormat.format(tb) + "TB";
+                        if (withSuffix)
+                            return decimalFormat.format(tb) + "TB";
+
+                        return decimalFormat.format(tb);
                     }
 
-                    return decimalFormat.format(gb) + "GB";
+                    if (withSuffix)
+                        return decimalFormat.format(gb) + "GB";
+                    return decimalFormat.format(gb);
                 }
 
-                return decimalFormat.format(mb) + "MB";
+                if (withSuffix)
+                    return decimalFormat.format(mb) + "MB";
+                return decimalFormat.format(mb);
             }
 
-            return decimalFormat.format(kb) + "KB";
+            if (withSuffix)
+                return decimalFormat.format(kb) + "KB";
+            return decimalFormat.format(kb);
         } else {
-            return size + "B";
+            if (withSuffix)
+                return size + "B";
+            return String.valueOf(size);
         }
+    }
+
+    /**
+     * 格式化时间
+     *
+     * @param time  毫秒值/秒值
+     * @param isSecond  是否为秒值
+     * @param isMonth   是否只取月份（年/月/日）
+     * @param delimiter     分隔符号
+     * @return  返回格式化后的时间
+     */
+    public static String generateTime(long time, boolean isSecond, boolean isMonth, String delimiter) {
+        String format = "yyyy" + delimiter + "MM" + delimiter + "dd HH:mm";
+        Date date = new Date(isSecond ? time * 1000 : time);
+
+        if (isMonth) {
+            format = "yyyy" + delimiter + "MM" + delimiter + "dd";
+        }
+
+        return new SimpleDateFormat(format, Locale.CHINA).format(date);
+
     }
 }

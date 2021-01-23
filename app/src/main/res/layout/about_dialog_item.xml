@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:text="开源许可说明"
-        android:textColor="@color/normal"
+        android:textColor="@color/black"
         android:textSize="17sp" />
 
 </LinearLayout>

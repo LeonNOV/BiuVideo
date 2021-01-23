@@ -7,7 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
+/**
+ * 圆角弹窗(适用于单文字条目展示)
+ */
 public class RoundPopupWindow extends PopupWindow {
     public final static int SHOW_AS_DROP_DOWN = 1;
     public final static int SHOW_AS_LEFT = 2;
@@ -54,6 +58,17 @@ public class RoundPopupWindow extends PopupWindow {
         popupView.findViewById(viewId).setOnClickListener(onClickListener);
 
         return this;
+    }
+
+    public RoundPopupWindow setText(int viewId, String text) {
+        TextView textView = popupView.findViewById(viewId);
+        textView.setText(text);
+
+        return this;
+    }
+
+    public View getPopupView() {
+        return popupView;
     }
 
     /**

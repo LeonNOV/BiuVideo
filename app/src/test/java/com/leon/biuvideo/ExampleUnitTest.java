@@ -1,21 +1,9 @@
 package com.leon.biuvideo;
 
-import com.leon.biuvideo.beans.articleBeans.Article;
-import com.leon.biuvideo.beans.upMasterBean.Audio;
-import com.leon.biuvideo.beans.upMasterBean.Picture;
-import com.leon.biuvideo.beans.upMasterBean.Video;
 import com.leon.biuvideo.utils.IDUtils;
-import com.leon.biuvideo.values.OrderType;
-import com.leon.biuvideo.values.Paths;
-import com.leon.biuvideo.utils.ValueFormat;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.AudioParseUtils;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.PictureParseUtils;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.VideoParseUtils;
-import com.leon.biuvideo.utils.parseDataUtils.searchParsers.ArticleParser;
+import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.FollowParser;
 
 import org.junit.Test;
-
-import java.util.List;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -24,52 +12,8 @@ import java.util.List;
  */
 public class ExampleUnitTest {
 
-    //video接口测试
     @Test
-    public void video() {
-        List<Video> videos = VideoParseUtils.parseVideo(49405324, 1);
-
-        System.out.println("page1count:" + videos.size());
-
-        for (Video video : videos) {
-            System.out.println(video);
-        }
-    }
-
-    //audio接口测试
-    @Test
-    public void audio() {
-        List<Audio> audio = AudioParseUtils.parseAudio(49405324, 1);
-
-        System.out.println("page1count:" + audio.size());
-
-        for (Audio audio : audio) {
-            System.out.println(audio);
-        }
-    }
-
-    //picture接口测试
-    @Test
-    public void picture() {
-        List<Picture> pictures = PictureParseUtils.parsePicture(49405324, 0);
-
-        System.out.println("page0count:" + pictures.size());
-
-        for (Picture picture : pictures) {
-            System.out.println(picture);
-        }
-    }
-
-    //avid转bvid测试
-    @Test
-    public void avidTobvid() {
-//        String s1 = IDUtils.avidToBvid(170001);
-//        String s2 = IDUtils.avidToBvid(455017605);
-//        String s3 = IDUtils.avidToBvid(882584971);
-
-//        System.out.println(s1);
-//        System.out.println(s2);
-//        System.out.println(s3);
+    public void test() {
     }
 
     //解析输入的内容
@@ -129,42 +73,5 @@ public class ExampleUnitTest {
         bp_video_offset_49405324=457166987692434151;
         bfe_id=393becc67cde8e85697ff111d724b3c8
         */
-    }
-
-    @Test
-    public void numTest() {
-        //12345.6万
-        String s = ValueFormat.generateCN(12345678);
-        System.out.println(s);
-    }
-
-    //网页源码获取测试
-    @Test
-    public void HtmlSource() {
-        String path = Paths.articleWebPage + "8107744";
-    }
-
-    //size转换测试
-    @Test
-    public void sizeFormat() {
-        //4653470B
-
-        //2,719,458,939
-//        long size = 2719458939L;
-
-        long size = 465347 * 1024 * 10;
-
-        String s = ValueFormat.sizeFormat(size);
-
-        System.out.println(s);
-    }
-
-
-    //article details的获取
-    @Test
-    public void articlesForDetails() {
-        ArticleParser articleParser = new ArticleParser();
-
-        List<Article> articles = articleParser.articleParse("马保国", 1, OrderType.DEFAULT);
     }
 }

@@ -1,12 +1,15 @@
 package com.leon.biuvideo.utils.parseDataUtils.searchParsers;
 
+import android.content.Context;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.upMasterBean.Video;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.values.OrderType;
+import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.Paths;
 import com.leon.biuvideo.values.SearchType;
+import com.leon.biuvideo.values.SortType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,27 +22,39 @@ import okhttp3.Headers;
  * 解析搜索结果-视频数据
  */
 public class VideoParser {
+    private final Map<String, String> requestHeader;
+
+    public VideoParser(Context context) {
+        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
+        for (Map.Entry<String, String> entry : this.requestHeader.entrySet()) {
+            if (entry.getKey().equals("Referer")) {
+                entry.setValue("https://search.bilibili.com");
+                break;
+            }
+        }
+    }
+
     /**
      * 解析视频数据
      *
      * @param keyword   关键字
      * @param pn    页码
-     * @param orderType 排序方式
+     * @param sortType 排序方式
      * @return  返回视频数据
      */
-    public List<Video> videoParse(String keyword, int pn, OrderType orderType) {
+    public List<Video> videoParse(String keyword, int pn, SortType sortType) {
         Map<String, String> params = new HashMap<>();
         params.put("keyword", keyword);
         params.put("search_type", SearchType.VIDEO.value);
         params.put("page", String.valueOf(pn));
-        params.put("order", orderType.value);
+        params.put("order", sortType.value);
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
+        JSONObject responseObject = HttpUtils.getResponse(Paths.search, Headers.of(requestHeader), params);
         JSONObject data = responseObject.getJSONObject("data");
 
         List<Video> videos = new ArrayList<>();
         if (data != null) {
-            videos = parseData(data, keyword);
+            videos = parseData(data);
         }
 
         return videos;
@@ -51,9 +66,7 @@ public class VideoParser {
      * @param data  JSONObject对象
      * @return  返回解析结果
      */
-    private List<Video> parseData(JSONObject data, String keyword) {
-        String oldStr = "<em class=\"keyword\">" + keyword + "</em>";
-
+    private List<Video> parseData(JSONObject data) {
         JSONArray result = data.getJSONArray("result");
 
         List<Video> videos;
@@ -77,7 +90,7 @@ public class VideoParser {
                 video.bvid = jsonObject.getString("bvid");
 
                 //获取标题
-                video.title = jsonObject.getString("title").replaceAll(oldStr, keyword);
+                video.title = jsonObject.getString("title").replaceAll("<em class=\"keyword\">", "").replaceAll("</em>", "");
 
                 //获取视频说明
                 video.description = jsonObject.getString("description");
@@ -112,16 +125,16 @@ public class VideoParser {
      * @param keyword   关键字
      * @return  返回搜索结果个数
      */
-    public static int getSearchVideoCount(String keyword) {
+    public int getSearchVideoCount(String keyword) {
         int count = -1;
 
         Map<String, String> params = new HashMap<>();
         params.put("keyword", keyword);
         params.put("search_type", SearchType.VIDEO.value);
         params.put("page", "1");
-        params.put("order", OrderType.DEFAULT.value);
+        params.put("order", SortType.DEFAULT.value);
 
-        HttpUtils httpUtils = new HttpUtils(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
+        HttpUtils httpUtils = new HttpUtils(Paths.search, Headers.of(requestHeader), params);
         String response = httpUtils.getData();
 
         JSONObject jsonObject = JSONObject.parseObject(response);
@@ -140,14 +153,14 @@ public class VideoParser {
      * @param keyword   搜索关键词
      * @return  返回是否匹配
      */
-    public static boolean dataState(String keyword) {
+    public boolean dataState(String keyword) {
         Map<String, String> params = new HashMap<>();
         params.put("keyword", keyword);
         params.put("search_type", SearchType.VIDEO.value);
         params.put("page", "1");
-        params.put("order", OrderType.DEFAULT.value);
+        params.put("order", SortType.DEFAULT.value);
 
-        HttpUtils httpUtils = new HttpUtils(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
+        HttpUtils httpUtils = new HttpUtils(Paths.search, Headers.of(requestHeader), params);
         String response = httpUtils.getData();
 
         JSONObject jsonObject = JSONObject.parseObject(response);

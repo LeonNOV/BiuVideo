@@ -3,60 +3,69 @@ package com.leon.biuvideo.ui.activitys;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.ViewPageAdapter;
+import com.leon.biuvideo.adapters.FragmentViewPagerAdapter;
 import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.beans.upMasterBean.UserInfo;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.fragments.userFragments.UserArticlesFragment;
-import com.leon.biuvideo.ui.fragments.userFragments.UserAudioListFragment;
-import com.leon.biuvideo.ui.fragments.userFragments.UserPictureListFragment;
-import com.leon.biuvideo.ui.fragments.userFragments.UserVideoListFragment;
+import com.leon.biuvideo.ui.fragments.userFragments.UserAudiosFragment;
+import com.leon.biuvideo.ui.fragments.userFragments.UserPicturesFragment;
+import com.leon.biuvideo.ui.fragments.userFragments.UserVideosFragment;
+import com.leon.biuvideo.utils.SimpleThreadPool;
+import com.leon.biuvideo.utils.ViewUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
-import com.leon.biuvideo.utils.dataBaseUtils.FavoriteDatabaseUtils;
-import com.leon.biuvideo.utils.dataBaseUtils.SQLiteHelperFactory;
-import com.leon.biuvideo.utils.dataBaseUtils.Tables;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UserInfoParseUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UserInfoParser;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.FutureTask;
 
 /**
  * 用户界面activity
  * 由于用户粉丝数、获赞数和观看数的获取需要使用cookie获取，所以暂不添加该三项
  */
 public class UserActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
-    private ImageView up_imageView_cover, up_imageView_back;
+    private ImageView up_imageView_cover;
     private CircleImageView up_circleImageView_face;
     private TextView up_textView_name;
     private ImageView up_imageView_favoriteIconState;
     private TextView up_textView_favoriteStrState;
     private ExpandableTextView up_textView_sign;
-    private TextView user_textView_video, user_textView_audio, user_textView_articles, user_textView_picture;
     private ViewPager up_viewPage;
-
-    private ViewPageAdapter viewPageAdapter;
 
     private long mid;
     private UserInfo userInfo;
 
-    private FavoriteDatabaseUtils favoriteDatabaseUtils;
+    private FavoriteUserDatabaseUtils favoriteUserDatabaseUtils;
+
+    private Handler handler;
+    private Map<Integer, TextView> textViewMap;
+    private CoordinatorLayout user_linearLayout;
+    private LoadingDialog loadingDialog;
 
     public UserActivity() {
         super();
@@ -71,15 +80,14 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
         setContentView(R.layout.activity_user);
 
         initView();
-
-        initValue();
     }
 
     //初始化控件
     private void initView() {
+        user_linearLayout = findViewById(R.id.user_linearLayout);
         up_imageView_cover = findViewById(R.id.up_imageView_cover);
 
-        up_imageView_back = findViewById(R.id.up_imageView_back);
+        ImageView up_imageView_back = findViewById(R.id.up_imageView_back);
         up_imageView_back.setOnClickListener(this);
 
         up_circleImageView_face = findViewById(R.id.up_circleImageView_face);
@@ -92,49 +100,86 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         up_textView_sign = findViewById(R.id.up_textView_sign);
 
-        user_textView_video = findViewById(R.id.user_textView_video);
+        textViewMap = new HashMap<>();
+        TextView user_textView_video = findViewById(R.id.user_textView_video);
         user_textView_video.setOnClickListener(this);
+        textViewMap.put(0, user_textView_video);
 
-        user_textView_audio = findViewById(R.id.user_textView_audio);
+        TextView user_textView_audio = findViewById(R.id.user_textView_audio);
         user_textView_audio.setOnClickListener(this);
+        textViewMap.put(1, user_textView_audio);
 
-        user_textView_articles = findViewById(R.id.user_textView_articles);
+        TextView user_textView_articles = findViewById(R.id.user_textView_articles);
         user_textView_articles.setOnClickListener(this);
+        textViewMap.put(2, user_textView_articles);
 
-        user_textView_picture = findViewById(R.id.user_textView_picture);
+        TextView user_textView_picture = findViewById(R.id.user_textView_picture);
         user_textView_picture.setOnClickListener(this);
+        textViewMap.put(3, user_textView_picture);
 
         up_viewPage = findViewById(R.id.up_viewPage);
         up_viewPage.addOnPageChangeListener(this);
         up_viewPage.setOffscreenPageLimit(4);
+
+        loadingDialog = new LoadingDialog(UserActivity.this);
+        loadingDialog.show();
+
+        loadData();
     }
 
     //初始化数据
-    private void initValue() {
-        SQLiteHelperFactory sqLiteHelperFactory = new SQLiteHelperFactory(getApplicationContext(), Tables.FavoriteUp);
-        favoriteDatabaseUtils = (FavoriteDatabaseUtils) sqLiteHelperFactory.getInstance();
+    private void loadData() {
+        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+            @Override
+            public void load() {
+                //获取mid
+                Intent intent = getIntent();
+                mid = intent.getLongExtra("mid", -1);
 
-        //获取mid
-        Intent intent = getIntent();
-        mid = intent.getLongExtra("mid", -1);
+                if (mid == -1) {
+                    Snackbar.make(user_linearLayout, "信息获取失败", Snackbar.LENGTH_SHORT).show();
+                    finish();
+                }
 
-        if (mid == -1) {
-            Toast.makeText(this, "信息获取失败", Toast.LENGTH_SHORT).show();
-            onDestroy();
-        }
+                UserInfoParser userInfoParser = new UserInfoParser(getApplicationContext());
+                userInfo = userInfoParser.parseUpInfo(mid);
 
-        //更新visit
-        favoriteDatabaseUtils.updateVisit(mid);
+                favoriteUserDatabaseUtils = new FavoriteUserDatabaseUtils(getApplicationContext());
 
-        setValue(mid);
-        initViewPage();
+                //更新visit
+                favoriteUserDatabaseUtils.updateVisit(mid);
 
+                Message message = handler.obtainMessage();
+                message.what = 0;
+
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("loadState", true);
+
+                message.setData(bundle);
+                handler.sendMessage(message);
+            }
+        };
+
+        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadUserInfo");
+
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                boolean loadState = msg.getData().getBoolean("loadState");
+
+                if (loadState) {
+                    initValue();
+                }
+                loadingDialog.dismiss();
+
+                return true;
+            }
+        });
     }
 
     //设置控件的数据
-    private void setValue(long mid) {
-        userInfo = UserInfoParseUtils.parseUpInfo(mid);
-
+    private void initValue() {
         //设置顶部图片
         Glide.with(getApplicationContext()).load(userInfo.topPhoto).into(up_imageView_cover);
 
@@ -148,7 +193,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
         up_textView_sign.setText(userInfo.sign);
 
         //获取关注状态
-        boolean favorite_state = favoriteDatabaseUtils.queryFavoriteState(mid);
+        boolean favorite_state = favoriteUserDatabaseUtils.queryFavoriteState(mid);
 
         if (favorite_state) {
             up_imageView_favoriteIconState.setImageResource(R.drawable.favorite);
@@ -157,6 +202,8 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
             up_imageView_favoriteIconState.setImageResource(R.drawable.no_favorite);
             up_textView_favoriteStrState.setText("未关注");
         }
+
+        initViewPage();
     }
 
     //设置ViewPage
@@ -164,58 +211,20 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
         List<Fragment> fragments = new ArrayList<>();
 
         //获取视频数据
-        fragments.add(new UserVideoListFragment(mid, getApplicationContext()));
+        fragments.add(new UserVideosFragment(mid));
 
         //获取音频数据
-        fragments.add(new UserAudioListFragment(mid, getApplicationContext()));
+        fragments.add(new UserAudiosFragment(mid));
 
         //获取文章数据
-        fragments.add(new UserArticlesFragment(mid, getApplicationContext()));
+        fragments.add(new UserArticlesFragment(mid));
 
         //获取相簿数据
-        fragments.add(new UserPictureListFragment(mid, getApplicationContext()));
+        fragments.add(new UserPicturesFragment(mid));
 
-        viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
-        up_viewPage.setAdapter(viewPageAdapter);
-    }
+        FragmentViewPagerAdapter fragmentViewPagerAdapter = new FragmentViewPagerAdapter(getSupportFragmentManager(), fragments);
 
-    @Override
-    public void onPageSelected(int position) {
-        int point_bilibili_pink = R.drawable.shape_bilibili_pink;
-        int point_bilibili_pink_lite = R.drawable.ripple_bilibili_pink_lite;
-
-        switch (position) {
-            case 0:
-                user_textView_video.setBackgroundResource(point_bilibili_pink);
-                user_textView_audio.setBackgroundResource(point_bilibili_pink_lite);
-                user_textView_articles.setBackgroundResource(point_bilibili_pink_lite);
-                user_textView_picture.setBackgroundResource(point_bilibili_pink_lite);
-
-                break;
-            case 1:
-                user_textView_video.setBackgroundResource(point_bilibili_pink_lite);
-                user_textView_audio.setBackgroundResource(point_bilibili_pink);
-                user_textView_articles.setBackgroundResource(point_bilibili_pink_lite);
-                user_textView_picture.setBackgroundResource(point_bilibili_pink_lite);
-
-                break;
-            case 2:
-                user_textView_video.setBackgroundResource(point_bilibili_pink_lite);
-                user_textView_audio.setBackgroundResource(point_bilibili_pink_lite);
-                user_textView_articles.setBackgroundResource(point_bilibili_pink);
-                user_textView_picture.setBackgroundResource(point_bilibili_pink_lite);
-
-                break;
-            case 3:
-                user_textView_video.setBackgroundResource(point_bilibili_pink_lite);
-                user_textView_audio.setBackgroundResource(point_bilibili_pink_lite);
-                user_textView_articles.setBackgroundResource(point_bilibili_pink_lite);
-                user_textView_picture.setBackgroundResource(point_bilibili_pink);
-
-                break;
-            default:
-                break;
-        }
+        up_viewPage.setAdapter(fragmentViewPagerAdapter);
     }
 
     @Override
@@ -225,18 +234,17 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
                 this.finish();
                 break;
             case R.id.up_imageView_favoriteIconState:
-
                 //判断是否存在于数据库中
-                boolean state = favoriteDatabaseUtils.queryFavoriteState(mid);
+                boolean state = favoriteUserDatabaseUtils.queryFavoriteState(mid);
 
                 if (state) {
                     //从数据库中移除
                     up_imageView_favoriteIconState.setImageResource(R.drawable.no_favorite);
                     up_textView_favoriteStrState.setText("未关注");
 
-                    boolean removeState = favoriteDatabaseUtils.removeFavorite(mid);
+                    boolean removeState = favoriteUserDatabaseUtils.removeFavorite(mid);
 
-                    Toast.makeText(this, removeState ? "已取消关注" : "取消关注失败", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(v, removeState ? "已取消关注" : "取消关注失败", Snackbar.LENGTH_SHORT).show();
                 } else {
                     //添加至数据库中
                     up_imageView_favoriteIconState.setImageResource(R.drawable.favorite);
@@ -248,9 +256,9 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
                     favorite.faceUrl = userInfo.face;
                     favorite.name = userInfo.name;
 
-                    boolean addState = favoriteDatabaseUtils.addFavorite(favorite);
+                    boolean addState = favoriteUserDatabaseUtils.addFavorite(favorite);
 
-                    Toast.makeText(this, addState ? "已加入至关注列表" : "关注失败", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(v, addState ? "已加入至关注列表" : "关注失败", Snackbar.LENGTH_SHORT).show();
                 }
 
                 break;
@@ -272,7 +280,13 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
     }
 
     @Override
+    public void onPageSelected(int position) {
+        ViewUtils.changeText(textViewMap, position);
+    }
+
+    @Override
     public void onPageScrollStateChanged(int state) {
+
     }
 
     @Override
@@ -292,16 +306,18 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         if (requestCode == 1024) {
             if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                Toast.makeText(getApplicationContext(), "权限申请成功", Toast.LENGTH_LONG).show();
+                Snackbar.make(user_linearLayout, "权限申请成功", Snackbar.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getApplicationContext(), "权限申请失败", Toast.LENGTH_SHORT).show();
+                Snackbar.make(user_linearLayout, "权限申请失败", Snackbar.LENGTH_SHORT).show();
             }
         }
     }
 
     @Override
     protected void onDestroy() {
+        if (favoriteUserDatabaseUtils != null) {
+            favoriteUserDatabaseUtils.close();
+        }
         super.onDestroy();
-        favoriteDatabaseUtils.close();
     }
 }

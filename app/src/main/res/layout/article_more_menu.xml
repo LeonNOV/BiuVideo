@@ -20,6 +20,12 @@
             android:text="@string/article_screenshot" />
 
         <Button
+            android:id="@+id/article_more_menu_favorite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ripple_button_rectangle"/>
+
+        <Button
             android:id="@+id/article_more_menu_jumpToOrigin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

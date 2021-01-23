@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     app:cardBackgroundColor="#fff"
-    app:cardCornerRadius="15dp">
+    app:cardCornerRadius="@dimen/corner_6dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -22,7 +22,7 @@
             android:gravity="center"
             android:hint="@string/import_follow_editText_hint"
             android:inputType="number"
-            android:textColor="@color/normal"
+            android:textColor="@color/black"
             android:textSize="15sp"
             android:theme="@style/CustomEditText" />
 
@@ -41,7 +41,7 @@
                 android:gravity="center"
                 android:text="@string/import_follow_advanced"
                 android:textSize="12sp"
-                android:textColor="@color/normal"
+                android:textColor="@color/black"
                 android:textStyle="bold" />
 
             <ImageView
@@ -49,7 +49,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginStart="10dp"
-                android:background="?selectableItemBackgroundBorderless"
+                android:background="@drawable/ripple_round_white_bg"
                 android:padding="5dp"
                 android:src="@drawable/icon_back"
                 app:tint="@color/bilibili_pink" />
@@ -75,7 +75,7 @@
                 android:id="@+id/import_follow_editText_cookie"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/shape_feed_back"
+                android:background="@drawable/round_feed_back_bg"
                 android:ems="17"
                 android:gravity="start|top"
                 android:hint="@string/import_follow_editText_cookie_hint"
@@ -98,17 +98,18 @@
                 android:id="@+id/import_follow_button_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_margin="10dp"
-                android:background="@drawable/shape_bilibili_pink_lite"
-                android:text="@string/import_follow_button_cancel" />
+                android:background="@drawable/ripple_rectangle_bilibbili_pink_lite"
+                android:text="@string/cancel" />
 
             <Button
                 android:id="@+id/import_follow_button_confirm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="@drawable/shape_bilibili_pink_lite"
-                android:text="@string/import_follow_button_confirm" />
+                android:background="@drawable/ripple_rectangle_bilibbili_pink_lite"
+                android:text="@string/confirm" />
 
         </LinearLayout>
 

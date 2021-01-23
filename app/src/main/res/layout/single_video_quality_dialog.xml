@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="170dp"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="@color/bilibili_pink_lite"
     android:layout_gravity="center"
-    app:cardCornerRadius="15dp">
+    app:cardBackgroundColor="@color/bilibili_pink_lite"
+    app:cardCornerRadius="@dimen/corner_6dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/choose_quality_str"
-        android:layout_marginTop="10dp"
+        android:layout_above="@id/single_video_recyclerView_quality"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:text="@string/choose_quality_str"
+        android:textColor="@color/black"
         android:textSize="13sp"
-        android:textColor="@color/normal"
-        android:textStyle="bold"
-        android:layout_above="@id/single_video_recyclerView_quality" />
+        android:textStyle="bold" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -27,17 +27,18 @@
             android:id="@+id/single_video_recyclerView_quality"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp" />
 
         <Button
             android:id="@+id/single_video_quality_button_cancel"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/single_video_recyclerView_quality"
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp"
-            android:background="@drawable/shape_bilibili_pink"
+            android:background="@drawable/ripple_rectangle_bilibbili_pink"
             android:text="@string/cancel" />
 
     </RelativeLayout>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="90dp"
+    android:layout_height="50dp"
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/item_padding">
+
+    <TextView
+        android:id="@+id/search_result_bangumi_ep_item_textView_indexTitle"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/ripple_white_wire_frame_bg"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingStart="7dp"
+        android:paddingTop="3dp"
+        android:paddingEnd="7dp"
+        android:paddingBottom="3dp"
+        android:text="100000000000"
+        android:textColor="@color/black"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/search_result_bangumi_ep_item_textView_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginStart="25dp"
+        android:layout_marginBottom="25dp"
+        android:background="@drawable/round_bilibili_pink_bg"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:text="限时免费"
+        android:textColor="@color/white"
+        android:textSize="13sp" />
+
+</FrameLayout>

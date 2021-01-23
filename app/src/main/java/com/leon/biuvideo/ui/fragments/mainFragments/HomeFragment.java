@@ -3,20 +3,23 @@ package com.leon.biuvideo.ui.fragments.mainFragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.view.*;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.*;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.activitys.SearchResultActivity;
 import com.leon.biuvideo.ui.activitys.UserActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
-import com.leon.biuvideo.utils.IDUtils;
+import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
+import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.HeroImages;
+import com.leon.biuvideo.utils.IDUtils;
 import com.leon.biuvideo.utils.InternetUtils;
 
 import java.text.ParseException;
@@ -25,61 +28,37 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * MainActivity中的主页片段
+ * 主fragment
  */
-public class HomeFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
-    private ImageView hero_imageView;
-    private Spinner home_spinner;
-    private EditText main_editText_value;
-    private Button main_button_confirm;
-
-    private View view;
-    private Context context;
+public class HomeFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+    private ImageView home_fragment_imageView_hero;
+    private EditText home_fragment_editText_keyword;
 
     //spinner索引
     private int spinnerIndex;
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.main_fragment_home, container, false);
+    public int setLayout() {
+        return R.layout.main_fragment_home;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void initView(BindingUtils bindingUtils) {
+        home_fragment_imageView_hero = findView(R.id.home_fragment_imageView_hero);
+        home_fragment_imageView_hero.setOnClickListener(this);
 
-        init();
-        initView();
-        initValues();
-    }
-
-    /**
-     * 初始化
-     */
-    private void init() {
-        view = getView();
-        context = getActivity();
-    }
-
-    /**
-     * 初始化控件
-     */
-    private void initView() {
-        hero_imageView = view.findViewById(R.id.home_imageView_hero);
-        hero_imageView.setOnClickListener(this);
-
-        home_spinner = view.findViewById(R.id.home_spinner);
+        Spinner home_spinner = findView(R.id.home_spinner);
         home_spinner.setOnItemSelectedListener(this);
 
-        main_editText_value = view.findViewById(R.id.home_editText_value);
+        home_fragment_editText_keyword = findView(R.id.home_fragment_editText_keyword);
 
-        main_button_confirm = view.findViewById(R.id.home_button_confirm);
-        main_button_confirm.setOnClickListener(this);
+        bindingUtils
+                .setOnClickListener(R.id.home_button_confirm, this)
+                .setOnClickListener(R.id.home_fragment_imageView_clear, this);
     }
 
-    private void initValues() {
-
+    @Override
+    public void initValues() {
         //判断是否为自动更换
         SharedPreferences initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
         boolean isAutoChange = initValues.getBoolean("isAutoChange", true);
@@ -90,7 +69,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         } else {
             //设置自定义的hero
             int customHeroIndex = initValues.getInt("customHeroIndex", 0);
-            hero_imageView.setImageResource(HeroImages.heroImages[customHeroIndex]);
+            home_fragment_imageView_hero.setImageResource(HeroImages.heroImages[customHeroIndex]);
         }
     }
 
@@ -106,9 +85,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
         int heroIndex = initValues.getInt("heroIndex", 0);
 
         //判断是否为第一次启动
-        if (startTime == 0 && heroIndex == 0) {
-            heroIndex = 0;
-        } else {
+        if (startTime != 0 && heroIndex != 0) {
             //判断是否已过去一天，如果已过则设置新的hero
             if (System.currentTimeMillis() - startTime >= 86400000) {
                 //达到最后一个则将index重置为0
@@ -121,7 +98,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
             }
         }
 
-        hero_imageView.setImageResource(HeroImages.heroImages[heroIndex]);
+        home_fragment_imageView_hero.setImageResource(HeroImages.heroImages[heroIndex]);
         edit.putLong("startTime", getTime());
         edit.putInt("heroIndex", heroIndex);
         edit.apply();
@@ -130,7 +107,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     /**
      * 获取的年月日
      *
-     * @return  返回年月日
+     * @return 返回年月日
      */
     private long getTime() {
         Date nowDate = new Date(System.currentTimeMillis());
@@ -142,7 +119,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
             Date ymd_long = sdf.parse(ymd);
             return ymd_long.getTime();
         } catch (ParseException e) {
-            Toast.makeText(context, "时间解析出错", Toast.LENGTH_SHORT).show();
+            Snackbar.make(view, "时间解析出错", Snackbar.LENGTH_SHORT).show();
             e.printStackTrace();
         }
 
@@ -152,40 +129,42 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.home_imageView_hero:
+            case R.id.home_fragment_imageView_clear:
+                home_fragment_editText_keyword.getText().clear();
+                break;
+            case R.id.home_fragment_imageView_hero:
                 //抖一抖！！！
                 Animation animation = AnimationUtils.loadAnimation(context, R.anim.hero_anim);
                 animation.setDuration(1000);
                 animation.setRepeatMode(Animation.INFINITE);
-                hero_imageView.startAnimation(animation);
-
+                home_fragment_imageView_hero.startAnimation(animation);
                 break;
             case R.id.home_button_confirm:
                 //判断是否有网络
                 boolean isHaveNetwork = InternetUtils.checkNetwork(context);
 
                 if (!isHaveNetwork) {
-                    Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
                     return;
                 }
 
                 switch (spinnerIndex) {
                     case 0:
                         //获取输入内容
-                        String keywordUnCoded = main_editText_value.getText().toString();
+                        String keywordUnCoded = home_fragment_editText_keyword.getText().toString();
                         if (!keywordUnCoded.equals("")) {
 
                             Intent intent = new Intent(context, SearchResultActivity.class);
                             intent.putExtra("keyword", keywordUnCoded);
                             startActivity(intent);
                         } else {
-                            Toast.makeText(getContext(), "不输点啥,就想搜吗？", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(view, "不输点儿啥吗？", Snackbar.LENGTH_SHORT).show();
                             return;
                         }
                         break;
                     //获取数据，进入VideoActivity
                     case 1:
-                        String value_bvid = main_editText_value.getText().toString().trim();
+                        String value_bvid = home_fragment_editText_keyword.getText().toString().trim();
 
                         if (value_bvid.length() != 0) {
                             String bvid = IDUtils.getBvid(value_bvid);
@@ -195,7 +174,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                                 intent.putExtra("bvid", bvid);
                                 startActivity(intent);
                             } else {
-                                Toast.makeText(context, "ERROR~~~\n可通过右上角中的帮助来了解正确的获取方式", Toast.LENGTH_SHORT).show();
+                                Snackbar.make(view, "使用姿势有点不对哦~\n可通过“帮助”来了解正确的姿势", Snackbar.LENGTH_SHORT).show();
                             }
                         }
                         break;
@@ -203,7 +182,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                     //获取数据，进入UpMasterActivity
                     case 2:
                         //获取mid
-                        String value_mid = main_editText_value.getText().toString().trim();
+                        String value_mid = home_fragment_editText_keyword.getText().toString().trim();
 
                         if (value_mid.length() != 0) {
 
@@ -214,15 +193,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
                                 intent.putExtra("mid", mid);
                                 startActivity(intent);
                             } else {
-                                Toast.makeText(context, "ERROR~~~\n可通过右上角中的帮助来了解正确的获取方式", Toast.LENGTH_SHORT).show();
+                                Snackbar.make(view, "使用姿势有点不对哦~\n可通过“帮助”来了解正确的姿势", Snackbar.LENGTH_SHORT).show();
                             }
                         }
                         break;
-                    default:break;
+                    default:
+                        break;
                 }
 
                 break;
-            default:break;
+            default:
+                break;
         }
     }
 
@@ -230,23 +211,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Adap
      * PreferenceActivity被onDestroy后调用该方法，用来初始化Hero
      */
     @Override
-    public void onResume() {
-        super.onResume();
-        initValues();
+    public void onHiddenChanged(boolean hidden) {
+        if (!hidden) {
+            initValues();
+        }
+        super.onHiddenChanged(hidden);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         if (i == 0) {
-            main_editText_value.setHint(R.string.main_editText_hint1);
+            home_fragment_editText_keyword.setHint(R.string.main_editText_hint1);
         } else {
-            main_editText_value.setHint(R.string.main_editText_hint2);
+            home_fragment_editText_keyword.setHint(R.string.main_editText_hint2);
         }
         spinnerIndex = i;
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 }

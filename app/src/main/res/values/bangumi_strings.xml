@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bangumi_warn">由于B站未提供在线观看番剧接口且加上时间上的原因，所以该版本并不提供在线观看功能，在下一个版本中将会添加在线观看功能，请谅解(o゜▽゜)o☆</string>
+    <string name="bangumi_jump">点击这里跳转到官方页面观看</string>
+    <string name="bangumi_detail">点击查看详情</string>
+    <string name="bangumi_originalName">原名</string>
+    <string name="bangumi_otherInfo">其他信息</string>
+    <string name="bangumi_desc">简介</string>
+    <string name="bangumi_score">分</string>
+</resources>

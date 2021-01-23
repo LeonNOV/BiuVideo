@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/topBar_height"
+            android:background="@color/bilibili_pink">
+
+            <ImageView
+                android:id="@+id/fragment_downloaded_video_list_imageView_close"
+                android:layout_width="@dimen/small_view_w_h"
+                android:layout_height="@dimen/small_view_w_h"
+                android:background="@drawable/ripple_round_bilibili_pink_bg"
+                android:padding="@dimen/small_view_padding_10dp"
+                android:src="@drawable/icon_close" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp">
+
+            <TextView
+                android:id="@+id/fragment_downloaded_video_list_no_data"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:text="@string/noneData" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fragment_downloaded_video_list_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/fragment_downloaded_video_list_textView_toAudio"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:textSize="13sp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/ripple_rectangle_bilibbili_pink"
+                android:textColor="@color/black"
+                android:text="@string/downloaded_check_str"/>
+
+            <TextView
+                android:id="@+id/fragment_downloaded_video_list_textView_toFailList"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:textSize="13sp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/ripple_rectangle_bilibbili_pink"
+                android:textColor="@color/black"
+                android:text="@string/downloaded_check_fail_str"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

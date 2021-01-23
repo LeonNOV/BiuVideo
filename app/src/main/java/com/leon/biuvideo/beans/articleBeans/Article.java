@@ -6,10 +6,9 @@ import java.io.Serializable;
  * 专栏相关数据
  */
 public class Article implements Serializable {
-
     public long mid;
     public String face;
-    public long articleID;
+    public long articleId;
     public String title;
     public String summary;
     public String author;
@@ -17,6 +16,7 @@ public class Article implements Serializable {
 
     public String category;
     public long ctime;//秒
+    public long favoriteTime;//收藏时间（秒）
 
 //    public int coin;
     public int view;

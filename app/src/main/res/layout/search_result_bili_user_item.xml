@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="15dp"
+    app:cardCornerRadius="@dimen/corner_6dp"
     app:cardUseCompatPadding="true">
 
     <RelativeLayout
@@ -36,8 +36,10 @@
                 android:id="@+id/search_bili_user_textView_name"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
-                android:text="我是name"
-                android:textColor="@color/normal"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="我是name爱我多久啦我的骄傲未来的"
+                android:textColor="@color/black"
                 android:textSize="17sp"
                 android:textStyle="bold" />
 
@@ -54,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="稿件：173"
-                    android:textColor="@color/normal" />
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:id="@+id/search_bili_user_textView_fans"
@@ -62,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="粉丝：70.2万"
-                    android:textColor="@color/normal" />
+                    android:textColor="@color/black" />
 
             </LinearLayout>
 
@@ -74,21 +76,24 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:text="介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍"
-                android:textColor="@color/normal"
+                android:textColor="@color/black"
                 android:textSize="12sp" />
 
         </LinearLayout>
 
         <Button
             android:id="@+id/search_bili_user_button_follow"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="70dp"
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"
-            android:layout_margin="10dp"
-            android:background="@drawable/shape_bilibili_pink"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/ripple_rectangle_bilibbili_pink"
             android:text="关注"
-            android:textColor="@color/normal"
+            android:textColor="@color/black"
             android:textSize="13sp" />
+
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

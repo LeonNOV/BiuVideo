@@ -3,11 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="15dp"
+    app:cardCornerRadius="@dimen/corner_6dp"
     app:cardUseCompatPadding="true">
 
     <RelativeLayout
-        android:id="@+id/picture_relativeLayout"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:background="@drawable/ripple_item_bilibili_lite">
@@ -27,11 +26,12 @@
             android:layout_alignEnd="@id/up_picture_imageView_cover"
             android:layout_alignBottom="@id/up_picture_imageView_cover"
             android:layout_margin="10dp"
-            android:background="@drawable/shape_gray"
+            android:background="@drawable/round_gray_with_media_length_bg"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:scaleType="centerCrop"
             android:text="9P"
+            android:textColor="@color/white"
             android:textSize="13sp" />
 
         <TextView
@@ -45,7 +45,7 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:text="介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍绍介绍介绍介绍介绍绍介绍介绍介绍介绍"
-            android:textColor="@color/normal"
+            android:textColor="@color/black"
             android:textSize="15sp" />
 
         <LinearLayout
@@ -71,7 +71,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:text="150"
-                    android:textColor="@color/normal"
+                    android:textColor="@color/black"
                     android:textSize="13sp" />
 
             </LinearLayout>
@@ -93,7 +93,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:text="2020-11-12 13:46"
-                    android:textColor="@color/normal"
+                    android:textColor="@color/black"
                     android:textSize="13sp" />
 
             </LinearLayout>

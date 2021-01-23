@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="video_textView_choiceSingleVideo_str">选择剧集</string>
-    <string name="video_textView_choiceQuality_str">选择视频清晰度</string>
-    <string name="video_button_saveVideo_str">保存视频</string>
     <string name="video_textView_saveOther_str">保存其他资源</string>
-    <string name="video_button_saveCover_str">保存视频封面</string>
-    <string name="video_button_saveFace_str">保存UP头像</string>
+    <string name="video_button_saveVideo_str">保存视频</string>
+    <string name="video_button_toDownload_str">查看缓存</string>
+    <string name="video_button_saveCover_str">保存封面</string>
+    <string name="video_button_saveFace_str">保存头像</string>
+
+    <string name="anthology_download_dialog_title">缓存视频</string>
+    <string name="anthology_download_dialog_saveAll">缓存所有视频</string>
+    <string name="anthology_download_dialog_checkAll">查看已缓存资源</string>
+    <string name="anthology_download_dialog_qualityStr">当前已选择画质</string>
+
+    <string name="anthology_download_dialog_qualityWarn">第一次使用建议点击这里</string>
+    <string name="newVideoFolderHint">输入文件夹名称</string>
+    <string name="createNewVideoFolderTitle">创建新的收藏文件夹</string>
+    <array name="anthologyQuality">
+        <item>超清 4K</item>
+        <item>高清 1080P60</item>
+        <item>高清 1080P高码率</item>
+        <item>高清 1080P</item>
+        <item>高清 720P/720P60</item>
+        <item>清晰 480P</item>
+        <item>流畅 360P</item>
+    </array>
 </resources>

@@ -1,11 +1,13 @@
 package com.leon.biuvideo.ui.activitys;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Looper;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Base64;
 import android.view.View;
 import android.view.Window;
@@ -13,16 +15,25 @@ import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.articleBeans.Article;
+import com.leon.biuvideo.beans.orderBeans.LocalOrder;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.views.RoundPopupWindow;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.utils.MediaUtils;
+import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.SimpleThreadPool;
+import com.leon.biuvideo.utils.dataBaseUtils.LocalOrdersDatabaseUtils;
+import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
+import com.leon.biuvideo.values.LocalOrderType;
 import com.leon.biuvideo.values.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
 
@@ -36,9 +47,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.FutureTask;
 
 import okhttp3.Headers;
 
@@ -47,7 +58,7 @@ import okhttp3.Headers;
  */
 public class ArticleActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView article_textView_title;
-    private ImageView article_imageView_face, article_imageView_back, article_imageView_more;
+    private ImageView article_imageView_face, article_imageView_more;
     private WebView article_webView;
     private TextView
             article_textView_author,
@@ -58,7 +69,13 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
             article_textView_replay;
 
     private Article article;
-    private String encodedHtml;
+    private LocalOrdersDatabaseUtils localOrdersDatabaseUtils;
+
+    private boolean isHaveLocalOrder = false;
+    private final static LocalOrderType localOrderType = LocalOrderType.ARTICLE;
+    private LinearLayout article_linearLayout;
+    private LoadingDialog loadingDialog;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +86,11 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_article);
 
         initView();
-        initValue();
     }
 
     private void initView() {
+        article_linearLayout = findViewById(R.id.article_linearLayout);
+
         article_imageView_face = findViewById(R.id.article_imageView_face);
         article_imageView_face.setOnClickListener(this);
 
@@ -80,7 +98,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
 
         article_textView_title = findViewById(R.id.article_textView_title);
 
-        article_imageView_back = findViewById(R.id.article_imageView_back);
+        ImageView article_imageView_back = findViewById(R.id.article_imageView_back);
         article_imageView_back.setOnClickListener(this);
 
         article_imageView_more = findViewById(R.id.article_imageView_more);
@@ -101,13 +119,55 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         article_textView_view = findViewById(R.id.article_textView_view);
         article_textView_like = findViewById(R.id.article_textView_like);
         article_textView_replay = findViewById(R.id.article_textView_replay);
+
+        loadingDialog = new LoadingDialog(ArticleActivity.this);
+        loadingDialog.show();
+
+        loadData();
     }
 
-    private void initValue() {
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        article = (Article) extras.getSerializable("article");
+    private void loadData() {
+        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+            @Override
+            public void load() {
+                Intent intent = getIntent();
+                Bundle extras = intent.getExtras();
+                article = (Article) extras.getSerializable("article");
+                boolean isHistory = extras.getBoolean("isHistory", false);
 
+                Message message = handler.obtainMessage();
+                message.what = 0;
+
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("loadState", true);
+                bundle.putBoolean("isHistory", isHistory);
+
+                message.setData(bundle);
+                handler.sendMessage(message);
+            }
+        };
+
+        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadArticleInfo");
+
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                boolean loadState = msg.getData().getBoolean("loadState");
+                boolean isHistory = msg.getData().getBoolean("isHistory");
+
+                if (loadState) {
+                    initValue(isHistory);
+                }
+
+                loadingDialog.dismiss();
+
+                return true;
+            }
+        });
+    }
+
+    private void initValue(boolean isHistory) {
         //设置头像
         Glide.with(getApplicationContext()).load(article.face).into(article_imageView_face);
 
@@ -117,12 +177,16 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         //设置标题
         article_textView_title.setText(article.title);
 
-        //设置文章分类
-        article_textView_category.setText(article.category);
+        if (isHistory) {
+            article_textView_category.setVisibility(View.GONE);
+            article_textView_ctime.setVisibility(View.GONE);
+        } else {
+            //设置文章分类
+            article_textView_category.setText(article.category);
 
-        //设置创建时间
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
-        article_textView_ctime.setText(sdf.format(new Date(article.ctime * 1000)));
+            //设置创建时间
+            article_textView_ctime.setText(ValueFormat.generateTime(article.ctime, true, true, "-"));
+        }
 
         //设置观看量
         String viewStr = ValueFormat.generateCN(article.view) + "次阅读";
@@ -136,7 +200,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         String replayStr = ValueFormat.generateCN(article.reply) + "次评论";
         article_textView_replay.setText(replayStr);
 
-        String path = Paths.articleWebPage + article.articleID;
+        String path = Paths.articleWebPage + article.articleId;
 
         //获取文章页面
         String unencodedHtml = parseHTMLonPhone(path);
@@ -145,8 +209,12 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
          * 加载文章内容
          * 注意：原HTML是未进行编码的，如果android版本为8.0以上（不包括8.0）,则需要将其解码为base64
          */
-        encodedHtml = Base64.encodeToString(unencodedHtml.getBytes(), Base64.NO_PADDING);
+        String encodedHtml = Base64.encodeToString(unencodedHtml.getBytes(), Base64.NO_PADDING);
         article_webView.loadData(encodedHtml, "text/html", "base64");
+
+        localOrdersDatabaseUtils = new LocalOrdersDatabaseUtils(getApplicationContext());
+        isHaveLocalOrder = localOrdersDatabaseUtils.queryLocalOrder(String.valueOf(article.articleId), null, localOrderType);
+        Fuck.blue(isHaveLocalOrder + "");
     }
 
     /**
@@ -259,12 +327,13 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.article_imageView_face:
+                if (!InternetUtils.checkNetwork(getApplicationContext())) {
+                    Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    break;
+                }
 
                 Intent intent = new Intent(this, UserActivity.class);
                 intent.putExtra("mid", article.mid);
-
-                Fuck.blue("跳转至----" + article.author + "----" + article.mid + "----的主页");
-
                 startActivity(intent);
 
                 break;
@@ -276,6 +345,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                 RoundPopupWindow roundPopupWindow = new RoundPopupWindow(getApplicationContext(), article_imageView_more);
                 roundPopupWindow
                         .setContentView(R.layout.article_more_menu)
+                        .setText(R.id.article_more_menu_favorite, isHaveLocalOrder ? "取消收藏" : "收藏该文章")
                         .setOnClickListener(R.id.article_more_menu_savePic, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -283,11 +353,8 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        boolean saveState = MediaUtils.saveArticle(article_webView, getApplicationContext());
-
-                                        Looper.prepare();
-                                        Toast.makeText(ArticleActivity.this, saveState ? "保存成功" : "保存失败", Toast.LENGTH_SHORT).show();
-                                        Looper.loop();
+                                        boolean saveState = ResourceUtils.saveArticle(article_webView, getApplicationContext());
+                                        Snackbar.make(article_linearLayout, saveState ? "保存成功" : "保存失败", Snackbar.LENGTH_SHORT).show();
                                     }
                                 }).start();
 
@@ -300,11 +367,53 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                                 //跳转到源网站
                                 Intent intentOriginUrl = new Intent();
                                 intentOriginUrl.setAction("android.intent.action.VIEW");
-                                Uri uri = Uri.parse(Paths.articleWebPage + article.articleID);
+                                Uri uri = Uri.parse(Paths.articleWebPage + article.articleId);
                                 intentOriginUrl.setData(uri);
                                 startActivity(intentOriginUrl);
 
                                 roundPopupWindow.dismiss();
+                            }
+                        })
+                        .setOnClickListener(R.id.article_more_menu_favorite, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                boolean operatingStatus;
+
+                                if (isHaveLocalOrder) {
+                                    operatingStatus = localOrdersDatabaseUtils.deleteLocalOrder(String.valueOf(article.articleId), null, localOrderType);
+                                    if (operatingStatus) {
+                                        roundPopupWindow.setText(R.id.article_more_menu_favorite, "收藏该文章");
+                                        Snackbar.make(v, R.string.remFavoriteSign, Snackbar.LENGTH_SHORT).show();
+                                        isHaveLocalOrder = false;
+                                    }
+                                } else {
+                                    LocalOrder localOrder = new LocalOrder();
+                                    Map<String, Object> map = new HashMap<>();
+                                    map.put("face", article.face);
+                                    map.put("title", article.title);
+                                    map.put("summary", article.summary);
+                                    map.put("author", article.author);
+                                    map.put("cover", article.coverUrl);
+                                    map.put("category", article.category);
+                                    map.put("ctime", article.ctime);
+                                    map.put("favoriteTime", article.favoriteTime);
+                                    map.put("view", article.view);
+                                    map.put("like", article.like);
+                                    map.put("reply", article.reply);
+                                    localOrder.jsonObject = new JSONObject(map);
+                                    localOrder.mainId = String.valueOf(article.articleId);
+                                    localOrder.subId = String.valueOf(article.mid);
+                                    localOrder.orderType = localOrderType;
+                                    localOrder.addTime = System.currentTimeMillis();
+
+                                    operatingStatus = localOrdersDatabaseUtils.addLocalOrder(localOrder);
+
+                                    if (operatingStatus) {
+                                        roundPopupWindow.setText(R.id.article_more_menu_favorite, "取消收藏");
+                                        Snackbar.make(v, R.string.addFavoriteSign, Snackbar.LENGTH_SHORT).show();
+                                        isHaveLocalOrder = true;
+                                    }
+                                }
                             }
                         })
                         .setLocation(RoundPopupWindow.SHOW_AS_DROP_DOWN)
@@ -313,5 +422,13 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (localOrdersDatabaseUtils != null) {
+            localOrdersDatabaseUtils.close();
+        }
+        super.onDestroy();
     }
 }

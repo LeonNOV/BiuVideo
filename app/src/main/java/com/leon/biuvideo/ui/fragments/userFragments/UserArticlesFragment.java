@@ -1,168 +1,212 @@
 package com.leon.biuvideo.ui.fragments.userFragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.os.Message;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.UserFragmentAdapters.UserArticleAdapter;
+import com.leon.biuvideo.adapters.userFragmentAdapters.UserArticleAdapter;
 import com.leon.biuvideo.beans.articleBeans.Article;
-import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
+import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.parseDataUtils.articleParseUtils.ArticleParseUtils;
+import com.leon.biuvideo.utils.SimpleThreadPool;
+import com.leon.biuvideo.utils.parseDataUtils.articleParseUtils.ArticleParser;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.constant.RefreshState;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.List;
+import java.util.concurrent.FutureTask;
 
 /**
- * 用户主页-专栏Fragment
+ * 用户已发布专栏fragment
  */
-public class UserArticlesFragment extends Fragment {
+public class UserArticlesFragment extends BaseLazyFragment {
     private final long mid;
-    private final Context context;
+
+    private LinearLayout smart_refresh_layout_fragment_linearLayout;
+    private RecyclerView recyclerView;
+    private SmartRefreshLayout smartRefresh;
+    private TextView no_data;
+
+    private ArticleParser articleParser;
+
     private int pageNum = 1;
-
-    //总条目数
-    private int total;
-
-    //以获取的条目数
     private int currentCount;
-
-    //数据状态
     private boolean dataState = true;
 
-    private View view;
-    private LayoutInflater inflater;
+    private List<Article> articles;
+    private int count;
+    private Handler handler;
 
-    private RecyclerView user_article_recyclerView;
-    private SmartRefreshLayout article_smartRefresh;
-
-    public UserArticlesFragment(long mid, Context context) {
+    public UserArticlesFragment(long mid) {
         this.mid = mid;
-        this.context = context;
     }
 
-    @Nullable
+    private LinearLayoutManager linearLayoutManager;
+    private UserArticleAdapter userArticleAdapter;
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.inflater = inflater;
-        view = inflater.inflate(R.layout.fragment_space, container, false);
-
-        initView();
-        initValue();
-
-        return view;
+    public int setLayout() {
+        return R.layout.smart_refresh_layout_fragment;
     }
 
-    private void initView() {
-        user_article_recyclerView = view.findViewById(R.id.user_recyclerView_space);
-        article_smartRefresh = view.findViewById(R.id.user_smartRefresh);
+    @Override
+    public void initView(BindingUtils bindingUtils) {
+        smart_refresh_layout_fragment_linearLayout = findView(R.id.smart_refresh_layout_fragment_linearLayout);
+        recyclerView = findView(R.id.smart_refresh_layout_fragment_recyclerView);
+        smartRefresh = findView(R.id.smart_refresh_layout_fragment_smartRefresh);
+        no_data = findView(R.id.smart_refresh_layout_fragment_no_data);
 
         //关闭下拉刷新
-        article_smartRefresh.setEnableRefresh(false);
+        smartRefresh.setEnableRefresh(false);
     }
 
-    private void initValue() {
-        total = ArticleParseUtils.getArticleTotal(mid);
+    @Override
+    public void loadData() {
+        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+            @Override
+            public void load() {
+                articleParser = new ArticleParser(context, mid);
+                count = articleParser.getArticleTotal();
 
-        //判断条目是否为0
-        if (total == 0) {
+                Message message = handler.obtainMessage();
+                message.what = 0;
+
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("loadState", true);
+
+                message.setData(bundle);
+                handler.sendMessage(message);
+            }
+        };
+
+        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadUserArticles");
+
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                boolean loadState = msg.getData().getBoolean("loadState");
+                smart_refresh_layout_fragment_linearLayout.setVisibility(View.GONE);
+
+                if (loadState) {
+                    initValues();
+                }
+
+                simpleThreadPool.cancelTask("loadUserArticles");
+
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void initValues() {
+        if (count == 0) {
             //设置无数据提示界面
-            view = inflater.inflate(R.layout.fragment_no_data, null);
-            return;
+            no_data.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+            smartRefresh.setEnabled(false);
+        } else {
+            no_data.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            smartRefresh.setEnabled(true);
+
+            //获取初始数据
+            articles = articleParser.parseArticle(pageNum);
+            currentCount += articles.size();
+            pageNum++;
+
+            if (currentCount == count) {
+                dataState = false;
+                smartRefresh.setEnabled(false);
+            }
+
+            if (linearLayoutManager == null || userArticleAdapter == null) {
+                linearLayoutManager = new LinearLayoutManager(context);
+                userArticleAdapter = new UserArticleAdapter(articles, context);
+            }
+
+            initAttr();
         }
+    }
 
-        //获取初始数据
-        List<Article> initArticles = ArticleParseUtils.parseArticle(mid, pageNum);
-        currentCount += initArticles.size();
+    private void initAttr() {
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(userArticleAdapter);
 
-        //判断第一次是否已加载完所有数据
-        if (total == currentCount) {
-            dataState = false;
-            article_smartRefresh.setEnabled(false);
-        }
+        Handler handler = new Handler();
 
-        UserArticleAdapter articleAdapter = new UserArticleAdapter(initArticles, context);
-        user_article_recyclerView.setAdapter(articleAdapter);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        user_article_recyclerView.setLayoutManager(layoutManager);
-
-        article_smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {
+        //添加加载更多监听事件
+        smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
                 //判断是否有网络
                 boolean isHaveNetwork = InternetUtils.checkNetwork(context);
 
                 if (!isHaveNetwork) {
-                    Toast.makeText(context, R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
 
                     //结束加载更多动画
-                    article_smartRefresh.finishLoadMore();
+                    smartRefresh.finishLoadMore();
 
                     return;
                 }
 
-                if (dataState) {
-                    pageNum++;
+                RefreshState state = refreshLayout.getState();
 
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            //获取新数据
-                            List<Article> addOns = getNextArticles(mid, pageNum);
+                //判断是否处于拖拽已释放的状态
+                if (state.finishing == RefreshState.ReleaseToLoad.finishing) {
+                    if (dataState) {
+                        pageNum++;
 
-                            Log.d(Fuck.blue, "成功获取了" + mid + "的第" + pageNum + "页的" + addOns.size() + "条数据");
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                //获取新数据
+                                getArticles();
 
-                            //添加新数据
-                            articleAdapter.append(addOns);
-                        }
-                    }, 2000);
+                                //添加新数据
+                                userArticleAdapter.append(articles);
+                            }
+                        }, 1000);
+                    } else {
+                        //关闭上滑刷新
+                        smartRefresh.setEnabled(false);
 
-                } else {
-                    //关闭上滑刷新
-                    article_smartRefresh.setEnabled(false);
-
-                    Toast.makeText(context, "只有这么多数据了~~~", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(view, R.string.isDone, Snackbar.LENGTH_SHORT).show();
+                    }
                 }
 
                 //结束加载更多动画
-                article_smartRefresh.finishLoadMore();
+                smartRefresh.finishLoadMore();
             }
         });
     }
 
     /**
      * 获取下一页数据
-     *
-     * @param mid   用户ID
-     * @param pageNum   页码
-     * @return  返回下一页数据
      */
-    private List<Article> getNextArticles(long mid, int pageNum) {
-        List<Article> articles = ArticleParseUtils.parseArticle(mid, pageNum);
-
+    private void getArticles() {
+        articles = articleParser.parseArticle(pageNum);
         currentCount += articles.size();
 
         //如果第一次获取的条目数小于30则设置dataState
-        if (articles.size() < 30 || total == currentCount) {
+        if (currentCount == count) {
             dataState = false;
-            article_smartRefresh.setEnabled(false);
+            smartRefresh.setEnabled(false);
         }
-
-        return articles;
     }
 }

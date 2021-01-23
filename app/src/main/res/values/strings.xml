@@ -1,6 +1,17 @@
 <resources>
     <string name="app_name">BiuVideo</string>
 
+    <dimen name="corner_6dp">6dp</dimen>
+    <dimen name="item_padding">5dp</dimen>
+
+    <dimen name="cover_width">128dp</dimen>
+    <dimen name="cover_height">72dp</dimen>
+
+    <dimen name="small_view_w_h">40dp</dimen>
+    <dimen name="small_view_padding_10dp">10dp</dimen>
+
+    <dimen name="topBar_height">50dp</dimen>
+
     <string name="main_button_start">开始获取</string>
     <string name="main_editText_hint1">输入关键词进行搜索</string>
     <string name="main_editText_hint2">输入链接或id</string>
@@ -10,25 +21,47 @@
         <item>UP主</item>
     </array>
 
-    <string name="navigation_developer_sign">by&#160;Leon</string>
+    <string name="navigation_userName">点击头像即可登录哦</string>
+    <string name="navigation_nothing">--</string>
+    <string name="navigation_vip_due_date">登录即可查看VIP到期时间</string>
 
     <string name="cancel_follow">取消关注</string>
 
-    <string name="cancel">取消</string>
-    <string name="confirm">确定</string>
     <string name="choose_quality_str">选择要缓存的清晰度</string>
 
+    <string name="downloaded_check_str">查看已缓存音频</string>
+    <string name="downloaded_check_fail_str">查看缓存失败的媒体资源</string>
+
     <!-- hero尺寸 -->
-    <dimen name="hero_width">96dp</dimen>
-    <dimen name="hero_height">96dp</dimen>
     <!-- hero尺寸 -->
 
+    <string name="cancel">取消</string>
+    <string name="confirm">确定</string>
+    <string name="save">保存</string>
     <string name="close">关闭</string>
     <string name="noneData">啥都没有哎~~~</string>
 
     <!-- 无网络提示 -->
-    <string name="network_sign">网络貌似有点问题哎~</string>
+    <string name="networkWarn">网络貌似有点问题哎~</string>
+
+    <!-- 加入/删除提示 -->
+    <string name="addFavoriteSign">已加入到本地订阅中</string>
+    <string name="remFavoriteSign">已从本地订阅中删除</string>
+
+    <string name="saveSuccess">保存成功</string>
+    <string name="saveFail">保存失败</string>
+
+    <string name="isPlaying">选择的视频已经在播放了~</string>
+    <string name="isDownloading">已加入到缓存队列~</string>
+    <string name="isDone">只有这么多数据了~</string>
 
     <!-- 帮助链接 -->
     <string name="help_link">https://www.yuque.com/books/share/0544c9b3-9de9-4d3b-ad1e-0d7defd7e8be?# 《BiuVideo帮助文档》</string>
+    <string name="anthologyHelpLink">https://www.yuque.com/docs/share/0e9613b0-a9e2-4969-b0a4-97432be7b586?# 《关于选集下载的主要问题》</string>
+
+    <!-- 下载页面 -->
+
+    <!-- 加载数据中显示的默认文字 -->
+    <string name="defaultStr">--</string>
+    <string name="loading">加载数据中</string>
 </resources>

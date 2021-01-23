@@ -2,39 +2,38 @@ package com.leon.biuvideo.ui.views;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.values.ImagePixelSize;
-import com.leon.biuvideo.utils.MediaUtils;
+import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 图片查看器
+ */
 public class PictureViewer extends PopupWindow implements View.OnClickListener, ViewPager.OnPageChangeListener {
     private final int selectedPosition;
     private final List<String> pictures;
-    private List<ImageView> imageViews;
-
     private final Context context;
+
+    private List<ImageView> imageViews;
     private View pictureViewerView;
-    private ImageView picture_viewer_imageView_back, picture_viewer_imageView_savePic;
     private ViewPager picture_viewer_viewPager;
     private TextView picture_viewer_textView_index;
-
-    private PictureViewerAdapter pictureViewerAdapter;
 
     public PictureViewer(Context context, int selectedPosition, List<String> pictures) {
         super(context);
@@ -58,10 +57,10 @@ public class PictureViewer extends PopupWindow implements View.OnClickListener, 
     private void initView() {
         pictureViewerView = LayoutInflater.from(context).inflate(R.layout.picture_viewer, null);
 
-        picture_viewer_imageView_back = pictureViewerView.findViewById(R.id.picture_viewer_imageView_back);
+        ImageView picture_viewer_imageView_back = pictureViewerView.findViewById(R.id.picture_viewer_imageView_back);
         picture_viewer_imageView_back.setOnClickListener(this);
 
-        picture_viewer_imageView_savePic = pictureViewerView.findViewById(R.id.picture_viewer_imageView_savePic);
+        ImageView picture_viewer_imageView_savePic = pictureViewerView.findViewById(R.id.picture_viewer_imageView_savePic);
         picture_viewer_imageView_savePic.setOnClickListener(this);
 
         picture_viewer_viewPager = pictureViewerView.findViewById(R.id.picture_viewer_viewPager);
@@ -75,7 +74,7 @@ public class PictureViewer extends PopupWindow implements View.OnClickListener, 
         String indexStr = (selectedPosition + 1) + "/" + pictures.size();
         picture_viewer_textView_index.setText(indexStr);
 
-        pictureViewerAdapter = new PictureViewerAdapter(context, pictures, imageViews);
+        PictureViewerAdapter pictureViewerAdapter = new PictureViewerAdapter(context, pictures, imageViews);
         picture_viewer_viewPager.setAdapter(pictureViewerAdapter);
         picture_viewer_viewPager.setCurrentItem(selectedPosition);
         picture_viewer_viewPager.setPageMargin(40);
@@ -100,11 +99,9 @@ public class PictureViewer extends PopupWindow implements View.OnClickListener, 
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        boolean saveState = MediaUtils.savePicture(context, pictures.get(picture_viewer_viewPager.getCurrentItem()));
+                        boolean saveState = ResourceUtils.savePicture(context, pictures.get(picture_viewer_viewPager.getCurrentItem()));
 
-                        Looper.prepare();
-                        Toast.makeText(context, saveState ? "保存成功" : "保存失败", Toast.LENGTH_SHORT).show();
-                        Looper.loop();
+                        Snackbar.make(getContentView(), saveState ? R.string.saveSuccess : R.string.saveFail, Snackbar.LENGTH_SHORT).show();
                     }
                 }).start();
 

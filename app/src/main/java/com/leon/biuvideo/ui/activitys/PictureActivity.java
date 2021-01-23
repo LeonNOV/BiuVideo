@@ -1,37 +1,44 @@
 package com.leon.biuvideo.ui.activitys;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Looper;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.PictureListAdapter;
 import com.leon.biuvideo.beans.upMasterBean.Picture;
 import com.leon.biuvideo.layoutManager.PictureGridLayoutManager;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.views.RoundPopupWindow;
-import com.leon.biuvideo.utils.MediaUtils;
+import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.SimpleThreadPool;
+import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.values.Paths;
 import com.leon.biuvideo.utils.ValueFormat;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.FutureTask;
 
 /**
  * 相簿界面Activity
  */
 public class PictureActivity extends AppCompatActivity implements View.OnClickListener {
-    private ImageView picture_back, picture_more;
+    private ImageView picture_more;
 
     private TextView
             picture_textView_time,
@@ -42,6 +49,8 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
     private RecyclerView picture_recyclerView;
 
     private Picture picture;
+    private LoadingDialog loadingDialog;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,20 +60,11 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picture);
 
-        init();
         initView();
-        initValue();
-    }
-
-    private void init() {
-        //获取数据
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        picture = (Picture) extras.getSerializable("picture");
     }
 
     private void initView() {
-        picture_back = findViewById(R.id.picture_back);
+        ImageView picture_back = findViewById(R.id.picture_back);
         picture_back.setOnClickListener(this);
 
         picture_more = findViewById(R.id.picture_more);
@@ -76,6 +76,49 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
         picture_textView_desc =findViewById(R.id.picture_textView_desc);
 
         picture_recyclerView = findViewById(R.id.picture_recyclerView);
+
+        loadingDialog = new LoadingDialog(PictureActivity.this);
+        loadingDialog.show();
+
+        loadData();
+    }
+
+    private void loadData() {
+        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+            @Override
+            public void load() {
+                Intent intent = getIntent();
+                Bundle extras = intent.getExtras();
+                picture = (Picture) extras.getSerializable("picture");
+
+                Message message = handler.obtainMessage();
+                message.what = 0;
+
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("loadState", true);
+
+                message.setData(bundle);
+                handler.sendMessage(message);
+            }
+        };
+
+        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadPictureInfo");
+
+        handler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                boolean loadState = msg.getData().getBoolean("loadState");
+
+                if (loadState) {
+                    initValue();
+                }
+
+                loadingDialog.dismiss();
+
+                return true;
+            }
+        });
     }
 
     private void initValue() {
@@ -117,8 +160,10 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
                         .setOnClickListener(R.id.picture_more_saveAll, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //保存所有图片
-                                Toast.makeText(getApplicationContext(), "正在保存图片", Toast.LENGTH_SHORT).show();
+                                if (!InternetUtils.checkNetwork(getApplicationContext())) {
+                                    Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                                    return;
+                                }
 
                                 roundPopupWindow.dismiss();
                                 new Thread(new Runnable() {
@@ -127,16 +172,12 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
                                         int saveCounts = 0;
 
                                         for (String url : picture.pictures) {
-                                            boolean b = MediaUtils.savePicture(getApplicationContext(), url);
+                                            boolean b = ResourceUtils.savePicture(getApplicationContext(), url);
 
                                             if (b) saveCounts++;
                                         }
 
-                                        Looper.prepare();
-                                        Toast.makeText(getApplicationContext(),
-                                                "保存成功" + saveCounts + "张,失败" + (picture.pictures.size() - saveCounts) + "张",
-                                                Toast.LENGTH_SHORT).show();
-                                        Looper.loop();
+                                        Snackbar.make(v, "保存成功" + saveCounts + "张,失败" + (picture.pictures.size() - saveCounts) + "张", Snackbar.LENGTH_SHORT).show();
                                     }
                                 }).start();
                             }

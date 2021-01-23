@@ -7,12 +7,10 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.BaseAdapter.BaseAdapter;
-import com.leon.biuvideo.adapters.BaseAdapter.BaseViewHolder;
+import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
+import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.AboutBean;
-import com.leon.biuvideo.values.Paths;
 
-import java.net.URI;
 import java.util.List;
 
 /**

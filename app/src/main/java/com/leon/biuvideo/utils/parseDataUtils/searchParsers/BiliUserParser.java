@@ -1,12 +1,15 @@
 package com.leon.biuvideo.utils.parseDataUtils.searchParsers;
 
+import android.content.Context;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.BiliUser;
+import com.leon.biuvideo.beans.searchBean.BiliUser;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.values.OrderType;
+import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.Paths;
 import com.leon.biuvideo.values.SearchType;
+import com.leon.biuvideo.values.SortType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,22 +22,34 @@ import okhttp3.Headers;
  * 解析搜索结果-用户数据
  */
 public class BiliUserParser {
+    private final Map<String, String> requestHeader;
+
+    public BiliUserParser(Context context) {
+        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
+        for (Map.Entry<String, String> entry : this.requestHeader.entrySet()) {
+            if (entry.getKey().equals("Referer")) {
+                entry.setValue("https://search.bilibili.com");
+                break;
+            }
+        }
+    }
+
     /**
      * 获取用户列表
      *
      * @param keyword   关键字
      * @param pn    页码
-     * @param orderType 排序方式
+     * @param sortType 排序方式
      * @return  返回用户数据
      */
-    public List<BiliUser> userParse(String keyword, int pn, OrderType orderType) {
+    public List<BiliUser> userParse(String keyword, int pn, SortType sortType) {
         Map<String, String> params = new HashMap<>();
         params.put("keyword", keyword);
         params.put("search_type", SearchType.BILI_USER.value);
         params.put("page", String.valueOf(pn));
-        params.put("order", orderType.value);
+        params.put("order", sortType.value);
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
+        JSONObject responseObject = HttpUtils.getResponse(Paths.search, Headers.of(requestHeader), params);
         JSONObject data = responseObject.getJSONObject("data");
 
         List<BiliUser> biliUsers = new ArrayList<>();
@@ -95,16 +110,16 @@ public class BiliUserParser {
      * @param keyword   关键字
      * @return  返回搜索结果个数
      */
-    public static int getSearchUserCount(String keyword) {
+    public int getSearchUserCount(String keyword) {
         int count = -1;
 
         Map<String, String> params = new HashMap<>();
         params.put("keyword", keyword);
         params.put("search_type", SearchType.BILI_USER.value);
         params.put("page", "1");
-        params.put("order", OrderType.DEFAULT.value);
+        params.put("order", SortType.DEFAULT.value);
 
-        HttpUtils httpUtils = new HttpUtils(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
+        HttpUtils httpUtils = new HttpUtils(Paths.search, Headers.of(requestHeader), params);
         String response = httpUtils.getData();
 
         JSONObject jsonObject = JSONObject.parseObject(response);

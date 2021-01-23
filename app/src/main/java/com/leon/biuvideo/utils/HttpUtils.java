@@ -84,10 +84,10 @@ public class HttpUtils {
 
         try {
 
-            if (headers == null) {
-                requestBuilder.headers(Headers.of(getHeaders()));
-            } else {
+            if (headers != null) {
                 requestBuilder.headers(headers);
+            } else {
+                requestBuilder.headers(Headers.of(getHeaders()));
             }
 
             request = requestBuilder.url(urlBuilder.build()).get().build();

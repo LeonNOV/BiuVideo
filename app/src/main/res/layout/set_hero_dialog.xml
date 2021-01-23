@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="vertical"
-    app:cardBackgroundColor="#fff"
-    app:cardCornerRadius="15dp">
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/corner_6dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,42 +14,37 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <RadioGroup
-            android:id="@+id/set_hero_radio_group"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:text="设置主页Hero"/>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:padding="10dp">
 
-            <RadioButton
-                android:id="@+id/set_hero_radioButton_auto"
-                style="@style/CustomRadioTheme"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:checked="true"
+                android:layout_centerVertical="true"
                 android:text="@string/set_hero_auto"
-                android:paddingHorizontal="7dp"
-                android:textColor="@color/normal"
-                android:textSize="15sp" />
+                android:textColor="@color/gray" />
 
-            <RadioButton
-                android:id="@+id/set_hero_radioButton_custom"
-                style="@style/CustomRadioTheme"
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/set_hero_dialog_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_weight="1"
-                android:paddingHorizontal="7dp"
-                android:text="@string/set_hero_custom"
-                android:textColor="@color/normal"
-                android:textSize="15sp" />
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:checked="true"
+                android:theme="@style/CustomSwitchCompat" />
 
-        </RadioGroup>
+        </RelativeLayout>
 
         <View
             android:layout_width="match_parent"
@@ -58,22 +53,22 @@
             android:background="#A8A8A8" />
 
         <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/set_hero_spinner"
+            android:id="@+id/set_hero_dialog_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@drawable/spinner_theme_set_hero"
             android:entries="@array/heroNames"
             android:popupBackground="@drawable/spinner_popup_theme_set_hero"
-            android:textColor="@color/normal"
+            android:textColor="@color/black"
             android:theme="@style/set_hero_dialog_spinner" />
 
         <ImageView
-            android:id="@+id/set_hero_imageView_preview"
+            android:id="@+id/set_hero_dialog_imageView_preview"
             android:layout_width="156dp"
             android:layout_height="156dp"
             android:layout_margin="10dp"
-            android:background="@drawable/ripple_border_display"
+            android:background="@drawable/white_wire_frame_bg"
             android:src="@drawable/vector_hero_marvel_antman" />
 
         <LinearLayout
@@ -84,25 +79,25 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/set_hero_textView_save"
+                android:id="@+id/set_hero_dialog_textView_close"
                 android:layout_width="80dp"
                 android:layout_height="50dp"
-                android:background="@drawable/ripple_bilibili_pink_lite"
+                android:background="@drawable/ripple_rectangle_bilibbili_pink_light"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="@string/set_hero_save"
-                android:textColor="@color/normal" />
+                android:text="@string/close"
+                android:textColor="@color/black" />
 
             <TextView
-                android:id="@+id/set_hero_textView_close"
+                android:id="@+id/set_hero_dialog_textView_save"
                 android:layout_width="80dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="30dp"
-                android:background="@drawable/ripple_bilibili_pink_lite"
+                android:background="@drawable/ripple_rectangle_bilibbili_pink_light"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="@string/set_hero_close"
-                android:textColor="@color/normal" />
+                android:text="@string/save"
+                android:textColor="@color/black" />
 
         </LinearLayout>
 

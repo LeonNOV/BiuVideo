@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="video">视频</string>
+    <string name="live">直播</string>
+    <string name="article">专栏</string>
+    <string name="bangumi">番剧</string>
+    <string name="audio">音频</string>
+    <string name="biliUser">用户</string>
+    <string name="picture">相簿</string>
+
+    <string name="fBangumi">追番</string>
+    <string name="fSeries">追剧</string>
+</resources>

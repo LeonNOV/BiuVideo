@@ -1,19 +1,14 @@
 package com.leon.biuvideo.values;
 
 public enum OrderType {
-    DEFAULT("default"),//totalrank
-    PUPDATE("pubdate"),
-    SENDDATE("senddate"),
-    ID("id"),
-    RANKLEVEL("ranklevel"),
-    CLICK("click"),
-    SCORES("scores"),
-    DAMKU("damku"),
-    STOW("stow");//dm
+    VIDEO(0),
+    BANGUMI(1),
+    SERIES(2),
+    ARTICLE(3);
 
-    public String value;
+    public int value;
 
-    OrderType(String value) {
+    OrderType(int value) {
         this.value = value;
     }
 }

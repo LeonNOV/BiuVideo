@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="preference_title">设置</string>
-
     <string name="preference_category_baseSetting">基本设置</string>
 
     <string name="preference_import">导入外部数据</string>
     <string name="preference_set_hero">设置Hero</string>
     <string name="preference_visit">设置关注列表为按照“访问量”排序</string>
+    <string name="preference_importData">将用户数据保存至本地</string>
+    <string name="preference_importDataStr">
+        当该设置为‘打开’状态，且登录了该软件，你的关注数据（其他数据会在后期版本中添加）会保存到当前设备本地文件中，
+        该功能可保证只登录一次后，可将用户数据进行‘离线化’，如果你退出了当前账户，你的用户数据还会保存在
+        本地，想进行清除的话，可使用下面的‘清除用户数据’功能
+    </string>
+    <string name="preference_clean_userData">清除用户数据</string>
     <string name="preference_clean_cache">清除缓存</string>
 
     <string name="preference_category_about">关于</string>
 
-    <string name="preference_about_biu_video">关于本APP</string>
-    <string name="preference_version">版本</string>
     <string name="preference_open_source_license">开源许可</string>
     <string name="preference_thanks_list">感谢列表</string>
 
     <string name="preference_category_feed_back">反馈</string>
 
     <string name="preference_star_rating">提交反馈</string>
-    <string name="preference_feed_back_bug">提交BUG</string>
 
-<!--    <string name="set_hero_preview">预览</string>-->
+    <!--    <string name="set_hero_preview">预览</string>-->
     <string name="set_hero_auto">自动更换</string>
-    <string name="set_hero_custom">自定义</string>
+
 <!--    <string name="set_hero_title">设置主界面显示Hero的方式</string>-->
-    <string name="set_hero_save">保存</string>
-    <string name="set_hero_close">关闭</string>
 
     <array name="heroNames">
         <item>DC-原子侠</item>

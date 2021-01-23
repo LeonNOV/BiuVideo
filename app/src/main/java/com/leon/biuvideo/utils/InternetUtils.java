@@ -3,7 +3,13 @@ package com.leon.biuvideo.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.widget.Toast;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+
+import com.alibaba.fastjson.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class InternetUtils {
 
@@ -69,5 +75,32 @@ public class InternetUtils {
         InternetState(int value) {
             this.value = value;
         }
+    }
+
+    /**
+     * 判断当前IP是否为中国IP
+     *
+     * @param context   context
+     * @return  返回判断状态
+     */
+    public static boolean isCN (Context context) {
+        final String ipApi = "http://ip-api.com/json/";
+
+        // 获取当前IP
+        WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        WifiInfo connectionInfo = wifiManager.getConnectionInfo();
+        int ipAddress = connectionInfo.getIpAddress();
+
+        String ipStr = (ipAddress & 0xFF) + "." +
+                ((ipAddress >> 8) & 0xFF) + "." +
+                ((ipAddress >> 16) & 0xFF) + "." +
+                ((ipAddress >> 24) & 0xFF);
+
+        // 获取响应体
+        Map<String, String> params = new HashMap<>();
+        params.put("fields", "countryCode");
+        JSONObject response = HttpUtils.getResponse(ipApi + ipStr, params);
+
+        return response.getString("countryCode").equals("CN");
     }
 }

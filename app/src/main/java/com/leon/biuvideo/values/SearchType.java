@@ -3,7 +3,8 @@ package com.leon.biuvideo.values;
 public enum SearchType {
     VIDEO("video"),
     ARTICLE("article"),
-    BILI_USER("bili_user");
+    BILI_USER("bili_user"),
+    BANGUMI("media_bangumi");
 
     public String value;
 

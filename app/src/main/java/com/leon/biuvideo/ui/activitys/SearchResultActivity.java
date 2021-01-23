@@ -1,50 +1,45 @@
- package com.leon.biuvideo.ui.activitys;
+package com.leon.biuvideo.ui.activitys;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.view.inputmethod.InputMethodSubtype;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.ViewPageAdapter;
+import com.leon.biuvideo.adapters.FragmentViewPagerAdapter;
 import com.leon.biuvideo.ui.fragments.searchResultFragments.ArticleResultFragment;
+import com.leon.biuvideo.ui.fragments.searchResultFragments.BangumiResultFragment;
 import com.leon.biuvideo.ui.fragments.searchResultFragments.BiliUserResultFragment;
 import com.leon.biuvideo.ui.fragments.searchResultFragments.VideoResultFragment;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.ViewUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
- /**
-  * 搜索结果Activity
-  */
- public class SearchResultActivity extends AppCompatActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
-//     private ProgressBar search_progressBar;
-     private ImageView search_imageView_back, search_imageView_clean;
-     private EditText search_editText_searchBox;
-     private TextView search_textView_result_video, search_textView_result_article, search_textView_result_user;
-     private ViewPager search_viewPager;
+/**
+ * 搜索结果Activity
+ */
+public class SearchResultActivity extends AppCompatActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
+    private EditText search_editText_searchBox;
+    private TextView search_textView_result_video, search_textView_result_article, search_textView_result_user, search_textView_result_bangumi;
+    private ViewPager search_viewPager;
 
     private String keyword;
     private List<Fragment> fragments;
-    private ViewPageAdapter viewPageAdapter;
+    private Map<Integer, TextView> textViewMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +54,10 @@ import java.util.List;
     }
 
     private void initView() {
-        search_imageView_back = findViewById(R.id.search_imageView_back);
+        ImageView search_imageView_back = findViewById(R.id.search_imageView_back);
         search_imageView_back.setOnClickListener(this);
 
-        search_imageView_clean = findViewById(R.id.search_imageView_clean);
+        ImageView search_imageView_clean = findViewById(R.id.search_imageView_clean);
         search_imageView_clean.setOnClickListener(this);
 
         search_editText_searchBox = findViewById(R.id.search_editText_searchBox);
@@ -74,7 +69,7 @@ import java.util.List;
                 boolean isHaveNetwork = InternetUtils.checkNetwork(getApplicationContext());
 
                 if (!isHaveNetwork) {
-                    Toast.makeText(getApplicationContext(), R.string.network_sign, Toast.LENGTH_SHORT).show();
+                    Snackbar.make(textView, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
                     return false;
                 }
 
@@ -84,7 +79,7 @@ import java.util.List;
                     String value = search_editText_searchBox.getText().toString();
 
                     if (value.equals("")) {
-                        Toast.makeText(SearchResultActivity.this, "不输点啥就搜吗？", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(textView, "不输点儿啥吗？", Snackbar.LENGTH_SHORT).show();
                         return false;
                     } else {
                         //刷新当前界面数据
@@ -106,6 +101,9 @@ import java.util.List;
         search_textView_result_user = findViewById(R.id.search_textView_result_user);
         search_textView_result_user.setOnClickListener(this);
 
+        search_textView_result_bangumi = findViewById(R.id.search_textView_result_bangumi);
+        search_textView_result_bangumi.setOnClickListener(this);
+
         search_viewPager = findViewById(R.id.search_viewPager);
         search_viewPager.addOnPageChangeListener(this);
     }
@@ -116,6 +114,12 @@ import java.util.List;
         keyword = intent.getStringExtra("keyword");
 
         search_editText_searchBox.setText(keyword);
+
+        textViewMap = new HashMap<>();
+        textViewMap.put(0, search_textView_result_video);
+        textViewMap.put(1, search_textView_result_bangumi);
+        textViewMap.put(2, search_textView_result_article);
+        textViewMap.put(3, search_textView_result_user);
     }
 
     private void initViewPage() {
@@ -123,26 +127,32 @@ import java.util.List;
             fragments = new ArrayList<>();
         }
 
-        fragments.add(VideoResultFragment.getInstance(keyword));
-        fragments.add(ArticleResultFragment.getInstance(keyword));
-        fragments.add(BiliUserResultFragment.getInstance(keyword));
+        fragments.add(new VideoResultFragment(keyword));
+        fragments.add(new BangumiResultFragment(keyword));
+        fragments.add(new ArticleResultFragment(keyword));
+        fragments.add(new BiliUserResultFragment(keyword));
 
-        viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, fragments);
-        search_viewPager.setAdapter(viewPageAdapter);
+        FragmentViewPagerAdapter fragmentViewPagerAdapter = new FragmentViewPagerAdapter(getSupportFragmentManager(), fragments);
+        search_viewPager.setAdapter(fragmentViewPagerAdapter);
         search_viewPager.setOffscreenPageLimit(fragments.size());
     }
 
     private void refreshFragments() {
         for (Fragment fragment : fragments) {
-            if (fragment instanceof VideoResultFragment) {
-                VideoResultFragment videoResultFragment = (VideoResultFragment) fragment;
-                videoResultFragment.updateData(keyword);
-            } else if (fragment instanceof ArticleResultFragment){
-                ArticleResultFragment articleResultFragment = (ArticleResultFragment) fragment;
-                articleResultFragment.updateData(keyword);
-            } else {
-                BiliUserResultFragment biliUserResultFragment = (BiliUserResultFragment) fragment;
-                biliUserResultFragment.updateData(keyword);
+            if (!fragment.isHidden()) {
+                if (fragment instanceof VideoResultFragment) {
+                    VideoResultFragment videoResultFragment = (VideoResultFragment) fragment;
+                    videoResultFragment.updateData(keyword);
+                } else if (fragment instanceof ArticleResultFragment) {
+                    ArticleResultFragment articleResultFragment = (ArticleResultFragment) fragment;
+                    articleResultFragment.updateData(keyword);
+                } else if (fragment instanceof BiliUserResultFragment) {
+                    BiliUserResultFragment biliUserResultFragment = (BiliUserResultFragment) fragment;
+                    biliUserResultFragment.updateData(keyword);
+                } else {
+                    BangumiResultFragment bangumiResultFragment = (BangumiResultFragment) fragment;
+                    bangumiResultFragment.updateData(keyword);
+                }
             }
         }
     }
@@ -155,21 +165,24 @@ import java.util.List;
 
                 break;
             case R.id.search_imageView_clean:
-                search_editText_searchBox.setText("");
+                search_editText_searchBox.getText().clear();
 
                 break;
             case R.id.search_textView_result_video:
                 search_viewPager.setCurrentItem(0);
 
                 break;
-            case R.id.search_textView_result_article:
+            case R.id.search_textView_result_bangumi:
                 search_viewPager.setCurrentItem(1);
 
                 break;
-            case R.id.search_textView_result_user:
+            case R.id.search_textView_result_article:
                 search_viewPager.setCurrentItem(2);
 
                 break;
+
+            case R.id.search_textView_result_user:
+                search_viewPager.setCurrentItem(3);
             default:
                 break;
         }
@@ -177,33 +190,7 @@ import java.util.List;
 
     @Override
     public void onPageSelected(int position) {
-        int point_bilibili_pink = R.drawable.shape_bilibili_pink;
-        int point_bilibili_pink_lite = R.drawable.ripple_bilibili_pink_lite;
-
-        switch (position) {
-            case 0:
-                search_textView_result_video.setBackgroundResource(point_bilibili_pink);
-                search_textView_result_article.setBackgroundResource(point_bilibili_pink_lite);
-                search_textView_result_user.setBackgroundResource(point_bilibili_pink_lite);
-
-                break;
-            case 1:
-                search_textView_result_video.setBackgroundResource(point_bilibili_pink_lite);
-                search_textView_result_article.setBackgroundResource(point_bilibili_pink);
-                search_textView_result_user.setBackgroundResource(point_bilibili_pink_lite);
-
-                break;
-            case 2:
-                search_textView_result_video.setBackgroundResource(point_bilibili_pink_lite);
-                search_textView_result_article.setBackgroundResource(point_bilibili_pink_lite);
-                search_textView_result_user.setBackgroundResource(point_bilibili_pink);
-
-                break;
-            default:
-                break;
-        }
-
-        Fuck.blue("pageIndex:" + position);
+        ViewUtils.changeText(textViewMap, position);
     }
 
     @Override

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/downloadedVideoListFragment">
+    <fragment
+        android:id="@+id/downloadedMusicListFragment"
+        android:name="com.leon.biuvideo.ui.fragments.downloadedFragments.DownloadedMusicListFragment"
+        android:label="DownloadedMusicListFragment" >
+        <action
+            android:id="@+id/action_downloadedMusicListFragment_to_downloadedVideoListFragment"
+            app:destination="@id/downloadedVideoListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/downloadedVideoDetailFragment"
+        android:name="com.leon.biuvideo.ui.fragments.downloadedFragments.DownloadedVideoDetailFragment"
+        android:label="DownloadedVideoDetailFragment" >
+        <action
+            android:id="@+id/action_downloadedVideoDetailFragment_to_downloadedVideoListFragment"
+            app:destination="@id/downloadedVideoListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/downloadedVideoListFragment"
+        android:name="com.leon.biuvideo.ui.fragments.downloadedFragments.DownloadedVideoListFragment"
+        android:label="DownloadedVideoListFragment" >
+        <action
+            android:id="@+id/action_downloadedVideoListFragment_to_downloadedMusicListFragment"
+            app:destination="@id/downloadedMusicListFragment" />
+        <action
+            android:id="@+id/action_downloadedVideoListFragment_to_downloadedVideoDetailFragment"
+            app:destination="@id/downloadedVideoDetailFragment" />
+        <action
+            android:id="@+id/action_downloadedVideoListFragment_to_downloadFailListFragment"
+            app:destination="@id/downloadFailListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/downloadFailListFragment"
+        android:name="com.leon.biuvideo.ui.fragments.downloadedFragments.DownloadFailListFragment"
+        android:label="DownloadFailListFragment" >
+        <action
+            android:id="@+id/action_downloadFailListFragment_to_downloadedVideoListFragment"
+            app:destination="@id/downloadedVideoListFragment" />
+    </fragment>
+</navigation>

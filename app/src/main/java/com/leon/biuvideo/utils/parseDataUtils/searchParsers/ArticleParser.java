@@ -1,12 +1,15 @@
 package com.leon.biuvideo.utils.parseDataUtils.searchParsers;
 
+import android.content.Context;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.values.OrderType;
+import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.Paths;
 import com.leon.biuvideo.values.SearchType;
+import com.leon.biuvideo.values.SortType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,27 +22,39 @@ import okhttp3.Headers;
  * 解析搜索结果-专栏数据
  */
 public class ArticleParser {
+    private final Map<String, String> requestHeader;
+
+    public ArticleParser(Context context) {
+        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
+        for (Map.Entry<String, String> entry : this.requestHeader.entrySet()) {
+            if (entry.getKey().equals("Referer")) {
+                entry.setValue("https://search.bilibili.com");
+                break;
+            }
+        }
+    }
+
     /**
      * 获取专栏列表
      *
      * @param keyword   关键字
      * @param pn    页码
-     * @param orderType 排序方式
+     * @param sortType 排序方式
      * @return  返回专栏数据
      */
-    public List<Article> articleParse(String keyword, int pn, OrderType orderType) {
+    public List<Article> articleParse(String keyword, int pn, SortType sortType) {
         Map<String, String> params = new HashMap<>();
         params.put("keyword", keyword);
         params.put("search_type", SearchType.ARTICLE.value);
         params.put("page", String.valueOf(pn));
-        params.put("order", orderType.value);
+        params.put("order", sortType.value);
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
+        JSONObject responseObject = HttpUtils.getResponse(Paths.search, Headers.of(requestHeader), params);
         JSONObject data = responseObject.getJSONObject("data");
 
         List<Article> articles = new ArrayList<>();
         if (data != null) {
-            articles = parseData(data, keyword);
+            articles = parseData(data);
         }
 
         return articles;
@@ -51,9 +66,7 @@ public class ArticleParser {
      * @param data  JSONObject对象
      * @return  返回解析结果
      */
-    private List<Article> parseData(JSONObject data, String keyword) {
-        String oldStr = "<em class=\"keyword\">" + keyword + "</em>";
-
+    private List<Article> parseData(JSONObject data) {
         JSONArray result = data.getJSONArray("result");
 
         List<Article> articles;
@@ -71,7 +84,7 @@ public class ArticleParser {
                 article.like = jsonObject.getIntValue("like");
 
                 //获取标题
-                article.title = jsonObject.getString("title").replaceAll(oldStr, keyword);
+                article.title = jsonObject.getString("title").replaceAll("<em class=\"keyword\">", "").replaceAll("</em>", "");
 
                 //获取封面url
                 article.coverUrl = "http://" + jsonObject.getJSONArray("image_urls").getString(0);
@@ -86,7 +99,7 @@ public class ArticleParser {
                 article.summary = jsonObject.getString("desc");
 
                 //获取文章ID
-                article.articleID = jsonObject.getLongValue("id");
+                article.articleId = jsonObject.getLongValue("id");
 
                 //获取文章分类标签
                 article.category = jsonObject.getString("category_name");
@@ -116,7 +129,7 @@ public class ArticleParser {
         String separator = ",";
 
         for (Article article : articles) {
-            ids.append(article.articleID).append(separator);
+            ids.append(article.articleId).append(separator);
         }
 
         int length = ids.length();
@@ -141,7 +154,7 @@ public class ArticleParser {
 
         //将对应详细信息放入对应Article对象中
         for (Article article : articles) {
-            JSONObject articleObject = (JSONObject) details.get(String.valueOf(article.articleID));
+            JSONObject articleObject = (JSONObject) details.get(String.valueOf(article.articleId));
 
             //获取author对象
             JSONObject authorObject = articleObject.getJSONObject("author");
@@ -165,16 +178,16 @@ public class ArticleParser {
      * @param keyword   关键字
      * @return  返回搜索结果个数
      */
-    public static int getSearchArticleCount(String keyword) {
+    public int getSearchArticleCount(String keyword) {
         int count = -1;
 
         Map<String, String> params = new HashMap<>();
         params.put("keyword", keyword);
         params.put("search_type", SearchType.ARTICLE.value);
         params.put("page", "1");
-        params.put("order", OrderType.DEFAULT.value);
+        params.put("order", SortType.DEFAULT.value);
 
-        HttpUtils httpUtils = new HttpUtils(Paths.search, Headers.of("Referer", "https://search.bilibili.com"), params);
+        HttpUtils httpUtils = new HttpUtils(Paths.search, Headers.of(requestHeader), params);
         String response = httpUtils.getData();
 
         JSONObject jsonObject = JSONObject.parseObject(response);
