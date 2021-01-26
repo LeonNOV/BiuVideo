@@ -245,6 +245,7 @@ public class VideoResultFragment extends BaseLazyFragment {
         this.isLoaded = false;
         onResume();
         this.smart_refresh_layout_fragment_linearLayout.setVisibility(View.VISIBLE);
+        this.search_result_no_data.setVisibility(View.GONE);
 
         /**
          * 需要将二次搜索的第一个页面的数据放入一个临时的变量中

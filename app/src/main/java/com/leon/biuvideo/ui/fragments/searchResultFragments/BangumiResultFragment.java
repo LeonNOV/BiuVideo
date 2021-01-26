@@ -228,6 +228,7 @@ public class BangumiResultFragment extends BaseLazyFragment {
         this.isLoaded = false;
         onResume();
         this.smart_refresh_layout_fragment_linearLayout.setVisibility(View.VISIBLE);
+        this.search_result_no_data.setVisibility(View.GONE);
 
         if (bangumiList != null) {
             bangumiAdapter.removeAll();

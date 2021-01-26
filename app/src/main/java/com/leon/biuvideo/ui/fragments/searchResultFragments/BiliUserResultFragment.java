@@ -128,6 +128,7 @@ public class BiliUserResultFragment extends BaseLazyFragment {
             search_result_recyclerView.setVisibility(View.GONE);
             search_result_smartRefresh.setEnabled(false);
         } else {
+            search_result_no_data.setVisibility(View.GONE);
             search_result_recyclerView.setVisibility(View.VISIBLE);
             search_result_smartRefresh.setEnabled(true);
 
@@ -244,6 +245,7 @@ public class BiliUserResultFragment extends BaseLazyFragment {
         this.isLoaded = false;
         onResume();
         this.smart_refresh_layout_fragment_linearLayout.setVisibility(View.VISIBLE);
+        this.search_result_no_data.setVisibility(View.GONE);
 
         if (biliUserList != null) {
             biliUserAdapter.removeAll();

@@ -234,6 +234,7 @@ public class ArticleResultFragment extends BaseLazyFragment {
         this.isLoaded = false;
         onResume();
         this.smart_refresh_layout_fragment_linearLayout.setVisibility(View.VISIBLE);
+        this.search_result_no_data.setVisibility(View.GONE);
 
         if (articleList != null) {
             userArticleAdapter.removeAll();
