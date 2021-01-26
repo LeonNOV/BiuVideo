@@ -138,6 +138,7 @@ public class VideoResultFragment extends BaseLazyFragment {
 
             //获取第一页结果总数，最大为20，最小为0
             currentCount += videoList.size();
+            pageNum++;
 
             //判断第一次加载是否已加载完所有数据
             if (count == videoList.size()) {
@@ -187,8 +188,6 @@ public class VideoResultFragment extends BaseLazyFragment {
                 //判断是否处于拖拽已释放的状态
                 if (state.finishing == RefreshState.ReleaseToLoad.finishing) {
                     if (dataState) {
-                        pageNum++;
-
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -227,6 +226,8 @@ public class VideoResultFragment extends BaseLazyFragment {
             dataState = false;
             search_result_smartRefresh.setEnabled(false);
         }
+
+        pageNum++;
     }
 
     /**

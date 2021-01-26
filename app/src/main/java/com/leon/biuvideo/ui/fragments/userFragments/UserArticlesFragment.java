@@ -170,7 +170,6 @@ public class UserArticlesFragment extends BaseLazyFragment {
                 //判断是否处于拖拽已释放的状态
                 if (state.finishing == RefreshState.ReleaseToLoad.finishing) {
                     if (dataState) {
-                        pageNum++;
 
                         handler.postDelayed(new Runnable() {
                             @Override
@@ -208,5 +207,7 @@ public class UserArticlesFragment extends BaseLazyFragment {
             dataState = false;
             smartRefresh.setEnabled(false);
         }
+
+        pageNum++;
     }
 }

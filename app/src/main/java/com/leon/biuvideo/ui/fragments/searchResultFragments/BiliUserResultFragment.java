@@ -133,6 +133,7 @@ public class BiliUserResultFragment extends BaseLazyFragment {
 
             biliUserList = biliUserParser.userParse(keyword, pageNum, SortType.DEFAULT);
             currentCount += biliUserList.size();
+            pageNum++;
 
             if (count == biliUserList.size()) {
                 dataState = false;
@@ -186,8 +187,6 @@ public class BiliUserResultFragment extends BaseLazyFragment {
                 //判断是否处于拖拽已释放的状态
                 if (state.finishing == RefreshState.ReleaseToLoad.finishing) {
                     if (dataState) {
-                        pageNum++;
-
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -226,6 +225,8 @@ public class BiliUserResultFragment extends BaseLazyFragment {
             dataState = false;
             search_result_smartRefresh.setEnabled(false);
         }
+
+        pageNum++;
     }
 
     /**

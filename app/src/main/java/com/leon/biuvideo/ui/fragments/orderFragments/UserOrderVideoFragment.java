@@ -213,12 +213,13 @@ public class UserOrderVideoFragment extends BaseLazyFragment {
      * 获取收藏的视频
      */
     private void getFavoriteVideo() {
-        pageNum++;
         userFolderData = userFolderParser.parseUserFolderData(nowFolderId, pageNum);
 
         if (userFolderData.medias.size() < 20) {
             dataState = false;
             fragment_favorite_smartRefresh.setEnabled(false);
         }
+
+        pageNum++;
     }
 }

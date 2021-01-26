@@ -131,8 +131,8 @@ public class ArticleResultFragment extends BaseLazyFragment {
             search_result_smartRefresh.setEnabled(true);
 
             articleList = articleParser.articleParse(keyword, pageNum, SortType.DEFAULT);
-
             currentCount += articleList.size();
+            pageNum++;
 
             if (count == articleList.size()) {
                 dataState = false;
@@ -178,8 +178,6 @@ public class ArticleResultFragment extends BaseLazyFragment {
                 }
 
                 if (dataState) {
-                    pageNum++;
-
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -217,6 +215,8 @@ public class ArticleResultFragment extends BaseLazyFragment {
             dataState = false;
             search_result_smartRefresh.setEnabled(false);
         }
+
+        pageNum++;
     }
 
     /**
