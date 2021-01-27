@@ -232,8 +232,6 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
             anthologyAdapter.setOnClickAnthologyListener(new AnthologyAdapter.OnClickAnthologyListener() {
                 @Override
                 public void onClick(int position, long cid) {
-                    anthologySelectedIndex = position;
-
                     if (webViewUtils == null) {
                         webViewUtils = new WebViewUtils(webView);
                     }
@@ -371,12 +369,10 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                             //获取视频选集信息
                             Play playWithDownload = mediaParser.parseMedia(viewPage.bvid, cid, false);
 
-                            anthologySelectedIndex = position;
-
                             videoEntries = playWithDownload.videoEntries();
                             for (Map.Entry<Integer, Media> entry : videoEntries) {
                                 entry.getValue().isDownloaded = downloadRecordsDatabaseUtils
-                                        .queryVideoDownloadState(String.valueOf(viewPage.anthologyInfoList.get(anthologySelectedIndex).cid + entry.getKey()));
+                                        .queryVideoDownloadState(String.valueOf(viewPage.anthologyInfoList.get(position).cid + entry.getKey()));
                             }
 
                             audioEntries = playWithDownload.audioEntries();
@@ -389,7 +385,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                                 }
                             }
 
-                            saveSingleVideo(videoEntry);
+                            saveSingleVideo(videoEntry, position);
                         }
 
                         @Override
@@ -416,7 +412,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                         @Override
                         public void onClickListener(Map.Entry<Integer, Media> mediaEntry) {
                             singleVideoQualityDialog.dismiss();
-                            saveSingleVideo(mediaEntry);
+                            saveSingleVideo(mediaEntry, anthologySelectedIndex);
                         }
                     });
 
@@ -473,7 +469,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void saveSingleVideo(Map.Entry<Integer, Media> mediaEntry) {
+    private void saveSingleVideo(Map.Entry<Integer, Media> mediaEntry, int position) {
         //获取权限
         FileUtils.verifyPermissions(VideoActivity.this);
 
@@ -489,7 +485,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         addToDownloadedRecordsForVideo();
 
         // 添加至DownloadDetailsForMedia
-        String fileName = addToDownloadDetailMedia(mediaEntry, videoUrlBase, audioUrlBase);
+        String fileName = addToDownloadDetailMedia(mediaEntry, videoUrlBase, audioUrlBase, position);
 
         if (simpleThreadPool == null) {
             simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.DownloadTaskNum, SimpleThreadPool.DownloadTask);
@@ -500,15 +496,15 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
     }
 
     @NotNull
-    private String addToDownloadDetailMedia(Map.Entry<Integer, Media> mediaEntry, String videoUrlBase, String audioUrlBase) {
+    private String addToDownloadDetailMedia(Map.Entry<Integer, Media> mediaEntry, String videoUrlBase, String audioUrlBase, int position) {
         DownloadedDetailMedia downloadedDetailMedia = new DownloadedDetailMedia();
 
-        AnthologyInfo anthologyInfo = viewPage.anthologyInfoList.get(anthologySelectedIndex);
+        AnthologyInfo anthologyInfo = viewPage.anthologyInfoList.get(position);
         String fileName = viewPage.bvid + "-" + anthologyInfo.part + "-" + mediaEntry.getValue().quality.split(" ")[1];
 
         downloadedDetailMedia.fileName = fileName;
         downloadedDetailMedia.cover = viewPage.coverUrl;
-        downloadedDetailMedia.title = viewPage.anthologyInfoList.get(anthologySelectedIndex).part;
+        downloadedDetailMedia.title = anthologyInfo.part;
         downloadedDetailMedia.videoUrl = videoUrlBase;
         downloadedDetailMedia.audioUrl = audioUrlBase;
         downloadedDetailMedia.qualityId = mediaEntry.getKey();
@@ -516,7 +512,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         // 获取视频和音频总大小
         downloadedDetailMedia.size = ResourceUtils.getResourcesSize(videoUrlBase) + ResourceUtils.getResourcesSize(audioUrlBase);
         downloadedDetailMedia.mainId = viewPage.bvid;
-        downloadedDetailMedia.subId = viewPage.anthologyInfoList.get(anthologySelectedIndex).cid;
+        downloadedDetailMedia.subId = anthologyInfo.cid;
         downloadedDetailMedia.resourceMark = downloadedDetailMedia.subId + "-" + downloadedDetailMedia.qualityId;
         downloadedDetailMedia.isVideo = true;
 

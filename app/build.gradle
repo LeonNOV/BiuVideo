@@ -10,8 +10,8 @@ android {
         applicationId "com.leon.biuvideo"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 4
-        versionName "2.6.3-beta"
+        versionCode 5
+        versionName "2.6.5-beta"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

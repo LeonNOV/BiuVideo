@@ -27,7 +27,6 @@ import java.util.concurrent.FutureTask;
 public class DownloadedFailListAdapter extends BaseAdapter<DownloadedDetailMedia> {
     private final Context context;
     private final List<DownloadedDetailMedia> downloadedDetailMedias;
-    private DownloadedDetailMedia downloadedDetailMedia;
 
     private SimpleThreadPool simpleThreadPool;
 
@@ -47,7 +46,7 @@ public class DownloadedFailListAdapter extends BaseAdapter<DownloadedDetailMedia
         int videoIcon = R.drawable.icon_rectangle_video;
         int audioIcon = R.drawable.icon_rectangle_music;
 
-        downloadedDetailMedia = downloadedDetailMedias.get(position);
+        DownloadedDetailMedia downloadedDetailMedia = downloadedDetailMedias.get(position);
 
         holder
                 .setImage(R.id.downloaded_item_detail_imageView_mark, downloadedDetailMedia.isVideo ? videoIcon : audioIcon)

@@ -23,7 +23,7 @@ import java.util.UUID;
 public class FileUtils {
 
     /**
-     * 创建文件夹，默认再系统根目录中创建
+     * 创建文件夹，默认在系统根目录中创建
      *
      * @param folderName    子文件夹名称
      */
@@ -86,7 +86,8 @@ public class FileUtils {
     public enum ResourcesFolder {
         VIDEOS("Videos"),
         PICTURES("Pictures"),
-        MUSIC("Music");
+        MUSIC("Music"),
+        TEMP("Temp");
 
         public String value;
 

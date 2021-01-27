@@ -294,7 +294,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                                 Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
                                 return;
                             }
-                            saveSingleVideo(mediaEntry);
+                            saveSingleVideo(mediaEntry, selectAnthologyIndex);
                         }
                     });
                     singleVideoQualityDialog.show();
@@ -332,7 +332,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                                 }
                             }
 
-                            saveSingleVideo(videoEntry);
+                            saveSingleVideo(videoEntry, position);
                         }
 
                         @Override
@@ -386,7 +386,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private void saveSingleVideo(Map.Entry<Integer, Media> mediaEntry) {
+    private void saveSingleVideo(Map.Entry<Integer, Media> mediaEntry, int position) {
         if (simpleThreadPool == null) {
             simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.DownloadTaskNum, SimpleThreadPool.DownloadTask);
         }
@@ -401,7 +401,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
         addToDownloadedRecordsForVideo();
 
         // 添加至DownloadDetailsForMedia
-        String fileName = addToDownloadDetailMedia(mediaEntry, videoUrlBase, audioUrlBase);
+        String fileName = addToDownloadDetailMedia(mediaEntry, videoUrlBase, audioUrlBase, position);
 
         Snackbar.make(bangumi_linearLayout, R.string.isDownloading, Snackbar.LENGTH_SHORT).show();
 
@@ -419,11 +419,11 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
         downloadRecordsDatabaseUtils.addVideo(downloadedRecordsForVideo);
     }
 
-    private String addToDownloadDetailMedia(Map.Entry<Integer, Media> mediaEntry, String videoUrlBase, String audioUrlBase) {
+    private String addToDownloadDetailMedia(Map.Entry<Integer, Media> mediaEntry, String videoUrlBase, String audioUrlBase, int position) {
         DownloadedDetailMedia downloadedDetailMedia = new DownloadedDetailMedia();
-        Ep ep = bangumi.eps.get(selectAnthologyIndex);
+        Ep ep = bangumi.eps.get(position);
 
-        String fileName = bangumi.mediaId + "-" + ep.longTitle + "-" + mediaEntry.getValue().quality.split(" ")[1];
+        String fileName = ep.cid + "-" + ep.longTitle + "-" + mediaEntry.getValue().quality.split(" ")[1];
 
         downloadedDetailMedia.fileName = fileName;
         downloadedDetailMedia.cover = ep.cover;

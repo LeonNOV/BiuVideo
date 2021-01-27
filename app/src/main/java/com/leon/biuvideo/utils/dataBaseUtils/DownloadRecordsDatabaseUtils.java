@@ -3,7 +3,9 @@ package com.leon.biuvideo.utils.dataBaseUtils;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedRecordsForVideo;
@@ -225,13 +227,31 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
      * @param downloadedRecordsForVideo downloadedRecordsForVideo对象
      */
     public void addVideo(DownloadedRecordsForVideo downloadedRecordsForVideo) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("cover", downloadedRecordsForVideo.cover);
-        contentValues.put("title", downloadedRecordsForVideo.title);
-        contentValues.put("upName", downloadedRecordsForVideo.upName);
-        contentValues.put("mainId", downloadedRecordsForVideo.mainId);
+        boolean state = queryVideoFolderState(downloadedRecordsForVideo.mainId);
 
-        sqLiteDatabase.insert(videoRecord, null, contentValues);
+        if (!state) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("cover", downloadedRecordsForVideo.cover);
+            contentValues.put("title", downloadedRecordsForVideo.title);
+            contentValues.put("upName", downloadedRecordsForVideo.upName);
+            contentValues.put("mainId", downloadedRecordsForVideo.mainId);
+
+            sqLiteDatabase.insert(videoRecord, null, contentValues);
+        }
+    }
+
+    /**
+     * 查询视频文件夹存在状态
+     *
+     * @param mainId    主ID
+     * @return  存在状态
+     */
+    private boolean queryVideoFolderState(String mainId) {
+        Cursor cursor = sqLiteDatabase.query(videoRecord, new String[]{"id"}, "mainId = ?", new String[]{mainId}, null, null, null);
+        int count = cursor.getCount();
+
+        cursor.close();
+        return count > 0;
     }
 
     /**
@@ -240,20 +260,24 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
      * @param downloadedDetailMedia downloadedDetailMedia对象
      */
     public void addMediaDetail(DownloadedDetailMedia downloadedDetailMedia) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("fileName", downloadedDetailMedia.fileName);
-        contentValues.put("cover", downloadedDetailMedia.cover);
-        contentValues.put("title", downloadedDetailMedia.title);
-        contentValues.put("size", downloadedDetailMedia.size);
-        contentValues.put("mainId", downloadedDetailMedia.mainId);
-        contentValues.put("subId", downloadedDetailMedia.subId);
-        contentValues.put("videoUrl", downloadedDetailMedia.videoUrl);
-        contentValues.put("audioUrl", downloadedDetailMedia.audioUrl);
-        contentValues.put("qualityId", downloadedDetailMedia.qualityId);
-        contentValues.put("resourceMark", downloadedDetailMedia.resourceMark);
-        contentValues.put("isVideo", downloadedDetailMedia.isVideo ? 1 : 0);
+        boolean b = queryVideo(downloadedDetailMedia.mainId, String.valueOf(downloadedDetailMedia.subId));
 
-        sqLiteDatabase.insert(videoDetail, null, contentValues);
+        if (!b) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("fileName", downloadedDetailMedia.fileName);
+            contentValues.put("cover", downloadedDetailMedia.cover);
+            contentValues.put("title", downloadedDetailMedia.title);
+            contentValues.put("size", downloadedDetailMedia.size);
+            contentValues.put("mainId", downloadedDetailMedia.mainId);
+            contentValues.put("subId", downloadedDetailMedia.subId);
+            contentValues.put("videoUrl", downloadedDetailMedia.videoUrl);
+            contentValues.put("audioUrl", downloadedDetailMedia.audioUrl);
+            contentValues.put("qualityId", downloadedDetailMedia.qualityId);
+            contentValues.put("resourceMark", downloadedDetailMedia.resourceMark);
+            contentValues.put("isVideo", downloadedDetailMedia.isVideo ? 1 : 0);
+
+            sqLiteDatabase.insert(videoDetail, null, contentValues);
+        }
     }
 
     /**

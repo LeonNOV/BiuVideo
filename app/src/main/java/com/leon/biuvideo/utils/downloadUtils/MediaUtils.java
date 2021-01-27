@@ -7,7 +7,6 @@ import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.media.MediaMuxer;
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -15,7 +14,6 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.videoBean.play.Play;
 import com.leon.biuvideo.ui.views.GeneralNotification;
 import com.leon.biuvideo.utils.FileUtils;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParser;
@@ -29,13 +27,16 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 /**
  * 下载媒体资源(视频/音频)
  */
 public class MediaUtils {
+    private int videoTrackIndex = 0;
+    private int audioTrackIndex = 0;
+    private MediaMuxer mediaMuxer;
+
     private final Context context;
     private final int tag;
 
@@ -55,40 +56,50 @@ public class MediaUtils {
      * @param fileName   文件名称
      */
     public void saveVideo(String videoPath, String audioPath, String fileName) {
-        String folderPath = FileUtils.createFolder(FileUtils.ResourcesFolder.VIDEOS);
-
-        String outPath = folderPath + "/" + fileName + ".mp4";
-
-        Fuck.blue("VideoUrl:" + videoPath);
-        Fuck.blue("AudioUrl:" + audioPath);
-
-        long begin = System.currentTimeMillis();
-
         // 设置downloadState状态为“正在下载”状态
         setDownloadState(fileName, false);
         setNotificationState(fileName, false, true);
 
+        // 先对视频、音频进行缓存，两个文件均保存至`Temp`文件夹
+        SaveMediaUtils saveMediaUtils = SaveMediaUtils.getInstance();
+        saveMediaUtils.setOnDownloadMediaListener(new SaveMediaUtils.OnDownloadMediaListener() {
+            @Override
+            public void onDownloadFailed() {
+
+            }
+
+            @Override
+            public void onDownloadSuccess(String videoTempPath, String audiTempPath) {
+                // 如果视频、音频均下载完成就进行合成
+                if (videoTempPath != null && audiTempPath != null) {
+                    mergeVideo(videoTempPath, audiTempPath, fileName);
+                }
+            }
+
+            @Override
+            public void onDownloading(int progress) {
+
+            }
+        });
+        saveMediaUtils.saveMedia(videoPath, audioPath, fileName);
+    }
+
+    private void mergeVideo(String videoTempPath, String audioTempPath, String fileName) {
         MediaExtractor videoExtractor = null;
         MediaExtractor audioExtractor = null;
 
         try {
-            //设置头信息
-            HashMap<String, String> headers = HttpUtils.getHeaders();
-
-            //创建视频Extractor
-            videoExtractor = getVideoExtractor(videoPath, headers);
-            MediaFormat videoFormat = videoExtractor.getTrackFormat(0);
-            videoExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
-
-            //创建音频Extractor
-            audioExtractor = getAudioExtractor(audioPath, headers);
-            MediaFormat audioFormat = audioExtractor.getTrackFormat(0);
-            audioExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
+            String folderPath = FileUtils.createFolder(FileUtils.ResourcesFolder.VIDEOS);
+            String outPath = folderPath + "/" + fileName + ".mp4";
 
             //设置输出配置
-            MediaMuxer mediaMuxer = new MediaMuxer(outPath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
-            int videoTrack = mediaMuxer.addTrack(videoFormat);
-            int audioTrack = mediaMuxer.addTrack(audioFormat);
+            mediaMuxer = new MediaMuxer(outPath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
+
+            //创建视频Extractor
+            videoExtractor = getVideoExtractor(videoTempPath);
+
+            //创建音频Extractor
+            audioExtractor = getAudioExtractor(audioTempPath);
 
             /*
              * 设置缓冲区大小
@@ -98,73 +109,47 @@ public class MediaUtils {
              * 这样的错误可能是缓冲区太小的缘故，设置sampleSize的大小即可
              * */
             int sampleSize = 1024 * 1000;
-            ByteBuffer videoBuffer = ByteBuffer.allocate(sampleSize);
-            ByteBuffer audioBuffer = ByteBuffer.allocate(sampleSize);
+            ByteBuffer videoByteBuffer = ByteBuffer.allocate(sampleSize);
+            ByteBuffer audioByteBuffer = ByteBuffer.allocate(sampleSize);
 
             MediaCodec.BufferInfo videoBufferInfo = new MediaCodec.BufferInfo();
             MediaCodec.BufferInfo audioBufferInfo = new MediaCodec.BufferInfo();
 
             mediaMuxer.start();
 
-            boolean sawEOS_video = false;
-            int frameCount_video = 0;
-            int offset = 0;
-            while (!sawEOS_video) {
-                videoBufferInfo.offset = offset;
-                videoBufferInfo.size = videoExtractor.readSampleData(videoBuffer, offset);
-
-                if (videoBufferInfo.size < 0 || audioBufferInfo.size < 0) {
-                    sawEOS_video = true;
-                    videoBufferInfo.size = 0;
-                } else {
-                    videoBufferInfo.presentationTimeUs = videoExtractor.getSampleTime();
-                    videoBufferInfo.flags = videoExtractor.getSampleFlags();
-                    mediaMuxer.writeSampleData(videoTrack, videoBuffer, videoBufferInfo);
-                    videoExtractor.advance();
-                    frameCount_video++;
+            while (true) {
+                int readVideoSampleSize = videoExtractor.readSampleData(videoByteBuffer, 0);
+                if (readVideoSampleSize < 0) {
+                    break;
                 }
+                videoBufferInfo.size = readVideoSampleSize;
+                videoBufferInfo.presentationTimeUs = videoExtractor.getSampleTime();
+                videoBufferInfo.offset = 0;
+                videoBufferInfo.flags = videoExtractor.getSampleFlags();
+                mediaMuxer.writeSampleData(videoTrackIndex, videoByteBuffer, videoBufferInfo);
+                videoExtractor.advance();
 
 //                size += videoBufferInfo.size;
 //                currentSize = size;
 //                currentProgress = (int) (size * 100 / this.size);
             }
 
-            boolean sawEOS_audio = false;
-            int frameCount_audio = 0;
-            while (!sawEOS_audio) {
-                audioBufferInfo.offset = offset;
-                audioBufferInfo.size = audioExtractor.readSampleData(audioBuffer, offset);
-
-                if (videoBufferInfo.size < 0 || audioBufferInfo.size < 0) {
-                    sawEOS_audio = true;
-                    audioBufferInfo.size = 0;
-                } else {
-                    audioBufferInfo.presentationTimeUs = audioExtractor.getSampleTime();
-                    audioBufferInfo.flags = audioExtractor.getSampleFlags();
-                    mediaMuxer.writeSampleData(audioTrack, audioBuffer, audioBufferInfo);
-                    audioExtractor.advance();
-                    frameCount_audio++;
+            while (true) {
+                int readAudioSampleSize = audioExtractor.readSampleData(audioByteBuffer, 0);
+                if (readAudioSampleSize < 0) {
+                    break;
                 }
+                audioBufferInfo.size = readAudioSampleSize;
+                audioBufferInfo.presentationTimeUs = audioExtractor.getSampleTime();
+                audioBufferInfo.offset = 0;
+                audioBufferInfo.flags = audioExtractor.getSampleFlags();
+                mediaMuxer.writeSampleData(audioTrackIndex, audioByteBuffer, audioBufferInfo);
+                audioExtractor.advance();
 
 //                size += videoBufferInfo.size;
 //                currentSize = size;
 //                currentProgress = (int) (size * 100 / this.size);
             }
-
-            mediaMuxer.stop();
-            mediaMuxer.release();
-            videoExtractor.release();
-            audioExtractor.release();
-
-            long end = System.currentTimeMillis();
-
-            Log.d(Fuck.blue, "--------------------------------------------");
-            Log.d(Fuck.blue, "Video:" + videoPath.split("\\?")[0]);
-            Log.d(Fuck.blue, "Audio:" + audioPath.split("\\?")[0]);
-            Log.d(Fuck.blue, "isExists:" + new File(outPath).exists());
-//            Log.d(Fuck.blue, "size:" + this.size);
-            Log.d(Fuck.blue, "耗时：" + (end - begin) + "ms");
-            Log.d(Fuck.blue, "--------------------------------------------");
 
             //通知刷新，进行显示
             ResourceUtils.sendBroadcast(context, new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(outPath)));
@@ -172,6 +157,9 @@ public class MediaUtils {
             // 设置downloadState状态为“已下载完成”状态
             setDownloadState(fileName, true);
             setNotificationState(fileName, true, true);
+
+            deleteTemp(videoTempPath, audioTempPath);
+
         } catch (IOException e) {
             if (generalNotification == null) {
                 generalNotification = new GeneralNotification(context, "缓存媒体资源", this.tag);
@@ -181,12 +169,36 @@ public class MediaUtils {
 
             e.printStackTrace();
         } finally {
-            if (videoExtractor != null) {
-                videoExtractor.release();
+            if (mediaMuxer != null) {
+                mediaMuxer.stop();
+                mediaMuxer.release();
             }
+
             if (audioExtractor != null) {
                 audioExtractor.release();
             }
+
+            if (videoExtractor != null) {
+                videoExtractor.release();
+            }
+        }
+    }
+
+    /**
+     * 删除音视频的临时文件
+     *
+     * @param videoTempPath     临时视频文件路径
+     * @param audioTempPath     临时音频文件路径
+     */
+    private void deleteTemp(String videoTempPath, String audioTempPath) {
+        File videoTempFile = new File(videoTempPath);
+        if (videoTempFile.exists()) {
+            videoTempFile.delete();
+        }
+
+        File audioTempFile = new File(audioTempPath);
+        if (audioTempFile.exists()) {
+            audioTempFile.delete();
         }
     }
 
@@ -194,15 +206,25 @@ public class MediaUtils {
      * 获取视频Extractor
      *
      * @param videoPath 视频路径
-     * @param headers   头信息
      * @return  返回videoExtractor
      */
-    private MediaExtractor getVideoExtractor(String videoPath, Map<String, String> headers) throws IOException {
+    private MediaExtractor getVideoExtractor(String videoPath) throws IOException {
         MediaExtractor videoExtractor = new MediaExtractor();
 
         //设置视频源
-        videoExtractor.setDataSource(videoPath, headers);
-        videoExtractor.selectTrack(0);
+        videoExtractor.setDataSource(videoPath);
+        videoExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
+
+        // 找到视频所在轨道索引
+        for (int i = 0; i < videoExtractor.getTrackCount(); i++) {
+            MediaFormat trackFormat = videoExtractor.getTrackFormat(i);
+            String mimeType = trackFormat.getString(MediaFormat.KEY_MIME);
+            if (mimeType.startsWith("video/")) {
+                videoExtractor.selectTrack(i);
+                videoTrackIndex = mediaMuxer.addTrack(trackFormat);
+                break;
+            }
+        }
 
         return videoExtractor;
     }
@@ -211,15 +233,25 @@ public class MediaUtils {
      * 获取音频Extractor
      *
      * @param audioPath 音频路径
-     * @param headers   头信息
      * @return  返回audioExtractor
      */
-    private MediaExtractor getAudioExtractor(String audioPath, Map<String, String> headers) throws IOException {
+    private MediaExtractor getAudioExtractor(String audioPath) throws IOException {
         MediaExtractor audioExtractor = new MediaExtractor();
 
         //设置音频源
-        audioExtractor.setDataSource(audioPath, headers);
-        audioExtractor.selectTrack(0);
+        audioExtractor.setDataSource(audioPath);
+        audioExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
+
+        // 找到音频所在轨道索引
+        for (int i = 0; i < audioExtractor.getTrackCount(); i++) {
+            MediaFormat trackFormat = audioExtractor.getTrackFormat(i);
+            String mimeType = trackFormat.getString(MediaFormat.KEY_MIME);
+            if (mimeType.startsWith("audio/")) {
+                audioExtractor.selectTrack(i);
+                audioTrackIndex = mediaMuxer.addTrack(trackFormat);
+                break;
+            }
+        }
 
         return audioExtractor;
     }

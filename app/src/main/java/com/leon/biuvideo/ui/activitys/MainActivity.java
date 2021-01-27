@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initUserInfo() {
         boolean network = InternetUtils.checkNetwork(getApplicationContext());
         if (network) {
-            SharedPreferences sharedPreferences = getSharedPreferences("initValues", Activity.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = getSharedPreferences(getResources().getString(R.string.preference), Activity.MODE_PRIVATE);
             cookie = sharedPreferences.getString("cookie", null);
 
             if (cookie == null) {
@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigation_header_progress_level.setProgress(0);
 
         //删除本地Cookie
-        SharedPreferences.Editor editor = getSharedPreferences("initValues", Activity.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = getSharedPreferences(getResources().getString(R.string.preference), Activity.MODE_PRIVATE).edit();
         editor.remove("cookie").remove("isVIP").remove("mid").apply();
 
         isLogin = false;
@@ -480,17 +480,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // 删除未完成下载的媒体资源文件
             List<DownloadedDetailMedia> downloadedDetailMedia = downloadRecordsDatabaseUtils.queryDownloadFailMedia();
             File mediaFile;
-            String folderPath = FileUtils.createFolder(FileUtils.ResourcesFolder.VIDEOS);
+            String mediaFolderPath = FileUtils.createFolder(FileUtils.ResourcesFolder.VIDEOS);
             for (DownloadedDetailMedia detailMedia : downloadedDetailMedia) {
                 String fileName = detailMedia.fileName;
                 if (detailMedia.isVideo) {
-                    mediaFile = new File(folderPath + "/" + fileName + ".mp4");
+                    mediaFile = new File(mediaFolderPath + "/" + fileName + ".mp4");
                 } else {
-                    mediaFile = new File(folderPath + "/" + fileName + ".mp3");
+                    mediaFile = new File(mediaFolderPath + "/" + fileName + ".mp3");
                 }
 
                 if (mediaFile.exists()) {
                     mediaFile.delete();
+                }
+            }
+
+            // 删除Temp文件夹中的所有数据
+            String tempFolderPath = FileUtils.createFolder(FileUtils.ResourcesFolder.TEMP);
+            File file = new File(tempFolderPath);
+            String[] tempFiles = file.list();
+            for (String tempFilePath : tempFiles) {
+                File tempFile = new File(tempFolderPath, "/" + tempFilePath);
+                if (tempFile.exists()) {
+                    tempFile.delete();
                 }
             }
 
