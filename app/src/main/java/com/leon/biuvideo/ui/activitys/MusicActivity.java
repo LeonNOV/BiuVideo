@@ -42,7 +42,6 @@ import com.leon.biuvideo.utils.SimpleDownloadThread;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.LocalOrdersDatabaseUtils;
-import com.leon.biuvideo.utils.downloadUtils.MediaUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.values.LocalOrderType;
@@ -123,7 +122,6 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
     //播放列表弹窗
     private MusicPlayListDialog musicPlayListDialog;
 
-    private MediaUtils mediaUtils;
     private DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils;
     private MusicParser musicParser;
     private MusicUrlParser musicUrlParser;
@@ -441,10 +439,6 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                     break;
                 }
 
-                if (mediaUtils == null) {
-                    mediaUtils = new MediaUtils(getApplicationContext());
-                }
-
                 if (downloadRecordsDatabaseUtils == null) {
                     downloadRecordsDatabaseUtils = new DownloadRecordsDatabaseUtils(getApplicationContext());
                 }
@@ -651,7 +645,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
 
         //保存歌曲线程
         SimpleThreadPool simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.DownloadTaskNum, SimpleThreadPool.DownloadTask);
-        SimpleDownloadThread simpleDownloadThread = new SimpleDownloadThread(getApplicationContext(), musicUrl, musicInfo.title + "-" + musicInfo.uname);
+        SimpleDownloadThread simpleDownloadThread = new SimpleDownloadThread(getApplicationContext(), musicInfo.sid, musicUrl, musicInfo.title + "-" + musicInfo.uname);
         simpleThreadPool.submit(new FutureTask<>(simpleDownloadThread));
     }
 

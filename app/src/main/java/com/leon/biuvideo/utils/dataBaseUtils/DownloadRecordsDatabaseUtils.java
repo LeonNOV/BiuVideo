@@ -3,16 +3,16 @@ package com.leon.biuvideo.utils.dataBaseUtils;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.Toast;
 
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedRecordsForVideo;
 import com.leon.biuvideo.values.Tables;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 处理downloadRecordsForVideo、downloadDetailsForMedia数据的工具类
@@ -174,6 +174,29 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
     }
 
     /**
+     * 查询所有已下载资源文件名称，只查询下载状态为下载完成的
+     *
+     * @return  返回文件名和资源类型
+     */
+    public List<Map<String, Boolean>> queryAllMedia() {
+        Cursor cursor = sqLiteDatabase.query(videoDetail, new String[]{"fileName", "isVideo"}, "downloadState = ?", new String[]{"2"}, null, null, null);
+
+        List<Map<String, Boolean>> mapList = new ArrayList<>();
+        Map<String, Boolean> map;
+        while (cursor.moveToNext()) {
+            String fileName = cursor.getString(cursor.getColumnIndex("fileName"));
+            boolean isVideo = cursor.getInt(cursor.getColumnIndex("isVideo")) == 1;
+
+            map = new HashMap<>();
+            map.put(fileName, isVideo);
+            mapList.add(map);
+        }
+
+        cursor.close();
+        return mapList;
+    }
+
+    /**
      * 根据fileName设置isComplete字段的值为1（正在下载）
      *
      * @param fileName    mainId
@@ -318,6 +341,15 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put("isDelete", isDelete ? 1 : 0);
         sqLiteDatabase.update(videoDetail, contentValues, "fileName = ?", new String[]{fileName});
+    }
+
+    /**
+     * 根据文件名删除对应下载记录
+     *
+     * @param fileName  资源文件名称
+     */
+    public void removeDownloadRecords(String fileName) {
+        sqLiteDatabase.delete(videoDetail, "fileName = ?", new String[]{fileName});
     }
 
     /**

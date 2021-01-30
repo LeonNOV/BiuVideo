@@ -405,7 +405,13 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
 
         Snackbar.make(bangumi_linearLayout, R.string.isDownloading, Snackbar.LENGTH_SHORT).show();
 
-        SimpleDownloadThread simpleDownloadThread = new SimpleDownloadThread(getApplicationContext(), videoUrlBase, audioUrlBase, fileName);
+        SimpleDownloadThread simpleDownloadThread = new SimpleDownloadThread(getApplicationContext(),
+                String.valueOf(bangumi.seasonId),
+                bangumi.eps.get(position).cid,
+                mediaEntry.getKey(),
+                videoUrlBase,
+                audioUrlBase,
+                fileName);
         simpleThreadPool.submit(new FutureTask<>(simpleDownloadThread));
     }
 

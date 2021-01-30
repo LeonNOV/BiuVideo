@@ -1,6 +1,7 @@
 package com.leon.biuvideo.utils.downloadUtils;
 
 import com.leon.biuvideo.utils.FileUtils;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -19,23 +21,27 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class SaveMediaUtils {
+
     private String videoTempPath = null;
     private String audiTempPath = null;
     private OnDownloadMediaListener onDownloadMediaListener;
 
-    private static SaveMediaUtils saveMediaUtils;
     private final OkHttpClient videoOkHttpClient, audioOkHttpClient;
 
-    public static SaveMediaUtils getInstance() {
-        if (saveMediaUtils == null) {
-            saveMediaUtils = new SaveMediaUtils();
-        }
-        return saveMediaUtils;
-    }
-
-    private SaveMediaUtils() {
-        videoOkHttpClient = new OkHttpClient();
-        audioOkHttpClient = new OkHttpClient();
+    /**
+     * 保存媒体资源的Construction method
+     * <br/>
+     * 同时也创建两个OkHttpClient对象，默认的连接超时时间为3秒，读取数据的的超时时间为5秒
+     */
+    public SaveMediaUtils() {
+        videoOkHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(3, TimeUnit.SECONDS)
+                .readTimeout(5, TimeUnit.SECONDS)
+                .build();
+        audioOkHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(3, TimeUnit.SECONDS)
+                .readTimeout(5, TimeUnit.SECONDS)
+                .build();
     }
 
     public interface OnDownloadMediaListener {
@@ -56,6 +62,7 @@ public class SaveMediaUtils {
 
         videoRequest = requestBuilder.url(videoUrl).headers(Headers.of(HttpUtils.getHeaders())).get().build();
         audioRequest = requestBuilder.url(audioUrl).headers(Headers.of(HttpUtils.getHeaders())).get().build();
+
         videoOkHttpClient.newCall(videoRequest).enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -112,6 +119,12 @@ public class SaveMediaUtils {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                    }
+                } else {
+                    if (onDownloadMediaListener != null) {
+                        cancelAll();
+                        Fuck.blue("OkHttpClient CallsCount:" + audioOkHttpClient.dispatcher().runningCallsCount());
+                        onDownloadMediaListener.onDownloadFailed();
                     }
                 }
             }
@@ -173,8 +186,22 @@ public class SaveMediaUtils {
                             e.printStackTrace();
                         }
                     }
+                } else {
+                    if (onDownloadMediaListener != null) {
+                        cancelAll();
+                        Fuck.blue("OkHttpClient CallsCount:" + audioOkHttpClient.dispatcher().runningCallsCount());
+                        onDownloadMediaListener.onDownloadFailed();
+                    }
                 }
             }
         });
+    }
+
+    /**
+     * 取消所有的任务
+     */
+    private void cancelAll() {
+        this.videoOkHttpClient.dispatcher().cancelAll();
+        this.audioOkHttpClient.dispatcher().cancelAll();
     }
 }

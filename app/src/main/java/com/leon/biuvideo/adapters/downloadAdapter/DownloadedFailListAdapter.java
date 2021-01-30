@@ -10,16 +10,14 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
-import com.leon.biuvideo.utils.SimpleDownloadThread;
+import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
-import com.leon.biuvideo.utils.downloadUtils.MediaUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.List;
-import java.util.concurrent.FutureTask;
 
 /**
  * 下载失败列表适配器
@@ -29,6 +27,16 @@ public class DownloadedFailListAdapter extends BaseAdapter<DownloadedDetailMedia
     private final List<DownloadedDetailMedia> downloadedDetailMedias;
 
     private SimpleThreadPool simpleThreadPool;
+
+    private OnClickFailedItemListener onClickFailedItemListener;
+
+    public interface OnClickFailedItemListener {
+        void onClick(int position);
+    }
+
+    public void setOnClickFailedItemListener(OnClickFailedItemListener onClickFailedItemListener) {
+        this.onClickFailedItemListener = onClickFailedItemListener;
+    }
 
     public DownloadedFailListAdapter(Context context, List<DownloadedDetailMedia> downloadedDetailMedias) {
         super(downloadedDetailMedias, context);
@@ -53,27 +61,21 @@ public class DownloadedFailListAdapter extends BaseAdapter<DownloadedDetailMedia
                 .setImage(R.id.downloaded_item_detail_imageView_cover, downloadedDetailMedia.cover, ImagePixelSize.COVER)
                 .setText(R.id.downloaded_item_detail_textView_title, downloadedDetailMedia.title)
                 .setText(R.id.downloaded_item_detail_textView_mediaInfo, ValueFormat.sizeFormat(downloadedDetailMedia.size, true))
-                .setVisibility(R.id.downloaded_item_detail_imageView_error, View.VISIBLE)
+                .setVisibility(R.id.downloaded_item_detail_imageView_error, downloadedDetailMedia.downloadState == 1 ? View.GONE : View.VISIBLE)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // 重新对该资源进行下载
                         if (downloadedDetailMedia.downloadState == 0) {
-                            reacquire(downloadedDetailMedia, new MediaUtils(context));
+                            reacquire(downloadedDetailMedia);
                             downloadedDetailMedia.downloadState = 1;
 
                             holder
                                     .setVisibility(R.id.downloaded_item_detail_imageView_downloading, View.VISIBLE)
                                     .setVisibility(R.id.downloaded_item_detail_imageView_error, View.GONE);
 
-                            if (simpleThreadPool == null) {
-                                simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.DownloadTaskNum, SimpleThreadPool.DownloadTask);
-                            }
-
-                            if (downloadedDetailMedia.isVideo) {
-                                simpleThreadPool.submit(new FutureTask<>(new SimpleDownloadThread(context, downloadedDetailMedia.videoUrl, downloadedDetailMedia.audioUrl, downloadedDetailMedia.fileName)));
-                            } else {
-                                simpleThreadPool.submit(new FutureTask<>(new SimpleDownloadThread(context, downloadedDetailMedia.audioUrl, downloadedDetailMedia.fileName)));
+                            // 重新对该资源进行下载
+                            if (onClickFailedItemListener != null) {
+                                onClickFailedItemListener.onClick(position);
                             }
                         } else {
                             Snackbar.make(v, "该资源正在下载中", Snackbar.LENGTH_SHORT).show();
@@ -105,7 +107,7 @@ public class DownloadedFailListAdapter extends BaseAdapter<DownloadedDetailMedia
      */
     private boolean checkUrlState(String videoUrl, String audioUrl) {
         if (videoUrl != null) {
-            return ResourceUtils.getResourcesSize(videoUrl) + ResourceUtils.getResourcesSize(audioUrl) > 0;
+            return ResourceUtils.getResourcesSize(videoUrl) > 0 && ResourceUtils.getResourcesSize(audioUrl) > 0;
         } else {
             return ResourceUtils.getResourcesSize(audioUrl) > 0;
         }
@@ -115,12 +117,11 @@ public class DownloadedFailListAdapter extends BaseAdapter<DownloadedDetailMedia
      * 重新获取资源链接
      *
      * @param downloadedDetailMedia downloadedDetailMedia对象
-     * @param mediaUtils    mediaUtils
      */
-    private void reacquire(DownloadedDetailMedia downloadedDetailMedia, MediaUtils mediaUtils) {
+    private void reacquire(DownloadedDetailMedia downloadedDetailMedia) {
         boolean urlState = checkUrlState(downloadedDetailMedia.videoUrl, downloadedDetailMedia.audioUrl);
         if (!urlState) {
-            String[] newUrls = mediaUtils.reacquireMediaUrl(downloadedDetailMedia.mainId, downloadedDetailMedia.subId, downloadedDetailMedia.qualityId);
+            String[] newUrls = HttpUtils.reacquireMediaUrl(context, downloadedDetailMedia.mainId, downloadedDetailMedia.subId, downloadedDetailMedia.qualityId, !downloadedDetailMedia.mainId.startsWith("BV"));
             downloadedDetailMedia.videoUrl = newUrls[0];
 
             if (newUrls.length == 2) {

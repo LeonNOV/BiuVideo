@@ -101,7 +101,7 @@ public class BangumiParser {
                     ep.title = epObject.getString("title");
                     ep.longTitle = epObject.getString("long_title");
                     ep.url = epObject.getString("url");
-                    ep.cover = jsonObject.getString("cover");
+                    ep.cover = "http:" + jsonObject.getString("cover");
 
                     JSONArray badges = epObject.getJSONArray("badges");
                     if (badges.size() > 0) {

@@ -40,10 +40,13 @@ public class DownloadedDetailAdapter extends BaseAdapter<DownloadedDetailMedia> 
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
+        int videoIcon = R.drawable.icon_rectangle_video;
+        int audioIcon = R.drawable.icon_rectangle_music;
         DownloadedDetailMedia downloadedDetailMedia = downloadedDetailMedias.get(position);
 
         holder
                 .setImage(R.id.downloaded_item_detail_imageView_cover, downloadedDetailMedia.cover, ImagePixelSize.COVER)
+                .setImage(R.id.downloaded_item_detail_imageView_mark, downloadedDetailMedia.isVideo ? videoIcon : audioIcon)
                 .setText(R.id.downloaded_item_detail_textView_title, downloadedDetailMedia.title)
                 .setText(R.id.downloaded_item_detail_textView_mediaInfo, ValueFormat.sizeFormat(downloadedDetailMedia.size, true))
                 .setOnClickListener(new View.OnClickListener() {

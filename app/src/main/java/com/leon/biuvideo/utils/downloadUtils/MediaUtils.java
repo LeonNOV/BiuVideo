@@ -2,22 +2,16 @@ package com.leon.biuvideo.utils.downloadUtils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaCodec;
-import android.media.MediaExtractor;
-import android.media.MediaFormat;
-import android.media.MediaMuxer;
 import android.net.Uri;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.beans.videoBean.play.Play;
 import com.leon.biuvideo.ui.views.GeneralNotification;
 import com.leon.biuvideo.utils.FileUtils;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
-import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParser;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicUrlParser;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -25,26 +19,34 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Random;
+
+import io.microshow.rxffmpeg.RxFFmpegInvoke;
 
 /**
  * 下载媒体资源(视频/音频)
  */
 public class MediaUtils {
-    private int videoTrackIndex = 0;
-    private int audioTrackIndex = 0;
-    private MediaMuxer mediaMuxer;
-
     private final Context context;
     private final int tag;
+    private String mainId;
+    private long subId = 0;
+    private int qualityId = 0;
 
     private GeneralNotification generalNotification;
-    private MusicUrlParser musicUrlParser;
 
-    public MediaUtils(Context context) {
+    public MediaUtils(Context context, String mainId, long subId, int qualityId) {
         this.context = context;
+        this.mainId = mainId;
+        this.subId = subId;
+        this.qualityId = qualityId;
+        this.tag = new Random().nextInt(1001);
+    }
+
+    public MediaUtils(Context context, String mainId) {
+        this.context = context;
+        this.mainId = mainId;
         this.tag = new Random().nextInt(1001);
     }
 
@@ -61,11 +63,14 @@ public class MediaUtils {
         setNotificationState(fileName, false, true);
 
         // 先对视频、音频进行缓存，两个文件均保存至`Temp`文件夹
-        SaveMediaUtils saveMediaUtils = SaveMediaUtils.getInstance();
+        SaveMediaUtils saveMediaUtils = new SaveMediaUtils();
         saveMediaUtils.setOnDownloadMediaListener(new SaveMediaUtils.OnDownloadMediaListener() {
             @Override
             public void onDownloadFailed() {
-
+                generalNotification.setNotificationOnSDK26("缓存视频", "缓存失败，正在重试中...\t" + fileName, R.drawable.notification_biu_video);
+                String[] strings = HttpUtils.reacquireMediaUrl(context, mainId, subId, qualityId, !videoPath.startsWith("BV"));
+                setNotificationState(fileName, false, true);
+                saveMediaUtils.saveMedia(strings[0], strings[1], fileName);
             }
 
             @Override
@@ -84,104 +89,51 @@ public class MediaUtils {
         saveMediaUtils.saveMedia(videoPath, audioPath, fileName);
     }
 
+    /**
+     * 合并音视频
+     *
+     * @param videoTempPath     视频临时路径
+     * @param audioTempPath     音频临时路径
+     * @param fileName      文件名称
+     */
     private void mergeVideo(String videoTempPath, String audioTempPath, String fileName) {
-        MediaExtractor videoExtractor = null;
-        MediaExtractor audioExtractor = null;
+        String folderPath = FileUtils.createFolder(FileUtils.ResourcesFolder.VIDEOS);
+        String outPath = folderPath + "/" + fileName + ".mp4";
 
-        try {
-            String folderPath = FileUtils.createFolder(FileUtils.ResourcesFolder.VIDEOS);
-            String outPath = folderPath + "/" + fileName + ".mp4";
+        // 生成ffmpeg命令
+        String command = "ffmpeg -i " + videoTempPath + " -i " + audioTempPath + " -vcodec copy -acodec copy " + outPath;
+        RxFFmpegInvoke.getInstance().runCommand(command.split(" "), new RxFFmpegInvoke.IFFmpegListener() {
+            @Override
+            public void onFinish() {
+                Fuck.blue("Done.");
+                //通知刷新，进行显示
+                ResourceUtils.sendBroadcast(context, new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(outPath)));
 
-            //设置输出配置
-            mediaMuxer = new MediaMuxer(outPath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
+                // 设置downloadState状态为“已下载完成”状态
+                setDownloadState(fileName, true);
+                setNotificationState(fileName, true, true);
 
-            //创建视频Extractor
-            videoExtractor = getVideoExtractor(videoTempPath);
-
-            //创建音频Extractor
-            audioExtractor = getAudioExtractor(audioTempPath);
-
-            /*
-             * 设置缓冲区大小
-             *
-             * 出现：A/libc: Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR),
-             *      fault addr 0xc in tid 2843 (Thread-12), pid 2430 (m.leon.biuvideo)
-             * 这样的错误可能是缓冲区太小的缘故，设置sampleSize的大小即可
-             * */
-            int sampleSize = 1024 * 1000;
-            ByteBuffer videoByteBuffer = ByteBuffer.allocate(sampleSize);
-            ByteBuffer audioByteBuffer = ByteBuffer.allocate(sampleSize);
-
-            MediaCodec.BufferInfo videoBufferInfo = new MediaCodec.BufferInfo();
-            MediaCodec.BufferInfo audioBufferInfo = new MediaCodec.BufferInfo();
-
-            mediaMuxer.start();
-
-            while (true) {
-                int readVideoSampleSize = videoExtractor.readSampleData(videoByteBuffer, 0);
-                if (readVideoSampleSize < 0) {
-                    break;
-                }
-                videoBufferInfo.size = readVideoSampleSize;
-                videoBufferInfo.presentationTimeUs = videoExtractor.getSampleTime();
-                videoBufferInfo.offset = 0;
-                videoBufferInfo.flags = videoExtractor.getSampleFlags();
-                mediaMuxer.writeSampleData(videoTrackIndex, videoByteBuffer, videoBufferInfo);
-                videoExtractor.advance();
-
-//                size += videoBufferInfo.size;
-//                currentSize = size;
-//                currentProgress = (int) (size * 100 / this.size);
+                deleteTemp(videoTempPath, audioTempPath);
             }
 
-            while (true) {
-                int readAudioSampleSize = audioExtractor.readSampleData(audioByteBuffer, 0);
-                if (readAudioSampleSize < 0) {
-                    break;
-                }
-                audioBufferInfo.size = readAudioSampleSize;
-                audioBufferInfo.presentationTimeUs = audioExtractor.getSampleTime();
-                audioBufferInfo.offset = 0;
-                audioBufferInfo.flags = audioExtractor.getSampleFlags();
-                mediaMuxer.writeSampleData(audioTrackIndex, audioByteBuffer, audioBufferInfo);
-                audioExtractor.advance();
+            @Override
+            public void onProgress(int progress, long progressTime) {
 
-//                size += videoBufferInfo.size;
-//                currentSize = size;
-//                currentProgress = (int) (size * 100 / this.size);
             }
 
-            //通知刷新，进行显示
-            ResourceUtils.sendBroadcast(context, new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(outPath)));
+            @Override
+            public void onCancel() {
 
-            // 设置downloadState状态为“已下载完成”状态
-            setDownloadState(fileName, true);
-            setNotificationState(fileName, true, true);
-
-            deleteTemp(videoTempPath, audioTempPath);
-
-        } catch (IOException e) {
-            if (generalNotification == null) {
-                generalNotification = new GeneralNotification(context, "缓存媒体资源", this.tag);
-            }
-            generalNotification.setNotificationOnSDK26("缓存视频", "缓存失败\t" + fileName, R.drawable.notification_biu_video);
-            setDownloadFailState(fileName);
-
-            e.printStackTrace();
-        } finally {
-            if (mediaMuxer != null) {
-                mediaMuxer.stop();
-                mediaMuxer.release();
             }
 
-            if (audioExtractor != null) {
-                audioExtractor.release();
+            @Override
+            public void onError(String message) {
+                Fuck.blue("淦，出错了！\n" + message);
+                deleteTemp(videoTempPath, audioTempPath);
+                generalNotification.setNotificationOnSDK26("缓存视频", "缓存失败\t" + fileName, R.drawable.notification_biu_video);
+                setDownloadFailState(fileName);
             }
-
-            if (videoExtractor != null) {
-                videoExtractor.release();
-            }
-        }
+        });
     }
 
     /**
@@ -200,60 +152,6 @@ public class MediaUtils {
         if (audioTempFile.exists()) {
             audioTempFile.delete();
         }
-    }
-
-    /**
-     * 获取视频Extractor
-     *
-     * @param videoPath 视频路径
-     * @return  返回videoExtractor
-     */
-    private MediaExtractor getVideoExtractor(String videoPath) throws IOException {
-        MediaExtractor videoExtractor = new MediaExtractor();
-
-        //设置视频源
-        videoExtractor.setDataSource(videoPath);
-        videoExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
-
-        // 找到视频所在轨道索引
-        for (int i = 0; i < videoExtractor.getTrackCount(); i++) {
-            MediaFormat trackFormat = videoExtractor.getTrackFormat(i);
-            String mimeType = trackFormat.getString(MediaFormat.KEY_MIME);
-            if (mimeType.startsWith("video/")) {
-                videoExtractor.selectTrack(i);
-                videoTrackIndex = mediaMuxer.addTrack(trackFormat);
-                break;
-            }
-        }
-
-        return videoExtractor;
-    }
-
-    /**
-     * 获取音频Extractor
-     *
-     * @param audioPath 音频路径
-     * @return  返回audioExtractor
-     */
-    private MediaExtractor getAudioExtractor(String audioPath) throws IOException {
-        MediaExtractor audioExtractor = new MediaExtractor();
-
-        //设置音频源
-        audioExtractor.setDataSource(audioPath);
-        audioExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
-
-        // 找到音频所在轨道索引
-        for (int i = 0; i < audioExtractor.getTrackCount(); i++) {
-            MediaFormat trackFormat = audioExtractor.getTrackFormat(i);
-            String mimeType = trackFormat.getString(MediaFormat.KEY_MIME);
-            if (mimeType.startsWith("audio/")) {
-                audioExtractor.selectTrack(i);
-                audioTrackIndex = mediaMuxer.addTrack(trackFormat);
-                break;
-            }
-        }
-
-        return audioExtractor;
     }
 
     /**
@@ -322,37 +220,6 @@ public class MediaUtils {
         }
 
         return false;
-    }
-
-    /**
-     * 获取媒体资源链接
-     *
-     * @param mainId    主ID（bvid， sid）
-     * @param subId 子ID（cid）
-     * @return  返回资源链接
-     */
-    public String[] reacquireMediaUrl(String mainId, long subId, int qualityId) {
-        String[] urls;
-        if (subId != 0) {
-            urls = new String[2];
-
-            MediaParser mediaParser = new MediaParser(context);
-            Play play = mediaParser.parseMedia(mainId, subId, false);
-
-            urls[0] = play.videos.get(qualityId).baseUrl;
-            urls[1] = play.audios.get(0).baseUrl;
-
-        } else {
-            urls = new String[1];
-
-            if (musicUrlParser == null) {
-                musicUrlParser = new MusicUrlParser(context);
-            }
-
-            urls[0] = musicUrlParser.parseMusicUrl(mainId);;
-        }
-
-        return urls;
     }
 
     /**

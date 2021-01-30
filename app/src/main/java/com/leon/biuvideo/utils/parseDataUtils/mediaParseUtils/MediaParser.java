@@ -72,13 +72,13 @@ public class MediaParser {
     /**
      * 解析videoJSONArray
      *
-     * @param videoJsonArray json数组
+     * @param jsonArray json数组
      * @return  返回解析结果
      */
-    private Map<Integer, Media> parseJSONArray(JSONArray videoJsonArray) {
+    private Map<Integer, Media> parseJSONArray(JSONArray jsonArray) {
         Map<Integer, Media> mediaMap = new LinkedHashMap<>();
 
-        for (Object o : videoJsonArray) {
+        for (Object o : jsonArray) {
             JSONObject jsonObject = (JSONObject) o;
 
             Media media = new Media();

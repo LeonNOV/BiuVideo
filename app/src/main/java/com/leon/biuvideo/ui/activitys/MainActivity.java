@@ -47,6 +47,7 @@ import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserInfoParser;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
@@ -478,19 +479,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             downloadRecordsDatabaseUtils.setFailed();
 
             // 删除未完成下载的媒体资源文件
-            List<DownloadedDetailMedia> downloadedDetailMedia = downloadRecordsDatabaseUtils.queryDownloadFailMedia();
+            List<DownloadedDetailMedia> downloadedFailedDetailMedia = downloadRecordsDatabaseUtils.queryDownloadFailMedia();
             File mediaFile;
-            String mediaFolderPath = FileUtils.createFolder(FileUtils.ResourcesFolder.VIDEOS);
-            for (DownloadedDetailMedia detailMedia : downloadedDetailMedia) {
+            String videoFolderPath = FileUtils.createFolder(FileUtils.ResourcesFolder.VIDEOS);
+            String audioFolderPath = FileUtils.createFolder(FileUtils.ResourcesFolder.MUSIC);
+            for (DownloadedDetailMedia detailMedia : downloadedFailedDetailMedia) {
                 String fileName = detailMedia.fileName;
                 if (detailMedia.isVideo) {
-                    mediaFile = new File(mediaFolderPath + "/" + fileName + ".mp4");
+                    mediaFile = new File(videoFolderPath + "/" + fileName + ".mp4");
                 } else {
-                    mediaFile = new File(mediaFolderPath + "/" + fileName + ".mp3");
+                    mediaFile = new File(audioFolderPath + "/" + fileName + ".mp3");
                 }
 
                 if (mediaFile.exists()) {
                     mediaFile.delete();
+                }
+            }
+
+            // 检查下载记录所对应的资源文件是否已删除
+            List<Map<String, Boolean>> mapList = downloadRecordsDatabaseUtils.queryAllMedia();
+            for (Map<String, Boolean> map : mapList) {
+                Map.Entry<String, Boolean> next = map.entrySet().iterator().next();
+
+                if (next.getValue()) {
+                    mediaFile = new File(videoFolderPath + "/" + next.getKey() + ".mp4");
+                } else {
+                    mediaFile = new File(audioFolderPath + "/" + next.getKey() + ".mp3");
+                }
+
+                if (!mediaFile.exists()) {
+                    downloadRecordsDatabaseUtils.removeDownloadRecords(next.getKey());
                 }
             }
 

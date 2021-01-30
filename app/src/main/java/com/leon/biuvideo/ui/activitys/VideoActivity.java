@@ -491,7 +491,13 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
             simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.DownloadTaskNum, SimpleThreadPool.DownloadTask);
         }
 
-        SimpleDownloadThread simpleDownloadThread = new SimpleDownloadThread(getApplicationContext(), videoUrlBase, audioUrlBase, fileName);
+        SimpleDownloadThread simpleDownloadThread = new SimpleDownloadThread(getApplicationContext(),
+                viewPage.bvid,
+                viewPage.anthologyInfoList.get(position).cid,
+                mediaEntry.getKey(),
+                videoUrlBase,
+                audioUrlBase,
+                fileName);
         simpleThreadPool.submit(new FutureTask<>(simpleDownloadThread));
     }
 

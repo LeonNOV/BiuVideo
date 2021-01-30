@@ -145,13 +145,15 @@ public class ResourceUtils {
             urlConnection.setRequestProperty("User-Agent", headers.get("User-Agent"));
             urlConnection.setRequestProperty("Referer", headers.get("Referer"));
 
+            // 设置链接超时时间为500毫秒
+            urlConnection.setConnectTimeout(500);
+
             urlConnection.connect();
 
             return urlConnection.getContentLength();
         } catch (IOException e) {
             e.printStackTrace();
+            return 0;
         }
-
-        return 0;
     }
 }

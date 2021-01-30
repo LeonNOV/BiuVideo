@@ -1,9 +1,12 @@
 package com.leon.biuvideo.utils;
 
+import android.content.Context;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-
-import org.jetbrains.annotations.NotNull;
+import com.leon.biuvideo.beans.videoBean.play.Play;
+import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParser;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicUrlParser;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -12,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -134,6 +136,39 @@ public class HttpUtils {
         String response = new HttpUtils(path, headers, params).getData();
 
         return JSON.parseObject(response);
+    }
+
+    /**
+     * 获取媒体资源链接
+     *
+     * @param mainId    主ID（bvid， sid）
+     * @param subId 子ID（cid）
+     * @return  返回资源链接
+     * <br/>
+     * 如果为视频，则索引0为视频连接，索引1为音频链接
+     * <br/>
+     * 如果为音频，则索引0就是音频链接
+     */
+    public static String[] reacquireMediaUrl(Context context, String mainId, long subId, int qualityId, boolean isBangumi) {
+        String[] urls;
+        if (subId != 0) {
+            urls = new String[2];
+
+            MediaParser mediaParser = new MediaParser(context);
+            Play play = mediaParser.parseMedia(mainId, subId, isBangumi);
+
+            if (play != null) {
+                urls[0] = play.videos.get(qualityId).baseUrl;
+                urls[1] = play.audioEntries().get(0).getValue().baseUrl;
+            }
+
+        } else {
+            urls = new String[1];
+            MusicUrlParser musicUrlParser = new MusicUrlParser(context);
+            urls[0] = musicUrlParser.parseMusicUrl(mainId);;
+        }
+
+        return urls;
     }
 
     /**
