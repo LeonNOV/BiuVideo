@@ -100,6 +100,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+
                 //判断加载完成的页面是否为B站手机版主页
                 if (url.equals("https://m.bilibili.com/index.html")) {
                     Snackbar.make(view, "正在获取用户信息中，请不要进行任何操作", Snackbar.LENGTH_LONG).show();
@@ -121,17 +123,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                     }
 
+                    if (!cookieMap.containsKey("DedeUserID")) {
+                        Snackbar.make(view, "获取不到登录信息，请重新进行登录", Snackbar.LENGTH_SHORT).setTextColor(getResources().getColor(R.color.blue)).show();
+                        return;
+                    }
+
                     editor.putLong("mid", Long.parseLong(Objects.requireNonNull(cookieMap.get("DedeUserID")))).apply();
 
                     setResult(1004);
                     finish();
                 }
-
-                super.onPageFinished(view, url);
             }
         });
 
-        webView.loadUrl("https://passport.bilibili.com/login");
+        // 参数gourl为登陆成功后跳转到的url地址
+        webView.loadUrl("https://passport.bilibili.com/login?gourl=https://m.bilibili.com/index.html");
     }
 
     @Override

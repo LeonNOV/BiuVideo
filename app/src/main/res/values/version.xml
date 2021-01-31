@@ -4,6 +4,6 @@
     <!-- 每次更新后需要进行递增 -->
 
     <!-- 根据上一次的发布版本进行调整 -->
-    <string name="versionName">2.6.9-beta</string>
+    <string name="versionName">2.7.0-beta</string>
 
 </resources>
