@@ -191,7 +191,7 @@ public class UserOrderArticleFragment extends BaseLazyFragment {
 
         currentCount += articles.size();
 
-        if (currentCount == total || this.articles.size() < 16) {
+        if (currentCount == total) {
             dataState = false;
         }
 

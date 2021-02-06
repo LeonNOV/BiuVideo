@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bilibili_pink_lite"
+    android:background="@color/BiliBili_pink_lite"
     android:orientation="vertical">
 
     <ScrollView
@@ -21,7 +21,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/bilibili_pink_light"
+                app:cardBackgroundColor="@color/BiliBili_pink_light"
                 app:cardCornerRadius="@dimen/corner_6dp">
 
                 <LinearLayout
@@ -60,6 +60,21 @@
                         android:padding="10dp"
                         android:text="@string/preference_set_hero"
                         android:textColor="@color/preference_item" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.43dp"
+                        android:background="#CF879B" />
+
+                    <TextView
+                        android:id="@+id/preference_textView_set_color"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?selectableItemBackground"
+                        android:padding="10dp"
+                        android:text="@string/preference_set_color"
+                        android:textColor="@color/preference_item"
+                        app:drawableEndCompat="@drawable/icon_enter" />
 
                     <View
                         android:layout_width="match_parent"
@@ -183,7 +198,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                app:cardBackgroundColor="@color/bilibili_pink_light"
+                app:cardBackgroundColor="@color/BiliBili_pink_light"
                 app:cardCornerRadius="@dimen/corner_6dp">
 
                 <LinearLayout
@@ -231,7 +246,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                app:cardBackgroundColor="@color/bilibili_pink_light"
+                app:cardBackgroundColor="@color/BiliBili_pink_light"
                 app:cardCornerRadius="@dimen/corner_6dp">
 
                 <LinearLayout

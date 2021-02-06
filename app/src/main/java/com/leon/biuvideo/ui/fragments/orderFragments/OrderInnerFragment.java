@@ -210,7 +210,7 @@ public class OrderInnerFragment extends BaseLazyFragment {
         currentCount += this.orders.size();
 
         //判断是否已获取完所有的数据
-        if (currentCount >= total || this.orders.size() < 15) {
+        if (currentCount == total) {
             dataState = false;
         }
 

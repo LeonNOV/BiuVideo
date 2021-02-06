@@ -52,7 +52,7 @@
                 android:background="@drawable/ripple_round_white_bg"
                 android:padding="5dp"
                 android:src="@drawable/icon_back"
-                app:tint="@color/bilibili_pink" />
+                app:tint="@color/BiliBili_pink" />
 
         </LinearLayout>
 

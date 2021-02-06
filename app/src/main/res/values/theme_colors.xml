@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="theme_red2">#f44236</color>
+    <color name="theme_red1">#dc4437</color>
+    <color name="theme_origin2">#f74200</color><!--淘宝橙-->
+    <color name="theme_origin1">#ff9700</color>
+    <color name="theme_yellow">#fec107</color><!--咸蛋黄-->
+    <color name="theme_green1">#109d58</color><!--基安绿-->
+    <color name="theme_green2">#8bc24a</color><!--草苗绿-->
+    <color name="theme_blue1">#3f51b5</color>
+    <color name="theme_blue2">#2196f3</color>
+    <color name="theme_cyan">#009788</color>
+    <color name="theme_purple2">#9c28b1</color>
+    <color name="theme_purple1">#673bb7</color>
+    <color name="theme_brown">#795547</color>
+    <color name="theme_pink">#fa7298</color><!--哔哩粉-->
+    <color name="theme_gray">#607d8b</color>
+</resources>

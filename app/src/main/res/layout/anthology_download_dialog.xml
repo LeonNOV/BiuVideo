@@ -78,7 +78,7 @@
                 android:background="@drawable/ripple_item_white"
                 android:gravity="center"
                 android:text="@string/anthology_download_dialog_qualityWarn"
-                android:textColor="@color/bilibili_pink"
+                android:textColor="@color/BiliBili_pink"
                 android:textSize="13sp"
                 android:textStyle="bold" />
 

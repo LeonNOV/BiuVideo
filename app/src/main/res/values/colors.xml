@@ -4,10 +4,10 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#fb7299</color>
 
-    <color name="bilibili_pink">#fb7299</color>
-    <color name="bilibili_pink_lite">#F48FAC</color>
-    <color name="bilibili_pink_light">#FA9CB7</color>
-    <color name="blue">#1296db</color>
+    <color name="BiliBili_pink">#FB7299</color>
+    <color name="BiliBili_pink_lite">#FD95B3</color>
+    <color name="BiliBili_pink_light">#FDB1C7</color>
+    <color name="blue">#2196f3</color>
     <color name="red">#D50000</color>
 
     <color name="gray">#545555</color>

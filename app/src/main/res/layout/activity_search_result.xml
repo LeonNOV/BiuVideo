@@ -4,19 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bilibili_pink_lite"
+    android:background="@color/BiliBili_pink_lite"
     android:orientation="vertical"
     tools:context=".ui.activitys.SearchResultActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bilibili_pink_lite">
+        android:background="@color/BiliBili_pink_lite">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/topBar_height"
-            android:background="@color/bilibili_pink"
+            android:background="@color/BiliBili_pink"
             app:layout_scrollFlags="scroll|enterAlways">
 
             <ImageView

@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/topBar_height"
-        android:background="@color/bilibili_pink">
+        android:background="@color/BiliBili_pink">
 
         <ImageView
             android:id="@+id/toolBar_imageView_menu"

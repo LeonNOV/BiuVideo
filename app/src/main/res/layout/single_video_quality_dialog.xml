@@ -4,7 +4,7 @@
     android:layout_width="170dp"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    app:cardBackgroundColor="@color/bilibili_pink_lite"
+    app:cardBackgroundColor="@color/BiliBili_pink_lite"
     app:cardCornerRadius="@dimen/corner_6dp">
 
     <TextView

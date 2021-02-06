@@ -5,6 +5,7 @@
 
     <string name="preference_import">导入外部数据</string>
     <string name="preference_set_hero">设置Hero</string>
+    <string name="preference_set_color">设置主题颜色</string>
     <string name="preference_visit">设置关注列表为按照“访问量”排序</string>
     <string name="preference_importData">将用户数据保存至本地</string>
     <string name="preference_importDataStr">

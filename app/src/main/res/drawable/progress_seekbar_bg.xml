@@ -20,7 +20,7 @@
         <clip>
             <shape>
                 <size android:height="10dp"/>
-                <solid android:color="@color/bilibili_pink" />
+                <solid android:color="@color/BiliBili_pink" />
                 <corners android:radius="10dp"/>
             </shape>
         </clip>
