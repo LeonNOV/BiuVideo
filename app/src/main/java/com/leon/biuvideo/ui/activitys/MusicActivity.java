@@ -452,6 +452,11 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                             downloadAudio();
                             warnDialog.dismiss();
                         }
+
+                        @Override
+                        public void onCancel() {
+                            warnDialog.dismiss();
+                        }
                     });
                     warnDialog.show();
                 } else {

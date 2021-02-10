@@ -38,6 +38,7 @@ import com.leon.biuvideo.ui.fragments.mainFragments.HomeFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.OrderFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.LocalOrderFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.PreferenceFragment;
+import com.leon.biuvideo.ui.fragments.mainFragments.ThemeColorChangeBroadcastReceiver;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleThreadPool;
@@ -117,6 +118,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // 获取权限
         FileUtils.verifyPermissions(this);
+
+        // 初始化本地广播接收器
+        ThemeColorChangeBroadcastReceiver themeColorChangeBroadcastReceiver = new ThemeColorChangeBroadcastReceiver();
+        themeColorChangeBroadcastReceiver.initBroadcast(getApplicationContext());
+        themeColorChangeBroadcastReceiver.setChangeThemeColorListener(new ThemeColorChangeBroadcastReceiver.ChangeThemeColorListener() {
+            @Override
+            public void changThemeColor(int position) {
+                // 修改当前布局主题
+
+            }
+        });
 
         initDownloadFailList();
     }
@@ -431,6 +443,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                             warnDialog.dismiss();
                         }
+
+                        @Override
+                        public void onCancel() {
+                            warnDialog.dismiss();
+                        }
                     });
 
                 } else {
@@ -442,6 +459,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivityForResult(intent, 1003);
 
+                            warnDialog.dismiss();
+                        }
+
+                        @Override
+                        public void onCancel() {
                             warnDialog.dismiss();
                         }
                     });

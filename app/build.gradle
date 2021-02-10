@@ -17,7 +17,15 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         ndk {
-            // RxFFmpeg支持的架构，这里只使用以下架构
+            /**
+             * 设置支持的架构平台
+             * arm64-v8a和armeabi-v7a为手机端
+             * 其中arm64-v8a为市面上新出的手机所使用的架构，兼容armeabi-v7a
+             * armeabi-v7a支持老版本的手机
+             * 如果要在虚拟机上运行，一定要加上x86
+             * 如果需要支持平板，则需要加上x86或x86_64
+             * x86_64支持新上市的平板，向下兼容x86
+             */
             abiFilters "arm64-v8a", "x86"
         }
     }

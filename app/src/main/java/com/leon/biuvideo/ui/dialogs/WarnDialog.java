@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 
 /**
  * 提醒/警告通用弹窗
@@ -18,13 +19,19 @@ public class WarnDialog extends AlertDialog implements View.OnClickListener {
     private String title;
     private String content;
 
+    private Window window;
+    private final Context context;
+
     public WarnDialog(@NonNull Context context) {
         super(context);
+
+        this.context = context;
     }
 
     public WarnDialog(@NonNull Context context, String title, String content) {
         super(context);
 
+        this.context = context;
         this.title = title;
         this.content = content;
     }
@@ -34,30 +41,26 @@ public class WarnDialog extends AlertDialog implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.warn_dialog);
 
-        Window window = getWindow();
+        window = getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
 
         initView();
     }
 
     private void initView() {
-        TextView logout_textView_cancel = findViewById(R.id.warn_dialog_textView_confirm);
-        logout_textView_cancel.setOnClickListener(this);
-
-        TextView logout_textView_submit = findViewById(R.id.warn_dialog_textView_cancel);
-        logout_textView_submit.setOnClickListener(this);
-
-        TextView warn_dialog_textView_title = findViewById(R.id.warn_dialog_textView_title);
-        warn_dialog_textView_title.setText(title);
-
-        TextView warn_dialog_textView_content = findViewById(R.id.warn_dialog_textView_content);
-        warn_dialog_textView_content.setText(content);
+        BindingUtils bindingUtils = new BindingUtils(window.getDecorView(), context);
+        bindingUtils
+                .setText(R.id.warn_dialog_textView_title, title)
+                .setText(R.id.warn_dialog_textView_content, content)
+                .setOnClickListener(R.id.warn_dialog_textView_confirm, this)
+                .setOnClickListener(R.id.warn_dialog_textView_cancel, this);
     }
 
     private OnConfirmListener onConfirmListener;
 
     public interface OnConfirmListener {
         void onConfirm();
+        void onCancel();
     }
 
     public void setOnConfirmListener(OnConfirmListener onConfirmListener) {
@@ -68,7 +71,9 @@ public class WarnDialog extends AlertDialog implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.warn_dialog_textView_cancel:
-                dismiss();
+                if (onConfirmListener != null) {
+                    onConfirmListener.onCancel();
+                }
                 break;
             case R.id.warn_dialog_textView_confirm:
                 if (onConfirmListener != null) {

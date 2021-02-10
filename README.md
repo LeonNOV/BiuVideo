@@ -5,6 +5,23 @@
 
 ## 📘开发日志
 
+### 2020/02/10
+- 主题切换的核心部分已完成
+  - **由于主题切换功能涉及到很多地方，所以需要在后期慢慢完善全部**
+  - 使用格式
+    ``` java
+        // 初始化本地广播接收器
+        ThemeColorChangeBroadcastReceiver themeColorChangeBroadcastReceiver = new ThemeColorChangeBroadcastReceiver();
+        themeColorChangeBroadcastReceiver.initBroadcast(getApplicationContext());
+        themeColorChangeBroadcastReceiver.setChangeThemeColorListener(new ThemeColorChangeBroadcastReceiver.ChangeThemeColorListener() {
+            @Override
+            public void changThemeColor(int position) {
+                // 修改当前布局主题
+            }
+        });
+    ```
+- 在设置界面加入了`原图模式`，核心部分还未编写
+
 ### 2020/02/06
 - 创建了`V2.1`分支，该分支将着重于UI的修改，该分支不会对功能性代码进行大幅度改动
 - 加入了主题颜色，并修改了部分颜色命名

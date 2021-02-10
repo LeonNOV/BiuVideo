@@ -13,6 +13,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.AboutBean;
+import com.leon.biuvideo.ui.activitys.ChooseThemeColorActivity;
 import com.leon.biuvideo.ui.dialogs.ThanksListDialog;
 import com.leon.biuvideo.ui.dialogs.FeedbackDialog;
 import com.leon.biuvideo.ui.dialogs.ImportFollowDialog;
@@ -36,7 +37,11 @@ import java.util.Map;
  */
 public class PreferenceFragment extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private TextView preference_textView_cache_size;
-    private SwitchCompat preference_switch_visitState;
+    private SwitchCompat preference_switch_visitState, preference_switch_imgOriginalMode;
+    private SharedPreferences initValues;
+
+    // 用来标记是否已初始化完毕
+    private boolean isInitialized = false;
 
     @Override
     public int setLayout() {
@@ -47,8 +52,8 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
     public void initView(BindingUtils bindingUtils) {
         bindingUtils
 //                .setOnCheckedChangeListener(R.id.preference_switch_isImport, this)
-                .setOnCheckedChangeListener(R.id.preference_switch_visitState, this)
                 .setOnClickListener(R.id.preference_textView_set_hero, this)
+                .setOnClickListener(R.id.preference_textView_set_color, this)
                 .setOnClickListener(R.id.preference_textView_import, this)
                 .setOnClickListener(R.id.preference_textView_cache, this)
                 .setOnClickListener(R.id.preference_textView_open_source_license, this)
@@ -57,7 +62,12 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                 .setOnClickListener(R.id.preference_textView_feed_back, this);
 
         preference_textView_cache_size = findView(R.id.preference_textView_cache_size);
+
         preference_switch_visitState = findView(R.id.preference_switch_visitState);
+        preference_switch_visitState.setOnCheckedChangeListener(this);
+
+        preference_switch_imgOriginalMode = findView(R.id.preference_switch_imgOriginalMode);
+        preference_switch_imgOriginalMode.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -70,9 +80,14 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
         preference_textView_cache_size.setText(cacheSize);
 
         //初始化preference_switch_visitState
-        SharedPreferences initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
+        initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
         boolean isVisit = initValues.getBoolean("isVisit", true);
         preference_switch_visitState.setChecked(isVisit);
+
+        boolean imgOriginalMode = initValues.getBoolean("imgOriginalMode", false);
+        preference_switch_imgOriginalMode.setChecked(imgOriginalMode);
+
+        isInitialized = true;
     }
 
     @Override
@@ -82,6 +97,11 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                 //显示SetHeroDialog
                 SetHeroDialog setHeroDialog = new SetHeroDialog(context);
                 setHeroDialog.show();
+
+                break;
+            case R.id.preference_textView_set_color:
+                Intent intent = new Intent(context, ChooseThemeColorActivity.class);
+                context.startActivity(intent);
 
                 break;
             case R.id.preference_textView_import:
@@ -123,11 +143,11 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                 break;
             case R.id.preference_textView_cache: //清除缓存
                 //创建弹窗
-                WarnDialog warnDialog = new WarnDialog(context, "清除缓存", "是否要清除缓存？如果选择清除则之前加载过的数据将要重新加载一遍！");
-                warnDialog.setOnConfirmListener(new WarnDialog.OnConfirmListener() {
+                WarnDialog cleanCacheWarnDialog = new WarnDialog(context, "清除缓存", "是否要清除缓存？如果选择清除则之前加载过的数据将要重新加载一遍！");
+                cleanCacheWarnDialog.setOnConfirmListener(new WarnDialog.OnConfirmListener() {
                     @Override
                     public void onConfirm() {
-                        warnDialog.dismiss();
+                        cleanCacheWarnDialog.dismiss();
 
                         //删除缓存
                         cleanCache(context.getCacheDir());
@@ -135,8 +155,13 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                         //刷新显示的缓存大小
                         preference_textView_cache_size.setText("0B");
                     }
+
+                    @Override
+                    public void onCancel() {
+                        cleanCacheWarnDialog.dismiss();
+                    }
                 });
-                warnDialog.show();
+                cleanCacheWarnDialog.show();
 
                 break;
             case R.id.preference_textView_open_source_license:
@@ -225,13 +250,54 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        SharedPreferences initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = initValues.edit();
+        // 如果没有初始化完毕就拦截当前的监听事件
+        if (!isInitialized) {
+            return;
+        }
 
-        editor.putBoolean("isVisit", isChecked);
+        switch (buttonView.getId()) {
+            case R.id.preference_switch_imgOriginalMode:
+                if (isChecked) {
+                    WarnDialog imgOriginalModeWarnDialog = new WarnDialog(context, "原图模式", "是否要开启原图模式？如果开启将会产生比平常更多的流量。");
+                    imgOriginalModeWarnDialog.setOnConfirmListener(new WarnDialog.OnConfirmListener() {
+                        @Override
+                        public void onConfirm() {
+                            setImgOriginalMode(true);
+                            imgOriginalModeWarnDialog.dismiss();
+                        }
 
-        editor.apply();
+                        @Override
+                        public void onCancel() {
+                            buttonView.setChecked(false);
+                            imgOriginalModeWarnDialog.dismiss();
+                        }
+                    });
+                    imgOriginalModeWarnDialog.show();
+                } else {
+                    setImgOriginalMode(false);
+                }
+
+                break;
+            case R.id.preference_switch_visitState:
+                SharedPreferences.Editor editor = initValues.edit();
+                editor.putBoolean("isVisit", isChecked).apply();
+
+                break;
+            default:
+                break;
+        }
     }
+
+    /**
+     * 设置原图模式状态
+     *
+     * @param isChecked     状态
+     */
+    private void setImgOriginalMode(boolean isChecked) {
+        SharedPreferences.Editor editor = initValues.edit();
+        editor.putBoolean("imgOriginalMode", isChecked).apply();
+    }
+
 
     /**
      * 清除用户关注数据后发送本地广播

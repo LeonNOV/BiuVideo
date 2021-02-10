@@ -59,6 +59,11 @@ public class FileUtils {
                         warnDialog.dismiss();
                         ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1024);
                     }
+
+                    @Override
+                    public void onCancel() {
+                        warnDialog.dismiss();
+                    }
                 });
                 warnDialog.show();
             } else {
