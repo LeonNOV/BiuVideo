@@ -5,6 +5,23 @@
 
 ## 📘开发日志
 
+### 2020/02/13
+- 加入了自定义layoutSnackbar，分为不带监听事件和带有监听事件两种：
+  - 不带监听事件
+    ``` java
+        SimpleSnackBar.make(view, "显示文本", SimpleSnackBar.LENGTH_SHORT/LENGTH_LONG).show();
+    ```
+  - 带有监听事件
+    ``` java
+        SimpleSnackBar.make(view, "显示文本", "被点击文本", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Do something...
+            }
+        }, SimpleSnackBar.LENGTH_SHORT).show();
+    ```
+- 后面会对所有的`SnackBar`进行替换
+
 ### 2020/02/10
 - 主题切换的核心部分已完成
   - **由于主题切换功能涉及到很多地方，所以需要在后期慢慢完善全部**

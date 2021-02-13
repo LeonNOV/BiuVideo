@@ -10,6 +10,8 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
@@ -18,9 +20,12 @@ import com.leon.biuvideo.ui.activitys.UserActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.HeroImages;
 import com.leon.biuvideo.utils.IDUtils;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.sun.easysnackbar.BaseTransientBar;
+import com.sun.easysnackbar.EasySnackBar;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -138,6 +143,13 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 animation.setDuration(1000);
                 animation.setRepeatMode(Animation.INFINITE);
                 home_fragment_imageView_hero.startAnimation(animation);
+
+                SimpleSnackBar.make(view, "显示文本", "被点击文本", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Do something...
+                    }
+                }, SimpleSnackBar.LENGTH_SHORT).show();
                 break;
             case R.id.home_button_confirm:
                 //判断是否有网络
