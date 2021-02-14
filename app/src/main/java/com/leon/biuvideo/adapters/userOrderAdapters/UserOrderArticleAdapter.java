@@ -14,7 +14,7 @@ import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.ui.activitys.ArticleActivity;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.List;
@@ -45,7 +45,7 @@ public class UserOrderArticleAdapter extends BaseAdapter<Article> {
                 .setText(R.id.user_article_item_title, article.title)
                 .setImage(R.id.user_article_item_cover, article.coverUrl, ImagePixelSize.COVER)
                 .setText(R.id.user_article_item_desc, article.summary)
-                .setText(R.id.user_article_item_addTime, "收藏于 " + ValueFormat.generateTime(article.ctime, true, false, "-"))
+                .setText(R.id.user_article_item_addTime, "收藏于 " + ValueUtils.generateTime(article.ctime, true, false, "-"))
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

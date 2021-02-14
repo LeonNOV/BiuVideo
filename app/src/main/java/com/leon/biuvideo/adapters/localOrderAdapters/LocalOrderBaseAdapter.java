@@ -20,7 +20,7 @@ import com.leon.biuvideo.ui.activitys.MusicActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BangumiParser;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.values.LocalOrderType;
@@ -116,7 +116,7 @@ public class LocalOrderBaseAdapter extends BaseAdapter<LocalOrder> {
                         .setText(R.id.user_article_item_title, jsonObject.getString("title"))
                         .setText(R.id.user_article_item_desc, jsonObject.getString("summary"))
                         .setImage(R.id.user_article_item_cover, jsonObject.getString("cover"), ImagePixelSize.COVER)
-                        .setText(R.id.user_article_item_addTime, "收藏于" + ValueFormat.generateTime(localOrder.addTime, false, false, "/"))
+                        .setText(R.id.user_article_item_addTime, "收藏于" + ValueUtils.generateTime(localOrder.addTime, false, false, "/"))
                         .setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {

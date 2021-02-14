@@ -39,4 +39,9 @@ public class InitValueUtils {
         SharedPreferences initValues = context.getSharedPreferences(context.getResources().getString(R.string.preference), Context.MODE_PRIVATE);
         return initValues.getLong("mid", 0);
     }
+
+    public static boolean isImgOriginalMode(Context context) {
+        SharedPreferences initValues = context.getSharedPreferences(context.getResources().getString(R.string.preference), Context.MODE_PRIVATE);
+        return initValues.getBoolean("imgOriginalMode", false);
+    }
 }

@@ -21,7 +21,7 @@ import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleThreadPool;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserFolderParser;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -206,7 +206,7 @@ public class UserOrderVideoFragment extends BaseLazyFragment {
                 .setImage(R.id.fragment_favorite_video_imageView_cover, userFolderData.cover, ImagePixelSize.COVER)
                 .setText(R.id.fragment_favorite_video_textView_creator, userFolderData.userName)
                 .setText(R.id.fragment_favorite_video_textView_total, userFolderData.total + "个内容")
-                .setText(R.id.fragment_favorite_video_textView_ctime, "创建于" + ValueFormat.generateTime(userFolderData.ctime, true, false, "/"));
+                .setText(R.id.fragment_favorite_video_textView_ctime, "创建于" + ValueUtils.generateTime(userFolderData.ctime, true, false, "/"));
     }
 
     /**

@@ -23,7 +23,7 @@ import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.FollowParser;
 import com.leon.biuvideo.values.ThanksList;
@@ -76,7 +76,7 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
         File cacheDir = context.getCacheDir();
 
         //初始化缓存大小
-        String cacheSize = ValueFormat.sizeFormat(getCacheSize(cacheDir), true);
+        String cacheSize = ValueUtils.sizeFormat(getCacheSize(cacheDir), true);
         preference_textView_cache_size.setText(cacheSize);
 
         //初始化preference_switch_visitState
@@ -100,8 +100,9 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
 
                 break;
             case R.id.preference_textView_set_color:
-                Intent intent = new Intent(context, ChooseThemeColorActivity.class);
-                context.startActivity(intent);
+                SimpleSnackBar.make(view, "该功能将会在后期版本中上线，请谅解(。・∀・)ノ", SimpleSnackBar.LENGTH_LONG).show();
+//                Intent intent = new Intent(context, ChooseThemeColorActivity.class);
+//                context.startActivity(intent);
 
                 break;
             case R.id.preference_textView_import:

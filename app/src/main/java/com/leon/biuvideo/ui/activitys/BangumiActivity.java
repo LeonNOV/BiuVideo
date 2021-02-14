@@ -37,7 +37,7 @@ import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleDownloadThread;
 import com.leon.biuvideo.utils.SimpleThreadPool;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.LocalOrdersDatabaseUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
@@ -187,11 +187,11 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
         bangumi_textView_bangumiState.setText(bangumi.eps.size() == bangumi.epSize ? "已完结" : "连载中");
         bangumi_textView_epSize.setText("共" + bangumi.epSize + "话");
         bangumi_textView_score.setText(bangumi.score + "分");
-        bangumi_textView_play.setText(ValueFormat.generateCN(bangumiState.views) + "播放");
-        bangumi_textView_follow.setText(ValueFormat.generateCN(bangumiState.seriesFollow) + "系列追番");
-        bangumi_textView_like.setText(ValueFormat.generateCN(bangumiState.likes) + "点赞");
-        bangumi_textView_coin.setText(ValueFormat.generateCN(bangumiState.coins) + "投币");
-        bangumi_textView_favorite.setText(ValueFormat.generateCN(bangumiState.follow) + "收藏");
+        bangumi_textView_play.setText(ValueUtils.generateCN(bangumiState.views) + "播放");
+        bangumi_textView_follow.setText(ValueUtils.generateCN(bangumiState.seriesFollow) + "系列追番");
+        bangumi_textView_like.setText(ValueUtils.generateCN(bangumiState.likes) + "点赞");
+        bangumi_textView_coin.setText(ValueUtils.generateCN(bangumiState.coins) + "投币");
+        bangumi_textView_favorite.setText(ValueUtils.generateCN(bangumiState.follow) + "收藏");
 
         bangumi_imageView_favoriteMark.setImageResource(isHaveLocalOrder ? R.drawable.icon_video_favorite : R.drawable.icon_video_no_favorite);
 

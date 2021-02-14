@@ -19,7 +19,7 @@ import com.leon.biuvideo.ui.activitys.BangumiActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.parseDataUtils.articleParseUtils.ArticleParser;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BangumiParser;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -82,7 +82,7 @@ public class HistoryAdapter extends BaseAdapter<History.InnerHistory> {
 
                 int progress = history.progress;
                 int duration = history.duration;
-                holder.setText(videoLengthId, progress == -1 ? "已看完" : ValueFormat.lengthGenerate(progress) + "/" + ValueFormat.lengthGenerate(duration));
+                holder.setText(videoLengthId, progress == -1 ? "已看完" : ValueUtils.lengthGenerate(progress) + "/" + ValueUtils.lengthGenerate(duration));
 
                 ProgressBar progressBar = holder.findById(progressId);
                 progressBar.setMax(duration);

@@ -44,7 +44,7 @@ import com.leon.biuvideo.utils.dataBaseUtils.LocalOrdersDatabaseUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.WebViewUtils;
 import com.leon.biuvideo.values.LocalOrderType;
 import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParser;
@@ -263,13 +263,13 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         video_textView_name.setText(viewPage.userInfo.name);
         video_imageView_favoriteMark.setImageResource(isHaveLocalOrder ? R.drawable.icon_video_favorite : R.drawable.icon_video_no_favorite);
         video_textView_title.setText(viewPage.title);
-        video_textView_view.setText(ValueFormat.generateCN(viewPage.videoInfo.view) + "次观看");
-        video_textView_danmaku.setText(ValueFormat.generateCN(viewPage.videoInfo.danmaku) + "弹幕");
-        video_textView_upTime.setText(ValueFormat.generateTime(viewPage.upTime, true, false, "-"));
-        video_textView_like.setText(ValueFormat.generateCN(viewPage.videoInfo.like) + "点赞");
-        video_textView_coin.setText(ValueFormat.generateCN(viewPage.videoInfo.coin) + "投币");
-        video_textView_favorite.setText(ValueFormat.generateCN(viewPage.videoInfo.favorite) + "收藏");
-        video_textView_share.setText(ValueFormat.generateCN(viewPage.videoInfo.share) + "分享");
+        video_textView_view.setText(ValueUtils.generateCN(viewPage.videoInfo.view) + "次观看");
+        video_textView_danmaku.setText(ValueUtils.generateCN(viewPage.videoInfo.danmaku) + "弹幕");
+        video_textView_upTime.setText(ValueUtils.generateTime(viewPage.upTime, true, false, "-"));
+        video_textView_like.setText(ValueUtils.generateCN(viewPage.videoInfo.like) + "点赞");
+        video_textView_coin.setText(ValueUtils.generateCN(viewPage.videoInfo.coin) + "投币");
+        video_textView_favorite.setText(ValueUtils.generateCN(viewPage.videoInfo.favorite) + "收藏");
+        video_textView_share.setText(ValueUtils.generateCN(viewPage.videoInfo.share) + "分享");
         expand_text_view.setText(viewPage.desc);
 
         //设置默认的选集

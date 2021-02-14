@@ -11,8 +11,7 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.utils.SimpleThreadPool;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -25,8 +24,6 @@ import java.util.List;
 public class DownloadedFailListAdapter extends BaseAdapter<DownloadedDetailMedia> {
     private final Context context;
     private final List<DownloadedDetailMedia> downloadedDetailMedias;
-
-    private SimpleThreadPool simpleThreadPool;
 
     private OnClickFailedItemListener onClickFailedItemListener;
 
@@ -60,7 +57,7 @@ public class DownloadedFailListAdapter extends BaseAdapter<DownloadedDetailMedia
                 .setImage(R.id.downloaded_item_detail_imageView_mark, downloadedDetailMedia.isVideo ? videoIcon : audioIcon)
                 .setImage(R.id.downloaded_item_detail_imageView_cover, downloadedDetailMedia.cover, ImagePixelSize.COVER)
                 .setText(R.id.downloaded_item_detail_textView_title, downloadedDetailMedia.title)
-                .setText(R.id.downloaded_item_detail_textView_mediaInfo, ValueFormat.sizeFormat(downloadedDetailMedia.size, true))
+                .setText(R.id.downloaded_item_detail_textView_mediaInfo, ValueUtils.sizeFormat(downloadedDetailMedia.size, true))
                 .setVisibility(R.id.downloaded_item_detail_imageView_error, downloadedDetailMedia.downloadState == 1 ? View.GONE : View.VISIBLE)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override

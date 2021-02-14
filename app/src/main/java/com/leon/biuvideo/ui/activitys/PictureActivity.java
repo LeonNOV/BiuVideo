@@ -27,7 +27,7 @@ import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.values.Paths;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -125,8 +125,8 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
         picture_textView_time.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA)
                 .format(new Date(picture.ctime * 1000)));
 
-        picture_textView_view.setText(ValueFormat.generateCN(picture.view));
-        picture_textView_like.setText(ValueFormat.generateCN(picture.like));
+        picture_textView_view.setText(ValueUtils.generateCN(picture.view));
+        picture_textView_like.setText(ValueUtils.generateCN(picture.like));
         picture_textView_desc.setText(picture.description);
 
         int spanCount;

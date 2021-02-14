@@ -84,8 +84,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         long startTime = initValues.getLong("startTime", 0);
         int heroIndex = initValues.getInt("heroIndex", 0);
 
+        // 如果当天已进行过更新，则结束该方法
+        if (startTime == getTime()) {
+            home_fragment_imageView_hero.setImageResource(HeroImages.heroImages[heroIndex]);
+            return;
+        }
+
         //判断是否为第一次启动
-        if (startTime != 0 && heroIndex != 0) {
+        if (startTime != 0) {
             //判断是否已过去一天，如果已过则设置新的hero
             if (System.currentTimeMillis() - startTime >= 86400000) {
                 //达到最后一个则将index重置为0

@@ -1,11 +1,13 @@
 package com.leon.biuvideo.utils;
 
+import android.graphics.Color;
+
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class ValueFormat {
+public class ValueUtils {
     /**
      * 生成以万结尾的字符串，小于1万则直接返回
      *
@@ -114,5 +116,9 @@ public class ValueFormat {
 
         return new SimpleDateFormat(format, Locale.CHINA).format(date);
 
+    }
+
+    public static String changeARGB(String hexColor) {
+        return "#80" + hexColor.split("#")[1];
     }
 }

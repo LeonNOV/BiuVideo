@@ -14,7 +14,7 @@ import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -55,7 +55,7 @@ public class UserVideoAdapter extends BaseAdapter<Video> {
                 .setText(R.id.up_media_textView_mediaLength, video.length)
 
                 //设置播放次数
-                .setText(R.id.up_media_textView_play, ValueFormat.generateCN(video.play))
+                .setText(R.id.up_media_textView_play, ValueUtils.generateCN(video.play))
 
                 //设置上传日期
                 .setText(R.id.up_media_textView_ctime, new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA).format(new Date(video.create * 1000)))

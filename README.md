@@ -10,6 +10,7 @@
   - 设置监听统一使用`setAction`进行设置
 - 删除了`simple_snackbar_with_action_layout.xml`
 - 所有的`SnackBar`均已替换成自定义layout的`SnackBar`
+- 修改了部分代码
 
 ### 2020/02/13
 - 加入了自定义layoutSnackbar，分为不带监听事件和带有监听事件两种：

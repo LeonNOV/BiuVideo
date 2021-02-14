@@ -35,7 +35,7 @@ import com.leon.biuvideo.utils.dataBaseUtils.LocalOrdersDatabaseUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.values.LocalOrderType;
 import com.leon.biuvideo.values.Paths;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Attributes;
@@ -185,19 +185,19 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
             article_textView_category.setText(article.category);
 
             //设置创建时间
-            article_textView_ctime.setText(ValueFormat.generateTime(article.ctime, true, true, "-"));
+            article_textView_ctime.setText(ValueUtils.generateTime(article.ctime, true, true, "-"));
         }
 
         //设置观看量
-        String viewStr = ValueFormat.generateCN(article.view) + "次阅读";
+        String viewStr = ValueUtils.generateCN(article.view) + "次阅读";
         article_textView_view.setText(viewStr);
 
         //设置点赞数
-        String likeStr = ValueFormat.generateCN(article.like) + "次点赞";
+        String likeStr = ValueUtils.generateCN(article.like) + "次点赞";
         article_textView_like.setText(likeStr);
 
         //设置评论数
-        String replayStr = ValueFormat.generateCN(article.reply) + "次评论";
+        String replayStr = ValueUtils.generateCN(article.reply) + "次评论";
         article_textView_replay.setText(replayStr);
 
         String path = Paths.articleWebPage + article.articleId;

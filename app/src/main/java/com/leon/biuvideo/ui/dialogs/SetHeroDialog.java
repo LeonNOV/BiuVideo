@@ -77,7 +77,7 @@ public class SetHeroDialog extends AlertDialog implements View.OnClickListener, 
             //设置上一次设置的heroIndex
             set_hero_spinner.setEnabled(false);
         } else {
-            set_hero_dialog_switch.setChecked(true);
+            set_hero_dialog_switch.setChecked(false);
 
             //设置上一次设置的heroIndex
             set_hero_spinner.setEnabled(true);

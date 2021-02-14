@@ -13,7 +13,7 @@ import com.leon.biuvideo.beans.orderBeans.UserFolderData;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.text.SimpleDateFormat;
@@ -49,7 +49,7 @@ public class UserOrderVideoFolderDetailAdapter extends BaseAdapter<UserFolderDat
         holder.setImage(R.id.favorite_video_imageView_cover, media.cover, ImagePixelSize.COVER)
 
                 //设置播放时长
-                .setText(R.id.favorite_video_textView_duration, ValueFormat.lengthGenerate(media.duration))
+                .setText(R.id.favorite_video_textView_duration, ValueUtils.lengthGenerate(media.duration))
 
                 //设置收藏日期
                 .setText(R.id.favorite_video_textView_ftime, "收藏于" + new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA).format(new Date(media.addTime * 1000)))

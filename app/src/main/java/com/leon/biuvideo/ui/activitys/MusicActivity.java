@@ -43,7 +43,7 @@ import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.LocalOrdersDatabaseUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.LocalOrderType;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicParser;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicUrlParser;
@@ -351,7 +351,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
         music_textView_nowProgress.setText("00:00");
 
         //设置music总长度
-        music_textView_length.setText(ValueFormat.lengthGenerate(musicInfo.duration));
+        music_textView_length.setText(ValueUtils.lengthGenerate(musicInfo.duration));
 
     }
 

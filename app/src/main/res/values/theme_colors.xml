@@ -5,6 +5,7 @@
     <color name="theme_origin1">#ff9700</color><!--基情橙-->
     <color name="theme_yellow">#fec107</color><!--咸蛋黄-->
     <color name="theme_green1">#109d58</color><!--基安绿-->
+    <color name="theme_green3">#80109D58</color><!--基安绿-->
     <color name="theme_green2">#8bc24a</color><!--草苗绿-->
     <color name="theme_blue1">#3f51b5</color><!-- 赛车蓝 -->
     <color name="theme_blue2">#2196f3</color><!--宝石蓝-->

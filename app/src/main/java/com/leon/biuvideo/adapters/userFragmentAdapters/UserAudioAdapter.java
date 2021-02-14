@@ -14,7 +14,7 @@ import com.leon.biuvideo.ui.activitys.MusicActivity;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -47,13 +47,13 @@ public class UserAudioAdapter extends BaseAdapter<Audio> {
         holder.setImage(R.id.up_media_imageView_cover, audio.cover, ImagePixelSize.COVER)
 
                 //设置播放时长
-                .setText(R.id.up_media_textView_mediaLength, ValueFormat.lengthGenerate(audio.duration))
+                .setText(R.id.up_media_textView_mediaLength, ValueUtils.lengthGenerate(audio.duration))
 
                 //不显示合作标识
                 .setVisibility(R.id.up_media_textView_isUnionmedia, View.INVISIBLE)
 
                 //设置播放次数
-                .setText(R.id.up_media_textView_play, ValueFormat.generateCN(audio.play))
+                .setText(R.id.up_media_textView_play, ValueUtils.generateCN(audio.play))
 
                 //设置上传日期
                 .setText(R.id.up_media_textView_ctime, new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA).format(new Date(audio.ctime)))

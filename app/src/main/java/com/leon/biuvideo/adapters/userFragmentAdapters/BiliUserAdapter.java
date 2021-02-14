@@ -15,7 +15,7 @@ import com.leon.biuvideo.ui.activitys.UserActivity;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
 
 import java.util.List;
@@ -107,7 +107,7 @@ public class BiliUserAdapter extends BaseAdapter<BiliUser> {
         holder.setText(R.id.search_bili_user_textView_works, videos);
 
         //设置粉丝数
-        String fans = "粉丝：" + ValueFormat.generateCN(biliUser.fans);
+        String fans = "粉丝：" + ValueUtils.generateCN(biliUser.fans);
         holder
                 .setText(R.id.search_bili_user_textView_fans, fans)
                 .setText(R.id.search_bili_user_textView_sign, biliUser.usign);

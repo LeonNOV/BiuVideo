@@ -12,7 +12,7 @@ import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 
 import java.util.List;
 
@@ -55,7 +55,7 @@ public class AnthologyAdapter extends BaseAdapter<AnthologyInfo> {
                 //设置选集序号
                 .setText(R.id.anthology_item_textView_index, "P" + (position + 1))
 
-                .setText(R.id.anthology_item_textView_duration, ValueFormat.lengthGenerate(anthologyInfo.duration))
+                .setText(R.id.anthology_item_textView_duration, ValueUtils.lengthGenerate(anthologyInfo.duration))
 
                 //设置选集标题
                 .setText(R.id.anthology_item_textView_title, anthologyInfo.part)

@@ -11,7 +11,7 @@ import com.leon.biuvideo.beans.orderBeans.LocalOrder;
 import com.leon.biuvideo.beans.orderBeans.LocalVideoFolder;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.LocalOrdersDatabaseUtils;
 
 import java.util.List;
@@ -51,7 +51,7 @@ public class LocalOrderVideoFragment extends BaseFragment {
         LocalVideoFolder firstLocalVideoFolder = localVideoFolderList.get(0);
         fragment_local_order_textView_folderName.setText(firstLocalVideoFolder.folderName);
         fragment_local_order_textView_total.setText(firstLocalVideoFolder.videoCount + "个内容");
-        fragment_local_order_textView_ctime.setText(ValueFormat.generateTime(firstLocalVideoFolder.createTime, false, false, "/"));
+        fragment_local_order_textView_ctime.setText(ValueUtils.generateTime(firstLocalVideoFolder.createTime, false, false, "/"));
 
         LocalOrderVideoFolderAdapter localOrderVideoFolderAdapter = new LocalOrderVideoFolderAdapter(context, localVideoFolderList);
         localOrderVideoFolderAdapter.setOnClickFolderListener(new LocalOrderVideoFolderAdapter.OnClickFolderListener() {
@@ -61,7 +61,7 @@ public class LocalOrderVideoFragment extends BaseFragment {
                 if (!localVideoFolder.folderName.equals(fragment_local_order_textView_folderName.getText().toString())) {
                     fragment_local_order_textView_folderName.setText(localVideoFolder.folderName);
                     fragment_local_order_textView_total.setText(localVideoFolder.videoCount + "个内容");
-                    fragment_local_order_textView_ctime.setText(ValueFormat.generateTime(localVideoFolder.createTime, false, false, "/"));
+                    fragment_local_order_textView_ctime.setText(ValueUtils.generateTime(localVideoFolder.createTime, false, false, "/"));
 
                     // 查询和localVideoFolder中的folderName对应的数据
                     List<LocalOrder> nextLocalOrderList = localOrdersDatabaseUtils.queryLocalOrder(localVideoFolder.folderName);
