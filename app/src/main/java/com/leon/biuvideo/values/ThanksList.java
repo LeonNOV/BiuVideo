@@ -2,6 +2,7 @@ package com.leon.biuvideo.values;
 
 public class ThanksList {
     public static final String[] titles = {
+            "EasySnackBar",
             "RxFFmpeg",
             "Fastjson",
             "CircleImageView",
@@ -13,6 +14,7 @@ public class ThanksList {
     };
 
     public static final String[] desc = {
+            "实现自定义SnackBar，A SnackBar can show at top and bottom with a custom layout.This a SnackBar focuse on show custom layout,so it will not provide the same interface as the Google'Snackbar.",
             "用来处理音视频的合并，RxFFmpeg 是基于 ( FFmpeg 4.0 + X264 + mp3lame + fdk-aac + opencore-amr + openssl) 编译的适用于 Android 平台的音视频编辑、视频剪辑的快速处理框架，包含以下功能：视频拼接，转码，压缩，裁剪，片头片尾，分离音视频，变速，添加静态贴纸和gif动态贴纸，添加字幕，添加滤镜，添加背景音乐，加速减速视频，倒放音视频，百变魔音，音频裁剪，混音，图片合成视频，视频解码图片，抖音首页，视频播放器，及支持 OpenSSL https 等主流特色功能.",
             "对网络接口响应的json数据进行解析，Fastjson is a Java library that can be used to convert Java Objects into their JSON representation. It can also be used to convert a JSON string to an equivalent Java object. Fastjson can work with arbitrary Java objects including pre-existing objects that you do not have source-code of.",
             "实现了App中的圆形图片效果，A fast circular ImageView perfect for profile images. This is based on RoundedImageView from Vince Mi which itself is based on techniques recommended by Romain Guy.",
@@ -24,6 +26,7 @@ public class ThanksList {
     };
 
     public static final String[] orgUrl = {
+            "https://github.com/cooperka/react-native-snackbar",
             "https://github.com/microshow/RxFFmpeg",
             "https://github.com/alibaba/fastjson",
             "https://github.com/hdodenhof/CircleImageView",
