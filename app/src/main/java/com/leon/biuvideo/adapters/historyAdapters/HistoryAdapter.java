@@ -8,7 +8,6 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
@@ -18,6 +17,7 @@ import com.leon.biuvideo.beans.userBeans.History;
 import com.leon.biuvideo.ui.activitys.ArticleActivity;
 import com.leon.biuvideo.ui.activitys.BangumiActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.parseDataUtils.articleParseUtils.ArticleParser;
@@ -133,12 +133,12 @@ public class HistoryAdapter extends BaseAdapter<History.InnerHistory> {
                     @Override
                     public void onClick(View v) {
                         if (!InternetUtils.checkNetwork(context)) {
-                            Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                            SimpleSnackBar.make(v, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                             return;
                         }
 
                         if (history.badge.equals("纪录片")) {
-                            Snackbar.make(v, "该功能尚未开发，还请谅解(￣﹏￣；)", Snackbar.LENGTH_SHORT).show();
+                            SimpleSnackBar.make(v, "该功能尚未开发，还请谅解(￣﹏￣；)", SimpleSnackBar.LENGTH_SHORT).show();
                             return;
                         }
 
@@ -169,7 +169,7 @@ public class HistoryAdapter extends BaseAdapter<History.InnerHistory> {
                                 context.startActivity(intent);
                                 break;
                             case LIVE:
-                                Snackbar.make(v, "该功能尚未开发，还请谅解(￣﹏￣；)", Snackbar.LENGTH_SHORT).show();
+                                SimpleSnackBar.make(v, "该功能尚未开发，还请谅解(￣﹏￣；)", SimpleSnackBar.LENGTH_SHORT).show();
                                 break;
                             case BANGUMI:
                                 int pageNum = 1;

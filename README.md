@@ -5,13 +5,19 @@
 
 ## 📘开发日志
 
+### 2020/02/14
+- 删除了`SimpleSnackBar`中带有监听事件参数的make方法
+  - 设置监听统一使用`setAction`进行设置
+- 删除了`simple_snackbar_with_action_layout.xml`
+- 所有的`SnackBar`均已替换成自定义layout的`SnackBar`
+
 ### 2020/02/13
 - 加入了自定义layoutSnackbar，分为不带监听事件和带有监听事件两种：
   - 不带监听事件
     ``` java
         SimpleSnackBar.make(view, "显示文本", SimpleSnackBar.LENGTH_SHORT/LENGTH_LONG).show();
     ```
-  - 带有监听事件
+  ~~- 带有监听事件~~
     ``` java
         SimpleSnackBar.make(view, "显示文本", "被点击文本", new View.OnClickListener() {
             @Override

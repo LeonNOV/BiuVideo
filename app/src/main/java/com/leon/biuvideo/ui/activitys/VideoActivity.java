@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.AnthologyAdapter;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
@@ -36,6 +35,7 @@ import com.leon.biuvideo.ui.dialogs.AnthologyDownloadDialog;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.dialogs.SingleVideoQualityDialog;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.SimpleDownloadThread;
 import com.leon.biuvideo.utils.SimpleThreadPool;
@@ -294,7 +294,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 boolean isHaveNetwork = InternetUtils.checkNetwork(getApplicationContext());
 
                 if (!isHaveNetwork) {
-                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(view, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -311,7 +311,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
                     if (state) {
                         video_imageView_favoriteMark.setImageResource(R.drawable.icon_video_no_favorite);
-                        Snackbar.make(view, R.string.remFavoriteSign, Snackbar.LENGTH_SHORT).show();
+                        SimpleSnackBar.make(view, R.string.remFavoriteSign, SimpleSnackBar.LENGTH_SHORT).show();
                         isHaveLocalOrder = false;
                     }
                 } else {
@@ -338,7 +338,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                         public void onFavoriteIcon(boolean addState) {
                             if (addState) {
                                 video_imageView_favoriteMark.setImageResource(R.drawable.icon_video_favorite);
-                                Snackbar.make(view, R.string.addFavoriteSign, Snackbar.LENGTH_SHORT).show();
+                                SimpleSnackBar.make(view, R.string.addFavoriteSign, SimpleSnackBar.LENGTH_SHORT).show();
                                 isHaveLocalOrder = true;
                             }
                         }
@@ -352,7 +352,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 boolean isHaveNetworkSaveVideo = InternetUtils.checkNetwork(getApplicationContext());
 
                 if (!isHaveNetworkSaveVideo) {
-                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(view, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -391,7 +391,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                         @Override
                         public void onSaveAll(int qualityId) {
                             // 保存所有视频
-                            Snackbar.make(video_anthology_cardView, "Sorry~该功能暂未进行开发，请谅解＞︿＜", Snackbar.LENGTH_SHORT).show();
+                            SimpleSnackBar.make(video_anthology_cardView, "Sorry~该功能暂未进行开发，请谅解＞︿＜", SimpleSnackBar.LENGTH_SHORT).show();
                         }
                     });
                     anthologyDownloadDialog.show();
@@ -423,7 +423,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.video_textView_saveCover:
                 if (!InternetUtils.checkNetwork(getApplicationContext())) {
-                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(view, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -439,7 +439,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                     public void run() {
                         boolean coverSaveState = ResourceUtils.savePicture(getApplicationContext(), coverUrl);
 
-                        Snackbar.make(view, coverSaveState ? R.string.saveSuccess : R.string.saveFail, Snackbar.LENGTH_SHORT).show();
+                        SimpleSnackBar.make(view, coverSaveState ? R.string.saveSuccess : R.string.saveFail, SimpleSnackBar.LENGTH_SHORT).show();
                     }
                 }).start();
 
@@ -458,7 +458,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
                         boolean faceSaveState = ResourceUtils.savePicture(getApplicationContext(), faceUrl);
 
-                        Snackbar.make(view, faceSaveState ? R.string.saveSuccess : R.string.saveFail, Snackbar.LENGTH_SHORT).show();
+                        SimpleSnackBar.make(view, faceSaveState ? R.string.saveSuccess : R.string.saveFail, SimpleSnackBar.LENGTH_SHORT).show();
                     }
                 }).start();
 
@@ -479,7 +479,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         //获取音频路径,默认只获取第一个
         String audioUrlBase = audioEntries.get(0).getValue().baseUrl;
 
-        Snackbar.make(video_anthology_cardView, R.string.isDownloading, Snackbar.LENGTH_SHORT).show();
+        SimpleSnackBar.make(video_anthology_cardView, R.string.isDownloading, SimpleSnackBar.LENGTH_SHORT).show();
 
         // 添加至downloadedRecordsForVideo
         addToDownloadedRecordsForVideo();
@@ -587,9 +587,9 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
         if (requestCode == 1024) {
             if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                Snackbar.make(video_anthology_cardView, "权限申请成功", Snackbar.LENGTH_SHORT).show();
+                SimpleSnackBar.make(video_anthology_cardView, "权限申请成功", SimpleSnackBar.LENGTH_SHORT).show();
             } else {
-                Snackbar.make(video_anthology_cardView, "权限申请失败", Snackbar.LENGTH_SHORT).show();
+                SimpleSnackBar.make(video_anthology_cardView, "权限申请失败", SimpleSnackBar.LENGTH_SHORT).show();
             }
         }
     }

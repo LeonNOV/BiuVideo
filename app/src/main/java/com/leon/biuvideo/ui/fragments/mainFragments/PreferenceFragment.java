@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.AboutBean;
 import com.leon.biuvideo.ui.activitys.ChooseThemeColorActivity;
@@ -22,6 +21,7 @@ import com.leon.biuvideo.ui.dialogs.SetHeroDialog;
 import com.leon.biuvideo.ui.dialogs.WarnDialog;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
@@ -109,7 +109,7 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                 boolean isHaveNetwork = InternetUtils.checkNetwork(context);
 
                 if (!isHaveNetwork) {
-                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(view, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -123,16 +123,16 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                         //隐藏importFollowDialog
                         importFollowDialog.dismiss();
 
-                        Snackbar.make(view, "正在导入数据中，请不要随意进行任何操作", Snackbar.LENGTH_LONG).show();
+                        SimpleSnackBar.make(view, "正在导入数据中，请不要随意进行任何操作", SimpleSnackBar.LENGTH_LONG).show();
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
                                 Map<String, Long> importMap = FollowParser.getFollowings(context, mid, cookie);
 
                                 if (importMap == null) {
-                                    Snackbar.make(view, "导入成功0个，导入失败0个", Snackbar.LENGTH_LONG).show();
+                                    SimpleSnackBar.make(view, "导入成功0个，导入失败0个", SimpleSnackBar.LENGTH_LONG).show();
                                 } else {
-                                    Snackbar.make(view, "导入成功" + importMap.get("successNum") + "个，导入失败" + importMap.get("failNum") + "个", Snackbar.LENGTH_LONG).show();
+                                    SimpleSnackBar.make(view, "导入成功" + importMap.get("successNum") + "个，导入失败" + importMap.get("failNum") + "个", SimpleSnackBar.LENGTH_LONG).show();
                                     sendLocalBroadcast();
                                 }
                             }
@@ -196,10 +196,10 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                 boolean removeFavorite = favoriteUserDatabaseUtils.removeFavorite();
 
                 if (removeFavorite) {
-                    Snackbar.make(v, "已删除所有来自账户中的数据", Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(v, "已删除所有来自账户中的数据", SimpleSnackBar.LENGTH_SHORT).show();
                     sendLocalBroadcast();
                 } else {
-                    Snackbar.make(v, "清除失败，数据还没有导入进来哦~", Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(v, "清除失败，数据还没有导入进来哦~", SimpleSnackBar.LENGTH_SHORT).show();
                 }
 
                 favoriteUserDatabaseUtils.close();

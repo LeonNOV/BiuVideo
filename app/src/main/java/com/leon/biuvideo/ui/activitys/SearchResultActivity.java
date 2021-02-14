@@ -14,13 +14,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.FragmentViewPagerAdapter;
 import com.leon.biuvideo.ui.fragments.searchResultFragments.ArticleResultFragment;
 import com.leon.biuvideo.ui.fragments.searchResultFragments.BangumiResultFragment;
 import com.leon.biuvideo.ui.fragments.searchResultFragments.BiliUserResultFragment;
 import com.leon.biuvideo.ui.fragments.searchResultFragments.VideoResultFragment;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ViewUtils;
 
@@ -69,7 +69,7 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
                 boolean isHaveNetwork = InternetUtils.checkNetwork(getApplicationContext());
 
                 if (!isHaveNetwork) {
-                    Snackbar.make(textView, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(textView, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                     return false;
                 }
 
@@ -79,7 +79,7 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
                     String value = search_editText_searchBox.getText().toString();
 
                     if (value.equals("")) {
-                        Snackbar.make(textView, "不输点儿啥吗？", Snackbar.LENGTH_SHORT).show();
+                        SimpleSnackBar.make(textView, "不输点儿啥吗？", SimpleSnackBar.LENGTH_SHORT).show();
                         return false;
                     } else {
                         //刷新当前界面数据

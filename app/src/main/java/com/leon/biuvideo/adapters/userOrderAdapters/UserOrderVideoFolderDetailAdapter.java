@@ -6,12 +6,12 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.orderBeans.UserFolderData;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueFormat;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -62,13 +62,13 @@ public class UserOrderVideoFolderDetailAdapter extends BaseAdapter<UserFolderDat
                     @Override
                     public void onClick(View v) {
                         if (!InternetUtils.checkNetwork(context)) {
-                            Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                            SimpleSnackBar.make(view, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                             return;
                         }
 
                         // 判断视频是否已失效
                         if (media.title.equals("已失效视频")) {
-                            Snackbar.make(view, "该视频已失效", Snackbar.LENGTH_SHORT).show();
+                            SimpleSnackBar.make(view, "该视频已失效", SimpleSnackBar.LENGTH_SHORT).show();
                             return;
                         }
 

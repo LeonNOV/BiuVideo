@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.FragmentViewPagerAdapter;
 import com.leon.biuvideo.beans.Favorite;
@@ -29,6 +28,7 @@ import com.leon.biuvideo.ui.fragments.userFragments.UserArticlesFragment;
 import com.leon.biuvideo.ui.fragments.userFragments.UserAudiosFragment;
 import com.leon.biuvideo.ui.fragments.userFragments.UserPicturesFragment;
 import com.leon.biuvideo.ui.fragments.userFragments.UserVideosFragment;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.ViewUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -137,7 +137,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
                 mid = intent.getLongExtra("mid", -1);
 
                 if (mid == -1) {
-                    Snackbar.make(user_linearLayout, "信息获取失败", Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(user_linearLayout, "信息获取失败", SimpleSnackBar.LENGTH_SHORT).show();
                     finish();
                 }
 
@@ -244,7 +244,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
 
                     boolean removeState = favoriteUserDatabaseUtils.removeFavorite(mid);
 
-                    Snackbar.make(v, removeState ? "已取消关注" : "取消关注失败", Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(v, removeState ? "已取消关注" : "取消关注失败", SimpleSnackBar.LENGTH_SHORT).show();
                 } else {
                     //添加至数据库中
                     up_imageView_favoriteIconState.setImageResource(R.drawable.favorite);
@@ -258,7 +258,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
 
                     boolean addState = favoriteUserDatabaseUtils.addFavorite(favorite);
 
-                    Snackbar.make(v, addState ? "已加入至关注列表" : "关注失败", Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(v, addState ? "已加入至关注列表" : "关注失败", SimpleSnackBar.LENGTH_SHORT).show();
                 }
 
                 break;
@@ -306,9 +306,9 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         if (requestCode == 1024) {
             if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                Snackbar.make(user_linearLayout, "权限申请成功", Snackbar.LENGTH_SHORT).show();
+                SimpleSnackBar.make(user_linearLayout, "权限申请成功", SimpleSnackBar.LENGTH_SHORT).show();
             } else {
-                Snackbar.make(user_linearLayout, "权限申请失败", Snackbar.LENGTH_SHORT).show();
+                SimpleSnackBar.make(user_linearLayout, "权限申请失败", SimpleSnackBar.LENGTH_SHORT).show();
             }
         }
     }

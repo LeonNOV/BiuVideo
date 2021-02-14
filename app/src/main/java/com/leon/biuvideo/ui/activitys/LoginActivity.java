@@ -16,8 +16,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -104,7 +104,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 //判断加载完成的页面是否为B站手机版主页
                 if (url.equals("https://m.bilibili.com/index.html")) {
-                    Snackbar.make(view, "正在获取用户信息中，请不要进行任何操作", Snackbar.LENGTH_LONG).show();
+                    SimpleSnackBar.make(view, "正在获取用户信息中，请不要进行任何操作", SimpleSnackBar.LENGTH_LONG).show();
                     CookieManager cookieManager = CookieManager.getInstance();
                     String cookieStr = cookieManager.getCookie(url).trim();
 
@@ -124,7 +124,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
 
                     if (!cookieMap.containsKey("DedeUserID")) {
-                        Snackbar.make(view, "获取不到登录信息，请重新进行登录", Snackbar.LENGTH_SHORT).setTextColor(getResources().getColor(R.color.blue)).show();
+                        SimpleSnackBar.make(view, "获取不到登录信息，请重新进行登录", SimpleSnackBar.LENGTH_SHORT).show();
                         return;
                     }
 

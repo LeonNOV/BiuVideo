@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.userFragmentAdapters.BangumiEpAdapter;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
@@ -34,6 +33,7 @@ import com.leon.biuvideo.ui.dialogs.BangumiDetailDialog;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.dialogs.SingleVideoQualityDialog;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleDownloadThread;
 import com.leon.biuvideo.utils.SimpleThreadPool;
@@ -207,10 +207,10 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void onEpClick(int position) {
                     if (position == selectAnthologyIndex) {
-                        Snackbar.make(bangumi_linearLayout, R.string.isPlaying, Snackbar.LENGTH_SHORT).show();
+                        SimpleSnackBar.make(bangumi_linearLayout, R.string.isPlaying, SimpleSnackBar.LENGTH_SHORT).show();
                     } else {
                         if (!InternetUtils.checkNetwork(getApplicationContext())) {
-                            Snackbar.make(bangumi_linearLayout, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                            SimpleSnackBar.make(bangumi_linearLayout, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                             return;
                         }
 
@@ -259,7 +259,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                 boolean isHaveNetworkSaveVideo = InternetUtils.checkNetwork(getApplicationContext());
 
                 if (!isHaveNetworkSaveVideo) {
-                    Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(v, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -291,7 +291,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                         @Override
                         public void onClickListener(Map.Entry<Integer, Media> mediaEntry) {
                             if (!InternetUtils.checkNetwork(getApplicationContext())) {
-                                Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                                SimpleSnackBar.make(v, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                                 return;
                             }
                             saveSingleVideo(mediaEntry, selectAnthologyIndex);
@@ -304,7 +304,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                         @Override
                         public void onDownload(int qualityId, long cid, int position, String subTitle) {
                             if (!InternetUtils.checkNetwork(getApplicationContext())) {
-                                Snackbar.make(anthologyDownloadDialog.view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                                SimpleSnackBar.make(anthologyDownloadDialog.view, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                                 return;
                             }
 
@@ -312,7 +312,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                             Play playWithDownload = mediaParser.parseMedia(null, cid, true);
 
                             if (playWithDownload == null) {
-                                Snackbar.make(anthologyDownloadDialog.view, "获取不到该番剧的下载数据，可能该番剧有地区限制", Snackbar.LENGTH_SHORT).show();
+                                SimpleSnackBar.make(anthologyDownloadDialog.view, "获取不到该番剧的下载数据，可能该番剧有地区限制", SimpleSnackBar.LENGTH_SHORT).show();
                                 return;
                             }
 
@@ -338,7 +338,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                         @Override
                         public void onSaveAll(int qualityId) {
                             // 保存所有视频
-                            Snackbar.make(v, "Sorry~该功能暂未进行开发，请谅解＞︿＜", Snackbar.LENGTH_SHORT).show();
+                            SimpleSnackBar.make(v, "Sorry~该功能暂未进行开发，请谅解＞︿＜", SimpleSnackBar.LENGTH_SHORT).show();
                         }
                     });
 
@@ -354,7 +354,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
 
                     if (operatingStatus) {
                         bangumi_imageView_favoriteMark.setImageResource(R.drawable.icon_video_no_favorite);
-                        Snackbar.make(v, R.string.remFavoriteSign, Snackbar.LENGTH_SHORT).show();
+                        SimpleSnackBar.make(v, R.string.remFavoriteSign, SimpleSnackBar.LENGTH_SHORT).show();
                         isHaveLocalOrder = false;
                     }
                 } else {
@@ -376,7 +376,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
 
                     if (operatingStatus) {
                         bangumi_imageView_favoriteMark.setImageResource(R.drawable.icon_video_favorite);
-                        Snackbar.make(v, R.string.addFavoriteSign, Snackbar.LENGTH_SHORT).show();
+                        SimpleSnackBar.make(v, R.string.addFavoriteSign, SimpleSnackBar.LENGTH_SHORT).show();
                         isHaveLocalOrder = true;
                     }
                 }
@@ -403,7 +403,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
         // 添加至DownloadDetailsForMedia
         String fileName = addToDownloadDetailMedia(mediaEntry, videoUrlBase, audioUrlBase, position);
 
-        Snackbar.make(bangumi_linearLayout, R.string.isDownloading, Snackbar.LENGTH_SHORT).show();
+        SimpleSnackBar.make(bangumi_linearLayout, R.string.isDownloading, SimpleSnackBar.LENGTH_SHORT).show();
 
         SimpleDownloadThread simpleDownloadThread = new SimpleDownloadThread(getApplicationContext(),
                 String.valueOf(bangumi.seasonId),

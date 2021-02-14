@@ -7,11 +7,13 @@ import com.leon.biuvideo.R;
 import com.sun.easysnackbar.EasySnackBar;
 
 public class SimpleSnackBar {
-    public static final int LENGTH_SHORT = -1;
     public static final int LENGTH_LONG = 0;
+    public static final int LENGTH_SHORT = -1;
+    public static final int LENGTH_INDEFINITE = -2;
 
-    private final static int LAYOUT_ID = R.layout.simple_snackbar_layout;
-    private final static int LAYOUT_WITH_ACTION_ID = R.layout.simple_snackbar_with_action_layout;
+    public static EasySnackBar make(View view, int resId, int duration) {
+        return make(view, view.getResources().getText(resId).toString(), duration);
+    }
 
     /**
      * 创建一个Snackbar
@@ -20,33 +22,29 @@ public class SimpleSnackBar {
      * @param content   显示的文字内容
      * @param duration  显示时长
      */
-    public static EasySnackBar make(View view, String content, int duration) {
-        View convert = convertToContentView(view, LAYOUT_ID);
+    public static EasySnackBar make(View view, CharSequence content, int duration) {
+        View convert = convertToContentView(view, R.layout.simple_snackbar_layout);
         ((TextView) convert.findViewById(R.id.simple_snackbar_content)).setText(content);
 
         return EasySnackBar.make(view, convert, duration, false);
     }
 
     /**
-     * 创建带有点击事件的snackbar
+     * 设置监听事件
      *
-     * @param view  view
-     * @param content   显示文字
-     * @param action    点击事件文字
+     * @param easySnackBar  easySnackBar
+     * @param action    action文本
      * @param onClickListener   点击事件
-     * @param duration  显示时长
      */
-    public static EasySnackBar make(View view, String content, String action, View.OnClickListener onClickListener, int duration) {
-        View convert = convertToContentView(view, LAYOUT_WITH_ACTION_ID);
+    public static EasySnackBar setAction(EasySnackBar easySnackBar,String action, View.OnClickListener onClickListener) {
+        View view = easySnackBar.getView();
 
-        TextView textView_content = convert.findViewById(R.id.simple_snackbar_with_action_content);
-        textView_content.setText(content);
-
-        TextView text_View_action = convert.findViewById(R.id.simple_snackbar_with_action_action);
+        TextView text_View_action = view.findViewById(R.id.simple_snackbar_action);
+        text_View_action.setVisibility(View.VISIBLE);
         text_View_action.setText(action);
         text_View_action.setOnClickListener(onClickListener);
 
-        return EasySnackBar.make(view, convert, duration, false);
+        return easySnackBar;
     }
 
     /**

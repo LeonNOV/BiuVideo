@@ -5,11 +5,11 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.ValueFormat;
@@ -78,7 +78,7 @@ public class DownloadedFailListAdapter extends BaseAdapter<DownloadedDetailMedia
                                 onClickFailedItemListener.onClick(position);
                             }
                         } else {
-                            Snackbar.make(v, "该资源正在下载中", Snackbar.LENGTH_SHORT).show();
+                            SimpleSnackBar.make(v, "该资源正在下载中", SimpleSnackBar.LENGTH_SHORT).show();
                         }
                     }
                 });

@@ -26,7 +26,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.bumptech.glide.Glide;
 import com.google.android.material.internal.NavigationMenuView;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.beans.userBeans.UserInfo;
@@ -39,11 +38,13 @@ import com.leon.biuvideo.ui.fragments.mainFragments.OrderFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.LocalOrderFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.PreferenceFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.ThemeColorChangeBroadcastReceiver;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserInfoParser;
+import com.sun.easysnackbar.EasySnackBar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -177,13 +178,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         InternetUtils.InternetState internetState = InternetUtils.internetState(getApplicationContext());
         switch (internetState) {
             case INTERNET_NoAvailable:
-                Snackbar.make(drawer_layout, "没有网络哦~", Snackbar.LENGTH_SHORT).show();
+                SimpleSnackBar.make(drawer_layout, "没有网络哦~", SimpleSnackBar.LENGTH_SHORT).show();
                 break;
 //            case INTERNET_WIFI:
 //                Toast.makeText(getApplicationContext(), "WIFI", Toast.LENGTH_SHORT).show();
 //                break;
             case INTERNET_MOBILE:
-                Snackbar.make(drawer_layout, "现处于移动网络状态下，请注意流量的使用", Snackbar.LENGTH_SHORT).show();
+                SimpleSnackBar.make(drawer_layout, "现处于移动网络状态下，请注意流量的使用", SimpleSnackBar.LENGTH_SHORT).show();
                 break;
             default:
 //                Toast.makeText(getApplicationContext(), "未知类型", Toast.LENGTH_SHORT).show();
@@ -215,16 +216,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             cookie = sharedPreferences.getString("cookie", null);
 
             if (cookie == null) {
-                Snackbar.make(drawer_layout, "还未登录哦~", Snackbar.LENGTH_LONG)
-                        .setAction("这就去登录", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                                startActivityForResult(intent, 1003);
-                            }
-                        })
-                        .setActionTextColor(getResources().getColor(R.color.blue))
-                        .show();
+                EasySnackBar easySnackBar = SimpleSnackBar.make(drawer_layout, "还未登录哦~", SimpleSnackBar.LENGTH_LONG);
+                SimpleSnackBar.setAction(easySnackBar, "这就去登录", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivityForResult(intent, 1003);
+                    }
+                });
+                easySnackBar.show();
             } else {
                 UserInfoParser userInfoParser = new UserInfoParser(getApplicationContext());
                 userInfo = userInfoParser.userInfoParse();
@@ -233,17 +233,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     sharedPreferences.edit().putBoolean("isVIP", userInfo.isVip).apply();
                     refreshUserInfo();
                 } else {
-                    Snackbar.make(drawer_layout, "用户凭证已过期，需要重新登录", Snackbar.LENGTH_SHORT)
-                            .setAction("登录", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                                    startActivityForResult(intent, 1003);
-                                }
-                            })
-                            .setActionTextColor(getResources().getColor(R.color.blue))
-                            .show();
-
+                    EasySnackBar easySnackBar = SimpleSnackBar.make(drawer_layout, "用户凭证已过期，需要重新登录", SimpleSnackBar.LENGTH_SHORT);
+                    SimpleSnackBar.setAction(easySnackBar, "登录", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivityForResult(intent, 1003);
+                        }
+                    });
+                    easySnackBar.show();
                 }
             }
         }
@@ -293,7 +291,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         isLogin = false;
         cookie = null;
 
-        Snackbar.make(drawer_layout, "当前账号已成功退出", Snackbar.LENGTH_SHORT).show();
+        SimpleSnackBar.make(drawer_layout, "当前账号已成功退出", SimpleSnackBar.LENGTH_SHORT).show();
     }
 
     /**
