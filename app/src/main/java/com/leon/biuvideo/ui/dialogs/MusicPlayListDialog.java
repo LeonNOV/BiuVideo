@@ -40,7 +40,7 @@ public class MusicPlayListDialog extends AlertDialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.music_play_list_dialog);
+        setContentView(R.layout.dialog_music_play_list);
 
         initView();
     }

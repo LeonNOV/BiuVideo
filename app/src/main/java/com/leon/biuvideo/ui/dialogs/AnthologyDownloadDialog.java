@@ -43,7 +43,7 @@ public class AnthologyDownloadDialog extends AlertDialog implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.anthology_download_dialog);
+        setContentView(R.layout.dialog_anthology_download);
 
         initView();
         initValue();

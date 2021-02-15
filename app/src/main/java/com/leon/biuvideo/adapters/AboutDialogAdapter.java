@@ -28,7 +28,7 @@ public class AboutDialogAdapter extends BaseAdapter<AboutBean> {
 
     @Override
     public int getLayout(int viewType) {
-        return R.layout.about_dialog_item;
+        return R.layout.dialog_about_item;
     }
 
     @Override

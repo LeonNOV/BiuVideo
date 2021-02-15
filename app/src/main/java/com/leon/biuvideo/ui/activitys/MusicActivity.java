@@ -446,7 +446,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                 boolean downloadState = downloadRecordsDatabaseUtils.queryVideoDownloadState(musicInfo.sid);
                 if (downloadState) {
                     WarnDialog warnDialog = new WarnDialog(MusicActivity.this, "提示", "检测到本地已存在该音频，是否要覆盖本地资源文件？");
-                    warnDialog.setOnConfirmListener(new WarnDialog.OnConfirmListener() {
+                    warnDialog.setOnClickListener(new WarnDialog.OnClickListener() {
                         @Override
                         public void onConfirm() {
                             downloadAudio();

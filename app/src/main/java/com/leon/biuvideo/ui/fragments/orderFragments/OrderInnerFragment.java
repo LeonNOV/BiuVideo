@@ -147,7 +147,6 @@ public class OrderInnerFragment extends BaseLazyFragment {
 
             initAttr();
         }
-
     }
 
     private void initAttr() {

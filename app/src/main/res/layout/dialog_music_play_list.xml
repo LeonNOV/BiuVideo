@@ -8,15 +8,15 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:padding="10dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="10dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/music_recyclerView_playList"
             android:layout_width="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_height="match_parent" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,10 +29,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_margin="15dp"
-                style="?android:attr/borderlessButtonStyle"
-                android:background="@drawable/ripple_rectangle_bilibbili_pink_light"
-                android:textSize="15sp"
-                android:text="@string/close" />
+                android:background="@drawable/ripple_bilibili_pink_radius6"
+                android:text="@string/close"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
         </LinearLayout>
 

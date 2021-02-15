@@ -40,7 +40,7 @@ public class FavoriteUserFragment extends BaseFragment {
 
     @Override
     public int setLayout() {
-        return R.layout.main_favorite_up_fragment;
+        return R.layout.main_fragment_favorite_up;
     }
 
     @Override

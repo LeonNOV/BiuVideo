@@ -38,7 +38,7 @@ public class WarnDialog extends AlertDialog implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.warn_dialog);
+        setContentView(R.layout.dialog_warn);
 
         window = getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
@@ -55,28 +55,28 @@ public class WarnDialog extends AlertDialog implements View.OnClickListener {
                 .setOnClickListener(R.id.warn_dialog_textView_cancel, this);
     }
 
-    private OnConfirmListener onConfirmListener;
+    private OnClickListener onClickListener;
 
-    public interface OnConfirmListener {
+    public interface OnClickListener {
         void onConfirm();
         void onCancel();
     }
 
-    public void setOnConfirmListener(OnConfirmListener onConfirmListener) {
-        this.onConfirmListener = onConfirmListener;
+    public void setOnClickListener(OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.warn_dialog_textView_cancel:
-                if (onConfirmListener != null) {
-                    onConfirmListener.onCancel();
+                if (onClickListener != null) {
+                    onClickListener.onCancel();
                 }
                 break;
             case R.id.warn_dialog_textView_confirm:
-                if (onConfirmListener != null) {
-                    onConfirmListener.onConfirm();
+                if (onClickListener != null) {
+                    onClickListener.onConfirm();
                 }
                 break;
             default:

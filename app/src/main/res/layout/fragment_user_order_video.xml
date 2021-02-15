@@ -48,7 +48,8 @@
             <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:background="@color/BiliBili_pink_lite">
+                android:background="@color/BiliBili_pink_lite"
+                app:elevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"

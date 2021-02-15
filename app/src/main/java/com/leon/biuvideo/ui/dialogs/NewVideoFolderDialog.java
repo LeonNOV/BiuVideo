@@ -41,7 +41,7 @@ public class NewVideoFolderDialog extends AlertDialog implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.new_video_folder_dialog);
+        setContentView(R.layout.dialog_new_video_folder);
 
         window = getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);

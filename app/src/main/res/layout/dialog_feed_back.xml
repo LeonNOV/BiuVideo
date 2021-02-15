@@ -38,7 +38,8 @@
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:background="@drawable/ripple_rectangle_bilibbili_pink_lite"
+            android:background="@drawable/ripple_bilibili_pink_radius6"
+            android:textColor="@color/white"
             android:text="@string/feed_back_dialog_submit" />
     </LinearLayout>
 

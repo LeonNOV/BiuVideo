@@ -3,6 +3,7 @@ package com.leon.biuvideo.ui.fragments.mainFragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
@@ -12,11 +13,9 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.AboutBean;
-import com.leon.biuvideo.ui.activitys.ChooseThemeColorActivity;
 import com.leon.biuvideo.ui.dialogs.ThanksListDialog;
 import com.leon.biuvideo.ui.dialogs.FeedbackDialog;
 import com.leon.biuvideo.ui.dialogs.ImportFollowDialog;
-import com.leon.biuvideo.ui.dialogs.LicenseDialog;
 import com.leon.biuvideo.ui.dialogs.SetHeroDialog;
 import com.leon.biuvideo.ui.dialogs.WarnDialog;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
@@ -29,6 +28,7 @@ import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.FollowParser;
 import com.leon.biuvideo.values.ThanksList;
 
 import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -145,7 +145,7 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
             case R.id.preference_textView_cache: //清除缓存
                 //创建弹窗
                 WarnDialog cleanCacheWarnDialog = new WarnDialog(context, "清除缓存", "是否要清除缓存？如果选择清除则之前加载过的数据将要重新加载一遍！");
-                cleanCacheWarnDialog.setOnConfirmListener(new WarnDialog.OnConfirmListener() {
+                cleanCacheWarnDialog.setOnClickListener(new WarnDialog.OnClickListener() {
                     @Override
                     public void onConfirm() {
                         cleanCacheWarnDialog.dismiss();
@@ -166,9 +166,11 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
 
                 break;
             case R.id.preference_textView_open_source_license:
-                //显示开源许可
-                LicenseDialog licenseDialog = new LicenseDialog(context);
-                licenseDialog.show();
+                // 跳转到开源许可页面
+                Intent licenseIntent = new Intent();
+                licenseIntent.setAction("android.intent.action.VIEW");
+                licenseIntent.setData(Uri.parse("https://gitee.com/leon_xf/biu-video/blob/master/LICENSE"));
+                startActivity(licenseIntent);
 
                 break;
             case R.id.preference_textView_thanks_list:
@@ -193,17 +195,32 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                 feedbackDialog.show();
                 break;
             case R.id.preference_switch_cleanImport:
-                FavoriteUserDatabaseUtils favoriteUserDatabaseUtils = new FavoriteUserDatabaseUtils(context);
-                boolean removeFavorite = favoriteUserDatabaseUtils.removeFavorite();
+                WarnDialog cleanImportWarnDialog = new WarnDialog(context, "清除用户数据", "是否要清除当前用户（不包括本地）已关注的数据？");
+                cleanImportWarnDialog.setOnClickListener(new WarnDialog.OnClickListener() {
+                    @Override
+                    public void onConfirm() {
+                        FavoriteUserDatabaseUtils favoriteUserDatabaseUtils = new FavoriteUserDatabaseUtils(context);
+                        boolean removeFavorite = favoriteUserDatabaseUtils.removeFavorite();
 
-                if (removeFavorite) {
-                    SimpleSnackBar.make(v, "已删除所有来自账户中的数据", SimpleSnackBar.LENGTH_SHORT).show();
-                    sendLocalBroadcast();
-                } else {
-                    SimpleSnackBar.make(v, "清除失败，数据还没有导入进来哦~", SimpleSnackBar.LENGTH_SHORT).show();
-                }
+                        if (removeFavorite) {
+                            SimpleSnackBar.make(v, "已删除所有来自账户中的数据", SimpleSnackBar.LENGTH_SHORT).show();
+                            sendLocalBroadcast();
+                        } else {
+                            SimpleSnackBar.make(v, "清除失败，数据还没有导入进来哦~", SimpleSnackBar.LENGTH_SHORT).show();
+                        }
 
-                favoriteUserDatabaseUtils.close();
+                        favoriteUserDatabaseUtils.close();
+
+                        cleanImportWarnDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        cleanImportWarnDialog.dismiss();
+                    }
+                });
+
+                cleanImportWarnDialog.show();
             default:
                 break;
         }
@@ -260,7 +277,7 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
             case R.id.preference_switch_imgOriginalMode:
                 if (isChecked) {
                     WarnDialog imgOriginalModeWarnDialog = new WarnDialog(context, "原图模式", "是否要开启原图模式？如果开启将会产生比平常更多的流量。");
-                    imgOriginalModeWarnDialog.setOnConfirmListener(new WarnDialog.OnConfirmListener() {
+                    imgOriginalModeWarnDialog.setOnClickListener(new WarnDialog.OnClickListener() {
                         @Override
                         public void onConfirm() {
                             setImgOriginalMode(true);

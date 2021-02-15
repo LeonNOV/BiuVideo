@@ -45,7 +45,7 @@ public class SingleVideoQualityDialog extends AlertDialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.single_video_quality_dialog);
+        setContentView(R.layout.dialog_single_video_quality);
 
         initView();
         initValue();

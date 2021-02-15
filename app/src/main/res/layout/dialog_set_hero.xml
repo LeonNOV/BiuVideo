@@ -17,11 +17,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="设置主页Hero"
             android:textColor="@color/black"
             android:textSize="15sp"
-            android:textStyle="bold"
-            android:layout_marginTop="10dp"
-            android:text="设置主页Hero"/>
+            android:textStyle="bold" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -82,22 +82,22 @@
                 android:id="@+id/set_hero_dialog_textView_close"
                 android:layout_width="80dp"
                 android:layout_height="50dp"
-                android:background="@drawable/ripple_rectangle_bilibbili_pink_light"
+                android:background="@drawable/ripple_bilibili_pink_radius6"
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="@string/close"
-                android:textColor="@color/black" />
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/set_hero_dialog_textView_save"
                 android:layout_width="80dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="30dp"
-                android:background="@drawable/ripple_rectangle_bilibbili_pink_light"
+                android:background="@drawable/ripple_bilibili_pink_radius6"
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="@string/save"
-                android:textColor="@color/black" />
+                android:textColor="@color/white" />
 
         </LinearLayout>
 

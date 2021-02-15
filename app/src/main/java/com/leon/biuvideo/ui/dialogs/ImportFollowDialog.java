@@ -33,7 +33,7 @@ public class ImportFollowDialog extends AlertDialog implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.import_follow_dialog);
+        setContentView(R.layout.dialog_import_follow);
 
         initView();
     }

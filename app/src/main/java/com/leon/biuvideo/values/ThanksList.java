@@ -26,7 +26,7 @@ public class ThanksList {
     };
 
     public static final String[] orgUrl = {
-            "https://github.com/cooperka/react-native-snackbar",
+            "https://github.com/SunJenry/EasySnackBar",
             "https://github.com/microshow/RxFFmpeg",
             "https://github.com/alibaba/fastjson",
             "https://github.com/hdodenhof/CircleImageView",

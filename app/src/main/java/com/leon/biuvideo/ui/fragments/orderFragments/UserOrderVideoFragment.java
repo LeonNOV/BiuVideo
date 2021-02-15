@@ -85,6 +85,7 @@ public class UserOrderVideoFragment extends BaseLazyFragment {
                 //获取第一个收藏夹ID
                 nowFolderId = userFolders.get(0).id;
                 userFolderData = userFolderParser.parseUserFolderData(nowFolderId, pageNum);
+                pageNum ++;
 
                 Message message = handler.obtainMessage();
                 message.what = 0;
@@ -139,6 +140,7 @@ public class UserOrderVideoFragment extends BaseLazyFragment {
                 UserFolderData innerUserFolderData = userFolderParser.parseUserFolderData(nowFolderId, pageNum);
                 userOrderVideoFolderDetailAdapter.reset(innerUserFolderData.medias);
                 setFolderInfo(innerUserFolderData);
+                pageNum ++;
             }
         });
 

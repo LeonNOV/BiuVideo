@@ -2,7 +2,6 @@ package com.leon.biuvideo.utils;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 
@@ -53,7 +52,7 @@ public class FileUtils {
             //如果应用之前请求过此权限但用户拒绝了请求，此方法将返回 true
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 WarnDialog warnDialog = new WarnDialog(activity, "读写权限", "由于保存资源文件时需要用到\"读写权限\"，否则将无法正常使用");
-                warnDialog.setOnConfirmListener(new WarnDialog.OnConfirmListener() {
+                warnDialog.setOnClickListener(new WarnDialog.OnClickListener() {
                     @Override
                     public void onConfirm() {
                         warnDialog.dismiss();

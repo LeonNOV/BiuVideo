@@ -4,7 +4,7 @@
     android:layout_width="170dp"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    app:cardBackgroundColor="@color/BiliBili_pink_lite"
+    app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="@dimen/corner_6dp">
 
     <TextView
@@ -38,8 +38,9 @@
             android:layout_below="@id/single_video_recyclerView_quality"
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp"
-            android:background="@drawable/ripple_rectangle_bilibbili_pink"
-            android:text="@string/cancel" />
+            android:background="@drawable/ripple_bilibili_pink_radius6"
+            android:text="@string/cancel"
+            android:textColor="@color/white" />
 
     </RelativeLayout>
 

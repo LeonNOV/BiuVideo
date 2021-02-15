@@ -27,7 +27,7 @@ public class FeedbackDialog extends AlertDialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.feed_back_dialog);
+        setContentView(R.layout.dialog_feed_back);
 
         initView();
     }
@@ -46,15 +46,17 @@ public class FeedbackDialog extends AlertDialog {
                     return;
                 }
 
-                String feedBack = feed_back_editText.getText().toString();
-                if (!feedBack.equals("")) {
-                    //处理反馈的提交
-                    //do something...
-                    dismiss();
-                    Toast.makeText(getContext(), "感谢您的反馈", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "不反馈点儿啥吗?", Toast.LENGTH_SHORT).show();
-                }
+//                String feedBack = feed_back_editText.getText().toString();
+                Toast.makeText(getContext(), "反馈失败，请到对应的下载平台下进行反馈，或加入QQ群聊进行反馈", Toast.LENGTH_SHORT).show();
+//                if (!feedBack.equals("")) {
+//                    //处理反馈的提交
+//                    //do something...
+//                    dismiss();
+//                    Toast.makeText(getContext(), "感谢您的反馈", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(getContext(), "不反馈点儿啥吗?", Toast.LENGTH_SHORT).show();
+//                }
+                dismiss();
             }
         });
 

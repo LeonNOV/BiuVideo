@@ -81,6 +81,11 @@ public class UserOrderBaseAdapter extends BaseAdapter<Order> {
                             return;
                         }
 
+                        if (orderType == OrderType.SERIES) {
+                            SimpleSnackBar.make(v, "追剧功能还未进行开发，请谅解(●'◡'●)", SimpleSnackBar.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         // 如果为番剧则跳转到BangumiActivity
                         if (orderType == OrderType.BANGUMI) {
                             int pageNum = 1;

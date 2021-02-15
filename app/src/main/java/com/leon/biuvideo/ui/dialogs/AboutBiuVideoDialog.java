@@ -28,7 +28,7 @@ public class AboutBiuVideoDialog extends AlertDialog implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.about_biu_video_dialog);
+        setContentView(R.layout.dialog_about_biu_video);
 
         this.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 

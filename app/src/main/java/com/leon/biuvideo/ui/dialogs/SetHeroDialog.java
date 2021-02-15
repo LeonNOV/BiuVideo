@@ -37,7 +37,7 @@ public class SetHeroDialog extends AlertDialog implements View.OnClickListener, 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.set_hero_dialog);
+        setContentView(R.layout.dialog_set_hero);
 
         //获取window
         this.getWindow().setBackgroundDrawableResource(android.R.color.transparent);

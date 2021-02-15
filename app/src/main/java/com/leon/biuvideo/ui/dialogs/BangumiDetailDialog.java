@@ -31,7 +31,7 @@ public class BangumiDetailDialog extends AlertDialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.bangumi_detail_dialog);
+        setContentView(R.layout.dialog_bangumi_detail);
 
         initView();
     }

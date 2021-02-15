@@ -41,7 +41,7 @@ public class SingleVideoQualityAdapter extends BaseAdapter<Map.Entry<Integer, Me
 
     @Override
     public int getLayout(int viewType) {
-        return R.layout.single_video_quality_dialog_item;
+        return R.layout.dialog_single_video_quality_item;
     }
 
     @Override

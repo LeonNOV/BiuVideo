@@ -428,7 +428,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (isLogin) {
                     warnDialog.setTitle("提示");
                     warnDialog.setContent("是否要退出当前账户？");
-                    warnDialog.setOnConfirmListener(new WarnDialog.OnConfirmListener() {
+                    warnDialog.setOnClickListener(new WarnDialog.OnClickListener() {
                         @Override
                         public void onConfirm() {
                             //清除当前存储的Cookie
@@ -451,7 +451,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     warnDialog.setTitle("提示");
                     warnDialog.setContent("还未进行登录，是否要登录账户？");
-                    warnDialog.setOnConfirmListener(new WarnDialog.OnConfirmListener() {
+                    warnDialog.setOnClickListener(new WarnDialog.OnClickListener() {
                         @Override
                         public void onConfirm() {
                             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
