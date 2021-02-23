@@ -40,6 +40,23 @@ public class FileUtils {
     }
 
     /**
+     * 创建文件夹，默认在系统根目录中创建
+     *
+     * @param folderName    子文件夹名称
+     */
+    public static String createFolder(String folderName) {
+        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/BiuVideo";
+
+        File file = new File(rootPath, folderName);
+
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        return file.getAbsolutePath();
+    }
+
+    /**
      * 每次保存需要提前检查读写权限
      *
      * @param activity  申请权限的Activity

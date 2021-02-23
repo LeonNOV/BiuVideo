@@ -147,12 +147,8 @@ public class VideoResultFragment extends BaseLazyFragment {
                 search_result_smartRefresh.setEnabled(false);
             }
 
-            if (linearLayoutManager == null || userVideoAdapter == null) {
-                linearLayoutManager = new LinearLayoutManager(context);
-                userVideoAdapter = new UserVideoAdapter(videoList, context);
-            }
-
-            userVideoAdapter.append(videoList);
+            linearLayoutManager = new LinearLayoutManager(context);
+            userVideoAdapter = new UserVideoAdapter(videoList, context);
 
             initAttr();
         }

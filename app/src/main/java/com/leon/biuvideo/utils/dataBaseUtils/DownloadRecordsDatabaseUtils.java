@@ -143,6 +143,20 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
     }
 
     /**
+     * 查询所有的VideoFolder和其子Video
+     *
+     * @return
+     */
+    public List<DownloadedRecordsForVideo> queryAllSubVideo() {
+        List<DownloadedRecordsForVideo> downloadedRecordsForVideos = queryAllVideo();
+        for (DownloadedRecordsForVideo downloadedRecordsForVideo : downloadedRecordsForVideos) {
+            downloadedRecordsForVideo.subVideos = queryAllSubVideo(downloadedRecordsForVideo.mainId);
+        }
+
+        return downloadedRecordsForVideos;
+    }
+
+    /**
      * 根据fileName获取单个选集视频
      *
      * @param fileName    文件名称

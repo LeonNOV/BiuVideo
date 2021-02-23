@@ -13,6 +13,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.AboutBean;
+import com.leon.biuvideo.ui.dialogs.ExportDialog;
 import com.leon.biuvideo.ui.dialogs.ThanksListDialog;
 import com.leon.biuvideo.ui.dialogs.FeedbackDialog;
 import com.leon.biuvideo.ui.dialogs.ImportFollowDialog;
@@ -23,12 +24,12 @@ import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueUtils;
+import com.leon.biuvideo.utils.dataBaseUtils.BackupLocalData;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.FollowParser;
 import com.leon.biuvideo.values.ThanksList;
 
 import java.io.File;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -59,7 +60,8 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                 .setOnClickListener(R.id.preference_textView_open_source_license, this)
                 .setOnClickListener(R.id.preference_textView_thanks_list, this)
                 .setOnClickListener(R.id.preference_switch_cleanImport, this)
-                .setOnClickListener(R.id.preference_textView_feed_back, this);
+                .setOnClickListener(R.id.preference_textView_feed_back, this)
+                .setOnClickListener(R.id.preference_textView_exportUserData, this);
 
         preference_textView_cache_size = findView(R.id.preference_textView_cache_size);
 
@@ -221,6 +223,22 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                 });
 
                 cleanImportWarnDialog.show();
+            case R.id.preference_textView_exportUserData:
+                ExportDialog exportDialog = new ExportDialog(context);
+                exportDialog.show();
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        BackupLocalData backupLocalData = new BackupLocalData(context);
+                        backupLocalData.execute();
+
+                        exportDialog.dismiss();
+                        SimpleSnackBar.make(v, "备份完成", SimpleSnackBar.LENGTH_SHORT).show();
+                    }
+                }).start();
+
+                break;
             default:
                 break;
         }

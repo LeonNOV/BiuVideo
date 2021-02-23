@@ -14,6 +14,7 @@
         该功能可保证只登录一次后，可将用户数据进行‘离线化’，如果你退出了当前账户，你的用户数据还会保存在
         本地，想进行清除的话，可使用下面的‘清除用户数据’功能
     </string>
+    <string name="preference_exportUserData">导出本地数据</string>
     <string name="preference_clean_userData">清除用户数据</string>
     <string name="preference_clean_cache">清除缓存</string>
 

@@ -129,18 +129,13 @@ public class BangumiResultFragment extends BaseLazyFragment {
             currentCount = bangumiList.size();
             pageNum++;
 
-
             if (currentCount == count) {
                 dataState = false;
                 search_result_smartRefresh.setEnabled(false);
             }
 
-            if (linearLayoutManager == null || bangumiAdapter == null) {
-                linearLayoutManager = new LinearLayoutManager(context);
-                bangumiAdapter = new BangumiAdapter(bangumiList, context);
-            }
-
-            bangumiAdapter.append(bangumiList);
+            linearLayoutManager = new LinearLayoutManager(context);
+            bangumiAdapter = new BangumiAdapter(bangumiList, context);
 
             initAttr();
         }

@@ -142,17 +142,12 @@ public class BiliUserResultFragment extends BaseLazyFragment {
                 search_result_smartRefresh.setEnabled(false);
             }
 
-            if (linearLayoutManager == null || biliUserAdapter == null) {
-
-                if (favoriteUserDatabaseUtils == null) {
-                    favoriteUserDatabaseUtils = new FavoriteUserDatabaseUtils(context);
-                }
-
-                linearLayoutManager = new LinearLayoutManager(context);
-                biliUserAdapter = new BiliUserAdapter(biliUserList, context, favoriteUserDatabaseUtils);
+            if (favoriteUserDatabaseUtils == null) {
+                favoriteUserDatabaseUtils = new FavoriteUserDatabaseUtils(context);
             }
 
-            biliUserAdapter.append(biliUserList);
+            linearLayoutManager = new LinearLayoutManager(context);
+            biliUserAdapter = new BiliUserAdapter(biliUserList, context, favoriteUserDatabaseUtils);
 
             initAttr();
         }

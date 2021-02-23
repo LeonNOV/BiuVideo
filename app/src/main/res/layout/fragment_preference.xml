@@ -183,6 +183,15 @@
 
                     </RelativeLayout>
 
+                    <TextView
+                        android:id="@+id/preference_textView_exportUserData"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?selectableItemBackground"
+                        android:padding="10dp"
+                        android:text="@string/preference_exportUserData"
+                        android:textColor="@color/preference_item" />
+
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>

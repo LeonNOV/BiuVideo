@@ -140,12 +140,8 @@ public class ArticleResultFragment extends BaseLazyFragment {
                 search_result_smartRefresh.setEnabled(false);
             }
 
-            if (linearLayoutManager == null || userArticleAdapter == null) {
-                linearLayoutManager = new LinearLayoutManager(context);
-                userArticleAdapter = new UserArticleAdapter(articleList, context);
-            }
-
-            userArticleAdapter.append(articleList);
+            linearLayoutManager = new LinearLayoutManager(context);
+            userArticleAdapter = new UserArticleAdapter(articleList, context);
 
             initAttr();
         }
