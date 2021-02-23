@@ -223,6 +223,7 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                 });
 
                 cleanImportWarnDialog.show();
+                break;
             case R.id.preference_textView_exportUserData:
                 ExportDialog exportDialog = new ExportDialog(context);
                 exportDialog.show();
