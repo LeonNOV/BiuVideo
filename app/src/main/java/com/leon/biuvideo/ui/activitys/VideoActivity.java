@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.AnthologyAdapter;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
@@ -36,6 +35,7 @@ import com.leon.biuvideo.ui.dialogs.AnthologyDownloadDialog;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.dialogs.SingleVideoQualityDialog;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.SimpleDownloadThread;
 import com.leon.biuvideo.utils.SimpleThreadPool;
@@ -44,7 +44,7 @@ import com.leon.biuvideo.utils.dataBaseUtils.LocalOrdersDatabaseUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.WebViewUtils;
 import com.leon.biuvideo.values.LocalOrderType;
 import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParser;
@@ -232,8 +232,6 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
             anthologyAdapter.setOnClickAnthologyListener(new AnthologyAdapter.OnClickAnthologyListener() {
                 @Override
                 public void onClick(int position, long cid) {
-                    anthologySelectedIndex = position;
-
                     if (webViewUtils == null) {
                         webViewUtils = new WebViewUtils(webView);
                     }
@@ -265,13 +263,13 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         video_textView_name.setText(viewPage.userInfo.name);
         video_imageView_favoriteMark.setImageResource(isHaveLocalOrder ? R.drawable.icon_video_favorite : R.drawable.icon_video_no_favorite);
         video_textView_title.setText(viewPage.title);
-        video_textView_view.setText(ValueFormat.generateCN(viewPage.videoInfo.view) + "次观看");
-        video_textView_danmaku.setText(ValueFormat.generateCN(viewPage.videoInfo.danmaku) + "弹幕");
-        video_textView_upTime.setText(ValueFormat.generateTime(viewPage.upTime, true, false, "-"));
-        video_textView_like.setText(ValueFormat.generateCN(viewPage.videoInfo.like) + "点赞");
-        video_textView_coin.setText(ValueFormat.generateCN(viewPage.videoInfo.coin) + "投币");
-        video_textView_favorite.setText(ValueFormat.generateCN(viewPage.videoInfo.favorite) + "收藏");
-        video_textView_share.setText(ValueFormat.generateCN(viewPage.videoInfo.share) + "分享");
+        video_textView_view.setText(ValueUtils.generateCN(viewPage.videoInfo.view) + "次观看");
+        video_textView_danmaku.setText(ValueUtils.generateCN(viewPage.videoInfo.danmaku) + "弹幕");
+        video_textView_upTime.setText(ValueUtils.generateTime(viewPage.upTime, true, false, "-"));
+        video_textView_like.setText(ValueUtils.generateCN(viewPage.videoInfo.like) + "点赞");
+        video_textView_coin.setText(ValueUtils.generateCN(viewPage.videoInfo.coin) + "投币");
+        video_textView_favorite.setText(ValueUtils.generateCN(viewPage.videoInfo.favorite) + "收藏");
+        video_textView_share.setText(ValueUtils.generateCN(viewPage.videoInfo.share) + "分享");
         expand_text_view.setText(viewPage.desc);
 
         //设置默认的选集
@@ -296,7 +294,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 boolean isHaveNetwork = InternetUtils.checkNetwork(getApplicationContext());
 
                 if (!isHaveNetwork) {
-                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(view, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -313,7 +311,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
                     if (state) {
                         video_imageView_favoriteMark.setImageResource(R.drawable.icon_video_no_favorite);
-                        Snackbar.make(view, R.string.remFavoriteSign, Snackbar.LENGTH_SHORT).show();
+                        SimpleSnackBar.make(view, R.string.remFavoriteSign, SimpleSnackBar.LENGTH_SHORT).show();
                         isHaveLocalOrder = false;
                     }
                 } else {
@@ -340,7 +338,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                         public void onFavoriteIcon(boolean addState) {
                             if (addState) {
                                 video_imageView_favoriteMark.setImageResource(R.drawable.icon_video_favorite);
-                                Snackbar.make(view, R.string.addFavoriteSign, Snackbar.LENGTH_SHORT).show();
+                                SimpleSnackBar.make(view, R.string.addFavoriteSign, SimpleSnackBar.LENGTH_SHORT).show();
                                 isHaveLocalOrder = true;
                             }
                         }
@@ -354,7 +352,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 boolean isHaveNetworkSaveVideo = InternetUtils.checkNetwork(getApplicationContext());
 
                 if (!isHaveNetworkSaveVideo) {
-                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(view, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -371,12 +369,10 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                             //获取视频选集信息
                             Play playWithDownload = mediaParser.parseMedia(viewPage.bvid, cid, false);
 
-                            anthologySelectedIndex = position;
-
                             videoEntries = playWithDownload.videoEntries();
                             for (Map.Entry<Integer, Media> entry : videoEntries) {
                                 entry.getValue().isDownloaded = downloadRecordsDatabaseUtils
-                                        .queryVideoDownloadState(String.valueOf(viewPage.anthologyInfoList.get(anthologySelectedIndex).cid + entry.getKey()));
+                                        .queryVideoDownloadState(String.valueOf(viewPage.anthologyInfoList.get(position).cid + entry.getKey()));
                             }
 
                             audioEntries = playWithDownload.audioEntries();
@@ -389,13 +385,13 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                                 }
                             }
 
-                            saveSingleVideo(videoEntry);
+                            saveSingleVideo(videoEntry, position);
                         }
 
                         @Override
                         public void onSaveAll(int qualityId) {
                             // 保存所有视频
-                            Snackbar.make(video_anthology_cardView, "Sorry~该功能暂未进行开发，请谅解＞︿＜", Snackbar.LENGTH_SHORT).show();
+                            SimpleSnackBar.make(video_anthology_cardView, "Sorry~该功能暂未进行开发，请谅解＞︿＜", SimpleSnackBar.LENGTH_SHORT).show();
                         }
                     });
                     anthologyDownloadDialog.show();
@@ -416,7 +412,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                         @Override
                         public void onClickListener(Map.Entry<Integer, Media> mediaEntry) {
                             singleVideoQualityDialog.dismiss();
-                            saveSingleVideo(mediaEntry);
+                            saveSingleVideo(mediaEntry, anthologySelectedIndex);
                         }
                     });
 
@@ -427,7 +423,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.video_textView_saveCover:
                 if (!InternetUtils.checkNetwork(getApplicationContext())) {
-                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(view, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -443,7 +439,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                     public void run() {
                         boolean coverSaveState = ResourceUtils.savePicture(getApplicationContext(), coverUrl);
 
-                        Snackbar.make(view, coverSaveState ? R.string.saveSuccess : R.string.saveFail, Snackbar.LENGTH_SHORT).show();
+                        SimpleSnackBar.make(view, coverSaveState ? R.string.saveSuccess : R.string.saveFail, SimpleSnackBar.LENGTH_SHORT).show();
                     }
                 }).start();
 
@@ -462,7 +458,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
                         boolean faceSaveState = ResourceUtils.savePicture(getApplicationContext(), faceUrl);
 
-                        Snackbar.make(view, faceSaveState ? R.string.saveSuccess : R.string.saveFail, Snackbar.LENGTH_SHORT).show();
+                        SimpleSnackBar.make(view, faceSaveState ? R.string.saveSuccess : R.string.saveFail, SimpleSnackBar.LENGTH_SHORT).show();
                     }
                 }).start();
 
@@ -473,7 +469,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void saveSingleVideo(Map.Entry<Integer, Media> mediaEntry) {
+    private void saveSingleVideo(Map.Entry<Integer, Media> mediaEntry, int position) {
         //获取权限
         FileUtils.verifyPermissions(VideoActivity.this);
 
@@ -483,32 +479,38 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         //获取音频路径,默认只获取第一个
         String audioUrlBase = audioEntries.get(0).getValue().baseUrl;
 
-        Snackbar.make(video_anthology_cardView, R.string.isDownloading, Snackbar.LENGTH_SHORT).show();
+        SimpleSnackBar.make(video_anthology_cardView, R.string.isDownloading, SimpleSnackBar.LENGTH_SHORT).show();
 
         // 添加至downloadedRecordsForVideo
         addToDownloadedRecordsForVideo();
 
         // 添加至DownloadDetailsForMedia
-        String fileName = addToDownloadDetailMedia(mediaEntry, videoUrlBase, audioUrlBase);
+        String fileName = addToDownloadDetailMedia(mediaEntry, videoUrlBase, audioUrlBase, position);
 
         if (simpleThreadPool == null) {
             simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.DownloadTaskNum, SimpleThreadPool.DownloadTask);
         }
 
-        SimpleDownloadThread simpleDownloadThread = new SimpleDownloadThread(getApplicationContext(), videoUrlBase, audioUrlBase, fileName);
+        SimpleDownloadThread simpleDownloadThread = new SimpleDownloadThread(getApplicationContext(),
+                viewPage.bvid,
+                viewPage.anthologyInfoList.get(position).cid,
+                mediaEntry.getKey(),
+                videoUrlBase,
+                audioUrlBase,
+                fileName);
         simpleThreadPool.submit(new FutureTask<>(simpleDownloadThread));
     }
 
     @NotNull
-    private String addToDownloadDetailMedia(Map.Entry<Integer, Media> mediaEntry, String videoUrlBase, String audioUrlBase) {
+    private String addToDownloadDetailMedia(Map.Entry<Integer, Media> mediaEntry, String videoUrlBase, String audioUrlBase, int position) {
         DownloadedDetailMedia downloadedDetailMedia = new DownloadedDetailMedia();
 
-        AnthologyInfo anthologyInfo = viewPage.anthologyInfoList.get(anthologySelectedIndex);
+        AnthologyInfo anthologyInfo = viewPage.anthologyInfoList.get(position);
         String fileName = viewPage.bvid + "-" + anthologyInfo.part + "-" + mediaEntry.getValue().quality.split(" ")[1];
 
         downloadedDetailMedia.fileName = fileName;
         downloadedDetailMedia.cover = viewPage.coverUrl;
-        downloadedDetailMedia.title = viewPage.anthologyInfoList.get(anthologySelectedIndex).part;
+        downloadedDetailMedia.title = anthologyInfo.part;
         downloadedDetailMedia.videoUrl = videoUrlBase;
         downloadedDetailMedia.audioUrl = audioUrlBase;
         downloadedDetailMedia.qualityId = mediaEntry.getKey();
@@ -516,7 +518,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         // 获取视频和音频总大小
         downloadedDetailMedia.size = ResourceUtils.getResourcesSize(videoUrlBase) + ResourceUtils.getResourcesSize(audioUrlBase);
         downloadedDetailMedia.mainId = viewPage.bvid;
-        downloadedDetailMedia.subId = viewPage.anthologyInfoList.get(anthologySelectedIndex).cid;
+        downloadedDetailMedia.subId = anthologyInfo.cid;
         downloadedDetailMedia.resourceMark = downloadedDetailMedia.subId + "-" + downloadedDetailMedia.qualityId;
         downloadedDetailMedia.isVideo = true;
 
@@ -585,9 +587,9 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
         if (requestCode == 1024) {
             if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                Snackbar.make(video_anthology_cardView, "权限申请成功", Snackbar.LENGTH_SHORT).show();
+                SimpleSnackBar.make(video_anthology_cardView, "权限申请成功", SimpleSnackBar.LENGTH_SHORT).show();
             } else {
-                Snackbar.make(video_anthology_cardView, "权限申请失败", Snackbar.LENGTH_SHORT).show();
+                SimpleSnackBar.make(video_anthology_cardView, "权限申请失败", SimpleSnackBar.LENGTH_SHORT).show();
             }
         }
     }

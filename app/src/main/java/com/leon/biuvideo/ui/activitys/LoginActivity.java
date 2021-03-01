@@ -16,8 +16,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -100,14 +100,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+
                 //判断加载完成的页面是否为B站手机版主页
                 if (url.equals("https://m.bilibili.com/index.html")) {
-                    Snackbar.make(view, "正在获取用户信息中，请不要进行任何操作", Snackbar.LENGTH_LONG).show();
+                    SimpleSnackBar.make(view, "正在获取用户信息中，请不要进行任何操作", SimpleSnackBar.LENGTH_LONG).show();
                     CookieManager cookieManager = CookieManager.getInstance();
                     String cookieStr = cookieManager.getCookie(url).trim();
 
                     //添加Cookie至本地
-                    SharedPreferences sharedPreferences = getSharedPreferences("initValues", Activity.MODE_PRIVATE);
+                    SharedPreferences sharedPreferences = getSharedPreferences(getResources().getString(R.string.preference), Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("cookie", cookieStr);
 
@@ -121,17 +123,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                     }
 
+                    if (!cookieMap.containsKey("DedeUserID")) {
+                        SimpleSnackBar.make(view, "获取不到登录信息，请重新进行登录", SimpleSnackBar.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     editor.putLong("mid", Long.parseLong(Objects.requireNonNull(cookieMap.get("DedeUserID")))).apply();
 
                     setResult(1004);
                     finish();
                 }
-
-                super.onPageFinished(view, url);
             }
         });
 
-        webView.loadUrl("https://passport.bilibili.com/login");
+        // 参数gourl为登陆成功后跳转到的url地址
+        webView.loadUrl("https://passport.bilibili.com/login?gourl=https://m.bilibili.com/index.html");
     }
 
     @Override

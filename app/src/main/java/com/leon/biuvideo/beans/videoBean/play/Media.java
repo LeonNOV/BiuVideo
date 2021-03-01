@@ -12,8 +12,8 @@ public class Media implements Serializable {
     public String quality;
     public boolean isDownloaded;    //是否已下载过，适合在VideoActivity中进行赋值
 
-    //暂不使用
-    public String codecs;
+    // 暂不使用
+//    public String codec;
 
     /**
      * 获取视频帧数，暂不使用

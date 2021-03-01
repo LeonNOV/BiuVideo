@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:text="我是标题"
-        android:textColor="@color/bilibili_pink"
+        android:textColor="@color/BiliBili_pink"
         android:textSize="20sp"
         android:textStyle="bold" />
 

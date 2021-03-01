@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.userFragmentAdapters.BangumiEpAdapter;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
@@ -34,10 +33,11 @@ import com.leon.biuvideo.ui.dialogs.BangumiDetailDialog;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.dialogs.SingleVideoQualityDialog;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleDownloadThread;
 import com.leon.biuvideo.utils.SimpleThreadPool;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.LocalOrdersDatabaseUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
@@ -187,11 +187,11 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
         bangumi_textView_bangumiState.setText(bangumi.eps.size() == bangumi.epSize ? "已完结" : "连载中");
         bangumi_textView_epSize.setText("共" + bangumi.epSize + "话");
         bangumi_textView_score.setText(bangumi.score + "分");
-        bangumi_textView_play.setText(ValueFormat.generateCN(bangumiState.views) + "播放");
-        bangumi_textView_follow.setText(ValueFormat.generateCN(bangumiState.seriesFollow) + "系列追番");
-        bangumi_textView_like.setText(ValueFormat.generateCN(bangumiState.likes) + "点赞");
-        bangumi_textView_coin.setText(ValueFormat.generateCN(bangumiState.coins) + "投币");
-        bangumi_textView_favorite.setText(ValueFormat.generateCN(bangumiState.follow) + "收藏");
+        bangumi_textView_play.setText(ValueUtils.generateCN(bangumiState.views) + "播放");
+        bangumi_textView_follow.setText(ValueUtils.generateCN(bangumiState.seriesFollow) + "系列追番");
+        bangumi_textView_like.setText(ValueUtils.generateCN(bangumiState.likes) + "点赞");
+        bangumi_textView_coin.setText(ValueUtils.generateCN(bangumiState.coins) + "投币");
+        bangumi_textView_favorite.setText(ValueUtils.generateCN(bangumiState.follow) + "收藏");
 
         bangumi_imageView_favoriteMark.setImageResource(isHaveLocalOrder ? R.drawable.icon_video_favorite : R.drawable.icon_video_no_favorite);
 
@@ -207,10 +207,10 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void onEpClick(int position) {
                     if (position == selectAnthologyIndex) {
-                        Snackbar.make(bangumi_linearLayout, R.string.isPlaying, Snackbar.LENGTH_SHORT).show();
+                        SimpleSnackBar.make(bangumi_linearLayout, R.string.isPlaying, SimpleSnackBar.LENGTH_SHORT).show();
                     } else {
                         if (!InternetUtils.checkNetwork(getApplicationContext())) {
-                            Snackbar.make(bangumi_linearLayout, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                            SimpleSnackBar.make(bangumi_linearLayout, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                             return;
                         }
 
@@ -259,7 +259,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                 boolean isHaveNetworkSaveVideo = InternetUtils.checkNetwork(getApplicationContext());
 
                 if (!isHaveNetworkSaveVideo) {
-                    Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(v, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -291,10 +291,10 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                         @Override
                         public void onClickListener(Map.Entry<Integer, Media> mediaEntry) {
                             if (!InternetUtils.checkNetwork(getApplicationContext())) {
-                                Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                                SimpleSnackBar.make(v, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                                 return;
                             }
-                            saveSingleVideo(mediaEntry);
+                            saveSingleVideo(mediaEntry, selectAnthologyIndex);
                         }
                     });
                     singleVideoQualityDialog.show();
@@ -304,7 +304,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                         @Override
                         public void onDownload(int qualityId, long cid, int position, String subTitle) {
                             if (!InternetUtils.checkNetwork(getApplicationContext())) {
-                                Snackbar.make(anthologyDownloadDialog.view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                                SimpleSnackBar.make(anthologyDownloadDialog.view, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                                 return;
                             }
 
@@ -312,7 +312,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                             Play playWithDownload = mediaParser.parseMedia(null, cid, true);
 
                             if (playWithDownload == null) {
-                                Snackbar.make(anthologyDownloadDialog.view, "获取不到该番剧的下载数据，可能该番剧有地区限制", Snackbar.LENGTH_SHORT).show();
+                                SimpleSnackBar.make(anthologyDownloadDialog.view, "获取不到该番剧的下载数据，可能该番剧有地区限制", SimpleSnackBar.LENGTH_SHORT).show();
                                 return;
                             }
 
@@ -332,13 +332,13 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                                 }
                             }
 
-                            saveSingleVideo(videoEntry);
+                            saveSingleVideo(videoEntry, position);
                         }
 
                         @Override
                         public void onSaveAll(int qualityId) {
                             // 保存所有视频
-                            Snackbar.make(v, "Sorry~该功能暂未进行开发，请谅解＞︿＜", Snackbar.LENGTH_SHORT).show();
+                            SimpleSnackBar.make(v, "Sorry~该功能暂未进行开发，请谅解＞︿＜", SimpleSnackBar.LENGTH_SHORT).show();
                         }
                     });
 
@@ -354,7 +354,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
 
                     if (operatingStatus) {
                         bangumi_imageView_favoriteMark.setImageResource(R.drawable.icon_video_no_favorite);
-                        Snackbar.make(v, R.string.remFavoriteSign, Snackbar.LENGTH_SHORT).show();
+                        SimpleSnackBar.make(v, R.string.remFavoriteSign, SimpleSnackBar.LENGTH_SHORT).show();
                         isHaveLocalOrder = false;
                     }
                 } else {
@@ -376,7 +376,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
 
                     if (operatingStatus) {
                         bangumi_imageView_favoriteMark.setImageResource(R.drawable.icon_video_favorite);
-                        Snackbar.make(v, R.string.addFavoriteSign, Snackbar.LENGTH_SHORT).show();
+                        SimpleSnackBar.make(v, R.string.addFavoriteSign, SimpleSnackBar.LENGTH_SHORT).show();
                         isHaveLocalOrder = true;
                     }
                 }
@@ -386,7 +386,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private void saveSingleVideo(Map.Entry<Integer, Media> mediaEntry) {
+    private void saveSingleVideo(Map.Entry<Integer, Media> mediaEntry, int position) {
         if (simpleThreadPool == null) {
             simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.DownloadTaskNum, SimpleThreadPool.DownloadTask);
         }
@@ -401,11 +401,17 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
         addToDownloadedRecordsForVideo();
 
         // 添加至DownloadDetailsForMedia
-        String fileName = addToDownloadDetailMedia(mediaEntry, videoUrlBase, audioUrlBase);
+        String fileName = addToDownloadDetailMedia(mediaEntry, videoUrlBase, audioUrlBase, position);
 
-        Snackbar.make(bangumi_linearLayout, R.string.isDownloading, Snackbar.LENGTH_SHORT).show();
+        SimpleSnackBar.make(bangumi_linearLayout, R.string.isDownloading, SimpleSnackBar.LENGTH_SHORT).show();
 
-        SimpleDownloadThread simpleDownloadThread = new SimpleDownloadThread(getApplicationContext(), videoUrlBase, audioUrlBase, fileName);
+        SimpleDownloadThread simpleDownloadThread = new SimpleDownloadThread(getApplicationContext(),
+                String.valueOf(bangumi.seasonId),
+                bangumi.eps.get(position).cid,
+                mediaEntry.getKey(),
+                videoUrlBase,
+                audioUrlBase,
+                fileName);
         simpleThreadPool.submit(new FutureTask<>(simpleDownloadThread));
     }
 
@@ -419,11 +425,11 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
         downloadRecordsDatabaseUtils.addVideo(downloadedRecordsForVideo);
     }
 
-    private String addToDownloadDetailMedia(Map.Entry<Integer, Media> mediaEntry, String videoUrlBase, String audioUrlBase) {
+    private String addToDownloadDetailMedia(Map.Entry<Integer, Media> mediaEntry, String videoUrlBase, String audioUrlBase, int position) {
         DownloadedDetailMedia downloadedDetailMedia = new DownloadedDetailMedia();
-        Ep ep = bangumi.eps.get(selectAnthologyIndex);
+        Ep ep = bangumi.eps.get(position);
 
-        String fileName = bangumi.mediaId + "-" + ep.longTitle + "-" + mediaEntry.getValue().quality.split(" ")[1];
+        String fileName = ep.cid + "-" + ep.longTitle + "-" + mediaEntry.getValue().quality.split(" ")[1];
 
         downloadedDetailMedia.fileName = fileName;
         downloadedDetailMedia.cover = ep.cover;

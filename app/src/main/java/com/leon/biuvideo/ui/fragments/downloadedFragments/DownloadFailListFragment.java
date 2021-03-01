@@ -16,15 +16,19 @@ import com.leon.biuvideo.adapters.downloadAdapter.DownloadedFailListAdapter;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.utils.SimpleDownloadThread;
+import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 
 import java.util.List;
+import java.util.concurrent.FutureTask;
 
 /**
  * 缓存失败fragment
  */
 public class DownloadFailListFragment extends BaseFragment {
     private RecyclerView fragment_downloaded_media_detail_recyclerView;
+    private SimpleThreadPool simpleThreadPool;
 
     private DownloadedFailListAdapter downloadedFailListAdapter;
 
@@ -46,10 +50,23 @@ public class DownloadFailListFragment extends BaseFragment {
 
     @Override
     public void initValues() {
+        simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.DownloadTaskNum, SimpleThreadPool.DownloadTask);
         DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = new DownloadRecordsDatabaseUtils(context);
         List<DownloadedDetailMedia> downloadedDetailMedias = downloadRecordsDatabaseUtils.queryDownloadFailMedia();
 
         downloadedFailListAdapter = new DownloadedFailListAdapter(context, downloadedDetailMedias);
+        downloadedFailListAdapter.setOnClickFailedItemListener(new DownloadedFailListAdapter.OnClickFailedItemListener() {
+            @Override
+            public void onClick(int position) {
+                DownloadedDetailMedia downloadedDetailMedia = downloadedDetailMedias.get(position);
+
+                if (downloadedDetailMedia.isVideo) {
+                    simpleThreadPool.submit(new FutureTask<>(new SimpleDownloadThread(context, downloadedDetailMedia.mainId, downloadedDetailMedia.subId, downloadedDetailMedia.qualityId, downloadedDetailMedia.videoUrl, downloadedDetailMedia.audioUrl, downloadedDetailMedia.fileName)));
+                } else {
+                    simpleThreadPool.submit(new FutureTask<>(new SimpleDownloadThread(context, downloadedDetailMedia.mainId, downloadedDetailMedia.audioUrl, downloadedDetailMedia.fileName)));
+                }
+            }
+        });
         fragment_downloaded_media_detail_recyclerView.setAdapter(downloadedFailListAdapter);
         fragment_downloaded_media_detail_recyclerView.setLayoutManager(new LinearLayoutManager(context));
 

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">BiuVideo</string>
+    <string name="preference">initValues</string>
 
     <dimen name="corner_6dp">6dp</dimen>
     <dimen name="item_padding">5dp</dimen>
@@ -64,4 +65,5 @@
     <!-- 加载数据中显示的默认文字 -->
     <string name="defaultStr">--</string>
     <string name="loading">加载数据中</string>
+    <string name="exporting">导出数据中</string>
 </resources>

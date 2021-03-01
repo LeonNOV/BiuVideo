@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.userOrderAdapters.UserOrderVideoFolderAdapter;
 import com.leon.biuvideo.adapters.userOrderAdapters.UserOrderVideoFolderDetailAdapter;
@@ -19,9 +18,10 @@ import com.leon.biuvideo.beans.orderBeans.UserFolderData;
 import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleThreadPool;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserFolderParser;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -85,6 +85,7 @@ public class UserOrderVideoFragment extends BaseLazyFragment {
                 //获取第一个收藏夹ID
                 nowFolderId = userFolders.get(0).id;
                 userFolderData = userFolderParser.parseUserFolderData(nowFolderId, pageNum);
+                pageNum ++;
 
                 Message message = handler.obtainMessage();
                 message.what = 0;
@@ -127,7 +128,7 @@ public class UserOrderVideoFragment extends BaseLazyFragment {
             @Override
             public void OnClick(long folderId) {
                 if (!InternetUtils.checkNetwork(context)) {
-                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(view, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -139,6 +140,7 @@ public class UserOrderVideoFragment extends BaseLazyFragment {
                 UserFolderData innerUserFolderData = userFolderParser.parseUserFolderData(nowFolderId, pageNum);
                 userOrderVideoFolderDetailAdapter.reset(innerUserFolderData.medias);
                 setFolderInfo(innerUserFolderData);
+                pageNum ++;
             }
         });
 
@@ -160,7 +162,7 @@ public class UserOrderVideoFragment extends BaseLazyFragment {
                 boolean isHaveNetwork = InternetUtils.checkNetwork(context);
 
                 if (!isHaveNetwork) {
-                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(view, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
 
                     //结束加载更多动画
                     fragment_favorite_smartRefresh.finishLoadMore();
@@ -187,7 +189,7 @@ public class UserOrderVideoFragment extends BaseLazyFragment {
                         //关闭上滑刷新
                         fragment_favorite_smartRefresh.setEnabled(false);
 
-                        Snackbar.make(view, R.string.isDone, Snackbar.LENGTH_SHORT).show();
+                        SimpleSnackBar.make(view, R.string.isDone, SimpleSnackBar.LENGTH_SHORT).show();
                     }
                 }
 
@@ -206,19 +208,20 @@ public class UserOrderVideoFragment extends BaseLazyFragment {
                 .setImage(R.id.fragment_favorite_video_imageView_cover, userFolderData.cover, ImagePixelSize.COVER)
                 .setText(R.id.fragment_favorite_video_textView_creator, userFolderData.userName)
                 .setText(R.id.fragment_favorite_video_textView_total, userFolderData.total + "个内容")
-                .setText(R.id.fragment_favorite_video_textView_ctime, "创建于" + ValueFormat.generateTime(userFolderData.ctime, true, false, "/"));
+                .setText(R.id.fragment_favorite_video_textView_ctime, "创建于" + ValueUtils.generateTime(userFolderData.ctime, true, false, "/"));
     }
 
     /**
      * 获取收藏的视频
      */
     private void getFavoriteVideo() {
-        pageNum++;
         userFolderData = userFolderParser.parseUserFolderData(nowFolderId, pageNum);
 
         if (userFolderData.medias.size() < 20) {
             dataState = false;
             fragment_favorite_smartRefresh.setEnabled(false);
         }
+
+        pageNum++;
     }
 }

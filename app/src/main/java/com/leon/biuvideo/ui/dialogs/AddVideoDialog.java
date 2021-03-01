@@ -33,7 +33,7 @@ public class AddVideoDialog extends AlertDialog implements View.OnClickListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.video_add_dialog);
+        setContentView(R.layout.dialog_video_add);
 
         Window window = getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);

@@ -2,7 +2,7 @@
 <shape android:shape="rectangle"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- 填充背景色-->
-    <solid android:color="@color/bilibili_pink"/>
+    <solid android:color="@color/BiliBili_pink"/>
     <corners android:radius="@dimen/corner_6dp"/>
     <padding
         android:top="3dp"

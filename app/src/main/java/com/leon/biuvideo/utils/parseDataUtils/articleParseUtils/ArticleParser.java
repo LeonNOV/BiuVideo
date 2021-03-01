@@ -51,7 +51,6 @@ public class ArticleParser {
 
         if (dataObject != null) {
             JSONArray articleArray = dataObject.getJSONArray("articles");
-
             List<Article> articles = new ArrayList<>();
             for (Object article : articleArray) {
                 Article articleInfo = getArticleInfo((JSONObject) article);

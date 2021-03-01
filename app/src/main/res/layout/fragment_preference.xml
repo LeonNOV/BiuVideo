@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bilibili_pink_lite"
+    android:background="@color/BiliBili_pink_lite"
     android:orientation="vertical">
 
     <ScrollView
@@ -21,7 +21,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/bilibili_pink_light"
+                app:cardBackgroundColor="@color/BiliBili_pink_light"
                 app:cardCornerRadius="@dimen/corner_6dp">
 
                 <LinearLayout
@@ -47,11 +47,6 @@
                         android:text="@string/preference_import"
                         android:textColor="@color/preference_item" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.43dp"
-                        android:background="#CF879B" />
-
                     <TextView
                         android:id="@+id/preference_textView_set_hero"
                         android:layout_width="match_parent"
@@ -61,10 +56,38 @@
                         android:text="@string/preference_set_hero"
                         android:textColor="@color/preference_item" />
 
-                    <View
+                    <TextView
+                        android:id="@+id/preference_textView_set_color"
                         android:layout_width="match_parent"
-                        android:layout_height="0.43dp"
-                        android:background="#CF879B" />
+                        android:layout_height="wrap_content"
+                        android:background="?selectableItemBackground"
+                        android:padding="10dp"
+                        android:text="@string/preference_set_color"
+                        android:textColor="@color/preference_item"
+                        app:drawableEndCompat="@drawable/icon_enter" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="@string/preference_imgOriginalMode"
+                            android:textColor="@color/preference_item" />
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/preference_switch_imgOriginalMode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:checked="false"
+                            android:theme="@style/CustomSwitchCompat" />
+
+                    </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -88,11 +111,6 @@
                             android:theme="@style/CustomSwitchCompat" />
 
                     </RelativeLayout>
-
-<!--                    <View-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="0.43dp"-->
-<!--                        android:background="#CF879B" />-->
 
 <!--                    <RelativeLayout-->
 <!--                        android:layout_width="match_parent"-->
@@ -131,11 +149,6 @@
 
 <!--                    </RelativeLayout>-->
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.43dp"
-                        android:background="#CF879B" />
-
                     <TextView
                         android:id="@+id/preference_switch_cleanImport"
                         android:layout_width="wrap_content"
@@ -144,11 +157,6 @@
                         android:padding="10dp"
                         android:text="@string/preference_clean_userData"
                         android:textColor="@color/preference_item" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.43dp"
-                        android:background="#CF879B" />
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
@@ -175,6 +183,15 @@
 
                     </RelativeLayout>
 
+                    <TextView
+                        android:id="@+id/preference_textView_exportUserData"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?selectableItemBackground"
+                        android:padding="10dp"
+                        android:text="@string/preference_exportUserData"
+                        android:textColor="@color/preference_item" />
+
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
@@ -183,7 +200,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                app:cardBackgroundColor="@color/bilibili_pink_light"
+                app:cardBackgroundColor="@color/BiliBili_pink_light"
                 app:cardCornerRadius="@dimen/corner_6dp">
 
                 <LinearLayout
@@ -209,11 +226,6 @@
                         android:text="@string/preference_open_source_license"
                         android:textColor="@color/preference_item" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.43dp"
-                        android:background="#CF879B" />
-
                     <TextView
                         android:id="@+id/preference_textView_thanks_list"
                         android:layout_width="match_parent"
@@ -231,7 +243,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                app:cardBackgroundColor="@color/bilibili_pink_light"
+                app:cardBackgroundColor="@color/BiliBili_pink_light"
                 app:cardCornerRadius="@dimen/corner_6dp">
 
                 <LinearLayout

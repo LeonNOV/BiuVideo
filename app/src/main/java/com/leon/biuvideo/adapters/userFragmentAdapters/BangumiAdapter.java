@@ -8,14 +8,14 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
 import com.leon.biuvideo.ui.activitys.BangumiActivity;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.List;
@@ -45,16 +45,16 @@ public class BangumiAdapter extends BaseAdapter<Bangumi> {
         holder
                 .setImage(R.id.search_result_bangumi_imageView_cover, bangumi.cover, ImagePixelSize.COVER)
                 .setText(R.id.search_result_bangumi_textView_title, bangumi.title)
-                .setText(R.id.search_result_bangumi_textView_pubTime, ValueFormat.generateTime(bangumi.playTime, true, true, "-"))
+                .setText(R.id.search_result_bangumi_textView_pubTime, ValueUtils.generateTime(bangumi.playTime, true, true, "-"))
                 .setText(R.id.search_result_bangumi_textView_area, bangumi.area)
                 .setText(R.id.search_result_bangumi_textView_style, bangumi.styles)
                 .setText(R.id.search_result_bangumi_textView_score, String.valueOf(bangumi.score))
-                .setText(R.id.search_result_bangumi_textView_reviewNum, ValueFormat.generateCN(bangumi.reviewNum) + "人点评")
+                .setText(R.id.search_result_bangumi_textView_reviewNum, ValueUtils.generateCN(bangumi.reviewNum) + "人点评")
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (!InternetUtils.checkNetwork(context)) {
-                            Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                            SimpleSnackBar.make(v, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                             return;
                         }
 

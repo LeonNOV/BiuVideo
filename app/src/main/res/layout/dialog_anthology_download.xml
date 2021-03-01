@@ -78,7 +78,7 @@
                 android:background="@drawable/ripple_item_white"
                 android:gravity="center"
                 android:text="@string/anthology_download_dialog_qualityWarn"
-                android:textColor="@color/bilibili_pink"
+                android:textColor="@color/BiliBili_pink"
                 android:textSize="13sp"
                 android:textStyle="bold" />
 
@@ -109,10 +109,10 @@
             android:layout_height="45dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:background="@drawable/ripple_round_gray"
+            android:background="@drawable/ripple_bilibili_pink_radius6"
             android:gravity="center"
             android:text="@string/anthology_download_dialog_saveAll"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="13sp" />
 
         <TextView
@@ -121,10 +121,10 @@
             android:layout_height="45dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:background="@drawable/ripple_round_gray"
+            android:background="@drawable/ripple_bilibili_pink_radius6"
             android:gravity="center"
             android:text="@string/anthology_download_dialog_checkAll"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="13sp" />
 
     </LinearLayout>

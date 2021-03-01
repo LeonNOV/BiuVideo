@@ -5,11 +5,11 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.searchBean.bangumi.Ep;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InitValueUtils;
 import com.leon.biuvideo.utils.InternetUtils;
 
@@ -59,7 +59,7 @@ public class BangumiEpAdapter extends BaseAdapter<Ep> {
                     @Override
                     public void onClick(View v) {
                         if (!InternetUtils.checkNetwork(context)) {
-                            Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                            SimpleSnackBar.make(v, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                             return;
                         }
 
@@ -69,14 +69,12 @@ public class BangumiEpAdapter extends BaseAdapter<Ep> {
                             if (InitValueUtils.isLogin(context)) {
                                 // 判断已登录账号是否为大会员
                                 if (InitValueUtils.isVIP(context)) {
-                                    Snackbar.make(v, "该番剧需要成为大会员才能进行观看", Snackbar.LENGTH_SHORT).show();
-                                    return;
+                                    SimpleSnackBar.make(v, "该番剧需要成为大会员才能进行观看", SimpleSnackBar.LENGTH_SHORT).show();
                                 } else {
                                     toBangumi(position);
                                 }
                             } else {
-                                Snackbar.make(v, "该番剧需要登录账号才能观看", Snackbar.LENGTH_SHORT).show();
-                                return;
+                                SimpleSnackBar.make(v, "该番剧需要登录账号才能观看", SimpleSnackBar.LENGTH_SHORT).show();
                             }
                         } else {
                             toBangumi(position);

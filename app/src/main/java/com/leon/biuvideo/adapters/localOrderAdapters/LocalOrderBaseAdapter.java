@@ -8,7 +8,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
@@ -19,8 +18,9 @@ import com.leon.biuvideo.ui.activitys.ArticleActivity;
 import com.leon.biuvideo.ui.activitys.BangumiActivity;
 import com.leon.biuvideo.ui.activitys.MusicActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BangumiParser;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.values.LocalOrderType;
@@ -79,7 +79,7 @@ public class LocalOrderBaseAdapter extends BaseAdapter<LocalOrder> {
                             @Override
                             public void onClick(View v) {
                                 if (!InternetUtils.checkNetwork(context)) {
-                                    Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                                    SimpleSnackBar.make(v, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                                     return;
                                 }
 
@@ -116,12 +116,12 @@ public class LocalOrderBaseAdapter extends BaseAdapter<LocalOrder> {
                         .setText(R.id.user_article_item_title, jsonObject.getString("title"))
                         .setText(R.id.user_article_item_desc, jsonObject.getString("summary"))
                         .setImage(R.id.user_article_item_cover, jsonObject.getString("cover"), ImagePixelSize.COVER)
-                        .setText(R.id.user_article_item_addTime, "收藏于" + ValueFormat.generateTime(localOrder.addTime, false, false, "/"))
+                        .setText(R.id.user_article_item_addTime, "收藏于" + ValueUtils.generateTime(localOrder.addTime, false, false, "/"))
                         .setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 if (!InternetUtils.checkNetwork(context)) {
-                                    Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                                    SimpleSnackBar.make(v, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                                     return;
                                 }
 
@@ -160,7 +160,7 @@ public class LocalOrderBaseAdapter extends BaseAdapter<LocalOrder> {
                             public void onClick(View v) {
                                 if (!localOrder.subId.equals("")) {
                                     if (!InternetUtils.checkNetwork(context)) {
-                                        Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                                        SimpleSnackBar.make(v, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                                         return;
                                     }
 
@@ -174,7 +174,7 @@ public class LocalOrderBaseAdapter extends BaseAdapter<LocalOrder> {
                             @Override
                             public void onClick(View v) {
                                 if (!InternetUtils.checkNetwork(context)) {
-                                    Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                                    SimpleSnackBar.make(v, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                                     return;
                                 }
 

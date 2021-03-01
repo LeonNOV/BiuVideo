@@ -26,7 +26,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.bumptech.glide.Glide;
 import com.google.android.material.internal.NavigationMenuView;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.beans.userBeans.UserInfo;
@@ -38,15 +37,19 @@ import com.leon.biuvideo.ui.fragments.mainFragments.HomeFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.OrderFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.LocalOrderFragment;
 import com.leon.biuvideo.ui.fragments.mainFragments.PreferenceFragment;
+import com.leon.biuvideo.ui.fragments.mainFragments.ThemeColorChangeBroadcastReceiver;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserInfoParser;
+import com.sun.easysnackbar.EasySnackBar;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
 
@@ -117,6 +120,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // 获取权限
         FileUtils.verifyPermissions(this);
 
+        // 初始化本地广播接收器
+        ThemeColorChangeBroadcastReceiver themeColorChangeBroadcastReceiver = new ThemeColorChangeBroadcastReceiver();
+        themeColorChangeBroadcastReceiver.initBroadcast(getApplicationContext());
+        themeColorChangeBroadcastReceiver.setChangeThemeColorListener(new ThemeColorChangeBroadcastReceiver.ChangeThemeColorListener() {
+            @Override
+            public void changThemeColor(int position) {
+                // 修改当前布局主题
+
+            }
+        });
+
         initDownloadFailList();
     }
 
@@ -164,13 +178,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         InternetUtils.InternetState internetState = InternetUtils.internetState(getApplicationContext());
         switch (internetState) {
             case INTERNET_NoAvailable:
-                Snackbar.make(drawer_layout, "没有网络哦~", Snackbar.LENGTH_SHORT).show();
+                SimpleSnackBar.make(drawer_layout, "没有网络哦~", SimpleSnackBar.LENGTH_SHORT).show();
                 break;
 //            case INTERNET_WIFI:
 //                Toast.makeText(getApplicationContext(), "WIFI", Toast.LENGTH_SHORT).show();
 //                break;
             case INTERNET_MOBILE:
-                Snackbar.make(drawer_layout, "现处于移动网络状态下，请注意流量的使用", Snackbar.LENGTH_SHORT).show();
+                SimpleSnackBar.make(drawer_layout, "现处于移动网络状态下，请注意流量的使用", SimpleSnackBar.LENGTH_SHORT).show();
                 break;
             default:
 //                Toast.makeText(getApplicationContext(), "未知类型", Toast.LENGTH_SHORT).show();
@@ -198,20 +212,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initUserInfo() {
         boolean network = InternetUtils.checkNetwork(getApplicationContext());
         if (network) {
-            SharedPreferences sharedPreferences = getSharedPreferences("initValues", Activity.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = getSharedPreferences(getResources().getString(R.string.preference), Activity.MODE_PRIVATE);
             cookie = sharedPreferences.getString("cookie", null);
 
             if (cookie == null) {
-                Snackbar.make(drawer_layout, "还未登录哦~", Snackbar.LENGTH_LONG)
-                        .setAction("这就去登录", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                                startActivityForResult(intent, 1003);
-                            }
-                        })
-                        .setActionTextColor(getResources().getColor(R.color.blue))
-                        .show();
+                EasySnackBar easySnackBar = SimpleSnackBar.make(drawer_layout, "还未登录哦~", SimpleSnackBar.LENGTH_LONG);
+                SimpleSnackBar.setAction(easySnackBar, "这就去登录", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivityForResult(intent, 1003);
+                    }
+                });
+                easySnackBar.show();
             } else {
                 UserInfoParser userInfoParser = new UserInfoParser(getApplicationContext());
                 userInfo = userInfoParser.userInfoParse();
@@ -220,17 +233,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     sharedPreferences.edit().putBoolean("isVIP", userInfo.isVip).apply();
                     refreshUserInfo();
                 } else {
-                    Snackbar.make(drawer_layout, "用户凭证已过期，需要重新登录", Snackbar.LENGTH_SHORT)
-                            .setAction("登录", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                                    startActivityForResult(intent, 1003);
-                                }
-                            })
-                            .setActionTextColor(getResources().getColor(R.color.blue))
-                            .show();
-
+                    EasySnackBar easySnackBar = SimpleSnackBar.make(drawer_layout, "用户凭证已过期，需要重新登录", SimpleSnackBar.LENGTH_SHORT);
+                    SimpleSnackBar.setAction(easySnackBar, "登录", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivityForResult(intent, 1003);
+                        }
+                    });
+                    easySnackBar.show();
                 }
             }
         }
@@ -274,13 +285,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigation_header_progress_level.setProgress(0);
 
         //删除本地Cookie
-        SharedPreferences.Editor editor = getSharedPreferences("initValues", Activity.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = getSharedPreferences(getResources().getString(R.string.preference), Activity.MODE_PRIVATE).edit();
         editor.remove("cookie").remove("isVIP").remove("mid").apply();
 
         isLogin = false;
         cookie = null;
 
-        Snackbar.make(drawer_layout, "当前账号已成功退出", Snackbar.LENGTH_SHORT).show();
+        SimpleSnackBar.make(drawer_layout, "当前账号已成功退出", SimpleSnackBar.LENGTH_SHORT).show();
     }
 
     /**
@@ -417,7 +428,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (isLogin) {
                     warnDialog.setTitle("提示");
                     warnDialog.setContent("是否要退出当前账户？");
-                    warnDialog.setOnConfirmListener(new WarnDialog.OnConfirmListener() {
+                    warnDialog.setOnClickListener(new WarnDialog.OnClickListener() {
                         @Override
                         public void onConfirm() {
                             //清除当前存储的Cookie
@@ -430,17 +441,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                             warnDialog.dismiss();
                         }
+
+                        @Override
+                        public void onCancel() {
+                            warnDialog.dismiss();
+                        }
                     });
 
                 } else {
                     warnDialog.setTitle("提示");
                     warnDialog.setContent("还未进行登录，是否要登录账户？");
-                    warnDialog.setOnConfirmListener(new WarnDialog.OnConfirmListener() {
+                    warnDialog.setOnClickListener(new WarnDialog.OnClickListener() {
                         @Override
                         public void onConfirm() {
                             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivityForResult(intent, 1003);
 
+                            warnDialog.dismiss();
+                        }
+
+                        @Override
+                        public void onCancel() {
                             warnDialog.dismiss();
                         }
                     });
@@ -478,19 +499,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             downloadRecordsDatabaseUtils.setFailed();
 
             // 删除未完成下载的媒体资源文件
-            List<DownloadedDetailMedia> downloadedDetailMedia = downloadRecordsDatabaseUtils.queryDownloadFailMedia();
+            List<DownloadedDetailMedia> downloadedFailedDetailMedia = downloadRecordsDatabaseUtils.queryDownloadFailMedia();
             File mediaFile;
-            String folderPath = FileUtils.createFolder(FileUtils.ResourcesFolder.VIDEOS);
-            for (DownloadedDetailMedia detailMedia : downloadedDetailMedia) {
+            String videoFolderPath = FileUtils.createFolder(FileUtils.ResourcesFolder.VIDEOS);
+            String audioFolderPath = FileUtils.createFolder(FileUtils.ResourcesFolder.MUSIC);
+            for (DownloadedDetailMedia detailMedia : downloadedFailedDetailMedia) {
                 String fileName = detailMedia.fileName;
                 if (detailMedia.isVideo) {
-                    mediaFile = new File(folderPath + "/" + fileName + ".mp4");
+                    mediaFile = new File(videoFolderPath + "/" + fileName + ".mp4");
                 } else {
-                    mediaFile = new File(folderPath + "/" + fileName + ".mp3");
+                    mediaFile = new File(audioFolderPath + "/" + fileName + ".mp3");
                 }
 
                 if (mediaFile.exists()) {
                     mediaFile.delete();
+                }
+            }
+
+            // 检查下载记录所对应的资源文件是否已删除
+            List<Map<String, Boolean>> mapList = downloadRecordsDatabaseUtils.queryAllMedia();
+            for (Map<String, Boolean> map : mapList) {
+                Map.Entry<String, Boolean> next = map.entrySet().iterator().next();
+
+                if (next.getValue()) {
+                    mediaFile = new File(videoFolderPath + "/" + next.getKey() + ".mp4");
+                } else {
+                    mediaFile = new File(audioFolderPath + "/" + next.getKey() + ".mp3");
+                }
+
+                if (!mediaFile.exists()) {
+                    downloadRecordsDatabaseUtils.removeDownloadRecords(next.getKey());
+                }
+            }
+
+            // 删除Temp文件夹中的所有数据
+            String tempFolderPath = FileUtils.createFolder(FileUtils.ResourcesFolder.TEMP);
+            File file = new File(tempFolderPath);
+            String[] tempFiles = file.list();
+            for (String tempFilePath : tempFiles) {
+                File tempFile = new File(tempFolderPath, "/" + tempFilePath);
+                if (tempFile.exists()) {
+                    tempFile.delete();
                 }
             }
 

@@ -14,15 +14,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.FavoriteUserAdapter;
 import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.FollowParser;
+import com.sun.easysnackbar.EasySnackBar;
 
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class FavoriteUserFragment extends BaseFragment {
 
     @Override
     public int setLayout() {
-        return R.layout.main_favorite_up_fragment;
+        return R.layout.main_fragment_favorite_up;
     }
 
     @Override
@@ -70,9 +71,9 @@ public class FavoriteUserFragment extends BaseFragment {
                                 }
                             });
 
-                            Snackbar.make(v, "导入成功" + importMap.get("successNum") + "条数据，导入失败" + importMap.get("failNum") + "条数据", Snackbar.LENGTH_LONG).show();
+                            SimpleSnackBar.make(v, "导入成功" + importMap.get("successNum") + "条数据，导入失败" + importMap.get("failNum") + "条数据", SimpleSnackBar.LENGTH_LONG).show();
                         } else {
-                            Snackbar.make(v, "还未登录账号哦~", Snackbar.LENGTH_LONG).show();
+                            SimpleSnackBar.make(v, "还未登录账号哦~", SimpleSnackBar.LENGTH_LONG).show();
                         }
 
                         loadingDialog.dismiss();
@@ -81,20 +82,18 @@ public class FavoriteUserFragment extends BaseFragment {
             }
         });
 
-        Snackbar snackbar = Snackbar.make(view, "建议不要频繁的刷新关注列表数据，否则本机网络IP会被封禁", Snackbar.LENGTH_INDEFINITE);
-        snackbar.setTextColor(getResources().getColor(R.color.blue))
-                .setAction("我知道了", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        snackbar.dismiss();
+        EasySnackBar easySnackBar = SimpleSnackBar.make(view, "建议不要频繁的刷新关注列表数据，否则本机网络IP会被封禁", SimpleSnackBar.LENGTH_INDEFINITE);
+        SimpleSnackBar.setAction(easySnackBar, "我知道了", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                easySnackBar.dismiss();
 
-                        if (favorites != null && favorites.size() == 0) {
-                            Snackbar.make(v, "现在还没有任何数据，试着刷新一下吧", Snackbar.LENGTH_SHORT).show();
-                        }
-                    }
-                })
-                .setActionTextColor(getResources().getColor(R.color.white))
-                .show();
+                if (favorites != null && favorites.size() == 0) {
+                    SimpleSnackBar.make(v, "现在还没有任何数据，试着刷新一下吧", SimpleSnackBar.LENGTH_SHORT).show();
+                }
+            }
+        });
+        easySnackBar.show();
 
         initBroadcast();
     }

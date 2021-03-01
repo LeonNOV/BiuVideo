@@ -6,9 +6,9 @@
         <shape>
             <stroke
                 android:width="3dp"
-                android:color="@color/bilibili_pink" />
+                android:color="@color/BiliBili_pink" />
             <corners android:radius="@dimen/corner_6dp" />
-            <solid android:color="@color/bilibili_pink_lite" />
+            <solid android:color="@color/BiliBili_pink_lite" />
             <padding
                 android:bottom="5dp"
                 android:left="5dp"

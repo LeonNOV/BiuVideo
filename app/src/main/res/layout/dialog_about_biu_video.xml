@@ -34,7 +34,7 @@
                     android:fontFamily="sans-serif-black"
                     android:gravity="center"
                     android:text="@string/app_name"
-                    android:textColor="@color/bilibili_pink"
+                    android:textColor="@color/BiliBili_pink"
                     android:textSize="30sp"
                     android:typeface="normal" />
 
@@ -146,14 +146,14 @@
                 <TextView
                     android:id="@+id/about_biu_video_textView_close"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="10dp"
-                    android:background="@drawable/ripple_rectangle_bilibbili_pink"
+                    android:background="@drawable/ripple_bilibili_pink_radius6"
                     android:gravity="center"
                     android:padding="10dp"
                     android:text="@string/close"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 

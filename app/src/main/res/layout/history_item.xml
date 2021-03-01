@@ -62,7 +62,7 @@
                 android:layout_width="180dp"
                 android:layout_height="5dp"
                 android:layout_alignBottom="@id/history_item_imageView_cover"
-                android:progressTint="@color/bilibili_pink" />
+                android:progressTint="@color/BiliBili_pink" />
 
 
         </RelativeLayout>

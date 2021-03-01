@@ -11,8 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 
 /**
  * 关于本App的信息
@@ -28,7 +28,7 @@ public class AboutBiuVideoDialog extends AlertDialog implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.about_biu_video_dialog);
+        setContentView(R.layout.dialog_about_biu_video);
 
         this.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
@@ -79,7 +79,7 @@ public class AboutBiuVideoDialog extends AlertDialog implements View.OnClickList
                 try {
                     context.startActivity(intent);
                 } catch (Exception e) {
-                    Snackbar.make(v, "调起QQ失败，请检查QQ是否为最新版或是否已安装QQ", Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(v, "调起QQ失败，请检查QQ是否为最新版或是否已安装QQ", SimpleSnackBar.LENGTH_SHORT).show();
                 }
 
                 break;

@@ -6,16 +6,16 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.searchBean.BiliUser;
 import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.ui.activitys.UserActivity;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
 
 import java.util.List;
@@ -51,7 +51,7 @@ public class BiliUserAdapter extends BaseAdapter<BiliUser> {
                 boolean isHaveNetwork = InternetUtils.checkNetwork(context);
 
                 if (!isHaveNetwork) {
-                    Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(v, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -86,7 +86,7 @@ public class BiliUserAdapter extends BaseAdapter<BiliUser> {
                     favoriteUserDatabaseUtils.removeFavorite(biliUser.mid);
                     holder.setText(R.id.search_bili_user_button_follow, "关注");
 
-                    Snackbar.make(v, "已将'" + biliUser.name + "'从关注列表中移除", Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(v, "已将'" + biliUser.name + "'从关注列表中移除", SimpleSnackBar.LENGTH_SHORT).show();
                 } else {
                     Favorite favorite = new Favorite();
                     favorite.mid = biliUser.mid;
@@ -97,7 +97,7 @@ public class BiliUserAdapter extends BaseAdapter<BiliUser> {
                     favoriteUserDatabaseUtils.addFavorite(favorite);
                     holder.setText(R.id.search_bili_user_button_follow, "已关注");
 
-                    Snackbar.make(v, "已将'" + biliUser.name + "'添加至关注列表", Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(v, "已将'" + biliUser.name + "'添加至关注列表", SimpleSnackBar.LENGTH_SHORT).show();
                 }
             }
         });
@@ -107,7 +107,7 @@ public class BiliUserAdapter extends BaseAdapter<BiliUser> {
         holder.setText(R.id.search_bili_user_textView_works, videos);
 
         //设置粉丝数
-        String fans = "粉丝：" + ValueFormat.generateCN(biliUser.fans);
+        String fans = "粉丝：" + ValueUtils.generateCN(biliUser.fans);
         holder
                 .setText(R.id.search_bili_user_textView_fans, fans)
                 .setText(R.id.search_bili_user_textView_sign, biliUser.usign);

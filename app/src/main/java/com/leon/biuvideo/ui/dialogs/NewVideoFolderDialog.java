@@ -7,13 +7,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.orderBeans.LocalVideoFolder;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
@@ -43,7 +41,7 @@ public class NewVideoFolderDialog extends AlertDialog implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.new_video_folder_dialog);
+        setContentView(R.layout.dialog_new_video_folder);
 
         window = getWindow();
         window.setBackgroundDrawableResource(android.R.color.transparent);
@@ -69,7 +67,6 @@ public class NewVideoFolderDialog extends AlertDialog implements View.OnClickLis
                 if (folderName.equals("")) {
 
                     // 显示有问题，暂用Toast显示
-//                    Snackbar.make(new_video_folder_dialog_frameLayout, "请输入完整的文件名称", Snackbar.LENGTH_SHORT).show();
                     Toast.makeText(context, "请输入完整的文件名称", Toast.LENGTH_SHORT).show();
                     break;
                 } else {

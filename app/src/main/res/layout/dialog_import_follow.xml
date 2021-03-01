@@ -40,8 +40,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="@string/import_follow_advanced"
-                android:textSize="12sp"
                 android:textColor="@color/black"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <ImageView
@@ -52,7 +52,7 @@
                 android:background="@drawable/ripple_round_white_bg"
                 android:padding="5dp"
                 android:src="@drawable/icon_back"
-                app:tint="@color/bilibili_pink" />
+                app:tint="@color/BiliBili_pink" />
 
         </LinearLayout>
 
@@ -98,18 +98,19 @@
                 android:id="@+id/import_follow_button_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="?android:attr/borderlessButtonStyle"
                 android:layout_margin="10dp"
-                android:background="@drawable/ripple_rectangle_bilibbili_pink_lite"
-                android:text="@string/cancel" />
+                android:background="@drawable/ripple_bilibili_pink_radius6"
+                android:text="@string/cancel"
+                android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/import_follow_button_confirm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="@drawable/ripple_rectangle_bilibbili_pink_lite"
-                android:text="@string/confirm" />
+                android:background="@drawable/ripple_bilibili_pink_radius6"
+                android:text="@string/confirm"
+                android:textColor="@color/white" />
 
         </LinearLayout>
 

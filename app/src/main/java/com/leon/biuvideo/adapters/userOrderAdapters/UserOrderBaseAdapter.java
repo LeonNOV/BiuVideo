@@ -7,13 +7,13 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
 import com.leon.biuvideo.beans.orderBeans.Order;
 import com.leon.biuvideo.ui.activitys.BangumiActivity;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BangumiParser;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -77,7 +77,12 @@ public class UserOrderBaseAdapter extends BaseAdapter<Order> {
                     @Override
                     public void onClick(View v) {
                         if (!InternetUtils.checkNetwork(context)) {
-                            Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                            SimpleSnackBar.make(v, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        if (orderType == OrderType.SERIES) {
+                            SimpleSnackBar.make(v, "追剧功能还未进行开发，请谅解(●'◡'●)", SimpleSnackBar.LENGTH_SHORT).show();
                             return;
                         }
 

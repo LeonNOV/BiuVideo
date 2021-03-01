@@ -12,12 +12,12 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.downloadAdapter.DownloadedDetailAdapter;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 
 import java.util.List;
@@ -60,7 +60,7 @@ public class DownloadedVideoDetailFragment extends BaseFragment {
                 }
             });
         } else {
-            Snackbar.make(view, "找不到此视频选集信息~", Snackbar.LENGTH_SHORT).show();
+            SimpleSnackBar.make(view, "找不到此视频选集信息~", SimpleSnackBar.LENGTH_SHORT).show();
             Navigation.findNavController(view).popBackStack();
         }
     }

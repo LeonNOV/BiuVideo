@@ -11,13 +11,13 @@ import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.FragmentViewPagerAdapter;
 import com.leon.biuvideo.beans.userBeans.HistoryType;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.fragments.historyFragment.HistoryInnerFragment;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ViewUtils;
 
@@ -91,7 +91,7 @@ public class HistoryFragment extends BaseFragment implements View.OnClickListene
                 history_view_pager.addOnPageChangeListener(this);
             } else {
                 setNoData();
-                Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                SimpleSnackBar.make(view, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
             }
         }
     }

@@ -7,12 +7,12 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.ui.activitys.ArticleActivity;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.InternetUtils;
 
@@ -63,7 +63,7 @@ public class UserArticleAdapter extends BaseAdapter<Article> {
                         boolean isHaveNetwork = InternetUtils.checkNetwork(context);
 
                         if (!isHaveNetwork) {
-                            Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                            SimpleSnackBar.make(v, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                             return;
                         }
 

@@ -5,7 +5,7 @@
 
         <shape>
 
-            <solid android:color="@color/bilibili_pink"/>
+            <solid android:color="@color/BiliBili_pink"/>
             <corners android:radius="@dimen/corner_6dp"/>
 
         </shape>

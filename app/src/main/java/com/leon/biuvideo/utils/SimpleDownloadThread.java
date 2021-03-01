@@ -9,34 +9,42 @@ import java.util.concurrent.Callable;
 
 public class SimpleDownloadThread implements Callable<String> {
     private final Context context;
+    private final String mainId;
+    private long subId = 0;
+    private int qualityId = 0;
     private final String audioPath;
     private final String fileName;
 
     private String videoPath;
-    private MediaUtils mediaUtils;
 
-    public SimpleDownloadThread(Context context, String videoPath, String audioPath, String fileName) {
+    public SimpleDownloadThread(Context context, String mainId, long subId, int qualityId, String videoPath, String audioPath, String fileName) {
         this.context = context;
+        this.mainId = mainId;
+        this.subId = subId;
+        this.qualityId = qualityId;
         this.videoPath = videoPath;
         this.audioPath = audioPath;
         this.fileName = fileName;
     }
 
-    public SimpleDownloadThread(Context context, String audioPath, String fileName) {
+    public SimpleDownloadThread(Context context, String mainId, String audioPath, String fileName) {
         this.context = context;
+        this.mainId = mainId;
         this.audioPath = audioPath;
         this.fileName = fileName;
     }
 
     @Override
     public String call() {
-        if (mediaUtils == null) {
-            mediaUtils = new MediaUtils(context);
-        }
+        MediaUtils mediaUtils;
+
         Log.d("SimpleThreadPool", "call:" + fileName);
+
         if (videoPath != null) {
+            mediaUtils = new MediaUtils(context, mainId, subId, qualityId);
             mediaUtils.saveVideo(videoPath, audioPath, fileName);
         } else {
+            mediaUtils = new MediaUtils(context, mainId);
             mediaUtils.saveMusic(audioPath, fileName);
         }
 

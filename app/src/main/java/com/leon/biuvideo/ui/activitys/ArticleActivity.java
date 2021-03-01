@@ -20,13 +20,13 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
 import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.views.RoundPopupWindow;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.InternetUtils;
@@ -35,7 +35,7 @@ import com.leon.biuvideo.utils.dataBaseUtils.LocalOrdersDatabaseUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.values.LocalOrderType;
 import com.leon.biuvideo.values.Paths;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Attributes;
@@ -185,19 +185,19 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
             article_textView_category.setText(article.category);
 
             //设置创建时间
-            article_textView_ctime.setText(ValueFormat.generateTime(article.ctime, true, true, "-"));
+            article_textView_ctime.setText(ValueUtils.generateTime(article.ctime, true, true, "-"));
         }
 
         //设置观看量
-        String viewStr = ValueFormat.generateCN(article.view) + "次阅读";
+        String viewStr = ValueUtils.generateCN(article.view) + "次阅读";
         article_textView_view.setText(viewStr);
 
         //设置点赞数
-        String likeStr = ValueFormat.generateCN(article.like) + "次点赞";
+        String likeStr = ValueUtils.generateCN(article.like) + "次点赞";
         article_textView_like.setText(likeStr);
 
         //设置评论数
-        String replayStr = ValueFormat.generateCN(article.reply) + "次评论";
+        String replayStr = ValueUtils.generateCN(article.reply) + "次评论";
         article_textView_replay.setText(replayStr);
 
         String path = Paths.articleWebPage + article.articleId;
@@ -328,7 +328,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.article_imageView_face:
                 if (!InternetUtils.checkNetwork(getApplicationContext())) {
-                    Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(v, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -354,7 +354,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                                     @Override
                                     public void run() {
                                         boolean saveState = ResourceUtils.saveArticle(article_webView, getApplicationContext());
-                                        Snackbar.make(article_linearLayout, saveState ? "保存成功" : "保存失败", Snackbar.LENGTH_SHORT).show();
+                                        SimpleSnackBar.make(article_linearLayout, saveState ? "保存成功" : "保存失败", SimpleSnackBar.LENGTH_SHORT).show();
                                     }
                                 }).start();
 
@@ -383,7 +383,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                                     operatingStatus = localOrdersDatabaseUtils.deleteLocalOrder(String.valueOf(article.articleId), null, localOrderType);
                                     if (operatingStatus) {
                                         roundPopupWindow.setText(R.id.article_more_menu_favorite, "收藏该文章");
-                                        Snackbar.make(v, R.string.remFavoriteSign, Snackbar.LENGTH_SHORT).show();
+                                        SimpleSnackBar.make(v, R.string.remFavoriteSign, SimpleSnackBar.LENGTH_SHORT).show();
                                         isHaveLocalOrder = false;
                                     }
                                 } else {
@@ -410,7 +410,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
 
                                     if (operatingStatus) {
                                         roundPopupWindow.setText(R.id.article_more_menu_favorite, "取消收藏");
-                                        Snackbar.make(v, R.string.addFavoriteSign, Snackbar.LENGTH_SHORT).show();
+                                        SimpleSnackBar.make(v, R.string.addFavoriteSign, SimpleSnackBar.LENGTH_SHORT).show();
                                         isHaveLocalOrder = true;
                                     }
                                 }

@@ -10,7 +10,9 @@ import com.leon.biuvideo.beans.downloadedBeans.DownloadedRecordsForVideo;
 import com.leon.biuvideo.values.Tables;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 处理downloadRecordsForVideo、downloadDetailsForMedia数据的工具类
@@ -141,6 +143,20 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
     }
 
     /**
+     * 查询所有的VideoFolder和其子Video
+     *
+     * @return
+     */
+    public List<DownloadedRecordsForVideo> queryAllSubVideo() {
+        List<DownloadedRecordsForVideo> downloadedRecordsForVideos = queryAllVideo();
+        for (DownloadedRecordsForVideo downloadedRecordsForVideo : downloadedRecordsForVideos) {
+            downloadedRecordsForVideo.subVideos = queryAllSubVideo(downloadedRecordsForVideo.mainId);
+        }
+
+        return downloadedRecordsForVideos;
+    }
+
+    /**
      * 根据fileName获取单个选集视频
      *
      * @param fileName    文件名称
@@ -169,6 +185,29 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
 
         cursor.close();
         return null;
+    }
+
+    /**
+     * 查询所有已下载资源文件名称，只查询下载状态为下载完成的
+     *
+     * @return  返回文件名和资源类型
+     */
+    public List<Map<String, Boolean>> queryAllMedia() {
+        Cursor cursor = sqLiteDatabase.query(videoDetail, new String[]{"fileName", "isVideo"}, "downloadState = ?", new String[]{"2"}, null, null, null);
+
+        List<Map<String, Boolean>> mapList = new ArrayList<>();
+        Map<String, Boolean> map;
+        while (cursor.moveToNext()) {
+            String fileName = cursor.getString(cursor.getColumnIndex("fileName"));
+            boolean isVideo = cursor.getInt(cursor.getColumnIndex("isVideo")) == 1;
+
+            map = new HashMap<>();
+            map.put(fileName, isVideo);
+            mapList.add(map);
+        }
+
+        cursor.close();
+        return mapList;
     }
 
     /**
@@ -225,13 +264,31 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
      * @param downloadedRecordsForVideo downloadedRecordsForVideo对象
      */
     public void addVideo(DownloadedRecordsForVideo downloadedRecordsForVideo) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("cover", downloadedRecordsForVideo.cover);
-        contentValues.put("title", downloadedRecordsForVideo.title);
-        contentValues.put("upName", downloadedRecordsForVideo.upName);
-        contentValues.put("mainId", downloadedRecordsForVideo.mainId);
+        boolean state = queryVideoFolderState(downloadedRecordsForVideo.mainId);
 
-        sqLiteDatabase.insert(videoRecord, null, contentValues);
+        if (!state) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("cover", downloadedRecordsForVideo.cover);
+            contentValues.put("title", downloadedRecordsForVideo.title);
+            contentValues.put("upName", downloadedRecordsForVideo.upName);
+            contentValues.put("mainId", downloadedRecordsForVideo.mainId);
+
+            sqLiteDatabase.insert(videoRecord, null, contentValues);
+        }
+    }
+
+    /**
+     * 查询视频文件夹存在状态
+     *
+     * @param mainId    主ID
+     * @return  存在状态
+     */
+    private boolean queryVideoFolderState(String mainId) {
+        Cursor cursor = sqLiteDatabase.query(videoRecord, new String[]{"id"}, "mainId = ?", new String[]{mainId}, null, null, null);
+        int count = cursor.getCount();
+
+        cursor.close();
+        return count > 0;
     }
 
     /**
@@ -240,20 +297,24 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
      * @param downloadedDetailMedia downloadedDetailMedia对象
      */
     public void addMediaDetail(DownloadedDetailMedia downloadedDetailMedia) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("fileName", downloadedDetailMedia.fileName);
-        contentValues.put("cover", downloadedDetailMedia.cover);
-        contentValues.put("title", downloadedDetailMedia.title);
-        contentValues.put("size", downloadedDetailMedia.size);
-        contentValues.put("mainId", downloadedDetailMedia.mainId);
-        contentValues.put("subId", downloadedDetailMedia.subId);
-        contentValues.put("videoUrl", downloadedDetailMedia.videoUrl);
-        contentValues.put("audioUrl", downloadedDetailMedia.audioUrl);
-        contentValues.put("qualityId", downloadedDetailMedia.qualityId);
-        contentValues.put("resourceMark", downloadedDetailMedia.resourceMark);
-        contentValues.put("isVideo", downloadedDetailMedia.isVideo ? 1 : 0);
+        boolean b = queryVideo(downloadedDetailMedia.mainId, String.valueOf(downloadedDetailMedia.subId));
 
-        sqLiteDatabase.insert(videoDetail, null, contentValues);
+        if (!b) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("fileName", downloadedDetailMedia.fileName);
+            contentValues.put("cover", downloadedDetailMedia.cover);
+            contentValues.put("title", downloadedDetailMedia.title);
+            contentValues.put("size", downloadedDetailMedia.size);
+            contentValues.put("mainId", downloadedDetailMedia.mainId);
+            contentValues.put("subId", downloadedDetailMedia.subId);
+            contentValues.put("videoUrl", downloadedDetailMedia.videoUrl);
+            contentValues.put("audioUrl", downloadedDetailMedia.audioUrl);
+            contentValues.put("qualityId", downloadedDetailMedia.qualityId);
+            contentValues.put("resourceMark", downloadedDetailMedia.resourceMark);
+            contentValues.put("isVideo", downloadedDetailMedia.isVideo ? 1 : 0);
+
+            sqLiteDatabase.insert(videoDetail, null, contentValues);
+        }
     }
 
     /**
@@ -294,6 +355,15 @@ public class DownloadRecordsDatabaseUtils extends SQLiteHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put("isDelete", isDelete ? 1 : 0);
         sqLiteDatabase.update(videoDetail, contentValues, "fileName = ?", new String[]{fileName});
+    }
+
+    /**
+     * 根据文件名删除对应下载记录
+     *
+     * @param fileName  资源文件名称
+     */
+    public void removeDownloadRecords(String fileName) {
+        sqLiteDatabase.delete(videoDetail, "fileName = ?", new String[]{fileName});
     }
 
     /**

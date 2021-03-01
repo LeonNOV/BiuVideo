@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.leon.biuvideo.utils.InitValueUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.HashMap;
@@ -24,10 +25,12 @@ import java.util.Map;
 public class BaseViewHolder extends RecyclerView.ViewHolder {
     private final Map<Integer, View> views;
     private final Context context;
+    private final boolean imgOriginalMode;
 
     public BaseViewHolder(@NonNull View itemView, Context context) {
         super(itemView);
 
+        this.imgOriginalMode = InitValueUtils.isImgOriginalMode(context);
         this.views = new HashMap<>();
         this.context = context;
     }
@@ -74,7 +77,8 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      */
     public BaseViewHolder setImage(int id, String url, ImagePixelSize imagePixelSize) {
         ImageView imageView = findById(id);
-        Glide.with(context).load(url + imagePixelSize.value).into(imageView);
+
+        Glide.with(context).load(imgOriginalMode ? url : url + imagePixelSize.value).into(imageView);
 
         return this;
     }

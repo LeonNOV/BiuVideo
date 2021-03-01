@@ -16,7 +16,7 @@ public class LoadingDialog extends AlertDialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.loading_dialog);
+        setContentView(R.layout.dialog_loading);
 
         this.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         this.setCanceledOnTouchOutside(false);

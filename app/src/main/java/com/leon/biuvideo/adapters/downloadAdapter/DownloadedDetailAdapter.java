@@ -8,13 +8,13 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.FileUtils;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
 
@@ -40,12 +40,15 @@ public class DownloadedDetailAdapter extends BaseAdapter<DownloadedDetailMedia> 
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
+        int videoIcon = R.drawable.icon_rectangle_video;
+        int audioIcon = R.drawable.icon_rectangle_music;
         DownloadedDetailMedia downloadedDetailMedia = downloadedDetailMedias.get(position);
 
         holder
                 .setImage(R.id.downloaded_item_detail_imageView_cover, downloadedDetailMedia.cover, ImagePixelSize.COVER)
+                .setImage(R.id.downloaded_item_detail_imageView_mark, downloadedDetailMedia.isVideo ? videoIcon : audioIcon)
                 .setText(R.id.downloaded_item_detail_textView_title, downloadedDetailMedia.title)
-                .setText(R.id.downloaded_item_detail_textView_mediaInfo, ValueFormat.sizeFormat(downloadedDetailMedia.size, true))
+                .setText(R.id.downloaded_item_detail_textView_mediaInfo, ValueUtils.sizeFormat(downloadedDetailMedia.size, true))
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -67,7 +70,7 @@ public class DownloadedDetailAdapter extends BaseAdapter<DownloadedDetailMedia> 
                         try {
                             context.startActivity(intentMediaPlayer);
                         } catch (ActivityNotFoundException e) {
-                            Snackbar.make(v, "找不到支持打开该文件格式的应用", Snackbar.LENGTH_SHORT).show();
+                            SimpleSnackBar.make(v, "找不到支持打开该文件格式的应用", SimpleSnackBar.LENGTH_SHORT).show();
                         }
                     }
                 });

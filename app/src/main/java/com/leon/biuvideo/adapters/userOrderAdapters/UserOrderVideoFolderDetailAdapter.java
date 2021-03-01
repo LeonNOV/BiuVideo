@@ -6,14 +6,14 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.orderBeans.UserFolderData;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.text.SimpleDateFormat;
@@ -49,7 +49,7 @@ public class UserOrderVideoFolderDetailAdapter extends BaseAdapter<UserFolderDat
         holder.setImage(R.id.favorite_video_imageView_cover, media.cover, ImagePixelSize.COVER)
 
                 //设置播放时长
-                .setText(R.id.favorite_video_textView_duration, ValueFormat.lengthGenerate(media.duration))
+                .setText(R.id.favorite_video_textView_duration, ValueUtils.lengthGenerate(media.duration))
 
                 //设置收藏日期
                 .setText(R.id.favorite_video_textView_ftime, "收藏于" + new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA).format(new Date(media.addTime * 1000)))
@@ -62,13 +62,13 @@ public class UserOrderVideoFolderDetailAdapter extends BaseAdapter<UserFolderDat
                     @Override
                     public void onClick(View v) {
                         if (!InternetUtils.checkNetwork(context)) {
-                            Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                            SimpleSnackBar.make(view, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                             return;
                         }
 
                         // 判断视频是否已失效
                         if (media.title.equals("已失效视频")) {
-                            Snackbar.make(view, "该视频已失效", Snackbar.LENGTH_SHORT).show();
+                            SimpleSnackBar.make(view, "该视频已失效", SimpleSnackBar.LENGTH_SHORT).show();
                             return;
                         }
 

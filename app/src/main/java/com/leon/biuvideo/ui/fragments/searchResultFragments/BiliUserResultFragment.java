@@ -11,13 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.userFragmentAdapters.BiliUserAdapter;
 import com.leon.biuvideo.beans.searchBean.BiliUser;
 import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
@@ -128,11 +128,13 @@ public class BiliUserResultFragment extends BaseLazyFragment {
             search_result_recyclerView.setVisibility(View.GONE);
             search_result_smartRefresh.setEnabled(false);
         } else {
+            search_result_no_data.setVisibility(View.GONE);
             search_result_recyclerView.setVisibility(View.VISIBLE);
             search_result_smartRefresh.setEnabled(true);
 
             biliUserList = biliUserParser.userParse(keyword, pageNum, SortType.DEFAULT);
             currentCount += biliUserList.size();
+            pageNum++;
 
             if (count == biliUserList.size()) {
                 dataState = false;
@@ -140,17 +142,12 @@ public class BiliUserResultFragment extends BaseLazyFragment {
                 search_result_smartRefresh.setEnabled(false);
             }
 
-            if (linearLayoutManager == null || biliUserAdapter == null) {
-
-                if (favoriteUserDatabaseUtils == null) {
-                    favoriteUserDatabaseUtils = new FavoriteUserDatabaseUtils(context);
-                }
-
-                linearLayoutManager = new LinearLayoutManager(context);
-                biliUserAdapter = new BiliUserAdapter(biliUserList, context, favoriteUserDatabaseUtils);
+            if (favoriteUserDatabaseUtils == null) {
+                favoriteUserDatabaseUtils = new FavoriteUserDatabaseUtils(context);
             }
 
-            biliUserAdapter.append(biliUserList);
+            linearLayoutManager = new LinearLayoutManager(context);
+            biliUserAdapter = new BiliUserAdapter(biliUserList, context, favoriteUserDatabaseUtils);
 
             initAttr();
         }
@@ -173,7 +170,7 @@ public class BiliUserResultFragment extends BaseLazyFragment {
                 boolean isHaveNetwork = InternetUtils.checkNetwork(context);
 
                 if (!isHaveNetwork) {
-                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(view, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
 
                     //结束加载更多动画
                     search_result_smartRefresh.finishLoadMore();
@@ -186,8 +183,6 @@ public class BiliUserResultFragment extends BaseLazyFragment {
                 //判断是否处于拖拽已释放的状态
                 if (state.finishing == RefreshState.ReleaseToLoad.finishing) {
                     if (dataState) {
-                        pageNum++;
-
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -202,7 +197,7 @@ public class BiliUserResultFragment extends BaseLazyFragment {
                         //关闭上滑刷新
                         search_result_smartRefresh.setEnabled(false);
 
-                        Snackbar.make(view, R.string.isDone, Snackbar.LENGTH_SHORT).show();
+                        SimpleSnackBar.make(view, R.string.isDone, SimpleSnackBar.LENGTH_SHORT).show();
                     }
                 }
 
@@ -226,6 +221,8 @@ public class BiliUserResultFragment extends BaseLazyFragment {
             dataState = false;
             search_result_smartRefresh.setEnabled(false);
         }
+
+        pageNum++;
     }
 
     /**
@@ -243,6 +240,7 @@ public class BiliUserResultFragment extends BaseLazyFragment {
         this.isLoaded = false;
         onResume();
         this.smart_refresh_layout_fragment_linearLayout.setVisibility(View.VISIBLE);
+        this.search_result_no_data.setVisibility(View.GONE);
 
         if (biliUserList != null) {
             biliUserAdapter.removeAll();

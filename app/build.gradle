@@ -1,7 +1,5 @@
 apply plugin: 'com.android.application'
 
-android
-
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
@@ -10,11 +8,24 @@ android {
         applicationId "com.leon.biuvideo"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 3
-        versionName "2.6.1-beta"
+        versionCode 10
+        versionName "2.7.7-beta"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            /**
+             * 设置支持的架构平台
+             * arm64-v8a和armeabi-v7a为手机端
+             * 其中arm64-v8a为市面上新出的手机所使用的架构，兼容armeabi-v7a
+             * armeabi-v7a支持老版本的手机
+             * 如果要在虚拟机上运行，一定要加上x86
+             * 如果需要支持平板，则需要加上x86或x86_64
+             * x86_64支持新上市的平板，向下兼容x86
+             */
+            abiFilters "arm64-v8a"
+        }
     }
 
     buildTypes {
@@ -26,14 +37,6 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE.txt'
     }
 }
 
@@ -47,8 +50,8 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.3.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'com.android.support:multidex:1.0.3'
-    testCompile 'junit:junit:4.12'
-    testCompile "org.mockito:mockito-core:1.9.5"
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.mockito:mockito-core:1.9.5"
 
     // https://mvnrepository.com/artifact/com.alibaba/fastjson
     implementation group: 'com.alibaba', name: 'fastjson', version: '1.2.74'
@@ -74,6 +77,12 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.jsoup/jsoup
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
+
+    // RxFFmpeg
+    implementation 'com.github.microshow:RxFFmpeg:4.9.0-lite'
+
+    // EasySnackBar
+    implementation 'com.sun.easysnackbar:easysnackbar:1.0.1'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

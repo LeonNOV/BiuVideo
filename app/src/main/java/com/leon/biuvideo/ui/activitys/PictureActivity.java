@@ -15,7 +15,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.PictureListAdapter;
 import com.leon.biuvideo.beans.upMasterBean.Picture;
@@ -23,11 +22,12 @@ import com.leon.biuvideo.layoutManager.PictureGridLayoutManager;
 import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.views.RoundPopupWindow;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.values.Paths;
-import com.leon.biuvideo.utils.ValueFormat;
+import com.leon.biuvideo.utils.ValueUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -125,8 +125,8 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
         picture_textView_time.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA)
                 .format(new Date(picture.ctime * 1000)));
 
-        picture_textView_view.setText(ValueFormat.generateCN(picture.view));
-        picture_textView_like.setText(ValueFormat.generateCN(picture.like));
+        picture_textView_view.setText(ValueUtils.generateCN(picture.view));
+        picture_textView_like.setText(ValueUtils.generateCN(picture.like));
         picture_textView_desc.setText(picture.description);
 
         int spanCount;
@@ -161,7 +161,7 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
                             @Override
                             public void onClick(View v) {
                                 if (!InternetUtils.checkNetwork(getApplicationContext())) {
-                                    Snackbar.make(v, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                                    SimpleSnackBar.make(v, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                                     return;
                                 }
 
@@ -177,7 +177,7 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
                                             if (b) saveCounts++;
                                         }
 
-                                        Snackbar.make(v, "保存成功" + saveCounts + "张,失败" + (picture.pictures.size() - saveCounts) + "张", Snackbar.LENGTH_SHORT).show();
+                                        SimpleSnackBar.make(v, "保存成功" + saveCounts + "张,失败" + (picture.pictures.size() - saveCounts) + "张", SimpleSnackBar.LENGTH_SHORT).show();
                                     }
                                 }).start();
                             }

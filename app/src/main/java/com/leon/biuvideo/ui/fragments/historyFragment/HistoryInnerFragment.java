@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.historyAdapters.HistoryAdapter;
 import com.leon.biuvideo.beans.userBeans.History;
@@ -19,6 +18,7 @@ import com.leon.biuvideo.beans.userBeans.HistoryType;
 import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.HistoryParser;
@@ -156,7 +156,7 @@ public class HistoryInnerFragment extends BaseLazyFragment {
                 boolean isHaveNetwork = InternetUtils.checkNetwork(context);
 
                 if (!isHaveNetwork) {
-                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(view, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
 
                     //结束加载更多动画
                     smartRefresh.finishLoadMore();
@@ -183,7 +183,7 @@ public class HistoryInnerFragment extends BaseLazyFragment {
                         //关闭上滑刷新
                         smartRefresh.setEnabled(false);
 
-                        Snackbar.make(view, "只有这么多数据了~", Snackbar.LENGTH_SHORT).show();
+                        SimpleSnackBar.make(view, "只有这么多数据了~", SimpleSnackBar.LENGTH_SHORT).show();
                     }
                 }
 

@@ -11,13 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.userFragmentAdapters.BangumiAdapter;
 import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
 import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BangumiParser;
@@ -129,18 +129,13 @@ public class BangumiResultFragment extends BaseLazyFragment {
             currentCount = bangumiList.size();
             pageNum++;
 
-
             if (currentCount == count) {
                 dataState = false;
                 search_result_smartRefresh.setEnabled(false);
             }
 
-            if (linearLayoutManager == null || bangumiAdapter == null) {
-                linearLayoutManager = new LinearLayoutManager(context);
-                bangumiAdapter = new BangumiAdapter(bangumiList, context);
-            }
-
-            bangumiAdapter.append(bangumiList);
+            linearLayoutManager = new LinearLayoutManager(context);
+            bangumiAdapter = new BangumiAdapter(bangumiList, context);
 
             initAttr();
         }
@@ -160,7 +155,7 @@ public class BangumiResultFragment extends BaseLazyFragment {
                 boolean isHaveNetwork = InternetUtils.checkNetwork(context);
 
                 if (!isHaveNetwork) {
-                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(view, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
 
                     //结束加载更多动画
                     search_result_smartRefresh.finishLoadMore();
@@ -173,8 +168,6 @@ public class BangumiResultFragment extends BaseLazyFragment {
                 //判断是否处于拖拽已释放的状态
                 if (state.finishing == RefreshState.ReleaseToLoad.finishing) {
                     if (dataState) {
-                        pageNum++;
-
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -189,7 +182,7 @@ public class BangumiResultFragment extends BaseLazyFragment {
                         //关闭上滑刷新
                         search_result_smartRefresh.setEnabled(false);
 
-                        Snackbar.make(view, R.string.isDone, Snackbar.LENGTH_SHORT).show();
+                        SimpleSnackBar.make(view, R.string.isDone, SimpleSnackBar.LENGTH_SHORT).show();
                     }
                 }
 
@@ -211,6 +204,8 @@ public class BangumiResultFragment extends BaseLazyFragment {
             dataState = false;
             search_result_smartRefresh.setEnabled(false);
         }
+
+        pageNum++;
     }
 
     /**
@@ -228,6 +223,7 @@ public class BangumiResultFragment extends BaseLazyFragment {
         this.isLoaded = false;
         onResume();
         this.smart_refresh_layout_fragment_linearLayout.setVisibility(View.VISIBLE);
+        this.search_result_no_data.setVisibility(View.GONE);
 
         if (bangumiList != null) {
             bangumiAdapter.removeAll();

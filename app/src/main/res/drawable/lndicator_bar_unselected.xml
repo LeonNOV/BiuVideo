@@ -4,7 +4,7 @@
     <item>
         <shape android:shape="rectangle">
             <!-- 填充背景色-->
-            <solid android:color="@color/bilibili_pink_lite"/>
+            <solid android:color="@color/BiliBili_pink_lite"/>
             <corners android:radius="@dimen/corner_6dp"/>
             <padding
                 android:top="3dp"

@@ -11,13 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.userFragmentAdapters.UserArticleAdapter;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.ArticleParser;
@@ -131,8 +131,8 @@ public class ArticleResultFragment extends BaseLazyFragment {
             search_result_smartRefresh.setEnabled(true);
 
             articleList = articleParser.articleParse(keyword, pageNum, SortType.DEFAULT);
-
             currentCount += articleList.size();
+            pageNum++;
 
             if (count == articleList.size()) {
                 dataState = false;
@@ -140,12 +140,8 @@ public class ArticleResultFragment extends BaseLazyFragment {
                 search_result_smartRefresh.setEnabled(false);
             }
 
-            if (linearLayoutManager == null || userArticleAdapter == null) {
-                linearLayoutManager = new LinearLayoutManager(context);
-                userArticleAdapter = new UserArticleAdapter(articleList, context);
-            }
-
-            userArticleAdapter.append(articleList);
+            linearLayoutManager = new LinearLayoutManager(context);
+            userArticleAdapter = new UserArticleAdapter(articleList, context);
 
             initAttr();
         }
@@ -169,7 +165,7 @@ public class ArticleResultFragment extends BaseLazyFragment {
                 boolean isHaveNetwork = InternetUtils.checkNetwork(context);
 
                 if (!isHaveNetwork) {
-                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(view, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
 
                     //结束加载更多动画
                     search_result_smartRefresh.finishLoadMore();
@@ -178,8 +174,6 @@ public class ArticleResultFragment extends BaseLazyFragment {
                 }
 
                 if (dataState) {
-                    pageNum++;
-
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -194,7 +188,7 @@ public class ArticleResultFragment extends BaseLazyFragment {
                     //关闭上滑刷新
                     search_result_smartRefresh.setEnabled(false);
 
-                    Snackbar.make(view, R.string.isDone, Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(view, R.string.isDone, SimpleSnackBar.LENGTH_SHORT).show();
                 }
 
                 //结束加载更多动画
@@ -217,6 +211,8 @@ public class ArticleResultFragment extends BaseLazyFragment {
             dataState = false;
             search_result_smartRefresh.setEnabled(false);
         }
+
+        pageNum++;
     }
 
     /**
@@ -234,6 +230,7 @@ public class ArticleResultFragment extends BaseLazyFragment {
         this.isLoaded = false;
         onResume();
         this.smart_refresh_layout_fragment_linearLayout.setVisibility(View.VISIBLE);
+        this.search_result_no_data.setVisibility(View.GONE);
 
         if (articleList != null) {
             userArticleAdapter.removeAll();

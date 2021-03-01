@@ -43,8 +43,9 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="@color/bilibili_pink_light"
-                app:cardCornerRadius="@dimen/corner_6dp">
+                app:cardBackgroundColor="@color/BiliBili_pink_light"
+                app:cardCornerRadius="@dimen/corner_6dp"
+                app:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -201,8 +202,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:gravity="center"
                             android:background="?selectableItemBackground"
+                            android:gravity="center"
                             android:orientation="vertical">
 
                             <ImageView
@@ -257,8 +258,9 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
-                app:cardBackgroundColor="@color/bilibili_pink_light"
-                app:cardCornerRadius="@dimen/corner_6dp">
+                app:cardBackgroundColor="@color/BiliBili_pink_light"
+                app:cardCornerRadius="@dimen/corner_6dp"
+                app:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -287,8 +289,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                app:cardBackgroundColor="@color/bilibili_pink_light"
-                app:cardCornerRadius="@dimen/corner_6dp">
+                app:cardBackgroundColor="@color/BiliBili_pink_light"
+                app:cardCornerRadius="@dimen/corner_6dp"
+                app:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"

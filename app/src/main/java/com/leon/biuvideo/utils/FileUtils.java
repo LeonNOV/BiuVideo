@@ -2,7 +2,6 @@ package com.leon.biuvideo.utils;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 
@@ -23,7 +22,7 @@ import java.util.UUID;
 public class FileUtils {
 
     /**
-     * 创建文件夹，默认再系统根目录中创建
+     * 创建文件夹，默认在系统根目录中创建
      *
      * @param folderName    子文件夹名称
      */
@@ -32,6 +31,23 @@ public class FileUtils {
 
         String resourcesPath = folderName.value;
         File file = new File(rootPath, resourcesPath);
+
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        return file.getAbsolutePath();
+    }
+
+    /**
+     * 创建文件夹，默认在系统根目录中创建
+     *
+     * @param folderName    子文件夹名称
+     */
+    public static String createFolder(String folderName) {
+        String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/BiuVideo";
+
+        File file = new File(rootPath, folderName);
 
         if (!file.exists()) {
             file.mkdirs();
@@ -53,11 +69,16 @@ public class FileUtils {
             //如果应用之前请求过此权限但用户拒绝了请求，此方法将返回 true
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 WarnDialog warnDialog = new WarnDialog(activity, "读写权限", "由于保存资源文件时需要用到\"读写权限\"，否则将无法正常使用");
-                warnDialog.setOnConfirmListener(new WarnDialog.OnConfirmListener() {
+                warnDialog.setOnClickListener(new WarnDialog.OnClickListener() {
                     @Override
                     public void onConfirm() {
                         warnDialog.dismiss();
                         ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1024);
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        warnDialog.dismiss();
                     }
                 });
                 warnDialog.show();
@@ -86,7 +107,8 @@ public class FileUtils {
     public enum ResourcesFolder {
         VIDEOS("Videos"),
         PICTURES("Pictures"),
-        MUSIC("Music");
+        MUSIC("Music"),
+        TEMP("Temp");
 
         public String value;
 

@@ -32,7 +32,7 @@ public class ThanksListDialog extends AlertDialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.about_dialog);
+        setContentView(R.layout.dialog_thanks_list);
 
         initView();
     }

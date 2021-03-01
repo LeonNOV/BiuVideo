@@ -11,13 +11,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.activitys.SearchResultActivity;
 import com.leon.biuvideo.ui.activitys.UserActivity;
 import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.HeroImages;
 import com.leon.biuvideo.utils.IDUtils;
 import com.leon.biuvideo.utils.InternetUtils;
@@ -84,8 +84,14 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         long startTime = initValues.getLong("startTime", 0);
         int heroIndex = initValues.getInt("heroIndex", 0);
 
+        // 如果当天已进行过更新，则结束该方法
+        if (startTime == getTime()) {
+            home_fragment_imageView_hero.setImageResource(HeroImages.heroImages[heroIndex]);
+            return;
+        }
+
         //判断是否为第一次启动
-        if (startTime != 0 && heroIndex != 0) {
+        if (startTime != 0) {
             //判断是否已过去一天，如果已过则设置新的hero
             if (System.currentTimeMillis() - startTime >= 86400000) {
                 //达到最后一个则将index重置为0
@@ -119,7 +125,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
             Date ymd_long = sdf.parse(ymd);
             return ymd_long.getTime();
         } catch (ParseException e) {
-            Snackbar.make(view, "时间解析出错", Snackbar.LENGTH_SHORT).show();
+            SimpleSnackBar.make(view, "时间解析出错", SimpleSnackBar.LENGTH_SHORT).show();
             e.printStackTrace();
         }
 
@@ -144,7 +150,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                 boolean isHaveNetwork = InternetUtils.checkNetwork(context);
 
                 if (!isHaveNetwork) {
-                    Snackbar.make(view, R.string.networkWarn, Snackbar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(view, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -158,7 +164,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                             intent.putExtra("keyword", keywordUnCoded);
                             startActivity(intent);
                         } else {
-                            Snackbar.make(view, "不输点儿啥吗？", Snackbar.LENGTH_SHORT).show();
+                            SimpleSnackBar.make(view, "不输点儿啥吗？", SimpleSnackBar.LENGTH_SHORT).show();
                             return;
                         }
                         break;
@@ -174,7 +180,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                                 intent.putExtra("bvid", bvid);
                                 startActivity(intent);
                             } else {
-                                Snackbar.make(view, "使用姿势有点不对哦~\n可通过“帮助”来了解正确的姿势", Snackbar.LENGTH_SHORT).show();
+                                SimpleSnackBar.make(view, "使用姿势有点不对哦~\n可通过“帮助”来了解正确的姿势", SimpleSnackBar.LENGTH_SHORT).show();
                             }
                         }
                         break;
@@ -193,7 +199,7 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
                                 intent.putExtra("mid", mid);
                                 startActivity(intent);
                             } else {
-                                Snackbar.make(view, "使用姿势有点不对哦~\n可通过“帮助”来了解正确的姿势", Snackbar.LENGTH_SHORT).show();
+                                SimpleSnackBar.make(view, "使用姿势有点不对哦~\n可通过“帮助”来了解正确的姿势", SimpleSnackBar.LENGTH_SHORT).show();
                             }
                         }
                         break;

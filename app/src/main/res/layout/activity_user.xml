@@ -5,13 +5,13 @@
     android:id="@+id/user_linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bilibili_pink_lite"
+    android:background="@color/BiliBili_pink_lite"
     tools:context=".ui.activitys.UserActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bilibili_pink_lite">
+        android:background="@color/BiliBili_pink_lite">
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -47,7 +47,7 @@
                 android:layout_marginTop="120dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                app:cardBackgroundColor="@color/bilibili_pink_lite"
+                app:cardBackgroundColor="@color/BiliBili_pink_lite"
                 app:cardCornerRadius="6dp">
 
                 <LinearLayout
@@ -135,7 +135,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|bottom"
-                            android:background="@color/bilibili_pink_lite"
+                            android:background="@color/BiliBili_pink_lite"
                             android:padding="10dp" />
                     </com.ms.square.android.expandabletextview.ExpandableTextView>
 
@@ -160,7 +160,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@color/bilibili_pink_lite"
+            android:background="@color/BiliBili_pink_lite"
             android:orientation="horizontal">
 
             <TextView
