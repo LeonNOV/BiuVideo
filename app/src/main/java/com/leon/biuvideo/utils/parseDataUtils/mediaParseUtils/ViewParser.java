@@ -12,7 +12,7 @@ import com.leon.biuvideo.beans.videoBean.view.ViewPage;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
-import com.leon.biuvideo.values.Paths;
+import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public class ViewParser {
             Map<String, String> params = new HashMap<>();
             params.put("bvid", bvid);
 
-            JSONObject responseObject = HttpUtils.getResponse(Paths.view, Headers.of(requestHeader), params);
+            JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.view, Headers.of(requestHeader), params);
             JSONObject dataObject = responseObject.getJSONObject("data");
 
             if (dataObject != null) {

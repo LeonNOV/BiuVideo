@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:checked="true"
+        android:icon="@drawable/a_bottom_home"
+        android:title="@string/home_nav_home" />
+    <item
+        android:id="@+id/discovery"
+        android:icon="@drawable/a_bottom_discovery"
+        android:title="@string/home_nav_discover" />
+    <item
+        android:id="@+id/user"
+        android:icon="@drawable/a_bottom_user"
+        android:title="@string/home_nav_user" />
+</menu>

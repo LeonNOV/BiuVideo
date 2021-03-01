@@ -7,7 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
-import com.leon.biuvideo.values.Paths;
+import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,7 +63,7 @@ public class FollowParser {
             params.put("order_type", "attention");//按照最常访问获取
         }
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.follow, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.follow, Headers.of(requestHeader), params);
         JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {
@@ -108,7 +108,7 @@ public class FollowParser {
         params.put("ps", "20");
         params.put("order", "desc");
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.follow, params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.follow, params);
         JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {

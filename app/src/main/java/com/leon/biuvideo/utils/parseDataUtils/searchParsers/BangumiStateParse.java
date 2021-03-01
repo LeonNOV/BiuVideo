@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.searchBean.bangumi.BangumiState;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
-import com.leon.biuvideo.values.Paths;
+import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +30,7 @@ public class BangumiStateParse {
         Map<String, String> params = new HashMap<>();
         params.put("season_id", String.valueOf(seasonId));
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.bangumiState, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.bangumiState, Headers.of(requestHeader), params);
         JSONObject result = responseObject.getJSONObject("result");
 
         if (result != null) {

@@ -26,7 +26,7 @@ import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
-import com.leon.biuvideo.values.Paths;
+import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 import com.leon.biuvideo.utils.ValueUtils;
 
 import java.text.SimpleDateFormat;
@@ -187,7 +187,7 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
                             public void onClick(View v) {
                                 Intent intentOriginUrl = new Intent();
                                 intentOriginUrl.setAction("android.intent.action.VIEW");
-                                Uri uri = Uri.parse(Paths.pictureWebPage + picture.docId + "?tab=1&type=2");
+                                Uri uri = Uri.parse(BiliBiliAPIs.pictureWebPage + picture.docId + "?tab=1&type=2");
                                 intentOriginUrl.setData(uri);
                                 startActivity(intentOriginUrl);
 

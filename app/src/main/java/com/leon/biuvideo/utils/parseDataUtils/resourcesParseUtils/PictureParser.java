@@ -9,7 +9,7 @@ import com.leon.biuvideo.beans.upMasterBean.Picture;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
-import com.leon.biuvideo.values.Paths;
+import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public class PictureParser {
         params.put("page_size", String.valueOf(30));
         params.put("biz", "all");
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.picture, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.picture, Headers.of(requestHeader), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {
@@ -111,7 +111,7 @@ public class PictureParser {
         Map<String, String> values = new HashMap<>();
         values.put("uid", String.valueOf(mid));
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.pictureCount, Headers.of(requestHeader), values);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.pictureCount, Headers.of(requestHeader), values);
         JSONObject data = responseObject.getJSONObject("data");
 
         return data.getIntValue("all_count");

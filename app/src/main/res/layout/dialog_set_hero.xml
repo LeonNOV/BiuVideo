@@ -63,13 +63,13 @@
             android:textColor="@color/black"
             android:theme="@style/set_hero_dialog_spinner" />
 
-        <ImageView
-            android:id="@+id/set_hero_dialog_imageView_preview"
-            android:layout_width="156dp"
-            android:layout_height="156dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/white_wire_frame_bg"
-            android:src="@drawable/vector_hero_marvel_antman" />
+<!--        <ImageView-->
+<!--            android:id="@+id/set_hero_dialog_imageView_preview"-->
+<!--            android:layout_width="156dp"-->
+<!--            android:layout_height="156dp"-->
+<!--            android:layout_margin="10dp"-->
+<!--            android:background="@drawable/white_wire_frame_bg"-->
+<!--            android:src="@drawable/vector_hero_marvel_antman" />-->
 
         <LinearLayout
             android:layout_width="match_parent"

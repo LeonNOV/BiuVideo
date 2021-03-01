@@ -8,7 +8,7 @@ import com.leon.biuvideo.beans.orderBeans.UserFolder;
 import com.leon.biuvideo.beans.orderBeans.UserFolderData;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
-import com.leon.biuvideo.values.Paths;
+import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +34,7 @@ public class UserFolderParser {
         Map<String, String> params = new HashMap<>();
         params.put("up_mid", String.valueOf(mid));
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.userAllFolder, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.userAllFolder, Headers.of(requestHeader), params);
         JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {
@@ -75,7 +75,7 @@ public class UserFolderParser {
         params.put("type", "0");
         params.put("tid", "0");
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.userFolderData, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.userFolderData, Headers.of(requestHeader), params);
         JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {

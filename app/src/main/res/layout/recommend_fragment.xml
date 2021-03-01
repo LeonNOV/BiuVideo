@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.leon.biuvideo.ui.views.SimpleTopBar
+        android:id="@+id/recommend_topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:rightSrc="@drawable/ic_more_vert"
+        app:topBarTitle="@string/recommend" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recommend_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        tools:listitem="@layout/rv_test_item"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+</LinearLayout>

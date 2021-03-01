@@ -70,6 +70,6 @@ public class ChooseThemeColorAdapter extends BaseAdapter<String> {
                         }
                     }
                 })
-                .findById(R.id.choose_theme_color_item).setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(colorId)));
+                .findById(R.id.choose_theme_color_item).setBackgroundTintList(ColorStateList.valueOf(context.getColor(colorId)));
     }
 }

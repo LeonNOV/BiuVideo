@@ -9,7 +9,7 @@ import com.leon.biuvideo.beans.upMasterBean.Video;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
-import com.leon.biuvideo.values.Paths;
+import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,7 +45,7 @@ public class VideoParser {
         params.put("tid", "0");
         params.put("jsonp", "jsonp");
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.videos, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.videos, Headers.of(requestHeader), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {
@@ -121,7 +121,7 @@ public class VideoParser {
         params.put("tid", "0");
         params.put("jsonp", "jsonp");
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.videos, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.videos, Headers.of(requestHeader), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
         JSONObject page = dataObject.getJSONObject("page");
 

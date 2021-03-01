@@ -1,0 +1,17 @@
+<vector android:height="42dp" android:viewportHeight="512"
+    android:viewportWidth="512" android:width="42dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#FFDE91" android:pathData="M287.203,228.969H91.533v-30h195.67c15.912,0 28.857,-12.945 28.857,-28.856s-12.945,-28.856 -28.857,-28.856s-28.857,12.945 -28.857,28.856h-30c0,-32.453 26.403,-58.856 58.857,-58.856s58.857,26.403 58.857,58.856S319.657,228.969 287.203,228.969z"/>
+    <path android:fillColor="#EDC472" android:pathData="M385.765,417.575c-32.454,0 -58.856,-26.403 -58.856,-58.856h30c0,15.911 12.945,28.856 28.856,28.856s28.857,-12.945 28.857,-28.856c0,-15.912 -12.945,-28.857 -28.857,-28.857H152.144v-30h233.621c32.454,0 58.857,26.403 58.857,58.857C444.622,391.171 418.218,417.575 385.765,417.575z"/>
+    <path android:fillColor="#FAD17F" android:pathData="M443.936,279.416H0v-30h443.936c20.989,0 38.064,-17.075 38.064,-38.064s-17.076,-38.064 -38.064,-38.064s-38.064,17.075 -38.064,38.064h-30c0,-37.531 30.534,-68.064 68.064,-68.064S512,173.82 512,211.351S481.466,279.416 443.936,279.416z"/>
+    <path android:fillColor="#FFDE91" android:pathData="M54.46,48.974h30v30h-30z"/>
+    <path android:fillColor="#FAD17F" android:pathData="M138.07,101.16h30v30h-30z"/>
+    <path android:fillColor="#EDC472" android:pathData="M233.27,26.94h30v30h-30z"/>
+    <path android:fillColor="#FFDE91" android:pathData="M461.53,26.94h30v30h-30z"/>
+    <path android:fillColor="#FAD17F" android:pathData="M360.76,65.21h30v30h-30z"/>
+    <path android:fillColor="#FAD17F" android:pathData="M17.789,323.29h30v30h-30z"/>
+    <path android:fillColor="#FFDE91" android:pathData="M58.24,434.08h30v30h-30z"/>
+    <path android:fillColor="#EDC472" android:pathData="M179.07,378.33h30v30h-30z"/>
+    <path android:fillColor="#EDC472" android:pathData="M461.53,387.79h30v30h-30z"/>
+    <path android:fillColor="#FFDE91" android:pathData="M256,434.08h30v30h-30z"/>
+    <path android:fillColor="#FAD17F" android:pathData="M380.09,455.06h30v30h-30z"/>
+</vector>

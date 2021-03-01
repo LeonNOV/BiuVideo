@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/head_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg">
+
+    <com.leon.biuvideo.ui.views.HeadZoomScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/headLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/head_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="170dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img" />
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="86dp"
+                        android:layout_height="86dp"
+                        android:src="@drawable/ic_launcher_background"
+                        app:civ_border_color="@color/black"
+                        app:civ_border_width="2dp" />
+
+                    <ImageView
+                        android:id="@+id/user_fragment_vip_mark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|end"
+                        android:src="@drawable/ic_vip_mark" />
+
+                </FrameLayout>
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:background="@drawable/round_corners6dp_bg"
+                android:orientation="vertical"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="user_fragmentName"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <com.leon.biuvideo.ui.views.TagView
+                        android:id="@+id/user_fragment_dynamic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:isClick="true"
+                        app:leftValue="0"
+                        app:rightValue="@string/user_dynamic"
+                        app:tagMark="right" />
+
+                    <com.leon.biuvideo.ui.views.TagView
+                        android:id="@+id/user_fragment_fav"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        app:isClick="true"
+                        app:leftValue="0"
+                        app:rightValue="@string/user_follow"
+                        app:tagMark="right" />
+
+                    <com.leon.biuvideo.ui.views.TagView
+                        android:id="@+id/user_fragment_fans"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:isClick="true"
+                        app:leftValue="0"
+                        app:rightValue="@string/user_fans"
+                        app:tagMark="right" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/round_corners6dp_bg"
+                android:orientation="vertical"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:padding="20dp">
+
+                <com.leon.biuvideo.ui.views.CardTitle
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:card_title="基本信息" />
+
+                <com.leon.biuvideo.ui.views.TagView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:leftValue="@string/user_uid"
+                    app:tagMark="none"
+                    app:rightValue="12345678"/>
+
+                <com.leon.biuvideo.ui.views.TagView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:isClick="false"
+                    app:leftValue="@string/user_name"
+                    app:rightValue="Leon"
+                    app:tagMark="none" />
+
+                <com.leon.biuvideo.ui.views.TagView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:isClick="false"
+                    app:leftValue="@string/user_sex"
+                    android:layout_marginTop="10dp"
+                    app:rightValue="男"
+                    app:tagMark="none" />
+
+                <com.leon.biuvideo.ui.views.TagView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:isClick="false"
+                    app:leftValue="@string/user_level"
+                    android:layout_marginTop="10dp"
+                    app:rightValue="Lv4"
+                    app:tagMark="none" />
+
+                <TextView
+                    android:id="@+id/user_fragment_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/ripple_round_corners6dp_bg"
+                    android:text="@string/checkAll"
+                    android:textColor="@color/gray" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/round_corners6dp_bg"
+                android:orientation="vertical"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:padding="20dp">
+
+                <com.leon.biuvideo.ui.views.CardTitle
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:card_title="@string/user_accountInfo" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:text="Lv.4"
+                            android:textColor="@color/black"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:text="8303/10800"
+                            android:textColor="@color/black"
+                            android:textSize="15sp" />
+
+                    </FrameLayout>
+
+                    <ProgressBar
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp"
+                        android:max="10800"
+                        android:layout_marginTop="5dp"
+                        android:progressDrawable="@drawable/user_level_progress_layer"
+                        android:progress="8303" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:id="@+id/user_fragment_fragment_coin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:drawablePadding="10dp"
+                        android:text="651.0"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        app:drawableStartCompat="@drawable/ic_coin1" />
+
+                    <TextView
+                        android:id="@+id/user_fragment_fragment_b_coin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="30dp"
+                        android:layout_toEndOf="@id/user_fragment_fragment_coin"
+                        android:drawablePadding="10dp"
+                        android:text="2.0"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        app:drawableStartCompat="@drawable/ic_coin2" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:background="@drawable/round_corners6dp_bg"
+                        android:padding="5dp"
+                        android:backgroundTint="#fb7299"
+                        android:text="@string/vip"
+                        android:textColor="@color/white"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/gray"
+                    android:text="大会员有效期至2021-03-12" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/round_corners6dp_bg"
+                android:orientation="vertical"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:padding="20dp">
+
+                <com.leon.biuvideo.ui.views.CardTitle
+                    android:id="@+id/user_favorites_cardTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:card_action="@string/checkMore"
+                    app:card_title="@string/favorites" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    tools:itemCount="2"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/round_corners6dp_bg"
+                android:orientation="vertical"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:padding="20dp">
+
+                <com.leon.biuvideo.ui.views.CardTitle
+                    android:id="@+id/user_bangumi_cardTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:card_action="@string/checkMore"
+                    app:card_title="@string/bangumi" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    tools:itemCount="3"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/round_corners6dp_bg"
+                android:orientation="vertical"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:padding="20dp">
+
+                <com.leon.biuvideo.ui.views.CardTitle
+                    android:id="@+id/user_coin_cardTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:card_action="@string/checkMore"
+                    app:card_title="@string/user_coin" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    tools:itemCount="2"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.leon.biuvideo.ui.views.HeadZoomScrollView>
+
+</LinearLayout>

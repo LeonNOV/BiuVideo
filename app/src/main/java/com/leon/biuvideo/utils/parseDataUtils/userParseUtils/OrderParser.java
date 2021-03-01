@@ -9,7 +9,7 @@ import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.OrderFollowType;
 import com.leon.biuvideo.values.OrderType;
-import com.leon.biuvideo.values.Paths;
+import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public class OrderParser {
         params.put("type", String.valueOf(orderType.value));
         params.put("follow_status", String.valueOf(orderFollowType.value));
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.bangumi, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.bangumi, Headers.of(requestHeader), params);
         JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {
@@ -141,7 +141,7 @@ public class OrderParser {
         params.put("follow_status", String.valueOf(orderFollowType.value));
 
         JSONObject responseObject;
-        responseObject = HttpUtils.getResponse(Paths.bangumi, Headers.of(requestHeader), params);
+        responseObject = HttpUtils.getResponse(BiliBiliAPIs.bangumi, Headers.of(requestHeader), params);
 
         return responseObject.getJSONObject("data").getIntValue("total");
     }

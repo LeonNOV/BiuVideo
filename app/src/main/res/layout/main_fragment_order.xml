@@ -39,7 +39,7 @@
             android:layout_weight="1"
             android:background="@drawable/lndicator_bar_unselected"
             android:gravity="center"
-            android:text="@string/fBangumi"
+            android:text="@string/bangumi"
             android:textColor="@color/black"
             android:textSize="15sp" />
 
@@ -52,7 +52,7 @@
             android:layout_weight="1"
             android:background="@drawable/lndicator_bar_unselected"
             android:gravity="center"
-            android:text="@string/fSeries"
+            android:text="@string/series"
             android:textColor="@color/black"
             android:textSize="15sp" />
 

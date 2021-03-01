@@ -8,7 +8,7 @@ import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
 import com.leon.biuvideo.beans.searchBean.bangumi.Ep;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
-import com.leon.biuvideo.values.Paths;
+import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 import com.leon.biuvideo.values.SearchType;
 import com.leon.biuvideo.values.SortType;
 
@@ -55,7 +55,7 @@ public class BangumiParser {
         params.put("page", String.valueOf(pn));
         params.put("order", sortType.value);
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.search, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.search, Headers.of(requestHeader), params);
         JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {
@@ -132,7 +132,7 @@ public class BangumiParser {
      * @return  返回番剧状态
      */
     private String getBangumiState(long mediaId) {
-        HttpUtils httpUtils = new HttpUtils(Paths.bangumiStateWhiteMid + mediaId, null);
+        HttpUtils httpUtils = new HttpUtils(BiliBiliAPIs.bangumiStateWhiteMid + mediaId, null);
         String data = httpUtils.getData();
 
         Document document = Jsoup.parse(data);
@@ -162,7 +162,7 @@ public class BangumiParser {
         params.put("page", "1");
         params.put("order", SortType.DEFAULT.value);
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.search, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.search, Headers.of(requestHeader), params);
         JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {
@@ -183,7 +183,7 @@ public class BangumiParser {
         Map<String, String> params = new HashMap<>();
         params.put("season_id", String.valueOf(seasonId));
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.bangumiEpCid, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.bangumiEpCid, Headers.of(requestHeader), params);
         JSONObject result = responseObject.getJSONObject("result");
         JSONObject mainSection = result.getJSONObject("main_section");
         JSONArray episodes = mainSection.getJSONArray("episodes");

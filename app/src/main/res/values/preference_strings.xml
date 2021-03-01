@@ -4,7 +4,6 @@
     <string name="preference_category_baseSetting">基本设置</string>
 
     <string name="preference_import">导入外部数据</string>
-    <string name="preference_set_hero">设置Hero</string>
     <string name="preference_set_color">设置主题颜色</string>
     <string name="preference_imgOriginalMode">开启原图模式</string>
     <string name="preference_visit">设置关注列表为按照“访问量”排序</string>

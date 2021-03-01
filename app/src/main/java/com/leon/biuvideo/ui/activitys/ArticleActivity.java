@@ -34,7 +34,7 @@ import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.LocalOrdersDatabaseUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.values.LocalOrderType;
-import com.leon.biuvideo.values.Paths;
+import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 import com.leon.biuvideo.utils.ValueUtils;
 
 import org.jsoup.Jsoup;
@@ -80,7 +80,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
@@ -200,7 +200,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         String replayStr = ValueUtils.generateCN(article.reply) + "次评论";
         article_textView_replay.setText(replayStr);
 
-        String path = Paths.articleWebPage + article.articleId;
+        String path = BiliBiliAPIs.articleWebPage + article.articleId;
 
         //获取文章页面
         String unencodedHtml = parseHTMLonPhone(path);
@@ -367,7 +367,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                                 //跳转到源网站
                                 Intent intentOriginUrl = new Intent();
                                 intentOriginUrl.setAction("android.intent.action.VIEW");
-                                Uri uri = Uri.parse(Paths.articleWebPage + article.articleId);
+                                Uri uri = Uri.parse(BiliBiliAPIs.articleWebPage + article.articleId);
                                 intentOriginUrl.setData(uri);
                                 startActivity(intentOriginUrl);
 

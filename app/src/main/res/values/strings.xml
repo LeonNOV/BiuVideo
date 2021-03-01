@@ -1,8 +1,83 @@
 <resources>
     <string name="app_name">BiuVideo</string>
+
+    <string name="search">搜索</string>
+    <string name="favorites">收藏</string>
+    <string name="orders">订阅</string>
+    <string name="settings">设置</string>
+    <string name="userInfo">用户信息</string>
+    <string name="popular">热门</string>
+    <string name="recommend">推荐</string>
+
+    <string name="video">视频</string>
+    <string name="bangumi">番剧</string>
+    <string name="series">剧集</string>
+    <string name="tag">标签</string>
+    <string name="article">专栏</string>
+    <string name="biliUser">用户</string>
+    <string name="audio">音频</string>
+    <string name="picture">相簿</string>
+    <string name="live">直播</string>
+
+    <string name="home_nav_home">首页</string>
+    <string name="home_nav_discover">发现</string>
+    <string name="home_nav_user">我的</string>
+
+    <string name="home_card_title">推荐</string>
+    <string name="home_card_action">查看更多</string>
+    <string name="home_popular">热门排行</string>
+    <string name="home_orders">我的订阅</string>
+    <string name="home_favorites">我的收藏夹</string>
+    <string name="home_follows">我关注的人</string>
+    <string name="home_history">历史记录</string>
+    <string name="home_downloaded">下载记录</string>
+    <string name="home_settings">设置</string>
+
+    <string name="search_history">搜索历史</string>
+    <string name="search_clear">清空搜索历史</string>
+
+    <string name="setting_baseSetting">基本设置</string>
+    <string name="setting_import">导入外部数据</string>
+    <string name="setting_setThemeColor">设置主题颜色</string>
+    <string name="setting_imgOriginalMode">开启原图模式</string>
+    <string name="setting_clear">清空数据</string>
+    <string name="setting_clearCache">清空缓存</string>
+    <string name="setting_setLocation">设置位置</string>
+    <string name="setting_restoreBackup">恢复备份</string>
+
+    <string name="setting_about">关于</string>
+    <string name="setting_open_source_license">开源许可</string>
+    <string name="setting_thanksList">感谢列表</string>
+
+    <string name="setting_feedBack">反馈</string>
+    <string name="setting_submitFeedback">提交反馈</string>
+
+    <string name="setting_set_location_title">设置城市</string>
+    <string name="setting_set_location_hint">搜索城市</string>
+    <string name="setting_set_location_choose_location">选择位置</string>
+
+    <string name="user_dynamic">动态</string>
+    <string name="user_follow">关注</string>
+    <string name="user_fans">粉丝</string>
+
+    <string name="user_baseInfo">基本信息</string>
+    <string name="user_accountInfo">账号信息</string>
+    <string name="user_uid">UID：</string>
+    <string name="user_name">昵称：</string>
+    <string name="user_sex">性别：</string>
+    <string name="user_level">等级：</string>
+    <string name="user_birthday">出生日期：</string>
+    <string name="user_flag">个性签名：</string>
+    <string name="user_coin">最近投币的视频</string>
+
+    <string name="vip">大会员</string>
+    <string name="checkAll">查看全部</string>
+    <string name="checkMore">查看更多</string>
+
+<!-- ========================================================================================== -->
+
     <string name="preference">initValues</string>
 
-    <dimen name="corner_6dp">6dp</dimen>
     <dimen name="item_padding">5dp</dimen>
 
     <dimen name="cover_width">128dp</dimen>
@@ -10,8 +85,6 @@
 
     <dimen name="small_view_w_h">40dp</dimen>
     <dimen name="small_view_padding_10dp">10dp</dimen>
-
-    <dimen name="topBar_height">50dp</dimen>
 
     <string name="main_button_start">开始获取</string>
     <string name="main_editText_hint1">输入关键词进行搜索</string>

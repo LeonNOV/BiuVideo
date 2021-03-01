@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
-import com.leon.biuvideo.values.Paths;
+import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 public class WebViewUtils {
     private final WebView webView;
@@ -20,7 +20,7 @@ public class WebViewUtils {
         String parameter_cid = "cid=" + cid;
 
         //默认第一个视频为singleVideoInfoList中的第一个，page为选集列表中的第一个视频的索引（从1开始,所以要进行加1）
-        String videoPath = Paths.videoBaeUrl + parameter_aid + "&" + parameter_cid + "&" + "page=" + pageIndex + 1;
+        String videoPath = BiliBiliAPIs.videoBaeUrl + parameter_aid + "&" + parameter_cid + "&" + "page=" + pageIndex + 1;
         configWebView(videoPath);
     }
 

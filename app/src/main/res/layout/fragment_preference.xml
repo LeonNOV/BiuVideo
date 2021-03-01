@@ -48,15 +48,6 @@
                         android:textColor="@color/preference_item" />
 
                     <TextView
-                        android:id="@+id/preference_textView_set_hero"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?selectableItemBackground"
-                        android:padding="10dp"
-                        android:text="@string/preference_set_hero"
-                        android:textColor="@color/preference_item" />
-
-                    <TextView
                         android:id="@+id/preference_textView_set_color"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

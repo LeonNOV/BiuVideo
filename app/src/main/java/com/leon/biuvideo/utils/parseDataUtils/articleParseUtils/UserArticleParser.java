@@ -7,7 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
-import com.leon.biuvideo.values.Paths;
+import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +34,7 @@ public class UserArticleParser {
         params.put("pn", String.valueOf(pageNum));
         params.put("ps", "16");
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.userArticle, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.userArticle, Headers.of(requestHeader), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {
@@ -86,7 +86,7 @@ public class UserArticleParser {
         params.put("pn", "1");
         params.put("ps", "16");
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.userArticle, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.userArticle, Headers.of(requestHeader), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {

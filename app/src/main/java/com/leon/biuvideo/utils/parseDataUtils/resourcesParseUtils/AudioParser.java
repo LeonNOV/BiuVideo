@@ -7,7 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.upMasterBean.Audio;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.Fuck;
-import com.leon.biuvideo.values.Paths;
+import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +41,7 @@ public class AudioParser {
         params.put("order", "1");
         params.put("jsonp", "jsonp");
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.music, params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.music, params);
         JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {
@@ -97,7 +97,7 @@ public class AudioParser {
         params.put("order", "1");
         params.put("jsonp", "jsonp");
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.music, params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.music, params);
         JSONObject data = responseObject.getJSONObject("data");
 
         return data.getIntValue("totalSize");

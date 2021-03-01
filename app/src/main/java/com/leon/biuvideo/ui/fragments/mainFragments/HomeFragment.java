@@ -18,20 +18,13 @@ import com.leon.biuvideo.ui.activitys.VideoActivity;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
-import com.leon.biuvideo.utils.HeroImages;
 import com.leon.biuvideo.utils.IDUtils;
 import com.leon.biuvideo.utils.InternetUtils;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * 主fragment
  */
 public class HomeFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
-    private ImageView home_fragment_imageView_hero;
     private EditText home_fragment_editText_keyword;
 
     //spinner索引
@@ -44,8 +37,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void initView(BindingUtils bindingUtils) {
-        home_fragment_imageView_hero = findView(R.id.home_fragment_imageView_hero);
-        home_fragment_imageView_hero.setOnClickListener(this);
 
         Spinner home_spinner = findView(R.id.home_spinner);
         home_spinner.setOnItemSelectedListener(this);
@@ -59,77 +50,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void initValues() {
-        //判断是否为自动更换
-        SharedPreferences initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
-        boolean isAutoChange = initValues.getBoolean("isAutoChange", true);
-
-        if (isAutoChange) {
-            //设置每天打开的hero
-            setHero();
-        } else {
-            //设置自定义的hero
-            int customHeroIndex = initValues.getInt("customHeroIndex", 0);
-            home_fragment_imageView_hero.setImageResource(HeroImages.heroImages[customHeroIndex]);
-        }
-    }
-
-    /**
-     * 设置hero
-     */
-    private void setHero() {
-        SharedPreferences initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = initValues.edit();
-
-        //获取当前时间
-        long startTime = initValues.getLong("startTime", 0);
-        int heroIndex = initValues.getInt("heroIndex", 0);
-
-        // 如果当天已进行过更新，则结束该方法
-        if (startTime == getTime()) {
-            home_fragment_imageView_hero.setImageResource(HeroImages.heroImages[heroIndex]);
-            return;
-        }
-
-        //判断是否为第一次启动
-        if (startTime != 0) {
-            //判断是否已过去一天，如果已过则设置新的hero
-            if (System.currentTimeMillis() - startTime >= 86400000) {
-                //达到最后一个则将index重置为0
-                if (heroIndex == HeroImages.heroImages.length - 1) {
-                    heroIndex = 0;
-                } else {
-                    //设置新的index
-                    heroIndex++;
-                }
-            }
-        }
-
-        home_fragment_imageView_hero.setImageResource(HeroImages.heroImages[heroIndex]);
-        edit.putLong("startTime", getTime());
-        edit.putInt("heroIndex", heroIndex);
-        edit.apply();
-    }
-
-    /**
-     * 获取的年月日
-     *
-     * @return 返回年月日
-     */
-    private long getTime() {
-        Date nowDate = new Date(System.currentTimeMillis());
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.CHINA);
-        String ymd = sdf.format(nowDate);
-
-        try {
-            Date ymd_long = sdf.parse(ymd);
-            return ymd_long.getTime();
-        } catch (ParseException e) {
-            SimpleSnackBar.make(view, "时间解析出错", SimpleSnackBar.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
-
-        return 0;
     }
 
     @Override
@@ -137,13 +57,6 @@ public class HomeFragment extends BaseFragment implements View.OnClickListener, 
         switch (view.getId()) {
             case R.id.home_fragment_imageView_clear:
                 home_fragment_editText_keyword.getText().clear();
-                break;
-            case R.id.home_fragment_imageView_hero:
-                //抖一抖！！！
-                Animation animation = AnimationUtils.loadAnimation(context, R.anim.hero_anim);
-                animation.setDuration(1000);
-                animation.setRepeatMode(Animation.INFINITE);
-                home_fragment_imageView_hero.startAnimation(animation);
                 break;
             case R.id.home_button_confirm:
                 //判断是否有网络

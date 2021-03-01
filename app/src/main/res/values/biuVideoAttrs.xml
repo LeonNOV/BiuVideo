@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SimpleTopBar">
+        <attr name="topBarTitle" format="string" localization="suggested"/>
+        <attr name="leftSrc" format="reference"/>
+        <attr name="rightSrc" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="CircleImageView">
+        <attr name="borderWidth" format="dimension"/>
+        <attr name="borderColor" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="TagView">
+        <attr name="leftValue" format="string" localization="suggested"/>
+        <attr name="rightValue" format="string" localization="suggested"/>
+        <attr name="isClick" format="boolean"/>
+        <attr name="tagMark" format="enum">
+            <enum name="none" value="0"/>
+            <enum name="left" value="1"/>
+            <enum name="right" value="2"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="CardTitleLayout">
+        <attr name="card_title" format="string" localization="suggested"/>
+        <attr name="card_action" format="string" localization="suggested"/>
+    </declare-styleable>
+
+    <declare-styleable name="BottomSheetTopBar">
+        <attr name="bottomSheetTitle" format="string"/>
+        <attr name="bottomSheetCloseSrc" format="reference"/>
+    </declare-styleable>
+</resources>

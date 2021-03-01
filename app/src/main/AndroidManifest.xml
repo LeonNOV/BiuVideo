@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".App"
         android:allowBackup="false"
         android:icon="@mipmap/ic_biu_video"
         android:label="@string/app_name"
@@ -17,6 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <meta-data android:name="amap_key" android:value="${amap_key}"/>
         <activity
             android:name=".ui.activitys.ChooseThemeColorActivity"
             android:exported="false"
@@ -68,8 +70,20 @@
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
+<!--        <activity-->
+<!--            android:name=".ui.activitys.MainActivity"-->
+<!--            android:screenOrientation="portrait"-->
+<!--            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"-->
+<!--            android:theme="@style/Theme.AppCompat.NoActionBar">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
+
         <activity
-            android:name=".ui.activitys.MainActivity"
+            android:name=".ui.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:theme="@style/Theme.AppCompat.NoActionBar">

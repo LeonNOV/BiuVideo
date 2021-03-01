@@ -52,7 +52,7 @@ public class HistoryAdapter extends BaseAdapter<History.InnerHistory> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        History.InnerHistory history = historys.get(position);
+        /*History.InnerHistory history = historys.get(position);
 
         //直播状态
         int liveStateId = holder.findById(R.id.history_item_imageView_live_state).getId();
@@ -202,6 +202,6 @@ public class HistoryAdapter extends BaseAdapter<History.InnerHistory> {
                                 break;
                         }
                     }
-                });
+                });*/
     }
 }

@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.musicBeans.MusicInfo;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.Fuck;
-import com.leon.biuvideo.values.Paths;
+import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +25,7 @@ public class MusicParser {
         Map<String, String> params = new HashMap<>();
         params.put("sid", sid);
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.musicInfo, params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.musicInfo, params);
         JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {

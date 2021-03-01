@@ -8,7 +8,7 @@ import com.leon.biuvideo.beans.userBeans.History;
 import com.leon.biuvideo.beans.userBeans.HistoryType;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
-import com.leon.biuvideo.values.Paths;
+import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +40,7 @@ public class HistoryParser {
         params.put("type", historyType.value);
 
         if (cookie != null) {
-            JSONObject responseObject = HttpUtils.getResponse(Paths.history, Headers.of(requestHeader), params);
+            JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.history, Headers.of(requestHeader), params);
             JSONObject data = responseObject.getJSONObject("data");
 
             if (data != null) {

@@ -17,7 +17,6 @@ import com.leon.biuvideo.ui.dialogs.ExportDialog;
 import com.leon.biuvideo.ui.dialogs.ThanksListDialog;
 import com.leon.biuvideo.ui.dialogs.FeedbackDialog;
 import com.leon.biuvideo.ui.dialogs.ImportFollowDialog;
-import com.leon.biuvideo.ui.dialogs.SetHeroDialog;
 import com.leon.biuvideo.ui.dialogs.WarnDialog;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
@@ -53,7 +52,6 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
     public void initView(BindingUtils bindingUtils) {
         bindingUtils
 //                .setOnCheckedChangeListener(R.id.preference_switch_isImport, this)
-                .setOnClickListener(R.id.preference_textView_set_hero, this)
                 .setOnClickListener(R.id.preference_textView_set_color, this)
                 .setOnClickListener(R.id.preference_textView_import, this)
                 .setOnClickListener(R.id.preference_textView_cache, this)
@@ -95,12 +93,6 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.preference_textView_set_hero:
-                //显示SetHeroDialog
-                SetHeroDialog setHeroDialog = new SetHeroDialog(context);
-                setHeroDialog.show();
-
-                break;
             case R.id.preference_textView_set_color:
                 SimpleSnackBar.make(view, "该功能将会在后期版本中上线，请谅解(。・∀・)ノ", SimpleSnackBar.LENGTH_LONG).show();
 //                Intent intent = new Intent(context, ChooseThemeColorActivity.class);

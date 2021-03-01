@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.userBeans.UserInfo;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
-import com.leon.biuvideo.values.Paths;
+import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,7 +28,7 @@ public class UserInfoParser {
      * @return  返回UserInfo对象
      */
     public UserInfo userInfoParse() {
-        JSONObject responseObject = HttpUtils.getResponse(Paths.nav, Headers.of(requestHeader), null);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.nav, Headers.of(requestHeader), null);
         JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {

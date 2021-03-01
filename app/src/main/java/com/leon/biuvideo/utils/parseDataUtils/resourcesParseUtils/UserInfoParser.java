@@ -8,7 +8,7 @@ import com.leon.biuvideo.beans.upMasterBean.UserInfo;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
-import com.leon.biuvideo.values.Paths;
+import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +36,7 @@ public class UserInfoParser {
         params.put("mid", String.valueOf(mid));
         params.put("jsonp", "jsonp");
 
-        JSONObject responseObject = HttpUtils.getResponse(Paths.info, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.info, Headers.of(requestHeader), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {
