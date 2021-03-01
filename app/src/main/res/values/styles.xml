@@ -17,7 +17,7 @@
     </style>
 
     <!-- PictureViewer动画 -->
-    <style name="picture_viewer_anim_style">
+    <style name="paning_anim_style">
         <!-- 进入 -->
         <item name="android:windowEnterAnimation">@anim/picture_viewer_enter</item>
 

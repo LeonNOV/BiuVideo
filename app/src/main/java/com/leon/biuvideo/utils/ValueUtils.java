@@ -1,8 +1,7 @@
 package com.leon.biuvideo.utils;
 
-import android.graphics.Color;
-
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -115,10 +114,39 @@ public class ValueUtils {
         }
 
         return new SimpleDateFormat(format, Locale.CHINA).format(date);
+    }
+
+    /**
+     * 格式化时间
+     *
+     * @param time  毫秒值/秒值
+     * @param pattern 时间格式
+     * @param isSecond  是否为秒值
+     * @return  返回格式化后的时间
+     */
+    public static String generateTime(long time, String pattern, boolean isSecond) {
+        Date date = new Date(isSecond ? time * 1000 : time);
+        return new SimpleDateFormat(pattern, Locale.CHINA).format(date);
 
     }
 
-    public static String changeARGB(String hexColor) {
-        return "#80" + hexColor.split("#")[1];
+    /**
+     * 解析字符串时间
+     *
+     * @param strTime   字符串时间
+     * @return  毫秒值时间
+     */
+    public static long formatStrTime(String strTime) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+        Date date;
+        try {
+            date = simpleDateFormat.parse(strTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+
+            return 0;
+        }
+
+        return date.getTime();
     }
 }

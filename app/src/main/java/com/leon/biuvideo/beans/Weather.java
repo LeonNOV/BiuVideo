@@ -2,9 +2,10 @@ package com.leon.biuvideo.beans;
 
 import androidx.annotation.DrawableRes;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Weather {
+public class Weather implements Serializable {
     public int status;  // 1：成功，0：失败
     public String infocode;
 

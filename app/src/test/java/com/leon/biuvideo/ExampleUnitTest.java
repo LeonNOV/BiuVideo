@@ -1,6 +1,7 @@
 package com.leon.biuvideo;
 
 import com.leon.biuvideo.utils.IDUtils;
+import com.leon.biuvideo.utils.ValueUtils;
 
 import org.junit.Test;
 
@@ -13,6 +14,10 @@ public class ExampleUnitTest {
 
     @Test
     public void test() {
+        long strTime = ValueUtils.formatStrTime("2021-03-01 19:30:28");
+
+        String s = ValueUtils.generateTime(strTime, "HH:mm", false);
+        System.out.println(s);
     }
 
     //解析输入的内容

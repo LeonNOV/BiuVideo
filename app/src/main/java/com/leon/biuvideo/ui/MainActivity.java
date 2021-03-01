@@ -42,8 +42,7 @@ public class MainActivity extends SupportActivity {
                 params.put("key", AmapKey.amapKey);
                 params.put("ip", cip);
 
-                HttpUtils IPInfoHttpUtils = new HttpUtils(AmapAPIs.amapIp, params);
-                JSONObject IPInfoResponse = JSONObject.parseObject(IPInfoHttpUtils.getData());
+                JSONObject IPInfoResponse = HttpUtils.getResponse(AmapAPIs.amapIp, params);
                 if (IPInfoResponse.getString("status").equals("1")) {
                     SharedPreferences preference = getSharedPreferences("preference", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preference.edit();

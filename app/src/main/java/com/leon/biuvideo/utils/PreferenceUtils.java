@@ -4,11 +4,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class PreferenceUtils {
+    public static final String PREFERENCE_NAME = "preference";
+
     private static SharedPreferences preference;
+
+    public static SharedPreferences getPreference (Context context) {
+        return context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+    }
 
     private static void getSharedPreferences (Context context) {
         if (preference == null) {
-            preference = context.getSharedPreferences("preference", Context.MODE_PRIVATE);
+            preference = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         }
     }
 

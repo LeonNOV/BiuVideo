@@ -129,7 +129,7 @@ public class HistoryAdapter extends BaseAdapter<History.InnerHistory> {
                 .setText(R.id.history_item_textView_title, history.title)
                 .setText(R.id.history_item_textView_view_time, new SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.CHINA).format(new Date(history.viewDate * 1000)))
                 .setText(R.id.history_item_textView_uname, history.authorName)
-                .setOnClickListener(new View.OnClickListener() {
+                .setOnWarnActionListener(new View.OnWarnActionListener() {
                     @Override
                     public void onClick(View v) {
                         if (!InternetUtils.checkNetwork(context)) {

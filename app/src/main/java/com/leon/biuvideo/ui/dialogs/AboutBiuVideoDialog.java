@@ -40,7 +40,7 @@ public class AboutBiuVideoDialog extends AlertDialog implements View.OnClickList
         about_biu_video_imageView_jumpToGitee.setOnClickListener(this);
 
 //        ImageView about_biu_video_imageView_jumpToGithub = findViewById(R.id.about_biu_video_imageView_jumpToGithub);
-//        about_biu_video_imageView_jumpToGithub.setOnClickListener(this);
+//        about_biu_video_imageView_jumpToGithub.setOnWarnActionListener(this);
 
         ImageView about_biu_video_join_group = findViewById(R.id.about_biu_video_join_group);
         about_biu_video_join_group.setOnClickListener(this);

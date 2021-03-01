@@ -2,20 +2,17 @@ package com.leon.biuvideo.ui.home;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
+import android.net.Uri;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -23,50 +20,57 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.beans.AboutBean;
+import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.dialogs.FeedbackDialog;
+import com.leon.biuvideo.ui.dialogs.ThanksListDialog;
+import com.leon.biuvideo.ui.dialogs.WarnDialog;
 import com.leon.biuvideo.ui.views.BottomSheetTopBar;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.PreferenceUtils;
+import com.leon.biuvideo.utils.ValueUtils;
+import com.leon.biuvideo.values.ThanksList;
 import com.leon.biuvideo.values.apis.AmapAPIs;
 import com.leon.biuvideo.values.apis.AmapKey;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * 设置页面
  */
-public class SettingsFragment extends SupportFragment implements View.OnClickListener {
-    private Context context;
-
+public class SettingsFragment extends BaseSupportFragment implements View.OnClickListener {
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch settings_fragment_imgOriginalMode_switch;
     private BottomSheetDialog bottomSheetDialog;
     private EditText set_location_keyword;
     private TextView settings_fragment_location;
     private RecyclerView set_location_result;
+    private TextView settings_fragment_cacheSize;
+    private SimpleTopBar settings_fragment_topBar;
+    private SharedPreferences preferences;
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.settings_fragment, container, false);
-        context = getContext();
-        initView(view);
-        return view;
+    protected int setLayout() {
+        return R.layout.settings_fragment;
     }
 
-    private void initView(View view) {
-        SimpleTopBar settings_fragment_topBar = view.findViewById(R.id.settings_fragment_topBar);
+    @Override
+    protected void initView() {
+        preferences = context.getSharedPreferences(PreferenceUtils.PREFERENCE_NAME, Context.MODE_PRIVATE);
+
+        settings_fragment_topBar = findView(R.id.settings_fragment_topBar);
         settings_fragment_topBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
-                _mActivity.onBackPressed();
+                backPressed();
             }
 
             @Override
@@ -75,25 +79,143 @@ public class SettingsFragment extends SupportFragment implements View.OnClickLis
             }
         });
 
-        settings_fragment_imgOriginalMode_switch = view.findViewById(R.id.settings_fragment_imgOriginalMode_switch);
-        settings_fragment_location = view.findViewById(R.id.settings_fragment_location);
+        bindingUtils
+                .setOnClickListener(R.id.settings_fragment_cleanCache, this)
+                .setOnClickListener(R.id.settings_fragment_setLocation, this)
+                .setOnClickListener(R.id.settings_fragment_imgOriginalMode, this)
+                .setOnClickListener(R.id.settings_fragment_open_source_license, this)
+                .setOnClickListener(R.id.settings_fragment_thanks_list, this)
+                .setOnClickListener(R.id.settings_fragment_feedback, this);
+
+        settings_fragment_imgOriginalMode_switch = findView(R.id.settings_fragment_imgOriginalMode_switch);
+        settings_fragment_imgOriginalMode_switch.setChecked(preferences.getBoolean("imgOriginalMode", false));
+
+        settings_fragment_location = findView(R.id.settings_fragment_location);
         settings_fragment_location.setText(PreferenceUtils.getLocation(context) + "," + "未选择");
 
-        view.findViewById(R.id.settings_fragment_imgOriginalMode).setOnClickListener(this);
-        view.findViewById(R.id.settings_fragment_setLocation).setOnClickListener(this);
+        settings_fragment_cacheSize = findView(R.id.settings_fragment_cacheSize);
+        settings_fragment_cacheSize.setText(ValueUtils.sizeFormat(getCacheSize(context.getCacheDir()), true));
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.settings_fragment_imgOriginalMode:
-                settings_fragment_imgOriginalMode_switch.setChecked(!settings_fragment_imgOriginalMode_switch.isChecked());
+                if (!settings_fragment_imgOriginalMode_switch.isChecked()) {
+                    WarnDialog imgOriginalModeWarnDialog = new WarnDialog(context, "原图模式", "是否要开启原图模式？如果开启将会产生比平常更多的流量。");
+                    imgOriginalModeWarnDialog.setOnWarnActionListener(new WarnDialog.OnWarnActionListener() {
+                        @Override
+                        public void onConfirm() {
+                            settings_fragment_imgOriginalMode_switch.setChecked(true);
+                            setImgOriginalMode(true);
+                            imgOriginalModeWarnDialog.dismiss();
+                        }
+
+                        @Override
+                        public void onCancel() {
+                            imgOriginalModeWarnDialog.dismiss();
+                        }
+                    });
+                    imgOriginalModeWarnDialog.show();
+                } else {
+                    settings_fragment_imgOriginalMode_switch.setChecked(false);
+                    setImgOriginalMode(false);
+                }
+                break;
+            case R.id.settings_fragment_cleanCache:
+                //创建弹窗
+                WarnDialog cleanCacheWarnDialog = new WarnDialog(context, "清除缓存", "是否要清除缓存？如果选择清除则之前加载过的数据将要重新加载一遍！");
+                cleanCacheWarnDialog.setOnWarnActionListener(new WarnDialog.OnWarnActionListener() {
+                    @Override
+                    public void onConfirm() {
+                        cleanCacheWarnDialog.dismiss();
+
+                        //删除缓存
+                        cleanCache(context.getCacheDir());
+
+                        //刷新显示的缓存大小
+                        settings_fragment_cacheSize.setText("0B");
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        cleanCacheWarnDialog.dismiss();
+                    }
+                });
+                cleanCacheWarnDialog.show();
                 break;
             case R.id.settings_fragment_setLocation:
                 showBottomSheet();
                 break;
+            case R.id.settings_fragment_open_source_license:
+                // 跳转到开源许可页面
+                Intent licenseIntent = new Intent();
+                licenseIntent.setAction("android.intent.action.VIEW");
+                licenseIntent.setData(Uri.parse("https://gitee.com/leon_xf/biu-video/blob/master/LICENSE"));
+                startActivity(licenseIntent);
+                break;
+            case R.id.settings_fragment_thanks_list:
+                //设置Dialog显示内容
+                ArrayList<AboutBean> aboutBeans = new ArrayList<>();
+                for (int i = 0; i < ThanksList.titles.length; i++) {
+                    AboutBean aboutBean = new AboutBean();
+                    aboutBean.title = ThanksList.titles[i];
+                    aboutBean.desc = ThanksList.desc[i];
+                    aboutBean.orgUrl = ThanksList.orgUrl[i];
+                    aboutBeans.add(aboutBean);
+                }
+
+                //显示Dialog
+                ThanksListDialog thanksListDialog = new ThanksListDialog(context, aboutBeans);
+                thanksListDialog.show();
+                break;
+            case R.id.settings_fragment_feedback:
+                //显示反馈提交界面
+                FeedbackDialog feedbackDialog = new FeedbackDialog(context);
+                feedbackDialog.show();
+                break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * 获取缓存文件大小
+     *
+     * @param cacheFile 应用cache文件夹路径
+     * @return 返回cache文件夹大小(byte)
+     */
+    private long getCacheSize(File cacheFile) {
+        long size = 0;
+
+        File[] files = cacheFile.listFiles();
+        for (File file : files) {
+
+            //判断是否还存在有文件夹
+            if (file.isDirectory()) {
+                size += getCacheSize(file);
+            } else {
+                size += file.length();
+            }
+        }
+
+        return size;
+    }
+
+    /**
+     * 删除缓存
+     *
+     * @param cacheFile 缓存路径
+     */
+    private void cleanCache(File cacheFile) {
+        if (cacheFile.isDirectory()) {
+            String[] list = cacheFile.list();
+
+            for (String s : list) {
+                cleanCache(new File(cacheFile, s));
+            }
+        } else {
+            cacheFile.delete();
         }
     }
 
@@ -129,11 +251,8 @@ public class SettingsFragment extends SupportFragment implements View.OnClickLis
                         params.put("keywords", keyword);
                         params.put("subdistrict", "0");
                         params.put("filter", PreferenceUtils.getAdcode(context));
-
-                        HttpUtils httpUtils = new HttpUtils(AmapAPIs.amapDistrict, params);
-                        JSONObject response = JSONObject.parseObject(httpUtils.getData());
-                        JSONArray districts = response.getJSONArray("districts");
-
+                        
+                        JSONArray districts = HttpUtils.getResponse(AmapAPIs.amapDistrict, params).getJSONArray("districts");
                         Map<String, String> districtsMap = new HashMap<>();
                         for (Object district : districts) {
                             JSONObject object = (JSONObject) district;
@@ -159,5 +278,15 @@ public class SettingsFragment extends SupportFragment implements View.OnClickLis
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
         bottomSheetDialog.show();
+    }
+
+    /**
+     * 设置原图模式状态
+     *
+     * @param isChecked     状态
+     */
+    private void setImgOriginalMode(boolean isChecked) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("imgOriginalMode", isChecked).apply();
     }
 }

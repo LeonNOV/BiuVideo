@@ -47,6 +47,7 @@ public class WarnDialog extends AlertDialog implements View.OnClickListener {
     }
 
     private void initView() {
+        window.setWindowAnimations(R.style.paning_anim_style);
         BindingUtils bindingUtils = new BindingUtils(window.getDecorView(), context);
         bindingUtils
                 .setText(R.id.warn_dialog_textView_title, title)
@@ -55,28 +56,28 @@ public class WarnDialog extends AlertDialog implements View.OnClickListener {
                 .setOnClickListener(R.id.warn_dialog_textView_cancel, this);
     }
 
-    private OnClickListener onClickListener;
+    private OnWarnActionListener onWarnActionListener;
 
-    public interface OnClickListener {
+    public interface OnWarnActionListener {
         void onConfirm();
         void onCancel();
     }
 
-    public void setOnClickListener(OnClickListener onClickListener) {
-        this.onClickListener = onClickListener;
+    public void setOnWarnActionListener(OnWarnActionListener onWarnActionListener) {
+        this.onWarnActionListener = onWarnActionListener;
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.warn_dialog_textView_cancel:
-                if (onClickListener != null) {
-                    onClickListener.onCancel();
+                if (onWarnActionListener != null) {
+                    onWarnActionListener.onCancel();
                 }
                 break;
             case R.id.warn_dialog_textView_confirm:
-                if (onClickListener != null) {
-                    onClickListener.onConfirm();
+                if (onWarnActionListener != null) {
+                    onWarnActionListener.onConfirm();
                 }
                 break;
             default:

@@ -18,7 +18,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <meta-data android:name="amap_key" android:value="${amap_key}"/>
         <activity
             android:name=".ui.activitys.ChooseThemeColorActivity"
             android:exported="false"

@@ -51,7 +51,6 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
     @Override
     public void initView(BindingUtils bindingUtils) {
         bindingUtils
-//                .setOnCheckedChangeListener(R.id.preference_switch_isImport, this)
                 .setOnClickListener(R.id.preference_textView_set_color, this)
                 .setOnClickListener(R.id.preference_textView_import, this)
                 .setOnClickListener(R.id.preference_textView_cache, this)
@@ -139,7 +138,7 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
             case R.id.preference_textView_cache: //清除缓存
                 //创建弹窗
                 WarnDialog cleanCacheWarnDialog = new WarnDialog(context, "清除缓存", "是否要清除缓存？如果选择清除则之前加载过的数据将要重新加载一遍！");
-                cleanCacheWarnDialog.setOnClickListener(new WarnDialog.OnClickListener() {
+                cleanCacheWarnDialog.setOnWarnActionListener(new WarnDialog.OnWarnActionListener() {
                     @Override
                     public void onConfirm() {
                         cleanCacheWarnDialog.dismiss();
@@ -190,7 +189,7 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                 break;
             case R.id.preference_switch_cleanImport:
                 WarnDialog cleanImportWarnDialog = new WarnDialog(context, "清除用户数据", "是否要清除当前用户（不包括本地）已关注的数据？");
-                cleanImportWarnDialog.setOnClickListener(new WarnDialog.OnClickListener() {
+                cleanImportWarnDialog.setOnWarnActionListener(new WarnDialog.OnWarnActionListener() {
                     @Override
                     public void onConfirm() {
                         FavoriteUserDatabaseUtils favoriteUserDatabaseUtils = new FavoriteUserDatabaseUtils(context);
@@ -288,7 +287,7 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
             case R.id.preference_switch_imgOriginalMode:
                 if (isChecked) {
                     WarnDialog imgOriginalModeWarnDialog = new WarnDialog(context, "原图模式", "是否要开启原图模式？如果开启将会产生比平常更多的流量。");
-                    imgOriginalModeWarnDialog.setOnClickListener(new WarnDialog.OnClickListener() {
+                    imgOriginalModeWarnDialog.setOnWarnActionListener(new WarnDialog.OnWarnActionListener() {
                         @Override
                         public void onConfirm() {
                             setImgOriginalMode(true);

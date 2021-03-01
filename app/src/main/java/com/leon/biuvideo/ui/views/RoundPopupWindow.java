@@ -51,7 +51,7 @@ public class RoundPopupWindow extends PopupWindow {
      * <strong>只需传入对应的控件的ID，覆盖View.OnClickListener即可<strong/>
      *
      * @param viewId    监听的控件ID
-     * @param onClickListener   需要覆盖View.OnClickListener
+     * @param onClickListener   需要覆盖View.OnWarnActionListener
      * @return  返回this
      */
     public RoundPopupWindow setOnClickListener (int viewId, View.OnClickListener onClickListener) {
