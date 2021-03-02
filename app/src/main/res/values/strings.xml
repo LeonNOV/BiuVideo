@@ -40,6 +40,7 @@
     <string name="setting_import">导入外部数据</string>
     <string name="setting_setThemeColor">设置主题颜色</string>
     <string name="setting_imgOriginalMode">开启原图模式</string>
+    <string name="setting_weatherModel">开启天气模块</string>
     <string name="setting_clear">清空数据</string>
     <string name="setting_clearCache">清空缓存</string>
     <string name="setting_setLocation">设置位置</string>

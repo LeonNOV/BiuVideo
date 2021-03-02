@@ -139,6 +139,7 @@
         </HorizontalScrollView>
 
         <LinearLayout
+            android:id="@+id/home_model"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -147,6 +148,7 @@
             android:background="@drawable/ripple_round_corners6dp_bg"
             android:clickable="true"
             android:focusable="true"
+            android:visibility="gone"
             android:orientation="horizontal"
             android:padding="10dp">
 

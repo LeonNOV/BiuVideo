@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSONArray;
@@ -43,8 +44,11 @@ import java.util.Map;
  * 设置页面
  */
 public class SettingsFragment extends BaseSupportFragment implements View.OnClickListener {
+    public static final String IMG_ORIGINAL_MODEL = "imgOriginalModel";
+    public static final String WEATHER_MODEL = "weatherModel";
+
     @SuppressLint("UseSwitchCompatOrMaterialCode")
-    private Switch settings_fragment_imgOriginalMode_switch;
+    private Switch settings_fragment_imgOriginalModel_switch;
     private BottomSheetDialog bottomSheetDialog;
     private EditText set_location_keyword;
     private TextView settings_fragment_location;
@@ -52,6 +56,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     private TextView settings_fragment_cacheSize;
     private SimpleTopBar settings_fragment_topBar;
     private SharedPreferences preferences;
+    private Switch settings_fragment_weatherModel_switch;
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
@@ -83,12 +88,16 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 .setOnClickListener(R.id.settings_fragment_cleanCache, this)
                 .setOnClickListener(R.id.settings_fragment_setLocation, this)
                 .setOnClickListener(R.id.settings_fragment_imgOriginalMode, this)
+                .setOnClickListener(R.id.settings_fragment_weatherModel, this)
                 .setOnClickListener(R.id.settings_fragment_open_source_license, this)
                 .setOnClickListener(R.id.settings_fragment_thanks_list, this)
                 .setOnClickListener(R.id.settings_fragment_feedback, this);
 
-        settings_fragment_imgOriginalMode_switch = findView(R.id.settings_fragment_imgOriginalMode_switch);
-        settings_fragment_imgOriginalMode_switch.setChecked(preferences.getBoolean("imgOriginalMode", false));
+        settings_fragment_imgOriginalModel_switch = findView(R.id.settings_fragment_imgOriginalModel_switch);
+        settings_fragment_imgOriginalModel_switch.setChecked(preferences.getBoolean("imgOriginalModel", false));
+
+        settings_fragment_weatherModel_switch = findView(R.id.settings_fragment_weatherModel_switch);
+        settings_fragment_weatherModel_switch.setChecked(preferences.getBoolean("weatherModel", false));
 
         settings_fragment_location = findView(R.id.settings_fragment_location);
         settings_fragment_location.setText(PreferenceUtils.getLocation(context) + "," + "未选择");
@@ -101,26 +110,10 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.settings_fragment_imgOriginalMode:
-                if (!settings_fragment_imgOriginalMode_switch.isChecked()) {
-                    WarnDialog imgOriginalModeWarnDialog = new WarnDialog(context, "原图模式", "是否要开启原图模式？如果开启将会产生比平常更多的流量。");
-                    imgOriginalModeWarnDialog.setOnWarnActionListener(new WarnDialog.OnWarnActionListener() {
-                        @Override
-                        public void onConfirm() {
-                            settings_fragment_imgOriginalMode_switch.setChecked(true);
-                            setImgOriginalMode(true);
-                            imgOriginalModeWarnDialog.dismiss();
-                        }
-
-                        @Override
-                        public void onCancel() {
-                            imgOriginalModeWarnDialog.dismiss();
-                        }
-                    });
-                    imgOriginalModeWarnDialog.show();
-                } else {
-                    settings_fragment_imgOriginalMode_switch.setChecked(false);
-                    setImgOriginalMode(false);
-                }
+                setSwitchStatus(settings_fragment_imgOriginalModel_switch, IMG_ORIGINAL_MODEL, true);
+                break;
+            case R.id.settings_fragment_weatherModel:
+                setSwitchStatus(settings_fragment_weatherModel_switch, WEATHER_MODEL, false);
                 break;
             case R.id.settings_fragment_cleanCache:
                 //创建弹窗
@@ -176,6 +169,54 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * 设置开关空间
+     *
+     * @param mSwitch
+     * @param modelName
+     * @param isImg
+     */
+    private void setSwitchStatus(@SuppressLint("UseSwitchCompatOrMaterialCode") Switch mSwitch, String modelName, boolean isImg) {
+        if (!mSwitch.isChecked()) {
+            String title;
+            String content;
+            if (isImg) {
+                title = "原图模式";
+                content = "是否要开启原图模式？如果开启将会产生比平常更多的流量。";
+            } else {
+                title = "开启天气模块";
+                content = "是否要开启天气模块？如果开启需要您开启定位服务。";
+            }
+
+            WarnDialog warnDialog = new WarnDialog(context, title, content);
+            warnDialog.setOnWarnActionListener(new WarnDialog.OnWarnActionListener() {
+                @Override
+                public void onConfirm() {
+                    mSwitch.setChecked(true);
+                    setSwitchStatus(modelName, true);
+                    warnDialog.dismiss();
+
+                    if (!isImg) {
+                        sendBroadcast(mSwitch.isChecked());
+                    }
+                }
+
+                @Override
+                public void onCancel() {
+                    warnDialog.dismiss();
+                }
+            });
+            warnDialog.show();
+        } else {
+            mSwitch.setChecked(false);
+            setSwitchStatus(modelName, false);
+
+            if (!isImg) {
+                sendBroadcast(mSwitch.isChecked());
+            }
         }
     }
 
@@ -281,12 +322,24 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     }
 
     /**
-     * 设置原图模式状态
+     * 设置模块状态
      *
      * @param isChecked     状态
      */
-    private void setImgOriginalMode(boolean isChecked) {
+    private void setSwitchStatus(String modelName, boolean isChecked) {
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("imgOriginalMode", isChecked).apply();
+        editor.putBoolean(modelName, isChecked).apply();
+    }
+
+    /**
+     * 发送本地广播
+     */
+    private void sendBroadcast(boolean status) {
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
+
+        Intent weatherModelIntent = new Intent("WeatherModel");
+        weatherModelIntent.putExtra("status", status);
+
+        localBroadcastManager.sendBroadcast(weatherModelIntent);
     }
 }

@@ -37,4 +37,15 @@ public class PreferenceUtils {
         getSharedPreferences(context);
         return preference.getString("province", "") + "," + preference.getString("city", "");
     }
+
+    /**
+     * 获取天气模块开关状态
+     *
+     * @param context   context
+     * @return  开关状态
+     */
+    public static boolean getWeatherModelStatus(Context context) {
+        getSharedPreferences(context);
+        return preference.getBoolean("weatherModel", false);
+    }
 }

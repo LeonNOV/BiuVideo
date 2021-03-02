@@ -1,20 +1,20 @@
 package com.leon.biuvideo.ui.mainFragments;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
-import android.os.MessageQueue;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
@@ -42,8 +42,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.FutureTask;
 
-import me.yokeyword.fragmentation.SupportFragment;
-
 /**
  * 主页面
  */
@@ -57,6 +55,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
     private TagView home_tagView;
     private WeatherUtil weatherUtil;
     private Handler handler;
+    private LinearLayout home_model;
 
     @Override
     protected int setLayout() {
@@ -89,11 +88,14 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         home_weatherTem = findView(R.id.home_weatherTem);
         home_location = findView(R.id.home_location);
         home_tagView = findView(R.id.home_tagView);
+        home_model = findView(R.id.home_model);
 
         initValue();
     }
 
     private void initValue() {
+        initBroadcastReceiver();
+
         List<RvTestBean> rvTestBeanList = new ArrayList<>();
 
         Random random = new Random();
@@ -188,6 +190,29 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 break;
             default:
                 break;
+        }
+    }
+
+    private void initBroadcastReceiver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("WeatherModel");
+
+        LocalReceicer localReceicer = new LocalReceicer();
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
+        localBroadcastManager.registerReceiver(localReceicer, intentFilter);
+    }
+
+    private class LocalReceicer extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals("WeatherModel")) {
+                boolean status = intent.getBooleanExtra("status", false);
+                if (status) {
+                    home_model.setVisibility(View.VISIBLE);
+                } else {
+                    home_model.setVisibility(View.GONE);
+                }
+            }
         }
     }
 }
