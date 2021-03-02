@@ -8,28 +8,31 @@ import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.provider.Settings;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+/**
+ * 定位工具类
+ */
 public class LocationUtil {
     private final Context context;
     private LocationManager locationManager;
-    private SimpleLocationListener simpleLocationListener;
+    private Location lastKnownLocation;
+    private String bestProvider;
 
     public LocationUtil(Context context) {
         this.context = context;
     }
 
+    /**
+     * 初始化LocationManager
+     */
     private void initLocationManager() {
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         // 未开启GPS则跳转到开启GPS页面
@@ -48,20 +51,23 @@ public class LocationUtil {
 
         // 获取最佳服务对象
         // GPS和NetWork二选一
-        String bestProvider = locationManager.getBestProvider(criteria, true);
+        bestProvider = locationManager.getBestProvider(criteria, true);
 
         // 检查权限
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-            Toast.makeText(context, "未授予定位权限，定位失败", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        simpleLocationListener = new SimpleLocationListener();
-        locationManager.requestLocationUpdates(bestProvider, 0, 0, simpleLocationListener);
+        lastKnownLocation = locationManager.getLastKnownLocation(bestProvider);
     }
 
+    /**
+     * 获取定位标准
+     *
+     * @return  criteria
+     */
     private Criteria getCriteria() {
         Criteria criteria = new Criteria();
         criteria.setAltitudeRequired(false);
@@ -73,21 +79,53 @@ public class LocationUtil {
         return criteria;
     }
 
-    public void removeListener() {
-        if (locationManager != null) {
-            locationManager.removeUpdates(simpleLocationListener);
+    /**
+     * 更新location
+     */
+    private void updateLocation() {
+        // 检查权限
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
         }
+
+        lastKnownLocation = locationManager.getLastKnownLocation(bestProvider);
     }
 
-    public static class SimpleLocationListener implements LocationListener {
+    /**
+     * 将经纬度转换成中文地址
+     *
+     * @param location  location
+     * @return  位置数组
+     */
+    private String[] getLocationAddress(Location location) {
+        String[] addressStrings = new String[4];
+        Geocoder geoCoder = new Geocoder(context, Locale.CHINESE);
+        try {
+            List<Address> addresses = geoCoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            Address address = addresses.get(0);
 
-        @Override
-        public void onLocationChanged(@NonNull Location location) {
-            // 获取经纬度
-            double longitude = location.getLongitude();
-            double latitude = location.getLatitude();
-
-            Fuck.blue("经纬度：" + longitude + "," + latitude);
+            addressStrings[0] = address.getAdminArea(); // province
+            addressStrings[1]  = address.getLocality();  // city
+            addressStrings[2]  = address.getSubLocality();  // district
+            addressStrings[3]  = address.getSubAdminArea(); // street
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return addressStrings;
+    }
+
+    /**
+     * 获取当前的位置信息
+     * <br/>
+     * 该方法会每次刷新一次位置
+     *
+     * @return  [0]:province(省份),[1]:city(城市),[2]:district(区县),[3]:street(街道)
+     */
+    public String[] getAddress() {
+        updateLocation();
+
+        return getLocationAddress(lastKnownLocation);
     }
 }

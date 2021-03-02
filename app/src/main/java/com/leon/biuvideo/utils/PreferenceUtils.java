@@ -19,6 +19,36 @@ public class PreferenceUtils {
     }
 
     /**
+     * 设置经纬度
+     *
+     * @param context   context
+     * @param longitude 经度
+     * @param latitude  维度
+     */
+    public static void setLongAndLat(Context context, double longitude, double latitude) {
+        getSharedPreferences(context);
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putFloat("longitude", (float) longitude);
+        editor.putFloat("latitude", (float) latitude);
+        editor.apply();
+    }
+
+    /**
+     * 获取经纬度
+     *
+     * @param context   context
+     * @return  经纬度
+     */
+    public static double[] getLongAndLat(Context context) {
+        getSharedPreferences(context);
+        double[] longAndLat = new double[2];
+        longAndLat[0] = preference.getFloat("longitude", 0);
+        longAndLat[1] = preference.getFloat("latitude", 0);
+
+        return longAndLat;
+    }
+
+    /**
      * 获取本地存放的adcode
      *
      * @return  adcode

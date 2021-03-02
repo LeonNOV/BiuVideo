@@ -31,13 +31,16 @@ import com.leon.biuvideo.ui.home.RecommendFragment;
 import com.leon.biuvideo.ui.home.SettingsFragment;
 import com.leon.biuvideo.ui.otherFragments.PopularFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.LocationUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.WeatherUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.FutureTask;
@@ -118,6 +121,14 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
             @Override
             public void load() {
+                // 初始化LocationUtil
+                if (locationUtil == null) {
+                    locationUtil = new LocationUtil(context);
+                }
+
+                // 第一次获取location
+                locationUtil.location();
+
                 Weather currentWeather = weatherUtil.getCurrentWeather(PreferenceUtils.getAdcode(context));
 
                 Message message = handler.obtainMessage();
@@ -178,10 +189,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
 //                Toast.makeText(context, "点击了-我关注的人", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.home_my_history:
-                if (locationUtil == null) {
-                    locationUtil = new LocationUtil(context);
-                }
-                locationUtil.location();
+                SimpleSnackBar.make(view, Arrays.toString(locationUtil.getAddress()), SimpleSnackBar.LENGTH_LONG).show();
                 break;
             case R.id.home_my_downloaded:
                 Toast.makeText(context, "点击了-下载记录", Toast.LENGTH_SHORT).show();
@@ -213,6 +221,13 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 boolean status = intent.getBooleanExtra("status", false);
                 if (status) {
                     home_model.setVisibility(View.VISIBLE);
+
+                    // 获取经纬度
+                    if (locationUtil == null) {
+                        locationUtil = new LocationUtil(context);
+                    }
+                    // 设置经纬度
+                    locationUtil.location();
                 } else {
                     home_model.setVisibility(View.GONE);
                 }

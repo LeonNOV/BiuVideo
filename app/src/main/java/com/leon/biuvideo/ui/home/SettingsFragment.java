@@ -40,7 +40,6 @@ import com.leon.biuvideo.values.ThanksList;
 import com.leon.biuvideo.values.apis.AmapAPIs;
 import com.leon.biuvideo.values.apis.AmapKey;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;

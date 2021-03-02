@@ -29,7 +29,7 @@ public class MainActivity extends SupportActivity {
         }
 
         // 获取当前省份、城市和adcode
-        new Thread(new Runnable() {
+        /*new Thread(new Runnable() {
             @Override
             public void run() {
                 // 获取公网IP
@@ -53,7 +53,7 @@ public class MainActivity extends SupportActivity {
                             .apply();
                 }
             }
-        }).start();
+        }).start();*/
     }
 
     @Override
