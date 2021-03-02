@@ -32,9 +32,9 @@ import com.leon.biuvideo.ui.home.SettingsFragment;
 import com.leon.biuvideo.ui.otherFragments.PopularFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
 import com.leon.biuvideo.ui.views.TagView;
+import com.leon.biuvideo.utils.LocationUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleThreadPool;
-import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.WeatherUtil;
 
 import java.util.ArrayList;
@@ -56,6 +56,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
     private WeatherUtil weatherUtil;
     private Handler handler;
     private LinearLayout home_model;
+    private LocationUtil locationUtil;
 
     @Override
     protected int setLayout() {
@@ -138,11 +139,11 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
             public boolean handleMessage(@NonNull Message msg) {
                 Weather currentWeather = (Weather) msg.getData().getSerializable("currentWeather");
                 if (currentWeather != null) {
-                    weatherIcon.setImageResource(currentWeather.weatherIconId);
-                    home_weatherStr.setText(currentWeather.weather);
-                    home_weatherTem.setText(currentWeather.temperature + "°");
-                    home_location.setText(currentWeather.city);
-                    home_tagView.setRightValue(ValueUtils.generateTime(ValueUtils.formatStrTime(currentWeather.reporttime), "HH:mm", false));
+//                    weatherIcon.setImageResource(currentWeather.weatherIconId);
+//                    home_weatherStr.setText(currentWeather.weather);
+//                    home_weatherTem.setText(currentWeather.temperature + "°");
+//                    home_location.setText(currentWeather.city);
+//                    home_tagView.setRightValue(ValueUtils.generateTime(ValueUtils.formatStrTime(currentWeather.reporttime), "HH:mm", false));
                 }
 
                 simpleThreadPool.cancelTask("initHomeValues");
@@ -177,7 +178,10 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
 //                Toast.makeText(context, "点击了-我关注的人", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.home_my_history:
-                Toast.makeText(context, "点击了-历史记录", Toast.LENGTH_SHORT).show();
+                if (locationUtil == null) {
+                    locationUtil = new LocationUtil(context);
+                }
+                locationUtil.location();
                 break;
             case R.id.home_my_downloaded:
                 Toast.makeText(context, "点击了-下载记录", Toast.LENGTH_SHORT).show();
@@ -197,12 +201,12 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("WeatherModel");
 
-        LocalReceicer localReceicer = new LocalReceicer();
+        LocalReceiver localReceiver = new LocalReceiver();
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
-        localBroadcastManager.registerReceiver(localReceicer, intentFilter);
+        localBroadcastManager.registerReceiver(localReceiver, intentFilter);
     }
 
-    private class LocalReceicer extends BroadcastReceiver {
+    private class LocalReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals("WeatherModel")) {

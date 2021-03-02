@@ -38,6 +38,7 @@ import com.leon.biuvideo.ui.dialogs.WarnDialog;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.PermissionUtil;
 import com.leon.biuvideo.utils.SimpleDownloadThread;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
@@ -128,6 +129,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
     private LinearLayout music_linearLayout;
     private Handler initDataHandler;
     private LoadingDialog loadingDialog;
+    private PermissionUtil permissionUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -329,6 +331,8 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
      * 初始化数据
      */
     private void initValue() {
+        permissionUtil = new PermissionUtil(getApplicationContext(), this);
+
         //设置封面
         Glide.with(getApplicationContext()).load(musicInfo.cover).into(music_circleImageView_cover);
 
@@ -430,8 +434,8 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
 
                 break;
             case R.id.music_imageView_download:
-                //获取权限
-                FileUtils.verifyPermissions(this);
+                // 申请读写权限
+                permissionUtil.verifyPermission(PermissionUtil.Permission.RW);
 
                 //判断是否有网络
                 if (!InternetUtils.checkNetwork(getApplicationContext())) {

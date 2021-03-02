@@ -41,6 +41,7 @@ import com.leon.biuvideo.ui.fragments.mainFragments.ThemeColorChangeBroadcastRec
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.PermissionUtil;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserInfoParser;
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Fragment historyFragment;
     private Fragment preferenceFragment;
     private Fragment orderFragment;
+    private PermissionUtil permissionUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,8 +119,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.main_fragment, homeFragment).commit();
 
-        // 获取权限
-        FileUtils.verifyPermissions(this);
+        // 申请读写权限
+        permissionUtil = new PermissionUtil(getApplicationContext(), this);
+        permissionUtil.verifyPermission(PermissionUtil.Permission.RW);
 
         // 初始化本地广播接收器
         ThemeColorChangeBroadcastReceiver themeColorChangeBroadcastReceiver = new ThemeColorChangeBroadcastReceiver();

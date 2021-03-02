@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,8 +29,11 @@ import com.leon.biuvideo.ui.dialogs.FeedbackDialog;
 import com.leon.biuvideo.ui.dialogs.ThanksListDialog;
 import com.leon.biuvideo.ui.dialogs.WarnDialog;
 import com.leon.biuvideo.ui.views.BottomSheetTopBar;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
+import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.PermissionUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.ThanksList;
@@ -48,7 +53,8 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     public static final String WEATHER_MODEL = "weatherModel";
 
     @SuppressLint("UseSwitchCompatOrMaterialCode")
-    private Switch settings_fragment_imgOriginalModel_switch;
+    private Switch settings_fragment_imgOriginalModel_switch, settings_fragment_weatherModel_switch;
+
     private BottomSheetDialog bottomSheetDialog;
     private EditText set_location_keyword;
     private TextView settings_fragment_location;
@@ -56,7 +62,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     private TextView settings_fragment_cacheSize;
     private SimpleTopBar settings_fragment_topBar;
     private SharedPreferences preferences;
-    private Switch settings_fragment_weatherModel_switch;
+    private PermissionUtil permissionUtil;
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
@@ -103,7 +109,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
         settings_fragment_location.setText(PreferenceUtils.getLocation(context) + "," + "未选择");
 
         settings_fragment_cacheSize = findView(R.id.settings_fragment_cacheSize);
-        settings_fragment_cacheSize.setText(ValueUtils.sizeFormat(getCacheSize(context.getCacheDir()), true));
+        settings_fragment_cacheSize.setText(ValueUtils.sizeFormat(FileUtils.getCacheSize(context.getCacheDir()), true));
     }
 
     @Override
@@ -113,6 +119,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 setSwitchStatus(settings_fragment_imgOriginalModel_switch, IMG_ORIGINAL_MODEL, true);
                 break;
             case R.id.settings_fragment_weatherModel:
+
                 setSwitchStatus(settings_fragment_weatherModel_switch, WEATHER_MODEL, false);
                 break;
             case R.id.settings_fragment_cleanCache:
@@ -124,7 +131,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                         cleanCacheWarnDialog.dismiss();
 
                         //删除缓存
-                        cleanCache(context.getCacheDir());
+                        FileUtils.cleanCache(context.getCacheDir());
 
                         //刷新显示的缓存大小
                         settings_fragment_cacheSize.setText("0B");
@@ -175,9 +182,9 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     /**
      * 设置开关空间
      *
-     * @param mSwitch
-     * @param modelName
-     * @param isImg
+     * @param mSwitch   switch对象
+     * @param modelName {@value WEATHER_MODEL} {@value IMG_ORIGINAL_MODEL}
+     * @param isImg 是否为“开启原图模式”
      */
     private void setSwitchStatus(@SuppressLint("UseSwitchCompatOrMaterialCode") Switch mSwitch, String modelName, boolean isImg) {
         if (!mSwitch.isChecked()) {
@@ -196,11 +203,17 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 @Override
                 public void onConfirm() {
                     mSwitch.setChecked(true);
-                    setSwitchStatus(modelName, true);
+                    setPreferenceStatus(modelName, true);
                     warnDialog.dismiss();
 
                     if (!isImg) {
-                        sendBroadcast(mSwitch.isChecked());
+                        if (permissionUtil == null) {
+                            permissionUtil = new PermissionUtil(context, SettingsFragment.this);
+                        }
+
+                        // 获取定位权限
+                        permissionUtil.verifyPermission(PermissionUtil.Permission.LOCATION);
+                        sendBroadcast(true);
                     }
                 }
 
@@ -212,51 +225,11 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
             warnDialog.show();
         } else {
             mSwitch.setChecked(false);
-            setSwitchStatus(modelName, false);
+            setPreferenceStatus(modelName, false);
 
             if (!isImg) {
-                sendBroadcast(mSwitch.isChecked());
+                sendBroadcast(false);
             }
-        }
-    }
-
-    /**
-     * 获取缓存文件大小
-     *
-     * @param cacheFile 应用cache文件夹路径
-     * @return 返回cache文件夹大小(byte)
-     */
-    private long getCacheSize(File cacheFile) {
-        long size = 0;
-
-        File[] files = cacheFile.listFiles();
-        for (File file : files) {
-
-            //判断是否还存在有文件夹
-            if (file.isDirectory()) {
-                size += getCacheSize(file);
-            } else {
-                size += file.length();
-            }
-        }
-
-        return size;
-    }
-
-    /**
-     * 删除缓存
-     *
-     * @param cacheFile 缓存路径
-     */
-    private void cleanCache(File cacheFile) {
-        if (cacheFile.isDirectory()) {
-            String[] list = cacheFile.list();
-
-            for (String s : list) {
-                cleanCache(new File(cacheFile, s));
-            }
-        } else {
-            cacheFile.delete();
         }
     }
 
@@ -326,7 +299,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
      *
      * @param isChecked     状态
      */
-    private void setSwitchStatus(String modelName, boolean isChecked) {
+    private void setPreferenceStatus(String modelName, boolean isChecked) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(modelName, isChecked).apply();
     }
@@ -341,5 +314,27 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
         weatherModelIntent.putExtra("status", status);
 
         localBroadcastManager.sendBroadcast(weatherModelIntent);
+    }
+
+    /**
+     * 定位权限回调
+     *
+     * @param requestCode   请求码
+     * @param permissions   权限名称
+     * @param grantResults  授权结果
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1025) {
+            if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                SimpleSnackBar.make(view, "获取权限成功", SimpleSnackBar.LENGTH_SHORT).show();
+            } else {
+                SimpleSnackBar.make(view, "获取权限失败", SimpleSnackBar.LENGTH_SHORT).show();
+                settings_fragment_weatherModel_switch.setChecked(false);
+                setPreferenceStatus(WEATHER_MODEL, false);
+                sendBroadcast(false);
+            }
+        }
     }
 }

@@ -37,6 +37,7 @@ import com.leon.biuvideo.ui.dialogs.SingleVideoQualityDialog;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.FileUtils;
+import com.leon.biuvideo.utils.PermissionUtil;
 import com.leon.biuvideo.utils.SimpleDownloadThread;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
@@ -104,6 +105,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
     private LoadingDialog loadingDialog;
     private Handler handler;
     private String bvid;
+    private PermissionUtil permissionUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,6 +220,8 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
      */
     private void initValues() {
         localOrdersDatabaseUtils = new LocalOrdersDatabaseUtils(getApplicationContext());
+
+        permissionUtil = new PermissionUtil(getApplicationContext(), this);
 
         isHaveLocalOrder = localOrdersDatabaseUtils.queryLocalOrder(String.valueOf(viewPage.bvid), null, localOrderType);
 
@@ -428,7 +432,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 }
 
                 //获取权限
-                FileUtils.verifyPermissions(this);
+                permissionUtil.verifyPermission(PermissionUtil.Permission.RW);
 
                 //获取视频封面地址
                 String coverUrl = viewPage.coverUrl;
@@ -446,7 +450,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.video_textView_saveFace:
                 //获取权限
-                FileUtils.verifyPermissions(this);
+                permissionUtil.verifyPermission(PermissionUtil.Permission.RW);
 
                 //获取链接
                 String faceUrl = viewPage.userInfo.faceUrl;
@@ -471,7 +475,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
     private void saveSingleVideo(Map.Entry<Integer, Media> mediaEntry, int position) {
         //获取权限
-        FileUtils.verifyPermissions(VideoActivity.this);
+        permissionUtil.verifyPermission(PermissionUtil.Permission.RW);
 
         //获取视频路径
         String videoUrlBase = mediaEntry.getValue().baseUrl;
@@ -587,9 +591,9 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
         if (requestCode == 1024) {
             if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                SimpleSnackBar.make(video_anthology_cardView, "权限申请成功", SimpleSnackBar.LENGTH_SHORT).show();
+                SimpleSnackBar.make(video_anthology_cardView, "获取权限成功", SimpleSnackBar.LENGTH_SHORT).show();
             } else {
-                SimpleSnackBar.make(video_anthology_cardView, "权限申请失败", SimpleSnackBar.LENGTH_SHORT).show();
+                SimpleSnackBar.make(video_anthology_cardView, "获取权限失败", SimpleSnackBar.LENGTH_SHORT).show();
             }
         }
     }
