@@ -3,6 +3,7 @@ package com.leon.biuvideo.ui;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
 
 /**
  * 一个简单的加载数据抽象类<br/>

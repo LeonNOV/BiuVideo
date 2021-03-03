@@ -58,6 +58,15 @@ public class PreferenceUtils {
     }
 
     /**
+     * 设置adcode
+     */
+    public static void setAdcode(Context context, String adcode) {
+        getSharedPreferences(context);
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putString("adcode", adcode).apply();
+    }
+
+    /**
      * 对设置界面对应功能的开关状态进行设置
      *
      * @param context   context

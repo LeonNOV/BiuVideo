@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.testAdapters.RvTestAdapter;
 import com.leon.biuvideo.beans.TestBeans.RvTestBean;
@@ -33,6 +34,7 @@ import com.leon.biuvideo.ui.otherFragments.PopularFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
+import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.LocationUtil;
 import com.leon.biuvideo.utils.PermissionUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
@@ -40,11 +42,14 @@ import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.WeatherUtil;
 import com.leon.biuvideo.values.FeaturesName;
+import com.leon.biuvideo.values.apis.AmapAPIs;
+import com.leon.biuvideo.values.apis.AmapKey;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.FutureTask;
 
@@ -192,7 +197,12 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
 //                Toast.makeText(context, "点击了-我关注的人", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.home_my_history:
-//                SimpleSnackBar.make(view, Arrays.toString(locationUtil.getAddress()), SimpleSnackBar.LENGTH_LONG).show();
+                LocationUtil locationUtil = new LocationUtil(context);
+                locationUtil.location();
+
+                String[] address = locationUtil.getAddress();
+                setAdcode(address);
+
                 break;
             case R.id.home_my_downloaded:
                 Toast.makeText(context, "点击了-下载记录", Toast.LENGTH_SHORT).show();
@@ -208,6 +218,9 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         }
     }
 
+    /**
+     * 初始化广播接收者
+     */
     private void initBroadcastReceiver() {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("WeatherModel");
@@ -241,12 +254,42 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                         locationUtil.location();
                         String[] address = locationUtil.getAddress();
                         PreferenceUtils.setAddress(context, address);
+
+                        // 根据当前位置，设置adcode
+                        setAdcode(address);
                     }
                 } else {
                     weatherModel.setDisplayState(false);
                 }
             }
         }
+    }
+
+    /**
+     * 获取当前adcode，将其设置到配置文件中
+     *
+     * @param address   当前位置
+     */
+    private void setAdcode(String[] address) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, String> params = new HashMap<>();
+                params.put("key", AmapKey.amapKey);
+                params.put("address", address[0] + address[1] + address[2]);
+                params.put("city", address[2]);
+
+                JSONObject response = HttpUtils.getResponse(AmapAPIs.amapGeocode, params);
+                if (response.getString("status").equals("1")) {
+                    JSONObject geocode = (JSONObject) response.getJSONArray("geocodes").get(0);
+                    String adcode = geocode.getString("adcode");
+
+                    PreferenceUtils.setAdcode(context, adcode);
+                } else {
+                    SimpleSnackBar.make(view, "初始化位置失败", SimpleSnackBar.LENGTH_SHORT).show();
+                }
+            }
+        }).start();
     }
 
     /**

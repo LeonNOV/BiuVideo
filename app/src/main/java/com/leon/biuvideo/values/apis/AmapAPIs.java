@@ -40,11 +40,15 @@ public class AmapAPIs {
     public static String amapDistrict = "https://restapi.amap.com/v3/config/district";
 
     /**
-     * 高德IP定位API
-     * 参数：
-     *      key：请求服务权限标识
-     *      ip：ip地址，需要搜索的IP地址（仅支持国内），若用户不填写IP，则取客户http之中的请求来进行定位
-     *
+     * 高德地理编码API:https://developer.amap.com/api/webservice/guide/api/georegeo
+     * 参数（主要参数）
+     *      address:结构化地址信息
+     *              规则遵循：国家、省份、城市、区县、城镇、乡村、街道、门牌号码、屋邨、大厦
+     *              如：北京市朝阳区阜通东大街6号。如果需要解析多个地址的话，请用"|"进行间隔
+     *              并且将 batch 参数设置为 true，最多支持 10 个地址进进行"|"分割形式的请求。
+     *      city:指定查询的城市
+     *              可选输入内容包括：指定城市的中文（如北京）、指定城市的中文全拼（beijing）、citycode（010）、adcode（110000）
+     *              不支持县级市。当指定城市查询内容为空时，会进行全国范围内的地址转换检索。
      */
-    public static String amapIp = "https://restapi.amap.com/v3/ip";
+    public static String amapGeocode = "https://restapi.amap.com/v3/geocode/geo";
 }
