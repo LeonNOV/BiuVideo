@@ -3,14 +3,12 @@ package com.leon.biuvideo.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.leon.biuvideo.values.FeaturesName;
+
 public class PreferenceUtils {
     public static final String PREFERENCE_NAME = "preference";
 
     private static SharedPreferences preference;
-
-    public static SharedPreferences getPreference (Context context) {
-        return context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
-    }
 
     private static void getSharedPreferences (Context context) {
         if (preference == null) {
@@ -19,33 +17,34 @@ public class PreferenceUtils {
     }
 
     /**
-     * 设置经纬度
+     * 设置位置信息
      *
      * @param context   context
-     * @param longitude 经度
-     * @param latitude  维度
+     * @param address 位置信息
      */
-    public static void setLongAndLat(Context context, double longitude, double latitude) {
+    public static void setAddress(Context context, String[] address) {
         getSharedPreferences(context);
         SharedPreferences.Editor editor = preference.edit();
-        editor.putFloat("longitude", (float) longitude);
-        editor.putFloat("latitude", (float) latitude);
+        editor.putString("province", address[0]);
+        editor.putString("city", address[1]);
+        editor.putString("district", address[2]);
         editor.apply();
     }
 
     /**
-     * 获取经纬度
+     * 获取位置信息
      *
      * @param context   context
-     * @return  经纬度
+     * @return  位置信息
      */
-    public static double[] getLongAndLat(Context context) {
+    public static String[] getAddress(Context context) {
         getSharedPreferences(context);
-        double[] longAndLat = new double[2];
-        longAndLat[0] = preference.getFloat("longitude", 0);
-        longAndLat[1] = preference.getFloat("latitude", 0);
+        String[] address = new String[3];
+        address[0] = preference.getString("province", null);
+        address[1] = preference.getString("city", null);
+        address[2] = preference.getString("district", null);
 
-        return longAndLat;
+        return address;
     }
 
     /**
@@ -55,27 +54,48 @@ public class PreferenceUtils {
      */
     public static String getAdcode(Context context) {
         getSharedPreferences(context);
-        return preference.getString("adcode", "");
+        return preference.getString("adcode", null);
     }
 
     /**
-     * 获取本地存放的省份和城市字符串
+     * 对设置界面对应功能的开关状态进行设置
      *
-     * @return  省份 + "," + 城市
+     * @param context   context
+     * @param featuresName 功能名称
+     * @param status    设置状态
      */
-    public static String getLocation(Context context) {
+    public static void setFeaturesStatus(Context context, FeaturesName featuresName, boolean status) {
         getSharedPreferences(context);
-        return preference.getString("province", "") + "," + preference.getString("city", "");
+        SharedPreferences.Editor editor = preference.edit();
+
+        switch (featuresName) {
+            case IMG_ORIGINAL_MODEL:
+                editor.putBoolean("imgOriginalModel", status).apply();
+                break;
+            case WEATHER_MODEL:
+                editor.putBoolean("weatherModel", status).apply();
+                break;
+            default:
+                break;
+        }
     }
 
     /**
-     * 获取天气模块开关状态
+     * 获取设置界面中对应功能的开启状态
      *
      * @param context   context
      * @return  开关状态
      */
-    public static boolean getWeatherModelStatus(Context context) {
+    public static boolean getFeaturesStatus(Context context, FeaturesName featuresName) {
         getSharedPreferences(context);
-        return preference.getBoolean("weatherModel", false);
+
+        switch (featuresName) {
+            case IMG_ORIGINAL_MODEL:
+                return preference.getBoolean("imgOriginalModel", false);
+            case WEATHER_MODEL:
+                return preference.getBoolean("weatherModel", false);
+            default:
+                return false;
+        }
     }
 }

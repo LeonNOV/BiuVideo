@@ -90,6 +90,26 @@ public class PermissionUtil {
         }
     }
 
+    /**
+     * 验证是否已授予指定权限
+     *
+     * @param context   context
+     * @param permission    {@link Permission}
+     * @return  true:已授予，false:未授予
+     */
+    public static boolean verifyPermission(Context context, Permission permission) {
+        switch (permission) {
+            case LOCATION:  // 验证定位权限
+                return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+            case RW:    // 验证读写权限
+                return ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+            default:
+                return false;
+        }
+    }
+
     public enum Permission {
         RW(0),  // 读写权限
         LOCATION(1);    // 定位权限

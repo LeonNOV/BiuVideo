@@ -19,13 +19,13 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/home_weatherIcon"
+                android:id="@+id/weatherModel_weatherIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/weather_unknow" />
 
             <TextView
-                android:id="@+id/home_weatherTem"
+                android:id="@+id/weatherModel_weatherTem"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
@@ -39,7 +39,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/home_weatherStr"
+            android:id="@+id/weatherModel_weatherStr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -57,7 +57,7 @@
         android:orientation="vertical">
 
         <com.leon.biuvideo.ui.views.TagView
-            android:id="@+id/home_tagView"
+            android:id="@+id/weatherModel_tagView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -66,7 +66,7 @@
             app:tagMark="left" />
 
         <TextView
-            android:id="@+id/home_location"
+            android:id="@+id/weatherModel_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawablePadding="3dp"

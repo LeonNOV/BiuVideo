@@ -100,7 +100,7 @@ public class LocationUtil {
      * @return  位置数组
      */
     private String[] getLocationAddress(Location location) {
-        String[] addressStrings = new String[4];
+        String[] addressStrings = new String[3];
         Geocoder geoCoder = new Geocoder(context, Locale.CHINESE);
         try {
             List<Address> addresses = geoCoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
@@ -109,7 +109,7 @@ public class LocationUtil {
             addressStrings[0] = address.getAdminArea(); // province
             addressStrings[1]  = address.getLocality();  // city
             addressStrings[2]  = address.getSubLocality();  // district
-            addressStrings[3]  = address.getSubAdminArea(); // street
+//            addressStrings[3]  = address.getSubAdminArea(); // street
         } catch (IOException e) {
             e.printStackTrace();
         }

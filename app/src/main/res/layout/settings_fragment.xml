@@ -139,7 +139,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:clickable="false"
-                        android:text="5.32M"
+                        android:text="@string/setting_default_cacheSize"
                         android:textColor="@color/gray"
                         android:textSize="15sp" />
 
@@ -163,7 +163,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
-                        android:text="北京,北京城区,东城区"
+                        android:text="@string/setting_default_location"
                         android:textColor="@color/gray"
                         android:textSize="14sp" />
 

@@ -33,14 +33,17 @@ import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.LocationUtil;
 import com.leon.biuvideo.utils.PermissionUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.ValueUtils;
+import com.leon.biuvideo.values.FeaturesName;
 import com.leon.biuvideo.values.ThanksList;
 import com.leon.biuvideo.values.apis.AmapAPIs;
 import com.leon.biuvideo.values.apis.AmapKey;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,6 +65,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     private SimpleTopBar settings_fragment_topBar;
     private SharedPreferences preferences;
     private PermissionUtil permissionUtil;
+    private LocationUtil locationUtil;
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
@@ -105,7 +109,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
         settings_fragment_weatherModel_switch.setChecked(preferences.getBoolean("weatherModel", false));
 
         settings_fragment_location = findView(R.id.settings_fragment_location);
-        settings_fragment_location.setText(PreferenceUtils.getLocation(context) + "," + "未选择");
+        settings_fragment_location.setText(Arrays.toString(PreferenceUtils.getAddress(context)));
 
         settings_fragment_cacheSize = findView(R.id.settings_fragment_cacheSize);
         settings_fragment_cacheSize.setText(ValueUtils.sizeFormat(FileUtils.getCacheSize(context.getCacheDir()), true));
@@ -115,11 +119,10 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.settings_fragment_imgOriginalMode:
-                setSwitchStatus(settings_fragment_imgOriginalModel_switch, IMG_ORIGINAL_MODEL, true);
+                setSwitchStatus(settings_fragment_imgOriginalModel_switch, FeaturesName.IMG_ORIGINAL_MODEL, true);
                 break;
             case R.id.settings_fragment_weatherModel:
-
-                setSwitchStatus(settings_fragment_weatherModel_switch, WEATHER_MODEL, false);
+                setSwitchStatus(settings_fragment_weatherModel_switch, FeaturesName.WEATHER_MODEL, false);
                 break;
             case R.id.settings_fragment_cleanCache:
                 //创建弹窗
@@ -182,10 +185,10 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
      * 设置开关空间
      *
      * @param mSwitch   switch对象
-     * @param modelName {@value WEATHER_MODEL} {@value IMG_ORIGINAL_MODEL}
+     * @param featuresName {@link FeaturesName}
      * @param isImg 是否为“开启原图模式”
      */
-    private void setSwitchStatus(@SuppressLint("UseSwitchCompatOrMaterialCode") Switch mSwitch, String modelName, boolean isImg) {
+    private void setSwitchStatus(@SuppressLint("UseSwitchCompatOrMaterialCode") Switch mSwitch, FeaturesName featuresName, boolean isImg) {
         if (!mSwitch.isChecked()) {
             String title;
             String content;
@@ -202,7 +205,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 @Override
                 public void onConfirm() {
                     mSwitch.setChecked(true);
-                    setPreferenceStatus(modelName, true);
+                    PreferenceUtils.setFeaturesStatus(context, featuresName, true);
                     warnDialog.dismiss();
 
                     if (!isImg) {
@@ -212,6 +215,10 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
 
                         // 获取定位权限
                         permissionUtil.verifyPermission(PermissionUtil.Permission.LOCATION);
+                    }
+
+                    // 检查权限是否已获取到,如果已授予定位权限就发送广播
+                    if (PermissionUtil.verifyPermission(context, PermissionUtil.Permission.LOCATION)) {
                         sendBroadcast(true);
                     }
                 }
@@ -224,7 +231,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
             warnDialog.show();
         } else {
             mSwitch.setChecked(false);
-            setPreferenceStatus(modelName, false);
+            PreferenceUtils.setFeaturesStatus(context, featuresName, false);
 
             if (!isImg) {
                 sendBroadcast(false);
@@ -294,16 +301,6 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     }
 
     /**
-     * 设置模块状态
-     *
-     * @param isChecked     状态
-     */
-    private void setPreferenceStatus(String modelName, boolean isChecked) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(modelName, isChecked).apply();
-    }
-
-    /**
      * 发送本地广播
      */
     private void sendBroadcast(boolean status) {
@@ -328,12 +325,29 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
         if (requestCode == 1025) {
             if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 SimpleSnackBar.make(view, "获取权限成功", SimpleSnackBar.LENGTH_SHORT).show();
+
+                // 权限申请成功后发送广播
+                sendBroadcast(true);
+
+                // 设置settings_fragment_location的文字为当前的位置
+                setAddress();
             } else {
                 SimpleSnackBar.make(view, "获取权限失败", SimpleSnackBar.LENGTH_SHORT).show();
                 settings_fragment_weatherModel_switch.setChecked(false);
-                setPreferenceStatus(WEATHER_MODEL, false);
+                PreferenceUtils.setFeaturesStatus(context, FeaturesName.WEATHER_MODEL, false);
                 sendBroadcast(false);
             }
         }
+    }
+
+    /**
+     * 一般在第一次申请到定位权限后调用该方法
+     * <br/>
+     * 对设置界面的`settings_fragment_location`设置文字内容
+     */
+    private void setAddress() {
+        LocationUtil locationUtil = new LocationUtil(context);
+        locationUtil.location();
+        settings_fragment_location.setText(Arrays.toString(locationUtil.getAddress()));
     }
 }

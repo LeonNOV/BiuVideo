@@ -33,12 +33,15 @@ import com.leon.biuvideo.ui.otherFragments.PopularFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.LocationUtil;
+import com.leon.biuvideo.utils.PermissionUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleThreadPool;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.WeatherUtil;
+import com.leon.biuvideo.values.FeaturesName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -49,17 +52,13 @@ import java.util.concurrent.FutureTask;
  * 主页面
  */
 public class HomeFragment extends BaseSupportFragment implements View.OnClickListener {
-    RecyclerView home_recyclerView;
-    private ImageView weatherIcon;
-    private CardTitle home_fragment_cardTitle_recommend;
-    private TextView home_weatherStr;
-    private TextView home_weatherTem;
-    private TextView home_location;
-    private TagView home_tagView;
-    private WeatherUtil weatherUtil;
-    private Handler handler;
+    private RecyclerView home_recyclerView;
     private LinearLayout home_model;
     private LocationUtil locationUtil;
+
+    private Handler handler;
+    private WeatherModel weatherModel;
+    private WeatherUtil weatherUtil;
 
     @Override
     protected int setLayout() {
@@ -77,10 +76,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 .setOnClickListener(R.id.home_setting, this)
                 .setOnClickListener(R.id.home_popular, this);
 
-        weatherIcon = findView(R.id.home_weatherIcon);
-
-        home_fragment_cardTitle_recommend = findView(R.id.home_fragment_cardTitle_recommend);
-        home_fragment_cardTitle_recommend.setOnClickActionListener(new CardTitle.OnClickActionListener() {
+        ((CardTitle) findView(R.id.home_fragment_cardTitle_recommend)).setOnClickActionListener(new CardTitle.OnClickActionListener() {
             @Override
             public void onClickAction() {
                 ((NavFragment) getParentFragment()).startBrotherFragment(RecommendFragment.newInstance());
@@ -88,10 +84,6 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         });
 
         home_recyclerView = findView(R.id.home_recyclerView);
-        home_weatherStr = findView(R.id.home_weatherStr);
-        home_weatherTem = findView(R.id.home_weatherTem);
-        home_location = findView(R.id.home_location);
-        home_tagView = findView(R.id.home_tagView);
         home_model = findView(R.id.home_model);
 
         initValue();
@@ -121,21 +113,31 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
             @Override
             public void load() {
-                // 初始化LocationUtil
-                if (locationUtil == null) {
-                    locationUtil = new LocationUtil(context);
+                // 初始化天气模块
+                if (weatherModel == null) {
+                    weatherModel = new WeatherModel();
+                    weatherModel.onInitialize(view);
                 }
-
-                // 第一次获取location
-                locationUtil.location();
-
-                Weather currentWeather = weatherUtil.getCurrentWeather(PreferenceUtils.getAdcode(context));
 
                 Message message = handler.obtainMessage();
                 message.what = 0;
-
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("currentWeather", currentWeather);
+
+                // 检查天气模块是否设置为开启状态
+                boolean weatherModelStatus = PreferenceUtils.getFeaturesStatus(context, FeaturesName.WEATHER_MODEL);
+                if (weatherModelStatus) {
+                    String adcode = PreferenceUtils.getAdcode(context);
+
+                    if (adcode == null) {
+                        bundle.putBoolean("weatherModelStatus", false);
+                    } else {
+                        Weather currentWeather = weatherUtil.getCurrentWeather(adcode);
+                        bundle.putBoolean("weatherModelStatus", true);
+                        bundle.putSerializable("currentWeather", currentWeather);
+                    }
+                } else {
+                    bundle.putBoolean("weatherModelStatus", false);
+                }
 
                 message.setData(bundle);
                 handler.sendMessage(message);
@@ -148,14 +150,15 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         handler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(@NonNull Message msg) {
-                Weather currentWeather = (Weather) msg.getData().getSerializable("currentWeather");
-                if (currentWeather != null) {
-//                    weatherIcon.setImageResource(currentWeather.weatherIconId);
-//                    home_weatherStr.setText(currentWeather.weather);
-//                    home_weatherTem.setText(currentWeather.temperature + "°");
-//                    home_location.setText(currentWeather.city);
-//                    home_tagView.setRightValue(ValueUtils.generateTime(ValueUtils.formatStrTime(currentWeather.reporttime), "HH:mm", false));
+                Bundle data = msg.getData();
+                boolean weatherModelStatus = data.getBoolean("weatherModelStatus");
+                Weather currentWeather = (Weather) data.getSerializable("currentWeather");
+
+                if (currentWeather != null && weatherModelStatus) {
+                    weatherModel.onRefresh(currentWeather);
                 }
+
+                weatherModel.setDisplayState(weatherModelStatus);
 
                 simpleThreadPool.cancelTask("initHomeValues");
                 return true;
@@ -189,7 +192,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
 //                Toast.makeText(context, "点击了-我关注的人", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.home_my_history:
-                SimpleSnackBar.make(view, Arrays.toString(locationUtil.getAddress()), SimpleSnackBar.LENGTH_LONG).show();
+//                SimpleSnackBar.make(view, Arrays.toString(locationUtil.getAddress()), SimpleSnackBar.LENGTH_LONG).show();
                 break;
             case R.id.home_my_downloaded:
                 Toast.makeText(context, "点击了-下载记录", Toast.LENGTH_SHORT).show();
@@ -214,24 +217,83 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         localBroadcastManager.registerReceiver(localReceiver, intentFilter);
     }
 
+    /**
+     * 广播接收者，主要用于显示或隐藏天气模块
+     */
     private class LocalReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals("WeatherModel")) {
                 boolean status = intent.getBooleanExtra("status", false);
                 if (status) {
-                    home_model.setVisibility(View.VISIBLE);
+                    weatherModel.setDisplayState(true);
 
-                    // 获取经纬度
-                    if (locationUtil == null) {
-                        locationUtil = new LocationUtil(context);
+                    // 检查权限
+                    boolean permissionStatus = PermissionUtil.verifyPermission(context, PermissionUtil.Permission.LOCATION);
+
+                    // 如果已授予定位权限就获取当前位置信息，并设置到配文件中
+                    if (permissionStatus) {
+                        // 获取经纬度
+                        if (locationUtil == null) {
+                            locationUtil = new LocationUtil(context);
+                        }
+
+                        locationUtil.location();
+                        String[] address = locationUtil.getAddress();
+                        PreferenceUtils.setAddress(context, address);
                     }
-                    // 设置经纬度
-                    locationUtil.location();
                 } else {
-                    home_model.setVisibility(View.GONE);
+                    weatherModel.setDisplayState(false);
                 }
             }
+        }
+    }
+
+    /**
+     * 用于控制主页的天气模块
+     */
+    private static class WeatherModel implements HomeModel {
+        private boolean isInitialized = false;
+
+        private LinearLayout home_model;
+        private ImageView weatherModel_weatherIcon;
+        private TextView weatherModel_weatherTem;
+        private TagView weatherModel_tagView;
+        private TextView weatherModel_location;
+        private TextView weatherModel_weatherStr;
+        private Weather currentWeather;
+
+        @Override
+        public void onInitialize(View view) {
+            // 如果isInitialized为false，就进行初始化
+            if (isInitialized) {
+                return;
+            }
+
+            this.isInitialized = true;
+
+            home_model = view.findViewById(R.id.home_model);
+            weatherModel_weatherIcon = view.findViewById(R.id.weatherModel_weatherIcon);
+            weatherModel_weatherTem = view.findViewById(R.id.weatherModel_weatherTem);
+            weatherModel_weatherStr = view.findViewById(R.id.weatherModel_weatherStr);
+            weatherModel_tagView = view.findViewById(R.id.weatherModel_tagView);
+            weatherModel_location = view.findViewById(R.id.weatherModel_location);
+        }
+
+        @Override
+        public void onRefresh(Serializable serializable) {
+            currentWeather = (Weather) serializable;
+
+            weatherModel_weatherIcon.setImageResource(currentWeather.weatherIconId);
+            weatherModel_weatherTem.setText(currentWeather.temperature + "°");
+            weatherModel_weatherStr.setText(currentWeather.weather);
+            weatherModel_tagView.setRightValue(ValueUtils.generateTime(ValueUtils.formatStrTime(currentWeather.reporttime), "HH:mm", false));
+            weatherModel_location.setText(currentWeather.city);
+        }
+
+        @Override
+        public void setDisplayState(boolean isDisplay) {
+            home_model.setVisibility(isDisplay ? View.VISIBLE : View.GONE);
         }
     }
 }
