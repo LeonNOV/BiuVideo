@@ -119,10 +119,10 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.settings_fragment_imgOriginalMode:
-                setSwitchStatus(settings_fragment_imgOriginalModel_switch, FeaturesName.IMG_ORIGINAL_MODEL, true);
+                setSwitchStatus(settings_fragment_imgOriginalModel_switch, FeaturesName.IMG_ORIGINAL_MODEL);
                 break;
             case R.id.settings_fragment_weatherModel:
-                setSwitchStatus(settings_fragment_weatherModel_switch, FeaturesName.WEATHER_MODEL, false);
+                setSwitchStatus(settings_fragment_weatherModel_switch, FeaturesName.WEATHER_MODEL);
                 break;
             case R.id.settings_fragment_cleanCache:
                 //创建弹窗
@@ -186,18 +186,25 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
      *
      * @param mSwitch   switch对象
      * @param featuresName {@link FeaturesName}
-     * @param isImg 是否为“开启原图模式”
      */
-    private void setSwitchStatus(@SuppressLint("UseSwitchCompatOrMaterialCode") Switch mSwitch, FeaturesName featuresName, boolean isImg) {
+    private void setSwitchStatus(@SuppressLint("UseSwitchCompatOrMaterialCode") Switch mSwitch, FeaturesName featuresName) {
         if (!mSwitch.isChecked()) {
+            // 如果定位权限已授予且是要打开天气模块，就不显示弹窗
+            if (PermissionUtil.verifyPermission(context, PermissionUtil.Permission.LOCATION) && featuresName == FeaturesName.WEATHER_MODEL) {
+                mSwitch.setChecked(true);
+                PreferenceUtils.setFeaturesStatus(context, featuresName, true);
+                sendBroadcast(true);
+                return;
+            }
+
             String title;
             String content;
-            if (isImg) {
-                title = "原图模式";
-                content = "是否要开启原图模式？如果开启将会产生比平常更多的流量。";
+            if (featuresName == FeaturesName.WEATHER_MODEL) {
+                title = "授权定位服务";
+                content = "是否要开启天气模块？如果开启需要您授予定位服务。";
             } else {
-                title = "开启天气模块";
-                content = "是否要开启天气模块？如果开启需要您开启定位服务。";
+                title = "开启原图模式";
+                content = "是否要开启原图模式？如果开启将会产生比平常更多的流量。";
             }
 
             WarnDialog warnDialog = new WarnDialog(context, title, content);
@@ -208,18 +215,16 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                     PreferenceUtils.setFeaturesStatus(context, featuresName, true);
                     warnDialog.dismiss();
 
-                    if (!isImg) {
-                        if (permissionUtil == null) {
-                            permissionUtil = new PermissionUtil(context, SettingsFragment.this);
+                    if (featuresName == FeaturesName.WEATHER_MODEL) {
+                        // 检查定位权限是否已获取到,如果未授予就申请获取定位权限
+                        if (!PermissionUtil.verifyPermission(context, PermissionUtil.Permission.LOCATION)) {
+                            if (permissionUtil == null) {
+                                permissionUtil = new PermissionUtil(context, SettingsFragment.this);
+                            }
+
+                            // 获取定位权限
+                            permissionUtil.verifyPermission(PermissionUtil.Permission.LOCATION);
                         }
-
-                        // 获取定位权限
-                        permissionUtil.verifyPermission(PermissionUtil.Permission.LOCATION);
-                    }
-
-                    // 检查权限是否已获取到,如果已授予定位权限就发送广播
-                    if (PermissionUtil.verifyPermission(context, PermissionUtil.Permission.LOCATION)) {
-                        sendBroadcast(true);
                     }
                 }
 
@@ -229,11 +234,12 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 }
             });
             warnDialog.show();
+
         } else {
             mSwitch.setChecked(false);
             PreferenceUtils.setFeaturesStatus(context, featuresName, false);
 
-            if (!isImg) {
+            if (featuresName == FeaturesName.WEATHER_MODEL) {
                 sendBroadcast(false);
             }
         }

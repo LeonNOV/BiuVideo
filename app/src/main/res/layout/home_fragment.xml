@@ -148,7 +148,6 @@
             android:background="@drawable/ripple_round_corners6dp_bg"
             android:clickable="true"
             android:focusable="true"
-            android:visibility="gone"
             android:orientation="horizontal"
             android:padding="10dp">
 

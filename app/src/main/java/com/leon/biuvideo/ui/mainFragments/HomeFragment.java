@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,10 +35,12 @@ import com.leon.biuvideo.ui.otherFragments.PopularFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.LocationUtil;
 import com.leon.biuvideo.utils.PermissionUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
+import com.leon.biuvideo.utils.SimpleThread;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.WeatherUtil;
@@ -46,6 +49,7 @@ import com.leon.biuvideo.values.apis.AmapAPIs;
 import com.leon.biuvideo.values.apis.AmapKey;
 
 import java.io.Serializable;
+import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +62,6 @@ import java.util.concurrent.FutureTask;
  */
 public class HomeFragment extends BaseSupportFragment implements View.OnClickListener {
     private RecyclerView home_recyclerView;
-    private LinearLayout home_model;
     private LocationUtil locationUtil;
 
     private Handler handler;
@@ -89,7 +92,6 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         });
 
         home_recyclerView = findView(R.id.home_recyclerView);
-        home_model = findView(R.id.home_model);
 
         initValue();
     }
@@ -121,31 +123,10 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 // 初始化天气模块
                 if (weatherModel == null) {
                     weatherModel = new WeatherModel();
-                    weatherModel.onInitialize(view);
+                    weatherModel.onInitialize(view, context);
                 }
-
-                Message message = handler.obtainMessage();
-                message.what = 0;
-                Bundle bundle = new Bundle();
-
-                // 检查天气模块是否设置为开启状态
-                boolean weatherModelStatus = PreferenceUtils.getFeaturesStatus(context, FeaturesName.WEATHER_MODEL);
-                if (weatherModelStatus) {
-                    String adcode = PreferenceUtils.getAdcode(context);
-
-                    if (adcode == null) {
-                        bundle.putBoolean("weatherModelStatus", false);
-                    } else {
-                        Weather currentWeather = weatherUtil.getCurrentWeather(adcode);
-                        bundle.putBoolean("weatherModelStatus", true);
-                        bundle.putSerializable("currentWeather", currentWeather);
-                    }
-                } else {
-                    bundle.putBoolean("weatherModelStatus", false);
-                }
-
-                message.setData(bundle);
-                handler.sendMessage(message);
+                // 获取当前天气
+                getCurrentWeather();
             }
         };
 
@@ -169,6 +150,33 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 return true;
             }
         });
+    }
+
+    /**
+     * 获取当前天气，并向handler发送消息
+     */
+    private void getCurrentWeather() {
+        Message message = handler.obtainMessage();
+        Bundle bundle = new Bundle();
+
+        // 检查天气模块是否设置为开启状态
+        boolean weatherModelStatus = PreferenceUtils.getFeaturesStatus(context, FeaturesName.WEATHER_MODEL);
+        if (weatherModelStatus) {
+            String adcode = PreferenceUtils.getAdcode(context);
+
+            if (adcode == null) {
+                bundle.putBoolean("weatherModelStatus", false);
+            } else {
+                Weather currentWeather = weatherUtil.getCurrentWeather(adcode);
+                bundle.putBoolean("weatherModelStatus", true);
+                bundle.putSerializable("currentWeather", currentWeather);
+            }
+        } else {
+            bundle.putBoolean("weatherModelStatus", false);
+        }
+
+        message.setData(bundle);
+        handler.sendMessage(message);
     }
 
     @Override
@@ -197,12 +205,6 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
 //                Toast.makeText(context, "点击了-我关注的人", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.home_my_history:
-                LocationUtil locationUtil = new LocationUtil(context);
-                locationUtil.location();
-
-                String[] address = locationUtil.getAddress();
-                setAdcode(address);
-
                 break;
             case R.id.home_my_downloaded:
                 Toast.makeText(context, "点击了-下载记录", Toast.LENGTH_SHORT).show();
@@ -241,23 +243,24 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 if (status) {
                     weatherModel.setDisplayState(true);
 
-                    // 检查权限
-                    boolean permissionStatus = PermissionUtil.verifyPermission(context, PermissionUtil.Permission.LOCATION);
-
-                    // 如果已授予定位权限就获取当前位置信息，并设置到配文件中
-                    if (permissionStatus) {
-                        // 获取经纬度
-                        if (locationUtil == null) {
-                            locationUtil = new LocationUtil(context);
-                        }
-
-                        locationUtil.location();
-                        String[] address = locationUtil.getAddress();
-                        PreferenceUtils.setAddress(context, address);
-
-                        // 根据当前位置，设置adcode
-                        setAdcode(address);
+                    // 获取经纬度
+                    if (locationUtil == null) {
+                        locationUtil = new LocationUtil(context);
                     }
+
+                    locationUtil.location();
+                    String[] address = locationUtil.getAddress();
+                    PreferenceUtils.setAddress(context, address);
+
+                    // 根据当前位置，设置adcode
+                    setAdcode(address);
+
+                    SimpleThread.executor(new Runnable() {
+                        @Override
+                        public void run() {
+                            getCurrentWeather();
+                        }
+                    });
                 } else {
                     weatherModel.setDisplayState(false);
                 }
@@ -271,7 +274,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
      * @param address   当前位置
      */
     private void setAdcode(String[] address) {
-        new Thread(new Runnable() {
+        SimpleThread.executor(new Runnable() {
             @Override
             public void run() {
                 Map<String, String> params = new HashMap<>();
@@ -289,7 +292,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                     SimpleSnackBar.make(view, "初始化位置失败", SimpleSnackBar.LENGTH_SHORT).show();
                 }
             }
-        }).start();
+        });
     }
 
     /**
@@ -307,7 +310,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         private Weather currentWeather;
 
         @Override
-        public void onInitialize(View view) {
+        public void onInitialize(View view, Context context) {
             // 如果isInitialized为false，就进行初始化
             if (isInitialized) {
                 return;
@@ -321,6 +324,8 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
             weatherModel_weatherStr = view.findViewById(R.id.weatherModel_weatherStr);
             weatherModel_tagView = view.findViewById(R.id.weatherModel_tagView);
             weatherModel_location = view.findViewById(R.id.weatherModel_location);
+
+            setDisplayState(PreferenceUtils.getFeaturesStatus(context, FeaturesName.WEATHER_MODEL));
         }
 
         @Override
