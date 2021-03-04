@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,21 +34,19 @@ import com.leon.biuvideo.ui.otherFragments.PopularFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.LocationUtil;
-import com.leon.biuvideo.utils.PermissionUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleThread;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.WeatherUtil;
+import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.FeaturesName;
 import com.leon.biuvideo.values.apis.AmapAPIs;
 import com.leon.biuvideo.values.apis.AmapKey;
 
 import java.io.Serializable;
-import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -165,7 +162,10 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
             String adcode = PreferenceUtils.getAdcode(context);
 
             if (adcode == null) {
+                // 关闭天气模块的开关
+                PreferenceUtils.setFeaturesStatus(context, FeaturesName.WEATHER_MODEL, false);
                 bundle.putBoolean("weatherModelStatus", false);
+                bundle.putSerializable("currentWeather", null);
             } else {
                 Weather currentWeather = weatherUtil.getCurrentWeather(adcode);
                 bundle.putBoolean("weatherModelStatus", true);
@@ -225,7 +225,8 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
      */
     private void initBroadcastReceiver() {
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("WeatherModel");
+        intentFilter.addAction(Actions.WeatherModel);
+        intentFilter.addAction(Actions.CurrentWeather);
 
         LocalReceiver localReceiver = new LocalReceiver();
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
@@ -233,12 +234,13 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
     }
 
     /**
-     * 广播接收者，主要用于显示或隐藏天气模块
+     * 广播接收者，主要用于显示、刷新或隐藏天气模块
      */
     private class LocalReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals("WeatherModel")) {
+            String action = intent.getAction();
+            if (action.equals(Actions.WeatherModel)) {
                 boolean status = intent.getBooleanExtra("status", false);
                 if (status) {
                     weatherModel.setDisplayState(true);
@@ -263,6 +265,11 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                     });
                 } else {
                     weatherModel.setDisplayState(false);
+                }
+            } else if (action.equals(Actions.CurrentWeather)) {
+                Weather currentWeather = (Weather) intent.getSerializableExtra("currentWeather");
+                if (currentWeather != null) {
+                    weatherModel.onRefresh(currentWeather);
                 }
             }
         }

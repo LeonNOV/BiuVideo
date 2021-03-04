@@ -1,24 +1,24 @@
 package com.leon.biuvideo.ui;
 
+import android.content.ComponentName;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 
-import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.values.apis.AmapAPIs;
-import com.leon.biuvideo.values.apis.AmapKey;
-import com.leon.biuvideo.values.apis.OtherAPIs;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.leon.biuvideo.service.WeatherService;
 
 import me.yokeyword.fragmentation.SupportActivity;
 import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
 public class MainActivity extends SupportActivity {
+
+    private WeatherConnection weatherConnection;
+    private Intent weatherServiceIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,32 +28,48 @@ public class MainActivity extends SupportActivity {
             loadRootFragment(R.id.fl_container, NavFragment.newInstance());
         }
 
-        // 获取当前省份、城市和adcode
-        /*new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // 获取公网IP
-                HttpUtils publicIPHttpUtils = new HttpUtils(OtherAPIs.souhuIP, null);
-                String data = publicIPHttpUtils.getData().split(" = ")[1].replaceAll(";", "");
-                JSONObject publicIPResponse = JSONObject.parseObject(data);
-                String cip = publicIPResponse.getString("cip");
+        // 与WeatherService建立连接
+        weatherConnection = new WeatherConnection();
+        weatherServiceIntent = new Intent(getApplicationContext(), WeatherService.class);
+        bindService(weatherServiceIntent, weatherConnection, Context.BIND_AUTO_CREATE);
+    }
 
-                Map<String, String> params = new HashMap<>();
-                params.put("key", AmapKey.amapKey);
-                params.put("ip", cip);
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
 
-                JSONObject IPInfoResponse = HttpUtils.getResponse(AmapAPIs.amapIp, params);
-                if (IPInfoResponse.getString("status").equals("1")) {
-                    SharedPreferences preference = getSharedPreferences("preference", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preference.edit();
-                    editor
-                            .putString("adcode", IPInfoResponse.getString("adcode"))
-                            .putString("province", IPInfoResponse.getString("province"))
-                            .putString("city", IPInfoResponse.getString("city"))
-                            .apply();
-                }
-            }
-        }).start();*/
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    public void unbind() {
+        // 解绑服务
+        unbindService(weatherConnection);
+
+        // 停止服务
+        stopService(weatherServiceIntent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        unbind();
+        super.onDestroy();
+    }
+
+    // 天气服务连接类
+    private static class WeatherConnection implements ServiceConnection {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            WeatherService.WeatherBinder weatherBinder = (WeatherService.WeatherBinder) service;
+            weatherBinder.init();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
     }
 
     @Override

@@ -37,6 +37,7 @@ import com.leon.biuvideo.utils.LocationUtil;
 import com.leon.biuvideo.utils.PermissionUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.ValueUtils;
+import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.FeaturesName;
 import com.leon.biuvideo.values.ThanksList;
 import com.leon.biuvideo.values.apis.AmapAPIs;
@@ -51,9 +52,6 @@ import java.util.Map;
  * 设置页面
  */
 public class SettingsFragment extends BaseSupportFragment implements View.OnClickListener {
-    public static final String IMG_ORIGINAL_MODEL = "imgOriginalModel";
-    public static final String WEATHER_MODEL = "weatherModel";
-
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch settings_fragment_imgOriginalModel_switch, settings_fragment_weatherModel_switch;
 
@@ -312,7 +310,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     private void sendBroadcast(boolean status) {
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
 
-        Intent weatherModelIntent = new Intent("WeatherModel");
+        Intent weatherModelIntent = new Intent(Actions.WeatherModel);
         weatherModelIntent.putExtra("status", status);
 
         localBroadcastManager.sendBroadcast(weatherModelIntent);
