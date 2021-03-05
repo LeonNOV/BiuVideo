@@ -84,8 +84,12 @@ dependencies {
     // EasySnackBar
     implementation 'com.sun.easysnackbar:easysnackbar:1.0.1'
 
+    // 单Activity框架
     implementation 'me.yokeyword:fragmentationx:1.0.1'
     implementation 'me.yokeyword:fragmentation-swipeback:1.0.1'
+
+    // Item侧滑控件
+    implementation "com.github.mcxtzhang:SwipeDelMenuLayout:V1.3.0"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

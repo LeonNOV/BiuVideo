@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.FavoriteUserAdapter;
-import com.leon.biuvideo.beans.Favorite;
+import com.leon.biuvideo.adapters.MyFollowsAdapter;
+import com.leon.biuvideo.beans.Follow;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
@@ -35,8 +35,8 @@ public class FavoriteUserFragment extends BaseFragment {
     private RecyclerView favorite_recyclerView;
 
     private FavoriteUserDatabaseUtils favoriteUserDatabaseUtils;
-    private FavoriteUserAdapter favoriteUserAdapter;
-    private List<Favorite> favorites;
+    private MyFollowsAdapter myFollowsAdapter;
+    private List<Follow> follows;
 
     @Override
     public int setLayout() {
@@ -88,7 +88,7 @@ public class FavoriteUserFragment extends BaseFragment {
             public void onClick(View v) {
                 easySnackBar.dismiss();
 
-                if (favorites != null && favorites.size() == 0) {
+                if (follows != null && follows.size() == 0) {
                     SimpleSnackBar.make(v, "现在还没有任何数据，试着刷新一下吧", SimpleSnackBar.LENGTH_SHORT).show();
                 }
             }
@@ -107,25 +107,25 @@ public class FavoriteUserFragment extends BaseFragment {
         SharedPreferences initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
         boolean isVisit = initValues.getBoolean("isVisit", true);
 
-        favorites = favoriteUserDatabaseUtils.queryFavorites(isVisit);
+        follows = favoriteUserDatabaseUtils.queryFavorites(isVisit);
 
-        if (favorites != null) {
-            favoriteUserAdapter = new FavoriteUserAdapter(favorites, context);
+        if (follows != null) {
+            myFollowsAdapter = new MyFollowsAdapter(follows, context);
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(context);
             favorite_recyclerView.setLayoutManager(layoutManager);
-            favorite_recyclerView.setAdapter(favoriteUserAdapter);
+            favorite_recyclerView.setAdapter(myFollowsAdapter);
         }
     }
 
     @Override
     public void onResume() {
-        if (favoriteUserAdapter != null) {
+        if (myFollowsAdapter != null) {
             SharedPreferences initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
             boolean isVisit = initValues.getBoolean("isVisit", true);
 
-            favorites = favoriteUserDatabaseUtils.queryFavorites(isVisit);
-            favoriteUserAdapter.refresh(favorites);
+            follows = favoriteUserDatabaseUtils.queryFavorites(isVisit);
+            myFollowsAdapter.refresh(follows);
         }
 
         super.onResume();

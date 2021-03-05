@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.leon.biuvideo.beans.Favorite;
+import com.leon.biuvideo.beans.Follow;
 import com.leon.biuvideo.values.Tables;
 
 import java.util.ArrayList;
@@ -67,38 +67,38 @@ public class FavoriteUserDatabaseUtils extends SQLiteHelper {
      *
      * @return  返回favorites
      */
-    public List<Favorite> queryFavorites(boolean isByVisit) {
+    public List<Follow> queryFavorites(boolean isByVisit) {
         Cursor cursor = sqLiteDatabase.query(tableName, null, "isDelete = ?", new String [] {"0"}, null, null, isByVisit ? "visit DESC" : "id DESC");
 
-        List<Favorite> favorites = new ArrayList<>();
+        List<Follow> follows = new ArrayList<>();
         while (cursor.moveToNext()) {
-            Favorite favorite = new Favorite();
+            Follow follow = new Follow();
 
-            favorite.mid = cursor.getLong(cursor.getColumnIndex("mid"));
-            favorite.name = cursor.getString(cursor.getColumnIndex("name"));
-            favorite.faceUrl = cursor.getString(cursor.getColumnIndex("faceUrl"));
-            favorite.desc = cursor.getString(cursor.getColumnIndex("desc"));
+            follow.mid = cursor.getLong(cursor.getColumnIndex("mid"));
+            follow.name = cursor.getString(cursor.getColumnIndex("name"));
+            follow.faceUrl = cursor.getString(cursor.getColumnIndex("faceUrl"));
+            follow.desc = cursor.getString(cursor.getColumnIndex("desc"));
 
-            favorites.add(favorite);
+            follows.add(follow);
         }
 
         cursor.close();
-        return favorites;
+        return follows;
     }
 
     /**
      * 将UP的数据导入favorite_up库中
      */
-    public boolean addFavorite(Favorite favorite) {
-        if (favorite.name.equals("账号已注销")) {
+    public boolean addFavorite(Follow follow) {
+        if (follow.name.equals("账号已注销")) {
             return false;
         }
 
         ContentValues values = new ContentValues();
-        values.put("mid", favorite.mid);
-        values.put("name", favorite.name);
-        values.put("faceUrl", favorite.faceUrl);
-        values.put("desc", favorite.desc);
+        values.put("mid", follow.mid);
+        values.put("name", follow.name);
+        values.put("faceUrl", follow.faceUrl);
+        values.put("desc", follow.desc);
 
         long insert = sqLiteDatabase.insert(tableName, null, values);
 
@@ -108,15 +108,15 @@ public class FavoriteUserDatabaseUtils extends SQLiteHelper {
     /**
      * 将用户的关注列表数据导入到本地
      */
-    public Map<String, Long> addFavorite(List<Favorite> favorites) {
+    public Map<String, Long> addFavorite(List<Follow> follows) {
         long successNum = 0;
         long failNum = 0;
-        for (Favorite favorite : favorites) {
+        for (Follow follow : follows) {
             ContentValues values = new ContentValues();
-            values.put("mid", favorite.mid);
-            values.put("name", favorite.name);
-            values.put("faceUrl", favorite.faceUrl);
-            values.put("desc", favorite.desc);
+            values.put("mid", follow.mid);
+            values.put("name", follow.name);
+            values.put("faceUrl", follow.faceUrl);
+            values.put("desc", follow.desc);
             values.put("isUser", 1);
 
             long insert;

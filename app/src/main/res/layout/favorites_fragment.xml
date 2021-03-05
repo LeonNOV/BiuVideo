@@ -10,7 +10,7 @@
         android:id="@+id/favorites_fragment_topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:topBarTitle="@string/favorites"
+        app:topBarTitle="@string/follows"
         app:rightSrc="@drawable/ic_more_vert" />
 
     <com.google.android.material.tabs.TabLayout

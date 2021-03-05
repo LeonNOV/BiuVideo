@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -58,7 +59,7 @@ public abstract class BaseSupportFragment extends SupportFragment {
      * @param <T>   继承View类的控件
      * @return  返回控件对象
      */
-    protected  <T extends View> T findView(int id) {
+    protected  <T extends View> T findView(@IdRes int id) {
         return view.findViewById(id);
     }
 }

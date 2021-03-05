@@ -27,6 +27,7 @@ import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.dialogs.WarnDialog;
 import com.leon.biuvideo.ui.home.FavoritesFragment;
+import com.leon.biuvideo.ui.home.MyFollowsFragment;
 import com.leon.biuvideo.ui.home.OrderFragment;
 import com.leon.biuvideo.ui.home.RecommendFragment;
 import com.leon.biuvideo.ui.home.SettingsFragment;
@@ -189,20 +190,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 ((NavFragment) getParentFragment()).startBrotherFragment(FavoritesFragment.newInstance());
                 break;
             case R.id.home_my_follows:
-                WarnDialog warnDialog = new WarnDialog(context, "Test", "TestTestTestTestTestTestTestTestTestTest");
-                warnDialog.setOnWarnActionListener(new WarnDialog.OnWarnActionListener() {
-                    @Override
-                    public void onConfirm() {
-                        warnDialog.dismiss();
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        warnDialog.dismiss();
-                    }
-                });
-                warnDialog.show();
-//                Toast.makeText(context, "点击了-我关注的人", Toast.LENGTH_SHORT).show();
+                ((NavFragment) getParentFragment()).startBrotherFragment(MyFollowsFragment.newInstance());
                 break;
             case R.id.home_my_history:
                 break;

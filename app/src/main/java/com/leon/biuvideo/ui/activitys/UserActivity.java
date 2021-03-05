@@ -20,7 +20,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.FragmentViewPagerAdapter;
-import com.leon.biuvideo.beans.Favorite;
+import com.leon.biuvideo.beans.Follow;
 import com.leon.biuvideo.beans.upMasterBean.UserInfo;
 import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
@@ -250,13 +250,13 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
                     up_imageView_favoriteIconState.setImageResource(R.drawable.favorite);
                     up_textView_favoriteStrState.setText("已关注");
 
-                    Favorite favorite = new Favorite();
-                    favorite.desc = userInfo.sign;
-                    favorite.mid = mid;
-                    favorite.faceUrl = userInfo.face;
-                    favorite.name = userInfo.name;
+                    Follow follow = new Follow();
+                    follow.desc = userInfo.sign;
+                    follow.mid = mid;
+                    follow.faceUrl = userInfo.face;
+                    follow.name = userInfo.name;
 
-                    boolean addState = favoriteUserDatabaseUtils.addFavorite(favorite);
+                    boolean addState = favoriteUserDatabaseUtils.addFavorite(follow);
 
                     SimpleSnackBar.make(v, addState ? "已加入至关注列表" : "关注失败", SimpleSnackBar.LENGTH_SHORT).show();
                 }

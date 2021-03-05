@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:orientation="vertical">
+
+    <com.leon.biuvideo.ui.views.SimpleTopBar
+        android:id="@+id/my_follow_topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:rightSrc="@drawable/ic_more_vert"
+        app:topBarTitle="@string/follows" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/my_follow_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/my_follow_item" />
+
+</LinearLayout>

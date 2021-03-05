@@ -9,8 +9,8 @@ import androidx.annotation.NonNull;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
+import com.leon.biuvideo.beans.Follow;
 import com.leon.biuvideo.beans.searchBean.BiliUser;
-import com.leon.biuvideo.beans.Favorite;
 import com.leon.biuvideo.ui.activitys.UserActivity;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -88,13 +88,13 @@ public class BiliUserAdapter extends BaseAdapter<BiliUser> {
 
                     SimpleSnackBar.make(v, "已将'" + biliUser.name + "'从关注列表中移除", SimpleSnackBar.LENGTH_SHORT).show();
                 } else {
-                    Favorite favorite = new Favorite();
-                    favorite.mid = biliUser.mid;
-                    favorite.name = biliUser.name;
-                    favorite.faceUrl = biliUser.face;
-                    favorite.desc = biliUser.usign;
+                    Follow follow = new Follow();
+                    follow.mid = biliUser.mid;
+                    follow.name = biliUser.name;
+                    follow.faceUrl = biliUser.face;
+                    follow.desc = biliUser.usign;
 
-                    favoriteUserDatabaseUtils.addFavorite(favorite);
+                    favoriteUserDatabaseUtils.addFavorite(follow);
                     holder.setText(R.id.search_bili_user_button_follow, "已关注");
 
                     SimpleSnackBar.make(v, "已将'" + biliUser.name + "'添加至关注列表", SimpleSnackBar.LENGTH_SHORT).show();

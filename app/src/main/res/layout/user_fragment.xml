@@ -296,7 +296,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:card_action="@string/checkMore"
-                    app:card_title="@string/favorites" />
+                    app:card_title="@string/follows" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="wrap_content"

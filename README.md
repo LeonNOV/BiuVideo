@@ -17,16 +17,20 @@
 
 ## 📘开发日志
 
+### 2020/03/05
+- 重构了`FavoriteUserAdapter`，增加了Item侧滑菜单功能
+  - `FavoriteUserAdapter`已更名为`MyFollowsAdapter`
+
 ### 2020/03/04
 - 完善了获取/设置adcode的功能，和其它一些功能
 - 加入了`SimpleThread`，该类只是用来执行单个线程，不能同时执行多个，示例:
   - ``` java
-        SimpleThread.executor(new Runnable() {
-            @Override
-            public void run() {
-                // Do someting...
-            }
-        });
+    SimpleThread.executor(new Runnable() {
+        @Override
+        public void run() {
+            // Do someting...
+        }
+    });
     ```
 - 新加入的`WeatherService`是留存在后台获取天气数据使用的，每半小时获取一次，获取数据的方式还待定
 - 完善了`WeatherService`,该服务每半小时获取一次天气信息,并通过广播发送天气数据

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.Favorite;
+import com.leon.biuvideo.beans.Follow;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
@@ -52,7 +52,7 @@ public class FollowParser {
      * @param pn    页码，从1开始
      * @return  返回Favorite集合
      */
-    public List<Favorite> parseFollow(int pn) {
+    public List<Follow> parseFollow(int pn) {
         Map<String, String> params = new HashMap<>();
         params.put("vmid", String.valueOf(vmid));
         params.put("pn", String.valueOf(pn));
@@ -67,27 +67,27 @@ public class FollowParser {
         JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {
-            List<Favorite> followings = new ArrayList<>();
+            List<Follow> followings = new ArrayList<>();
 
             JSONArray list = data.getJSONArray("list");
             for (Object temp : list) {
                 JSONObject jsonObject = (JSONObject) temp;
 
-                Favorite favorite = new Favorite();
+                Follow follow = new Follow();
 
                 //获取mid
-                favorite.mid = jsonObject.getLongValue("mid");
+                follow.mid = jsonObject.getLongValue("mid");
 
                 //获取name
-                favorite.name = jsonObject.getString("uname");
+                follow.name = jsonObject.getString("uname");
 
                 //获取简介
-                favorite.desc = jsonObject.getString("sign");
+                follow.desc = jsonObject.getString("sign");
 
                 //获取头像url
-                favorite.faceUrl = jsonObject.getString("face");
+                follow.faceUrl = jsonObject.getString("face");
 
-                followings.add(favorite);
+                followings.add(follow);
             }
 
             return followings;
@@ -152,11 +152,11 @@ public class FollowParser {
             long successNum = 0;
             long failNum = 0;
             while (currentTotal != total) {
-                List<Favorite> favorites = followParser.parseFollow(pn);
-                if (favorites != null || favorites.size() == 0) {
-                    currentTotal += favorites.size();
+                List<Follow> follows = followParser.parseFollow(pn);
+                if (follows != null || follows.size() == 0) {
+                    currentTotal += follows.size();
 
-                    Map<String, Long> stringLongMap = favoriteUserDatabaseUtils.addFavorite(favorites);
+                    Map<String, Long> stringLongMap = favoriteUserDatabaseUtils.addFavorite(follows);
                     successNum += stringLongMap.get("successNum");
                     failNum += stringLongMap.get("failNum");
 

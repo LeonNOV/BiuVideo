@@ -3,7 +3,7 @@ package com.leon.biuvideo.utils.dataBaseUtils;
 import android.content.Context;
 
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.Favorite;
+import com.leon.biuvideo.beans.Follow;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedRecordsForVideo;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
@@ -88,10 +88,10 @@ public class BackupLocalData {
 
         // 获取所有关注数据
         FavoriteUserDatabaseUtils favoriteUserDatabaseUtils = new FavoriteUserDatabaseUtils(context);
-        List<Favorite> favorites = favoriteUserDatabaseUtils.queryFavorites(false);
+        List<Follow> follows = favoriteUserDatabaseUtils.queryFavorites(false);
 
         try {
-            favoritesJSONObject.put("favorite", favorites);
+            favoritesJSONObject.put("favorite", follows);
         } finally {
             if (favoriteUserDatabaseUtils != null) {
                 favoriteUserDatabaseUtils.close();
