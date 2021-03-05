@@ -20,6 +20,10 @@
 ### 2020/03/05
 - 重构了`FavoriteUserAdapter`，增加了Item侧滑菜单功能
   - `FavoriteUserAdapter`已更名为`MyFollowsAdapter`
+- 重构了`HistoryFragment`，增加了动态根据资源类型创建Item的功能
+- 未解决问题
+  - **目前`PopularFragment`、`OrderFragment`、`FavoritesFragment`都存在第二次打开
+    后，出现`TabLayout`滑动距离变长，且所含的子`Fragment`不显示，以上问题都是在`TabLayout`和`ViewPager`配合使用中出现的**
 
 ### 2020/03/04
 - 完善了获取/设置adcode的功能，和其它一些功能

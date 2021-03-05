@@ -5,7 +5,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.MyFollowsAdapter;
+import com.leon.biuvideo.adapters.home.MyFollowsAdapter;
 import com.leon.biuvideo.beans.Follow;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyFollowsFragment extends BaseSupportFragment {
-    public static MyFollowsFragment newInstance() {
+    public static MyFollowsFragment getInstance() {
         return new MyFollowsFragment();
     }
 

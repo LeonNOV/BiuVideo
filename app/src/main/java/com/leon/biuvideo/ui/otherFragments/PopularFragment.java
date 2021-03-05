@@ -36,7 +36,7 @@ public class PopularFragment extends SupportFragment {
     private TabLayout popular_tabLayout;
     private ViewPager popular_viewPager;
 
-    public static PopularFragment newInstance() {
+    public static PopularFragment getInstance() {
         return new PopularFragment();
     }
 

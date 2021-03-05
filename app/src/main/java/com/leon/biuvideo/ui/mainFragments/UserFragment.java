@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.home.FavoritesFragment;
-import com.leon.biuvideo.ui.home.SettingsFragment;
 import com.leon.biuvideo.ui.user.UserInfoFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
 
@@ -45,7 +44,7 @@ public class UserFragment extends SupportFragment implements View.OnClickListene
         user_favorites_cardTitle.setOnClickActionListener(new CardTitle.OnClickActionListener() {
             @Override
             public void onClickAction() {
-                ((NavFragment) getParentFragment()).startBrotherFragment(FavoritesFragment.newInstance());
+                ((NavFragment) getParentFragment()).startBrotherFragment(FavoritesFragment.getInstance());
             }
         });
 

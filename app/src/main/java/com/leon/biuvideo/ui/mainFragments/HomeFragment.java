@@ -25,8 +25,8 @@ import com.leon.biuvideo.beans.Weather;
 import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.dialogs.WarnDialog;
 import com.leon.biuvideo.ui.home.FavoritesFragment;
+import com.leon.biuvideo.ui.home.HistoryFragment;
 import com.leon.biuvideo.ui.home.MyFollowsFragment;
 import com.leon.biuvideo.ui.home.OrderFragment;
 import com.leon.biuvideo.ui.home.RecommendFragment;
@@ -184,24 +184,25 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.home_my_orders:
-                ((NavFragment) getParentFragment()).startBrotherFragment(OrderFragment.newInstance());
+                ((NavFragment) getParentFragment()).startBrotherFragment(OrderFragment.getInstance());
                 break;
             case R.id.home_my_favorites:
-                ((NavFragment) getParentFragment()).startBrotherFragment(FavoritesFragment.newInstance());
+                ((NavFragment) getParentFragment()).startBrotherFragment(FavoritesFragment.getInstance());
                 break;
             case R.id.home_my_follows:
-                ((NavFragment) getParentFragment()).startBrotherFragment(MyFollowsFragment.newInstance());
+                ((NavFragment) getParentFragment()).startBrotherFragment(MyFollowsFragment.getInstance());
                 break;
             case R.id.home_my_history:
+                ((NavFragment) getParentFragment()).startBrotherFragment(HistoryFragment.getInstance());
                 break;
             case R.id.home_my_downloaded:
                 Toast.makeText(context, "点击了-下载记录", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.home_setting:
-                ((NavFragment) getParentFragment()).startBrotherFragment(SettingsFragment.newInstance());
+                ((NavFragment) getParentFragment()).startBrotherFragment(SettingsFragment.getInstance());
                 break;
             case R.id.home_popular:
-                ((NavFragment) getParentFragment()).startBrotherFragment(PopularFragment.newInstance());
+                ((NavFragment) getParentFragment()).startBrotherFragment(PopularFragment.getInstance());
                 break;
             default:
                 break;

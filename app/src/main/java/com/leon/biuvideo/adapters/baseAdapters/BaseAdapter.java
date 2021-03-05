@@ -21,7 +21,8 @@ import java.util.List;
  */
 public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
     private final List<T> beans;
-    private final Context context;
+    public final Context context;
+    public View view;
     protected ViewGroup parent;
 
     public BaseAdapter(List<T> beans, Context context) {
@@ -46,7 +47,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     @Override
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         this.parent = parent;
-        View view = LayoutInflater.from(context).inflate(getLayout(viewType), parent, false);
+        this.view = LayoutInflater.from(context).inflate(getLayout(viewType), parent, false);
         return new BaseViewHolder(view, context);
     }
 

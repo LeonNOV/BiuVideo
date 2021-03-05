@@ -65,7 +65,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     private PermissionUtil permissionUtil;
     private LocationUtil locationUtil;
 
-    public static SettingsFragment newInstance() {
+    public static SettingsFragment getInstance() {
         return new SettingsFragment();
     }
 

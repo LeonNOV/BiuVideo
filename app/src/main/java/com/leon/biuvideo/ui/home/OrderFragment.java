@@ -21,6 +21,7 @@ import com.leon.biuvideo.ui.home.orderFragments.OrderBangumiFragment;
 import com.leon.biuvideo.ui.home.orderFragments.OrderSeriesFragment;
 import com.leon.biuvideo.ui.home.orderFragments.OrderTagsFragment;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
+import com.leon.biuvideo.utils.Fuck;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +32,8 @@ import me.yokeyword.fragmentation.SupportFragment;
  * 订阅页面
  */
 public class OrderFragment extends SupportFragment {
-    private List<Fragment> viewPagerFragments;
 
-    public static SupportFragment newInstance() {
+    public static SupportFragment getInstance() {
         return new OrderFragment();
     }
 
@@ -51,6 +51,8 @@ public class OrderFragment extends SupportFragment {
     }
 
     private void initView(View view) {
+        TabLayout order_fragment_tabLayout = view.findViewById(R.id.order_fragment_tabLayout);
+        ViewPager order_fragment_viewPager = view.findViewById(R.id.order_fragment_viewPager);
         SimpleTopBar order_fragment_topBar = view.findViewById(R.id.order_fragment_topBar);
         order_fragment_topBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
@@ -64,10 +66,7 @@ public class OrderFragment extends SupportFragment {
             }
         });
 
-        TabLayout order_fragment_tabLayout = view.findViewById(R.id.order_fragment_tabLayout);
-        ViewPager order_fragment_viewPager = view.findViewById(R.id.order_fragment_viewPager);
-
-        viewPagerFragments = new ArrayList<>();
+        List<Fragment> viewPagerFragments = new ArrayList<>();
         viewPagerFragments.add(new OrderBangumiFragment());
         viewPagerFragments.add(new OrderSeriesFragment());
         viewPagerFragments.add(new OrderTagsFragment());
@@ -75,7 +74,7 @@ public class OrderFragment extends SupportFragment {
         String[] titles = {"番剧", "剧集", "标签"};
         order_fragment_viewPager.setAdapter(new TabLayoutViewPagerAdapter(_mActivity.getSupportFragmentManager(),titles, viewPagerFragments));
         order_fragment_viewPager.setCurrentItem(0);
-        order_fragment_viewPager.setOffscreenPageLimit(4);
+        order_fragment_viewPager.setOffscreenPageLimit(3);
         order_fragment_tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

@@ -2,8 +2,9 @@
     <string name="app_name">BiuVideo</string>
 
     <string name="search">搜索</string>
-    <string name="follows">收藏</string>
+    <string name="favorite">收藏</string>
     <string name="follows">关注</string>
+    <string name="history">历史记录</string>
     <string name="orders">订阅</string>
     <string name="settings">设置</string>
     <string name="userInfo">用户信息</string>

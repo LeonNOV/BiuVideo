@@ -1,4 +1,4 @@
-package com.leon.biuvideo.adapters;
+package com.leon.biuvideo.adapters.home;
 
 import android.content.Context;
 import android.view.View;
@@ -10,6 +10,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.Follow;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class MyFollowsAdapter extends BaseAdapter<Follow> {
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         Follow follow = follows.get(position);
+        Fuck.blue(position + "");
         holder
                 .setOnClickListener(R.id.my_follow_content, new View.OnClickListener() {
                     @Override

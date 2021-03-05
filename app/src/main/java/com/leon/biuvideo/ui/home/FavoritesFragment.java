@@ -29,7 +29,7 @@ import java.util.List;
 import me.yokeyword.fragmentation.SupportFragment;
 
 public class FavoritesFragment extends SupportFragment {
-    public static FavoritesFragment newInstance() {
+    public static FavoritesFragment getInstance() {
         return new FavoritesFragment();
     }
 

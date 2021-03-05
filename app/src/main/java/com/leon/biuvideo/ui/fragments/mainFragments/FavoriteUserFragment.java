@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.MyFollowsAdapter;
+import com.leon.biuvideo.adapters.home.MyFollowsAdapter;
 import com.leon.biuvideo.beans.Follow;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
