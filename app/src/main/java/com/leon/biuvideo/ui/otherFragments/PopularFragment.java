@@ -31,8 +31,6 @@ import me.yokeyword.fragmentation.SupportFragment;
  * 热门（综合热门、每周必看、入站必刷、排行榜）页面
  */
 public class PopularFragment extends SupportFragment {
-    private List<Fragment> viewPagerFragments;
-
     private TabLayout popular_tabLayout;
     private ViewPager popular_viewPager;
 
@@ -70,14 +68,14 @@ public class PopularFragment extends SupportFragment {
     }
 
     private void initValue() {
-        viewPagerFragments = new ArrayList<>();
+        List<Fragment> viewPagerFragments = new ArrayList<>();
         viewPagerFragments.add(new PopularHotListFragment());
         viewPagerFragments.add(new PopularWeeklyFragment());
         viewPagerFragments.add(new PopularHistoryFragment());
         viewPagerFragments.add(new PopularTopListFragment());
 
         String[] titles = {"综合热门", "每周必看", "入站必刷", "排行榜"};
-        popular_viewPager.setAdapter(new TabLayoutViewPagerAdapter(_mActivity.getSupportFragmentManager(),titles, viewPagerFragments));
+        popular_viewPager.setAdapter(new TabLayoutViewPagerAdapter(getChildFragmentManager(),titles, viewPagerFragments));
         popular_viewPager.setCurrentItem(0);
         popular_viewPager.setOffscreenPageLimit(4);
         popular_tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

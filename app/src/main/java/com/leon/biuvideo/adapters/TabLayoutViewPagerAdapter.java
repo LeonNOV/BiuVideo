@@ -9,6 +9,12 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import java.util.List;
 
+/**
+ * TabLayout与ViewPager配合使用所用到的ViewPager适配器
+ * <br/>
+ * 构造方法中的参数fm，需要确定ViewPager的子fragment是否为嵌套的fragment，如OrderFragment中ViewPager的子fragment就
+ * 是嵌套的fragment（其父容器为OrderFragment），所以就要使用getChildFragmentManager()来获取实例
+ */
 public class TabLayoutViewPagerAdapter extends FragmentPagerAdapter {
     private final String[] titles;
     private final List<Fragment> fragments;

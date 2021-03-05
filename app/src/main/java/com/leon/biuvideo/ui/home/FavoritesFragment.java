@@ -28,7 +28,11 @@ import java.util.List;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
+/**
+ * 收藏夹页面
+ */
 public class FavoritesFragment extends SupportFragment {
+
     public static FavoritesFragment getInstance() {
         return new FavoritesFragment();
     }
@@ -64,7 +68,7 @@ public class FavoritesFragment extends SupportFragment {
         viewPagerFragments.add(new FavoriteWatchLaterFragment());
 
         String[] titles = {"视频收藏夹", "专栏收藏夹", "相簿收藏夹", "稍后观看"};
-        favorites_fragment_viewPager.setAdapter(new TabLayoutViewPagerAdapter(_mActivity.getSupportFragmentManager(), titles, viewPagerFragments));
+        favorites_fragment_viewPager.setAdapter(new TabLayoutViewPagerAdapter(getChildFragmentManager(), titles, viewPagerFragments));
         favorites_fragment_viewPager.setCurrentItem(0);
         favorites_fragment_viewPager.setOffscreenPageLimit(4);
         favorites_fragment_tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

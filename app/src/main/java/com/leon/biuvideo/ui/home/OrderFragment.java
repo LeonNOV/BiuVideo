@@ -21,7 +21,6 @@ import com.leon.biuvideo.ui.home.orderFragments.OrderBangumiFragment;
 import com.leon.biuvideo.ui.home.orderFragments.OrderSeriesFragment;
 import com.leon.biuvideo.ui.home.orderFragments.OrderTagsFragment;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
-import com.leon.biuvideo.utils.Fuck;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +71,7 @@ public class OrderFragment extends SupportFragment {
         viewPagerFragments.add(new OrderTagsFragment());
 
         String[] titles = {"番剧", "剧集", "标签"};
-        order_fragment_viewPager.setAdapter(new TabLayoutViewPagerAdapter(_mActivity.getSupportFragmentManager(),titles, viewPagerFragments));
+        order_fragment_viewPager.setAdapter(new TabLayoutViewPagerAdapter(getChildFragmentManager(),titles, viewPagerFragments));
         order_fragment_viewPager.setCurrentItem(0);
         order_fragment_viewPager.setOffscreenPageLimit(3);
         order_fragment_tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
