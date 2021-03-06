@@ -52,7 +52,10 @@ public class BottomSheetTopBar extends LinearLayout {
     private OnCloseListener onCloseListener;
 
     public interface OnCloseListener {
-        void OnClose();
+        /**
+         * 关闭该弹窗
+         */
+        void onClose();
     }
 
     public void setOnCloseListener(OnCloseListener onCloseListener) {
@@ -110,7 +113,7 @@ public class BottomSheetTopBar extends LinearLayout {
             @Override
             public void onClick(View v) {
                 if (onCloseListener != null) {
-                    onCloseListener.OnClose();
+                    onCloseListener.onClose();
                 }
             }
         });

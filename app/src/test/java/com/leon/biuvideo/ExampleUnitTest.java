@@ -1,8 +1,6 @@
 package com.leon.biuvideo;
 
 import com.leon.biuvideo.utils.IDUtils;
-import com.leon.biuvideo.utils.SimpleThread;
-import com.leon.biuvideo.utils.ValueUtils;
 
 import org.junit.Test;
 

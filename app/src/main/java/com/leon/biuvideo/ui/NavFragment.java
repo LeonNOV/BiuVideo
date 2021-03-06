@@ -72,8 +72,9 @@ public class NavFragment extends SupportFragment implements BottomNavigationView
             case R.id.user:
                 showHideFragment(supportFragments[2]);
                 return true;
+            default:
+                return false;
         }
-        return false;
     }
 
     @Override

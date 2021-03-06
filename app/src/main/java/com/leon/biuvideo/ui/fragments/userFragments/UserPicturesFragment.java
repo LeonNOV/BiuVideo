@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.userFragmentAdapters.UserPictureAdapter;
 import com.leon.biuvideo.beans.upMasterBean.Picture;
-import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.ui.AbstractSimpleLoadDataThread;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
@@ -75,7 +75,7 @@ public class UserPicturesFragment extends BaseLazyFragment {
 
     @Override
     public void loadData() {
-        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+        AbstractSimpleLoadDataThread abstractSimpleLoadDataThread = new AbstractSimpleLoadDataThread() {
             @Override
             public void load() {
                 pictureParser = new PictureParser(context);
@@ -92,8 +92,8 @@ public class UserPicturesFragment extends BaseLazyFragment {
             }
         };
 
-        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
-        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadUserPictures");
+        SimpleThreadPool simpleThreadPool = abstractSimpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(abstractSimpleLoadDataThread), "loadUserPictures");
 
         handler = new Handler(new Handler.Callback() {
             @Override

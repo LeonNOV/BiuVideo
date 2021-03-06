@@ -31,7 +31,7 @@ import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.beans.musicBeans.MusicInfo;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
 import com.leon.biuvideo.service.MusicService;
-import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.ui.AbstractSimpleLoadDataThread;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.dialogs.MusicPlayListDialog;
 import com.leon.biuvideo.ui.dialogs.WarnDialog;
@@ -205,7 +205,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
     }
 
     private void loadData() {
-        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+        AbstractSimpleLoadDataThread abstractSimpleLoadDataThread = new AbstractSimpleLoadDataThread() {
             @Override
             public void load() {
                 //获取music信息
@@ -261,8 +261,8 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
             }
         };
 
-        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
-        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadMusicInfo");
+        SimpleThreadPool simpleThreadPool = abstractSimpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(abstractSimpleLoadDataThread), "loadMusicInfo");
 
         initDataHandler = new Handler(new Handler.Callback() {
             @Override

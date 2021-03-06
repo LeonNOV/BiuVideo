@@ -19,7 +19,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.PictureListAdapter;
 import com.leon.biuvideo.beans.upMasterBean.Picture;
 import com.leon.biuvideo.layoutManager.PictureGridLayoutManager;
-import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.ui.AbstractSimpleLoadDataThread;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.views.RoundPopupWindow;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
@@ -84,7 +84,7 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void loadData() {
-        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+        AbstractSimpleLoadDataThread abstractSimpleLoadDataThread = new AbstractSimpleLoadDataThread() {
             @Override
             public void load() {
                 Intent intent = getIntent();
@@ -102,8 +102,8 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
             }
         };
 
-        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
-        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadPictureInfo");
+        SimpleThreadPool simpleThreadPool = abstractSimpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(abstractSimpleLoadDataThread), "loadPictureInfo");
 
         handler = new Handler(new Handler.Callback() {
             @Override
@@ -174,7 +174,9 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
                                         for (String url : picture.pictures) {
                                             boolean b = ResourceUtils.savePicture(getApplicationContext(), url);
 
-                                            if (b) saveCounts++;
+                                            if (b) {
+                                                saveCounts++;
+                                            }
                                         }
 
                                         SimpleSnackBar.make(v, "保存成功" + saveCounts + "张,失败" + (picture.pictures.size() - saveCounts) + "张", SimpleSnackBar.LENGTH_SHORT).show();

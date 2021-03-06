@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,8 +24,9 @@ import com.leon.biuvideo.adapters.testAdapters.RvTestAdapter;
 import com.leon.biuvideo.beans.TestBeans.RvTestBean;
 import com.leon.biuvideo.beans.Weather;
 import com.leon.biuvideo.ui.NavFragment;
-import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.ui.AbstractSimpleLoadDataThread;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.home.DownloadedFragment;
 import com.leon.biuvideo.ui.home.FavoritesFragment;
 import com.leon.biuvideo.ui.home.HistoryFragment;
 import com.leon.biuvideo.ui.home.MyFollowsFragment;
@@ -38,7 +40,7 @@ import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.LocationUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
-import com.leon.biuvideo.utils.SimpleThread;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.WeatherUtil;
@@ -56,10 +58,12 @@ import java.util.Random;
 import java.util.concurrent.FutureTask;
 
 /**
- * 主页面
+ * @Author Leon
+ * @Time 2021/3/6
+ * @Desc 主页Fragment，第一显示的Fragment
  */
 public class HomeFragment extends BaseSupportFragment implements View.OnClickListener {
-    private RecyclerView home_recyclerView;
+    private RecyclerView homeRecyclerView;
     private LocationUtil locationUtil;
 
     private Handler handler;
@@ -89,7 +93,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
             }
         });
 
-        home_recyclerView = findView(R.id.home_recyclerView);
+        homeRecyclerView = findView(R.id.home_recyclerView);
 
         initValue();
     }
@@ -111,11 +115,11 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         }
 
         RvTestAdapter rvTestAdapter = new RvTestAdapter(rvTestBeanList, context);
-        home_recyclerView.setAdapter(rvTestAdapter);
+        homeRecyclerView.setAdapter(rvTestAdapter);
 
         weatherUtil = new WeatherUtil();
 
-        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+        AbstractSimpleLoadDataThread abstractSimpleLoadDataThread = new AbstractSimpleLoadDataThread() {
             @Override
             public void load() {
                 // 初始化天气模块
@@ -128,10 +132,11 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
             }
         };
 
-        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
-        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "initHomeValues");
+        SimpleThreadPool simpleThreadPool = abstractSimpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(abstractSimpleLoadDataThread), "initHomeValues");
 
-        handler = new Handler(new Handler.Callback() {
+        // 在主线程中更新天气信息
+        handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
             @Override
             public boolean handleMessage(@NonNull Message msg) {
                 Bundle data = msg.getData();
@@ -139,6 +144,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 Weather currentWeather = (Weather) data.getSerializable("currentWeather");
 
                 if (currentWeather != null && weatherModelStatus) {
+                    // 更新天气数据
                     weatherModel.onRefresh(currentWeather);
                 }
 
@@ -196,7 +202,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 ((NavFragment) getParentFragment()).startBrotherFragment(HistoryFragment.getInstance());
                 break;
             case R.id.home_my_downloaded:
-                Toast.makeText(context, "点击了-下载记录", Toast.LENGTH_SHORT).show();
+                ((NavFragment) getParentFragment()).startBrotherFragment(DownloadedFragment.getInstance());
                 break;
             case R.id.home_setting:
                 ((NavFragment) getParentFragment()).startBrotherFragment(SettingsFragment.getInstance());
@@ -246,7 +252,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                     // 根据当前位置，设置adcode
                     setAdcode(address);
 
-                    SimpleThread.executor(new Runnable() {
+                    SimpleSingleThreadPool.executor(new Runnable() {
                         @Override
                         public void run() {
                             getCurrentWeather();
@@ -270,16 +276,16 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
      * @param address   当前位置
      */
     private void setAdcode(String[] address) {
-        SimpleThread.executor(new Runnable() {
+        SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                Map<String, String> params = new HashMap<>();
+                Map<String, String> params = new HashMap<>(3);
                 params.put("key", AmapKey.amapKey);
                 params.put("address", address[0] + address[1] + address[2]);
                 params.put("city", address[2]);
 
                 JSONObject response = HttpUtils.getResponse(AmapAPIs.amapGeocode, params);
-                if (response.getString("status").equals("1")) {
+                if ("1".equals(response.getString("status"))) {
                     JSONObject geocode = (JSONObject) response.getJSONArray("geocodes").get(0);
                     String adcode = geocode.getString("adcode");
 
@@ -297,12 +303,12 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
     private static class WeatherModel implements HomeModel {
         private boolean isInitialized = false;
 
-        private LinearLayout home_model;
-        private ImageView weatherModel_weatherIcon;
-        private TextView weatherModel_weatherTem;
-        private TagView weatherModel_tagView;
-        private TextView weatherModel_location;
-        private TextView weatherModel_weatherStr;
+        private LinearLayout homeModel;
+        private ImageView weatherModelWeatherIcon;
+        private TextView weatherModelWeatherTem;
+        private TagView weatherModelTagView;
+        private TextView weatherModelLocation;
+        private TextView weatherModelWeatherStr;
         private Weather currentWeather;
 
         @Override
@@ -314,12 +320,12 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
 
             this.isInitialized = true;
 
-            home_model = view.findViewById(R.id.home_model);
-            weatherModel_weatherIcon = view.findViewById(R.id.weatherModel_weatherIcon);
-            weatherModel_weatherTem = view.findViewById(R.id.weatherModel_weatherTem);
-            weatherModel_weatherStr = view.findViewById(R.id.weatherModel_weatherStr);
-            weatherModel_tagView = view.findViewById(R.id.weatherModel_tagView);
-            weatherModel_location = view.findViewById(R.id.weatherModel_location);
+            homeModel = view.findViewById(R.id.home_model);
+            weatherModelWeatherIcon = view.findViewById(R.id.weatherModel_weatherIcon);
+            weatherModelWeatherTem = view.findViewById(R.id.weatherModel_weatherTem);
+            weatherModelWeatherStr = view.findViewById(R.id.weatherModel_weatherStr);
+            weatherModelTagView = view.findViewById(R.id.weatherModel_tagView);
+            weatherModelLocation = view.findViewById(R.id.weatherModel_location);
 
             setDisplayState(PreferenceUtils.getFeaturesStatus(context, FeaturesName.WEATHER_MODEL));
         }
@@ -328,16 +334,16 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         public void onRefresh(Serializable serializable) {
             currentWeather = (Weather) serializable;
 
-            weatherModel_weatherIcon.setImageResource(currentWeather.weatherIconId);
-            weatherModel_weatherTem.setText(currentWeather.temperature + "°");
-            weatherModel_weatherStr.setText(currentWeather.weather);
-            weatherModel_tagView.setRightValue(ValueUtils.generateTime(ValueUtils.formatStrTime(currentWeather.reporttime), "HH:mm", false));
-            weatherModel_location.setText(currentWeather.city);
+            weatherModelWeatherIcon.setImageResource(currentWeather.weatherIconId);
+            weatherModelWeatherTem.setText(currentWeather.temperature + "°");
+            weatherModelWeatherStr.setText(currentWeather.weather);
+            weatherModelTagView.setRightValue(ValueUtils.generateTime(ValueUtils.formatStrTime(currentWeather.reporttime), "HH:mm", false));
+            weatherModelLocation.setText(currentWeather.city);
         }
 
         @Override
         public void setDisplayState(boolean isDisplay) {
-            home_model.setVisibility(isDisplay ? View.VISIBLE : View.GONE);
+            homeModel.setVisibility(isDisplay ? View.VISIBLE : View.GONE);
         }
     }
 }

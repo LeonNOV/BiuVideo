@@ -7,4 +7,8 @@
     <item name="tag_view_value" type="id"/>
 
     <item name="card_title_action" type="id"/>
+
+    <item name="base_tab_layout_support_fragment_topBar" type="id"/>
+    <item name="base_tab_layout_support_fragment_tabLayout" type="id"/>
+    <item name="base_tab_layout_support_fragment_viewPager" type="id"/>
 </resources>

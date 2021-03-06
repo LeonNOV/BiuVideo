@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.userFragmentAdapters.UserArticleAdapter;
 import com.leon.biuvideo.beans.articleBeans.Article;
-import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.ui.AbstractSimpleLoadDataThread;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
@@ -75,7 +75,7 @@ public class UserArticlesFragment extends BaseLazyFragment {
 
     @Override
     public void loadData() {
-        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+        AbstractSimpleLoadDataThread abstractSimpleLoadDataThread = new AbstractSimpleLoadDataThread() {
             @Override
             public void load() {
                 articleParser = new ArticleParser(context, mid);
@@ -92,8 +92,8 @@ public class UserArticlesFragment extends BaseLazyFragment {
             }
         };
 
-        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
-        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadUserArticles");
+        SimpleThreadPool simpleThreadPool = abstractSimpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(abstractSimpleLoadDataThread), "loadUserArticles");
 
         handler = new Handler(new Handler.Callback() {
             @Override

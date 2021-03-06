@@ -17,6 +17,9 @@
 
 ## 📘开发日志
 
+### 2020/03/06
+- 优化了部分代码，还有部分未优化完成
+
 ### 2020/03/05
 - 重构了`FavoriteUserAdapter`，增加了Item侧滑菜单功能
   - `FavoriteUserAdapter`已更名为`MyFollowsAdapter`

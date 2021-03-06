@@ -29,14 +29,13 @@ import com.leon.biuvideo.beans.videoBean.play.Media;
 import com.leon.biuvideo.beans.videoBean.play.Play;
 import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
-import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.ui.AbstractSimpleLoadDataThread;
 import com.leon.biuvideo.ui.dialogs.AddVideoDialog;
 import com.leon.biuvideo.ui.dialogs.AnthologyDownloadDialog;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.dialogs.SingleVideoQualityDialog;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
-import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.PermissionUtil;
 import com.leon.biuvideo.utils.SimpleDownloadThread;
 import com.leon.biuvideo.utils.SimpleThreadPool;
@@ -165,7 +164,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
      * 开启一个线程来加载数据
      */
     private void loadData() {
-        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+        AbstractSimpleLoadDataThread abstractSimpleLoadDataThread = new AbstractSimpleLoadDataThread() {
             @Override
             public void load() {
                 //获取视频bvid
@@ -196,8 +195,8 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
             }
         };
 
-        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
-        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadVideoInfo");
+        SimpleThreadPool simpleThreadPool = abstractSimpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(abstractSimpleLoadDataThread), "loadVideoInfo");
 
         handler = new Handler(new Handler.Callback() {
             @Override

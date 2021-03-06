@@ -84,13 +84,18 @@ public class HeadZoomScrollView extends ScrollView {
                     }
                 }
                 int distance = (int) ((ev.getY() - y) * mScaleRatio);
-                if (distance < 0) break;//若往下滑动
+                if (distance < 0) {
+                    //若往下滑动
+                    break;
+                }
                 mScaling = true;
                 setZoom(distance);
                 return true;
             case MotionEvent.ACTION_UP:
                 mScaling = false;
                 replyView();
+                break;
+            default:
                 break;
         }
         return super.onTouchEvent(ev);
@@ -102,7 +107,9 @@ public class HeadZoomScrollView extends ScrollView {
     private void setZoom(float s) {
         float scaleTimes = (float) ((zoomViewWidth + s) / (zoomViewWidth * 1.0));
         // 如超过最大放大倍数，直接返回
-        if (scaleTimes > mScaleTimes) return;
+        if (scaleTimes > mScaleTimes) {
+            return;
+        }
 
         ViewGroup.LayoutParams layoutParams = zoomView.getLayoutParams();
         layoutParams.width = (int) (zoomViewWidth + s);
@@ -136,7 +143,9 @@ public class HeadZoomScrollView extends ScrollView {
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
-        if (onScrollListener != null) onScrollListener.onScroll(l, t, oldl, oldt);
+        if (onScrollListener != null) {
+            onScrollListener.onScroll(l, t, oldl, oldt);
+        }
     }
 
     private OnScrollListener onScrollListener;

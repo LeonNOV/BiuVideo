@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -22,10 +23,12 @@ public abstract class BaseSupportFragment extends SupportFragment {
     protected View view;
     protected BindingUtils bindingUtils;
 
-    /*
-     *  设置FragmentLayout
+    /**
+     * 设置LayoutId
+     *
+     * @return  LayoutId
      */
-    protected abstract int setLayout();
+    protected abstract @LayoutRes int setLayout();
 
     @Nullable
     @Override

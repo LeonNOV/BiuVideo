@@ -22,7 +22,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.FragmentViewPagerAdapter;
 import com.leon.biuvideo.beans.Follow;
 import com.leon.biuvideo.beans.upMasterBean.UserInfo;
-import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.ui.AbstractSimpleLoadDataThread;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.fragments.userFragments.UserArticlesFragment;
 import com.leon.biuvideo.ui.fragments.userFragments.UserAudiosFragment;
@@ -129,7 +129,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     //初始化数据
     private void loadData() {
-        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+        AbstractSimpleLoadDataThread abstractSimpleLoadDataThread = new AbstractSimpleLoadDataThread() {
             @Override
             public void load() {
                 //获取mid
@@ -160,8 +160,8 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
         };
 
-        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
-        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadUserInfo");
+        SimpleThreadPool simpleThreadPool = abstractSimpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(abstractSimpleLoadDataThread), "loadUserInfo");
 
         handler = new Handler(new Handler.Callback() {
             @Override

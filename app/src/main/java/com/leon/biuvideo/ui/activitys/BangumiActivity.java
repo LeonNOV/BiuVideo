@@ -27,7 +27,7 @@ import com.leon.biuvideo.beans.searchBean.bangumi.BangumiState;
 import com.leon.biuvideo.beans.searchBean.bangumi.Ep;
 import com.leon.biuvideo.beans.videoBean.play.Media;
 import com.leon.biuvideo.beans.videoBean.play.Play;
-import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.ui.AbstractSimpleLoadDataThread;
 import com.leon.biuvideo.ui.dialogs.AnthologyDownloadDialog;
 import com.leon.biuvideo.ui.dialogs.BangumiDetailDialog;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
@@ -129,7 +129,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void loadData() {
-        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+        AbstractSimpleLoadDataThread abstractSimpleLoadDataThread = new AbstractSimpleLoadDataThread() {
             @Override
             public void load() {
                 Intent intent = getIntent();
@@ -163,8 +163,8 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
             }
         };
 
-        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
-        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadBangumiInfo");
+        SimpleThreadPool simpleThreadPool = abstractSimpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(abstractSimpleLoadDataThread), "loadBangumiInfo");
 
         handler = new Handler(new Handler.Callback() {
             @Override

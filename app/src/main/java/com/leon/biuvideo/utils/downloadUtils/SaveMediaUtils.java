@@ -108,14 +108,16 @@ public class SaveMediaUtils {
                         e.printStackTrace();
                     } finally {
                         try {
-                            if (inputStream != null)
+                            if (inputStream != null) {
                                 inputStream.close();
+                            }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                         try {
-                            if (fileOutputStream != null)
+                            if (fileOutputStream != null) {
                                 fileOutputStream.close();
+                            }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -174,14 +176,16 @@ public class SaveMediaUtils {
                         e.printStackTrace();
                     } finally {
                         try {
-                            if (inputStream != null)
+                            if (inputStream != null) {
                                 inputStream.close();
+                            }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                         try {
-                            if (fileOutputStream != null)
+                            if (fileOutputStream != null) {
                                 fileOutputStream.close();
+                            }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

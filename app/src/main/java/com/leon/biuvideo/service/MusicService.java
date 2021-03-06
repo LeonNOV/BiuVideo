@@ -34,7 +34,9 @@ public class MusicService extends Service {
     private MediaPlayer mediaPlayer;
     private Timer timer;
 
-    //播放停止时的数值与长度之间的差值
+    /**
+     * 播放停止时的数值与长度之间的差值
+     */
     private final int differenceRange = 100;
 
     @Override
@@ -153,7 +155,9 @@ public class MusicService extends Service {
         }
     }
 
-    //播放音乐
+    /**
+     * 播放音乐
+     */
     private void playMusic(String url) {
         if (url.startsWith("https")) {
             url = "http" + url.substring(5);
@@ -163,7 +167,7 @@ public class MusicService extends Service {
         Uri uri = Uri.parse(url);
 
         //设置headers
-        Map<String, String> headers = new HashMap<>();
+        Map<String, String> headers = new HashMap<>(2);
         headers.put("Referer", "https://www.bilibili.com/");
         headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36 Edg/86.0.622.51");
 

@@ -11,7 +11,6 @@ import android.os.Message;
 import android.util.Base64;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -23,7 +22,7 @@ import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
-import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.ui.AbstractSimpleLoadDataThread;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.views.RoundPopupWindow;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
@@ -127,7 +126,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void loadData() {
-        SimpleLoadDataThread simpleLoadDataThread = new SimpleLoadDataThread() {
+        AbstractSimpleLoadDataThread abstractSimpleLoadDataThread = new AbstractSimpleLoadDataThread() {
             @Override
             public void load() {
                 Intent intent = getIntent();
@@ -147,8 +146,8 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
             }
         };
 
-        SimpleThreadPool simpleThreadPool = simpleLoadDataThread.getSimpleThreadPool();
-        simpleThreadPool.submit(new FutureTask<>(simpleLoadDataThread), "loadArticleInfo");
+        SimpleThreadPool simpleThreadPool = abstractSimpleLoadDataThread.getSimpleThreadPool();
+        simpleThreadPool.submit(new FutureTask<>(abstractSimpleLoadDataThread), "loadArticleInfo");
 
         handler = new Handler(new Handler.Callback() {
             @Override

@@ -36,6 +36,7 @@ import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.LocationUtil;
 import com.leon.biuvideo.utils.PermissionUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.FeaturesName;
@@ -49,18 +50,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 设置页面
+ * @Author Leon
+ * @Time 2021/3/6
+ * @Desc 设置页面
  */
 public class SettingsFragment extends BaseSupportFragment implements View.OnClickListener {
     @SuppressLint("UseSwitchCompatOrMaterialCode")
-    private Switch settings_fragment_imgOriginalModel_switch, settings_fragment_weatherModel_switch;
+    private Switch settingsFragmentImgOriginalModelSwitch, settingsFragmentWeatherModelSwitch;
 
     private BottomSheetDialog bottomSheetDialog;
-    private EditText set_location_keyword;
-    private TextView settings_fragment_location;
-    private RecyclerView set_location_result;
-    private TextView settings_fragment_cacheSize;
-    private SimpleTopBar settings_fragment_topBar;
+    private EditText setLocationKeyword;
+    private TextView settingsFragmentLocation;
+    private RecyclerView setLocationResult;
+    private TextView settingsFragmentCacheSize;
+    private SimpleTopBar settingsFragmentTopBar;
     private SharedPreferences preferences;
     private PermissionUtil permissionUtil;
     private LocationUtil locationUtil;
@@ -78,8 +81,8 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     protected void initView() {
         preferences = context.getSharedPreferences(PreferenceUtils.PREFERENCE_NAME, Context.MODE_PRIVATE);
 
-        settings_fragment_topBar = findView(R.id.settings_fragment_topBar);
-        settings_fragment_topBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
+        settingsFragmentTopBar = findView(R.id.settings_fragment_topBar);
+        settingsFragmentTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
                 backPressed();
@@ -100,27 +103,27 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 .setOnClickListener(R.id.settings_fragment_thanks_list, this)
                 .setOnClickListener(R.id.settings_fragment_feedback, this);
 
-        settings_fragment_imgOriginalModel_switch = findView(R.id.settings_fragment_imgOriginalModel_switch);
-        settings_fragment_imgOriginalModel_switch.setChecked(preferences.getBoolean("imgOriginalModel", false));
+        settingsFragmentImgOriginalModelSwitch = findView(R.id.settings_fragment_imgOriginalModel_switch);
+        settingsFragmentImgOriginalModelSwitch.setChecked(preferences.getBoolean("imgOriginalModel", false));
 
-        settings_fragment_weatherModel_switch = findView(R.id.settings_fragment_weatherModel_switch);
-        settings_fragment_weatherModel_switch.setChecked(preferences.getBoolean("weatherModel", false));
+        settingsFragmentWeatherModelSwitch = findView(R.id.settings_fragment_weatherModel_switch);
+        settingsFragmentWeatherModelSwitch.setChecked(preferences.getBoolean("weatherModel", false));
 
-        settings_fragment_location = findView(R.id.settings_fragment_location);
-        settings_fragment_location.setText(Arrays.toString(PreferenceUtils.getAddress(context)));
+        settingsFragmentLocation = findView(R.id.settings_fragment_location);
+        settingsFragmentLocation.setText(Arrays.toString(PreferenceUtils.getAddress(context)));
 
-        settings_fragment_cacheSize = findView(R.id.settings_fragment_cacheSize);
-        settings_fragment_cacheSize.setText(ValueUtils.sizeFormat(FileUtils.getCacheSize(context.getCacheDir()), true));
+        settingsFragmentCacheSize = findView(R.id.settings_fragment_cacheSize);
+        settingsFragmentCacheSize.setText(ValueUtils.sizeFormat(FileUtils.getCacheSize(context.getCacheDir()), true));
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.settings_fragment_imgOriginalMode:
-                setSwitchStatus(settings_fragment_imgOriginalModel_switch, FeaturesName.IMG_ORIGINAL_MODEL);
+                setSwitchStatus(settingsFragmentImgOriginalModelSwitch, FeaturesName.IMG_ORIGINAL_MODEL);
                 break;
             case R.id.settings_fragment_weatherModel:
-                setSwitchStatus(settings_fragment_weatherModel_switch, FeaturesName.WEATHER_MODEL);
+                setSwitchStatus(settingsFragmentWeatherModelSwitch, FeaturesName.WEATHER_MODEL);
                 break;
             case R.id.settings_fragment_cleanCache:
                 //创建弹窗
@@ -134,7 +137,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                         FileUtils.cleanCache(context.getCacheDir());
 
                         //刷新显示的缓存大小
-                        settings_fragment_cacheSize.setText("0B");
+                        settingsFragmentCacheSize.setText("0B");
                     }
 
                     @Override
@@ -254,20 +257,20 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
 
         ((BottomSheetTopBar) view.findViewById(R.id.set_location_topBar)).setOnCloseListener(new BottomSheetTopBar.OnCloseListener() {
             @Override
-            public void OnClose() {
+            public void onClose() {
                 bottomSheetDialog.dismiss();
             }
         });
 
-        set_location_keyword = view.findViewById(R.id.set_location_keyword);
-        set_location_result = view.findViewById(R.id.set_location_result);
+        setLocationKeyword = view.findViewById(R.id.set_location_keyword);
+        setLocationResult = view.findViewById(R.id.set_location_result);
 
         view.findViewById(R.id.set_location_search).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String keyword = set_location_keyword.getText().toString();
+                String keyword = setLocationKeyword.getText().toString();
                 // 获取结果
-                new Thread(new Runnable() {
+                SimpleSingleThreadPool.executor(new Runnable() {
                     @Override
                     public void run() {
                         Map<String, String> params = new HashMap<>();
@@ -275,7 +278,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                         params.put("keywords", keyword);
                         params.put("subdistrict", "0");
                         params.put("filter", PreferenceUtils.getAdcode(context));
-                        
+
                         JSONArray districts = HttpUtils.getResponse(AmapAPIs.amapDistrict, params).getJSONArray("districts");
                         Map<String, String> districtsMap = new HashMap<>();
                         for (Object district : districts) {
@@ -285,7 +288,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
 
                         Log.d("Fuck-blue", districtsMap.toString());
                     }
-                }).start();
+                });
 
                 // 搜索完之后隐藏软键盘
                 InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -337,7 +340,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 setAddress();
             } else {
                 SimpleSnackBar.make(view, "获取权限失败", SimpleSnackBar.LENGTH_SHORT).show();
-                settings_fragment_weatherModel_switch.setChecked(false);
+                settingsFragmentWeatherModelSwitch.setChecked(false);
                 PreferenceUtils.setFeaturesStatus(context, FeaturesName.WEATHER_MODEL, false);
                 sendBroadcast(false);
             }
@@ -352,6 +355,6 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     private void setAddress() {
         LocationUtil locationUtil = new LocationUtil(context);
         locationUtil.location();
-        settings_fragment_location.setText(Arrays.toString(locationUtil.getAddress()));
+        settingsFragmentLocation.setText(Arrays.toString(locationUtil.getAddress()));
     }
 }

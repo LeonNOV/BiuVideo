@@ -83,14 +83,10 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <com.leon.biuvideo.ui.views.CardTitle
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="@string/setting_set_location_choose_location"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            android:textStyle="bold" />
+            app:card_title="@string/setting_set_location_choose_location"/>
 
         <FrameLayout
             android:layout_width="match_parent"

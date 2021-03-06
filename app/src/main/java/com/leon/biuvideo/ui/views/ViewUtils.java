@@ -21,7 +21,8 @@ public class ViewUtils {
             case View.MeasureSpec.EXACTLY:
                 mSize = size;
                 break;
-
+            default:
+                mSize = defaultSize;
         }
         return mSize;
     }

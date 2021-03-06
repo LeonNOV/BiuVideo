@@ -70,28 +70,33 @@ public class ValueUtils {
                     if (gb > 1024) {
                         double tb = mb / 1024;
 
-                        if (withSuffix)
+                        if (withSuffix) {
                             return decimalFormat.format(tb) + "TB";
+                        }
 
                         return decimalFormat.format(tb);
                     }
 
-                    if (withSuffix)
+                    if (withSuffix) {
                         return decimalFormat.format(gb) + "GB";
+                    }
                     return decimalFormat.format(gb);
                 }
 
-                if (withSuffix)
+                if (withSuffix) {
                     return decimalFormat.format(mb) + "MB";
+                }
                 return decimalFormat.format(mb);
             }
 
-            if (withSuffix)
+            if (withSuffix) {
                 return decimalFormat.format(kb) + "KB";
+            }
             return decimalFormat.format(kb);
         } else {
-            if (withSuffix)
+            if (withSuffix) {
                 return size + "B";
+            }
             return String.valueOf(size);
         }
     }

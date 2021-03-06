@@ -3,13 +3,9 @@ package com.leon.biuvideo.ui.home;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -17,6 +13,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.TabLayoutViewPagerAdapter;
+import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.home.orderFragments.OrderBangumiFragment;
 import com.leon.biuvideo.ui.home.orderFragments.OrderSeriesFragment;
 import com.leon.biuvideo.ui.home.orderFragments.OrderTagsFragment;
@@ -28,9 +25,11 @@ import java.util.List;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
- * 订阅页面
+ * @Author Leon
+ * @Time 2021/3/6
+ * @Desc 订阅页面
  */
-public class OrderFragment extends SupportFragment {
+public class OrderFragment extends BaseSupportFragment {
 
     public static SupportFragment getInstance() {
         return new OrderFragment();
@@ -41,19 +40,15 @@ public class OrderFragment extends SupportFragment {
         super.onLazyInitView(savedInstanceState);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.order_fragment, container, false);
-        initView(view);
-        return view;
+    protected int setLayout() {
+        return R.layout.order_fragment;
     }
 
-    private void initView(View view) {
-        TabLayout order_fragment_tabLayout = view.findViewById(R.id.order_fragment_tabLayout);
-        ViewPager order_fragment_viewPager = view.findViewById(R.id.order_fragment_viewPager);
-        SimpleTopBar order_fragment_topBar = view.findViewById(R.id.order_fragment_topBar);
-        order_fragment_topBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
+    @Override
+    protected void initView() {
+        SimpleTopBar orderFragmentTopBar = findView(R.id.order_fragment_topBar);
+        orderFragmentTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
                 _mActivity.onBackPressed();
@@ -61,7 +56,6 @@ public class OrderFragment extends SupportFragment {
 
             @Override
             public void onRight() {
-                Toast.makeText(_mActivity, "more", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -71,10 +65,12 @@ public class OrderFragment extends SupportFragment {
         viewPagerFragments.add(new OrderTagsFragment());
 
         String[] titles = {"番剧", "剧集", "标签"};
-        order_fragment_viewPager.setAdapter(new TabLayoutViewPagerAdapter(getChildFragmentManager(),titles, viewPagerFragments));
-        order_fragment_viewPager.setCurrentItem(0);
-        order_fragment_viewPager.setOffscreenPageLimit(3);
-        order_fragment_tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        TabLayout orderFragmentTabLayout = findView(R.id.order_fragment_tabLayout);
+        ViewPager orderFragmentViewPager = findView(R.id.order_fragment_viewPager);
+        orderFragmentViewPager.setAdapter(new TabLayoutViewPagerAdapter(getChildFragmentManager(),titles, viewPagerFragments));
+        orderFragmentViewPager.setCurrentItem(0);
+        orderFragmentViewPager.setOffscreenPageLimit(3);
+        orderFragmentTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 View view = tab.getCustomView();
@@ -104,6 +100,6 @@ public class OrderFragment extends SupportFragment {
 
             }
         });
-        order_fragment_tabLayout.setupWithViewPager(order_fragment_viewPager, false);
+        orderFragmentTabLayout.setupWithViewPager(orderFragmentViewPager, false);
     }
 }

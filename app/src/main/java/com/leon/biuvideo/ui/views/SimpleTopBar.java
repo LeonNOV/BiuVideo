@@ -15,7 +15,6 @@ import com.leon.biuvideo.R;
 
 public class SimpleTopBar extends RelativeLayout implements View.OnClickListener {
     private final Context context;
-    private AttributeSet attrs;
 
     private RelativeLayout relativeLayout;
     private ImageView leftView;
@@ -28,24 +27,18 @@ public class SimpleTopBar extends RelativeLayout implements View.OnClickListener
     public SimpleTopBar(Context context) {
         super(context);
         this.context = context;
-
-        initView();
     }
 
     public SimpleTopBar(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
-        this.attrs = attrs;
-
-        initView();
+        this.initView(attrs);
     }
 
     public SimpleTopBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context = context;
-        this.attrs = attrs;
-
-        initView();
+        this.initView(attrs);
     }
 
     private OnSimpleTopBarListener onSimpleTopBarListener;
@@ -59,13 +52,50 @@ public class SimpleTopBar extends RelativeLayout implements View.OnClickListener
         this.onSimpleTopBarListener = onSimpleTopBarListener;
     }
 
-    private void initView() {
+    public void setLeftSrc(Drawable leftSrc) {
+        this.leftSrc = leftSrc;
+    }
+
+    public void setRightSrc(Drawable rightSrc) {
+        this.rightSrc = rightSrc;
+    }
+
+    public void setTopBarTitle(String topBarTitle) {
+        this.topBarTitle = topBarTitle;
+    }
+
+    private void initView(AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SimpleTopBar);
         this.topBarTitle = typedArray.getString(R.styleable.SimpleTopBar_topBarTitle);;
         this.leftSrc = typedArray.getDrawable(R.styleable.SimpleTopBar_leftSrc);
         this.rightSrc = typedArray.getDrawable(R.styleable.SimpleTopBar_rightSrc);
         typedArray.recycle();
 
+        if (leftSrc == null) {
+            this.leftSrc = getResources().getDrawable(R.drawable.ic_back);
+        }
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+
+        addParent();
+        addLeftView();
+
+        if (topBarTitle != null) {
+            addTitle();
+        }
+
+        if (rightSrc != null) {
+            addRightView();
+        }
+    }
+
+    /**
+     * 添加父布局
+     */
+    private void addParent() {
         relativeLayout = new RelativeLayout(context);
         relativeLayout.setGravity(RelativeLayout.CENTER_VERTICAL);
         relativeLayout.setPadding(30, 0, 30, 0);
@@ -79,20 +109,6 @@ public class SimpleTopBar extends RelativeLayout implements View.OnClickListener
         relativeLayoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
 
         relativeLayout.setLayoutParams(relativeLayoutParams);
-
-        if (topBarTitle != null) {
-            addTitle();
-        }
-
-        if (leftSrc == null) {
-            this.leftSrc = getResources().getDrawable(R.drawable.ic_back);
-        }
-
-        addLeftView();
-
-        if (rightSrc != null) {
-            addRightView();
-        }
     }
 
     /**
