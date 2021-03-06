@@ -2,21 +2,17 @@ package com.leon.biuvideo.ui.home;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.TabLayoutViewPagerAdapter;
+import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.home.favoriteFragments.FavoriteAlbumFragment;
 import com.leon.biuvideo.ui.home.favoriteFragments.FavoriteArticleFragment;
 import com.leon.biuvideo.ui.home.favoriteFragments.FavoriteVideoFragment;
@@ -26,31 +22,29 @@ import com.leon.biuvideo.ui.views.SimpleTopBar;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.yokeyword.fragmentation.SupportFragment;
-
 /**
- * 收藏夹页面
+ * @Author Leon
+ * @Time 2021/3/7
+ * @Desc 收藏夹页面
  */
-public class FavoritesFragment extends SupportFragment {
+public class FavoritesFragment extends BaseSupportFragment {
 
     public static FavoritesFragment getInstance() {
         return new FavoritesFragment();
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.favorites_fragment, container, false);
-        initView(view);
-        return view;
+    protected int setLayout() {
+        return R.layout.favorites_fragment;
     }
 
-    private void initView(View view) {
+    @Override
+    protected void initView() {
         SimpleTopBar favorites_fragment_topBar = view.findViewById(R.id.favorites_fragment_topBar);
         favorites_fragment_topBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
-                _mActivity.onBackPressed();
+                backPressed();
             }
 
             @Override
@@ -102,6 +96,5 @@ public class FavoritesFragment extends SupportFragment {
             }
         });
         favorites_fragment_tabLayout.setupWithViewPager(favorites_fragment_viewPager, false);
-
     }
 }

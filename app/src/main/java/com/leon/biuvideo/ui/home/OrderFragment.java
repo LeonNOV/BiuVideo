@@ -51,7 +51,7 @@ public class OrderFragment extends BaseSupportFragment {
         orderFragmentTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
-                _mActivity.onBackPressed();
+                backPressed();
             }
 
             @Override

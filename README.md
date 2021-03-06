@@ -19,6 +19,8 @@
 
 ### 2020/03/06
 - 优化了部分代码，还有部分未优化完成
+- 完善了其他部分代码
+- 加入了`DownloadedFragment`，该Fragment还未完善
 
 ### 2020/03/05
 - 重构了`FavoriteUserAdapter`，增加了Item侧滑菜单功能

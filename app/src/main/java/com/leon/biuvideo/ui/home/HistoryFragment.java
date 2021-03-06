@@ -14,7 +14,9 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * 历史记录页面
+ * @Author Leon
+ * @Time 2021/3/7
+ * @Desc 历史记录页面
  */
 public class HistoryFragment extends BaseSupportFragment {
     public static HistoryFragment getInstance() {
@@ -34,7 +36,7 @@ public class HistoryFragment extends BaseSupportFragment {
         history_topBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
-                _mActivity.onBackPressed();
+                backPressed();
             }
 
             @Override

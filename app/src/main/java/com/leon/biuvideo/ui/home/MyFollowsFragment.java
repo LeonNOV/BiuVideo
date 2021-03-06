@@ -13,6 +13,11 @@ import com.leon.biuvideo.ui.views.SimpleTopBar;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @Author Leon
+ * @Time 2021/3/7
+ * @Desc 关注数据界面
+ */
 public class MyFollowsFragment extends BaseSupportFragment {
     public static MyFollowsFragment getInstance() {
         return new MyFollowsFragment();
@@ -29,7 +34,7 @@ public class MyFollowsFragment extends BaseSupportFragment {
         my_follow_topBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
-                _mActivity.onBackPressed();
+                backPressed();
             }
 
             @Override

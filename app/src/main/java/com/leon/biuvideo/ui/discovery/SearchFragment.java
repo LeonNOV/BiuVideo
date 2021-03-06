@@ -2,28 +2,29 @@ package com.leon.biuvideo.ui.discovery;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.SearchHistoryAdapter;
+import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import me.yokeyword.fragmentation.SupportFragment;
-
-public class SearchFragment extends SupportFragment implements View.OnClickListener {
+/**
+ * @Author Leon
+ * @Time 2021/3/7
+ * @Desc 搜索页面
+ */
+public class SearchFragment extends BaseSupportFragment implements View.OnClickListener {
     private static final String ARG_MSG = "arg_msg";
 
     private SimpleTopBar search_fragment_topBar;
@@ -45,20 +46,18 @@ public class SearchFragment extends SupportFragment implements View.OnClickListe
         this.context = getContext();
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.search_fragment, container, false);
-        initView(view);
-        return view;
+    protected int setLayout() {
+        return R.layout.search_fragment;
     }
 
-    private void initView(View view) {
+    @Override
+    protected void initView() {
         search_fragment_topBar = view.findViewById(R.id.search_fragment_topBar);
         search_fragment_topBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
-                _mActivity.onBackPressed();
+                backPressed();
             }
 
             @Override
