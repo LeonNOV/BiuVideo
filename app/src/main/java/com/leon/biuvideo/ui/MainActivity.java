@@ -9,6 +9,7 @@ import android.os.IBinder;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.service.WeatherService;
+import com.leon.biuvideo.utils.PreferenceUtils;
 
 import me.yokeyword.fragmentation.SupportActivity;
 import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator;
@@ -32,6 +33,9 @@ public class MainActivity extends SupportActivity {
         weatherConnection = new WeatherConnection();
         weatherServiceIntent = new Intent(getApplicationContext(), WeatherService.class);
         bindService(weatherServiceIntent, weatherConnection, Context.BIND_AUTO_CREATE);
+
+        // 初始化PreferenceUtil类中的PREFERENCE
+        PreferenceUtils.PREFERENCE = getSharedPreferences(PreferenceUtils.PREFERENCE_NAME, Context.MODE_PRIVATE);
     }
 
     @Override
@@ -58,7 +62,11 @@ public class MainActivity extends SupportActivity {
         super.onDestroy();
     }
 
-    // 天气服务连接类
+    /**
+     * @Author Leon
+     * @Time 2021/3/1
+     * @Desc 天气服务连接类
+     */
     private static class WeatherConnection implements ServiceConnection {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {

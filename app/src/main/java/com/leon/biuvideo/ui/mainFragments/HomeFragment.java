@@ -58,7 +58,7 @@ import java.util.concurrent.FutureTask;
 
 /**
  * @Author Leon
- * @Time 2021/3/6
+ * @Time 2021/3/1
  * @Desc 主页Fragment，第一显示的Fragment
  */
 public class HomeFragment extends BaseSupportFragment implements View.OnClickListener {
@@ -163,13 +163,13 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         Bundle bundle = new Bundle();
 
         // 检查天气模块是否设置为开启状态
-        boolean weatherModelStatus = PreferenceUtils.getFeaturesStatus(context, FeaturesName.WEATHER_MODEL);
+        boolean weatherModelStatus = PreferenceUtils.getFeaturesStatus(FeaturesName.WEATHER_MODEL);
         if (weatherModelStatus) {
-            String adcode = PreferenceUtils.getAdcode(context);
+            String adcode = PreferenceUtils.getAdcode();
 
             if (adcode == null) {
                 // 关闭天气模块的开关
-                PreferenceUtils.setFeaturesStatus(context, FeaturesName.WEATHER_MODEL, false);
+                PreferenceUtils.setFeaturesStatus(FeaturesName.WEATHER_MODEL, false);
                 bundle.putBoolean("weatherModelStatus", false);
                 bundle.putSerializable("currentWeather", null);
             } else {
@@ -248,7 +248,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
 
                     locationUtil.location();
                     String[] address = locationUtil.getAddress();
-                    PreferenceUtils.setAddress(context, address);
+                    PreferenceUtils.setAddress(address);
 
                     // 根据当前位置，设置adcode
                     setAdcode(address);
@@ -289,7 +289,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                         JSONObject geocode = (JSONObject) response.getJSONArray("geocodes").get(0);
                         String adcode = geocode.getString("adcode");
 
-                        PreferenceUtils.setAdcode(context, adcode);
+                        PreferenceUtils.setAdcode(adcode);
                     } else {
                         SimpleSnackBar.make(view, "初始化位置失败", SimpleSnackBar.LENGTH_SHORT).show();
                     }
@@ -330,7 +330,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
             weatherModelTagView = view.findViewById(R.id.weatherModel_tagView);
             weatherModelLocation = view.findViewById(R.id.weatherModel_location);
 
-            setDisplayState(PreferenceUtils.getFeaturesStatus(context, FeaturesName.WEATHER_MODEL));
+            setDisplayState(PreferenceUtils.getFeaturesStatus(FeaturesName.WEATHER_MODEL));
         }
 
         @Override

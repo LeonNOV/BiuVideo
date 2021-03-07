@@ -12,6 +12,11 @@ import com.leon.biuvideo.R;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
+/**
+ * @Author Leon
+ * @Time 2021/3/1
+ * @Desc 订阅页面-剧集订阅
+ */
 public class OrderSeriesFragment extends SupportFragment {
     @Nullable
     @Override

@@ -50,11 +50,11 @@ public class WeatherService extends Service {
                 public void run() {
 
                     // 如果天气模块已开启就获取当前天气信息
-                    if (PreferenceUtils.getFeaturesStatus(context, FeaturesName.WEATHER_MODEL)) {
+                    if (PreferenceUtils.getFeaturesStatus(FeaturesName.WEATHER_MODEL)) {
                         // 检查定位服务是否已授予
                         if (PermissionUtil.verifyPermission(context, PermissionUtil.Permission.LOCATION)) {
                             // 获取当前天气
-                            Weather currentWeather = weatherUtil.getCurrentWeather(PreferenceUtils.getAdcode(context));
+                            Weather currentWeather = weatherUtil.getCurrentWeather(PreferenceUtils.getAdcode());
                             // 发送广播，通知已更新天气数据
                             sendBroadcast(currentWeather);
                         }

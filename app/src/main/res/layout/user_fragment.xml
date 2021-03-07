@@ -5,6 +5,7 @@
     android:id="@+id/head_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg"
     android:orientation="vertical">
 
     <com.leon.biuvideo.ui.views.HeadZoomScrollView
@@ -23,7 +24,7 @@
                 <ImageView
                     android:id="@+id/user_banner"
                     android:layout_width="match_parent"
-                    android:layout_height="170dp"
+                    android:layout_height="match_parent"
                     android:contentDescription="@string/description"
                     android:scaleType="centerCrop"
                     android:src="@drawable/user_default_banner" />
@@ -37,7 +38,7 @@
                         android:id="@+id/user_face"
                         android:layout_width="86dp"
                         android:layout_height="86dp"
-                        android:src="@drawable/icon_no_login"
+                        android:src="@drawable/not_login"
                         app:civ_border_color="@color/gray"
                         app:civ_border_width="1dp"
                         app:civ_circle_background_color="@color/BiliBili_pink" />
@@ -58,7 +59,6 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bottom_sheet_background"
                 android:orientation="vertical">
 
                 <LinearLayout

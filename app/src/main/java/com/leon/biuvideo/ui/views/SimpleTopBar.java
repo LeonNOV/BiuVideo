@@ -35,6 +35,7 @@ public class SimpleTopBar extends RelativeLayout implements View.OnClickListener
     private String topBarTitle;
     private Typeface topBarTitleStyle = Typeface.DEFAULT_BOLD;
     private int topBarTitleGravity = Gravity.CENTER_HORIZONTAL;
+    private TextView topBarTitleView;
 
     public SimpleTopBar(Context context) {
         super(context);
@@ -133,7 +134,7 @@ public class SimpleTopBar extends RelativeLayout implements View.OnClickListener
      * 添加标题
      */
     private void addTitle() {
-        TextView topBarTitleView = new TextView(context);
+        topBarTitleView = new TextView(context);
         topBarTitleView.setText(topBarTitle);
         topBarTitleView.setTypeface(Typeface.DEFAULT_BOLD);
         topBarTitleView.setTextColor(Color.BLACK);

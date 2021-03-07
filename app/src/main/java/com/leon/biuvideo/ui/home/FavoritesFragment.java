@@ -1,9 +1,5 @@
 package com.leon.biuvideo.ui.home;
 
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -25,7 +21,7 @@ import java.util.List;
 
 /**
  * @Author Leon
- * @Time 2021/3/7
+ * @Time 2021/3/1
  * @Desc 收藏夹页面
  */
 public class FavoritesFragment extends BaseSupportFragment {

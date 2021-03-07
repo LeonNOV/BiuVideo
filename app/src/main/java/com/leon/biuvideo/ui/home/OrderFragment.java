@@ -1,10 +1,6 @@
 package com.leon.biuvideo.ui.home;
 
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -27,7 +23,7 @@ import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * @Author Leon
- * @Time 2021/3/6
+ * @Time 2021/3/1
  * @Desc 订阅页面
  */
 public class OrderFragment extends BaseSupportFragment {

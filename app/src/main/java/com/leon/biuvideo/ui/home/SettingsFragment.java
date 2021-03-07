@@ -51,7 +51,7 @@ import java.util.Map;
 
 /**
  * @Author Leon
- * @Time 2021/3/6
+ * @Time 2021/3/1
  * @Desc 设置页面
  */
 public class SettingsFragment extends BaseSupportFragment implements View.OnClickListener {
@@ -110,7 +110,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
         settingsFragmentWeatherModelSwitch.setChecked(preferences.getBoolean("weatherModel", false));
 
         settingsFragmentLocation = findView(R.id.settings_fragment_location);
-        settingsFragmentLocation.setText(Arrays.toString(PreferenceUtils.getAddress(context)));
+        settingsFragmentLocation.setText(Arrays.toString(PreferenceUtils.getAddress()));
 
         settingsFragmentCacheSize = findView(R.id.settings_fragment_cacheSize);
         settingsFragmentCacheSize.setText(ValueUtils.sizeFormat(FileUtils.getCacheSize(context.getCacheDir()), true));
@@ -193,7 +193,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
             // 如果定位权限已授予且是要打开天气模块，就不显示弹窗
             if (PermissionUtil.verifyPermission(context, PermissionUtil.Permission.LOCATION) && featuresName == FeaturesName.WEATHER_MODEL) {
                 mSwitch.setChecked(true);
-                PreferenceUtils.setFeaturesStatus(context, featuresName, true);
+                PreferenceUtils.setFeaturesStatus(featuresName, true);
                 sendBroadcast(true);
                 return;
             }
@@ -213,7 +213,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 @Override
                 public void onConfirm() {
                     mSwitch.setChecked(true);
-                    PreferenceUtils.setFeaturesStatus(context, featuresName, true);
+                    PreferenceUtils.setFeaturesStatus(featuresName, true);
                     warnDialog.dismiss();
 
                     if (featuresName == FeaturesName.WEATHER_MODEL) {
@@ -238,7 +238,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
 
         } else {
             mSwitch.setChecked(false);
-            PreferenceUtils.setFeaturesStatus(context, featuresName, false);
+            PreferenceUtils.setFeaturesStatus(featuresName, false);
 
             if (featuresName == FeaturesName.WEATHER_MODEL) {
                 sendBroadcast(false);
@@ -277,7 +277,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                         params.put("key", AmapKey.amapKey);
                         params.put("keywords", keyword);
                         params.put("subdistrict", "0");
-                        params.put("filter", PreferenceUtils.getAdcode(context));
+                        params.put("filter", PreferenceUtils.getAdcode());
 
                         JSONArray districts = HttpUtils.getResponse(AmapAPIs.amapDistrict, params).getJSONArray("districts");
                         Map<String, String> districtsMap = new HashMap<>();
@@ -341,7 +341,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
             } else {
                 SimpleSnackBar.make(view, "获取权限失败", SimpleSnackBar.LENGTH_SHORT).show();
                 settingsFragmentWeatherModelSwitch.setChecked(false);
-                PreferenceUtils.setFeaturesStatus(context, FeaturesName.WEATHER_MODEL, false);
+                PreferenceUtils.setFeaturesStatus(FeaturesName.WEATHER_MODEL, false);
                 sendBroadcast(false);
             }
         }

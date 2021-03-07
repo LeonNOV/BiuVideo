@@ -21,6 +21,8 @@
 - 加入了`DownloadManagerFragment`，下载管理页面；加入了`LoginFragment`，登录页面
 - 修改了部分代码
 - 修改了`SimpleTopBar`
+- 加入了`LoginFragment`登录页面
+- 完善了部分类的注释，并完善了其他代码
 
 ### 2020/03/06
 - 优化了部分代码，还有部分未优化完成

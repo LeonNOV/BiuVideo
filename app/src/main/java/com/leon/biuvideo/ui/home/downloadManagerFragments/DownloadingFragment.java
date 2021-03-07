@@ -6,7 +6,7 @@ import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 /**
  * @Author Leon
  * @Time 2021/3/7
- * @Desc 下载中的资源页面
+ * @Desc 下载管理页面-下载中的资源
  */
 public class DownloadingFragment extends BaseSupportFragment {
     @Override

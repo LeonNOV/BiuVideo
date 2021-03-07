@@ -12,6 +12,11 @@ import com.leon.biuvideo.R;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
+/**
+ * @Author Leon
+ * @Time 2021/3/1
+ * @Desc 热门排行榜页面-每周必看
+ */
 public class PopularWeeklyFragment extends SupportFragment {
     @Nullable
     @Override

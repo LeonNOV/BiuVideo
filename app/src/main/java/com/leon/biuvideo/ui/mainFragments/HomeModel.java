@@ -5,6 +5,11 @@ import android.view.View;
 
 import java.io.Serializable;
 
+/**
+ * @Author Leon
+ * @Time 2021/3/3
+ * @Desc 主页模块接口
+ */
 public interface HomeModel {
     /**
      * 初始化模块

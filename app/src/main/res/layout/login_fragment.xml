@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <com.leon.biuvideo.ui.views.SimpleTopBar
         android:id="@+id/login_topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:topBarTitleStyle="normal"
+        app:rightSrc="@drawable/ic_refresh"
+        app:topBarTitle="@string/login_account"
         app:topBarTitleGravity="center"
-        app:rightSrc="@drawable/ic_refresh"/>
+        app:topBarTitleStyle="normal" />
 
     <FrameLayout
         android:layout_width="match_parent"
