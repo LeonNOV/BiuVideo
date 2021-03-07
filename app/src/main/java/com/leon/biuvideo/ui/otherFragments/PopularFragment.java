@@ -1,10 +1,5 @@
 package com.leon.biuvideo.ui.otherFragments;
 
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.view.View;
-import android.widget.TextView;
-
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -12,11 +7,12 @@ import com.google.android.material.tabs.TabLayout;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.TabLayoutViewPagerAdapter;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.discovery.popularFragments.PopularHistoryFragment;
-import com.leon.biuvideo.ui.discovery.popularFragments.PopularHotListFragment;
-import com.leon.biuvideo.ui.discovery.popularFragments.PopularTopListFragment;
-import com.leon.biuvideo.ui.discovery.popularFragments.PopularWeeklyFragment;
+import com.leon.biuvideo.ui.otherFragments.popularFragments.PopularHistoryFragment;
+import com.leon.biuvideo.ui.otherFragments.popularFragments.PopularHotListFragment;
+import com.leon.biuvideo.ui.otherFragments.popularFragments.PopularTopListFragment;
+import com.leon.biuvideo.ui.otherFragments.popularFragments.PopularWeeklyFragment;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
+import com.leon.biuvideo.utils.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,26 +64,12 @@ public class PopularFragment extends BaseSupportFragment {
         popularTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                View view = tab.getCustomView();
-                if (view == null) {
-                    tab.setCustomView(R.layout.tab_layout_title);
-                }
-
-                TextView textView = tab.getCustomView().findViewById(android.R.id.text1);
-                textView.setTypeface(Typeface.DEFAULT_BOLD);
-                textView.setTextColor(Color.BLACK);
+                ViewUtils.changeTabTitle(tab, true);
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                View view = tab.getCustomView();
-                if (view == null) {
-                    tab.setCustomView(R.layout.tab_layout_title);
-                }
-
-                TextView textView = tab.getCustomView().findViewById(android.R.id.text1);
-                textView.setTypeface(Typeface.DEFAULT);
-                textView.setTextColor(Color.GRAY);
+                ViewUtils.changeTabTitle(tab, false);
             }
 
             @Override

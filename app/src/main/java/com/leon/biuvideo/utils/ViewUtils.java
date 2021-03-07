@@ -1,8 +1,11 @@
 package com.leon.biuvideo.utils;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.material.tabs.TabLayout;
 import com.leon.biuvideo.R;
 
 import java.util.Map;
@@ -34,6 +37,28 @@ public class ViewUtils {
                 textView.setTextSize(15);
                 textView.setTypeface(typeface_normal);
             }
+        }
+    }
+
+    public static void changeTabTitle(TabLayout.Tab tab, boolean isSelected) {
+        if (isSelected) {
+            View view = tab.getCustomView();
+            if (view == null) {
+                tab.setCustomView(R.layout.tab_layout_title);
+            }
+
+            TextView textView = tab.getCustomView().findViewById(android.R.id.text1);
+            textView.setTypeface(Typeface.DEFAULT_BOLD);
+            textView.setTextColor(Color.BLACK);
+        } else {
+            View view = tab.getCustomView();
+            if (view == null) {
+                tab.setCustomView(R.layout.tab_layout_title);
+            }
+
+            TextView textView = tab.getCustomView().findViewById(android.R.id.text1);
+            textView.setTypeface(Typeface.DEFAULT);
+            textView.setTextColor(Color.GRAY);
         }
     }
 }

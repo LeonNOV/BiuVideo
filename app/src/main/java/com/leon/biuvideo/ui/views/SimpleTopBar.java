@@ -5,11 +5,15 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import com.leon.biuvideo.R;
 
@@ -29,6 +33,8 @@ public class SimpleTopBar extends RelativeLayout implements View.OnClickListener
     private Drawable leftSrc;
     private Drawable rightSrc;
     private String topBarTitle;
+    private Typeface topBarTitleStyle = Typeface.DEFAULT_BOLD;
+    private int topBarTitleGravity = Gravity.CENTER_HORIZONTAL;
 
     public SimpleTopBar(Context context) {
         super(context);
@@ -69,6 +75,8 @@ public class SimpleTopBar extends RelativeLayout implements View.OnClickListener
         this.topBarTitle = typedArray.getString(R.styleable.SimpleTopBar_topBarTitle);;
         this.leftSrc = typedArray.getDrawable(R.styleable.SimpleTopBar_leftSrc);
         this.rightSrc = typedArray.getDrawable(R.styleable.SimpleTopBar_rightSrc);
+        this.topBarTitleStyle = typedArray.getInt(R.styleable.SimpleTopBar_topBarTitleStyle, 1) == 0 ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT;
+        this.topBarTitleGravity = typedArray.getInt(R.styleable.SimpleTopBar_topBarTitleGravity, Gravity.START);
         typedArray.recycle();
 
         relativeLayout = new RelativeLayout(context);
@@ -81,7 +89,7 @@ public class SimpleTopBar extends RelativeLayout implements View.OnClickListener
         LayoutParams relativeLayoutParams = (LayoutParams) relativeLayout.getLayoutParams();
         relativeLayoutParams.width = LayoutParams.MATCH_PARENT;
         relativeLayoutParams.height = getResources().getDimensionPixelOffset(R.dimen.topBar_height);
-        relativeLayoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
+        relativeLayoutParams.addRule(RelativeLayout.ALIGN_TOP);
 
         relativeLayout.setLayoutParams(relativeLayoutParams);
 
@@ -90,7 +98,7 @@ public class SimpleTopBar extends RelativeLayout implements View.OnClickListener
         }
 
         if (leftSrc == null) {
-            this.leftSrc = getResources().getDrawable(R.drawable.ic_back);
+            this.leftSrc = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_back, null);
         }
 
         addLeftView();
@@ -130,6 +138,10 @@ public class SimpleTopBar extends RelativeLayout implements View.OnClickListener
         topBarTitleView.setTypeface(Typeface.DEFAULT_BOLD);
         topBarTitleView.setTextColor(Color.BLACK);
         topBarTitleView.setTextSize(18);
+        topBarTitleView.setMaxLines(1);
+        topBarTitleView.setEllipsize(TextUtils.TruncateAt.END);
+        topBarTitleView.setTypeface(topBarTitleStyle);
+        topBarTitleView.setGravity(topBarTitleGravity);
 
         relativeLayout.addView(topBarTitleView);
 
@@ -139,6 +151,7 @@ public class SimpleTopBar extends RelativeLayout implements View.OnClickListener
         topBarTitleViewParams.addRule(RelativeLayout.END_OF, R.id.simple_topBar_leftView);
         topBarTitleViewParams.addRule(RelativeLayout.CENTER_VERTICAL);
         topBarTitleViewParams.setMarginStart(getResources().getDimensionPixelOffset(R.dimen.topBar_title_margin_start));
+        topBarTitleViewParams.setMarginEnd(getResources().getDimensionPixelOffset(R.dimen.topBar_title_margin_start));
 
         topBarTitleView.setLayoutParams(topBarTitleViewParams);
     }

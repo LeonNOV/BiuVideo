@@ -10,7 +10,7 @@
     <string name="userInfo">用户信息</string>
     <string name="popular">热门</string>
     <string name="recommend">推荐</string>
-    <string name="downloaded">下载</string>
+    <string name="downloadManager">下载管理</string>
 
     <string name="video">视频</string>
     <string name="bangumi">番剧</string>
@@ -21,19 +21,22 @@
     <string name="audio">音频</string>
     <string name="picture">相簿</string>
     <string name="live">直播</string>
+    <string name="dynamic">动态</string>
 
     <string name="home_nav_home">首页</string>
     <string name="home_nav_discover">发现</string>
     <string name="home_nav_user">我的</string>
 
-    <string name="home_card_title">推荐</string>
-    <string name="home_card_action">查看更多</string>
+    <string name="see_more">查看更多</string>
+
+    <string name="home_card_title_recommend">推荐</string>
+    <string name="home_card_title_watch_later">稍后观看</string>
     <string name="home_popular">热门排行</string>
     <string name="home_orders">我的订阅</string>
     <string name="home_favorites">我的收藏夹</string>
     <string name="home_follows">我关注的人</string>
     <string name="home_history">历史记录</string>
-    <string name="home_downloaded">下载记录</string>
+    <string name="home_downloadManager">下载管理</string>
     <string name="home_settings">设置</string>
 
     <string name="search_history">搜索历史</string>
@@ -78,6 +81,10 @@
     <string name="checkAll">查看全部</string>
     <string name="checkMore">查看更多</string>
 
+    <string name="setting_default_location">北京,北京城区,东城区</string>
+    <string name="setting_default_cacheSize">0.0B</string>
+    <string name="description">description</string>
+    <string name="no_login">点击上方头像即可登录</string>
 <!-- ========================================================================================== -->
 
     <string name="preference">initValues</string>
@@ -143,6 +150,4 @@
     <string name="defaultStr">--</string>
     <string name="loading">加载数据中</string>
     <string name="exporting">导出数据中</string>
-    <string name="setting_default_location">北京,北京城区,东城区</string>
-    <string name="setting_default_cacheSize">0.0M</string>
 </resources>

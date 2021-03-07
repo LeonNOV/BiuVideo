@@ -32,6 +32,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
+                android:contentDescription="@string/description"
                 android:src="@drawable/ic_search" />
 
             <EditText
@@ -55,6 +56,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/ripple_round_corners6dp_bg"
+                android:contentDescription="@string/description"
                 android:padding="5dp"
                 android:src="@drawable/ic_clear" />
 

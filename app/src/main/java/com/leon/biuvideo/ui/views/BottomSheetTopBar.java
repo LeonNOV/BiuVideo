@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.leon.biuvideo.R;
 
@@ -24,7 +25,7 @@ public class BottomSheetTopBar extends LinearLayout {
     private AttributeSet attrs;
 
     private String title = "";
-    private Drawable closeSrc = getResources().getDrawable(R.drawable.ic_arrow_down);
+    private Drawable closeSrc = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_down, null);
     private LinearLayout parentLayout;
 
     public BottomSheetTopBar(Context context) {

@@ -59,9 +59,9 @@ public class CardTitle extends LinearLayout {
     }
 
     private void initView() {
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CardTitleLayout);
-        this.title = typedArray.getString(R.styleable.CardTitleLayout_card_title);
-        this.action = typedArray.getString(R.styleable.CardTitleLayout_card_action);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CardTitle);
+        this.title = typedArray.getString(R.styleable.CardTitle_card_title);
+        this.action = typedArray.getString(R.styleable.CardTitle_card_action);
         typedArray.recycle();
 
         addParent();
@@ -99,11 +99,6 @@ public class CardTitle extends LinearLayout {
         firstTitleViewLayoutParams.width = LayoutParams.WRAP_CONTENT;
         firstTitleViewLayoutParams.height = LayoutParams.WRAP_CONTENT;
         firstTitleViewLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_START);
-//        firstTitleViewLayoutParams.setMargins(
-//                getResources().getDimensionPixelOffset(R.dimen.card_title_layout_margin_start_end),
-//                getResources().getDimensionPixelOffset(R.dimen.card_title_layout_margin_top_bottom),
-//                0,
-//                getResources().getDimensionPixelOffset(R.dimen.card_title_layout_margin_top_bottom));
         titleView.setLayoutParams(firstTitleViewLayoutParams);
     }
 
@@ -134,11 +129,6 @@ public class CardTitle extends LinearLayout {
         secondTitleViewLayoutParams.width = LayoutParams.WRAP_CONTENT;
         secondTitleViewLayoutParams.height = LayoutParams.WRAP_CONTENT;
         secondTitleViewLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
-//        secondTitleViewLayoutParams.setMargins(
-//                0,
-//                getResources().getDimensionPixelOffset(R.dimen.card_title_layout_margin_top_bottom),
-//                getResources().getDimensionPixelOffset(R.dimen.card_title_layout_margin_start_end),
-//                getResources().getDimensionPixelOffset(R.dimen.card_title_layout_margin_top_bottom));
         actionView.setLayoutParams(secondTitleViewLayoutParams);
     }
 }

@@ -18,6 +18,7 @@ import com.leon.biuvideo.ui.home.favoriteFragments.FavoriteArticleFragment;
 import com.leon.biuvideo.ui.home.favoriteFragments.FavoriteVideoFragment;
 import com.leon.biuvideo.ui.home.favoriteFragments.FavoriteWatchLaterFragment;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
+import com.leon.biuvideo.utils.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +53,8 @@ public class FavoritesFragment extends BaseSupportFragment {
                 Toast.makeText(_mActivity, "more", Toast.LENGTH_SHORT).show();
             }
         });
-        TabLayout favorites_fragment_tabLayout = view.findViewById(R.id.favorites_fragment_tabLayout);
-        ViewPager favorites_fragment_viewPager = view.findViewById(R.id.favorites_fragment_viewPager);
+        TabLayout favoritesFragmentTabLayout = view.findViewById(R.id.favorites_fragment_tabLayout);
+        ViewPager favoritesFragmentViewPager = view.findViewById(R.id.favorites_fragment_viewPager);
 
         List<Fragment> viewPagerFragments = new ArrayList<>();
         viewPagerFragments.add(new FavoriteVideoFragment());
@@ -62,32 +63,18 @@ public class FavoritesFragment extends BaseSupportFragment {
         viewPagerFragments.add(new FavoriteWatchLaterFragment());
 
         String[] titles = {"视频收藏夹", "专栏收藏夹", "相簿收藏夹", "稍后观看"};
-        favorites_fragment_viewPager.setAdapter(new TabLayoutViewPagerAdapter(getChildFragmentManager(), titles, viewPagerFragments));
-        favorites_fragment_viewPager.setCurrentItem(0);
-        favorites_fragment_viewPager.setOffscreenPageLimit(4);
-        favorites_fragment_tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        favoritesFragmentViewPager.setAdapter(new TabLayoutViewPagerAdapter(getChildFragmentManager(), titles, viewPagerFragments));
+        favoritesFragmentViewPager.setCurrentItem(0);
+        favoritesFragmentViewPager.setOffscreenPageLimit(4);
+        favoritesFragmentTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                View view = tab.getCustomView();
-                if (view == null) {
-                    tab.setCustomView(R.layout.tab_layout_title);
-                }
-
-                TextView textView = tab.getCustomView().findViewById(android.R.id.text1);
-                textView.setTypeface(Typeface.DEFAULT_BOLD);
-                textView.setTextColor(Color.BLACK);
+                ViewUtils.changeTabTitle(tab, true);
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                View view = tab.getCustomView();
-                if (view == null) {
-                    tab.setCustomView(R.layout.tab_layout_title);
-                }
-
-                TextView textView = tab.getCustomView().findViewById(android.R.id.text1);
-                textView.setTypeface(Typeface.DEFAULT);
-                textView.setTextColor(Color.GRAY);
+                ViewUtils.changeTabTitle(tab, false);
             }
 
             @Override
@@ -95,6 +82,6 @@ public class FavoritesFragment extends BaseSupportFragment {
 
             }
         });
-        favorites_fragment_tabLayout.setupWithViewPager(favorites_fragment_viewPager, false);
+        favoritesFragmentTabLayout.setupWithViewPager(favoritesFragmentViewPager, false);
     }
 }

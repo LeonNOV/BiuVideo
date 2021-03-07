@@ -11,7 +11,7 @@ import com.leon.biuvideo.ui.views.TagView;
  * @Desc 用户个人详细信息页面
  */
 public class UserInfoFragment extends BaseSupportFragment {
-    public static UserInfoFragment newInstance() {
+    public static UserInfoFragment getInstance() {
         return new UserInfoFragment();
     }
 

@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -26,7 +25,7 @@ import com.leon.biuvideo.beans.Weather;
 import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.AbstractSimpleLoadDataThread;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.home.DownloadedFragment;
+import com.leon.biuvideo.ui.home.DownloadManagerFragment;
 import com.leon.biuvideo.ui.home.FavoritesFragment;
 import com.leon.biuvideo.ui.home.HistoryFragment;
 import com.leon.biuvideo.ui.home.MyFollowsFragment;
@@ -82,7 +81,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 .setOnClickListener(R.id.home_my_favorites, this)
                 .setOnClickListener(R.id.home_my_follows, this)
                 .setOnClickListener(R.id.home_my_history, this)
-                .setOnClickListener(R.id.home_my_downloaded, this)
+                .setOnClickListener(R.id.home_my_downloadManager, this)
                 .setOnClickListener(R.id.home_setting, this)
                 .setOnClickListener(R.id.home_popular, this);
 
@@ -93,7 +92,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
             }
         });
 
-        homeRecyclerView = findView(R.id.home_recyclerView);
+        homeRecyclerView = findView(R.id.home_recommend_recyclerView);
 
         initValue();
     }
@@ -201,8 +200,8 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
             case R.id.home_my_history:
                 ((NavFragment) getParentFragment()).startBrotherFragment(HistoryFragment.getInstance());
                 break;
-            case R.id.home_my_downloaded:
-                ((NavFragment) getParentFragment()).startBrotherFragment(DownloadedFragment.getInstance());
+            case R.id.home_my_downloadManager:
+                ((NavFragment) getParentFragment()).startBrotherFragment(DownloadManagerFragment.getInstance());
                 break;
             case R.id.home_setting:
                 ((NavFragment) getParentFragment()).startBrotherFragment(SettingsFragment.getInstance());
@@ -229,7 +228,9 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
     }
 
     /**
-     * 广播接收者，主要用于显示、刷新或隐藏天气模块
+     * @Author Leon
+     * @Time 2021/3/7
+     * @Desc 广播接收者，主要用于显示、刷新或隐藏天气模块
      */
     private class LocalReceiver extends BroadcastReceiver {
         @Override
@@ -268,37 +269,39 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 }
             }
         }
-    }
 
-    /**
-     * 获取当前adcode，将其设置到配置文件中
-     *
-     * @param address   当前位置
-     */
-    private void setAdcode(String[] address) {
-        SimpleSingleThreadPool.executor(new Runnable() {
-            @Override
-            public void run() {
-                Map<String, String> params = new HashMap<>(3);
-                params.put("key", AmapKey.amapKey);
-                params.put("address", address[0] + address[1] + address[2]);
-                params.put("city", address[2]);
+        /**
+         * 获取当前adcode，将其设置到配置文件中
+         *
+         * @param address   当前位置
+         */
+        private void setAdcode(String[] address) {
+            SimpleSingleThreadPool.executor(new Runnable() {
+                @Override
+                public void run() {
+                    Map<String, String> params = new HashMap<>(3);
+                    params.put("key", AmapKey.amapKey);
+                    params.put("address", address[0] + address[1] + address[2]);
+                    params.put("city", address[2]);
 
-                JSONObject response = HttpUtils.getResponse(AmapAPIs.amapGeocode, params);
-                if ("1".equals(response.getString("status"))) {
-                    JSONObject geocode = (JSONObject) response.getJSONArray("geocodes").get(0);
-                    String adcode = geocode.getString("adcode");
+                    JSONObject response = HttpUtils.getResponse(AmapAPIs.amapGeocode, params);
+                    if ("1".equals(response.getString("status"))) {
+                        JSONObject geocode = (JSONObject) response.getJSONArray("geocodes").get(0);
+                        String adcode = geocode.getString("adcode");
 
-                    PreferenceUtils.setAdcode(context, adcode);
-                } else {
-                    SimpleSnackBar.make(view, "初始化位置失败", SimpleSnackBar.LENGTH_SHORT).show();
+                        PreferenceUtils.setAdcode(context, adcode);
+                    } else {
+                        SimpleSnackBar.make(view, "初始化位置失败", SimpleSnackBar.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     /**
-     * 用于控制主页的天气模块
+     * @Author Leon
+     * @Time 2021/3/7
+     * @Desc 用于控制主页的天气模块
      */
     private static class WeatherModel implements HomeModel {
         private boolean isInitialized = false;
@@ -335,7 +338,8 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
             currentWeather = (Weather) serializable;
 
             weatherModelWeatherIcon.setImageResource(currentWeather.weatherIconId);
-            weatherModelWeatherTem.setText(currentWeather.temperature + "°");
+            String tem = currentWeather.temperature + "°";
+            weatherModelWeatherTem.setText(tem);
             weatherModelWeatherStr.setText(currentWeather.weather);
             weatherModelTagView.setRightValue(ValueUtils.generateTime(ValueUtils.formatStrTime(currentWeather.reporttime), "HH:mm", false));
             weatherModelLocation.setText(currentWeather.city);

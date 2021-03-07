@@ -4,6 +4,17 @@
         <attr name="topBarTitle" format="string" localization="suggested"/>
         <attr name="leftSrc" format="reference"/>
         <attr name="rightSrc" format="reference"/>
+        <attr name="topBarTitleStyle" format="enum">
+            <enum name="bold" value="0"/>
+            <enum name="normal" value="1"/>
+        </attr>
+        <attr name="topBarTitleGravity" format="enum">
+            <enum name="start" value="8388611"/>
+            <enum name="end" value="8388613"/>
+            <enum name="center" value="17"/>
+            <enum name="center_vertical" value="16"/>
+            <enum name="center_horizontal" value="1"/>
+        </attr>
     </declare-styleable>
 
     <declare-styleable name="CircleImageView">
@@ -22,7 +33,7 @@
         </attr>
     </declare-styleable>
 
-    <declare-styleable name="CardTitleLayout">
+    <declare-styleable name="CardTitle">
         <attr name="card_title" format="string" localization="suggested"/>
         <attr name="card_action" format="string" localization="suggested"/>
     </declare-styleable>

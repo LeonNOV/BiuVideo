@@ -1,63 +1,67 @@
 package com.leon.biuvideo.ui.mainFragments;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.NavFragment;
+import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.home.FavoritesFragment;
+import com.leon.biuvideo.ui.otherFragments.LoginFragment;
 import com.leon.biuvideo.ui.user.UserInfoFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
 
-import me.yokeyword.fragmentation.SupportFragment;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * 用户页面
+ * @Author Leon
+ * @Time 2021/3/1
+ * @Desc 用户页面
  */
-public class UserFragment extends SupportFragment implements View.OnClickListener {
-    private Context context;
-
-    @Nullable
+public class UserFragment extends BaseSupportFragment implements View.OnClickListener {
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.user_fragment, container, false);
-        context = getContext();
-
-        initView(view);
-
-        return view;
+    protected int setLayout() {
+        return R.layout.user_fragment;
     }
 
-    private void initView(View view) {
-        TextView user_fragment_info = view.findViewById(R.id.user_fragment_info);
-        user_fragment_info.setOnClickListener(this);
+    @Override
+    protected void initView() {
+        CircleImageView userFace = findView(R.id.user_face);
+        userFace.setOnClickListener(this);
 
-        CardTitle user_favorites_cardTitle = view.findViewById(R.id.user_favorites_cardTitle);
-        user_favorites_cardTitle.setOnClickActionListener(new CardTitle.OnClickActionListener() {
+        ImageView userVipMark = findView(R.id.user_vip_mark);
+        LinearLayout userBaseInfoLinearLayout = findView(R.id.user_baseInfo_linearLayout);
+        LinearLayout userAccountInfoLinearLayout = findView(R.id.user_accountInfo_linearLayout);
+        RecyclerView userFavoriteRecyclerView = findView(R.id.user_favorite_recyclerView);
+        RecyclerView userBangumiRecyclerView = findView(R.id.user_bangumi_recyclerView);
+        RecyclerView userCoinRecyclerView = findView(R.id.user_coin_recyclerView);
+
+        TextView userInfo = findView(R.id.user_info);
+        userInfo.setOnClickListener(this);
+
+        CardTitle userFavoritesCardTitle = findView(R.id.user_favorite_cardTitle);
+        userFavoritesCardTitle.setOnClickActionListener(new CardTitle.OnClickActionListener() {
             @Override
             public void onClickAction() {
                 ((NavFragment) getParentFragment()).startBrotherFragment(FavoritesFragment.getInstance());
             }
         });
 
-        CardTitle user_bangumi_cardTitle = view.findViewById(R.id.user_bangumi_cardTitle);
-        user_bangumi_cardTitle.setOnClickActionListener(new CardTitle.OnClickActionListener() {
+        CardTitle userBangumiCardTitle = findView(R.id.user_bangumi_cardTitle);
+        userBangumiCardTitle.setOnClickActionListener(new CardTitle.OnClickActionListener() {
             @Override
             public void onClickAction() {
                 Toast.makeText(context, "订阅的番剧", Toast.LENGTH_SHORT).show();
             }
         });
 
-        CardTitle user_coin_cardTitle = view.findViewById(R.id.user_coin_cardTitle);
-        user_coin_cardTitle.setOnClickActionListener(new CardTitle.OnClickActionListener() {
+        CardTitle userCoinCardTitle = findView(R.id.user_coin_cardTitle);
+        userCoinCardTitle.setOnClickActionListener(new CardTitle.OnClickActionListener() {
             @Override
             public void onClickAction() {
                 Toast.makeText(context, "最近投币的视频", Toast.LENGTH_SHORT).show();
@@ -67,6 +71,15 @@ public class UserFragment extends SupportFragment implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        ((NavFragment) getParentFragment()).startBrotherFragment(UserInfoFragment.newInstance());
+        switch (v.getId()) {
+            case R.id.user_info:
+                ((NavFragment) getParentFragment()).startBrotherFragment(UserInfoFragment.getInstance());
+                break;
+            case R.id.user_face:
+                ((NavFragment) getParentFragment()).startBrotherFragment(LoginFragment.getInstance());
+                break;
+            default:
+                break;
+        }
     }
 }

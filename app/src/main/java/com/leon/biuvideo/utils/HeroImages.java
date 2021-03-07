@@ -8,7 +8,7 @@ public class HeroImages {
      * <br/>
      * <strong>顺序不能随意更改，如果要更改的话，preference_string.xml里面的heroNames的顺序也必须更改为一样</strong>
      */
-    public static int[] heroImages = {
+    /*public static int[] heroImages = {
             R.drawable.vector_hero_dc_atom,//DC-原子侠
             R.drawable.vector_hero_dc_batman,//DC-蝙蝠侠
             R.drawable.vector_hero_dc_divingman,//DC-潜水侠
@@ -29,5 +29,5 @@ public class HeroImages {
             R.drawable.vector_hero_marvel_spiderman,//漫威-蜘蛛侠
             R.drawable.vector_hero_marvel_thor,//漫威-雷神
             R.drawable.vector_hero_marvel_wolverine//漫威-金刚狼
-    };
+    };*/
 }

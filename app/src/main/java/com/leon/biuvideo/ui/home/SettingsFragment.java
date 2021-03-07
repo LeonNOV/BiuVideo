@@ -137,7 +137,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                         FileUtils.cleanCache(context.getCacheDir());
 
                         //刷新显示的缓存大小
-                        settingsFragmentCacheSize.setText("0B");
+                        settingsFragmentCacheSize.setText(getText(R.string.setting_default_cacheSize));
                     }
 
                     @Override

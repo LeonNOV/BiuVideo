@@ -108,7 +108,7 @@ public class WeatherUtil {
     }
 
     private @DrawableRes int getWeatherType(String weather) {
-        int weatherIconId = R.drawable.weather_unknow;
+        int weatherIconId = R.drawable.weather_unknown;
 
         switch (weather) {
             case "晴":
@@ -127,7 +127,7 @@ public class WeatherUtil {
                 weatherIconId = R.drawable.weather_cold;
                 break;
             case "未知":
-                weatherIconId = R.drawable.weather_unknow;
+                weatherIconId = R.drawable.weather_unknown;
                 break;
             default:
                 weatherIconId = getWeatherType2(weather);
@@ -140,7 +140,7 @@ public class WeatherUtil {
     private int getWeatherType2(String weather) {
         String[] sandDusts = {"浮尘", "扬沙", "沙尘暴", "强沙尘暴"};
 
-        int weatherIconId = R.drawable.weather_unknow;
+        int weatherIconId = R.drawable.weather_unknown;
 
         if (weather.endsWith("多云")) {
             weatherIconId = R.drawable.weather_partly_cloudy;

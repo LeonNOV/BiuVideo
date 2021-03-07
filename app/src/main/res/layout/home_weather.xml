@@ -22,7 +22,7 @@
                 android:id="@+id/weatherModel_weatherIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/weather_unknow" />
+                android:src="@drawable/weather_unknown" />
 
             <TextView
                 android:id="@+id/weatherModel_weatherTem"

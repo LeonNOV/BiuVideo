@@ -16,7 +16,9 @@ import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
- * 基本的SupportFragment
+ * @Author Leon
+ * @Time 2021/3/1
+ * @Desc 基本的SupportFragment
  */
 public abstract class BaseSupportFragment extends SupportFragment {
     protected Context context;

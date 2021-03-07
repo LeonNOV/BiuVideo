@@ -18,6 +18,7 @@ import com.leon.biuvideo.ui.home.orderFragments.OrderBangumiFragment;
 import com.leon.biuvideo.ui.home.orderFragments.OrderSeriesFragment;
 import com.leon.biuvideo.ui.home.orderFragments.OrderTagsFragment;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
+import com.leon.biuvideo.utils.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,26 +74,12 @@ public class OrderFragment extends BaseSupportFragment {
         orderFragmentTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                View view = tab.getCustomView();
-                if (view == null) {
-                    tab.setCustomView(R.layout.tab_layout_title);
-                }
-
-                TextView textView = tab.getCustomView().findViewById(android.R.id.text1);
-                textView.setTypeface(Typeface.DEFAULT_BOLD);
-                textView.setTextColor(Color.BLACK);
+                ViewUtils.changeTabTitle(tab, true);
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                View view = tab.getCustomView();
-                if (view == null) {
-                    tab.setCustomView(R.layout.tab_layout_title);
-                }
-
-                TextView textView = tab.getCustomView().findViewById(android.R.id.text1);
-                textView.setTypeface(Typeface.DEFAULT);
-                textView.setTextColor(Color.GRAY);
+                ViewUtils.changeTabTitle(tab, false);
             }
 
             @Override

@@ -5,22 +5,60 @@ import androidx.annotation.DrawableRes;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * @Author Leon
+ * @Time 2021/3/1
+ * @Desc 天气数据类
+ */
 public class Weather implements Serializable {
-    public int status;  // 1：成功，0：失败
+    /**
+     * 1：成功，0：失败
+     */
+    public int status;
+
     public String infocode;
 
-    public String province; // 省份
-    public String city; // 城市
-    public String adcode;  // 邮政编码
+    /**
+     * 省份
+     */
+    public String province;
 
-    public String weather;  // 天气（文字描述）
+    /**
+     * 城市
+     */
+    public String city;
+
+    /**
+     * 邮政编码
+     */
+    public String adcode;
+
+    /**
+     * 天气（文字描述）
+     */
+    public String weather;
+
     public @DrawableRes int weatherIconId;
-    public String temperature;  // 实时气温，单位：摄氏度
-    public String humidity; // 空气湿度
 
-    public String reporttime;    // 预报发布时间
+    /**
+     * 实时气温，单位：摄氏度
+     */
+    public String temperature;
 
-    public List<Cast> casts;  // 预报数据list结构，元素cast,按顺序为当天、第二天、第三天的预报数据
+    /**
+     * 空气湿度
+     */
+    public String humidity;
+
+    /**
+     * 预报发布时间
+     */
+    public String reporttime;
+
+    /**
+     * // 预报数据list结构，元素cast,按顺序为当天、第二天、第三天的预报数据
+     */
+    public List<Cast> casts;
 
     public static class Cast {
         public String date; // 日期
