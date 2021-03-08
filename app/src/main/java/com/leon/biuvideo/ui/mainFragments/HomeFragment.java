@@ -9,9 +9,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -32,23 +29,21 @@ import com.leon.biuvideo.ui.home.MyFollowsFragment;
 import com.leon.biuvideo.ui.home.OrderFragment;
 import com.leon.biuvideo.ui.home.RecommendFragment;
 import com.leon.biuvideo.ui.home.SettingsFragment;
+import com.leon.biuvideo.ui.mainFragments.homeModels.WeatherModelInterface;
 import com.leon.biuvideo.ui.otherFragments.PopularFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
-import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.LocationUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.SimpleThreadPool;
-import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.WeatherUtil;
 import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.FeaturesName;
 import com.leon.biuvideo.values.apis.AmapAPIs;
 import com.leon.biuvideo.values.apis.AmapKey;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,7 +61,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
     private LocationUtil locationUtil;
 
     private Handler handler;
-    private WeatherModel weatherModel;
+    private WeatherModelInterface weatherModel;
     private WeatherUtil weatherUtil;
 
     @Override
@@ -123,7 +118,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
             public void load() {
                 // 初始化天气模块
                 if (weatherModel == null) {
-                    weatherModel = new WeatherModel();
+                    weatherModel = new WeatherModelInterface();
                     weatherModel.onInitialize(view, context);
                 }
                 // 获取当前天气
@@ -295,59 +290,6 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                     }
                 }
             });
-        }
-    }
-
-    /**
-     * @Author Leon
-     * @Time 2021/3/7
-     * @Desc 用于控制主页的天气模块
-     */
-    private static class WeatherModel implements HomeModel {
-        private boolean isInitialized = false;
-
-        private LinearLayout homeModel;
-        private ImageView weatherModelWeatherIcon;
-        private TextView weatherModelWeatherTem;
-        private TagView weatherModelTagView;
-        private TextView weatherModelLocation;
-        private TextView weatherModelWeatherStr;
-        private Weather currentWeather;
-
-        @Override
-        public void onInitialize(View view, Context context) {
-            // 如果isInitialized为false，就进行初始化
-            if (isInitialized) {
-                return;
-            }
-
-            this.isInitialized = true;
-
-            homeModel = view.findViewById(R.id.home_model);
-            weatherModelWeatherIcon = view.findViewById(R.id.weatherModel_weatherIcon);
-            weatherModelWeatherTem = view.findViewById(R.id.weatherModel_weatherTem);
-            weatherModelWeatherStr = view.findViewById(R.id.weatherModel_weatherStr);
-            weatherModelTagView = view.findViewById(R.id.weatherModel_tagView);
-            weatherModelLocation = view.findViewById(R.id.weatherModel_location);
-
-            setDisplayState(PreferenceUtils.getFeaturesStatus(FeaturesName.WEATHER_MODEL));
-        }
-
-        @Override
-        public void onRefresh(Serializable serializable) {
-            currentWeather = (Weather) serializable;
-
-            weatherModelWeatherIcon.setImageResource(currentWeather.weatherIconId);
-            String tem = currentWeather.temperature + "°";
-            weatherModelWeatherTem.setText(tem);
-            weatherModelWeatherStr.setText(currentWeather.weather);
-            weatherModelTagView.setRightValue(ValueUtils.generateTime(ValueUtils.formatStrTime(currentWeather.reporttime), "HH:mm", false));
-            weatherModelLocation.setText(currentWeather.city);
-        }
-
-        @Override
-        public void setDisplayState(boolean isDisplay) {
-            homeModel.setVisibility(isDisplay ? View.VISIBLE : View.GONE);
         }
     }
 }

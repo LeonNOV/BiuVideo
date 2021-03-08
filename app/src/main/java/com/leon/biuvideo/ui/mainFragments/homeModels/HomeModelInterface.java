@@ -1,4 +1,4 @@
-package com.leon.biuvideo.ui.mainFragments;
+package com.leon.biuvideo.ui.mainFragments.homeModels;
 
 import android.content.Context;
 import android.view.View;
@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @Time 2021/3/3
  * @Desc 主页模块接口
  */
-public interface HomeModel {
+public interface HomeModelInterface {
     /**
      * 初始化模块
      */

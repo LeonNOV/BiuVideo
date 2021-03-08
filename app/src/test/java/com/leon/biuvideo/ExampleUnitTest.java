@@ -4,6 +4,10 @@ import com.leon.biuvideo.utils.IDUtils;
 
 import org.junit.Test;
 
+import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Example local unit test, which will execute on the development machine (host).
  *
@@ -13,6 +17,30 @@ public class ExampleUnitTest {
 
     @Test
     public void test() {
+        System.out.println("".matches("^[\\u4e00-\\u9fa5]*$"));
+    }
+
+    private int sort(int[] ints) {
+        for (int i = 0; i < ints.length - 1; i++) {
+            for (int j = 0; j < ints.length - i - 1; j++) {
+                if (ints[j] > ints[j + 1]) {
+                    int temp = ints[j];
+                    ints[j] = ints[j + 1];
+                    ints[j + 1] = temp;
+                }
+            }
+        }
+
+        return ints[29];
+    }
+
+    private int avg(int[] ints) {
+        int sum = 0;
+        for (int i = 0; i < ints.length; i++) {
+            sum += ints[i];
+        }
+
+        return sum / 30;
     }
 
     //解析输入的内容

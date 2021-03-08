@@ -1,6 +1,7 @@
 package com.leon.biuvideo.adapters.baseAdapters;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +9,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.leon.biuvideo.utils.Fuck;
-
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -116,5 +117,12 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
      */
     public void refresh(String str) {
 
+    }
+
+    public void append(ArrayList<Parcelable> districtList) {
+        for (int i = 0; i < districtList.size(); i++) {
+            this.beans.add((T) districtList.get(i));
+            notifyItemInserted(i);
+        }
     }
 }

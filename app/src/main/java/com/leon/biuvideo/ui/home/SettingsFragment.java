@@ -6,13 +6,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.util.Log;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -23,7 +30,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.adapters.otherAdapters.SettingChoiceAddressAdapter;
 import com.leon.biuvideo.beans.AboutBean;
+import com.leon.biuvideo.beans.District;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.dialogs.FeedbackDialog;
 import com.leon.biuvideo.ui.dialogs.ThanksListDialog;
@@ -32,6 +41,7 @@ import com.leon.biuvideo.ui.views.BottomSheetTopBar;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.FileUtils;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.LocationUtil;
 import com.leon.biuvideo.utils.PermissionUtil;
@@ -47,6 +57,7 @@ import com.leon.biuvideo.values.apis.AmapKey;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,10 +74,14 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     private TextView settingsFragmentLocation;
     private RecyclerView setLocationResult;
     private TextView settingsFragmentCacheSize;
-    private SimpleTopBar settingsFragmentTopBar;
-    private SharedPreferences preferences;
     private PermissionUtil permissionUtil;
-    private LocationUtil locationUtil;
+
+    private Handler handler;
+    private List<District> districtList;
+    private List<District> districtListTemp;
+
+    private ImageView setLocationNoData;
+    private SettingChoiceAddressAdapter settingChoiceAddressAdapter;
 
     public static SettingsFragment getInstance() {
         return new SettingsFragment();
@@ -79,9 +94,9 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
 
     @Override
     protected void initView() {
-        preferences = context.getSharedPreferences(PreferenceUtils.PREFERENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences preferences = context.getSharedPreferences(PreferenceUtils.PREFERENCE_NAME, Context.MODE_PRIVATE);
 
-        settingsFragmentTopBar = findView(R.id.settings_fragment_topBar);
+        SimpleTopBar settingsFragmentTopBar = findView(R.id.settings_fragment_topBar);
         settingsFragmentTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
@@ -264,35 +279,110 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
 
         setLocationKeyword = view.findViewById(R.id.set_location_keyword);
         setLocationResult = view.findViewById(R.id.set_location_result);
+        setLocationNoData = view.findViewById(R.id.set_location_no_data);
+
+        District district1 = new District();
+        district1.name = "朝阳";
+        district1.address = new String[]{"北京市", "北京市", "朝阳区"};
+
+        District district2 = new District();
+        district2.name = "朝阳";
+        district2.address = new String[]{"北京市", "北京市", "朝阳区"};
+
+        if (settingChoiceAddressAdapter == null) {
+            districtList = new ArrayList<>();
+            settingChoiceAddressAdapter = new SettingChoiceAddressAdapter(districtList, context);
+            setLocationResult.setAdapter(settingChoiceAddressAdapter);
+            settingChoiceAddressAdapter.setOnSettingChoiceAddressListener(new SettingChoiceAddressAdapter.OnSettingChoiceAddressListener() {
+                @Override
+                public void onSelectAddress(District district) {
+                    Toast.makeText(context, "Address:" + Arrays.toString(district.address), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                Bundle data = msg.getData();
+                boolean dataStatus = data.getBoolean("dataStatus", false);
+
+                settingChoiceAddressAdapter.removeAll();
+                if (dataStatus) {
+                    setLocationNoData.setVisibility(View.GONE);
+                    setLocationResult.setVisibility(View.VISIBLE);
+                    settingChoiceAddressAdapter.append(districtListTemp);
+                } else {
+                    setLocationNoData.setVisibility(View.VISIBLE);
+                    setLocationResult.setVisibility(View.GONE);
+                }
+
+                return true;
+            }
+        });
 
         view.findViewById(R.id.set_location_search).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String keyword = setLocationKeyword.getText().toString();
+                String keyword;
+                String s = setLocationKeyword.getText().toString().replaceAll(" ", "");
+                if (s.matches("^[\\u4e00-\\u9fa5]*$") && s.length() > 0) {
+                    keyword = s;
+                } else {
+                    Toast.makeText(context, "请输入正确的城市名称", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 // 获取结果
                 SimpleSingleThreadPool.executor(new Runnable() {
                     @Override
                     public void run() {
-                        Map<String, String> params = new HashMap<>();
+                        Map<String, String> params = new HashMap<>(3);
                         params.put("key", AmapKey.amapKey);
                         params.put("keywords", keyword);
                         params.put("subdistrict", "0");
-                        params.put("filter", PreferenceUtils.getAdcode());
 
                         JSONArray districts = HttpUtils.getResponse(AmapAPIs.amapDistrict, params).getJSONArray("districts");
-                        Map<String, String> districtsMap = new HashMap<>();
-                        for (Object district : districts) {
-                            JSONObject object = (JSONObject) district;
-                            districtsMap.put(object.getString("adcode"), object.getString("name"));
+                        districtListTemp = new ArrayList<>(districts.size());
+                        for (Object object : districts) {
+                            JSONObject jsonObject = (JSONObject) object;
+                            District district = new District();
+
+                            district.citycode = jsonObject.getString("citycode");
+                            district.adcode = jsonObject.getString("adcode");
+                            district.name = jsonObject.getString("name");
+                            district.level = jsonObject.getString("level");
+
+                            String[] centers = jsonObject.getString("center").split(",");
+                            district.longitude = Double.parseDouble(centers[0]);
+                            district.latitude = Double.parseDouble(centers[1]);
+
+                            // 根据经纬度获取位置信息
+                            district.address = LocationUtil.geoLocation(context, district.longitude, district.latitude);
+
+                            districtListTemp.add(district);
                         }
 
-                        Log.d("Fuck-blue", districtsMap.toString());
+                        // 发送消息
+                        Message message = handler.obtainMessage();
+
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean("dataStatus", districtListTemp.size() > 0);
+
+                        message.setData(bundle);
+                        handler.sendMessage(message);
                     }
                 });
 
                 // 搜索完之后隐藏软键盘
                 InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+        });
+        view.findViewById(R.id.search_fragment_clearKeyword).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setLocationKeyword.getText().clear();
             }
         });
 

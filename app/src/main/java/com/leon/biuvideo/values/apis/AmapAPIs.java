@@ -29,12 +29,13 @@ public class AmapAPIs {
      *              3：返回下三级行政区；
      *              需要在此特殊说明，目前部分城市和省直辖县因为没有区县的概念，故在市级下方直接显示街道。
      *              例如：广东-东莞、海南-文昌市
-     *      filter：根据区划过滤，按照指定行政区划进行过滤，填入后则只返回该省/直辖市信息，需填入adcode，为了保证数据的正确，强烈建议填入此参数（配合IP定位使用）
+     *      filter：根据区划过滤，按照指定行政区划进行过滤，填入后则只返回该省/直辖市信息，需填入adcode，为了保证数据的正确，强烈建议填入此参数
      *     其他参数暂不需要
-     * 返回结果（这里的注解只显示重要参数）：
+     * 返回结果（这里的注释只显示重要参数）：
      *      country:国家
      *      province:省份（直辖市会在province和city显示）
      *      city:市（直辖市会在province和city显示）
+     *      center：区域中心点
      *      street:街道（该项目不需要该结果）
      */
     public static String amapDistrict = "https://restapi.amap.com/v3/config/district";

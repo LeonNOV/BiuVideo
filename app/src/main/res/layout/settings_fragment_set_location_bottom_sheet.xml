@@ -34,7 +34,7 @@
 
             <EditText
                 android:id="@+id/set_location_keyword"
-                android:layout_width="0dp"
+                android:layout_width="209dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="15dp"
@@ -46,7 +46,7 @@
                 android:textColorHint="@color/hintColor" />
 
             <ImageView
-                android:id="@+id/search_fragment_imageView_clearKeyword"
+                android:id="@+id/search_fragment_clearKeyword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
@@ -91,14 +91,15 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="300dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/set_location_result"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="5"
+                android:visibility="gone"
                 tools:listitem="@layout/history_item" />
 
             <ImageView
@@ -106,6 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:scaleType="centerCrop"
                 android:contentDescription="@string/description"
                 android:drawablePadding="10dp"
                 android:gravity="center_horizontal"

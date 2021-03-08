@@ -21,6 +21,7 @@ import java.util.Locale;
  * 定位工具类
  */
 public class LocationUtil {
+    private static Geocoder geoCoder;
     private final Context context;
     private LocationManager locationManager;
     private Location lastKnownLocation;
@@ -94,29 +95,6 @@ public class LocationUtil {
     }
 
     /**
-     * 将经纬度转换成中文地址
-     *
-     * @param location  location
-     * @return  位置数组
-     */
-    private String[] getLocationAddress(Location location) {
-        String[] addressStrings = new String[3];
-        Geocoder geoCoder = new Geocoder(context, Locale.CHINESE);
-        try {
-            List<Address> addresses = geoCoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            Address address = addresses.get(0);
-
-            addressStrings[0] = address.getAdminArea(); // province
-            addressStrings[1]  = address.getLocality();  // city
-            addressStrings[2]  = address.getSubLocality();  // district
-//            addressStrings[3]  = address.getSubAdminArea(); // street
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return addressStrings;
-    }
-
-    /**
      * 获取当前的位置信息
      * <br/>
      * 该方法会每次刷新一次位置
@@ -125,7 +103,41 @@ public class LocationUtil {
      */
     public String[] getAddress() {
         updateLocation();
+        return geoLocation(context, lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+    }
 
-        return getLocationAddress(lastKnownLocation);
+    /**
+     * 根据经纬度获取位置信息
+     *
+     * @param latitude  纬度
+     * @param longitude 经度
+     * @return  返回位置信息
+     */
+    public static String[] geoLocation(Context context, double longitude, double latitude) {
+        String[] addressStrings = new String[3];
+
+        if (geoCoder == null) {
+            geoCoder = new Geocoder(context, Locale.CHINESE);
+        }
+
+        try {
+            List<Address> addresses = geoCoder.getFromLocation(latitude, longitude, 1);
+            Address address = addresses.get(0);
+
+            // province
+            addressStrings[0] = address.getAdminArea();
+
+            // city
+            addressStrings[1]  = address.getLocality();
+
+            // district
+            addressStrings[2]  = address.getSubLocality();
+
+//            addressStrings[3]  = address.getSubAdminArea(); // street
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return addressStrings;
     }
 }
