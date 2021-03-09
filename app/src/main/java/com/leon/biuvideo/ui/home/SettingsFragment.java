@@ -14,22 +14,18 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.adapters.otherAdapters.SettingChoiceAddressAdapter;
 import com.leon.biuvideo.beans.AboutBean;
 import com.leon.biuvideo.beans.District;
@@ -42,6 +38,7 @@ import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.FileUtils;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.LocationUtil;
 import com.leon.biuvideo.utils.PermissionUtil;
@@ -77,11 +74,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
 
     private Handler handler;
     private List<District> districtList;
-    private List<District> districtListTemp;
-
-//    private ImageView setLocationNoData;
-//    private ProgressBar setLocationProgressBar;
-//    private RecyclerView setLocationResult;
+//    private List<District> districtListTemp;
 
     private SettingChoiceAddressAdapter settingChoiceAddressAdapter;
     private View bottomSheetView;
@@ -277,13 +270,14 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
         handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
             @Override
             public boolean handleMessage(@NonNull Message msg) {
-                Bundle data = msg.getData();
-                boolean dataStatus = data.getBoolean("dataStatus", false);
+//                Bundle data = msg.getData();
+//                boolean dataStatus = data.getBoolean("dataStatus", false);
 
                 settingChoiceAddressAdapter.removeAll();
-                if (dataStatus) {
+                if (msg.obj != null) {
+                    Fuck.blue("msg.obj:" + msg.obj);
                     loadingRecyclerView.setRecyclerViewVisibility(View.VISIBLE);
-                    settingChoiceAddressAdapter.append(districtListTemp);
+                    settingChoiceAddressAdapter.append((List<District>) msg.obj);
                 } else {
                     loadingRecyclerView.setImageViewVisibility(View.VISIBLE);
                 }
@@ -347,7 +341,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
         params.put("subdistrict", "0");
 
         JSONArray districts = HttpUtils.getResponse(AmapAPIs.amapDistrict, params).getJSONArray("districts");
-        districtListTemp = new ArrayList<>(districts.size());
+        List<District> districtListTemp = new ArrayList<>(districts.size());
         for (Object object : districts) {
             JSONObject jsonObject = (JSONObject) object;
             District district = new District();
@@ -369,11 +363,8 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
 
         // 发送消息
         Message message = handler.obtainMessage();
-
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("dataStatus", districtListTemp.size() > 0);
-
-        message.setData(bundle);
+        message.obj = districtListTemp;
+        Fuck.blue("message.obj:" + message.obj);
         handler.sendMessage(message);
     }
 

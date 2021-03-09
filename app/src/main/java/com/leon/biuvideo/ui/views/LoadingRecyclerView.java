@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -24,14 +25,14 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * @Author Leon
  * @Time 2021/3/9
- * @Desc
+ * @Desc 带有无数据提示、圆形进度条的RecyclerView
  */
 public class LoadingRecyclerView extends FrameLayout {
     private final Context context;
     private FrameLayout parentLayout;
-    private ProgressBar progressBar;
-    private ImageView imageView;
-    private RecyclerView recyclerView;
+    public ProgressBar progressBar;
+    public ImageView imageView;
+    public RecyclerView recyclerView;
 
     public LoadingRecyclerView(@NonNull Context context) {
         super(context);
@@ -52,7 +53,6 @@ public class LoadingRecyclerView extends FrameLayout {
         this.context = context;
 
         initView();
-
     }
 
     private void initView() {
@@ -136,5 +136,5 @@ public class LoadingRecyclerView extends FrameLayout {
 
     @IntDef({VISIBLE, INVISIBLE, GONE})
     @Retention(RetentionPolicy.SOURCE)
-    private @interface Visibility {}
+    @interface Visibility {}
 }

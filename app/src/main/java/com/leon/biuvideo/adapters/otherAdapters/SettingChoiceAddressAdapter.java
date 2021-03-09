@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @Author Leon
  * @Time 2021/3/8
- * @Desc
+ * @Desc 设置页面‘设置位置’适配器
  */
 public class SettingChoiceAddressAdapter extends BaseAdapter<District> {
     private final List<District> districtList;

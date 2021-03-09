@@ -24,6 +24,10 @@
 - **`SettingsFragment`的代码还需进行清理**
 - 修复了几个很小的BUG
 - 修复了天气模块的部分BUG
+- 加入了`BaseLazySupportFragment`和`BaseLazySupportFragmentWithSrr`两个抽象类
+  - `BaseLazySupportFragment`自带懒加载功能，在需要自定义比布局时继承该类
+  - `BaseLazySupportFragmentWithSrr`该类不需要指定XML布局文件，**适合需要加载数据的数据列表页面**，只需重写`initView()`即可
+  - **以上两个类还处于`试验阶段`其代码还未进行过优化**
 
 ### 2020/03/08
 - 完善了设置页面的`设置位置`功能

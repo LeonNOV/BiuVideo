@@ -20,7 +20,7 @@ public abstract class BaseLazyFragment extends Fragment {
     // 界面初始化状态
     protected boolean isLoaded = false;
 
-    /*
+    /**
      *  Fragment容器ID
      */
     public abstract int setLayout();
