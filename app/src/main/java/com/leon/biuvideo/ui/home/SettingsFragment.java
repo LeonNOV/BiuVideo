@@ -10,8 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -31,6 +29,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.adapters.otherAdapters.SettingChoiceAddressAdapter;
 import com.leon.biuvideo.beans.AboutBean;
 import com.leon.biuvideo.beans.District;
@@ -39,10 +38,10 @@ import com.leon.biuvideo.ui.dialogs.FeedbackDialog;
 import com.leon.biuvideo.ui.dialogs.ThanksListDialog;
 import com.leon.biuvideo.ui.dialogs.WarnDialog;
 import com.leon.biuvideo.ui.views.BottomSheetTopBar;
+import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.FileUtils;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.LocationUtil;
 import com.leon.biuvideo.utils.PermissionUtil;
@@ -73,7 +72,6 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     private BottomSheetDialog bottomSheetDialog;
     private EditText setLocationKeyword;
     private TextView settingsFragmentLocation;
-    private RecyclerView setLocationResult;
     private TextView settingsFragmentCacheSize;
     private PermissionUtil permissionUtil;
 
@@ -81,10 +79,14 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     private List<District> districtList;
     private List<District> districtListTemp;
 
-    private ImageView setLocationNoData;
+//    private ImageView setLocationNoData;
+//    private ProgressBar setLocationProgressBar;
+//    private RecyclerView setLocationResult;
+
     private SettingChoiceAddressAdapter settingChoiceAddressAdapter;
-    private ProgressBar setLocationProgressBar;
     private View bottomSheetView;
+    private LoadingRecyclerView loadingRecyclerView;
+    private LocalBroadcastManager localBroadcastManager;
 
     public static SettingsFragment getInstance() {
         return new SettingsFragment();
@@ -280,15 +282,14 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
 
                 settingChoiceAddressAdapter.removeAll();
                 if (dataStatus) {
-                    setLocationResult.setVisibility(View.VISIBLE);
+                    loadingRecyclerView.setRecyclerViewVisibility(View.VISIBLE);
                     settingChoiceAddressAdapter.append(districtListTemp);
                 } else {
-                    setLocationNoData.setVisibility(View.VISIBLE);
-                    setLocationResult.setVisibility(View.GONE);
+                    loadingRecyclerView.setImageViewVisibility(View.VISIBLE);
                 }
 
                 // 设置完数据后隐藏ProgressBar
-                setLocationProgressBar.setVisibility(View.GONE);
+                loadingRecyclerView.setProgressBarVisibility(View.GONE);
 
                 return true;
             }
@@ -302,9 +303,10 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 if (s.matches("^[\\u4e00-\\u9fa5]*$") && s.length() > 0) {
                     keyword = s;
 
-                    // 如果匹配成功就显示ProgressBar和隐藏NoData
-                    setLocationProgressBar.setVisibility(View.VISIBLE);
-                    setLocationNoData.setVisibility(View.GONE);
+                    // 如果匹配成功就显示ProgressBar、隐藏NoData和recyclerView
+                    loadingRecyclerView.setProgressBarVisibility(View.VISIBLE);
+                    loadingRecyclerView.setImageViewVisibility(View.GONE);
+                    loadingRecyclerView.setRecyclerViewVisibility(View.GONE);
                 } else {
                     Toast.makeText(context, "请输入正确的城市名称（不能含有中文以外的字符）", Toast.LENGTH_SHORT).show();
                     return;
@@ -379,7 +381,9 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
      * 发送本地广播
      */
     private void sendBroadcast(boolean weatherModelStatus) {
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
+        if (localBroadcastManager == null) {
+            localBroadcastManager = LocalBroadcastManager.getInstance(context);
+        }
 
         Intent weatherModelIntent = new Intent(Actions.WeatherModel);
         weatherModelIntent.putExtra("weatherModelStatus", weatherModelStatus);
@@ -459,14 +463,12 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
         });
 
         setLocationKeyword = bottomSheetView.findViewById(R.id.set_location_keyword);
-        setLocationResult = bottomSheetView.findViewById(R.id.set_location_result);
-        setLocationNoData = bottomSheetView.findViewById(R.id.set_location_no_data);
-        setLocationProgressBar = bottomSheetView.findViewById(R.id.set_location_progressBar);
+        loadingRecyclerView = bottomSheetView.findViewById(R.id.set_location_data);
 
         if (settingChoiceAddressAdapter == null) {
             districtList = new ArrayList<>();
             settingChoiceAddressAdapter = new SettingChoiceAddressAdapter(districtList, context);
-            setLocationResult.setAdapter(settingChoiceAddressAdapter);
+            loadingRecyclerView.setRecyclerViewAdapter(settingChoiceAddressAdapter);
             settingChoiceAddressAdapter.setOnSettingChoiceAddressListener(new SettingChoiceAddressAdapter.OnSettingChoiceAddressListener() {
                 @Override
                 public void onSelectAddress(District district) {

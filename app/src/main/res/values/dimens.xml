@@ -20,4 +20,7 @@
     <dimen name="bottomSheet_topView_height">5dp</dimen>
     <dimen name="bottomSheetCloseViewWH">34dp</dimen>
     <dimen name="bottomSheetTopViewMarginTop">10dp</dimen>
+
+    <dimen name="loadingRecyclerViewHeight">300dp</dimen>
+    <dimen name="loadingRecyclerViewProgressBarHW">60dp</dimen>
 </resources>

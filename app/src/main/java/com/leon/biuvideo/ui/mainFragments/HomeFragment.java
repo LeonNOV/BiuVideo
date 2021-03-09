@@ -131,13 +131,16 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 boolean weatherModelStatus = data.getBoolean("weatherModelStatus");
                 Weather currentWeather = (Weather) data.getSerializable("currentWeather");
 
-                if (currentWeather != null && weatherModelStatus) {
-                    // 更新天气数据
-                    weatherModel.onRefresh(currentWeather);
-                }
+                // 如果配置文件中未开启天气模块，则在此处停止运行此方法
+                if (PreferenceUtils.getFeaturesStatus(FeaturesName.WEATHER_MODEL)) {
+                    if (currentWeather != null && weatherModelStatus) {
+                        // 更新天气数据
+                        weatherModel.onRefresh(currentWeather);
+                    }
 
-                // 定位服务或已手动设置位置，则显示天气模块
-                weatherModel.setDisplayState(PreferenceUtils.getLocationServiceStatus() || PreferenceUtils.getManualSetLocationStatus());
+                    // 定位服务或已手动设置位置，则显示天气模块
+                    weatherModel.setDisplayState(PreferenceUtils.getLocationServiceStatus() || PreferenceUtils.getManualSetLocationStatus());
+                }
 
                 simpleThreadPool.cancelTask("initHomeValues");
                 return true;
@@ -229,14 +232,14 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 boolean weatherModelStatus = intent.getBooleanExtra("weatherModelStatus", false);
 
                 // 判断天气模块是否为开启状态
-                if (weatherModelStatus) {
+                if (weatherModelStatus && PreferenceUtils.getFeaturesStatus(FeaturesName.WEATHER_MODEL)) {
+
                     // 如果定位服务状态和手动设置位置状态有一个为true就显示天气模块
                     weatherModel.setDisplayState(PreferenceUtils.getLocationServiceStatus() || PreferenceUtils.getManualSetLocationStatus());
                 } else {
                     weatherModel.setDisplayState(false);
                     return;
                 }
-
 
                 // 如果已开启定位服务，则通过GPS/NetWork来获取位置
                 if (PreferenceUtils.getLocationServiceStatus()) {

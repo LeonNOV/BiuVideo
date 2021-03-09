@@ -89,41 +89,42 @@
             android:layout_height="wrap_content"
             app:card_title="@string/setting_set_location_choose_location" />
 
-        <FrameLayout
+        <com.leon.biuvideo.ui.views.LoadingRecyclerView
+            android:id="@+id/set_location_data"
             android:layout_width="match_parent"
-            android:layout_height="300dp">
+            android:layout_height="300dp"/>
 
-            <ProgressBar
-                android:id="@+id/set_location_progressBar"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_gravity="center"
-                android:indeterminateTint="@color/blue"
-                android:visibility="gone" />
+<!--        <FrameLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="300dp">-->
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/set_location_result"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="5"
-                tools:listitem="@layout/history_item" />
+<!--            <ProgressBar-->
+<!--                android:id="@+id/set_location_progressBar"-->
+<!--                android:layout_width="60dp"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:indeterminateTint="@color/blue"-->
+<!--                android:visibility="gone" />-->
 
-            <ImageView
-                android:id="@+id/set_location_no_data"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:contentDescription="@string/description"
-                android:drawablePadding="10dp"
-                android:gravity="center_horizontal"
-                android:paddingTop="150dp"
-                android:paddingBottom="150dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_no_data" />
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:id="@+id/set_location_result"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:visibility="gone"-->
+<!--                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+<!--                tools:itemCount="5"-->
+<!--                tools:listitem="@layout/history_item" />-->
 
-        </FrameLayout>
+<!--            <ImageView-->
+<!--                android:id="@+id/set_location_no_data"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:contentDescription="@string/description"-->
+<!--                android:scaleType="centerCrop"-->
+<!--                android:src="@drawable/ic_no_data" />-->
+
+<!--        </FrameLayout>-->
 
     </LinearLayout>
 
