@@ -84,7 +84,6 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     private ImageView setLocationNoData;
     private SettingChoiceAddressAdapter settingChoiceAddressAdapter;
     private ProgressBar setLocationProgressBar;
-    private View view;
     private View bottomSheetView;
 
     public static SettingsFragment getInstance() {
@@ -295,7 +294,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
             }
         });
 
-        view.findViewById(R.id.set_location_search).setOnClickListener(new View.OnClickListener() {
+        bottomSheetView.findViewById(R.id.set_location_search).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String keyword;
@@ -321,12 +320,12 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 });
 
                 // 搜索完之后隐藏软键盘
-                InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                InputMethodManager imm = (InputMethodManager) bottomSheetView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(bottomSheetView.getWindowToken(), 0);
             }
         });
 
-        view.findViewById(R.id.search_fragment_clearKeyword).setOnClickListener(new View.OnClickListener() {
+        bottomSheetView.findViewById(R.id.search_fragment_clearKeyword).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setLocationKeyword.getText().clear();
@@ -489,7 +488,6 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                     Toast.makeText(context, "已手动设置位置为:" + district.address[0] + "," + district.address[1] + "," + district.address[2], Toast.LENGTH_SHORT).show();
 
                     bottomSheetDialog.dismiss();
-
                 }
             });
         }
@@ -499,7 +497,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
         if (bottom != null) {
             bottom.setBackgroundResource(android.R.color.transparent);
         }
-        BottomSheetBehavior<View> bottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
+        BottomSheetBehavior<View> bottomSheetBehavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 }
