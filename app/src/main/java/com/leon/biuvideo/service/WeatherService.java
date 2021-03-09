@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.leon.biuvideo.beans.Weather;
-import com.leon.biuvideo.utils.PermissionUtil;
+import com.leon.biuvideo.utils.LocationUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.WeatherUtil;
 import com.leon.biuvideo.values.FeaturesName;
@@ -19,12 +19,16 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * 后台天气服务，每半小时获取一次天气数据，以广播的形式发送数据
+ * @Author Leon
+ * @Time 2021/3/4
+ * @Desc 后台天气服务，每半小时获取一次天气数据，以广播的形式发送数据
  */
 public class WeatherService extends Service {
     private Context context;
     private WeatherUtil weatherUtil;
     private Timer timer;
+    private LocationUtil locationUtil;
+    private LocalBroadcastManager localBroadcastManager;
 
     @Override
     public void onCreate() {
@@ -51,8 +55,23 @@ public class WeatherService extends Service {
 
                     // 如果天气模块已开启就获取当前天气信息
                     if (PreferenceUtils.getFeaturesStatus(FeaturesName.WEATHER_MODEL)) {
-                        // 检查定位服务是否已授予
-                        if (PermissionUtil.verifyPermission(context, PermissionUtil.Permission.LOCATION)) {
+                        // 获取定位服务开启状态和手动设置位置状态
+                        if (PreferenceUtils.getLocationServiceStatus() || PreferenceUtils.getManualSetLocationStatus()) {
+                            // 如果已开启定位，则获取天气的同时获取当前位置信息
+                            if (PreferenceUtils.getLocationServiceStatus()) {
+                                if (locationUtil == null) {
+                                    locationUtil = new LocationUtil(context);
+                                    locationUtil.location();
+                                }
+
+                                String[] address = locationUtil.getAddress();
+                                String adcode = LocationUtil.getAdcode(address);
+
+                                // 设置当前位置和adcode
+                                PreferenceUtils.setAddress(address);
+                                PreferenceUtils.setAdcode(adcode);
+                            }
+
                             // 获取当前天气
                             Weather currentWeather = weatherUtil.getCurrentWeather(PreferenceUtils.getAdcode());
                             // 发送广播，通知已更新天气数据
@@ -71,7 +90,9 @@ public class WeatherService extends Service {
      * 发送本地广播
      */
     private void sendBroadcast(Weather currentWeather) {
-        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
+        if (localBroadcastManager == null) {
+            localBroadcastManager = LocalBroadcastManager.getInstance(context);
+        }
 
         Intent weatherModelIntent = new Intent("currentWeatherData");
         weatherModelIntent.putExtra("currentWeather", currentWeather);

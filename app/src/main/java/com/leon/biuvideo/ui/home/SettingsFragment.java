@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,6 +83,9 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
 
     private ImageView setLocationNoData;
     private SettingChoiceAddressAdapter settingChoiceAddressAdapter;
+    private ProgressBar setLocationProgressBar;
+    private View view;
+    private View bottomSheetView;
 
     public static SettingsFragment getInstance() {
         return new SettingsFragment();
@@ -216,8 +220,8 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
             String title;
             String content;
             if (featuresName == FeaturesName.WEATHER_MODEL) {
-                title = "授权定位服务";
-                content = "是否要开启天气模块？如果开启需要您授予定位服务。";
+                title = "开启天气模块";
+                content = "您可以选择是否授予定位服务\n\n如果授予，则能根据您位置的变动来自动设置天气预报位置\n如果不授予则可以通过此页面的”设置位置“来手动定位。";
             } else {
                 title = "开启原图模式";
                 content = "是否要开启原图模式？如果开启将会产生比平常更多的流量。";
@@ -265,41 +269,9 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
      * 显示BottomSheet
      */
     private void showBottomSheet() {
-        View view = View.inflate(context, R.layout.settings_fragment_set_location_bottom_sheet, null);
-
-        bottomSheetDialog = new BottomSheetDialog(context);
-        bottomSheetDialog.setContentView(view);
-
-        ((BottomSheetTopBar) view.findViewById(R.id.set_location_topBar)).setOnCloseListener(new BottomSheetTopBar.OnCloseListener() {
-            @Override
-            public void onClose() {
-                bottomSheetDialog.dismiss();
-            }
-        });
-
-        setLocationKeyword = view.findViewById(R.id.set_location_keyword);
-        setLocationResult = view.findViewById(R.id.set_location_result);
-        setLocationNoData = view.findViewById(R.id.set_location_no_data);
-
-        District district1 = new District();
-        district1.name = "朝阳";
-        district1.address = new String[]{"北京市", "北京市", "朝阳区"};
-
-        District district2 = new District();
-        district2.name = "朝阳";
-        district2.address = new String[]{"北京市", "北京市", "朝阳区"};
-
-        if (settingChoiceAddressAdapter == null) {
-            districtList = new ArrayList<>();
-            settingChoiceAddressAdapter = new SettingChoiceAddressAdapter(districtList, context);
-            setLocationResult.setAdapter(settingChoiceAddressAdapter);
-            settingChoiceAddressAdapter.setOnSettingChoiceAddressListener(new SettingChoiceAddressAdapter.OnSettingChoiceAddressListener() {
-                @Override
-                public void onSelectAddress(District district) {
-                    Toast.makeText(context, "Address:" + Arrays.toString(district.address), Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+        // 初始化BottomSheet
+        initBottomSheet();
+        bottomSheetDialog.show();
 
         handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
             @Override
@@ -309,13 +281,15 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
 
                 settingChoiceAddressAdapter.removeAll();
                 if (dataStatus) {
-                    setLocationNoData.setVisibility(View.GONE);
                     setLocationResult.setVisibility(View.VISIBLE);
                     settingChoiceAddressAdapter.append(districtListTemp);
                 } else {
                     setLocationNoData.setVisibility(View.VISIBLE);
                     setLocationResult.setVisibility(View.GONE);
                 }
+
+                // 设置完数据后隐藏ProgressBar
+                setLocationProgressBar.setVisibility(View.GONE);
 
                 return true;
             }
@@ -328,8 +302,12 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 String s = setLocationKeyword.getText().toString().replaceAll(" ", "");
                 if (s.matches("^[\\u4e00-\\u9fa5]*$") && s.length() > 0) {
                     keyword = s;
+
+                    // 如果匹配成功就显示ProgressBar和隐藏NoData
+                    setLocationProgressBar.setVisibility(View.VISIBLE);
+                    setLocationNoData.setVisibility(View.GONE);
                 } else {
-                    Toast.makeText(context, "请输入正确的城市名称", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "请输入正确的城市名称（不能含有中文以外的字符）", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -337,40 +315,8 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 SimpleSingleThreadPool.executor(new Runnable() {
                     @Override
                     public void run() {
-                        Map<String, String> params = new HashMap<>(3);
-                        params.put("key", AmapKey.amapKey);
-                        params.put("keywords", keyword);
-                        params.put("subdistrict", "0");
-
-                        JSONArray districts = HttpUtils.getResponse(AmapAPIs.amapDistrict, params).getJSONArray("districts");
-                        districtListTemp = new ArrayList<>(districts.size());
-                        for (Object object : districts) {
-                            JSONObject jsonObject = (JSONObject) object;
-                            District district = new District();
-
-                            district.citycode = jsonObject.getString("citycode");
-                            district.adcode = jsonObject.getString("adcode");
-                            district.name = jsonObject.getString("name");
-                            district.level = jsonObject.getString("level");
-
-                            String[] centers = jsonObject.getString("center").split(",");
-                            district.longitude = Double.parseDouble(centers[0]);
-                            district.latitude = Double.parseDouble(centers[1]);
-
-                            // 根据经纬度获取位置信息
-                            district.address = LocationUtil.geoLocation(context, district.longitude, district.latitude);
-
-                            districtListTemp.add(district);
-                        }
-
-                        // 发送消息
-                        Message message = handler.obtainMessage();
-
-                        Bundle bundle = new Bundle();
-                        bundle.putBoolean("dataStatus", districtListTemp.size() > 0);
-
-                        message.setData(bundle);
-                        handler.sendMessage(message);
+                        // 获取地址信息
+                        getDistrict(keyword);
                     }
                 });
 
@@ -379,32 +325,65 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         });
+
         view.findViewById(R.id.search_fragment_clearKeyword).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setLocationKeyword.getText().clear();
             }
         });
+    }
 
-        // 设置底部透明
-        FrameLayout bottom = bottomSheetDialog.findViewById(R.id.design_bottom_sheet);
-        if (bottom != null) {
-            bottom.setBackgroundResource(android.R.color.transparent);
+    /**
+     * 获取地址信息
+     *
+     * @param keyword   搜索关键字
+     */
+    private void getDistrict(String keyword) {
+        Map<String, String> params = new HashMap<>(3);
+        params.put("key", AmapKey.amapKey);
+        params.put("keywords", keyword);
+        params.put("subdistrict", "0");
+
+        JSONArray districts = HttpUtils.getResponse(AmapAPIs.amapDistrict, params).getJSONArray("districts");
+        districtListTemp = new ArrayList<>(districts.size());
+        for (Object object : districts) {
+            JSONObject jsonObject = (JSONObject) object;
+            District district = new District();
+
+            district.citycode = jsonObject.getString("citycode");
+            district.adcode = jsonObject.getString("adcode");
+            district.name = jsonObject.getString("name");
+            district.level = jsonObject.getString("level");
+
+            String[] centers = jsonObject.getString("center").split(",");
+            district.longitude = Double.parseDouble(centers[0]);
+            district.latitude = Double.parseDouble(centers[1]);
+
+            // 根据经纬度获取位置信息
+            district.address = LocationUtil.geoLocation(context, district.longitude, district.latitude);
+
+            districtListTemp.add(district);
         }
-        BottomSheetBehavior<View> bottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
-        bottomSheetDialog.show();
+        // 发送消息
+        Message message = handler.obtainMessage();
+
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("dataStatus", districtListTemp.size() > 0);
+
+        message.setData(bundle);
+        handler.sendMessage(message);
     }
 
     /**
      * 发送本地广播
      */
-    private void sendBroadcast(boolean status) {
+    private void sendBroadcast(boolean weatherModelStatus) {
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
 
         Intent weatherModelIntent = new Intent(Actions.WeatherModel);
-        weatherModelIntent.putExtra("status", status);
+        weatherModelIntent.putExtra("weatherModelStatus", weatherModelStatus);
 
         localBroadcastManager.sendBroadcast(weatherModelIntent);
     }
@@ -421,18 +400,22 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1025) {
             if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                SimpleSnackBar.make(view, "获取权限成功", SimpleSnackBar.LENGTH_SHORT).show();
+                SimpleSnackBar.make(view, "已授予定位服务", SimpleSnackBar.LENGTH_SHORT).show();
+
+                PreferenceUtils.setLocationServiceStatus(true);
 
                 // 权限申请成功后发送广播
                 sendBroadcast(true);
 
                 // 设置settings_fragment_location的文字为当前的位置
                 setAddress();
+
             } else {
-                SimpleSnackBar.make(view, "获取权限失败", SimpleSnackBar.LENGTH_SHORT).show();
-                settingsFragmentWeatherModelSwitch.setChecked(false);
-                PreferenceUtils.setFeaturesStatus(FeaturesName.WEATHER_MODEL, false);
-                sendBroadcast(false);
+                SimpleSnackBar.make(view, "未授予定位服务，请通过”设置位置“来设置天气预报的位置", SimpleSnackBar.LENGTH_SHORT).show();
+                settingsFragmentWeatherModelSwitch.setChecked(true);
+                PreferenceUtils.setFeaturesStatus(FeaturesName.WEATHER_MODEL, true);
+                sendBroadcast(true);
+                PreferenceUtils.setLocationServiceStatus(false);
             }
         }
     }
@@ -443,8 +426,80 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
      * 对设置界面的`settings_fragment_location`设置文字内容
      */
     private void setAddress() {
-        LocationUtil locationUtil = new LocationUtil(context);
-        locationUtil.location();
-        settingsFragmentLocation.setText(Arrays.toString(locationUtil.getAddress()));
+        String[] address = {"?", "?", "?"};
+        if (PreferenceUtils.getLocationServiceStatus()) {
+            LocationUtil locationUtil = new LocationUtil(context);
+            locationUtil.location();
+            address = locationUtil.getAddress();
+        } else if (PreferenceUtils.getManualSetLocationStatus()) {
+            address = PreferenceUtils.getAddress();
+        }
+        settingsFragmentLocation.setText(Arrays.toString(address));
+    }
+
+    /**
+     * 初始化BottomSheet
+     */
+    private void initBottomSheet() {
+        if (bottomSheetView != null) {
+            return;
+        }
+
+        if (bottomSheetView == null) {
+            bottomSheetView = View.inflate(context, R.layout.settings_fragment_set_location_bottom_sheet, null);
+        }
+
+        bottomSheetDialog = new BottomSheetDialog(context);
+        bottomSheetDialog.setContentView(bottomSheetView);
+
+        ((BottomSheetTopBar) bottomSheetView.findViewById(R.id.set_location_topBar)).setOnCloseListener(new BottomSheetTopBar.OnCloseListener() {
+            @Override
+            public void onClose() {
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        setLocationKeyword = bottomSheetView.findViewById(R.id.set_location_keyword);
+        setLocationResult = bottomSheetView.findViewById(R.id.set_location_result);
+        setLocationNoData = bottomSheetView.findViewById(R.id.set_location_no_data);
+        setLocationProgressBar = bottomSheetView.findViewById(R.id.set_location_progressBar);
+
+        if (settingChoiceAddressAdapter == null) {
+            districtList = new ArrayList<>();
+            settingChoiceAddressAdapter = new SettingChoiceAddressAdapter(districtList, context);
+            setLocationResult.setAdapter(settingChoiceAddressAdapter);
+            settingChoiceAddressAdapter.setOnSettingChoiceAddressListener(new SettingChoiceAddressAdapter.OnSettingChoiceAddressListener() {
+                @Override
+                public void onSelectAddress(District district) {
+                    // 设置手动设置状态为true
+                    PreferenceUtils.setManualSetLocationStatus(true);
+
+                    // 设置位置信息
+                    PreferenceUtils.setAddress(district.address);
+
+                    // 设置adcode
+                    PreferenceUtils.setAdcode(district.adcode);
+
+                    // 发送广播
+                    sendBroadcast(true);
+
+                    // 显示已选择的位置
+                    setAddress();
+
+                    Toast.makeText(context, "已手动设置位置为:" + district.address[0] + "," + district.address[1] + "," + district.address[2], Toast.LENGTH_SHORT).show();
+
+                    bottomSheetDialog.dismiss();
+
+                }
+            });
+        }
+
+        // 设置底部透明
+        FrameLayout bottom = bottomSheetDialog.findViewById(R.id.design_bottom_sheet);
+        if (bottom != null) {
+            bottom.setBackgroundResource(android.R.color.transparent);
+        }
+        BottomSheetBehavior<View> bottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 }

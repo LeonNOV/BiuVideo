@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.testAdapters.RvTestAdapter;
 import com.leon.biuvideo.beans.TestBeans.RvTestBean;
@@ -33,7 +32,6 @@ import com.leon.biuvideo.ui.mainFragments.homeModels.WeatherModelInterface;
 import com.leon.biuvideo.ui.otherFragments.PopularFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
-import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.LocationUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
@@ -41,13 +39,9 @@ import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.WeatherUtil;
 import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.FeaturesName;
-import com.leon.biuvideo.values.apis.AmapAPIs;
-import com.leon.biuvideo.values.apis.AmapKey;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.FutureTask;
 
@@ -142,7 +136,8 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                     weatherModel.onRefresh(currentWeather);
                 }
 
-                weatherModel.setDisplayState(weatherModelStatus);
+                // 定位服务或已手动设置位置，则显示天气模块
+                weatherModel.setDisplayState(PreferenceUtils.getLocationServiceStatus() || PreferenceUtils.getManualSetLocationStatus());
 
                 simpleThreadPool.cancelTask("initHomeValues");
                 return true;
@@ -163,8 +158,6 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
             String adcode = PreferenceUtils.getAdcode();
 
             if (adcode == null) {
-                // 关闭天气模块的开关
-                PreferenceUtils.setFeaturesStatus(FeaturesName.WEATHER_MODEL, false);
                 bundle.putBoolean("weatherModelStatus", false);
                 bundle.putSerializable("currentWeather", null);
             } else {
@@ -232,11 +225,21 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(Actions.WeatherModel)) {
-                boolean status = intent.getBooleanExtra("status", false);
-                if (status) {
-                    weatherModel.setDisplayState(true);
+                // 获取天气模块开关状态
+                boolean weatherModelStatus = intent.getBooleanExtra("weatherModelStatus", false);
 
-                    // 获取经纬度
+                // 判断天气模块是否为开启状态
+                if (weatherModelStatus) {
+                    // 如果定位服务状态和手动设置位置状态有一个为true就显示天气模块
+                    weatherModel.setDisplayState(PreferenceUtils.getLocationServiceStatus() || PreferenceUtils.getManualSetLocationStatus());
+                } else {
+                    weatherModel.setDisplayState(false);
+                    return;
+                }
+
+
+                // 如果已开启定位服务，则通过GPS/NetWork来获取位置
+                if (PreferenceUtils.getLocationServiceStatus()) {
                     if (locationUtil == null) {
                         locationUtil = new LocationUtil(context);
                     }
@@ -247,16 +250,14 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
 
                     // 根据当前位置，设置adcode
                     setAdcode(address);
-
-                    SimpleSingleThreadPool.executor(new Runnable() {
-                        @Override
-                        public void run() {
-                            getCurrentWeather();
-                        }
-                    });
-                } else {
-                    weatherModel.setDisplayState(false);
                 }
+
+                SimpleSingleThreadPool.executor(new Runnable() {
+                    @Override
+                    public void run() {
+                        getCurrentWeather();
+                    }
+                });
             } else if (action.equals(Actions.CurrentWeather)) {
                 Weather currentWeather = (Weather) intent.getSerializableExtra("currentWeather");
                 if (currentWeather != null) {
@@ -274,19 +275,12 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
             SimpleSingleThreadPool.executor(new Runnable() {
                 @Override
                 public void run() {
-                    Map<String, String> params = new HashMap<>(3);
-                    params.put("key", AmapKey.amapKey);
-                    params.put("address", address[0] + address[1] + address[2]);
-                    params.put("city", address[2]);
+                    String adcode = LocationUtil.getAdcode(address);
 
-                    JSONObject response = HttpUtils.getResponse(AmapAPIs.amapGeocode, params);
-                    if ("1".equals(response.getString("status"))) {
-                        JSONObject geocode = (JSONObject) response.getJSONArray("geocodes").get(0);
-                        String adcode = geocode.getString("adcode");
-
-                        PreferenceUtils.setAdcode(adcode);
-                    } else {
+                    if (adcode == null) {
                         SimpleSnackBar.make(view, "初始化位置失败", SimpleSnackBar.LENGTH_SHORT).show();
+                    } else {
+                        PreferenceUtils.setAdcode(adcode);
                     }
                 }
             });

@@ -13,9 +13,16 @@ import android.provider.Settings;
 
 import androidx.core.app.ActivityCompat;
 
+import com.alibaba.fastjson.JSONObject;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
+import com.leon.biuvideo.values.apis.AmapAPIs;
+import com.leon.biuvideo.values.apis.AmapKey;
+
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * 定位工具类
@@ -139,5 +146,27 @@ public class LocationUtil {
         }
 
         return addressStrings;
+    }
+
+    /**
+     * 获取指定位置的adcode
+     *
+     * @param address   位置（省、市、区/县）
+     * @return  返回adcode
+     */
+    public static String getAdcode(String[] address) {
+        Map<String, String> params = new HashMap<>(3);
+        params.put("key", AmapKey.amapKey);
+        params.put("address", address[0] + address[1] + address[2]);
+        params.put("city", address[2]);
+
+        JSONObject response = HttpUtils.getResponse(AmapAPIs.amapGeocode, params);
+        if ("1".equals(response.getString("status"))) {
+            JSONObject geocode = (JSONObject) response.getJSONArray("geocodes").get(0);
+
+            return geocode.getString("adcode");
+        } else {
+            return null;
+        }
     }
 }

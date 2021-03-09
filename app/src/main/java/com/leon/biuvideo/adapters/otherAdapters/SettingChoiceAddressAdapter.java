@@ -46,7 +46,7 @@ public class SettingChoiceAddressAdapter extends BaseAdapter<District> {
         District district = districtList.get(position);
         holder
                 .setText(R.id.settings_choice_address_district, district.name)
-                .setText(R.id.settings_choice_address_city, district.address[0] + "," + district.address[1])
+                .setText(R.id.settings_choice_address_city, district.address[0] + "," + district.address[1] + "," + district.address[2])
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

@@ -1,6 +1,5 @@
 package com.leon.biuvideo.utils;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.leon.biuvideo.values.FeaturesName;
@@ -21,6 +20,8 @@ public class PreferenceUtils {
     public static final String WEATHER_MODEL  = "weatherModel";
     public static final String COOKIE = "cookie";
     public static final String USER_ID = "userId";
+    public static final String LOCATION_SERVICE = "locationServiceStatus";
+    public static final String MANUAL_SET_LOCATION = "manualSetLocationStatus";
 
     public static SharedPreferences PREFERENCE;
 
@@ -139,5 +140,43 @@ public class PreferenceUtils {
      */
     public static String getUserId() {
         return PREFERENCE.getString(USER_ID, null);
+    }
+
+    /**
+     * 设置定位服务开启状态
+     *
+     * @param status    开启状态
+     */
+    public static void setLocationServiceStatus(boolean status) {
+        SharedPreferences.Editor editor = PREFERENCE.edit();
+        editor.putBoolean(LOCATION_SERVICE, status).apply();
+    }
+
+    /**
+     * 获取定位服务开启状态
+     *
+     * @return  开启状态
+     */
+    public static boolean getLocationServiceStatus() {
+        return PREFERENCE.getBoolean(LOCATION_SERVICE, false);
+    }
+
+    /**
+     * 设置手动设置位置状态
+     *
+     * @param status    开启状态
+     */
+    public static void setManualSetLocationStatus(boolean status) {
+        SharedPreferences.Editor editor = PREFERENCE.edit();
+        editor.putBoolean(MANUAL_SET_LOCATION, status).apply();
+    }
+
+    /**
+     * 获取手动设置位置状态
+     *
+     * @return  开启状态
+     */
+    public static boolean getManualSetLocationStatus() {
+        return PREFERENCE.getBoolean(MANUAL_SET_LOCATION, false);
     }
 }
