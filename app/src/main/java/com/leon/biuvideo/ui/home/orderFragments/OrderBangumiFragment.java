@@ -9,6 +9,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.testAdapters.RvTestAdapter;
 import com.leon.biuvideo.beans.TestBeans.RvTestBean;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
+import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -71,7 +72,7 @@ public class OrderBangumiFragment extends BaseLazySupportFragment {
         boolean isVisible = savedInstanceState.getBoolean("isVisible", false);
 
         if (isVisible) {
-            orderBangumiSmartRefreshRecyclerView.setStatus(SmartRefreshRecyclerView.LOADING);
+            orderBangumiSmartRefreshRecyclerView.setStatus(LoadingRecyclerView.LOADING);
             List<RvTestBean> rvTestBeanList = new ArrayList<>();
 
             Random random = new Random();
@@ -86,7 +87,7 @@ public class OrderBangumiFragment extends BaseLazySupportFragment {
             }
 
             orderBangumiSmartRefreshRecyclerView.setRecyclerViewAdapter(new RvTestAdapter(rvTestBeanList, context));
-            orderBangumiSmartRefreshRecyclerView.setStatus(SmartRefreshRecyclerView.LOADING_FINISH);
+            orderBangumiSmartRefreshRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
         }
 
         setOnLoadListener(new OnLoadListener() {

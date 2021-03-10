@@ -177,7 +177,7 @@ public class HttpUtils {
      * @return  返回头信息
      */
     public static HashMap<String, String> getHeaders() {
-        HashMap<String, String> headers = new HashMap<>();
+        HashMap<String, String> headers = new HashMap<>(3);
         headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36 Edg/86.0.622.51");
         headers.put("Connection", "keep-alive");
         headers.put("Referer", "https://www.bilibili.com/");

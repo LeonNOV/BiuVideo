@@ -12,8 +12,6 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 /**
@@ -22,21 +20,6 @@ import java.util.List;
  * @Desc
  */
 public class SmartRefreshRecyclerView<T> extends SmartRefreshLayout {
-    /**
-     * 无数据状态
-     */
-    public static final int NO_DATA = 0;
-
-    /**
-     * 加载数据中
-     */
-    public static final int LOADING = 1;
-
-    /**
-     * 数据加载完毕
-     */
-    public static final int LOADING_FINISH = 2;
-
     private final Context context;
     private ClassicsFooter classicsFooter;
     private LoadingRecyclerView loadingRecyclerView;
@@ -108,9 +91,6 @@ public class SmartRefreshRecyclerView<T> extends SmartRefreshLayout {
         loadingRecyclerView.setLayoutParams(layoutParams);
     }
 
-    @IntDef({NO_DATA, LOADING, LOADING_FINISH})
-    @interface SRRStatus {}
-
     public void setProgressBarVisibility(@LoadingRecyclerView.Visibility int visibility) {
         this.loadingRecyclerView.progressBar.setVisibility(visibility);
     }
@@ -132,31 +112,8 @@ public class SmartRefreshRecyclerView<T> extends SmartRefreshLayout {
         this.loadingRecyclerView.recyclerView.setLayoutManager(layoutManager);
     }
 
-    /**
-     * 改变状态
-     *
-     * @param status    NoData:{@value NO_DATA}, Loading:{@value LOADING}, LoadingFinish:{@value LOADING_FINISH}
-     */
-    public void setStatus(@SRRStatus int status) {
-        switch (status) {
-            case NO_DATA:
-                setRecyclerViewVisibility(GONE);
-                setProgressBarVisibility(GONE);
-                setImageViewVisibility(VISIBLE);
-                break;
-            case LOADING:
-                setRecyclerViewVisibility(GONE);
-                setProgressBarVisibility(VISIBLE);
-                setImageViewVisibility(GONE);
-                break;
-            case LOADING_FINISH:
-                setRecyclerViewVisibility(VISIBLE);
-                setProgressBarVisibility(GONE);
-                setImageViewVisibility(GONE);
-                break;
-            default:
-                break;
-        }
+    public void setStatus(@LoadingRecyclerView.SRRStatus int status) {
+        loadingRecyclerView.setStatus(status);
     }
 
     /**

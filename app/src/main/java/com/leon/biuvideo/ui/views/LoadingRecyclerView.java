@@ -28,6 +28,21 @@ import java.lang.annotation.RetentionPolicy;
  * @Desc 带有无数据提示、圆形进度条的RecyclerView
  */
 public class LoadingRecyclerView extends FrameLayout {
+    /**
+     * 无数据状态
+     */
+    public static final int NO_DATA = 0;
+
+    /**
+     * 加载数据中
+     */
+    public static final int LOADING = 1;
+
+    /**
+     * 数据加载完毕
+     */
+    public static final int LOADING_FINISH = 2;
+
     private final Context context;
     private FrameLayout parentLayout;
     public ProgressBar progressBar;
@@ -90,6 +105,7 @@ public class LoadingRecyclerView extends FrameLayout {
     private void addRecyclerView() {
         recyclerView = new RecyclerView(context);
         recyclerView.setVisibility(View.GONE);
+        recyclerView.setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         parentLayout.addView(recyclerView);
@@ -133,6 +149,36 @@ public class LoadingRecyclerView extends FrameLayout {
     public void setRecyclerViewLayoutManager(RecyclerView.LayoutManager layoutManager) {
         this.recyclerView.setLayoutManager(layoutManager);
     }
+
+    /**
+     * 改变状态
+     *
+     * @param status    NoData:{@value NO_DATA}, Loading:{@value LOADING}, LoadingFinish:{@value LOADING_FINISH}
+     */
+    public void setStatus(@SRRStatus int status) {
+        switch (status) {
+            case NO_DATA:
+                setRecyclerViewVisibility(GONE);
+                setProgressBarVisibility(GONE);
+                setImageViewVisibility(VISIBLE);
+                break;
+            case LOADING:
+                setRecyclerViewVisibility(GONE);
+                setProgressBarVisibility(VISIBLE);
+                setImageViewVisibility(GONE);
+                break;
+            case LOADING_FINISH:
+                setRecyclerViewVisibility(VISIBLE);
+                setProgressBarVisibility(GONE);
+                setImageViewVisibility(GONE);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @IntDef({NO_DATA, LOADING, LOADING_FINISH})
+    @interface SRRStatus {}
 
     @IntDef({VISIBLE, INVISIBLE, GONE})
     @Retention(RetentionPolicy.SOURCE)

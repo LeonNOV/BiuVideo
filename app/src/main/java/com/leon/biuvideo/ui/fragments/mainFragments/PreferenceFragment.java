@@ -326,7 +326,6 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
         editor.putBoolean("imgOriginalMode", isChecked).apply();
     }
 
-
     /**
      * 清除用户关注数据后发送本地广播
      */

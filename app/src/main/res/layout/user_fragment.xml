@@ -38,10 +38,9 @@
                         android:id="@+id/user_face"
                         android:layout_width="86dp"
                         android:layout_height="86dp"
-                        android:src="@drawable/not_login"
+                        android:src="@drawable/user_default_face"
                         app:civ_border_color="@color/gray"
-                        app:civ_border_width="1dp"
-                        app:civ_circle_background_color="@color/BiliBili_pink" />
+                        app:civ_border_width="@dimen/face_border_width" />
 
                     <ImageView
                         android:id="@+id/user_vip_mark"

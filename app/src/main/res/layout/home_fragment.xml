@@ -192,8 +192,6 @@
 
         </LinearLayout>
 
-        <!--#ff716d-->
-        <!--#EF5350-->
         <TextView
             android:id="@+id/home_popular"
             android:layout_width="match_parent"
@@ -218,7 +216,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="20dp"
             android:background="@drawable/round_corners6dp_bg"
             android:orientation="vertical">
@@ -233,15 +231,14 @@
                 app:card_action="@string/see_more"
                 app:card_title="@string/home_card_title_recommend" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/home_recommend_recyclerView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:overScrollMode="never"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="5"
-                tools:listitem="@layout/rv_test_item" />
+            <com.leon.biuvideo.ui.views.LoadingRecyclerView
+                android:id="@+id/home_recommend_loadingRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginStart="13dp"
+                android:layout_marginEnd="13dp"
+                android:layout_marginBottom="20dp" />
 
         </LinearLayout>
 
@@ -269,15 +266,16 @@
                 android:id="@+id/home_watchLater_recyclerView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginEnd="13dp"
                 android:orientation="vertical"
                 android:overScrollMode="never"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="5"
-                tools:listitem="@layout/rv_test_item" />
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="1"
+                tools:listitem="@layout/video_item_single_row" />
 
         </LinearLayout>
 
     </LinearLayout>
-
 
 </ScrollView>

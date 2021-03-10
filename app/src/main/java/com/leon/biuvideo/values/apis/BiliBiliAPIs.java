@@ -284,4 +284,12 @@ public class BiliBiliAPIs {
      *      tid：分区ID，该值默认为0
      */
     public static String userFolderData = "https://api.bilibili.com/x/v3/fav/resource/list";
+
+    /**
+     * 内容推荐接口
+     * 如果没有登录账户的话只能获取系统推荐的内容
+     * 如果登录上的话，需要在请求头加入Cookie数据，即可获取个人推荐数据
+     *
+     */
+    public static final String recommend = "https://www.bilibili.com/index/ding.json";
 }

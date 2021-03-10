@@ -9,15 +9,16 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.view.View;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.testAdapters.RvTestAdapter;
-import com.leon.biuvideo.beans.TestBeans.RvTestBean;
+import com.leon.biuvideo.adapters.home.RecommendAdapter;
 import com.leon.biuvideo.beans.Weather;
+import com.leon.biuvideo.beans.homeBeans.Recommend;
 import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.AbstractSimpleLoadDataThread;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
@@ -31,18 +32,19 @@ import com.leon.biuvideo.ui.home.SettingsFragment;
 import com.leon.biuvideo.ui.mainFragments.homeModels.WeatherModelInterface;
 import com.leon.biuvideo.ui.otherFragments.PopularFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
+import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.LocationUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.WeatherUtil;
+import com.leon.biuvideo.utils.parseDataUtils.RecommendParser;
 import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.FeaturesName;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.FutureTask;
 
 /**
@@ -51,12 +53,13 @@ import java.util.concurrent.FutureTask;
  * @Desc 主页Fragment，第一显示的Fragment
  */
 public class HomeFragment extends BaseSupportFragment implements View.OnClickListener {
-    private RecyclerView homeRecyclerView;
     private LocationUtil locationUtil;
 
     private Handler handler;
     private WeatherModelInterface weatherModel;
     private WeatherUtil weatherUtil;
+    private LoadingRecyclerView homeRecommendLoadingRecyclerView;
+    private List<Recommend> recommendList;
 
     @Override
     protected int setLayout() {
@@ -81,7 +84,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
             }
         });
 
-        homeRecyclerView = findView(R.id.home_recommend_recyclerView);
+        homeRecommendLoadingRecyclerView = findView(R.id.home_recommend_loadingRecyclerView);
 
         initValue();
     }
@@ -89,21 +92,37 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
     private void initValue() {
         initBroadcastReceiver();
 
-        List<RvTestBean> rvTestBeanList = new ArrayList<>();
+        // 开启单线程加载推荐数据
+        SimpleSingleThreadPool.executor(new Runnable() {
+            @Override
+            public void run() {
+                // 设置状态为加载数据中
+                homeRecommendLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING);
 
-        Random random = new Random();
+                // 获取推荐内容(顺序已打乱)
+                RecommendParser recommendParser = new RecommendParser(null);
+                recommendList = recommendParser.parseData();
 
-        for (int i = 0; i < 10; i++) {
-            RvTestBean rvTestBean = new RvTestBean();
+                // 获取前十个数据作为主页的数据
+                List<Recommend> homeRecommendList = new ArrayList<>(5);
+                for (int i = 0; i < 10; i++) {
+                    homeRecommendList.add(recommendList.get(i));
+                }
 
-            rvTestBean.title = "Title" + (i + 1);
-            rvTestBean.view = (random.nextInt(5000) + 5000);
+                // 设置数据
+                Handler mHandler = new Handler(Looper.getMainLooper());
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        homeRecommendLoadingRecyclerView.setRecyclerViewLayoutManager(new GridLayoutManager(context, 1));
+                        homeRecommendLoadingRecyclerView.setRecyclerViewAdapter(new RecommendAdapter(homeRecommendList, RecommendAdapter.SINGLE_ROW, context));
 
-            rvTestBeanList.add(rvTestBean);
-        }
-
-        RvTestAdapter rvTestAdapter = new RvTestAdapter(rvTestBeanList, context);
-        homeRecyclerView.setAdapter(rvTestAdapter);
+                        // 设置状态为已完成加载数据
+                        homeRecommendLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
+                    }
+                });
+            }
+        });
 
         weatherUtil = new WeatherUtil();
 

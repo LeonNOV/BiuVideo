@@ -10,15 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
- * 基本的RecyclerViewAdapter
- * 为RecyclerView创建适配器时最好使用该抽象类进行创建
- * ViewHolder为同包下的BaseViewHolder
- *
- * @param <T>   实体类型
+ * @Author Leon
+ * @Time 2020/11/16
+ * @Desc 基本的RecyclerViewAdapter为RecyclerView创建适配器时最好使用该抽象类进行创建ViewHolder为同包下的BaseViewHolder
  */
 public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
     private final List<T> beans;

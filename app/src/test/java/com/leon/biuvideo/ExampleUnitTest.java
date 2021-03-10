@@ -1,10 +1,18 @@
 package com.leon.biuvideo;
 
+import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.utils.IDUtils;
+import com.leon.biuvideo.utils.ValueUtils;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,7 +25,17 @@ public class ExampleUnitTest {
 
     @Test
     public void test() {
+        List<Integer> arrayList = new ArrayList<>();
+        arrayList.add(1);
+        arrayList.add(2);
+        arrayList.add(3);
+        arrayList.add(4);
+        arrayList.add(5);
 
+        List<Integer> temp = new ArrayList<>(3);
+        temp.addAll(arrayList);
+
+        System.out.println(temp);
     }
     //解析输入的内容
     @Test

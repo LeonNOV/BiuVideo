@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import com.leon.biuvideo.adapters.testAdapters.RvTestAdapter;
 import com.leon.biuvideo.beans.TestBeans.RvTestBean;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragmentWithSrr;
+import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -62,7 +63,7 @@ public class OrderSeriesFragment extends BaseLazySupportFragmentWithSrr<RvTestBe
         boolean isVisible = savedInstanceState.getBoolean("isVisible", false);
 
         if (isVisible) {
-            view.setStatus(SmartRefreshRecyclerView.LOADING);
+            view.setStatus(LoadingRecyclerView.LOADING);
             List<RvTestBean> rvTestBeanList = new ArrayList<>();
 
             Random random = new Random();
@@ -77,7 +78,7 @@ public class OrderSeriesFragment extends BaseLazySupportFragmentWithSrr<RvTestBe
             }
 
             view.setRecyclerViewAdapter(new RvTestAdapter(rvTestBeanList, context));
-            view.setStatus(SmartRefreshRecyclerView.LOADING_FINISH);
+            view.setStatus(LoadingRecyclerView.LOADING_FINISH);
         }
 
         setOnLoadListener(new OnLoadListener() {
