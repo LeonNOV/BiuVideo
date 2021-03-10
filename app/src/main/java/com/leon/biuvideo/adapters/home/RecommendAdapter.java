@@ -21,26 +21,26 @@ import java.util.List;
  * @Desc 推荐视频适配器
  */
 public class RecommendAdapter extends BaseAdapter<Recommend> {
-    public static final int SINGLE_ROW = 1;
-    public static final int DOUBLE_ROW = 2;
+    public static final int SINGLE_COLUMN = 1;
+    public static final int DOUBLE_COLUMN = 2;
 
     private final List<Recommend> recommendList;
-    private final int rows;
+    private final int columns;
 
-    public RecommendAdapter(List<Recommend> beans, int rows, Context context) {
+    public RecommendAdapter(List<Recommend> beans, int columns, Context context) {
         super(beans, context);
 
-        this.rows = rows;
+        this.columns = columns;
         this.recommendList = beans;
     }
 
     @Override
     public int getLayout(int viewType) {
-        if (rows == SINGLE_ROW) {
-            return R.layout.video_item_single_row;
+        if (columns == SINGLE_COLUMN) {
+            return R.layout.video_item_single_column;
         }
 
-        return R.layout.video_item_double_row;
+        return R.layout.video_item_double_column;
     }
 
     @Override

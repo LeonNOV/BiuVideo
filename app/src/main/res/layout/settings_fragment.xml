@@ -178,6 +178,15 @@
                     android:textColor="@color/black"
                     android:textSize="15sp" />
 
+                <TextView
+                    android:id="@+id/settings_fragment_recommend_span_count"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_setting_item_bg"
+                    android:text="@string/setting_recommend_span_count"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
             </LinearLayout>
 
             <LinearLayout

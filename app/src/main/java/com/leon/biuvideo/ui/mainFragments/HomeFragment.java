@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.view.View;
-import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -93,7 +92,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         initBroadcastReceiver();
 
         // 开启单线程加载推荐数据
-        SimpleSingleThreadPool.executor(new Runnable() {
+        /*SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
                 // 设置状态为加载数据中
@@ -115,14 +114,14 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                     @Override
                     public void run() {
                         homeRecommendLoadingRecyclerView.setRecyclerViewLayoutManager(new GridLayoutManager(context, 1));
-                        homeRecommendLoadingRecyclerView.setRecyclerViewAdapter(new RecommendAdapter(homeRecommendList, RecommendAdapter.SINGLE_ROW, context));
+                        homeRecommendLoadingRecyclerView.setRecyclerViewAdapter(new RecommendAdapter(homeRecommendList, RecommendAdapter.SINGLE_COLUMN, context));
 
                         // 设置状态为已完成加载数据
                         homeRecommendLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
                     }
                 });
             }
-        });
+        });*/
 
         weatherUtil = new WeatherUtil();
 

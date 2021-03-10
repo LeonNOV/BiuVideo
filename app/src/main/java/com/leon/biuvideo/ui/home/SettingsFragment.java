@@ -5,8 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -14,6 +19,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,10 +41,10 @@ import com.leon.biuvideo.ui.dialogs.ThanksListDialog;
 import com.leon.biuvideo.ui.dialogs.WarnDialog;
 import com.leon.biuvideo.ui.views.BottomSheetTopBar;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
+import com.leon.biuvideo.ui.views.SimpleBottomSheet;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.FileUtils;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.LocationUtil;
 import com.leon.biuvideo.utils.PermissionUtil;
@@ -66,20 +72,18 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch settingsFragmentImgOriginalModelSwitch, settingsFragmentWeatherModelSwitch;
 
-    private BottomSheetDialog bottomSheetDialog;
     private EditText setLocationKeyword;
     private TextView settingsFragmentLocation;
     private TextView settingsFragmentCacheSize;
     private PermissionUtil permissionUtil;
 
     private Handler handler;
-    private List<District> districtList;
-//    private List<District> districtListTemp;
 
     private SettingChoiceAddressAdapter settingChoiceAddressAdapter;
-    private View bottomSheetView;
     private LoadingRecyclerView loadingRecyclerView;
     private LocalBroadcastManager localBroadcastManager;
+    private SetLocationBottomSheet setLocationBottomSheet;
+    private SetRecommendColumnBottomSheet setRecommendColumnBottomSheet;
 
     public static SettingsFragment getInstance() {
         return new SettingsFragment();
@@ -114,6 +118,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 .setOnClickListener(R.id.settings_fragment_weatherModel, this)
                 .setOnClickListener(R.id.settings_fragment_open_source_license, this)
                 .setOnClickListener(R.id.settings_fragment_thanks_list, this)
+                .setOnClickListener(R.id.settings_fragment_recommend_span_count, this)
                 .setOnClickListener(R.id.settings_fragment_feedback, this);
 
         settingsFragmentImgOriginalModelSwitch = findView(R.id.settings_fragment_imgOriginalModel_switch);
@@ -161,7 +166,11 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 cleanCacheWarnDialog.show();
                 break;
             case R.id.settings_fragment_setLocation:
-                showBottomSheet();
+                if (setLocationBottomSheet == null) {
+                    setLocationBottomSheet = new SetLocationBottomSheet();
+                }
+
+                setLocationBottomSheet.showSetLocationBottomSheet();
                 break;
             case R.id.settings_fragment_open_source_license:
                 // 跳转到开源许可页面
@@ -184,6 +193,13 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 //显示Dialog
                 ThanksListDialog thanksListDialog = new ThanksListDialog(context, aboutBeans);
                 thanksListDialog.show();
+                break;
+            case R.id.settings_fragment_recommend_span_count:
+                if (setRecommendColumnBottomSheet == null) {
+                    setRecommendColumnBottomSheet = new SetRecommendColumnBottomSheet();
+                }
+
+                setRecommendColumnBottomSheet.showSetRecommendColumnBottomSheet();
                 break;
             case R.id.settings_fragment_feedback:
                 //显示反馈提交界面
@@ -260,76 +276,6 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     }
 
     /**
-     * 显示BottomSheet
-     */
-    private void showBottomSheet() {
-        // 初始化BottomSheet
-        initBottomSheet();
-        bottomSheetDialog.show();
-
-        handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
-            @Override
-            public boolean handleMessage(@NonNull Message msg) {
-//                Bundle data = msg.getData();
-//                boolean dataStatus = data.getBoolean("dataStatus", false);
-
-                settingChoiceAddressAdapter.removeAll();
-                if (msg.obj != null) {
-                    Fuck.blue("msg.obj:" + msg.obj);
-                    loadingRecyclerView.setRecyclerViewVisibility(View.VISIBLE);
-                    settingChoiceAddressAdapter.append((List<District>) msg.obj);
-                } else {
-                    loadingRecyclerView.setImageViewVisibility(View.VISIBLE);
-                }
-
-                // 设置完数据后隐藏ProgressBar
-                loadingRecyclerView.setProgressBarVisibility(View.GONE);
-
-                return true;
-            }
-        });
-
-        bottomSheetView.findViewById(R.id.set_location_search).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String keyword;
-                String s = setLocationKeyword.getText().toString().replaceAll(" ", "");
-                if (s.matches("^[\\u4e00-\\u9fa5]*$") && s.length() > 0) {
-                    keyword = s;
-
-                    // 如果匹配成功就显示ProgressBar、隐藏NoData和recyclerView
-                    loadingRecyclerView.setProgressBarVisibility(View.VISIBLE);
-                    loadingRecyclerView.setImageViewVisibility(View.GONE);
-                    loadingRecyclerView.setRecyclerViewVisibility(View.GONE);
-                } else {
-                    Toast.makeText(context, "请输入正确的城市名称（不能含有中文以外的字符）", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // 获取结果
-                SimpleSingleThreadPool.executor(new Runnable() {
-                    @Override
-                    public void run() {
-                        // 获取地址信息
-                        getDistrict(keyword);
-                    }
-                });
-
-                // 搜索完之后隐藏软键盘
-                InputMethodManager imm = (InputMethodManager) bottomSheetView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(bottomSheetView.getWindowToken(), 0);
-            }
-        });
-
-        bottomSheetView.findViewById(R.id.search_fragment_clearKeyword).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setLocationKeyword.getText().clear();
-            }
-        });
-    }
-
-    /**
      * 获取地址信息
      *
      * @param keyword   搜索关键字
@@ -364,8 +310,22 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
         // 发送消息
         Message message = handler.obtainMessage();
         message.obj = districtListTemp;
-        Fuck.blue("message.obj:" + message.obj);
         handler.sendMessage(message);
+    }
+
+    /**
+     * 对设置界面的`settings_fragment_location`设置文字内容
+     */
+    private void setAddress() {
+        String[] address = {"?", "?", "?"};
+        if (PreferenceUtils.getLocationServiceStatus()) {
+            LocationUtil locationUtil = new LocationUtil(context);
+            locationUtil.location();
+            address = locationUtil.getAddress();
+        } else if (PreferenceUtils.getManualSetLocationStatus()) {
+            address = PreferenceUtils.getAddress();
+        }
+        settingsFragmentLocation.setText(Arrays.toString(address));
     }
 
     /**
@@ -414,83 +374,207 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
         }
     }
 
-    /**
-     * 一般在第一次申请到定位权限后调用该方法
-     * <br/>
-     * 对设置界面的`settings_fragment_location`设置文字内容
-     */
-    private void setAddress() {
-        String[] address = {"?", "?", "?"};
-        if (PreferenceUtils.getLocationServiceStatus()) {
-            LocationUtil locationUtil = new LocationUtil(context);
-            locationUtil.location();
-            address = locationUtil.getAddress();
-        } else if (PreferenceUtils.getManualSetLocationStatus()) {
-            address = PreferenceUtils.getAddress();
-        }
-        settingsFragmentLocation.setText(Arrays.toString(address));
-    }
+    private class SetLocationBottomSheet {
+        private SimpleBottomSheet setLocationBottomSheet;
+        private View setLocationBottomSheetView;
+        private BottomSheetDialog setLocationBottomSheetDialog;
 
-    /**
-     * 初始化BottomSheet
-     */
-    private void initBottomSheet() {
-        if (bottomSheetView != null) {
-            return;
-        }
+        /**
+         * 显示BottomSheet
+         */
+        private void showSetLocationBottomSheet() {
+            // 初始化BottomSheet
+            initSetLocationBottomSheet();
+            setLocationBottomSheetDialog.show();
 
-        if (bottomSheetView == null) {
-            bottomSheetView = View.inflate(context, R.layout.settings_fragment_set_location_bottom_sheet, null);
-        }
-
-        bottomSheetDialog = new BottomSheetDialog(context);
-        bottomSheetDialog.setContentView(bottomSheetView);
-
-        ((BottomSheetTopBar) bottomSheetView.findViewById(R.id.set_location_topBar)).setOnCloseListener(new BottomSheetTopBar.OnCloseListener() {
-            @Override
-            public void onClose() {
-                bottomSheetDialog.dismiss();
-            }
-        });
-
-        setLocationKeyword = bottomSheetView.findViewById(R.id.set_location_keyword);
-        loadingRecyclerView = bottomSheetView.findViewById(R.id.set_location_data);
-
-        if (settingChoiceAddressAdapter == null) {
-            districtList = new ArrayList<>();
-            settingChoiceAddressAdapter = new SettingChoiceAddressAdapter(districtList, context);
-            loadingRecyclerView.setRecyclerViewAdapter(settingChoiceAddressAdapter);
-            settingChoiceAddressAdapter.setOnSettingChoiceAddressListener(new SettingChoiceAddressAdapter.OnSettingChoiceAddressListener() {
+            handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
                 @Override
-                public void onSelectAddress(District district) {
-                    // 设置手动设置状态为true
-                    PreferenceUtils.setManualSetLocationStatus(true);
+                public boolean handleMessage(@NonNull Message msg) {
+                    settingChoiceAddressAdapter.removeAll();
+                    if (msg.obj != null) {
+                        loadingRecyclerView.setRecyclerViewVisibility(View.VISIBLE);
+                        settingChoiceAddressAdapter.append((List<District>) msg.obj);
+                    } else {
+                        loadingRecyclerView.setImageViewVisibility(View.VISIBLE);
+                    }
 
-                    // 设置位置信息
-                    PreferenceUtils.setAddress(district.address);
+                    // 设置完数据后隐藏ProgressBar
+                    loadingRecyclerView.setProgressBarVisibility(View.GONE);
 
-                    // 设置adcode
-                    PreferenceUtils.setAdcode(district.adcode);
+                    return true;
+                }
+            });
 
-                    // 发送广播
-                    sendBroadcast(true);
+            setLocationBottomSheetView.findViewById(R.id.set_location_search).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String keyword;
+                    String s = setLocationKeyword.getText().toString().replaceAll(" ", "");
+                    if (s.matches("^[\\u4e00-\\u9fa5]*$") && s.length() > 0) {
+                        keyword = s;
 
-                    // 显示已选择的位置
-                    setAddress();
+                        // 如果匹配成功就显示ProgressBar、隐藏NoData和recyclerView
+                        loadingRecyclerView.setProgressBarVisibility(View.VISIBLE);
+                        loadingRecyclerView.setImageViewVisibility(View.GONE);
+                        loadingRecyclerView.setRecyclerViewVisibility(View.GONE);
+                    } else {
+                        Toast.makeText(context, "请输入正确的城市名称（不能含有中文以外的字符）", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                    Toast.makeText(context, "已手动设置位置为:" + district.address[0] + "," + district.address[1] + "," + district.address[2], Toast.LENGTH_SHORT).show();
+                    // 获取结果
+                    SimpleSingleThreadPool.executor(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 获取地址信息
+                            getDistrict(keyword);
+                        }
+                    });
 
-                    bottomSheetDialog.dismiss();
+                    // 搜索完之后隐藏软键盘
+                    InputMethodManager imm = (InputMethodManager) setLocationBottomSheetView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(setLocationBottomSheetView.getWindowToken(), 0);
+                }
+            });
+
+            setLocationBottomSheetView.findViewById(R.id.search_fragment_clearKeyword).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setLocationKeyword.getText().clear();
                 }
             });
         }
 
-        // 设置底部透明
-        FrameLayout bottom = bottomSheetDialog.findViewById(R.id.design_bottom_sheet);
-        if (bottom != null) {
-            bottom.setBackgroundResource(android.R.color.transparent);
+        /**
+         * 初始化BottomSheet
+         */
+        private void initSetLocationBottomSheet() {
+            if (setLocationBottomSheet == null) {
+                setLocationBottomSheet = new SimpleBottomSheet(context, R.layout.settings_fragment_set_location_bottom_sheet);
+                setLocationBottomSheetView = setLocationBottomSheet.initView();
+                setLocationBottomSheetDialog = setLocationBottomSheet.bottomSheetDialog;
+            }
+
+            ((BottomSheetTopBar) setLocationBottomSheetView.findViewById(R.id.set_location_topBar)).setOnCloseListener(new BottomSheetTopBar.OnCloseListener() {
+                @Override
+                public void onClose() {
+                    setLocationBottomSheetDialog.dismiss();
+                }
+            });
+
+            setLocationKeyword = setLocationBottomSheetView.findViewById(R.id.set_location_keyword);
+            loadingRecyclerView = setLocationBottomSheetView.findViewById(R.id.set_location_data);
+
+            if (settingChoiceAddressAdapter == null) {
+                List<District> districtList = new ArrayList<>();
+                settingChoiceAddressAdapter = new SettingChoiceAddressAdapter(districtList, context);
+                loadingRecyclerView.setRecyclerViewAdapter(settingChoiceAddressAdapter);
+                settingChoiceAddressAdapter.setOnSettingChoiceAddressListener(new SettingChoiceAddressAdapter.OnSettingChoiceAddressListener() {
+                    @Override
+                    public void onSelectAddress(District district) {
+                        // 设置手动设置状态为true
+                        PreferenceUtils.setManualSetLocationStatus(true);
+
+                        // 设置位置信息
+                        PreferenceUtils.setAddress(district.address);
+
+                        // 设置adcode
+                        PreferenceUtils.setAdcode(district.adcode);
+
+                        // 发送广播
+                        sendBroadcast(true);
+
+                        // 显示已选择的位置
+                        setAddress();
+
+                        Toast.makeText(context, "已手动设置位置为:" + district.address[0] + "," + district.address[1] + "," + district.address[2], Toast.LENGTH_SHORT).show();
+
+                        setLocationBottomSheetDialog.dismiss();
+                    }
+                });
+            }
+
+            // 设置底部透明
+            FrameLayout bottom = setLocationBottomSheetDialog.findViewById(R.id.design_bottom_sheet);
+            if (bottom != null) {
+                bottom.setBackgroundResource(android.R.color.transparent);
+            }
+            BottomSheetBehavior<View> bottomSheetBehavior = BottomSheetBehavior.from((View) setLocationBottomSheetView.getParent());
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
-        BottomSheetBehavior<View> bottomSheetBehavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+    }
+
+    private class SetRecommendColumnBottomSheet implements View.OnClickListener {
+        private final int UNSELECTED_TINT = context.getColor(R.color.blue);
+        private final Drawable UNSELECTED_BG = context.getDrawable(R.drawable.ripple_round_corners6dp_bg);
+        private final int UNSELECTED_TEXT_COLOR = context.getColor(R.color.white);
+
+        private final Drawable SELECTED_BG = context.getDrawable(R.drawable.ic_border_selected);
+        private final int SELECTED_TEXT_COLOR = context.getColor(R.color.black);
+
+        private SimpleBottomSheet setRecommendColumnBottomSheet;
+        private View setRecommendColumnBottomSheetView;
+        private BottomSheetDialog setRecommendColumnBottomSheetDialog;
+        private ImageView setRecommendColumnPreview;
+        private BottomSheetTopBar setRecommendColumnTopBar;
+        private TextView setRecommendColumnShowSingleColumn;
+        private TextView setRecommendColumnShowDoubleColumn;
+
+        private void showSetRecommendColumnBottomSheet() {
+            if (setLocationBottomSheet == null) {
+                setRecommendColumnBottomSheet = new SimpleBottomSheet(context, R.layout.settings_fragment_set_recommend_column_bottom_sheet);
+                setRecommendColumnBottomSheetView = setRecommendColumnBottomSheet.initView();
+                setRecommendColumnBottomSheetDialog = setRecommendColumnBottomSheet.bottomSheetDialog;
+            }
+
+            setRecommendColumnTopBar = setRecommendColumnBottomSheetView.findViewById(R.id.set_recommend_column_topBar);
+            setRecommendColumnTopBar.setOnCloseListener(new BottomSheetTopBar.OnCloseListener() {
+                @Override
+                public void onClose() {
+                    setRecommendColumnBottomSheetDialog.dismiss();
+                }
+            });
+
+            setRecommendColumnPreview = setRecommendColumnBottomSheetView.findViewById(R.id.set_recommend_column_preview);
+
+            setRecommendColumnShowSingleColumn = setRecommendColumnBottomSheetView.findViewById(R.id.set_recommend_column_showSingleColumn);
+            setRecommendColumnShowSingleColumn.setOnClickListener(this);
+
+            setRecommendColumnShowDoubleColumn = setRecommendColumnBottomSheetView.findViewById(R.id.set_recommend_column_showDoubleColumn);
+            setRecommendColumnShowDoubleColumn.setOnClickListener(this);
+
+            setRecommendColumnBottomSheetView.findViewById(R.id.set_recommend_column_saveOperation).setOnClickListener(this);
+
+            setRecommendColumnBottomSheetDialog.show();
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.set_recommend_column_showSingleColumn:
+                    setRecommendColumnShowSingleColumn.setTextColor(SELECTED_TEXT_COLOR);
+                    setRecommendColumnShowSingleColumn.setBackground(SELECTED_BG);
+                    setRecommendColumnShowSingleColumn.setBackgroundTintList(null);
+
+                    setRecommendColumnShowDoubleColumn.setTextColor(UNSELECTED_TEXT_COLOR);
+                    setRecommendColumnShowDoubleColumn.setBackground(UNSELECTED_BG);
+                    setRecommendColumnShowDoubleColumn.getBackground().setColorFilter(new LightingColorFilter(UNSELECTED_TINT, Color.WHITE));
+                    break;
+                case R.id.set_recommend_column_showDoubleColumn:
+                    setRecommendColumnShowDoubleColumn.setTextColor(SELECTED_TEXT_COLOR);
+                    setRecommendColumnShowDoubleColumn.setBackground(SELECTED_BG);
+                    setRecommendColumnShowDoubleColumn.setBackgroundTintList(null);
+
+                    setRecommendColumnShowSingleColumn.setTextColor(UNSELECTED_TEXT_COLOR);
+                    setRecommendColumnShowSingleColumn.setBackground(UNSELECTED_BG);
+                    setRecommendColumnShowSingleColumn.getBackground().setColorFilter(new LightingColorFilter(UNSELECTED_TINT, Color.WHITE));
+                    break;
+                case R.id.set_recommend_column_saveOperation:
+                    Toast.makeText(context, "保存成功，将在下次启动后生效", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }

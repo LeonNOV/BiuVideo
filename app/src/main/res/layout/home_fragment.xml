@@ -272,7 +272,7 @@
                 android:overScrollMode="never"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="1"
-                tools:listitem="@layout/video_item_single_row" />
+                tools:listitem="@layout/video_item_single_column" />
 
         </LinearLayout>
 

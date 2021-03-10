@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bottom_sheet_background"
@@ -34,7 +33,7 @@
 
             <EditText
                 android:id="@+id/set_location_keyword"
-                android:layout_width="209dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="15dp"
@@ -92,39 +91,7 @@
         <com.leon.biuvideo.ui.views.LoadingRecyclerView
             android:id="@+id/set_location_data"
             android:layout_width="match_parent"
-            android:layout_height="300dp"/>
-
-<!--        <FrameLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="300dp">-->
-
-<!--            <ProgressBar-->
-<!--                android:id="@+id/set_location_progressBar"-->
-<!--                android:layout_width="60dp"-->
-<!--                android:layout_height="60dp"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:indeterminateTint="@color/blue"-->
-<!--                android:visibility="gone" />-->
-
-<!--            <androidx.recyclerview.widget.RecyclerView-->
-<!--                android:id="@+id/set_location_result"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:visibility="gone"-->
-<!--                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-<!--                tools:itemCount="5"-->
-<!--                tools:listitem="@layout/history_item" />-->
-
-<!--            <ImageView-->
-<!--                android:id="@+id/set_location_no_data"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:contentDescription="@string/description"-->
-<!--                android:scaleType="centerCrop"-->
-<!--                android:src="@drawable/ic_no_data" />-->
-
-<!--        </FrameLayout>-->
+            android:layout_height="300dp" />
 
     </LinearLayout>
 

@@ -51,6 +51,7 @@
     <string name="setting_clearCache">清空缓存</string>
     <string name="setting_setLocation">设置位置</string>
     <string name="setting_restoreBackup">恢复备份</string>
+    <string name="setting_recommend_span_count">设置推荐视图样式</string>
 
     <string name="setting_about">关于</string>
     <string name="setting_open_source_license">开源许可</string>
@@ -62,6 +63,9 @@
     <string name="setting_set_location_title">设置城市</string>
     <string name="setting_set_location_hint">搜索城市</string>
     <string name="setting_set_location_choose_location">选择位置</string>
+
+    <string name="singleColumn">显示单列</string>
+    <string name="doubleColumn">显示双列</string>
 
     <string name="user_dynamic">动态</string>
     <string name="user_follow">关注</string>
@@ -123,6 +127,7 @@
     <string name="cancel">取消</string>
     <string name="confirm">确定</string>
     <string name="save">保存</string>
+    <string name="saveOperation">保存设置</string>
     <string name="close">关闭</string>
     <string name="noneData">啥都没有哎~~~</string>
 
