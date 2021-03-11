@@ -120,7 +120,7 @@ public class LocationUtil {
      * @param longitude 经度
      * @return  返回位置信息
      */
-    public static String[] geoLocation(Context context, double longitude, double latitude) {
+    public static String[] geoLocation(Context context, double latitude, double longitude) {
         String[] addressStrings = new String[3];
 
         if (geoCoder == null) {

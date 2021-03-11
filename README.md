@@ -17,6 +17,10 @@
 
 ## 📘开发日志
 
+### 2020/03/11
+- 修复了经纬度错乱的问题
+  - 调用`LocationUtil.geoLocation(Context context, double latitude, double longitude)`时，是纬度在前经度在后
+
 ### 2020/03/10
 - 主页的推荐数据功能已完成
   - **进入到`RecommendFragment`时会出现BUG**

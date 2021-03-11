@@ -45,7 +45,7 @@
                 android:textColorHint="@color/hintColor" />
 
             <ImageView
-                android:id="@+id/search_fragment_clearKeyword"
+                android:id="@+id/set_location_clearKeyword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"

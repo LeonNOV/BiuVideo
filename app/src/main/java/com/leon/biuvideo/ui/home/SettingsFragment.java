@@ -5,11 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
@@ -302,7 +299,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
             district.latitude = Double.parseDouble(centers[1]);
 
             // 根据经纬度获取位置信息
-            district.address = LocationUtil.geoLocation(context, district.longitude, district.latitude);
+            district.address = LocationUtil.geoLocation(context, district.latitude, district.longitude);
 
             districtListTemp.add(district);
         }
@@ -437,7 +434,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 }
             });
 
-            setLocationBottomSheetView.findViewById(R.id.search_fragment_clearKeyword).setOnClickListener(new View.OnClickListener() {
+            setLocationBottomSheetView.findViewById(R.id.set_location_clearKeyword).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     setLocationKeyword.getText().clear();
