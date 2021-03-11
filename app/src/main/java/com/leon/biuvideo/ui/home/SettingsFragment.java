@@ -6,8 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.LightingColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
@@ -17,8 +15,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,7 +78,6 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     private LoadingRecyclerView loadingRecyclerView;
     private LocalBroadcastManager localBroadcastManager;
     private SetLocationBottomSheet setLocationBottomSheet;
-    private SetRecommendColumnBottomSheet setRecommendColumnBottomSheet;
 
     public static SettingsFragment getInstance() {
         return new SettingsFragment();
@@ -194,10 +189,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 thanksListDialog.show();
                 break;
             case R.id.settings_fragment_recommend_span_count:
-                if (setRecommendColumnBottomSheet == null) {
-                    setRecommendColumnBottomSheet = new SetRecommendColumnBottomSheet();
-                }
-
+                SetRecommendColumnBottomSheet setRecommendColumnBottomSheet = new SetRecommendColumnBottomSheet();
                 setRecommendColumnBottomSheet.showSetRecommendColumnBottomSheet();
                 break;
             case R.id.settings_fragment_feedback:
@@ -335,8 +327,22 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
             localBroadcastManager = LocalBroadcastManager.getInstance(context);
         }
 
-        Intent weatherModelIntent = new Intent(Actions.WeatherModel);
+        Intent weatherModelIntent = new Intent(Actions.WEATHER_MODEL);
         weatherModelIntent.putExtra("weatherModelStatus", weatherModelStatus);
+
+        localBroadcastManager.sendBroadcast(weatherModelIntent);
+    }
+
+    /**
+     * 发送本地广播
+     */
+    private void sendBroadcast(int recommendColumns) {
+        if (localBroadcastManager == null) {
+            localBroadcastManager = LocalBroadcastManager.getInstance(context);
+        }
+
+        Intent weatherModelIntent = new Intent(Actions.REFRESH_RECOMMEND_STYLE);
+        weatherModelIntent.putExtra("recommendColumns", recommendColumns);
 
         localBroadcastManager.sendBroadcast(weatherModelIntent);
     }
@@ -507,7 +513,8 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
         private static final int SINGLE_COLUMN = 1;
         private static final int DOUBLE_COLUMN = 2;
 
-        private int recommendColumn = PreferenceUtils.getRecommendColumns();
+        private final int recommendColumns = PreferenceUtils.getRecommendColumns();
+        private int recommendColumnTemp = recommendColumns;
 
         private final Drawable SELECTED_BG = context.getDrawable(R.drawable.ic_selected);
         private final Drawable UNSELECTED_BG = context.getDrawable(R.drawable.ripple_round_corners6dp_no_padding_bg);
@@ -528,10 +535,15 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 setRecommendColumnBottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        PreferenceUtils.setRecommendColumns(recommendColumn);
+                        // 如果选择的column和配置文件中的一样，则不发送广播
+                        if (recommendColumnTemp == recommendColumns) {
+                            return;
+                        }
+
+                        PreferenceUtils.setRecommendColumns(recommendColumnTemp);
 
                         // setRecommendColumnBottomSheetDialog消失后发送广播
-                        Toast.makeText(context, "setRecommendColumnBottomSheetDialog已消失", Toast.LENGTH_SHORT).show();
+                        sendBroadcast(recommendColumnTemp);
                     }
                 });
             }
@@ -550,7 +562,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
             setRecommendColumnShowDoubleColumn = setRecommendColumnBottomSheetView.findViewById(R.id.set_recommend_column_showDoubleColumn);
             setRecommendColumnShowDoubleColumn.setOnClickListener(this);
 
-            setOptionsStyle(recommendColumn);
+            setOptionsStyle(recommendColumns);
 
             setRecommendColumnBottomSheetDialog.show();
         }
@@ -559,20 +571,20 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.set_recommend_column_showSingleColumn:
-                    if (recommendColumn == SINGLE_COLUMN) {
+                    if (recommendColumns == SINGLE_COLUMN) {
                         return;
                     }
 
-                    recommendColumn = SINGLE_COLUMN;
+                    recommendColumnTemp = SINGLE_COLUMN;
 
                     setOptionsStyle(SINGLE_COLUMN);
                     break;
                 case R.id.set_recommend_column_showDoubleColumn:
-                    if (recommendColumn == DOUBLE_COLUMN) {
+                    if (recommendColumns == DOUBLE_COLUMN) {
                         return;
                     }
 
-                    recommendColumn = DOUBLE_COLUMN;
+                    recommendColumnTemp = DOUBLE_COLUMN;
 
                     setOptionsStyle(DOUBLE_COLUMN);
                     break;

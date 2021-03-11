@@ -1,21 +1,20 @@
 package com.leon.biuvideo.ui.home;
 
-import android.content.Context;
-import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.testAdapters.RvTestAdapter;
-import com.leon.biuvideo.beans.TestBeans.RvTestBean;
+import com.leon.biuvideo.adapters.home.RecommendAdapter;
+import com.leon.biuvideo.beans.homeBeans.Recommend;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
+import com.leon.biuvideo.utils.PreferenceUtils;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @Author Leon
@@ -23,11 +22,11 @@ import java.util.Random;
  * @Desc 推荐页面
  */
 public class RecommendFragment extends BaseSupportFragment {
-    private Context context;
-    private RecyclerView recommend_recyclerView;
+    private LoadingRecyclerView recommendLoadingRecyclerView;
+    private final List<Recommend> recommendList;
 
-    public static RecommendFragment newInstance() {
-        return new RecommendFragment();
+    public RecommendFragment(List<Recommend> recommendList) {
+        this.recommendList = recommendList;
     }
 
     @Override
@@ -37,8 +36,8 @@ public class RecommendFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        SimpleTopBar recommend_topBar = view.findViewById(R.id.recommend_topBar);
-        recommend_topBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
+        SimpleTopBar recommendTopBar = view.findViewById(R.id.recommend_topBar);
+        recommendTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
                 backPressed();
@@ -50,26 +49,27 @@ public class RecommendFragment extends BaseSupportFragment {
             }
         });
 
-        recommend_recyclerView = view.findViewById(R.id.recommend_recyclerView);
+        recommendLoadingRecyclerView = view.findViewById(R.id.recommend_loadingRecyclerView);
+
+        initValues();
     }
 
-    @Override
-    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
-        super.onLazyInitView(savedInstanceState);
-        List<RvTestBean> rvTestBeanList = new ArrayList<>();
+    private void initValues() {
+        // 设置数据
+        Handler mHandler = new Handler(Looper.getMainLooper());
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                recommendLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING);
 
-        Random random = new Random();
+                int recommendColumns = PreferenceUtils.getRecommendColumns();
 
-        for (int i = 0; i < 10; i++) {
-            RvTestBean rvTestBean = new RvTestBean();
+                recommendLoadingRecyclerView.setRecyclerViewLayoutManager(new GridLayoutManager(context, recommendColumns));
+                recommendLoadingRecyclerView.setRecyclerViewAdapter(new RecommendAdapter(recommendList, recommendColumns == 1 ? RecommendAdapter.SINGLE_COLUMN : RecommendAdapter.DOUBLE_COLUMN, context));
 
-            rvTestBean.title = "Title" + (i + 1);
-            rvTestBean.view = (random.nextInt(5000) + 5000);
-
-            rvTestBeanList.add(rvTestBean);
-        }
-
-        RvTestAdapter rvTestAdapter = new RvTestAdapter(rvTestBeanList, context);
-        recommend_recyclerView.setAdapter(rvTestAdapter);
+                // 设置状态为已完成加载数据
+                recommendLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
+            }
+        });
     }
 }

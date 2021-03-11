@@ -17,6 +17,11 @@
 
 ## 📘开发日志
 
+### 2020/03/12
+- 现主页推荐视图可进行动态切换视图样式
+- 完善了`RecommendFragment`
+- **在退出`OrderFragment`后会出现`NPE`异常，问题根源还未知**
+
 ### 2020/03/11
 - 修复了经纬度错乱的问题
   - 调用`LocationUtil.geoLocation(Context context, double latitude, double longitude)`时，是纬度在前经度在后
@@ -24,9 +29,10 @@
 
 ### 2020/03/10
 - 主页的推荐数据功能已完成
-  - **进入到`RecommendFragment`时会出现BUG**
+  - ~~**进入到`RecommendFragment`时会出现BUG**~~
 - 加入了`设置推荐视图样式`功能，可将推荐样式设置成`单列`或`双列`
-  - **该功能的还没有进行完善**
+  - ~~**该功能的还没有进行完善**~~
+- 推荐视图样式的更改已完成
 
 ### 2020/03/09
 - 完善了天气模块

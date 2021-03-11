@@ -84,6 +84,7 @@ public class SimpleTopBar extends RelativeLayout implements View.OnClickListener
         relativeLayout.setGravity(RelativeLayout.CENTER_VERTICAL);
         relativeLayout.setPadding(30, 0, 30, 0);
         relativeLayout.setBackgroundResource(R.color.white);
+//        relativeLayout.setElevation(10);
 
         addView(relativeLayout);
 

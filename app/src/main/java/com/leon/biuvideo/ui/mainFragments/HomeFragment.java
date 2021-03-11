@@ -58,7 +58,16 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
     private WeatherModelInterface weatherModel;
     private WeatherUtil weatherUtil;
     private LoadingRecyclerView homeRecommendLoadingRecyclerView;
+
+    /**
+     * 所有的推荐内容（已打乱）
+     */
     private List<Recommend> recommendList;
+
+    /**
+     * 主页显示的推荐内容
+     */
+    private final List<Recommend> homeRecommendList = new ArrayList<>(10);
 
     @Override
     protected int setLayout() {
@@ -79,7 +88,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         ((CardTitle) findView(R.id.home_fragment_cardTitle_recommend)).setOnClickActionListener(new CardTitle.OnClickActionListener() {
             @Override
             public void onClickAction() {
-                ((NavFragment) getParentFragment()).startBrotherFragment(RecommendFragment.newInstance());
+                ((NavFragment) getParentFragment()).startBrotherFragment(new RecommendFragment(recommendList));
             }
         });
 
@@ -103,7 +112,6 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 recommendList = recommendParser.parseData();
 
                 // 获取前十个数据作为主页的数据
-                List<Recommend> homeRecommendList = new ArrayList<>(5);
                 for (int i = 0; i < 10; i++) {
                     homeRecommendList.add(recommendList.get(i));
                 }
@@ -230,8 +238,9 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
      */
     private void initBroadcastReceiver() {
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(Actions.WeatherModel);
-        intentFilter.addAction(Actions.CurrentWeather);
+        intentFilter.addAction(Actions.WEATHER_MODEL);
+        intentFilter.addAction(Actions.CURRENT_WEATHER);
+        intentFilter.addAction(Actions.REFRESH_RECOMMEND_STYLE);
 
         LocalReceiver localReceiver = new LocalReceiver();
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
@@ -247,45 +256,62 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(Actions.WeatherModel)) {
-                // 获取天气模块开关状态
-                boolean weatherModelStatus = intent.getBooleanExtra("weatherModelStatus", false);
+            switch (action) {
+                case Actions.WEATHER_MODEL:
+                    // 获取天气模块开关状态
+                    boolean weatherModelStatus = intent.getBooleanExtra("weatherModelStatus", false);
 
-                // 判断天气模块是否为开启状态
-                if (weatherModelStatus && PreferenceUtils.getFeaturesStatus(FeaturesName.WEATHER_MODEL)) {
+                    // 判断天气模块是否为开启状态
+                    if (weatherModelStatus && PreferenceUtils.getFeaturesStatus(FeaturesName.WEATHER_MODEL)) {
 
-                    // 如果定位服务状态和手动设置位置状态有一个为true就显示天气模块
-                    weatherModel.setDisplayState(PreferenceUtils.getLocationServiceStatus() || PreferenceUtils.getManualSetLocationStatus());
-                } else {
-                    weatherModel.setDisplayState(false);
-                    return;
-                }
-
-                // 如果已开启定位服务，则通过GPS/NetWork来获取位置
-                if (PreferenceUtils.getLocationServiceStatus()) {
-                    if (locationUtil == null) {
-                        locationUtil = new LocationUtil(context);
+                        // 如果定位服务状态和手动设置位置状态有一个为true就显示天气模块
+                        weatherModel.setDisplayState(PreferenceUtils.getLocationServiceStatus() || PreferenceUtils.getManualSetLocationStatus());
+                    } else {
+                        weatherModel.setDisplayState(false);
+                        return;
                     }
 
-                    locationUtil.location();
-                    String[] address = locationUtil.getAddress();
-                    PreferenceUtils.setAddress(address);
+                    // 如果已开启定位服务，则通过GPS/NetWork来获取位置
+                    if (PreferenceUtils.getLocationServiceStatus()) {
+                        if (locationUtil == null) {
+                            locationUtil = new LocationUtil(context);
+                        }
 
-                    // 根据当前位置，设置adcode
-                    setAdcode(address);
-                }
+                        locationUtil.location();
+                        String[] address = locationUtil.getAddress();
+                        PreferenceUtils.setAddress(address);
 
-                SimpleSingleThreadPool.executor(new Runnable() {
-                    @Override
-                    public void run() {
-                        getCurrentWeather();
+                        // 根据当前位置，设置adcode
+                        setAdcode(address);
                     }
-                });
-            } else if (action.equals(Actions.CurrentWeather)) {
-                Weather currentWeather = (Weather) intent.getSerializableExtra("currentWeather");
-                if (currentWeather != null) {
-                    weatherModel.onRefresh(currentWeather);
-                }
+
+                    SimpleSingleThreadPool.executor(new Runnable() {
+                        @Override
+                        public void run() {
+                            getCurrentWeather();
+                        }
+                    });
+                    break;
+                case Actions.CURRENT_WEATHER:
+                    Weather currentWeather = (Weather) intent.getSerializableExtra("currentWeather");
+                    if (currentWeather != null) {
+                        weatherModel.onRefresh(currentWeather);
+                    }
+                    break;
+                case Actions.REFRESH_RECOMMEND_STYLE:
+                    homeRecommendLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING);
+
+                    // 刷新推荐试图样式
+                    int recommendColumns = intent.getIntExtra("recommendColumns", 2);
+
+                    homeRecommendLoadingRecyclerView.recyclerView.setAdapter(new RecommendAdapter(homeRecommendList, recommendColumns == 1 ? RecommendAdapter.SINGLE_COLUMN : RecommendAdapter.DOUBLE_COLUMN, context));
+                    homeRecommendLoadingRecyclerView.setRecyclerViewLayoutManager(new GridLayoutManager(context, recommendColumns));
+
+                    // 设置状态为已完成加载数据
+                    homeRecommendLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
+                    break;
+                default:
+                    break;
             }
         }
 

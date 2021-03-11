@@ -106,6 +106,8 @@ public class LoadingRecyclerView extends FrameLayout {
         recyclerView = new RecyclerView(context);
         recyclerView.setVisibility(View.GONE);
         recyclerView.setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
+        // 禁止多点触发
+        recyclerView.setMotionEventSplittingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         parentLayout.addView(recyclerView);

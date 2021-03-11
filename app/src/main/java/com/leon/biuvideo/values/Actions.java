@@ -9,10 +9,15 @@ public class Actions {
     /**
      * 天气模块
      */
-    public static final String WeatherModel = "WeatherModelInterface";
+    public static final String WEATHER_MODEL = "WeatherModelInterface";
 
     /**
      * 当前天气数据
      */
-    public static final String CurrentWeather = "CurrentWeather";
+    public static final String CURRENT_WEATHER = "CurrentWeather";
+
+    /**
+     * 刷新推荐视图样式
+     */
+    public static final String REFRESH_RECOMMEND_STYLE = "refreshRecommendStyle";
 }
