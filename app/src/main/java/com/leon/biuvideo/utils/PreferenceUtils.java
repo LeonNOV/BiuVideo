@@ -22,6 +22,7 @@ public class PreferenceUtils {
     public static final String USER_ID = "userId";
     public static final String LOCATION_SERVICE = "locationServiceStatus";
     public static final String MANUAL_SET_LOCATION = "manualSetLocationStatus";
+    public static final String RECOMMEND_COLUMNS = "recommendColumns";
 
     public static SharedPreferences PREFERENCE;
 
@@ -178,5 +179,25 @@ public class PreferenceUtils {
      */
     public static boolean getManualSetLocationStatus() {
         return PREFERENCE.getBoolean(MANUAL_SET_LOCATION, false);
+    }
+
+    /**
+     * 设置推荐视图显示样式
+     *
+     * @param columns   1：单列；2：双列
+     */
+    public static void setRecommendColumns (int columns) {
+        SharedPreferences.Editor edit = PREFERENCE.edit();
+        edit.putInt(RECOMMEND_COLUMNS, columns).apply();
+    }
+
+    /**
+     * 获取推荐视图样式
+     *
+     * @return  样式，默认为双列
+     */
+    public static int getRecommendColumns() {
+        int anInt = PREFERENCE.getInt(RECOMMEND_COLUMNS, 2);
+        return anInt >= 2 ? 2 : 1;
     }
 }

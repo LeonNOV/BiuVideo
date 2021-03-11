@@ -2,6 +2,7 @@ package com.leon.biuvideo.ui.home;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -17,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -502,26 +504,36 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     }
 
     private class SetRecommendColumnBottomSheet implements View.OnClickListener {
-        private final int UNSELECTED_TINT = context.getColor(R.color.blue);
-        private final Drawable UNSELECTED_BG = context.getDrawable(R.drawable.ripple_round_corners6dp_bg);
-        private final int UNSELECTED_TEXT_COLOR = context.getColor(R.color.white);
+        private static final int SINGLE_COLUMN = 1;
+        private static final int DOUBLE_COLUMN = 2;
 
-        private final Drawable SELECTED_BG = context.getDrawable(R.drawable.ic_border_selected);
-        private final int SELECTED_TEXT_COLOR = context.getColor(R.color.black);
+        private int recommendColumn = PreferenceUtils.getRecommendColumns();
+
+        private final Drawable SELECTED_BG = context.getDrawable(R.drawable.ic_selected);
+        private final Drawable UNSELECTED_BG = context.getDrawable(R.drawable.ripple_round_corners6dp_no_padding_bg);
 
         private SimpleBottomSheet setRecommendColumnBottomSheet;
         private View setRecommendColumnBottomSheetView;
         private BottomSheetDialog setRecommendColumnBottomSheetDialog;
-        private ImageView setRecommendColumnPreview;
         private BottomSheetTopBar setRecommendColumnTopBar;
-        private TextView setRecommendColumnShowSingleColumn;
-        private TextView setRecommendColumnShowDoubleColumn;
+
+        private FrameLayout setRecommendColumnShowSingleColumn;
+        private FrameLayout setRecommendColumnShowDoubleColumn;
 
         private void showSetRecommendColumnBottomSheet() {
             if (setLocationBottomSheet == null) {
                 setRecommendColumnBottomSheet = new SimpleBottomSheet(context, R.layout.settings_fragment_set_recommend_column_bottom_sheet);
                 setRecommendColumnBottomSheetView = setRecommendColumnBottomSheet.initView();
                 setRecommendColumnBottomSheetDialog = setRecommendColumnBottomSheet.bottomSheetDialog;
+                setRecommendColumnBottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        PreferenceUtils.setRecommendColumns(recommendColumn);
+
+                        // setRecommendColumnBottomSheetDialog消失后发送广播
+                        Toast.makeText(context, "setRecommendColumnBottomSheetDialog已消失", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             setRecommendColumnTopBar = setRecommendColumnBottomSheetView.findViewById(R.id.set_recommend_column_topBar);
@@ -532,15 +544,13 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 }
             });
 
-            setRecommendColumnPreview = setRecommendColumnBottomSheetView.findViewById(R.id.set_recommend_column_preview);
-
             setRecommendColumnShowSingleColumn = setRecommendColumnBottomSheetView.findViewById(R.id.set_recommend_column_showSingleColumn);
             setRecommendColumnShowSingleColumn.setOnClickListener(this);
 
             setRecommendColumnShowDoubleColumn = setRecommendColumnBottomSheetView.findViewById(R.id.set_recommend_column_showDoubleColumn);
             setRecommendColumnShowDoubleColumn.setOnClickListener(this);
 
-            setRecommendColumnBottomSheetView.findViewById(R.id.set_recommend_column_saveOperation).setOnClickListener(this);
+            setOptionsStyle(recommendColumn);
 
             setRecommendColumnBottomSheetDialog.show();
         }
@@ -549,28 +559,35 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.set_recommend_column_showSingleColumn:
-                    setRecommendColumnShowSingleColumn.setTextColor(SELECTED_TEXT_COLOR);
-                    setRecommendColumnShowSingleColumn.setBackground(SELECTED_BG);
-                    setRecommendColumnShowSingleColumn.setBackgroundTintList(null);
+                    if (recommendColumn == SINGLE_COLUMN) {
+                        return;
+                    }
 
-                    setRecommendColumnShowDoubleColumn.setTextColor(UNSELECTED_TEXT_COLOR);
-                    setRecommendColumnShowDoubleColumn.setBackground(UNSELECTED_BG);
-                    setRecommendColumnShowDoubleColumn.getBackground().setColorFilter(new LightingColorFilter(UNSELECTED_TINT, Color.WHITE));
+                    recommendColumn = SINGLE_COLUMN;
+
+                    setOptionsStyle(SINGLE_COLUMN);
                     break;
                 case R.id.set_recommend_column_showDoubleColumn:
-                    setRecommendColumnShowDoubleColumn.setTextColor(SELECTED_TEXT_COLOR);
-                    setRecommendColumnShowDoubleColumn.setBackground(SELECTED_BG);
-                    setRecommendColumnShowDoubleColumn.setBackgroundTintList(null);
+                    if (recommendColumn == DOUBLE_COLUMN) {
+                        return;
+                    }
 
-                    setRecommendColumnShowSingleColumn.setTextColor(UNSELECTED_TEXT_COLOR);
-                    setRecommendColumnShowSingleColumn.setBackground(UNSELECTED_BG);
-                    setRecommendColumnShowSingleColumn.getBackground().setColorFilter(new LightingColorFilter(UNSELECTED_TINT, Color.WHITE));
-                    break;
-                case R.id.set_recommend_column_saveOperation:
-                    Toast.makeText(context, "保存成功，将在下次启动后生效", Toast.LENGTH_SHORT).show();
+                    recommendColumn = DOUBLE_COLUMN;
+
+                    setOptionsStyle(DOUBLE_COLUMN);
                     break;
                 default:
                     break;
+            }
+        }
+
+        private void setOptionsStyle (int recommendColumn) {
+            if (recommendColumn == SINGLE_COLUMN) {
+                setRecommendColumnShowSingleColumn.setBackground(SELECTED_BG);
+                setRecommendColumnShowDoubleColumn.setBackground(UNSELECTED_BG);
+            } else {
+                setRecommendColumnShowDoubleColumn.setBackground(SELECTED_BG);
+                setRecommendColumnShowSingleColumn.setBackground(UNSELECTED_BG);
             }
         }
     }

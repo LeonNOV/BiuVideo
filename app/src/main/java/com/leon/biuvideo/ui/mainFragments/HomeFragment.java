@@ -92,7 +92,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         initBroadcastReceiver();
 
         // 开启单线程加载推荐数据
-        /*SimpleSingleThreadPool.executor(new Runnable() {
+        SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
                 // 设置状态为加载数据中
@@ -113,15 +113,17 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        homeRecommendLoadingRecyclerView.setRecyclerViewLayoutManager(new GridLayoutManager(context, 1));
-                        homeRecommendLoadingRecyclerView.setRecyclerViewAdapter(new RecommendAdapter(homeRecommendList, RecommendAdapter.SINGLE_COLUMN, context));
+                        int recommendColumns = PreferenceUtils.getRecommendColumns();
+
+                        homeRecommendLoadingRecyclerView.setRecyclerViewLayoutManager(new GridLayoutManager(context, recommendColumns));
+                        homeRecommendLoadingRecyclerView.setRecyclerViewAdapter(new RecommendAdapter(homeRecommendList, recommendColumns == 1 ? RecommendAdapter.SINGLE_COLUMN : RecommendAdapter.DOUBLE_COLUMN, context));
 
                         // 设置状态为已完成加载数据
                         homeRecommendLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
                     }
                 });
             }
-        });*/
+        });
 
         weatherUtil = new WeatherUtil();
 

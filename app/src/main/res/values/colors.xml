@@ -31,4 +31,5 @@
 
     <color name="warn_dialog_cancel_color">#bdbdbd</color>
     <color name="warn_dialog_confirm_color">#00bfa5</color>
+    <color name="rippleColor">#e5e5e5</color>
 </resources>
