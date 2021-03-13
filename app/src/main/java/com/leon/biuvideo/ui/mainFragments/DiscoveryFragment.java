@@ -26,7 +26,7 @@ public class DiscoveryFragment extends SupportFragment implements View.OnClickLi
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.discovery_fragment, container, false);
-//Analyze
+
         initView(view);
 
         return view;

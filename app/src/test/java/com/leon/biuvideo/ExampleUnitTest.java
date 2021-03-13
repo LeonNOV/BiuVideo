@@ -25,18 +25,9 @@ public class ExampleUnitTest {
 
     @Test
     public void test() {
-        List<Integer> arrayList = new ArrayList<>();
-        arrayList.add(1);
-        arrayList.add(2);
-        arrayList.add(3);
-        arrayList.add(4);
-        arrayList.add(5);
 
-        List<Integer> temp = new ArrayList<>(3);
-        temp.addAll(arrayList);
-
-        System.out.println(temp);
     }
+
     //解析输入的内容
     @Test
     public void parseValue() {
@@ -69,7 +60,7 @@ public class ExampleUnitTest {
 
         //mid的获取
 //        long mid = IDUtils.getMid("https://space.bilibili.com/357612002");
-//        long mid = IDUtils.getMid("https://space.bilibili.com/43707221?share_medium=android&share_source=copy_link&bbid=XY6E7E663EF9E1BF2EDD5BD83C77E9B1C33CE&ts=1603558072014\n");
+//        long mid = IDUtils.getMid("https://space.bilibili.com/43707221?share_medium=android&share_source=copy_link&bbid=XY6E7E663EF9E1BF2EDD5BD83C77E9B1C33CE&ts=1603558072014n");
 
 //        long mid = IDUtils.getMid("https://space.bilibili.com/2946474/");
 //        long mid = IDUtils.getMid("2946474");

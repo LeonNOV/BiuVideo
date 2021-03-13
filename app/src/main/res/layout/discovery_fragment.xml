@@ -55,15 +55,9 @@
             app:card_action="@string/see_more"
             app:card_title="@string/dynamic" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/discover_dynamic_recyclerView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:overScrollMode="never"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:itemCount="5"
-            tools:listitem="@layout/rv_test_item" />
+        <com.leon.biuvideo.ui.views.LoadingRecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
     </LinearLayout>
 

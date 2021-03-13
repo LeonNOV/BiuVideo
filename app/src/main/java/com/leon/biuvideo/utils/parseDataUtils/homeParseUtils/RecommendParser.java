@@ -1,9 +1,10 @@
-package com.leon.biuvideo.utils.parseDataUtils;
+package com.leon.biuvideo.utils.parseDataUtils.homeParseUtils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.homeBeans.Recommend;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.ValueUtils;
+import com.leon.biuvideo.utils.parseDataUtils.ParseInterface;
 import com.leon.biuvideo.values.RecommendType;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
@@ -48,7 +49,7 @@ public class RecommendParser implements ParseInterface<Recommend> {
             headers = HttpUtils.getHeaders();
         }
 
-        JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.recommend, Headers.of(headers), null);
+        JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.RECOMMEND, Headers.of(headers), null);
 
         Set<Map.Entry<String, Object>> entrySet = response.entrySet();
         Iterator<Map.Entry<String, Object>> iterator = entrySet.iterator();

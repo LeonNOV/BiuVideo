@@ -291,5 +291,43 @@ public class BiliBiliAPIs {
      * 如果登录上的话，需要在请求头加入Cookie数据，即可获取个人推荐数据
      *
      */
-    public static final String recommend = "https://www.bilibili.com/index/ding.json";
+    public static final String RECOMMEND = "https://www.bilibili.com/index/ding.json";
+
+
+    public static final String TYPE_LIST = "268435455";
+
+    /**
+     * 获取动态数据接口（未登录情况下）
+     *
+     * 参数：
+     *      fake_uid：一个随机的六位数字
+     *      hot_offset：下一页数据的索引值，第一页默认为0（获取第二页数据时，需要获取到第一页数据最后一条dynamic_id_str的值）
+     *
+     */
+    public static final String DYNAMIC_UN_LOGIN = "unlogin_dynamics";
+
+    /**
+     * 获取第一页动态数据接口（已登录情况下使用）
+     *
+     * 参数：
+     *      uid：用户ID（可选，但Cookie必须添加）
+     *      type_list/type：常量{@value TYPE_LIST}
+     *      其他参数不需要
+     */
+    public static final String DYNAMIC_LOGIN = "dynamic_new";
+
+    /**
+     * 获取下一页动态数据（已登录情况下）
+     *
+     * 参数：
+     *      type_list：同上{@value DYNAMIC_LOGIN}
+     *      offset：该值为第一页最后一条数据dynamic_id_str的值
+     *
+     */
+    public static final String DYNAMIC_LOGIN_NEXT = "dynamic_history";
+
+    /**
+     * 获取动态数据基本连接，配合{@value DYNAMIC_UN_LOGIN}、{@value DYNAMIC_LOGIN}、{@value DYNAMIC_LOGIN_NEXT}使用
+     */
+    public static final String DYNAMIC_BASE_PATH = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/";
 }
