@@ -13,13 +13,15 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.home.RecommendAdapter;
+import com.leon.biuvideo.adapters.home.WatchLaterAdapter;
 import com.leon.biuvideo.beans.Weather;
 import com.leon.biuvideo.beans.homeBeans.Recommend;
+import com.leon.biuvideo.beans.homeBeans.WatchLater;
 import com.leon.biuvideo.ui.NavFragment;
-import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.home.DownloadManagerFragment;
 import com.leon.biuvideo.ui.home.FavoritesFragment;
@@ -36,14 +38,14 @@ import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.LocationUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
-import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.WeatherUtil;
+import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.RecommendParser;
+import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.WatchLaterParser;
 import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.FeaturesName;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.FutureTask;
 
 /**
  * @Author Leon
@@ -56,12 +58,19 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
     private Handler handler;
     private WeatherModelInterface weatherModel;
     private WeatherUtil weatherUtil;
+
     private LoadingRecyclerView homeRecommendLoadingRecyclerView;
+    private LoadingRecyclerView homeWatchLaterLoadingRecyclerView;
 
     /**
      * 所有的推荐内容（已打乱）
      */
     private List<Recommend> recommendList;
+
+    /**
+     * 稍后观看数据
+     */
+    private List<WatchLater> watchLaterList;
 
     /**
      * 主页显示的推荐内容
@@ -92,6 +101,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         });
 
         homeRecommendLoadingRecyclerView = findView(R.id.home_recommend_loadingRecyclerView);
+        homeWatchLaterLoadingRecyclerView = findView(R.id.home_watchLater_loadingRecyclerView);
 
         initValue();
     }
@@ -99,16 +109,19 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
     private void initValue() {
         initBroadcastReceiver();
 
-        // 开启单线程加载推荐数据
-        /*SimpleSingleThreadPool.executor(new Runnable() {
+        // 设置状态为加载数据中
+        homeRecommendLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING);
+        homeWatchLaterLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING);
+
+        // 开启单线程加载网络数据
+        SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                // 设置状态为加载数据中
-                homeRecommendLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING);
+                // 获取推荐内容
+                recommendList = getRecommendData();
 
-                // 获取推荐内容(顺序已打乱)
-                RecommendParser recommendParser = new RecommendParser(null);
-                recommendList = recommendParser.parseData();
+                // 获取稍后观看数据
+                watchLaterList = getWatchLaterData();
 
                 // 获取前十个数据作为主页的数据
                 for (int i = 0; i < 10; i++) {
@@ -120,17 +133,40 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
+                        // 设置推荐数据
                         int recommendColumns = PreferenceUtils.getRecommendColumns();
-
                         homeRecommendLoadingRecyclerView.setRecyclerViewLayoutManager(new GridLayoutManager(context, recommendColumns));
                         homeRecommendLoadingRecyclerView.setRecyclerViewAdapter(new RecommendAdapter(homeRecommendList, recommendColumns == 1 ? RecommendAdapter.SINGLE_COLUMN : RecommendAdapter.DOUBLE_COLUMN, context));
-
-                        // 设置状态为已完成加载数据
                         homeRecommendLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
+
+                        // 设置稍后再看数据
+                        homeWatchLaterLoadingRecyclerView.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
+                        homeWatchLaterLoadingRecyclerView.setRecyclerViewAdapter(new WatchLaterAdapter(watchLaterList, context));
+                        homeWatchLaterLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
                     }
                 });
             }
-        });*/
+
+            /**
+             * 获取稍后再看数据数据
+             *
+             * @return  WatchLater集合
+             */
+            private List<WatchLater> getWatchLaterData() {
+                WatchLaterParser watchLaterParser = new WatchLaterParser();
+                return watchLaterParser.parseData();
+            }
+
+            /**
+             * 获取推荐数据
+             *
+             * @return  Recommend集合
+             */
+            private List<Recommend> getRecommendData() {
+                RecommendParser recommendParser = new RecommendParser(null);
+                return recommendParser.parseData();
+            }
+        });
 
         weatherUtil = new WeatherUtil();
 

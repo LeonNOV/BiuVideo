@@ -8,7 +8,6 @@ import com.leon.biuvideo.utils.parseDataUtils.ParseInterface;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +16,7 @@ import java.util.Map;
 /**
  * @Author Leon
  * @Time 2021/3/14
- * @Desc
+ * @Desc 热搜榜数据解析类
  */
 public class HotSearchParser implements ParseInterface<HotSearch> {
     @Override

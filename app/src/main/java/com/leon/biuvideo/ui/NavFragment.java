@@ -1,40 +1,35 @@
 package com.leon.biuvideo.ui;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
+import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.mainFragments.DiscoveryFragment;
 import com.leon.biuvideo.ui.mainFragments.HomeFragment;
 import com.leon.biuvideo.ui.mainFragments.UserFragment;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
-public class NavFragment extends SupportFragment implements BottomNavigationView.OnNavigationItemSelectedListener {
+/**
+ * @Author Leon
+ * @Time 2021/3/1
+ * @Desc 导航Fragment，用于显示底部导航栏
+ */
+public class NavFragment extends BaseSupportFragment implements BottomNavigationView.OnNavigationItemSelectedListener {
     private final SupportFragment[] supportFragments = new SupportFragment[3];
 
     public static NavFragment newInstance() {
-        Bundle args = new Bundle();
-
-        NavFragment navFragment = new NavFragment();
-        navFragment.setArguments(args);
-        return navFragment;
+        return new NavFragment();
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.nav_fragment, container, false);
-        initView(view);
-        return view;
+    protected int setLayout() {
+        return R.layout.nav_fragment;
     }
 
     @Override
@@ -55,7 +50,8 @@ public class NavFragment extends SupportFragment implements BottomNavigationView
         }
     }
 
-    private void initView(View view) {
+    @Override
+    protected void initView() {
         BottomNavigationView main_nav_bottom = view.findViewById(R.id.main_nav_bottom);
         main_nav_bottom.setItemIconTintList(null);
         main_nav_bottom.setOnNavigationItemSelectedListener(this);

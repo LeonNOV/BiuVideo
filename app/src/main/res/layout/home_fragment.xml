@@ -262,17 +262,13 @@
                 app:card_action="@string/see_more"
                 app:card_title="@string/home_card_title_watch_later" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/home_watchLater_recyclerView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <com.leon.biuvideo.ui.views.LoadingRecyclerView
+                android:id="@+id/home_watchLater_loadingRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginStart="13dp"
                 android:layout_marginEnd="13dp"
-                android:orientation="vertical"
-                android:overScrollMode="never"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="1"
-                tools:listitem="@layout/video_item_single_column" />
+                android:layout_marginBottom="20dp" />
 
         </LinearLayout>
 

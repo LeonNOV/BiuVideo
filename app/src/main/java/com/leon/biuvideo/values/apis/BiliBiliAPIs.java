@@ -340,4 +340,9 @@ public class BiliBiliAPIs {
      *
      */
     public static final String HOT_SEARCH_LIST = "https://app.bilibili.com/x/v2/search/square";
+
+    /**
+     * 稍后观看接口（需要Cookie）
+     */
+    public static final String WATCH_LATER = "https://api.bilibili.com/x/v2/history/toview/web";
 }

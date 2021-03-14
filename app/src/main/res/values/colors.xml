@@ -32,4 +32,7 @@
     <color name="warn_dialog_cancel_color">#bdbdbd</color>
     <color name="warn_dialog_confirm_color">#00bfa5</color>
     <color name="rippleColor">#e5e5e5</color>
+
+    <color name="video_length_bg">#99000000</color>
+    <color name="invalid_foreground">#80000000</color>
 </resources>
