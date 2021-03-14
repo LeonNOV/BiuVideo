@@ -15,11 +15,12 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.historyAdapters.HistoryAdapter;
 import com.leon.biuvideo.beans.userBeans.History;
 import com.leon.biuvideo.beans.userBeans.HistoryType;
-import com.leon.biuvideo.ui.AbstractSimpleLoadDataThread;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.HistoryParser;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -73,9 +74,9 @@ public class HistoryInnerFragment extends BaseLazyFragment {
 
     @Override
     public void loadData() {
-        AbstractSimpleLoadDataThread abstractSimpleLoadDataThread = new AbstractSimpleLoadDataThread() {
+        SimpleSingleThreadPool.executor(new Runnable() {
             @Override
-            public void load() {
+            public void run() {
                 historyParser = new HistoryParser(context);
                 history = historyParser.parseHistory(cookie, -1, -1, historyType);
 
@@ -88,10 +89,7 @@ public class HistoryInnerFragment extends BaseLazyFragment {
                 message.setData(bundle);
                 handler.sendMessage(message);
             }
-        };
-
-        SimpleThreadPool simpleThreadPool = abstractSimpleLoadDataThread.getSimpleThreadPool();
-        simpleThreadPool.submit(new FutureTask<>(abstractSimpleLoadDataThread), "loadHistory");
+        });
 
         handler = new Handler(new Handler.Callback() {
             @Override
@@ -102,8 +100,6 @@ public class HistoryInnerFragment extends BaseLazyFragment {
                 if (loadState) {
                     initValues();
                 }
-
-                simpleThreadPool.cancelTask("loadHistory");
 
                 return true;
             }

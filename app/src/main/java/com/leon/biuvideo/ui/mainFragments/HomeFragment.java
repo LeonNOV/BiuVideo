@@ -19,7 +19,7 @@ import com.leon.biuvideo.adapters.home.RecommendAdapter;
 import com.leon.biuvideo.beans.Weather;
 import com.leon.biuvideo.beans.homeBeans.Recommend;
 import com.leon.biuvideo.ui.NavFragment;
-import com.leon.biuvideo.ui.AbstractSimpleLoadDataThread;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.home.DownloadManagerFragment;
 import com.leon.biuvideo.ui.home.FavoritesFragment;
@@ -38,7 +38,6 @@ import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.WeatherUtil;
-import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.RecommendParser;
 import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.FeaturesName;
 
@@ -101,7 +100,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         initBroadcastReceiver();
 
         // 开启单线程加载推荐数据
-        SimpleSingleThreadPool.executor(new Runnable() {
+        /*SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
                 // 设置状态为加载数据中
@@ -131,13 +130,13 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                     }
                 });
             }
-        });
+        });*/
 
         weatherUtil = new WeatherUtil();
 
-        AbstractSimpleLoadDataThread abstractSimpleLoadDataThread = new AbstractSimpleLoadDataThread() {
+        SimpleSingleThreadPool.executor(new Runnable() {
             @Override
-            public void load() {
+            public void run() {
                 // 初始化天气模块
                 if (weatherModel == null) {
                     weatherModel = new WeatherModelInterface();
@@ -146,10 +145,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 // 获取当前天气
                 getCurrentWeather();
             }
-        };
-
-        SimpleThreadPool simpleThreadPool = abstractSimpleLoadDataThread.getSimpleThreadPool();
-        simpleThreadPool.submit(new FutureTask<>(abstractSimpleLoadDataThread), "initHomeValues");
+        });
 
         // 在主线程中更新天气信息
         handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
@@ -170,7 +166,6 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                     weatherModel.setDisplayState(PreferenceUtils.getLocationServiceStatus() || PreferenceUtils.getManualSetLocationStatus());
                 }
 
-                simpleThreadPool.cancelTask("initHomeValues");
                 return true;
             }
         });

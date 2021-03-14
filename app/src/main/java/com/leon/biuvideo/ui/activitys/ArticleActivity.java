@@ -22,14 +22,13 @@ import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
-import com.leon.biuvideo.ui.AbstractSimpleLoadDataThread;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.views.RoundPopupWindow;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.SimpleThreadPool;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.LocalOrdersDatabaseUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.values.LocalOrderType;
@@ -48,7 +47,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.FutureTask;
 
 import okhttp3.Headers;
 
@@ -79,7 +77,6 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
@@ -126,9 +123,9 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void loadData() {
-        AbstractSimpleLoadDataThread abstractSimpleLoadDataThread = new AbstractSimpleLoadDataThread() {
+        SimpleSingleThreadPool.executor(new Runnable() {
             @Override
-            public void load() {
+            public void run() {
                 Intent intent = getIntent();
                 Bundle extras = intent.getExtras();
                 article = (Article) extras.getSerializable("article");
@@ -144,10 +141,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                 message.setData(bundle);
                 handler.sendMessage(message);
             }
-        };
-
-        SimpleThreadPool simpleThreadPool = abstractSimpleLoadDataThread.getSimpleThreadPool();
-        simpleThreadPool.submit(new FutureTask<>(abstractSimpleLoadDataThread), "loadArticleInfo");
+        });
 
         handler = new Handler(new Handler.Callback() {
             @Override

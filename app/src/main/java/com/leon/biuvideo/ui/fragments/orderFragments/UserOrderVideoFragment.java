@@ -15,11 +15,12 @@ import com.leon.biuvideo.adapters.userOrderAdapters.UserOrderVideoFolderAdapter;
 import com.leon.biuvideo.adapters.userOrderAdapters.UserOrderVideoFolderDetailAdapter;
 import com.leon.biuvideo.beans.orderBeans.UserFolder;
 import com.leon.biuvideo.beans.orderBeans.UserFolderData;
-import com.leon.biuvideo.ui.AbstractSimpleLoadDataThread;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserFolderParser;
@@ -76,9 +77,9 @@ public class UserOrderVideoFragment extends BaseLazyFragment {
 
     @Override
     public void loadData() {
-        AbstractSimpleLoadDataThread abstractSimpleLoadDataThread = new AbstractSimpleLoadDataThread() {
+        SimpleSingleThreadPool.executor(new Runnable() {
             @Override
-            public void load() {
+            public void run() {
                 userFolderParser = new UserFolderParser(context);
                 userFolders = userFolderParser.parseUserFolder(mid);
 
@@ -96,10 +97,7 @@ public class UserOrderVideoFragment extends BaseLazyFragment {
                 message.setData(bundle);
                 handler.sendMessage(message);
             }
-        };
-
-        SimpleThreadPool simpleThreadPool = abstractSimpleLoadDataThread.getSimpleThreadPool();
-        simpleThreadPool.submit(new FutureTask<>(abstractSimpleLoadDataThread), "loadOrderVideo");
+        });
 
         handler = new Handler(new Handler.Callback() {
             @Override
@@ -110,8 +108,6 @@ public class UserOrderVideoFragment extends BaseLazyFragment {
                 if (loadState) {
                     initValues();
                 }
-
-                simpleThreadPool.cancelTask("loadOrderVideo");
 
                 return true;
             }

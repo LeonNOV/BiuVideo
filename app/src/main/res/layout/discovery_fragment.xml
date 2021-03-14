@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg"
@@ -46,16 +45,15 @@
         android:orientation="vertical">
 
         <com.leon.biuvideo.ui.views.CardTitle
-            android:id="@+id/discovery_cardTitle_dynamic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            app:card_action="@string/see_more"
-            app:card_title="@string/dynamic" />
+            app:card_title="@string/hotSearch" />
 
         <com.leon.biuvideo.ui.views.LoadingRecyclerView
+            android:id="@+id/discovery_loadingRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 

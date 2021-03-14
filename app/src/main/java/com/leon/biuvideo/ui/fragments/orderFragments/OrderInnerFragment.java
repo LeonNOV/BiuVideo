@@ -14,11 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.userOrderAdapters.UserOrderBaseAdapter;
 import com.leon.biuvideo.beans.orderBeans.Order;
-import com.leon.biuvideo.ui.AbstractSimpleLoadDataThread;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.OrderParser;
 import com.leon.biuvideo.values.OrderFollowType;
@@ -80,9 +81,9 @@ public class OrderInnerFragment extends BaseLazyFragment {
 
     @Override
     public void loadData() {
-        AbstractSimpleLoadDataThread abstractSimpleLoadDataThread = new AbstractSimpleLoadDataThread() {
+        SimpleSingleThreadPool.executor(new Runnable() {
             @Override
-            public void load() {
+            public void run() {
                 orderParser = new OrderParser(context);
                 total = orderParser.getOrderCount(mid, orderType, orderFollowType);
 
@@ -95,10 +96,7 @@ public class OrderInnerFragment extends BaseLazyFragment {
                 message.setData(bundle);
                 handler.sendMessage(message);
             }
-        };
-
-        SimpleThreadPool simpleThreadPool = abstractSimpleLoadDataThread.getSimpleThreadPool();
-        simpleThreadPool.submit(new FutureTask<>(abstractSimpleLoadDataThread), "loadOrders");
+        });
 
         handler = new Handler(new Handler.Callback() {
             @Override
@@ -109,8 +107,6 @@ public class OrderInnerFragment extends BaseLazyFragment {
                 if (loadState) {
                     initValues();
                 }
-
-                simpleThreadPool.cancelTask("loadOrders");
 
                 return true;
             }

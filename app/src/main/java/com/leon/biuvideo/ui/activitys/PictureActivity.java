@@ -19,11 +19,12 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.PictureListAdapter;
 import com.leon.biuvideo.beans.upMasterBean.Picture;
 import com.leon.biuvideo.layoutManager.PictureGridLayoutManager;
-import com.leon.biuvideo.ui.AbstractSimpleLoadDataThread;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.views.RoundPopupWindow;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
@@ -84,9 +85,9 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void loadData() {
-        AbstractSimpleLoadDataThread abstractSimpleLoadDataThread = new AbstractSimpleLoadDataThread() {
+        SimpleSingleThreadPool.executor(new Runnable() {
             @Override
-            public void load() {
+            public void run() {
                 Intent intent = getIntent();
                 Bundle extras = intent.getExtras();
                 picture = (Picture) extras.getSerializable("picture");
@@ -100,10 +101,7 @@ public class PictureActivity extends AppCompatActivity implements View.OnClickLi
                 message.setData(bundle);
                 handler.sendMessage(message);
             }
-        };
-
-        SimpleThreadPool simpleThreadPool = abstractSimpleLoadDataThread.getSimpleThreadPool();
-        simpleThreadPool.submit(new FutureTask<>(abstractSimpleLoadDataThread), "loadPictureInfo");
+        });
 
         handler = new Handler(new Handler.Callback() {
             @Override

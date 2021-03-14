@@ -78,7 +78,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     public BaseViewHolder setImage(int id, String url, ImagePixelSize imagePixelSize) {
         ImageView imageView = findById(id);
 
-        Glide.with(context).load(imgOriginalMode ? url : url + imagePixelSize.value).into(imageView);
+        Glide.with(context).load(imgOriginalMode ? url : imagePixelSize != null ? url + imagePixelSize.value : url).into(imageView);
 
         return this;
     }

@@ -9,8 +9,7 @@ import java.util.concurrent.Callable;
  * @Time 2021/3/6
  * @Desc 一个简单的加载数据抽象类<br />只需重写该类中的load()方法即可
  */
-public abstract class AbstractSimpleLoadDataThread implements Callable<String> {
-
+public abstract class SimpleLoadDataThread implements Callable<String> {
     /**
      * <strong>需要重写该方法</strong>
      * <br/>
@@ -23,9 +22,5 @@ public abstract class AbstractSimpleLoadDataThread implements Callable<String> {
         load();
 
         return null;
-    }
-
-    public SimpleThreadPool getSimpleThreadPool () {
-        return new SimpleThreadPool(SimpleThreadPool.LoadTaskNum, SimpleThreadPool.LoadTask);
     }
 }

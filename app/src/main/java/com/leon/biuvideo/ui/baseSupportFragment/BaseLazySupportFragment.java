@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
-import com.leon.biuvideo.utils.Fuck;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -76,10 +75,10 @@ public abstract class BaseLazySupportFragment extends SupportFragment {
         this.onLoadListener = onLoadListener;
     }
 
+    protected abstract void onLazy();
+
     @Override
     public void onResume() {
-        super.onResume();
-
         if (!isLoaded && isVisible()) {
             initView();
             isLoaded = true;
@@ -95,10 +94,10 @@ public abstract class BaseLazySupportFragment extends SupportFragment {
                 }
             });
 
-            Bundle bundle = new Bundle();
-            bundle.putBoolean("isVisible", isVisible());
-            onLazyInitView(bundle);
+            onLazy();
         }
+
+        super.onResume();
     }
 
     /**

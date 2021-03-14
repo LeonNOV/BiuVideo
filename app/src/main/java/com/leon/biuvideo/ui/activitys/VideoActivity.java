@@ -29,7 +29,7 @@ import com.leon.biuvideo.beans.videoBean.play.Media;
 import com.leon.biuvideo.beans.videoBean.play.Play;
 import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
-import com.leon.biuvideo.ui.AbstractSimpleLoadDataThread;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.dialogs.AddVideoDialog;
 import com.leon.biuvideo.ui.dialogs.AnthologyDownloadDialog;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
@@ -38,6 +38,7 @@ import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.PermissionUtil;
 import com.leon.biuvideo.utils.SimpleDownloadThread;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.LocalOrdersDatabaseUtils;
@@ -164,9 +165,9 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
      * 开启一个线程来加载数据
      */
     private void loadData() {
-        AbstractSimpleLoadDataThread abstractSimpleLoadDataThread = new AbstractSimpleLoadDataThread() {
+        SimpleSingleThreadPool.executor(new Runnable() {
             @Override
-            public void load() {
+            public void run() {
                 //获取视频bvid
                 Intent intent = getIntent();
                 bvid = intent.getStringExtra("bvid");
@@ -193,10 +194,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 message.setData(bundle);
                 handler.sendMessage(message);
             }
-        };
-
-        SimpleThreadPool simpleThreadPool = abstractSimpleLoadDataThread.getSimpleThreadPool();
-        simpleThreadPool.submit(new FutureTask<>(abstractSimpleLoadDataThread), "loadVideoInfo");
+        });
 
         handler = new Handler(new Handler.Callback() {
             @Override
@@ -490,10 +488,6 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
         // 添加至DownloadDetailsForMedia
         String fileName = addToDownloadDetailMedia(mediaEntry, videoUrlBase, audioUrlBase, position);
 
-        if (simpleThreadPool == null) {
-            simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.DownloadTaskNum, SimpleThreadPool.DownloadTask);
-        }
-
         SimpleDownloadThread simpleDownloadThread = new SimpleDownloadThread(getApplicationContext(),
                 viewPage.bvid,
                 viewPage.anthologyInfoList.get(position).cid,
@@ -501,7 +495,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 videoUrlBase,
                 audioUrlBase,
                 fileName);
-        simpleThreadPool.submit(new FutureTask<>(simpleDownloadThread));
+        SimpleThreadPool.submit(new FutureTask<>(simpleDownloadThread), null);
     }
 
     @NotNull

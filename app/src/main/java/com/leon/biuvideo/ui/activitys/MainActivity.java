@@ -301,8 +301,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 初始化未完成下载的媒体资源
      */
     private void initDownloadFailList() {
-        SimpleThreadPool simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.LoadTaskNum, SimpleThreadPool.LoadTask);
-        simpleThreadPool.submit(new FutureTask<>(new SimpleInitFailListThread()));
+        SimpleThreadPool.submit(new FutureTask<>(new SimpleInitFailListThread()), null);
     }
 
     /**

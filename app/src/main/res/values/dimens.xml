@@ -24,4 +24,6 @@
     <dimen name="loadingRecyclerViewHeight">300dp</dimen>
     <dimen name="loadingRecyclerViewProgressBarHW">60dp</dimen>
     <dimen name="face_border_width">1dp</dimen>
+
+    <dimen name="DP_23">23dp</dimen>
 </resources>

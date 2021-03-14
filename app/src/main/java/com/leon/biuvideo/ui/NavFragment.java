@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
 import com.leon.biuvideo.ui.mainFragments.DiscoveryFragment;
 import com.leon.biuvideo.ui.mainFragments.HomeFragment;
 import com.leon.biuvideo.ui.mainFragments.UserFragment;

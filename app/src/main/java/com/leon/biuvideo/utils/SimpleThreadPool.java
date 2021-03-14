@@ -15,22 +15,26 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class SimpleThreadPool extends ThreadPoolExecutor {
+/**
+ * @Author Leon
+ * @Time 2021/1/1
+ * @Desc 一个简单的线程池，加载截面数据或下载资源时可使用该类
+ */
+public class SimpleThreadPool {
     private static final String TAG = "SimpleThreadPool";
 
-    // 资源下载线程数
-    public static final int DownloadTaskNum = 3;
-    public static final String DownloadTask = "download";
+    /**
+     * 资源下载线程数
+     */
+    private static final int DOWNLOAD_TASK_NUM = 3;
+    private static final String DOWNLOAD_TASK = "download";
 
-    // 数据加载线程数
-    public static final int LoadTaskNum = 5;
-    public static final String LoadTask = "loading";
+    private static final Map<String, FutureTask<String>> FUTURE_TASK_MAP = new HashMap<>();
 
-    private final Map<String, FutureTask<String>> futureTaskMap;
+    private static final ThreadPoolExecutor DOWNLOAD_THREAD_POOL;
 
-    public SimpleThreadPool(int maxRunningThread, String poolName) {
-        super(maxRunningThread, maxRunningThread, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), new SimpleThreadFactory(poolName));
-        futureTaskMap = new HashMap<>();
+    static {
+        DOWNLOAD_THREAD_POOL = new ThreadPoolExecutor(DOWNLOAD_TASK_NUM, DOWNLOAD_TASK_NUM, 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), new SimpleThreadFactory(DOWNLOAD_TASK));
     }
 
     /**
@@ -38,14 +42,14 @@ public class SimpleThreadPool extends ThreadPoolExecutor {
      * @param futureTask  任务对象
      * @param tag   任务唯一TAG
      */
-    public void submit(FutureTask<String> futureTask , String tag){
-        synchronized (this){
+    public static void submit(FutureTask<String> futureTask , String tag){
+        synchronized (SimpleThreadPool.class){
             // 执行线程
-            if (!futureTaskMap.containsKey(tag)) {
+            if (!FUTURE_TASK_MAP.containsKey(tag)) {
                 // 如果池内没有相同的任务则开始执行
                 Log.d(TAG, "submit: " + "Task submit TAG:" + tag);
-                futureTaskMap.put(tag, futureTask);
-                submit(futureTask);
+                FUTURE_TASK_MAP.put(tag, futureTask);
+                DOWNLOAD_THREAD_POOL.submit(futureTask);
             } else {
                 Log.d(TAG, "Same task TAG. Skipped.");
             }
@@ -58,51 +62,22 @@ public class SimpleThreadPool extends ThreadPoolExecutor {
      * @param tag   任务tag
      * @return  终止状态
      */
-    public boolean cancelTask(String tag) {
-        return cancelTask(tag, false);
-    }
-
-    /**
-     * 终止任务
-     *
-     * @param tag   任务tag
-     * @param isContainText 是否为相似的tag
-     * @return  终止状态
-     */
-    public boolean cancelTask(String tag, boolean isContainText) {
+    private static boolean cancelTask(String tag) {
         // 中断线程
-        synchronized (this) {
-            if (isContainText) {
-                Log.d(TAG, "cancelTask: " + "Cancel Task TAG:" + tag);
-                for (String key : futureTaskMap.keySet()) {
-                    if (key.contains(tag)) {
-                        remove(futureTaskMap.get(key));
-                        FutureTask task = futureTaskMap.remove(key);
-                        if (task != null) {
-                            task.cancel(true);
-                        }
+        synchronized (SimpleThreadPool.class) {
+            if (FUTURE_TASK_MAP.containsKey(tag)) {
+                Log.d(TAG, "cancelTask: " + "Task canceled TAG:" + tag);
+                DOWNLOAD_THREAD_POOL.remove(FUTURE_TASK_MAP.get(tag));
 
-                        Log.d(TAG, "cancelTask: " + "Task Canceled TAG: " + tag);
-                        return true;
-                    }
+                FutureTask<String> removedTask = FUTURE_TASK_MAP.remove(tag);
+                if (removedTask != null) {
+                    removedTask.cancel(true);
                 }
 
-                return false;
+                return true;
             } else {
-                if (futureTaskMap.containsKey(tag)) {
-                    Log.d(TAG, "cancelTask: " + "Task canceled TAG:" + tag);
-                    remove(futureTaskMap.get(tag));
-
-                    FutureTask removedTask = futureTaskMap.remove(tag);
-                    if (removedTask != null) {
-                        removedTask.cancel(true);
-                    }
-
-                    return true;
-                } else {
-                    Log.d(TAG, "cancelTask: " + tag + " dose not exist");
-                    return false;
-                }
+                Log.d(TAG, "cancelTask: " + tag + " dose not exist");
+                return false;
             }
         }
     }
@@ -112,8 +87,8 @@ public class SimpleThreadPool extends ThreadPoolExecutor {
      *
      * @return  终止状态
      */
-    public boolean cancelAllTask () {
-        Iterator<FutureTask<String>> futureTaskIterator = futureTaskMap.values().iterator();
+    public static boolean cancelAllTask () {
+        Iterator<FutureTask<String>> futureTaskIterator = FUTURE_TASK_MAP.values().iterator();
 
         int count = 0;
         while (futureTaskIterator.hasNext()) {
@@ -122,29 +97,12 @@ public class SimpleThreadPool extends ThreadPoolExecutor {
             FutureTask<String> nextFutureTask = futureTaskIterator.next();
             nextFutureTask.cancel(true);
 
-            remove(nextFutureTask);
+            DOWNLOAD_THREAD_POOL.remove(nextFutureTask);
         }
 
         Log.d(TAG, "cancelAllTask: " + count + "Tasks canceled.");
 
         return count > 0;
-    }
-
-    /**
-     * 移除任务
-     *
-     * @param tag   任务tag
-     * @return  移除状态
-     */
-    public boolean remove(String tag) {
-        // 移除tag
-        if (futureTaskMap.remove(tag) != null) {
-            Log.d(TAG, "TAG removed. TAG Count:" + futureTaskMap.size() + "  Pool of " + ((SimpleThreadFactory) getThreadFactory()).getPoolName());
-            return true;
-        } else {
-            Log.d(TAG, "remove: TAG dose not exist.");
-            return false;
-        }
     }
 
     static class SimpleThreadFactory implements ThreadFactory {

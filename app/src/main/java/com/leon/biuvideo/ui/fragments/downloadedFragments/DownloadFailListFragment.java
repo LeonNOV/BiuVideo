@@ -50,7 +50,6 @@ public class DownloadFailListFragment extends BaseFragment {
 
     @Override
     public void initValues() {
-        simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.DownloadTaskNum, SimpleThreadPool.DownloadTask);
         DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils = new DownloadRecordsDatabaseUtils(context);
         List<DownloadedDetailMedia> downloadedDetailMedias = downloadRecordsDatabaseUtils.queryDownloadFailMedia();
 
@@ -61,9 +60,9 @@ public class DownloadFailListFragment extends BaseFragment {
                 DownloadedDetailMedia downloadedDetailMedia = downloadedDetailMedias.get(position);
 
                 if (downloadedDetailMedia.isVideo) {
-                    simpleThreadPool.submit(new FutureTask<>(new SimpleDownloadThread(context, downloadedDetailMedia.mainId, downloadedDetailMedia.subId, downloadedDetailMedia.qualityId, downloadedDetailMedia.videoUrl, downloadedDetailMedia.audioUrl, downloadedDetailMedia.fileName)));
+                    SimpleThreadPool.submit(new FutureTask<>(new SimpleDownloadThread(context, downloadedDetailMedia.mainId, downloadedDetailMedia.subId, downloadedDetailMedia.qualityId, downloadedDetailMedia.videoUrl, downloadedDetailMedia.audioUrl, downloadedDetailMedia.fileName)), null);
                 } else {
-                    simpleThreadPool.submit(new FutureTask<>(new SimpleDownloadThread(context, downloadedDetailMedia.mainId, downloadedDetailMedia.audioUrl, downloadedDetailMedia.fileName)));
+                    SimpleThreadPool.submit(new FutureTask<>(new SimpleDownloadThread(context, downloadedDetailMedia.mainId, downloadedDetailMedia.audioUrl, downloadedDetailMedia.fileName)), null);
                 }
             }
         });

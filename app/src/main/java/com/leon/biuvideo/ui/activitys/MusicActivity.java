@@ -31,7 +31,7 @@ import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.beans.musicBeans.MusicInfo;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
 import com.leon.biuvideo.service.MusicService;
-import com.leon.biuvideo.ui.AbstractSimpleLoadDataThread;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.dialogs.MusicPlayListDialog;
 import com.leon.biuvideo.ui.dialogs.WarnDialog;
@@ -39,6 +39,7 @@ import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.PermissionUtil;
 import com.leon.biuvideo.utils.SimpleDownloadThread;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.LocalOrdersDatabaseUtils;
@@ -205,9 +206,9 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
     }
 
     private void loadData() {
-        AbstractSimpleLoadDataThread abstractSimpleLoadDataThread = new AbstractSimpleLoadDataThread() {
+        SimpleSingleThreadPool.executor(new Runnable() {
             @Override
-            public void load() {
+            public void run() {
                 //获取music信息
                 Intent intent = getIntent();
 
@@ -259,10 +260,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                 message.setData(bundle);
                 initDataHandler.sendMessage(message);
             }
-        };
-
-        SimpleThreadPool simpleThreadPool = abstractSimpleLoadDataThread.getSimpleThreadPool();
-        simpleThreadPool.submit(new FutureTask<>(abstractSimpleLoadDataThread), "loadMusicInfo");
+        });
 
         initDataHandler = new Handler(new Handler.Callback() {
             @Override
@@ -652,9 +650,8 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
         SimpleSnackBar.make(music_linearLayout, R.string.isDownloading, SimpleSnackBar.LENGTH_SHORT).show();
 
         //保存歌曲线程
-        SimpleThreadPool simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.DownloadTaskNum, SimpleThreadPool.DownloadTask);
         SimpleDownloadThread simpleDownloadThread = new SimpleDownloadThread(getApplicationContext(), musicInfo.sid, musicUrl, musicInfo.title + "-" + musicInfo.uname);
-        simpleThreadPool.submit(new FutureTask<>(simpleDownloadThread));
+        SimpleThreadPool.submit(new FutureTask<>(simpleDownloadThread), null);
     }
 
     /**

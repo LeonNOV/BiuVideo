@@ -21,7 +21,7 @@
     <string name="audio">音频</string>
     <string name="picture">相簿</string>
     <string name="live">直播</string>
-    <string name="dynamic">动态</string>
+    <string name="hotSearch">热门搜索排行榜</string>
 
     <string name="home_nav_home">首页</string>
     <string name="home_nav_discover">发现</string>

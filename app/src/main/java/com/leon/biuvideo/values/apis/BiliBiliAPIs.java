@@ -330,4 +330,14 @@ public class BiliBiliAPIs {
      * 获取动态数据基本连接，配合{@value DYNAMIC_UN_LOGIN}、{@value DYNAMIC_LOGIN}、{@value DYNAMIC_LOGIN_NEXT}使用
      */
     public static final String DYNAMIC_BASE_PATH = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/";
+
+    /**
+     * 热搜榜接口
+     *
+     * 参数：
+     *     build：可为0
+     *     limit：默认为10，且只能为10
+     *
+     */
+    public static final String HOT_SEARCH_LIST = "https://app.bilibili.com/x/v2/search/square";
 }

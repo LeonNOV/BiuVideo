@@ -27,7 +27,7 @@ import com.leon.biuvideo.beans.searchBean.bangumi.BangumiState;
 import com.leon.biuvideo.beans.searchBean.bangumi.Ep;
 import com.leon.biuvideo.beans.videoBean.play.Media;
 import com.leon.biuvideo.beans.videoBean.play.Play;
-import com.leon.biuvideo.ui.AbstractSimpleLoadDataThread;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.dialogs.AnthologyDownloadDialog;
 import com.leon.biuvideo.ui.dialogs.BangumiDetailDialog;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
@@ -36,6 +36,7 @@ import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleDownloadThread;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
@@ -129,9 +130,9 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void loadData() {
-        AbstractSimpleLoadDataThread abstractSimpleLoadDataThread = new AbstractSimpleLoadDataThread() {
+        SimpleSingleThreadPool.executor(new Runnable() {
             @Override
-            public void load() {
+            public void run() {
                 Intent intent = getIntent();
                 Bundle extras = intent.getExtras();
 
@@ -161,10 +162,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                 message.setData(bundle);
                 handler.sendMessage(message);
             }
-        };
-
-        SimpleThreadPool simpleThreadPool = abstractSimpleLoadDataThread.getSimpleThreadPool();
-        simpleThreadPool.submit(new FutureTask<>(abstractSimpleLoadDataThread), "loadBangumiInfo");
+        });
 
         handler = new Handler(new Handler.Callback() {
             @Override
@@ -387,10 +385,6 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void saveSingleVideo(Map.Entry<Integer, Media> mediaEntry, int position) {
-        if (simpleThreadPool == null) {
-            simpleThreadPool = new SimpleThreadPool(SimpleThreadPool.DownloadTaskNum, SimpleThreadPool.DownloadTask);
-        }
-
         //获取视频路径
         String videoUrlBase = mediaEntry.getValue().baseUrl;
 
@@ -412,7 +406,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                 videoUrlBase,
                 audioUrlBase,
                 fileName);
-        simpleThreadPool.submit(new FutureTask<>(simpleDownloadThread));
+        SimpleThreadPool.submit(new FutureTask<>(simpleDownloadThread), null);
     }
 
     private void addToDownloadedRecordsForVideo() {

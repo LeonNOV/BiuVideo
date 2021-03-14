@@ -22,13 +22,14 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.FragmentViewPagerAdapter;
 import com.leon.biuvideo.beans.Follow;
 import com.leon.biuvideo.beans.upMasterBean.UserInfo;
-import com.leon.biuvideo.ui.AbstractSimpleLoadDataThread;
+import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.fragments.userFragments.UserArticlesFragment;
 import com.leon.biuvideo.ui.fragments.userFragments.UserAudiosFragment;
 import com.leon.biuvideo.ui.fragments.userFragments.UserPicturesFragment;
 import com.leon.biuvideo.ui.fragments.userFragments.UserVideosFragment;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.ViewUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -129,9 +130,9 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     //初始化数据
     private void loadData() {
-        AbstractSimpleLoadDataThread abstractSimpleLoadDataThread = new AbstractSimpleLoadDataThread() {
+        SimpleSingleThreadPool.executor(new Runnable() {
             @Override
-            public void load() {
+            public void run() {
                 //获取mid
                 Intent intent = getIntent();
                 mid = intent.getLongExtra("mid", -1);
@@ -158,10 +159,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
                 message.setData(bundle);
                 handler.sendMessage(message);
             }
-        };
-
-        SimpleThreadPool simpleThreadPool = abstractSimpleLoadDataThread.getSimpleThreadPool();
-        simpleThreadPool.submit(new FutureTask<>(abstractSimpleLoadDataThread), "loadUserInfo");
+        });
 
         handler = new Handler(new Handler.Callback() {
             @Override
