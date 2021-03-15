@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
 import com.leon.biuvideo.beans.orderBeans.LocalVideoFolder;
-import com.leon.biuvideo.utils.InitValueUtils;
+import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.values.LocalOrderType;
 import com.leon.biuvideo.values.Tables;
 
@@ -82,9 +82,9 @@ public class LocalOrdersDatabaseUtils extends SQLiteHelper {
     public boolean queryLocalOrder (String mainId, String subId, LocalOrderType localOrderType) {
         Cursor cursor;
         if (subId == null) {
-            cursor = sqLiteDatabase.query(LocalOrders, null, "isDelete = ? AND mainId = ? AND adder = ? AND orderType = ?", new String[]{"0", mainId, String.valueOf(InitValueUtils.getUID(context)), String.valueOf(localOrderType.value)}, null, null, null);
+            cursor = sqLiteDatabase.query(LocalOrders, null, "isDelete = ? AND mainId = ? AND adder = ? AND orderType = ?", new String[]{"0", mainId, PreferenceUtils.getUserId(), String.valueOf(localOrderType.value)}, null, null, null);
         } else {
-            cursor = sqLiteDatabase.query(LocalOrders, null, "isDelete = ? AND mainId = ? AND subId = ? AND adder = ? AND orderType = ?", new String[]{"0", mainId, subId, String.valueOf(InitValueUtils.getUID(context)), String.valueOf(localOrderType.value)}, null, null, null);
+            cursor = sqLiteDatabase.query(LocalOrders, null, "isDelete = ? AND mainId = ? AND subId = ? AND adder = ? AND orderType = ?", new String[]{"0", mainId, subId, PreferenceUtils.getUserId(), String.valueOf(localOrderType.value)}, null, null, null);
         }
         int count = cursor.getCount();
 
@@ -156,7 +156,7 @@ public class LocalOrdersDatabaseUtils extends SQLiteHelper {
         contentValues.put("mainId", localOrder.mainId);
         contentValues.put("subId", localOrder.subId);
         contentValues.put("orderType", localOrder.orderType.value);
-        contentValues.put("adder", InitValueUtils.getUID(context));
+        contentValues.put("adder", PreferenceUtils.getUserId());
         contentValues.put("addTime", localOrder.addTime);
         contentValues.put("folderName", localOrder.folderName);
 
@@ -174,9 +174,9 @@ public class LocalOrdersDatabaseUtils extends SQLiteHelper {
     public boolean deleteLocalOrder(String mainId, String subId, LocalOrderType localOrderType) {
         int deleteState;
         if (subId == null) {
-            deleteState = sqLiteDatabase.delete(LocalOrders, "mainId = ? AND adder = ? AND orderType = ?", new String[]{mainId, String.valueOf(InitValueUtils.getUID(context)), String.valueOf(localOrderType.value)});
+            deleteState = sqLiteDatabase.delete(LocalOrders, "mainId = ? AND adder = ? AND orderType = ?", new String[]{mainId, PreferenceUtils.getUserId(), String.valueOf(localOrderType.value)});
         } else {
-            deleteState = sqLiteDatabase.delete(LocalOrders, "mainId = ? AND subId = ? AND adder = ? AND orderType = ?", new String[]{mainId, subId, String.valueOf(InitValueUtils.getUID(context)), String.valueOf(localOrderType.value)});
+            deleteState = sqLiteDatabase.delete(LocalOrders, "mainId = ? AND subId = ? AND adder = ? AND orderType = ?", new String[]{mainId, subId, PreferenceUtils.getUserId(), String.valueOf(localOrderType.value)});
         }
 
         return deleteState > 0;
@@ -216,11 +216,11 @@ public class LocalOrdersDatabaseUtils extends SQLiteHelper {
      */
     public void mergeCurrentUserData() {
         ContentValues videoFolderContentValues = new ContentValues();
-        videoFolderContentValues.put("creator", InitValueUtils.getUID(context));
+        videoFolderContentValues.put("creator", PreferenceUtils.getUserId());
         int localVideoFolderUpdate = sqLiteDatabase.update(LocalVideoFolders, videoFolderContentValues, "creator = ?", new String[]{"0"});
 
         ContentValues orderContentValues = new ContentValues();
-        orderContentValues.put("adder", InitValueUtils.getUID(context));
+        orderContentValues.put("adder", PreferenceUtils.getUserId());
         int localOrderUpdate = sqLiteDatabase.update(LocalOrders, orderContentValues, "adder = ?", new String[]{"0"});
 
         Toast.makeText(context, "合并了" + localVideoFolderUpdate + "个收藏夹，" + localOrderUpdate + "个收藏数据，再次打开本地订阅页面即可查看", Toast.LENGTH_SHORT).show();

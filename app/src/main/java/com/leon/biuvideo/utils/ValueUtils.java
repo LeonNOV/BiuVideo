@@ -3,6 +3,7 @@ package com.leon.biuvideo.utils;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -153,5 +154,31 @@ public class ValueUtils {
         }
 
         return date.getTime();
+    }
+
+    /**
+     * 获取现在是一周的第几天
+     */
+    public static String getWeekday() {
+        Calendar calendar = Calendar.getInstance(Locale.CHINA);
+        int i = calendar.get(Calendar.DAY_OF_WEEK);
+        switch (i) {
+            case Calendar.SUNDAY:
+                return "星期日";
+            case Calendar.MONDAY:
+                return "星期一";
+            case Calendar.TUESDAY:
+                return "星期二";
+            case Calendar.WEDNESDAY:
+                return "星期三";
+            case Calendar.THURSDAY:
+                return "星期四";
+            case Calendar.FRIDAY:
+                return "星期五";
+            case Calendar.SATURDAY:
+                return "星期六";
+            default:
+                return "ERROR";
+        }
     }
 }

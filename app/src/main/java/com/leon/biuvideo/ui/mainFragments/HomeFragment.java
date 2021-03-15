@@ -30,6 +30,7 @@ import com.leon.biuvideo.ui.home.MyFollowsFragment;
 import com.leon.biuvideo.ui.home.OrderFragment;
 import com.leon.biuvideo.ui.home.RecommendFragment;
 import com.leon.biuvideo.ui.home.SettingsFragment;
+import com.leon.biuvideo.ui.home.WatchLaterFragment;
 import com.leon.biuvideo.ui.mainFragments.homeModels.WeatherModelInterface;
 import com.leon.biuvideo.ui.otherFragments.PopularFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
@@ -38,6 +39,7 @@ import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.LocationUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
+import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.WeatherUtil;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.RecommendParser;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.WatchLaterParser;
@@ -53,6 +55,11 @@ import java.util.List;
  * @Desc 主页Fragment，第一显示的Fragment
  */
 public class HomeFragment extends BaseSupportFragment implements View.OnClickListener {
+    /**
+     * 主页数据显示个数
+     */
+    private static final int HOME_DATA_COUNT = 10;
+
     private LocationUtil locationUtil;
 
     private Handler handler;
@@ -76,6 +83,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
      * 主页显示的推荐内容
      */
     private final List<Recommend> homeRecommendList = new ArrayList<>(10);
+    private final List<WatchLater> homeWatchLaterList = new ArrayList<>(10);
 
     @Override
     protected int setLayout() {
@@ -91,12 +99,21 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 .setOnClickListener(R.id.home_my_history, this)
                 .setOnClickListener(R.id.home_my_downloadManager, this)
                 .setOnClickListener(R.id.home_setting, this)
-                .setOnClickListener(R.id.home_popular, this);
+                .setOnClickListener(R.id.home_popular, this)
+                .setText(R.id.home_weekday, ValueUtils.getWeekday())
+                .setText(R.id.home_date, ValueUtils.generateTime(System.currentTimeMillis(), "MM/dd", false));
 
-        ((CardTitle) findView(R.id.home_fragment_cardTitle_recommend)).setOnClickActionListener(new CardTitle.OnClickActionListener() {
+        ((CardTitle) findView(R.id.home_cardTitle_recommend)).setOnClickActionListener(new CardTitle.OnClickActionListener() {
             @Override
             public void onClickAction() {
                 ((NavFragment) getParentFragment()).startBrotherFragment(new RecommendFragment(recommendList));
+            }
+        });
+
+        ((CardTitle) findView(R.id.home_cardTitle_watchLater)).setOnClickActionListener(new CardTitle.OnClickActionListener() {
+            @Override
+            public void onClickAction() {
+                ((NavFragment) getParentFragment()).startBrotherFragment(new WatchLaterFragment(watchLaterList));
             }
         });
 
@@ -123,9 +140,10 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 // 获取稍后观看数据
                 watchLaterList = getWatchLaterData();
 
-                // 获取前十个数据作为主页的数据
-                for (int i = 0; i < 10; i++) {
+                // 各获取前十个数据作为主页的数据
+                for (int i = 0; i < HOME_DATA_COUNT; i++) {
                     homeRecommendList.add(recommendList.get(i));
+                    homeWatchLaterList.add(watchLaterList.get(i));
                 }
 
                 // 设置数据
@@ -141,7 +159,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
 
                         // 设置稍后再看数据
                         homeWatchLaterLoadingRecyclerView.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
-                        homeWatchLaterLoadingRecyclerView.setRecyclerViewAdapter(new WatchLaterAdapter(watchLaterList, context));
+                        homeWatchLaterLoadingRecyclerView.setRecyclerViewAdapter(new WatchLaterAdapter(homeWatchLaterList, context));
                         homeWatchLaterLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
                     }
                 });
@@ -170,14 +188,15 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
 
         weatherUtil = new WeatherUtil();
 
+        // 初始化天气模块
+        if (weatherModel == null) {
+            weatherModel = new WeatherModelInterface();
+            weatherModel.onInitialize(view, context);
+        }
+
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                // 初始化天气模块
-                if (weatherModel == null) {
-                    weatherModel = new WeatherModelInterface();
-                    weatherModel.onInitialize(view, context);
-                }
                 // 获取当前天气
                 getCurrentWeather();
             }

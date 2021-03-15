@@ -10,17 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.leon.biuvideo.utils.InitValueUtils;
+import com.leon.biuvideo.utils.PreferenceUtils;
+import com.leon.biuvideo.values.FeaturesName;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 基本的ViewHolder
- * 该类提供了一些常用的绑定数据方法，可自行根据需要添加
- * <br/>
- * <strong>注意：设置点击事件时请注意该类中两个不同参数的setOnClickListener()方法，具体使用可看方法的注释</strong>
+ * @Author Leon
+ * @Time 2020/11/16
+ * @Desc 基本的ViewHolder,该类提供了一些常用的绑定数据方法，可自行根据需要添加<br/><strong>注意：设置点击事件时请注意该类中两个不同参数的setOnClickListener()方法，具体使用可看方法的注释</strong>
  */
 public class BaseViewHolder extends RecyclerView.ViewHolder {
     private final Map<Integer, View> views;
@@ -30,7 +30,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     public BaseViewHolder(@NonNull View itemView, Context context) {
         super(itemView);
 
-        this.imgOriginalMode = InitValueUtils.isImgOriginalMode(context);
+        this.imgOriginalMode = PreferenceUtils.getFeaturesStatus(FeaturesName.IMG_ORIGINAL_MODEL);
         this.views = new HashMap<>();
         this.context = context;
     }

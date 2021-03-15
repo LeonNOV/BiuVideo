@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bg">
@@ -173,6 +172,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/home_weekday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
@@ -181,6 +181,7 @@
                     android:textSize="13sp" />
 
                 <TextView
+                    android:id="@+id/home_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
@@ -222,7 +223,7 @@
             android:orientation="vertical">
 
             <com.leon.biuvideo.ui.views.CardTitle
-                android:id="@+id/home_fragment_cardTitle_recommend"
+                android:id="@+id/home_cardTitle_recommend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -234,7 +235,7 @@
             <com.leon.biuvideo.ui.views.LoadingRecyclerView
                 android:id="@+id/home_recommend_loadingRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="450dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="13dp"
                 android:layout_marginEnd="13dp"
@@ -253,7 +254,7 @@
             android:orientation="vertical">
 
             <com.leon.biuvideo.ui.views.CardTitle
-                android:id="@+id/home_fragment_cardTitle_watchLater"
+                android:id="@+id/home_cardTitle_watchLater"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -265,7 +266,7 @@
             <com.leon.biuvideo.ui.views.LoadingRecyclerView
                 android:id="@+id/home_watchLater_loadingRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="450dp"
                 android:layout_marginStart="13dp"
                 android:layout_marginEnd="13dp"
                 android:layout_marginBottom="20dp" />

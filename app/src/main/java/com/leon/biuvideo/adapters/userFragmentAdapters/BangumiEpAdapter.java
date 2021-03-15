@@ -10,8 +10,8 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.searchBean.bangumi.Ep;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
-import com.leon.biuvideo.utils.InitValueUtils;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.PreferenceUtils;
 
 import java.util.List;
 
@@ -66,9 +66,10 @@ public class BangumiEpAdapter extends BaseAdapter<Ep> {
                         // 先检查是否为VIP资源
                         if (ep.isVIP) {
                             // 判断当前是否已登录账号
-                            if (InitValueUtils.isLogin(context)) {
+                            if (PreferenceUtils.getLoginStatus()) {
+
                                 // 判断已登录账号是否为大会员
-                                if (InitValueUtils.isVIP(context)) {
+                                if (!PreferenceUtils.getVipStatus()) {
                                     SimpleSnackBar.make(v, "该番剧需要成为大会员才能进行观看", SimpleSnackBar.LENGTH_SHORT).show();
                                 } else {
                                     toBangumi(position);

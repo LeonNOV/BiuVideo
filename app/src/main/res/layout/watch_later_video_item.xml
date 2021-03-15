@@ -52,7 +52,7 @@
                     android:backgroundTint="@color/video_length_bg"
                     android:gravity="center"
                     android:padding="3dp"
-                    android:text="02:49"
+                    android:text="00:00"
                     android:textColor="@color/white"
                     android:textSize="13sp" />
 
@@ -73,7 +73,6 @@
                 android:layout_gravity="top"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="介绍介绍介绍介介绍介绍绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介介绍介绍绍介绍介绍介绍介绍介绍介绍介绍介绍"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
 
@@ -86,51 +85,16 @@
                 android:layout_marginTop="10dp"
                 android:text="已看0%" />
 
-            <RelativeLayout
+            <TextView
+                android:id="@+id/watch_later_video_item_pubName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_gravity="bottom"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/watch_later_video_item_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="5dp"
-                    android:text="4.7万"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    app:drawableStartCompat="@drawable/ic_play"
-                    app:drawableTint="@color/black" />
-
-                <TextView
-                    android:id="@+id/watch_later_video_item_danmaku"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_toEndOf="@id/watch_later_video_item_view"
-                    android:drawablePadding="5dp"
-                    android:text="106"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    app:drawableStartCompat="@drawable/ic_danmaku"
-                    app:drawableTint="@color/black" />
-
-                <TextView
-                    android:id="@+id/watch_later_video_item_pubName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginStart="10dp"
-                    android:drawablePadding="5dp"
-                    android:text="userName"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    app:drawableStartCompat="@drawable/ic_up_user"
-                    app:drawableTint="@color/black" />
-
-            </RelativeLayout>
+                android:drawablePadding="5dp"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:drawableStartCompat="@drawable/ic_up_user"
+                app:drawableTint="@color/black" />
 
         </RelativeLayout>
 

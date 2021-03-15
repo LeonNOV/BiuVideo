@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.homeBeans.WatchLater;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.parseDataUtils.ParseInterface;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
@@ -24,7 +25,7 @@ public class WatchLaterParser implements ParseInterface<WatchLater> {
     public List<WatchLater> parseData() {
         // 获取Cookie
         Map<String, String> headers = new HashMap<>(1);
-        headers.put("Cookie", "");
+        headers.put("Cookie", PreferenceUtils.getCookie());
 
         JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.WATCH_LATER, Headers.of(headers),null);
         JSONArray jsonArray = response.getJSONObject("data").getJSONArray("list");

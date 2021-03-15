@@ -20,6 +20,8 @@ public class PreferenceUtils {
     public static final String WEATHER_MODEL  = "weatherModel";
     public static final String COOKIE = "cookie";
     public static final String USER_ID = "userId";
+    public static final String VIP_STATUS = "vipStatus";
+    public static final String LOGIN_STATUS = "loginStatus";
     public static final String LOCATION_SERVICE = "locationServiceStatus";
     public static final String MANUAL_SET_LOCATION = "manualSetLocationStatus";
     public static final String RECOMMEND_COLUMNS = "recommendColumns";
@@ -54,7 +56,7 @@ public class PreferenceUtils {
     }
 
     /**
-     * 获取本地存放的adcode
+     * 获取adcode
      *
      * @return  adcode
      */
@@ -141,6 +143,44 @@ public class PreferenceUtils {
      */
     public static String getUserId() {
         return PREFERENCE.getString(USER_ID, null);
+    }
+
+    /**
+     * 设置VIP状态
+     *
+     * @param status   true：大会员；false：普通会员
+     */
+    public static void setVipStatus (boolean status) {
+        SharedPreferences.Editor edit = PREFERENCE.edit();
+        edit.putBoolean(VIP_STATUS, status).apply();
+    }
+
+    /**
+     * 获取VIP状态
+     *
+     * @return  true：大会员；false：普通会员
+     */
+    public static boolean getVipStatus() {
+        return PREFERENCE.getBoolean(VIP_STATUS, false);
+    }
+
+    /**
+     * 设置VIP状态
+     *
+     * @param status   true：已登录；false：未登录
+     */
+    public static void setLoginStatus (boolean status) {
+        SharedPreferences.Editor edit = PREFERENCE.edit();
+        edit.putBoolean(LOGIN_STATUS, status).apply();
+    }
+
+    /**
+     * 获取登录状态
+     *
+     * @return  true：已登录；false：未登录
+     */
+    public static boolean getLoginStatus() {
+        return PREFERENCE.getBoolean(LOGIN_STATUS, false);
     }
 
     /**

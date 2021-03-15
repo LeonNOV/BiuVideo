@@ -12,7 +12,9 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.homeBeans.WatchLater;
+import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.ValueUtils;
+import com.leon.biuvideo.values.FeaturesName;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.List;
@@ -20,7 +22,7 @@ import java.util.List;
 /**
  * @Author Leon
  * @Time 2021/3/14
- * @Desc
+ * @Desc 稍后观看适配器
  */
 public class WatchLaterAdapter extends BaseAdapter<WatchLater> {
     private final List<WatchLater> watchLaterList;
@@ -43,24 +45,27 @@ public class WatchLaterAdapter extends BaseAdapter<WatchLater> {
         WatchLater watchLater = watchLaterList.get(position);
 
         // 如果为观看过该视频，则不显示进度
-        if (watchLater.progress != 0) {
+        if (watchLater.progress > 0) {
             holder.setText(R.id.watch_later_watch_later_video_item_progress, ((watchLater.progress * 100) / watchLater.duration) + "%");
         }
 
         ImageView watchLaterVideoItemCover = holder.findById(R.id.watch_later_video_item_cover);
-        Glide.with(context).load(watchLater.cover + ImagePixelSize.COVER).into(watchLaterVideoItemCover);
+        Glide
+                .with(context)
+                .load(PreferenceUtils.getFeaturesStatus(FeaturesName.IMG_ORIGINAL_MODEL) ? watchLater.cover : watchLater.cover + ImagePixelSize.COVER.value)
+                .into(watchLaterVideoItemCover);
 
         if (watchLater.isInvalid) {
             holder.setVisibility(R.id.watch_later_video_item_invalidMark, View.VISIBLE);
             watchLaterVideoItemCover.setForeground(context.getDrawable(R.color.invalid_foreground));
+        } else {
+            holder.setVisibility(R.id.watch_later_video_item_invalidMark, View.GONE);
+            watchLaterVideoItemCover.setForeground(null);
         }
 
         holder
-                .setImage(R.id.watch_later_video_item_cover, watchLater.cover, ImagePixelSize.COVER)
                 .setText(R.id.watch_later_video_item_duration, ValueUtils.lengthGenerate(watchLater.duration))
                 .setText(R.id.watch_later_video_item_title, watchLater.title)
-                .setText(R.id.watch_later_video_item_view, ValueUtils.generateCN(watchLater.view))
-                .setText(R.id.watch_later_video_item_danmaku, ValueUtils.generateCN(watchLater.danmaku))
                 .setText(R.id.watch_later_video_item_pubName, watchLater.userName)
                 .setOnClickListener(R.id.watch_later_video_item_content, new View.OnClickListener() {
                     @Override
@@ -80,6 +85,5 @@ public class WatchLaterAdapter extends BaseAdapter<WatchLater> {
                         Toast.makeText(context, "remove：" + watchLater.bvid, Toast.LENGTH_SHORT).show();
                     }
                 });
-
     }
 }

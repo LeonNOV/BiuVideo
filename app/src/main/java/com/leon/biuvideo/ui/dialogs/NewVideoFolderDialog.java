@@ -15,7 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.orderBeans.LocalVideoFolder;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
-import com.leon.biuvideo.utils.InitValueUtils;
+import com.leon.biuvideo.utils.PreferenceUtils;
 
 public class NewVideoFolderDialog extends AlertDialog implements View.OnClickListener {
     private final Context context;
@@ -74,7 +74,7 @@ public class NewVideoFolderDialog extends AlertDialog implements View.OnClickLis
                         LocalVideoFolder localVideoFolder = new LocalVideoFolder();
                         localVideoFolder.videoCount = 0;
                         localVideoFolder.folderName = folderName;
-                        localVideoFolder.creator = String.valueOf(InitValueUtils.getUID(context));
+                        localVideoFolder.creator = PreferenceUtils.getUserId();
                         localVideoFolder.createTime = System.currentTimeMillis();
                         onConfirmListener.onConfirm(localVideoFolder);
                         dismiss();

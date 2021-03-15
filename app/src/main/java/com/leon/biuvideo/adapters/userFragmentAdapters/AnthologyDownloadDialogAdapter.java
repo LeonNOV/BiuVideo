@@ -10,7 +10,7 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
-import com.leon.biuvideo.utils.InitValueUtils;
+import com.leon.biuvideo.utils.PreferenceUtils;
 
 import java.util.List;
 
@@ -67,7 +67,7 @@ public class AnthologyDownloadDialogAdapter extends BaseAdapter<AnthologyInfo> {
                     public void onClick(View v) {
                         if (anthologyInfo.isVIP) {
                             // 查询当前用户是否为大会员
-                            if (!InitValueUtils.isVIP(context)) {
+                            if (!PreferenceUtils.getVipStatus()) {
                                 SimpleSnackBar.make(v, "该视频需要成为大会员才能下载", SimpleSnackBar.LENGTH_SHORT).show();
                                 return;
                             }
