@@ -21,7 +21,6 @@ import com.leon.biuvideo.ui.fragments.orderFragments.UserOrderVideoFragment;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ViewUtils;
-import com.leon.biuvideo.values.OrderFollowType;
 import com.leon.biuvideo.values.OrderType;
 
 import java.util.ArrayList;
@@ -94,8 +93,8 @@ public class OrderFragment extends BaseFragment implements View.OnClickListener,
 
                 List<Fragment> fragments = new ArrayList<>();
                 fragments.add(new UserOrderVideoFragment(mid));
-                fragments.add(new OrderInnerFragment(mid, OrderType.BANGUMI, OrderFollowType.ALL));
-                fragments.add(new OrderInnerFragment(mid, OrderType.SERIES, OrderFollowType.ALL));
+//                fragments.add(new OrderInnerFragment(mid, OrderType.BANGUMI, OrderFollowType.ALL));
+//                fragments.add(new OrderInnerFragment(mid, OrderType.SERIES, OrderFollowType.ALL));
                 fragments.add(new UserOrderArticleFragment());
 
                 FragmentViewPagerAdapter fragmentViewPagerAdapter = new FragmentViewPagerAdapter(getParentFragmentManager(), fragments);

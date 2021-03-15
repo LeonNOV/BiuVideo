@@ -1,11 +1,15 @@
 package com.leon.biuvideo.ui.home.orderFragments;
 
+import android.os.Message;
+
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.testAdapters.RvTestAdapter;
 import com.leon.biuvideo.beans.TestBeans.RvTestBean;
+import com.leon.biuvideo.beans.orderBeans.Order;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
+import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.OrderParser;
+import com.leon.biuvideo.values.OrderType;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
@@ -20,6 +24,8 @@ import java.util.Random;
  */
 public class OrderBangumiFragment extends BaseLazySupportFragment {
     private SmartRefreshRecyclerView<RvTestBean> orderBangumiSmartRefreshRecyclerView;
+    private OrderParser orderParser;
+    private List<Order> orderList;
 
     @Override
     protected int setLayout() {
@@ -56,25 +62,35 @@ public class OrderBangumiFragment extends BaseLazySupportFragment {
 //                orderBangumiSmartRefreshRecyclerView.setEnablePureScrollMode(true);
             }
         });
+
+        orderParser = new OrderParser(OrderType.BANGUMI);
+
+        setOnLoadListener(new OnLoadListener() {
+            @Override
+            public void onLoad(Message msg) {
+                if (msg.what == 0) {
+                    // 设置初始数据
+//                    orderBangumiSmartRefreshRecyclerView.setRecyclerViewAdapter();
+                    orderBangumiSmartRefreshRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
+                }
+            }
+        });
     }
 
     @Override
     protected void onLazy() {
+        // 加载初始数据
+//        SimpleSingleThreadPool.executor(new Runnable() {
+//            @Override
+//            public void run() {
+//                orderList = orderParser.parseOrder();
+//
+//                Message message = receiveDataHandler.obtainMessage();
+//                message.what = 0;
+//                receiveDataHandler.sendMessage(message);
+//            }
+//        });
+
         orderBangumiSmartRefreshRecyclerView.setStatus(LoadingRecyclerView.LOADING);
-        List<RvTestBean> rvTestBeanList = new ArrayList<>();
-
-        Random random = new Random();
-
-        for (int i = 0; i < 10; i++) {
-            RvTestBean rvTestBean = new RvTestBean();
-
-            rvTestBean.title = "Title" + (i + 1);
-            rvTestBean.view = (random.nextInt(5000) + 5000);
-
-            rvTestBeanList.add(rvTestBean);
-        }
-
-        orderBangumiSmartRefreshRecyclerView.setRecyclerViewAdapter(new RvTestAdapter(rvTestBeanList, context));
-        orderBangumiSmartRefreshRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
     }
 }

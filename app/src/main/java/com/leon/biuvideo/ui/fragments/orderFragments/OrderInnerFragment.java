@@ -12,17 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.userOrderAdapters.UserOrderBaseAdapter;
+import com.leon.biuvideo.adapters.home.OrderAdapter;
 import com.leon.biuvideo.beans.orderBeans.Order;
-import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
-import com.leon.biuvideo.utils.SimpleThreadPool;
-import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.OrderParser;
-import com.leon.biuvideo.values.OrderFollowType;
+import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.OrderParser;
 import com.leon.biuvideo.values.OrderType;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -30,37 +27,31 @@ import com.scwang.smartrefresh.layout.constant.RefreshState;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.List;
-import java.util.concurrent.FutureTask;
 
 /**
- * 用户订阅文件夹的详细数据fragment
+ * @Author Leon
+ * @Time 2020/12/9
+ * @Desc 用户订阅文件夹的详细数据fragment
  */
 public class OrderInnerFragment extends BaseLazyFragment {
     private final OrderType orderType;
     private final long mid;
-    private final OrderFollowType orderFollowType;
 
     private LinearLayout smart_refresh_layout_fragment_linearLayout;
     private RecyclerView recyclerView;
     private SmartRefreshLayout smartRefresh;
     private TextView no_data;
 
-    private int total;
-    private int currentCount;
-    private int pageNum = 1;
-    private boolean dataState = true;
-
     private OrderParser orderParser;
     private List<Order> orders;
 
     private LinearLayoutManager linearLayoutManager;
-    private UserOrderBaseAdapter userOrderBaseAdapter;
+    private OrderAdapter orderAdapter;
     private Handler handler;
 
-    public OrderInnerFragment(long mid, OrderType orderType, OrderFollowType orderFollowType) {
+    public OrderInnerFragment(long mid, OrderType orderType) {
         this.mid = mid;
         this.orderType = orderType;
-        this.orderFollowType = orderFollowType;
     }
 
     @Override
@@ -84,8 +75,7 @@ public class OrderInnerFragment extends BaseLazyFragment {
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                orderParser = new OrderParser(context);
-                total = orderParser.getOrderCount(mid, orderType, orderFollowType);
+                orderParser = new OrderParser(orderType);
 
                 Message message = handler.obtainMessage();
                 message.what = 0;
@@ -115,7 +105,7 @@ public class OrderInnerFragment extends BaseLazyFragment {
 
     @Override
     public void initValues() {
-        if (total <= 0) {
+        if (orderParser.getDataCount() <= 0) {
             //设置无数据提示界面
             no_data.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
@@ -125,20 +115,16 @@ public class OrderInnerFragment extends BaseLazyFragment {
             recyclerView.setVisibility(View.VISIBLE);
             smartRefresh.setEnabled(true);
 
-            orders = orderParser.parseOrder(mid, orderType, orderFollowType, pageNum);
-            currentCount += orders.size();
-            pageNum++;
+            orders = orderParser.parseData();
 
             //判断第一次加载是否已加载完所有数据
-            if (orders.size() < 15) {
-                dataState = false;
-                //关闭上滑加载
+            if (!orderParser.getDataStatus()) {
                 smartRefresh.setEnabled(false);
             }
 
-            if (linearLayoutManager == null || userOrderBaseAdapter == null) {
+            if (linearLayoutManager == null || orderAdapter == null) {
                 linearLayoutManager = new LinearLayoutManager(context);
-                userOrderBaseAdapter = new UserOrderBaseAdapter(orders, context, orderType);
+                orderAdapter = new OrderAdapter(orders, context, orderType);
             }
 
             initAttr();
@@ -147,7 +133,7 @@ public class OrderInnerFragment extends BaseLazyFragment {
 
     private void initAttr() {
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(userOrderBaseAdapter);
+        recyclerView.setAdapter(orderAdapter);
 
         Handler handler = new Handler();
 
@@ -171,15 +157,15 @@ public class OrderInnerFragment extends BaseLazyFragment {
 
                 //判断是否处于拖拽已释放的状态
                 if (state.finishing == RefreshState.ReleaseToLoad.finishing) {
-                    if (dataState) {
+                    if (orderParser.getDataStatus()) {
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 //获取新数据
-                                getOrder();
+                                orders = orderParser.parseData();
 
                                 //添加新数据
-                                userOrderBaseAdapter.append(orders);
+                                orderAdapter.append(orders);
                             }
                         }, 1000);
                     } else {
@@ -194,21 +180,5 @@ public class OrderInnerFragment extends BaseLazyFragment {
                 smartRefresh.finishLoadMore();
             }
         });
-    }
-
-    /**
-     * 获取下一页订阅数据
-     */
-    private void getOrder() {
-        this.orders = orderParser.parseOrder(mid, orderType, orderFollowType, pageNum);
-
-        currentCount += this.orders.size();
-
-        //判断是否已获取完所有的数据
-        if (currentCount == total) {
-            dataState = false;
-        }
-
-        pageNum++;
     }
 }

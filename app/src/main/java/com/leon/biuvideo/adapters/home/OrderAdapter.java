@@ -1,4 +1,4 @@
-package com.leon.biuvideo.adapters.userOrderAdapters;
+package com.leon.biuvideo.adapters.home;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,12 +23,17 @@ import com.leon.biuvideo.values.SortType;
 import java.util.Arrays;
 import java.util.List;
 
-public class UserOrderBaseAdapter extends BaseAdapter<Order> {
+/**
+ * @Author Leon
+ * @Time 2020/12/14
+ * @Desc 订阅数据适配器
+ */
+public class OrderAdapter extends BaseAdapter<Order> {
     private final Context context;
     private final List<Order> orders;
     private final OrderType orderType;
 
-    public UserOrderBaseAdapter(List<Order> orders, Context context, OrderType orderType) {
+    public OrderAdapter(List<Order> orders, Context context, OrderType orderType) {
         super(orders, context);
         this.context = context;
         this.orders = orders;
@@ -37,17 +42,7 @@ public class UserOrderBaseAdapter extends BaseAdapter<Order> {
 
     @Override
     public int getLayout(int viewType) {
-        switch (orderType) {
-            case VIDEO:
-                return R.layout.play_list_video_item;
-            case BANGUMI:
-            case SERIES:
-                return R.layout.order_bangumi_item;
-            case ARTICLE:
-                return R.layout.user_article_list_view_item;
-            default:
-                return 0;
-        }
+        return R.layout.order_item;
     }
 
     @Override

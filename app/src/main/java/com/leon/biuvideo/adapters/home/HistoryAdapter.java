@@ -12,6 +12,11 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 
 import java.util.List;
 
+/**
+ * @Author Leon
+ * @Time 2021/3/5
+ * @Desc 历史记录适配器
+ */
 public class HistoryAdapter extends BaseAdapter<String[]> {
     private final List<String[]> stringArrays;
 

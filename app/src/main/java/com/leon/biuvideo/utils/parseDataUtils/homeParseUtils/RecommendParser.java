@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.homeBeans.Recommend;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.ValueUtils;
-import com.leon.biuvideo.utils.parseDataUtils.ParseInterface;
+import com.leon.biuvideo.utils.parseDataUtils.ParserInterface;
 import com.leon.biuvideo.values.RecommendType;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
@@ -23,7 +23,7 @@ import okhttp3.Headers;
  * @Time 2021/3/10
  * @Desc 推荐数据解析类
  */
-public class RecommendParser implements ParseInterface<Recommend> {
+public class RecommendParser implements ParserInterface<Recommend> {
     private final String cookie;
 
     /**

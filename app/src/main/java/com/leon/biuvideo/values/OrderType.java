@@ -1,10 +1,25 @@
 package com.leon.biuvideo.values;
 
+/**
+ * @Author Leon
+ * @Time 2020/11/22
+ * @Desc 订阅类型
+ */
 public enum OrderType {
-    VIDEO(0),
-    BANGUMI(1),
-    SERIES(2),
-    ARTICLE(3);
+    /**
+     * 番剧
+     */
+    BANGUMI(0),
+
+    /**
+     * 剧集
+     */
+    SERIES(1),
+
+    /**
+     * 标签
+     */
+    TAG(2);
 
     public int value;
 

@@ -86,6 +86,7 @@
     <string name="checkMore">查看更多</string>
 
     <string name="remove">移除</string>
+    <string name="cancelOrder">取消订阅</string>
 
     <string name="setting_default_location">北京,北京城区,东城区</string>
     <string name="setting_default_cacheSize">0.0B</string>

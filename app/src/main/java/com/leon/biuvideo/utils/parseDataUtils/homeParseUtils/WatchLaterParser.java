@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.homeBeans.WatchLater;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.PreferenceUtils;
-import com.leon.biuvideo.utils.parseDataUtils.ParseInterface;
+import com.leon.biuvideo.utils.parseDataUtils.ParserInterface;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import okhttp3.Headers;
  * @Time 2021/3/14
  * @Desc 稍后观看解析类
  */
-public class WatchLaterParser implements ParseInterface<WatchLater> {
+public class WatchLaterParser implements ParserInterface<WatchLater> {
     @Override
     public List<WatchLater> parseData() {
         // 获取Cookie

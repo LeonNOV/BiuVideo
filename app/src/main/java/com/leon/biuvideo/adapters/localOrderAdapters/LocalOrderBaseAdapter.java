@@ -48,7 +48,7 @@ public class LocalOrderBaseAdapter extends BaseAdapter<LocalOrder> {
     public int getLayout(int viewType) {
         switch (localOrderType) {
             case BANGUMI:
-                return R.layout.order_bangumi_item;
+                return R.layout.order_item;
             case ARTICLE:
                 return R.layout.user_data_article_item;
             case AUDIO:

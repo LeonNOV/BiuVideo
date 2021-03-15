@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.discoverBeans.HotSearch;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.utils.parseDataUtils.ParseInterface;
+import com.leon.biuvideo.utils.parseDataUtils.ParserInterface;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.Map;
  * @Time 2021/3/14
  * @Desc 热搜榜数据解析类
  */
-public class HotSearchParser implements ParseInterface<HotSearch> {
+public class HotSearchParser implements ParserInterface<HotSearch> {
     @Override
     public List<HotSearch> parseData() {
         Map<String, String> params = new HashMap<>(2);

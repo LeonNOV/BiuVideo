@@ -7,7 +7,7 @@ import java.util.List;
  * @Time 2021/3/10
  * @Desc 所有的解析工具类都应实现该接口，用于解析请求到的JSON数据
  */
-public interface ParseInterface<T> {
+public interface ParserInterface<T> {
     /**
      * 解析数据
      *

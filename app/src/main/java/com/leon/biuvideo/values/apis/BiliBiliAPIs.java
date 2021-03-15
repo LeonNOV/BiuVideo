@@ -183,7 +183,7 @@ public class BiliBiliAPIs {
      *      参数：
      *          type:获取订阅类型，必须
      *              1：番剧
-     *              2：其他剧，不包括标签（纪录片、电视剧等）
+     *              2：剧集
      *          follow_status：筛选方式，默认为0，可选
      *              0：全部
      *              1：想看
@@ -193,7 +193,14 @@ public class BiliBiliAPIs {
      *          ps：条目数量，默认为15，必须
      *          vmid：用户ID，必须
      */
-    public static String bangumi = "https://api.bilibili.com/x/space/bangumi/follow/list";
+    public static final String ORDER_LIST = "https://api.bilibili.com/x/space/bangumi/follow/list";
+
+    /**
+     * 获取订阅的标签内容（需要Cookie）
+     * 参数：
+     *      vmid：用户ID
+     */
+    public static final String ORDER_TAG = "https://api.bilibili.com/x/space/tag/sub/list";
 
     /**
      * 获取番剧观看数、投币数、弹幕数等信息<br/>

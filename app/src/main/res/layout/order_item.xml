@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:padding="8dp"
-    android:background="?android:selectableItemBackground"
+    android:padding="10dp"
+    android:background="@drawable/ripple_round_corners6dp_bg"
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
@@ -21,7 +21,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_launcher_background"
-                android:scaleType="centerCrop"/>
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/description" />
 
             <TextView
                 android:id="@+id/order_item_textView_badge"
@@ -54,6 +55,7 @@
             android:maxLines="2"
             android:ellipsize="end"
             android:textColor="@color/black"/>
+
         <TextView
             android:id="@+id/order_item_textView_subtitle"
             android:layout_width="wrap_content"
