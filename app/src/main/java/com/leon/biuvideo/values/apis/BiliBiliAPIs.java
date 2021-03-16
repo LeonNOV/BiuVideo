@@ -43,7 +43,7 @@ public class BiliBiliAPIs {
      * 参数：
      *  mid：up主id
      */
-    public static String info = "https://api.bilibili.com/x/space/acc/info";
+    public static final String BILI_USER_INFO = "https://api.bilibili.com/x/space/acc/info";
 
     /**
      * 获取指定up的所有视频<br/>
@@ -230,11 +230,30 @@ public class BiliBiliAPIs {
     //========================以下接口数据的获取需要在请求头中添加Cookie========================
 
     /**
-     * 获取用户信息
+     * 获取用户信息1
      * 不需要任何参数
      * 必须要设置Cookie信息
      */
-    public static String nav = "https://api.bilibili.com/x/web-interface/nav";
+    public static final String USER_BASH_INFO = "http://api.bilibili.com/x/space/myinfo";
+
+    /**
+     * 获取用户数据2
+     * 参数
+     *      mid：用户ID
+     *      photo：是否含有顶部横幅图片
+     */
+    public static final String USER_BANNER = "http://api.bilibili.com/x/web-interface/card";
+
+    /**
+     * 获取用户动态数、关注数、粉丝数（只需Cookie）
+     */
+    public static final String USER_STAT = "https://api.bilibili.com/x/web-interface/nav/stat";
+
+    /**
+     * B币、贝壳查询接口（需要Cookie）
+     * 使用默认参数
+     */
+    public static final String USER_WALLET = "https://pay.bilibili.com/payplatform/getUserWalletInfo?platformType=3";
 
     /**
      * 获取用户历史记录,默认为20条

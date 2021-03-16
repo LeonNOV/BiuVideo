@@ -79,7 +79,7 @@ public class UserPicturesFragment extends BaseLazyFragment {
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                pictureParser = new PictureParser(context);
+                pictureParser = new PictureParser();
                 count = pictureParser.getPictureTotal(mid);
 
                 Message message = handler.obtainMessage();

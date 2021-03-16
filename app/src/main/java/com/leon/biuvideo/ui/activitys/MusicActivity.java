@@ -241,7 +241,7 @@ public class MusicActivity extends Activity implements View.OnClickListener, See
                     //获取music文件
 
                     if (musicUrlParser == null) {
-                        musicUrlParser = new MusicUrlParser(getApplicationContext());
+                        musicUrlParser = new MusicUrlParser();
                     }
 
                     musicUrl = musicUrlParser.parseMusicUrl(sid);

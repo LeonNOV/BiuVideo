@@ -229,8 +229,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
                 easySnackBar.show();
             } else {
-                UserInfoParser userInfoParser = new UserInfoParser(getApplicationContext());
-                userInfo = userInfoParser.userInfoParse();
+                UserInfoParser userInfoParser = new UserInfoParser();
+//                userInfo = userInfoParser.parseData();
                 if (userInfo != null) {
                     isLogin = true;
                     sharedPreferences.edit().putBoolean("isVIP", userInfo.isVip).apply();
@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigation_header_user_name.setText(userInfo.userName);
         navigation_header_user_level.setText("Lv：" + userInfo.currentLevel);
         navigation_header_user_ex.setText(userInfo.currentExp + "/" + userInfo.totalExp);
-        navigation_header_b_coin1.setText(String.valueOf(userInfo.money));
+        navigation_header_b_coin1.setText(String.valueOf(userInfo.coins));
         navigation_header_b_coin2.setText(String.valueOf(userInfo.bCoinBalance));
         navigation_header_vip_due_date.setText(userInfo.vipDueDate);
 

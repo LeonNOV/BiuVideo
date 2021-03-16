@@ -86,7 +86,7 @@ public class LocalOrderBaseAdapter extends BaseAdapter<LocalOrder> {
                                 int pageNum = 1;
                                 Bangumi targetBangumi = null;
 
-                                BangumiParser bangumiParser = new BangumiParser(context);
+                                BangumiParser bangumiParser = new BangumiParser();
                                 List<Bangumi> bangumiList;
 
                                 while (targetBangumi == null) {

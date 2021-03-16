@@ -6,7 +6,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
@@ -17,11 +16,6 @@ import java.util.Map;
 import okhttp3.Headers;
 
 public class UserArticleParser {
-    private final Map<String, String> requestHeader;
-
-    public UserArticleParser(Context context) {
-        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
-    }
 
     /**
      * 使用Cookie获取用户收藏的所有专栏
@@ -34,7 +28,7 @@ public class UserArticleParser {
         params.put("pn", String.valueOf(pageNum));
         params.put("ps", "16");
 
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.userArticle, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.userArticle, Headers.of(HttpUtils.getAPIRequestHeader()), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {
@@ -86,7 +80,7 @@ public class UserArticleParser {
         params.put("pn", "1");
         params.put("ps", "16");
 
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.userArticle, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.userArticle, Headers.of(HttpUtils.getAPIRequestHeader()), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {

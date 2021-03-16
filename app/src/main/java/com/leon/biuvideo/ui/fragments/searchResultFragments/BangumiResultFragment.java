@@ -79,7 +79,7 @@ public class BangumiResultFragment extends BaseLazyFragment {
             @Override
             public void run() {
                 if (bangumiParser == null) {
-                    bangumiParser = new BangumiParser(context);
+                    bangumiParser = new BangumiParser();
                 }
                 count = bangumiParser.getSearchBangumiCount(keyword);
 

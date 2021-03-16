@@ -1,12 +1,10 @@
 package com.leon.biuvideo.utils.parseDataUtils.searchParsers;
 
-import android.content.Context;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.searchBean.BiliUser;
+import com.leon.biuvideo.beans.searchBean.SearchBiliUser;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
+import com.leon.biuvideo.values.Role;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 import com.leon.biuvideo.values.SearchType;
 import com.leon.biuvideo.values.SortType;
@@ -24,14 +22,8 @@ import okhttp3.Headers;
 public class BiliUserParser {
     private final Map<String, String> requestHeader;
 
-    public BiliUserParser(Context context) {
-        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
-        for (Map.Entry<String, String> entry : this.requestHeader.entrySet()) {
-            if (entry.getKey().equals("Referer")) {
-                entry.setValue("https://search.bilibili.com");
-                break;
-            }
-        }
+    public BiliUserParser() {
+        this.requestHeader = HttpUtils.getAPIRequestHeader("Referer", "https://search.bilibili.com");
     }
 
     /**
@@ -42,7 +34,7 @@ public class BiliUserParser {
      * @param sortType 排序方式
      * @return  返回用户数据
      */
-    public List<BiliUser> userParse(String keyword, int pn, SortType sortType) {
+    public List<SearchBiliUser> userParse(String keyword, int pn, SortType sortType) {
         Map<String, String> params = new HashMap<>();
         params.put("keyword", keyword);
         params.put("search_type", SearchType.BILI_USER.value);
@@ -52,12 +44,12 @@ public class BiliUserParser {
         JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.search, Headers.of(requestHeader), params);
         JSONObject data = responseObject.getJSONObject("data");
 
-        List<BiliUser> biliUsers = new ArrayList<>();
+        List<SearchBiliUser> searchBiliUsers = new ArrayList<>();
         if (data != null) {
-            biliUsers = parseData(data);
+            searchBiliUsers = parseData(data);
         }
 
-        return biliUsers;
+        return searchBiliUsers;
     }
 
     /**
@@ -66,39 +58,45 @@ public class BiliUserParser {
      * @param data  JSONObject对象
      * @return  返回解析结果
      */
-    private List<BiliUser> parseData(JSONObject data) {
+    private List<SearchBiliUser> parseData(JSONObject data) {
         JSONArray result = data.getJSONArray("result");
 
-        List<BiliUser> biliUsers;
+        List<SearchBiliUser> searchBiliUsers;
         if (result.size() != 0) {
-            biliUsers = new ArrayList<>();
+            searchBiliUsers = new ArrayList<>();
 
             for (Object o : result) {
-                BiliUser biliUser = new BiliUser();
+                SearchBiliUser searchBiliUser = new SearchBiliUser();
                 JSONObject jsonObject = (JSONObject) o;
 
                 //用户ID
-                biliUser.mid = jsonObject.getLongValue("mid");
+                searchBiliUser.mid = jsonObject.getLongValue("mid");
 
                 //用户名称
-                biliUser.name = jsonObject.getString("uname");
+                searchBiliUser.name = jsonObject.getString("uname");
 
                 //用户说明
-                biliUser.usign = jsonObject.getString("usign");
+                searchBiliUser.usign = jsonObject.getString("usign");
 
                 //粉丝数
-                biliUser.fans = jsonObject.getIntValue("fans");
+                searchBiliUser.fans = jsonObject.getIntValue("fans");
 
                 //视频数
-                biliUser.videos = jsonObject.getIntValue("videos");
+                searchBiliUser.videos = jsonObject.getIntValue("videos");
 
                 //头像链接
-                biliUser.face = "http://" + jsonObject.getString("upic");
+                searchBiliUser.face = "http://" + jsonObject.getString("upic");
 
-                biliUsers.add(biliUser);
+                JSONObject officialVerify = jsonObject.getJSONObject("official_verify");
+
+                int type = officialVerify.getIntValue("type");
+                searchBiliUser.role = type > 1 ? Role.NONE : type == 1 ? Role.OFFICIAL : Role.PERSON;
+                searchBiliUser.verifyDesc = officialVerify.getString("desc");
+
+                searchBiliUsers.add(searchBiliUser);
             }
 
-            return biliUsers;
+            return searchBiliUsers;
         }
 
         return null;

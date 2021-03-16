@@ -21,8 +21,7 @@ import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.FragmentViewPagerAdapter;
 import com.leon.biuvideo.beans.Follow;
-import com.leon.biuvideo.beans.upMasterBean.UserInfo;
-import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.beans.upMasterBean.BiliUserInfo;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.fragments.userFragments.UserArticlesFragment;
 import com.leon.biuvideo.ui.fragments.userFragments.UserAudiosFragment;
@@ -30,11 +29,10 @@ import com.leon.biuvideo.ui.fragments.userFragments.UserPicturesFragment;
 import com.leon.biuvideo.ui.fragments.userFragments.UserVideosFragment;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
-import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.ViewUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.UserInfoParser;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.BiliUserInfoParser;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -43,7 +41,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.FutureTask;
 
 /**
  * 用户界面activity
@@ -59,7 +56,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
     private ViewPager up_viewPage;
 
     private long mid;
-    private UserInfo userInfo;
+    private BiliUserInfo biliUserInfo;
 
     private FavoriteUserDatabaseUtils favoriteUserDatabaseUtils;
 
@@ -142,8 +139,8 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
                     finish();
                 }
 
-                UserInfoParser userInfoParser = new UserInfoParser(getApplicationContext());
-                userInfo = userInfoParser.parseUpInfo(mid);
+                BiliUserInfoParser biliUserInfoParser = new BiliUserInfoParser();
+                biliUserInfo = biliUserInfoParser.parseUpInfo(mid);
 
                 favoriteUserDatabaseUtils = new FavoriteUserDatabaseUtils(getApplicationContext());
 
@@ -179,16 +176,16 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
     //设置控件的数据
     private void initValue() {
         //设置顶部图片
-        Glide.with(getApplicationContext()).load(userInfo.topPhoto).into(up_imageView_cover);
+        Glide.with(getApplicationContext()).load(biliUserInfo.topPhoto).into(up_imageView_cover);
 
         //设置头像
-        Glide.with(getApplicationContext()).load(userInfo.face + ImagePixelSize.FACE.value).into(up_circleImageView_face);
+        Glide.with(getApplicationContext()).load(biliUserInfo.face + ImagePixelSize.FACE.value).into(up_circleImageView_face);
 
         //设置昵称
-        up_textView_name.setText(userInfo.name);
+        up_textView_name.setText(biliUserInfo.name);
 
         //设置签名
-        up_textView_sign.setText(userInfo.sign);
+        up_textView_sign.setText(biliUserInfo.sign);
 
         //获取关注状态
         boolean favorite_state = favoriteUserDatabaseUtils.queryFavoriteState(mid);
@@ -249,10 +246,10 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
                     up_textView_favoriteStrState.setText("已关注");
 
                     Follow follow = new Follow();
-                    follow.desc = userInfo.sign;
+                    follow.desc = biliUserInfo.sign;
                     follow.mid = mid;
-                    follow.faceUrl = userInfo.face;
-                    follow.name = userInfo.name;
+                    follow.faceUrl = biliUserInfo.face;
+                    follow.name = biliUserInfo.name;
 
                     boolean addState = favoriteUserDatabaseUtils.addFavorite(follow);
 

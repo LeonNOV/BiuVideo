@@ -83,7 +83,7 @@ public class ArticleResultFragment extends BaseLazyFragment {
             @Override
             public void run() {
                 if (articleParser == null) {
-                    articleParser = new ArticleParser(context);
+                    articleParser = new ArticleParser();
                 }
                 count = articleParser.getSearchArticleCount(keyword);
 

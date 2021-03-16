@@ -6,7 +6,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 import com.leon.biuvideo.values.SearchType;
 import com.leon.biuvideo.values.SortType;
@@ -24,14 +23,8 @@ import okhttp3.Headers;
 public class ArticleParser {
     private final Map<String, String> requestHeader;
 
-    public ArticleParser(Context context) {
-        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
-        for (Map.Entry<String, String> entry : this.requestHeader.entrySet()) {
-            if (entry.getKey().equals("Referer")) {
-                entry.setValue("https://search.bilibili.com");
-                break;
-            }
-        }
+    public ArticleParser() {
+        this.requestHeader = HttpUtils.getAPIRequestHeader("Referer", "https://search.bilibili.com");
     }
 
     /**

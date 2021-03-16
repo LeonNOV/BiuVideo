@@ -13,6 +13,7 @@ import com.leon.biuvideo.beans.Weather;
 import com.leon.biuvideo.utils.LocationUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.WeatherUtil;
+import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.FeaturesName;
 
 import java.util.Timer;
@@ -94,7 +95,7 @@ public class WeatherService extends Service {
             localBroadcastManager = LocalBroadcastManager.getInstance(context);
         }
 
-        Intent weatherModelIntent = new Intent("currentWeatherData");
+        Intent weatherModelIntent = new Intent(Actions.CURRENT_WEATHER);
         weatherModelIntent.putExtra("currentWeather", currentWeather);
 
         localBroadcastManager.sendBroadcast(weatherModelIntent);

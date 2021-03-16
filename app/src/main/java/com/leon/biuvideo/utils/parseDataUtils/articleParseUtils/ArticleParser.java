@@ -6,7 +6,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.articleBeans.Article;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
@@ -17,12 +16,7 @@ import java.util.Map;
 import okhttp3.Headers;
 
 public class ArticleParser {
-    private final Map<String, String> requestHeader;
     private long mid;
-
-    public ArticleParser(Context context) {
-        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
-    }
 
     /**
      * construct
@@ -32,7 +26,6 @@ public class ArticleParser {
      */
     public ArticleParser(Context context, long mid) {
         this.mid = mid;
-        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
     }
 
     /**
@@ -46,7 +39,7 @@ public class ArticleParser {
         params.put("pn", String.valueOf(pn));
         params.put("ps", "12");
 
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.article, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.article, Headers.of(HttpUtils.getAPIRequestHeader()), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {
@@ -148,7 +141,7 @@ public class ArticleParser {
         Map<String, String> params = new HashMap<>();
         params.put("id", String.valueOf(articleId));
 
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.articleInfo, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.articleInfo, Headers.of(HttpUtils.getAPIRequestHeader()), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {

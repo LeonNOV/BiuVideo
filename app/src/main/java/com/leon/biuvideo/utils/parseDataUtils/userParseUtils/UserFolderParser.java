@@ -7,7 +7,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.orderBeans.UserFolder;
 import com.leon.biuvideo.beans.orderBeans.UserFolderData;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
@@ -18,12 +17,6 @@ import java.util.Map;
 import okhttp3.Headers;
 
 public class UserFolderParser {
-    private final Map<String, String> requestHeader;
-
-    public UserFolderParser(Context context) {
-        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
-    }
-
     /**
      * 获取用户所有收藏夹数据
      *
@@ -34,7 +27,7 @@ public class UserFolderParser {
         Map<String, String> params = new HashMap<>();
         params.put("up_mid", String.valueOf(mid));
 
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.userAllFolder, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.userAllFolder, Headers.of(HttpUtils.getAPIRequestHeader()), params);
         JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {
@@ -75,7 +68,7 @@ public class UserFolderParser {
         params.put("type", "0");
         params.put("tid", "0");
 
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.userFolderData, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.userFolderData, Headers.of(HttpUtils.getAPIRequestHeader()), params);
         JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {

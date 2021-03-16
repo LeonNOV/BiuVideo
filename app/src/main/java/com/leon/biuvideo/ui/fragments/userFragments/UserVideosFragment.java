@@ -79,7 +79,7 @@ public class UserVideosFragment extends BaseLazyFragment {
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                videoParser = new VideoParser(context);
+                videoParser = new VideoParser();
                 count = videoParser.getVideoTotal(mid);
 
                 Message message = handler.obtainMessage();

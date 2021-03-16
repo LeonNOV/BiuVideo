@@ -5,7 +5,6 @@ import android.content.Context;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.searchBean.bangumi.BangumiState;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.HashMap;
@@ -14,11 +13,6 @@ import java.util.Map;
 import okhttp3.Headers;
 
 public class BangumiStateParse {
-    private final Map<String, String> requestHeader;
-
-    public BangumiStateParse(Context context) {
-        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
-    }
 
     /**
      * 获取番剧投币数、弹幕数量等信息
@@ -27,10 +21,10 @@ public class BangumiStateParse {
      * @return  返回BangumiState
      */
     public BangumiState bangumiStateParse(long seasonId) {
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new HashMap<>(1);
         params.put("season_id", String.valueOf(seasonId));
 
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.bangumiState, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.bangumiState, Headers.of(HttpUtils.getAPIRequestHeader()), params);
         JSONObject result = responseObject.getJSONObject("result");
 
         if (result != null) {

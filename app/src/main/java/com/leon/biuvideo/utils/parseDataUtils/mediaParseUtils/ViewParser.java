@@ -11,7 +11,7 @@ import com.leon.biuvideo.beans.videoBean.view.VideoInfo;
 import com.leon.biuvideo.beans.videoBean.view.ViewPage;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.Fuck;
-import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
+import com.leon.biuvideo.utils.parseDataUtils.ParserInterface;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
@@ -25,11 +25,6 @@ import okhttp3.Headers;
  * view接口解析工具
  */
 public class ViewParser {
-    private final Map<String, String> requestHeader;
-
-    public ViewParser(Context context) {
-        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
-    }
 
     /**
      * 解析view接口响应的数据
@@ -42,7 +37,7 @@ public class ViewParser {
             Map<String, String> params = new HashMap<>();
             params.put("bvid", bvid);
 
-            JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.view, Headers.of(requestHeader), params);
+            JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.view, Headers.of(HttpUtils.getAPIRequestHeader()), params);
             JSONObject dataObject = responseObject.getJSONObject("data");
 
             if (dataObject != null) {

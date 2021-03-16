@@ -8,7 +8,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.upMasterBean.Picture;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.Fuck;
-import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
@@ -22,11 +21,6 @@ import okhttp3.Headers;
  * 解析相簿接口
  */
 public class PictureParser {
-    private final Map<String, String> requestHeader;
-
-    public PictureParser(Context context) {
-        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
-    }
 
     /**
      * 解析相簿接口
@@ -36,13 +30,13 @@ public class PictureParser {
      * @return  返回UpPicture类型集合
      */
     public List<Picture> parsePicture(long mid, int pageNum) {
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new HashMap<>(4);
         params.put("uid", String.valueOf(mid));
         params.put("page_num", String.valueOf(pageNum));
         params.put("page_size", String.valueOf(30));
         params.put("biz", "all");
 
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.picture, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.picture, Headers.of(HttpUtils.getAPIRequestHeader()), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {
@@ -111,7 +105,7 @@ public class PictureParser {
         Map<String, String> values = new HashMap<>();
         values.put("uid", String.valueOf(mid));
 
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.pictureCount, Headers.of(requestHeader), values);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.pictureCount, Headers.of(HttpUtils.getAPIRequestHeader()), values);
         JSONObject data = responseObject.getJSONObject("data");
 
         return data.getIntValue("all_count");

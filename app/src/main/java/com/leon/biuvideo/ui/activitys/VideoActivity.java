@@ -174,12 +174,12 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
 
                 //获取ViewPage实体类（视频基本信息）
                 if (viewParser == null) {
-                    viewParser = new ViewParser(getApplicationContext());
+                    viewParser = new ViewParser();
                 }
                 viewPage = viewParser.parseView(bvid);
 
                 if (mediaParser == null) {
-                    mediaParser = new MediaParser(getApplicationContext());
+                    mediaParser = new MediaParser();
                 }
 
                 //获取视频选集信息

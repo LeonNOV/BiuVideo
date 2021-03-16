@@ -72,7 +72,7 @@ public class UserOrderArticleFragment extends BaseLazyFragment {
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                userArticleParser = new UserArticleParser(context);
+                userArticleParser = new UserArticleParser();
                 total = userArticleParser.getTotal();
 
                 Message message = handler.obtainMessage();

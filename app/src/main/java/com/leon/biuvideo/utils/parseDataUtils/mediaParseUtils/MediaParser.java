@@ -7,7 +7,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.videoBean.play.Media;
 import com.leon.biuvideo.beans.videoBean.play.Play;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 import com.leon.biuvideo.values.Qualitys;
 
@@ -20,11 +19,6 @@ import java.util.Map;
 import okhttp3.Headers;
 
 public class MediaParser {
-    private final Map<String, String> requestHeader;
-
-    public MediaParser(Context context) {
-        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
-    }
 
     /**
      * 解析playUrl接口
@@ -43,7 +37,7 @@ public class MediaParser {
             params.put("fnver", "0");
             params.put("fnval", "80");
 
-            JSONObject responseObject = HttpUtils.getResponse(isBangumi ? BiliBiliAPIs.playUrlForBangumi : BiliBiliAPIs.playUrl, Headers.of(requestHeader), params);
+            JSONObject responseObject = HttpUtils.getResponse(isBangumi ? BiliBiliAPIs.playUrlForBangumi : BiliBiliAPIs.playUrl, Headers.of(HttpUtils.getAPIRequestHeader()), params);
 
             JSONObject data = responseObject.getJSONObject(isBangumi ? "result" : "data");
 

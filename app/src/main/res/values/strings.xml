@@ -7,7 +7,7 @@
     <string name="history">历史记录</string>
     <string name="orders">订阅</string>
     <string name="settings">设置</string>
-    <string name="userInfo">用户信息</string>
+    <string name="biliUserInfo">用户信息</string>
     <string name="popular">热门</string>
     <string name="recommend">推荐</string>
     <string name="downloadManager">下载管理</string>
@@ -17,7 +17,7 @@
     <string name="series">剧集</string>
     <string name="tag">标签</string>
     <string name="article">专栏</string>
-    <string name="biliUser">用户</string>
+    <string name="searchBiliUser">用户</string>
     <string name="audio">音频</string>
     <string name="picture">相簿</string>
     <string name="live">直播</string>
@@ -70,6 +70,7 @@
     <string name="user_dynamic">动态</string>
     <string name="user_follow">关注</string>
     <string name="user_fans">粉丝</string>
+    <string name="user_like">获赞</string>
 
     <string name="user_baseInfo">基本信息</string>
     <string name="user_accountInfo">账号信息</string>
@@ -158,4 +159,5 @@
     <string name="loading">加载数据中</string>
     <string name="exporting">导出数据中</string>
     <string name="login_account">登录账户</string>
+    <string name="Logout">退出当前账户</string>
 </resources>

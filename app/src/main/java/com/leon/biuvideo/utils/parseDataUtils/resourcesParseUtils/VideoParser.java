@@ -8,7 +8,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.upMasterBean.Video;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.Fuck;
-import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
@@ -23,11 +22,6 @@ import okhttp3.Headers;
  * 视频接口解析
  */
 public class VideoParser {
-    private final Map<String, String> requestHeader;
-
-    public VideoParser(Context context) {
-        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
-    }
 
     /**
      * 视频接口解析
@@ -37,7 +31,7 @@ public class VideoParser {
      * @return  返回UpVideo类型集合
      */
     public List<Video> parseVideo(long mid, int pageNum) {
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new HashMap<>(6);
         params.put("mid", String.valueOf(mid));
         params.put("ps", String.valueOf(30));
         params.put("pn", String.valueOf(pageNum));
@@ -45,7 +39,7 @@ public class VideoParser {
         params.put("tid", "0");
         params.put("jsonp", "jsonp");
 
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.videos, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.videos, Headers.of(HttpUtils.getAPIRequestHeader()), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {
@@ -113,7 +107,7 @@ public class VideoParser {
      * @return  返回视频总数
      */
     public int getVideoTotal(long mid) {
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new HashMap<>(6);
         params.put("mid", String.valueOf(mid));
         params.put("ps", "30");
         params.put("pn", "1");
@@ -121,7 +115,7 @@ public class VideoParser {
         params.put("tid", "0");
         params.put("jsonp", "jsonp");
 
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.videos, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.videos, Headers.of(HttpUtils.getAPIRequestHeader()), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
         JSONObject page = dataObject.getJSONObject("page");
 

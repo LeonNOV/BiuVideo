@@ -84,7 +84,7 @@ public class VideoResultFragment extends BaseLazyFragment {
             @Override
             public void run() {
                 if (videoParser == null) {
-                    videoParser = new VideoParser(context);
+                    videoParser = new VideoParser();
                 }
 
                 //获取总条目数，最大为1000，最小为0

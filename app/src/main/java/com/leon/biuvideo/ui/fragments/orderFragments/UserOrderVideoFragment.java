@@ -80,7 +80,7 @@ public class UserOrderVideoFragment extends BaseLazyFragment {
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                userFolderParser = new UserFolderParser(context);
+                userFolderParser = new UserFolderParser();
                 userFolders = userFolderParser.parseUserFolder(mid);
 
                 //获取第一个收藏夹ID

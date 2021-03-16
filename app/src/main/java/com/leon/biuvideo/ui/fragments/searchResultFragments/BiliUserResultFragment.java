@@ -13,14 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.userFragmentAdapters.BiliUserAdapter;
-import com.leon.biuvideo.beans.searchBean.BiliUser;
-import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.beans.searchBean.SearchBiliUser;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
-import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BiliUserParser;
 import com.leon.biuvideo.values.SortType;
@@ -30,10 +28,9 @@ import com.scwang.smartrefresh.layout.constant.RefreshState;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.List;
-import java.util.concurrent.FutureTask;
 
 /**
- * SearchResultActivity-BiliUser Fragment
+ * SearchResultActivity-SearchBiliUser Fragment
  */
 public class BiliUserResultFragment extends BaseLazyFragment {
     private LinearLayout smart_refresh_layout_fragment_linearLayout;
@@ -47,7 +44,7 @@ public class BiliUserResultFragment extends BaseLazyFragment {
     private int currentCount;
 
     private BiliUserParser biliUserParser;
-    private List<BiliUser> biliUserList;
+    private List<SearchBiliUser> searchBiliUserList;
 
     private BiliUserAdapter biliUserAdapter;
     private LinearLayoutManager linearLayoutManager;
@@ -86,7 +83,7 @@ public class BiliUserResultFragment extends BaseLazyFragment {
             @Override
             public void run() {
                 if (biliUserParser == null) {
-                    biliUserParser = new BiliUserParser(context);
+                    biliUserParser = new BiliUserParser();
                 }
                 count = biliUserParser.getSearchUserCount(keyword);
 
@@ -128,11 +125,11 @@ public class BiliUserResultFragment extends BaseLazyFragment {
             search_result_recyclerView.setVisibility(View.VISIBLE);
             search_result_smartRefresh.setEnabled(true);
 
-            biliUserList = biliUserParser.userParse(keyword, pageNum, SortType.DEFAULT);
-            currentCount += biliUserList.size();
+            searchBiliUserList = biliUserParser.userParse(keyword, pageNum, SortType.DEFAULT);
+            currentCount += searchBiliUserList.size();
             pageNum++;
 
-            if (count == biliUserList.size()) {
+            if (count == searchBiliUserList.size()) {
                 dataState = false;
                 //关闭上滑加载
                 search_result_smartRefresh.setEnabled(false);
@@ -143,7 +140,7 @@ public class BiliUserResultFragment extends BaseLazyFragment {
             }
 
             linearLayoutManager = new LinearLayoutManager(context);
-            biliUserAdapter = new BiliUserAdapter(biliUserList, context, favoriteUserDatabaseUtils);
+            biliUserAdapter = new BiliUserAdapter(searchBiliUserList, context, favoriteUserDatabaseUtils);
 
             initAttr();
         }
@@ -186,7 +183,7 @@ public class BiliUserResultFragment extends BaseLazyFragment {
                                 getBiliUsers();
 
                                 //添加新数据
-                                biliUserAdapter.append(biliUserList);
+                                biliUserAdapter.append(searchBiliUserList);
                             }
                         }, 1000);
                     } else {
@@ -207,10 +204,10 @@ public class BiliUserResultFragment extends BaseLazyFragment {
      * 获取下一页用户数据
      */
     public void getBiliUsers() {
-        biliUserList = biliUserParser.userParse(keyword, pageNum, SortType.DEFAULT);
+        searchBiliUserList = biliUserParser.userParse(keyword, pageNum, SortType.DEFAULT);
 
         //记录获取的总数
-        currentCount += biliUserList.size();
+        currentCount += searchBiliUserList.size();
 
         //判断是否已获取完所有的数据
         if (currentCount == count) {
@@ -238,7 +235,7 @@ public class BiliUserResultFragment extends BaseLazyFragment {
         this.smart_refresh_layout_fragment_linearLayout.setVisibility(View.VISIBLE);
         this.search_result_no_data.setVisibility(View.GONE);
 
-        if (biliUserList != null) {
+        if (searchBiliUserList != null) {
             biliUserAdapter.removeAll();
         }
     }

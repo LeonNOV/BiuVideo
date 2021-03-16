@@ -7,7 +7,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.Fuck;
-import com.leon.biuvideo.utils.parseDataUtils.ParserUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
@@ -18,11 +17,6 @@ import java.util.Map;
 import okhttp3.Headers;
 
 public class MusicUrlParser {
-    private final Map<String, String> requestHeader;
-
-    public MusicUrlParser(Context context) {
-        this.requestHeader = ParserUtils.getInterfaceRequestHeader(context);
-    }
 
     /**
      * 获取音频播放地址
@@ -34,7 +28,7 @@ public class MusicUrlParser {
         Map<String, String> params = new HashMap<>();
         params.put("sid", sid);
 
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.musicUrl, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.musicUrl, Headers.of(HttpUtils.getAPIRequestHeader()), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {

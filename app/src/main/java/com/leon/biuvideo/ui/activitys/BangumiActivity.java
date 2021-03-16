@@ -144,10 +144,10 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                 selectAnthologyIndex = extras.getInt("selectAnthologyIndex", 0);
 
                 // 获取番剧选集cid及其各选集cover
-                BangumiParser bangumiParser = new BangumiParser(getApplicationContext());
+                BangumiParser bangumiParser = new BangumiParser();
                 bangumi.eps = bangumiParser.getEpCids(bangumi.seasonId, bangumi.eps);
 
-                BangumiStateParse bangumiStateParse = new BangumiStateParse(getApplicationContext());
+                BangumiStateParse bangumiStateParse = new BangumiStateParse();
                 bangumiState = bangumiStateParse.bangumiStateParse(bangumi.seasonId);
 
                 localOrdersDatabaseUtils = new LocalOrdersDatabaseUtils(getApplicationContext());
@@ -266,7 +266,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                 }
 
                 if (mediaParser == null) {
-                    mediaParser = new MediaParser(getApplicationContext());
+                    mediaParser = new MediaParser();
                 }
 
                 // 如果番剧选集个数为1，则直接显示SingleVideoQualityDialog

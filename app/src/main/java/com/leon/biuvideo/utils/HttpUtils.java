@@ -13,6 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import okhttp3.Call;
 import okhttp3.Headers;
@@ -154,7 +155,7 @@ public class HttpUtils {
         if (subId != 0) {
             urls = new String[2];
 
-            MediaParser mediaParser = new MediaParser(context);
+            MediaParser mediaParser = new MediaParser();
             Play play = mediaParser.parseMedia(mainId, subId, isBangumi);
 
             if (play != null) {
@@ -164,11 +165,52 @@ public class HttpUtils {
 
         } else {
             urls = new String[1];
-            MusicUrlParser musicUrlParser = new MusicUrlParser(context);
+            MusicUrlParser musicUrlParser = new MusicUrlParser();
             urls[0] = musicUrlParser.parseMusicUrl(mainId);;
         }
 
         return urls;
+    }
+
+    /**
+     * 该方法适用于在获取接口数据时调用<br/>
+     * 如果已登录账号，则会获取已存在的Cookie
+     */
+    public static Map<String, String> getAPIRequestHeader() {
+        Map<String, String> requestHeader = new HashMap<>(HttpUtils.getHeaders());
+        String cookie = PreferenceUtils.getCookie();
+
+        if (cookie == null) {
+            return requestHeader;
+        } else {
+            requestHeader.put("Cookie", cookie);
+        }
+
+        return requestHeader;
+    }
+
+    /**
+     * 该方法适用于在获取接口数据时调用<br/>
+     * 如果已登录账号，则会获取已存在的Cookie
+     */
+    public static Map<String, String> getAPIRequestHeader(String key, String value) {
+        Map<String, String> requestHeader = new HashMap<>(HttpUtils.getHeaders());
+        String cookie = PreferenceUtils.getCookie();
+
+        if (cookie == null) {
+            Set<Map.Entry<String, String>> entries = requestHeader.entrySet();
+            for (Map.Entry<String, String> entry : entries) {
+                if (key.equals(entry.getKey())) {
+                    entry.setValue(value);
+                    break;
+                }
+            }
+            return requestHeader;
+        } else {
+            requestHeader.put("Cookie", cookie);
+        }
+
+        return requestHeader;
     }
 
     /**

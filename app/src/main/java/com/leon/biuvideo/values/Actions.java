@@ -20,4 +20,9 @@ public class Actions {
      * 刷新推荐视图样式
      */
     public static final String REFRESH_RECOMMEND_STYLE = "refreshRecommendStyle";
+
+    /**
+     * 登陆成功
+     */
+    public static final String LOGIN_SUCCESS = "loginSuccess";
 }

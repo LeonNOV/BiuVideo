@@ -1,5 +1,6 @@
 package com.leon.biuvideo.ui.otherFragments;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
@@ -31,7 +34,6 @@ public class LoginFragment extends BaseSupportFragment {
     private WebView loginWebView;
     private ProgressBar loginProgress;
     private Handler handler;
-    private SimpleTopBar loginTopBar;
 
     public static LoginFragment getInstance() {
         return new LoginFragment();
@@ -44,7 +46,7 @@ public class LoginFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        loginTopBar = findView(R.id.login_topBar);
+        SimpleTopBar loginTopBar = findView(R.id.login_topBar);
         loginTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
@@ -120,9 +122,6 @@ public class LoginFragment extends BaseSupportFragment {
                     CookieManager cookieManager = CookieManager.getInstance();
                     String cookieStr = cookieManager.getCookie(url).trim();
 
-                    //添加Cookie至本地
-                    PreferenceUtils.setCookie(cookieStr);
-
                     //获取用户ID
                     String[] split = cookieStr.split("; ");
                     Map<String, String> cookieMap = new HashMap<>();
@@ -138,7 +137,12 @@ public class LoginFragment extends BaseSupportFragment {
                         return;
                     }
 
+                    PreferenceUtils.setCookie(cookieStr);
                     PreferenceUtils.setUserId(cookieMap.get("DedeUserID"));
+                    PreferenceUtils.setLoginStatus(true);
+
+                    // 登录成功，发送广播
+                    sendBroadcast();
 
                     backPressed();
                 }
@@ -147,6 +151,18 @@ public class LoginFragment extends BaseSupportFragment {
 
         // 参数gourl为登陆成功后跳转到的url地址
         loginWebView.loadUrl(ORIGINAL_URL);
+    }
+
+    /**
+     * 登录成功后发送本地广播
+     */
+    private void sendBroadcast() {
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
+
+        Intent intent = new Intent("loginStatus");
+        intent.putExtra("loginStatus", true);
+
+        localBroadcastManager.sendBroadcast(intent);
     }
 
     @Override

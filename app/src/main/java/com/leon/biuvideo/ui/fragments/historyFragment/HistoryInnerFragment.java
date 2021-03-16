@@ -77,7 +77,7 @@ public class HistoryInnerFragment extends BaseLazyFragment {
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                historyParser = new HistoryParser(context);
+                historyParser = new HistoryParser();
                 history = historyParser.parseHistory(cookie, -1, -1, historyType);
 
                 Message message = handler.obtainMessage();
