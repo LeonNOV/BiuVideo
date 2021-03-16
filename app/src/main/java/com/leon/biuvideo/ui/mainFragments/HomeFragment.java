@@ -194,14 +194,6 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
             weatherModel.onInitialize(view, context);
         }
 
-        SimpleSingleThreadPool.executor(new Runnable() {
-            @Override
-            public void run() {
-                // 获取当前天气
-                getCurrentWeather();
-            }
-        });
-
         // 在主线程中更新天气信息
         handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
             @Override
@@ -222,6 +214,14 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 }
 
                 return true;
+            }
+        });
+
+        SimpleSingleThreadPool.executor(new Runnable() {
+            @Override
+            public void run() {
+                // 获取当前天气
+                getCurrentWeather();
             }
         });
     }

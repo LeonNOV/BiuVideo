@@ -1,11 +1,5 @@
 package com.leon.biuvideo.utils.parseDataUtils.userParseUtils;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-
-import androidx.annotation.NonNull;
-
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.userBeans.UserInfo;
 import com.leon.biuvideo.utils.HttpUtils;
@@ -14,10 +8,7 @@ import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.Role;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
@@ -33,12 +24,22 @@ import okhttp3.Headers;
  */
 public class UserInfoParser {
     private OnSuccessListener onSuccessListener;
+
     private int bCoins = -1;
     private String banner;
     private UserInfo userInfo;
+    private Map<String, Integer> statMap;
 
     public interface OnSuccessListener{
-        void onCallback (UserInfo userInfo, String banner, int bCoins);
+        /**
+         * 获取完数据后的回调方法
+         *
+         * @param userInfo  用户基本信息
+         * @param banner    横幅图片
+         * @param bCoins    B币数量
+         * @param statMap   动态数、关注数、粉丝数
+         */
+        void onCallback(UserInfo userInfo, String banner, int bCoins, Map<String, Integer> statMap);
     }
 
     public void setOnSuccessListener(OnSuccessListener onSuccessListener) {
@@ -55,7 +56,7 @@ public class UserInfoParser {
             public void run() {
                 userInfo = getBaseData();
                 if (onSuccessListener != null) {
-                    onSuccessListener.onCallback(userInfo, banner, bCoins);
+                    onSuccessListener.onCallback(userInfo, banner, bCoins, statMap);
                 }
             }
         });
@@ -64,9 +65,19 @@ public class UserInfoParser {
         UserInfoThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                banner = getBannerImg();
-                if (onSuccessListener != null) {
-                    onSuccessListener.onCallback(userInfo, banner, bCoins);
+                Map<String, String> params = new HashMap<>();
+                params.put("mid", PreferenceUtils.getUserId());
+                params.put("photo", "true");
+
+                JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.USER_BANNER, Headers.of(HttpUtils.getAPIRequestHeader()), params);
+                JSONObject data = responseObject.getJSONObject("data");
+
+                if (data != null) {
+                    banner = data.getJSONObject("space").getString("l_img");
+
+                    if (onSuccessListener != null) {
+                        onSuccessListener.onCallback(userInfo, banner, bCoins, statMap);
+                    }
                 }
             }
         });
@@ -75,12 +86,40 @@ public class UserInfoParser {
         UserInfoThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                bCoins = getWalletInfo();
+                JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.USER_WALLET, Headers.of(HttpUtils.getAPIRequestHeader()), null);
+                bCoins = response.getJSONObject("data").getJSONObject("accountInfo").getIntValue("defaultBp");
+
                 if (onSuccessListener != null) {
-                    onSuccessListener.onCallback(userInfo, banner, bCoins);
+                    onSuccessListener.onCallback(userInfo, banner, bCoins, statMap);
                 }
             }
         });
+
+        // 获取动态数、关注数、粉丝数
+        UserInfoThreadPool.executor(new Runnable() {
+            @Override
+            public void run() {
+
+                statMap = new HashMap<>(3);
+                JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.USER_STAT, Headers.of(HttpUtils.getAPIRequestHeader()), null);
+                JSONObject data = response.getJSONObject("data");
+
+                statMap.put("following", data.getIntValue("following"));
+                statMap.put("follower", data.getIntValue("follower"));
+                statMap.put("dynamicCount", data.getIntValue("dynamic_count"));
+
+                if (onSuccessListener != null) {
+                    onSuccessListener.onCallback(userInfo, banner, bCoins, statMap);
+                }
+            }
+        });
+    }
+
+    /**
+     * 关闭线程池
+     */
+    public void shutDownThreadPool() {
+        UserInfoThreadPool.USER_INFO_THREAD_POOL.shutdown();
     }
 
     /**
@@ -128,41 +167,11 @@ public class UserInfoParser {
         return null;
     }
 
-    /**
-     * 获取BANNER图片
-     *
-     * @return sImg：经过裁剪的图片；lImg：原图
-     */
-    private String getBannerImg() {
-        Map<String, String> params = new HashMap<>();
-        params.put("mid", PreferenceUtils.getUserId());
-        params.put("photo", "true");
-
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.USER_BANNER, Headers.of(HttpUtils.getAPIRequestHeader()), params);
-        JSONObject data = responseObject.getJSONObject("data");
-
-        if (data != null) {
-            return  data.getJSONObject("space").getString("l_img");
-        }
-
-        return null;
-    }
-
-    /**
-     * 获取B币数量
-     *
-     * @return  B币数量
-     */
-    private int getWalletInfo() {
-        JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.USER_WALLET, Headers.of(HttpUtils.getAPIRequestHeader()), null);
-        return response.getJSONObject("data").getJSONObject("accountInfo").getIntValue("defaultBp");
-    }
-
     private static class UserInfoThreadPool  {
         private static final ThreadPoolExecutor USER_INFO_THREAD_POOL;
 
         static {
-            USER_INFO_THREAD_POOL = new ThreadPoolExecutor(5, 5, 0,TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), new ThreadFactory() {
+            USER_INFO_THREAD_POOL = new ThreadPoolExecutor(4, 4, 0,TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), new ThreadFactory() {
                 @Override
                 public Thread newThread(Runnable r) {
                     return new Thread(r);

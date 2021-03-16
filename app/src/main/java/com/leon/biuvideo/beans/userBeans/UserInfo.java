@@ -11,6 +11,8 @@ public class UserInfo {
     public String userName;
     public String userFace;
     public long mid;
+    public String sex;
+    public String sign;
 
     /**
      * 现经验值
@@ -83,14 +85,12 @@ public class UserInfo {
     public int fans;
 
     /**
-     * 获赞数
-     */
-    public int likes;
-
-    /**
      * 动态数
      */
     public int dynamics;
-    public String sex;
-    public String sign;
+
+    /**
+     * 获赞数（暂不使用）
+     */
+    public int likes;
 }

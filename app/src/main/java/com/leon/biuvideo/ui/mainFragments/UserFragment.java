@@ -17,7 +17,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.userBeans.UserInfo;
 import com.leon.biuvideo.ui.NavFragment;
@@ -27,10 +26,8 @@ import com.leon.biuvideo.ui.otherFragments.LoginFragment;
 import com.leon.biuvideo.ui.user.UserInfoFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
-import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.utils.PreferenceUtils;
-import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserInfoParser;
 import com.leon.biuvideo.values.Actions;
 
@@ -91,10 +88,16 @@ public class UserFragment extends BaseSupportFragment {
         userInfoParser.parseData();
         userInfoParser.setOnSuccessListener(new UserInfoParser.OnSuccessListener() {
             @Override
-            public void onCallback(UserInfo userInfo, String banner, int bCoins) {
-                if (userInfo != null && banner != null && bCoins != -1) {
+            public void onCallback(UserInfo userInfo, String banner, int bCoins, Map<String, Integer> statMap) {
+                if (userInfo != null && banner != null && bCoins != -1 && statMap != null) {
+                    userInfoParser.shutDownThreadPool();
+
                     userInfo.banner = banner;
                     userInfo.bCoinBalance = bCoins;
+                    userInfo.follows = statMap.get("following");
+                    userInfo.fans = statMap.get("follower");
+                    userInfo.dynamics = statMap.get("dynamicCount");
+
 
                     Message message = handler.obtainMessage();
                     message.obj = userInfo;

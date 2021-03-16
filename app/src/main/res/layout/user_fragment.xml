@@ -114,15 +114,15 @@
                             app:rightValue="@string/user_dynamic"
                             app:tagMark="right" />
 
-                        <com.leon.biuvideo.ui.views.TagView
-                            android:id="@+id/user_top_like"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            app:isClick="true"
-                            app:leftValue="0"
-                            app:rightValue="@string/user_like"
-                            app:tagMark="right" />
+<!--                        <com.leon.biuvideo.ui.views.TagView-->
+<!--                            android:id="@+id/user_top_like"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginStart="20dp"-->
+<!--                            app:isClick="true"-->
+<!--                            app:leftValue="0"-->
+<!--                            app:rightValue="@string/user_like"-->
+<!--                            app:tagMark="right" />-->
 
                     </LinearLayout>
 
