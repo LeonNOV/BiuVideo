@@ -68,9 +68,9 @@ public class TagView extends LinearLayout {
         return "";
     }
 
-    public void setLeftValue(String rightValue) {
+    public void setLeftValue(String leftValue) {
         if (leftView != null) {
-            this.leftView.setText(rightValue);
+            this.leftView.setText(leftValue);
         }
     }
 

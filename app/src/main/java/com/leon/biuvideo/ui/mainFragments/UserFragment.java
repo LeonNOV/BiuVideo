@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.userBeans.UserInfo;
 import com.leon.biuvideo.ui.NavFragment;
@@ -30,6 +31,7 @@ import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserInfoParser;
 import com.leon.biuvideo.values.Actions;
+import com.leon.biuvideo.values.Role;
 
 import java.util.Map;
 
@@ -51,12 +53,12 @@ public class UserFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        // 获取用户数据
-        getAccountInfo();
-
         // 初始化控件
         userDataView = new UserDataView();
         userDataView.initDataView();
+
+        // 获取用户数据
+        getAccountInfo();
 
         handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
             @Override
@@ -65,6 +67,7 @@ public class UserFragment extends BaseSupportFragment {
                 UserInfo userInfo = (UserInfo) msg.obj;
 
                 // 设置数据
+                userDataView.setVisibility(true);
                 userDataView.setData(userInfo);
 
                 return true;
@@ -79,9 +82,11 @@ public class UserFragment extends BaseSupportFragment {
     private void getAccountInfo() {
         // 判断是否已登录
         if (!PreferenceUtils.getLoginStatus()) {
-//            SimpleSnackBar.make(view, "登录之后才能查看账户信息", SimpleSnackBar.LENGTH_SHORT).show();
+            userDataView.setVisibility(false);
             return;
         }
+
+        userDataView.setVisibility(true);
 
         // 获取用户数据
         UserInfoParser userInfoParser = new UserInfoParser();
@@ -119,6 +124,9 @@ public class UserFragment extends BaseSupportFragment {
         localBroadcastManager.registerReceiver(localReceiver, intentFilter);
     }
 
+    /**
+     * 本地广播接收器
+     */
     private class LocalReceiver extends BroadcastReceiver {
 
         @Override
@@ -140,11 +148,10 @@ public class UserFragment extends BaseSupportFragment {
      */
     private class UserDataView implements View.OnClickListener {
         private ImageView userVipMark;
-        private TagView userFavTagView;
-        private TagView userFansTagView;
-        private LinearLayout userVerify;
-        private ImageView userVerifyMark;
-        private TextView userVerifyDesc;
+        private TagView userTopFollow;
+        private TagView userTopFans;
+        private ImageView userBaseInfoVerifyMark;
+        private TextView userBaseInfoVerifyDesc;
         private LinearLayout userBaseInfoLinearLayout;
         private LinearLayout userAccountInfoLinearLayout;
         private LoadingRecyclerView userFavoriteLoadingRecyclerView;
@@ -157,13 +164,14 @@ public class UserFragment extends BaseSupportFragment {
         private ImageView userBanner;
         private TextView userTopName;
         private CircleImageView userFace;
-        private TextView userAccountInfLevel;
-        private TextView userAccountInfVipValid;
-        private TextView userAccountInfVipMark;
-        private TextView userAccountInfCoin;
-        private TextView userAccountInfMoney;
+        private TextView userAccountInfoLevel;
+        private TextView userAccountInfoVipValid;
+        private TextView userAccountInfoVipMark;
+        private TextView userAccountInfoBCoins;
+        private TextView userAccountInfoCoins;
         private ProgressBar userAccountInfExProgress;
-        private TextView userAccountInfEx;
+        private TextView userAccountInfoEx;
+        private TagView userTopDynamic;
 
         /**
          * 初始化所有控件
@@ -190,37 +198,58 @@ public class UserFragment extends BaseSupportFragment {
 
             userVipMark = findView(R.id.user_vip_mark);
             userTopName = findView(R.id.user_top_name);
-            userFavTagView = findView(R.id.user_top_fav);
-            userFansTagView = findView(R.id.user_top_fans);
+
+            userTopFollow = findView(R.id.user_top_follow);
+            userTopFollow.setOnTagViewClickListener(new TagView.OnTagViewClickListener() {
+                @Override
+                public void onClick() {
+                    Toast.makeText(context, "用户关注", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            userTopFans = findView(R.id.user_top_fans);
+            userTopFans.setOnTagViewClickListener(new TagView.OnTagViewClickListener() {
+                @Override
+                public void onClick() {
+                    Toast.makeText(context, "用户粉丝", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            userTopDynamic = findView(R.id.user_top_dynamic);
+            userTopDynamic.setOnTagViewClickListener(new TagView.OnTagViewClickListener() {
+                @Override
+                public void onClick() {
+                    Toast.makeText(context, "用户动态", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         /**
          * 初始化基本信息视图
          */
         private void initBaseInfoViews() {
-            userVerify = findView(R.id.user_baseInfo_verify);
-            userVerifyMark = findView(R.id.user_baseInfo_verify_mark);
-            userVerifyDesc = findView(R.id.user_baseInfo_verify_desc);
+            userBaseInfoVerifyMark = findView(R.id.user_baseInfo_verify_mark);
+            userBaseInfoVerifyDesc = findView(R.id.user_baseInfo_verify_desc);
 
             userBaseInfoUid = findView(R.id.user_baseInfo_uid);
             userBaseInfoName = findView(R.id.user_baseInfo_name);
             userBaseInfoGender = findView(R.id.user_baseInfo_gender);
             userBaseInfoLevel = findView(R.id.user_baseInfo_level);
 
-            TextView userInfoCheckAll = findView(R.id.user_baseInfo_check_all);
+            findView(R.id.user_baseInfo_check_all).setOnClickListener(this);
         }
 
         /**
          * 初始化账户信息视图
          */
         private void initAccountViews() {
-            userAccountInfLevel = findView(R.id.user_accountInf_level);
-            userAccountInfEx = findView(R.id.user_accountInf_ex);
+            userAccountInfoLevel = findView(R.id.user_accountInf_level);
+            userAccountInfoEx = findView(R.id.user_accountInf_ex);
             userAccountInfExProgress = findView(R.id.user_accountInf_ex_progress);
-            userAccountInfMoney = findView(R.id.user_accountInf_money);
-            userAccountInfCoin = findView(R.id.user_accountInf_coin);
-            userAccountInfVipMark = findView(R.id.user_accountInf_vipMark);
-            userAccountInfVipValid = findView(R.id.user_accountInf_vipValid);
+            userAccountInfoCoins = findView(R.id.user_accountInf_money);
+            userAccountInfoBCoins = findView(R.id.user_accountInf_coin);
+            userAccountInfoVipMark = findView(R.id.user_accountInf_vipMark);
+            userAccountInfoVipValid = findView(R.id.user_accountInf_vipValid);
         }
 
         /**
@@ -273,10 +302,63 @@ public class UserFragment extends BaseSupportFragment {
             }
         }
 
+        /**
+         * 设置数据
+         *
+         * @param userInfo  userInfo
+         */
         public void setData(UserInfo userInfo) {
             // 如果未登录，则不设置数据
             if (PreferenceUtils.getLoginStatus()) {
+                userFavoriteLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING);
+                userBangumiLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING);
+                userCoinLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING);
+
+                userVipMark.setVisibility(userInfo.isVip ? View.VISIBLE : View.GONE);
+                userTopName.setText(userInfo.userName);
+                Glide.with(context).load(userInfo.userFace).into(userFace);
+                Glide.with(context).load(userInfo.banner).into(userBanner);
+                userTopFans.setLeftValue(String.valueOf(userInfo.fans));
+                userTopFollow.setLeftValue(String.valueOf(userInfo.follows));
+                userTopDynamic.setLeftValue(String.valueOf(userInfo.dynamics));
+
+                if (userInfo.role == Role.NONE) {
+                    findView(R.id.user_baseInfo_verify).setVisibility(View.GONE);
+                } else {
+                    userBaseInfoVerifyMark.setImageResource(userInfo.role == Role.PERSON ? R.drawable.ic_person_verify : R.drawable.ic_official_verify);
+                    userBaseInfoVerifyDesc.setText(userInfo.verifyDesc);
+                }
+
+                userBaseInfoUid.setRightValue(String.valueOf(userInfo.mid));
+                userBaseInfoName.setRightValue(userInfo.userName);
+                userBaseInfoGender.setRightValue(userInfo.sex);
+                userBaseInfoLevel.setRightValue("Lv" + userInfo.currentLevel);
+
+                userAccountInfoLevel.setText("Lv" + userInfo.currentLevel);
+                userAccountInfoEx.setText(userInfo.currentExp + "/" + userInfo.totalExp);
+                userAccountInfoBCoins.setText(String.valueOf(userInfo.bCoinBalance));
+                userAccountInfoCoins.setText(String.valueOf(userInfo.coins));
+                userAccountInfoVipMark.setBackgroundColor(userInfo.isVip ? context.getColor(R.color.BiliBili_pink) : context.getColor(R.color.gray));
+                userAccountInfoVipMark.setText(userInfo.vipLabel);
+                userAccountInfoVipValid.setText(userInfo.vipDueDate);
+                userAccountInfExProgress.setMax(userInfo.totalExp);
+                userAccountInfExProgress.setProgress(userInfo.currentExp,true);
+
+                userFavoriteLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
+                userBangumiLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
+                userCoinLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
             }
+        }
+
+        /**
+         * 显示/隐藏指定部分
+         *
+         * @param visibility    visibility
+         */
+        public void setVisibility(boolean visibility) {
+            userBaseInfoLinearLayout.setVisibility(visibility ? View.VISIBLE : View.GONE);
+            userAccountInfoLinearLayout.setVisibility(visibility ? View.VISIBLE : View.GONE);
+            userVipMark.setVisibility(visibility ? View.VISIBLE : View.GONE);
         }
     }
 }
