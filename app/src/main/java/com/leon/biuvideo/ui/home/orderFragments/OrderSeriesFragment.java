@@ -27,7 +27,6 @@ public class OrderSeriesFragment extends BaseSupportFragmentWithSrr<RvTestBean> 
         view.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-//                RefreshState state = refreshLayout.getState();
                 Random random = new Random();
 
                 List<RvTestBean> rvTestBeanList = new ArrayList<>();
@@ -65,6 +64,7 @@ public class OrderSeriesFragment extends BaseSupportFragmentWithSrr<RvTestBean> 
         super.onLazyInitView(savedInstanceState);
 
         view.setStatus(LoadingRecyclerView.LOADING);
+
         List<RvTestBean> rvTestBeanList = new ArrayList<>();
 
         Random random = new Random();

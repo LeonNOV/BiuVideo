@@ -234,7 +234,7 @@ public class BiliBiliAPIs {
      * 不需要任何参数
      * 必须要设置Cookie信息
      */
-    public static final String USER_BASH_INFO = "http://api.bilibili.com/x/space/myinfo";
+    public static final String USER_BASE_INFO = "http://api.bilibili.com/x/space/myinfo";
 
     /**
      * 获取用户数据2
@@ -254,6 +254,16 @@ public class BiliBiliAPIs {
      * 使用默认参数
      */
     public static final String USER_WALLET = "https://pay.bilibili.com/payplatform/getUserWalletInfo?platformType=3";
+
+    /**
+     * 获取用户粉丝接口
+     * 参数：
+     *      vmid：用户ID
+     *      pn：页码，从1开始
+     *      ps：条目数，默认20
+     *
+     */
+    public static final String USER_FOLLOWERS = "https://api.bilibili.com/x/relation/followers";
 
     /**
      * 获取用户历史记录,默认为20条

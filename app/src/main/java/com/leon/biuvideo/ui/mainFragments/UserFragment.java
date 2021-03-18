@@ -24,11 +24,15 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.userBeans.UserInfo;
 import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.dialogs.WarnDialog;
 import com.leon.biuvideo.ui.home.FavoritesFragment;
+import com.leon.biuvideo.ui.home.MyFollowsFragment;
 import com.leon.biuvideo.ui.otherFragments.LoginFragment;
+import com.leon.biuvideo.ui.user.FollowersFragment;
 import com.leon.biuvideo.ui.user.UserInfoFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.PreferenceUtils;
@@ -49,6 +53,8 @@ public class UserFragment extends BaseSupportFragment {
     private Handler handler;
     private UserDataView userDataView;
 
+    private UserInfo userInfo;
+
     @Override
     protected int setLayout() {
         return R.layout.user_fragment;
@@ -64,7 +70,7 @@ public class UserFragment extends BaseSupportFragment {
             @Override
             public boolean handleMessage(@NonNull Message msg) {
                 // 刷新用户信息
-                UserInfo userInfo = (UserInfo) msg.obj;
+                userInfo = (UserInfo) msg.obj;
 
                 // 设置数据
                 userDataView.setVisibility(true);
@@ -80,10 +86,8 @@ public class UserFragment extends BaseSupportFragment {
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
 
-        Fuck.blue("加载UserFragment");
-
         // 获取用户数据
-//        getAccountInfo();
+        getAccountInfo();
     }
 
     /**
@@ -99,7 +103,7 @@ public class UserFragment extends BaseSupportFragment {
         userDataView.setVisibility(true);
 
         // 获取用户数据
-        UserInfoParser userInfoParser = new UserInfoParser();
+        UserInfoParser userInfoParser = new UserInfoParser(context);
         userInfoParser.parseData();
         userInfoParser.setOnSuccessListener(new UserInfoParser.OnSuccessListener() {
             @Override
@@ -160,7 +164,7 @@ public class UserFragment extends BaseSupportFragment {
         private TagView userTopFollow;
         private TagView userTopFans;
         private ImageView userBaseInfoVerifyMark;
-        private TextView userBaseInfoVerifyDesc;
+        private TextView userBaseInfoVerifyTitle;
         private LinearLayout userBaseInfoLinearLayout;
         private LinearLayout userAccountInfoLinearLayout;
         private LoadingRecyclerView userFavoriteLoadingRecyclerView;
@@ -181,6 +185,8 @@ public class UserFragment extends BaseSupportFragment {
         private ProgressBar userAccountInfExProgress;
         private TextView userAccountInfoEx;
         private TagView userTopDynamic;
+        private LinearLayout userBaseInfoVerify;
+        private TextView userBaseInfoVerifyDesc;
 
         /**
          * 初始化所有控件
@@ -195,7 +201,6 @@ public class UserFragment extends BaseSupportFragment {
 
             userBaseInfoLinearLayout = findView(R.id.user_baseInfo_linearLayout);
             userAccountInfoLinearLayout = findView(R.id.user_accountInfo_linearLayout);
-
         }
 
         /**
@@ -213,7 +218,7 @@ public class UserFragment extends BaseSupportFragment {
             userTopFollow.setOnTagViewClickListener(new TagView.OnTagViewClickListener() {
                 @Override
                 public void onClick() {
-                    Toast.makeText(context, "用户关注", Toast.LENGTH_SHORT).show();
+                    ((NavFragment) getParentFragment()).startBrotherFragment(MyFollowsFragment.getInstance());
                 }
             });
 
@@ -221,7 +226,7 @@ public class UserFragment extends BaseSupportFragment {
             userTopFans.setOnTagViewClickListener(new TagView.OnTagViewClickListener() {
                 @Override
                 public void onClick() {
-                    Toast.makeText(context, "用户粉丝", Toast.LENGTH_SHORT).show();
+                    ((NavFragment) getParentFragment()).startBrotherFragment(FollowersFragment.getInstance());
                 }
             });
 
@@ -229,7 +234,7 @@ public class UserFragment extends BaseSupportFragment {
             userTopDynamic.setOnTagViewClickListener(new TagView.OnTagViewClickListener() {
                 @Override
                 public void onClick() {
-                    Toast.makeText(context, "用户动态", Toast.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(view, "该功能还未开发~", SimpleSnackBar.LENGTH_SHORT).show();
                 }
             });
         }
@@ -238,7 +243,9 @@ public class UserFragment extends BaseSupportFragment {
          * 初始化基本信息视图
          */
         private void initBaseInfoViews() {
+            userBaseInfoVerify = findView(R.id.user_baseInfo_verify);
             userBaseInfoVerifyMark = findView(R.id.user_baseInfo_verify_mark);
+            userBaseInfoVerifyTitle = findView(R.id.user_baseInfo_verify_title);
             userBaseInfoVerifyDesc = findView(R.id.user_baseInfo_verify_desc);
 
             userBaseInfoUid = findView(R.id.user_baseInfo_uid);
@@ -299,17 +306,92 @@ public class UserFragment extends BaseSupportFragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.user_baseInfo_check_all:
-                    ((NavFragment) getParentFragment()).startBrotherFragment(UserInfoFragment.getInstance());
+                    ((NavFragment) getParentFragment()).startBrotherFragment(new UserInfoFragment(userInfo));
                     break;
                 case R.id.user_face:
                     ((NavFragment) getParentFragment()).startBrotherFragment(LoginFragment.getInstance());
                     break;
                 case R.id.user_logout:
-                    Toast.makeText(context, "退出操作", Toast.LENGTH_SHORT).show();
+                    WarnDialog warnDialog = new WarnDialog(context);
+
+                    if (PreferenceUtils.getLoginStatus()) {
+                        warnDialog.setTitle("提示");
+                        warnDialog.setContent("是否要退出当前账户？");
+                        warnDialog.setOnWarnActionListener(new WarnDialog.OnWarnActionListener() {
+                            @Override
+                            public void onConfirm() {
+                                //清除当前存储的Cookie
+                                resetUserIfo();
+
+                                // 发送本地广播，用户已退出
+                                LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
+                                Intent intent = new Intent(Actions.USER_LOGOUT);
+                                intent.putExtra("isLogout", true);
+                                localBroadcastManager.sendBroadcast(intent);
+
+                                warnDialog.dismiss();
+                            }
+
+                            @Override
+                            public void onCancel() {
+                                warnDialog.dismiss();
+                            }
+                        });
+
+                    } else {
+                        warnDialog.setTitle("提示");
+                        warnDialog.setContent("还未进行登录，是否要登录账户？");
+                        warnDialog.setOnWarnActionListener(new WarnDialog.OnWarnActionListener() {
+                            @Override
+                            public void onConfirm() {
+                                ((NavFragment) getParentFragment()).startBrotherFragment(LoginFragment.getInstance());
+                            }
+
+                            @Override
+                            public void onCancel() {
+                                warnDialog.dismiss();
+                            }
+                        });
+                    }
+
+                    warnDialog.show();
                     break;
                 default:
                     break;
             }
+        }
+
+        /**
+         * 清除当前账户信息
+         */
+        private void resetUserIfo() {
+            userBanner.setImageResource(R.drawable.user_default_banner);
+            userFace.setImageResource(R.drawable.user_default_face);
+
+            userTopFans.setLeftValue("0");
+            userTopDynamic.setLeftValue("0");
+            userTopFollow.setLeftValue("0");
+            userTopName.setText(R.string.no_login);
+
+            userCoinLoadingRecyclerView.setStatus(LoadingRecyclerView.NO_DATA);
+            userBangumiLoadingRecyclerView.setStatus(LoadingRecyclerView.NO_DATA);
+            userFavoriteLoadingRecyclerView.setStatus(LoadingRecyclerView.NO_DATA);
+
+            userCoinLoadingRecyclerView.recyclerView.removeAllViews();
+            userBangumiLoadingRecyclerView.recyclerView.removeAllViews();
+            userFavoriteLoadingRecyclerView.recyclerView.removeAllViews();
+
+            setVisibility(false);
+
+            SimpleSnackBar.make(view, "当前账户已退出~", SimpleSnackBar.LENGTH_LONG).show();
+
+//            SharedPreferences.Editor editor = PreferenceUtils.PREFERENCE.edit();
+//            editor
+//                    .remove(PreferenceUtils.COOKIE)
+//                    .remove(PreferenceUtils.USER_ID)
+//                    .remove(PreferenceUtils.VIP_STATUS)
+//                    .remove(PreferenceUtils.LOGIN_STATUS)
+//                    .apply();
         }
 
         /**
@@ -328,20 +410,18 @@ public class UserFragment extends BaseSupportFragment {
                 userTopName.setText(userInfo.userName);
                 Glide.with(context).load(userInfo.userFace).into(userFace);
                 Glide.with(context).load(userInfo.banner).into(userBanner);
-//                Glide.with(view).load(userInfo.banner).into(userBanner);
                 Fuck.blue(userInfo.banner);
                 userTopFans.setLeftValue(String.valueOf(userInfo.fans));
                 userTopFollow.setLeftValue(String.valueOf(userInfo.follows));
                 userTopDynamic.setLeftValue(String.valueOf(userInfo.dynamics));
 
-                Fuck.blue("role:" + userInfo.role.value);
-                if (userInfo.role == Role.NONE) {
-//                    userBaseInfoVerify.setVisibility(View.GONE);
-                    userBaseInfoVerifyMark.setVisibility(View.GONE);
-                    userBaseInfoVerifyDesc.setVisibility(View.GONE);
-                } else {
+                if (userInfo.isVerify || userInfo.role != Role.NONE) {
+                    userBaseInfoVerify.setVisibility(View.VISIBLE);
                     userBaseInfoVerifyMark.setImageResource(userInfo.role == Role.PERSON ? R.drawable.ic_person_verify : R.drawable.ic_official_verify);
+                    userBaseInfoVerifyTitle.setText(userInfo.verifyTitle);
                     userBaseInfoVerifyDesc.setText(userInfo.verifyDesc);
+                } else {
+                    userBaseInfoVerify.setVisibility(View.GONE);
                 }
 
                 userBaseInfoUid.setRightValue(String.valueOf(userInfo.mid));
@@ -353,7 +433,6 @@ public class UserFragment extends BaseSupportFragment {
                 userAccountInfoEx.setText(userInfo.currentExp + "/" + userInfo.totalExp);
                 userAccountInfoBCoins.setText(String.valueOf(userInfo.bCoinBalance));
                 userAccountInfoCoins.setText(String.valueOf(userInfo.coins));
-                userAccountInfoVipMark.setBackgroundColor(userInfo.isVip ? context.getColor(R.color.BiliBili_pink) : context.getColor(R.color.gray));
                 userAccountInfoVipMark.setText(userInfo.vipLabel);
                 userAccountInfoVipValid.setText(userInfo.vipDueDate);
                 userAccountInfExProgress.setMax(userInfo.totalExp);

@@ -13,6 +13,7 @@ public class UserInfo {
     public long mid;
     public String sex;
     public String sign;
+    public String birthday;
 
     /**
      * 现经验值
@@ -60,12 +61,22 @@ public class UserInfo {
     public String vipDueDate;
 
     /**
+     * 是否已经过认证
+     */
+    public boolean isVerify;
+
+    /**
      * 认证类型
      */
     public Role role;
 
     /**
-     * 认证说明
+     * 认证信息
+     */
+    public String verifyTitle;
+
+    /**
+     * 认证备注
      */
     public String verifyDesc;
 

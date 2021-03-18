@@ -18,6 +18,7 @@ import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.PreferenceUtils;
+import com.leon.biuvideo.values.Actions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -159,7 +160,7 @@ public class LoginFragment extends BaseSupportFragment {
     private void sendBroadcast() {
         LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
 
-        Intent intent = new Intent("loginStatus");
+        Intent intent = new Intent(Actions.LOGIN_SUCCESS);
         intent.putExtra("loginStatus", true);
 
         localBroadcastManager.sendBroadcast(intent);

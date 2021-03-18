@@ -1,4 +1,4 @@
-package com.leon.biuvideo.adapters.userFragmentAdapters;
+package com.leon.biuvideo.adapters.userAdapters;
 
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
 

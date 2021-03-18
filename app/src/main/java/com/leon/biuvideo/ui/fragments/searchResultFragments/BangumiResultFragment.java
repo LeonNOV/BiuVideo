@@ -12,15 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.userFragmentAdapters.BangumiAdapter;
+import com.leon.biuvideo.adapters.userAdapters.BangumiAdapter;
 import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
-import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
-import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BangumiParser;
 import com.leon.biuvideo.values.SortType;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -29,7 +27,6 @@ import com.scwang.smartrefresh.layout.constant.RefreshState;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.List;
-import java.util.concurrent.FutureTask;
 
 /**
  * 番剧搜索结果fragment

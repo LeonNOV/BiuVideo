@@ -25,4 +25,9 @@ public class Actions {
      * 登陆成功
      */
     public static final String LOGIN_SUCCESS = "loginSuccess";
+
+    /**
+     * 退出当前账户
+     */
+    public static final String USER_LOGOUT = "userLogout";
 }

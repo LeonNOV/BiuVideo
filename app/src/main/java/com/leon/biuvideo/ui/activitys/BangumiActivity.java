@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.userFragmentAdapters.BangumiEpAdapter;
+import com.leon.biuvideo.adapters.userAdapters.BangumiEpAdapter;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedRecordsForVideo;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
@@ -27,7 +27,6 @@ import com.leon.biuvideo.beans.searchBean.bangumi.BangumiState;
 import com.leon.biuvideo.beans.searchBean.bangumi.Ep;
 import com.leon.biuvideo.beans.videoBean.play.Media;
 import com.leon.biuvideo.beans.videoBean.play.Play;
-import com.leon.biuvideo.ui.SimpleLoadDataThread;
 import com.leon.biuvideo.ui.dialogs.AnthologyDownloadDialog;
 import com.leon.biuvideo.ui.dialogs.BangumiDetailDialog;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;

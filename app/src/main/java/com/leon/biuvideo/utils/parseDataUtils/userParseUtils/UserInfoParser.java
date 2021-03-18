@@ -1,6 +1,9 @@
 package com.leon.biuvideo.utils.parseDataUtils.userParseUtils;
 
+import android.content.Context;
+
 import com.alibaba.fastjson.JSONObject;
+import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.userBeans.UserInfo;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.PreferenceUtils;
@@ -29,6 +32,12 @@ public class UserInfoParser {
     private String banner;
     private UserInfo userInfo;
     private Map<String, Integer> statMap;
+
+    private final Context context;
+
+    public UserInfoParser(Context context) {
+        this.context = context;
+    }
 
     public interface OnSuccessListener{
         /**
@@ -127,7 +136,7 @@ public class UserInfoParser {
      * @return  UserInfo
      */
     private UserInfo getBaseData() {
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.USER_BASH_INFO, Headers.of(HttpUtils.getAPIRequestHeader()), null);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.USER_BASE_INFO, Headers.of(HttpUtils.getAPIRequestHeader()), null);
         JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {
@@ -137,8 +146,11 @@ public class UserInfoParser {
             userInfo.userName = data.getString("name");
             userInfo.sex = data.getString("sex");
             userInfo.userFace = data.getString("face");
-            userInfo.sign = data.getString("sign");
+
+            String sign = data.getString("sign");
+            userInfo.sign = "".equals(sign) ? context.getString(R.string.default_sign) : sign;
             userInfo.moral = data.getIntValue("moral");
+            userInfo.birthday = ValueUtils.generateTime(data.getLongValue("birthday"), "yyyy-MM-dd", true);
 
             JSONObject levelExp = data.getJSONObject("level_exp");
             userInfo.currentExp = levelExp.getIntValue("current_exp");
@@ -157,9 +169,12 @@ public class UserInfoParser {
             }
 
             JSONObject official = data.getJSONObject("official");
+            userInfo.isVerify = official.getIntValue("type") == 0;
             int role = official.getIntValue("role");
-            userInfo.role = role == -1 ? Role.NONE : role > 1 ? Role.OFFICIAL : Role.PERSON;
-            userInfo.verifyDesc = official.getString("title");
+            userInfo.role = role == 0 ? Role.NONE : role > 2 ? Role.OFFICIAL : Role.PERSON;
+            userInfo.verifyTitle = official.getString("title");
+            userInfo.verifyDesc = official.getString("desc");
+
 
             return userInfo;
         }

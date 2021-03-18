@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
                 easySnackBar.show();
             } else {
-                UserInfoParser userInfoParser = new UserInfoParser();
+                UserInfoParser userInfoParser = new UserInfoParser(getApplicationContext());
 //                userInfo = userInfoParser.parseData();
                 if (userInfo != null) {
                     isLogin = true;

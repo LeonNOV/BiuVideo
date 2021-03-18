@@ -47,7 +47,8 @@
                         android:layout_height="32dp"
                         android:layout_gravity="bottom|end"
                         android:contentDescription="@string/description"
-                        android:src="@drawable/ic_vip_mark" />
+                        android:src="@drawable/ic_vip_mark"
+                        android:visibility="gone" />
 
                 </FrameLayout>
 
@@ -113,15 +114,15 @@
                             app:rightValue="@string/user_dynamic"
                             app:tagMark="right" />
 
-<!--                        <com.leon.biuvideo.ui.views.TagView-->
-<!--                            android:id="@+id/user_top_like"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_marginStart="20dp"-->
-<!--                            app:isClick="true"-->
-<!--                            app:leftValue="0"-->
-<!--                            app:rightValue="@string/user_like"-->
-<!--                            app:tagMark="right" />-->
+                        <!--                        <com.leon.biuvideo.ui.views.TagView-->
+                        <!--                            android:id="@+id/user_top_like"-->
+                        <!--                            android:layout_width="wrap_content"-->
+                        <!--                            android:layout_height="wrap_content"-->
+                        <!--                            android:layout_marginStart="20dp"-->
+                        <!--                            app:isClick="true"-->
+                        <!--                            app:leftValue="0"-->
+                        <!--                            app:rightValue="@string/user_like"-->
+                        <!--                            app:tagMark="right" />-->
 
                     </LinearLayout>
 
@@ -136,7 +137,8 @@
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/round_corners6dp_bg"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="20dp"
+                    android:visibility="gone">
 
                     <com.leon.biuvideo.ui.views.CardTitle
                         android:layout_width="wrap_content"
@@ -145,26 +147,43 @@
 
                     <LinearLayout
                         android:id="@+id/user_baseInfo_verify"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
                         android:layout_marginTop="10dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/user_baseInfo_verify_mark"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
+                            android:contentDescription="@string/description"
                             android:src="@drawable/ic_person_verify" />
 
-                        <TextView
-                            android:id="@+id/user_baseInfo_verify_desc"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:text="知识领域优质UP主"
-                            android:textColor="@color/gray"
-                            android:textSize="15sp" />
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp">
+
+                            <TextView
+                                android:id="@+id/user_baseInfo_verify_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="top"
+                                android:textColor="@color/gray"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/user_baseInfo_verify_desc"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:textColor="@color/gray"
+                                android:textSize="15sp" />
+
+                        </FrameLayout>
+
 
                     </LinearLayout>
 
@@ -174,7 +193,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         app:leftValue="@string/user_uid"
-                        app:rightValue="12345678"
                         app:tagMark="none" />
 
                     <com.leon.biuvideo.ui.views.TagView
@@ -184,7 +202,6 @@
                         android:layout_marginTop="10dp"
                         app:isClick="false"
                         app:leftValue="@string/user_name"
-                        app:rightValue="Leon"
                         app:tagMark="none" />
 
                     <com.leon.biuvideo.ui.views.TagView
@@ -194,7 +211,6 @@
                         android:layout_marginTop="10dp"
                         app:isClick="false"
                         app:leftValue="@string/user_sex"
-                        app:rightValue="男"
                         app:tagMark="none" />
 
                     <com.leon.biuvideo.ui.views.TagView
@@ -204,7 +220,6 @@
                         android:layout_marginTop="10dp"
                         app:isClick="false"
                         app:leftValue="@string/user_level"
-                        app:rightValue="Lv4"
                         app:tagMark="none" />
 
                     <TextView
@@ -229,7 +244,8 @@
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/round_corners6dp_bg"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="20dp"
+                    android:visibility="gone">
 
                     <com.leon.biuvideo.ui.views.CardTitle
                         android:layout_width="wrap_content"
@@ -251,7 +267,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="start"
-                                android:text="Lv.4"
                                 android:textColor="@color/black"
                                 android:textSize="15sp" />
 
@@ -260,7 +275,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="end"
-                                android:text="8303/10800"
                                 android:textColor="@color/black"
                                 android:textSize="15sp" />
 
@@ -272,8 +286,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="5dp"
                             android:layout_marginTop="5dp"
-                            android:max="10800"
-                            android:progress="8303"
                             android:progressDrawable="@drawable/user_level_progress_layer" />
 
                     </LinearLayout>
@@ -289,7 +301,6 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:drawablePadding="10dp"
-                            android:text="651.0"
                             android:textColor="@color/black"
                             android:textSize="15sp"
                             app:drawableStartCompat="@drawable/ic_coin1" />
@@ -302,7 +313,6 @@
                             android:layout_marginStart="30dp"
                             android:layout_toEndOf="@id/user_accountInf_money"
                             android:drawablePadding="10dp"
-                            android:text="2.0"
                             android:textColor="@color/black"
                             android:textSize="15sp"
                             app:drawableStartCompat="@drawable/ic_coin2" />
@@ -313,9 +323,10 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:background="@drawable/round_corners6dp_bg"
-                            android:backgroundTint="#fb7299"
+                            android:backgroundTint="@color/BiliBili_pink"
+                            android:ellipsize="end"
+                            android:maxLength="10"
                             android:padding="5dp"
-                            android:text="@string/vip"
                             android:textColor="@color/white"
                             android:textStyle="bold" />
 
@@ -327,7 +338,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="10dp"
-                        android:text="大会员有效期至2021-03-12"
                         android:textColor="@color/gray"
                         android:textSize="14sp" />
 
@@ -354,7 +364,7 @@
                     <com.leon.biuvideo.ui.views.LoadingRecyclerView
                         android:id="@+id/user_favorite_loadingRecyclerView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
@@ -379,7 +389,7 @@
                     <com.leon.biuvideo.ui.views.LoadingRecyclerView
                         android:id="@+id/user_bangumi_loadingRecyclerView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 
@@ -404,7 +414,7 @@
                     <com.leon.biuvideo.ui.views.LoadingRecyclerView
                         android:id="@+id/user_coin_loadingRecyclerView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 

@@ -9,8 +9,8 @@
     <com.leon.biuvideo.ui.views.SimpleTopBar
         android:id="@+id/user_info_fragment_topBar"
         android:layout_width="match_parent"
-        app:topBarTitle="@string/biliUserInfo"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:topBarTitle="@string/biliUserInfo" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,14 +26,14 @@
         <com.leon.biuvideo.ui.views.CardTitle
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:card_title="@string/user_baseInfo"/>
+            app:card_title="@string/user_baseInfo" />
 
         <com.leon.biuvideo.ui.views.TagView
+            android:id="@+id/user_info_fragment_tagView_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:leftValue="@string/user_uid"
-            app:tagMark="none"
-            app:rightValue="12345678"/>
+            app:tagMark="none" />
 
         <com.leon.biuvideo.ui.views.TagView
             android:id="@+id/user_info_fragment_tagView_name"
@@ -42,17 +42,15 @@
             android:layout_marginTop="10dp"
             app:isClick="false"
             app:leftValue="@string/user_name"
-            app:rightValue="Leon"
             app:tagMark="none" />
 
         <com.leon.biuvideo.ui.views.TagView
             android:id="@+id/user_info_fragment_tagView_sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:isClick="false"
             android:layout_marginTop="10dp"
+            app:isClick="false"
             app:leftValue="@string/user_sex"
-            app:rightValue="男"
             app:tagMark="none" />
 
         <com.leon.biuvideo.ui.views.TagView
@@ -62,7 +60,6 @@
             android:layout_marginTop="10dp"
             app:isClick="false"
             app:leftValue="@string/user_level"
-            app:rightValue="Lv4"
             app:tagMark="none" />
 
         <com.leon.biuvideo.ui.views.TagView
@@ -72,7 +69,6 @@
             android:layout_marginTop="10dp"
             app:isClick="false"
             app:leftValue="@string/user_birthday"
-            app:rightValue="2020-11-28"
             app:tagMark="none" />
 
         <com.leon.biuvideo.ui.views.TagView
@@ -82,7 +78,6 @@
             android:layout_marginTop="10dp"
             app:isClick="false"
             app:leftValue="@string/user_flag"
-            app:rightValue="*^*"
             app:tagMark="none" />
 
     </LinearLayout>

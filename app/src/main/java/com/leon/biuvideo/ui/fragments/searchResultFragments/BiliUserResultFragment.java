@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.userFragmentAdapters.BiliUserAdapter;
+import com.leon.biuvideo.adapters.userAdapters.BiliUserAdapter;
 import com.leon.biuvideo.beans.searchBean.SearchBiliUser;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;

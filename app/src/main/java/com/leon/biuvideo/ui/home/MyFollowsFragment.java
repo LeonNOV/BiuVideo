@@ -43,9 +43,9 @@ public class MyFollowsFragment extends BaseSupportFragment {
             }
         });
 
-        RecyclerView my_follow_recyclerView = findView(R.id.my_follow_recyclerView);
+        RecyclerView myFollowRecyclerView = findView(R.id.my_follow_recyclerView);
 
-        initValue(my_follow_recyclerView);
+        initValue(myFollowRecyclerView);
     }
 
     private void initValue(RecyclerView recyclerView) {

@@ -21,6 +21,8 @@
 - 修复了`UserFragment`顶部图显示不正常的问题
 - 删除了`BaseLazySupportFragment`
   - 还有部分问题需要修复
+- `UserFragment`的各项功能均已完成
+  - **部分控件的数值还需要进行统一**
 
 ### 2020/03/17
 - 完善了`UserFragment`，但顶部图的显示还存在问题

@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * @Author Leon
  * @Time 2021/3/9
- * @Desc
+ * @Desc 带有上拉加载功能的LoadingRecyclerView
  */
 public class SmartRefreshRecyclerView<T> extends SmartRefreshLayout {
     private final Context context;

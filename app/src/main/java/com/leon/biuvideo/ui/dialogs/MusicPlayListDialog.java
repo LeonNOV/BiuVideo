@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.MusicPlayListAdapter;
-import com.leon.biuvideo.adapters.userFragmentAdapters.OnMusicListListener;
+import com.leon.biuvideo.adapters.userAdapters.OnMusicListListener;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
 
 import java.util.List;

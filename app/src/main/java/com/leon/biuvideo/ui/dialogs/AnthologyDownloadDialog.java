@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.userFragmentAdapters.AnthologyDownloadDialogAdapter;
+import com.leon.biuvideo.adapters.userAdapters.AnthologyDownloadDialogAdapter;
 import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
 import com.leon.biuvideo.ui.activitys.DownloadedActivity;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;

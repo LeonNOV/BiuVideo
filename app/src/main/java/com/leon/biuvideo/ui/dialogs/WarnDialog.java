@@ -12,7 +12,9 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 
 /**
- * 提醒/警告通用弹窗
+ * @Author Leon
+ * @Time 2020/12/30
+ * @Desc 提醒/警告通用弹窗
  */
 public class WarnDialog extends AlertDialog implements View.OnClickListener {
     private String title;
@@ -59,7 +61,14 @@ public class WarnDialog extends AlertDialog implements View.OnClickListener {
     private OnWarnActionListener onWarnActionListener;
 
     public interface OnWarnActionListener {
+        /**
+         * 确定键
+         */
         void onConfirm();
+
+        /**
+         * 取消键
+         */
         void onCancel();
     }
 

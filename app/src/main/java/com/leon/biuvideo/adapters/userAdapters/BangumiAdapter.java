@@ -1,4 +1,4 @@
-package com.leon.biuvideo.adapters.userFragmentAdapters;
+package com.leon.biuvideo.adapters.userAdapters;
 
 import android.content.Context;
 import android.content.Intent;

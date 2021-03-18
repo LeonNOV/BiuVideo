@@ -5,6 +5,7 @@
     <string name="favorite">收藏</string>
     <string name="follows">关注</string>
     <string name="history">历史记录</string>
+    <string name="my_followers">我的粉丝</string>
     <string name="orders">订阅</string>
     <string name="settings">设置</string>
     <string name="biliUserInfo">用户信息</string>
@@ -119,6 +120,10 @@
     <string name="navigation_vip_due_date">登录即可查看VIP到期时间</string>
 
     <string name="cancel_follow">取消关注</string>
+    <string name="remove_follower">移除粉丝</string>
+    <string name="is_mutual_follower">已互粉</string>
+    <string name="follow">关注</string>
+    <string name="default_sign">这家伙也忒懒了，连个介绍都没有</string>
 
     <string name="choose_quality_str">选择要缓存的清晰度</string>
 

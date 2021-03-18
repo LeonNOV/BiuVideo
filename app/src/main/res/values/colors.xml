@@ -35,4 +35,5 @@
 
     <color name="video_length_bg">#99000000</color>
     <color name="invalid_foreground">#80000000</color>
+    <color name="cancel_color">#F13939</color>
 </resources>
