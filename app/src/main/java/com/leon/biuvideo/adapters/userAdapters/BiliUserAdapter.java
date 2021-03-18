@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
-import com.leon.biuvideo.beans.Follow;
+import com.leon.biuvideo.beans.userBeans.Follow;
 import com.leon.biuvideo.beans.searchBean.SearchBiliUser;
 import com.leon.biuvideo.ui.activitys.UserActivity;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
@@ -76,7 +76,7 @@ public class BiliUserAdapter extends BaseAdapter<SearchBiliUser> {
         }
 
         //设置按钮监听
-        holder.setOnClickListener(R.id.search_bili_user_button_follow, new View.OnClickListener() {
+        /*holder.setOnClickListener(R.id.search_bili_user_button_follow, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean followState = favoriteUserDatabaseUtils.queryFavoriteState(searchBiliUser.mid);
@@ -100,7 +100,7 @@ public class BiliUserAdapter extends BaseAdapter<SearchBiliUser> {
                     SimpleSnackBar.make(v, "已将'" + searchBiliUser.name + "'添加至关注列表", SimpleSnackBar.LENGTH_SHORT).show();
                 }
             }
-        });
+        });*/
 
         //设置稿件数
         String videos = "稿件：" + searchBiliUser.videos;

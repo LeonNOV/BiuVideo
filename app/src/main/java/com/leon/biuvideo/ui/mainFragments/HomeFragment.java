@@ -13,11 +13,9 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.home.RecommendAdapter;
-import com.leon.biuvideo.adapters.home.WatchLaterAdapter;
 import com.leon.biuvideo.beans.Weather;
 import com.leon.biuvideo.beans.homeBeans.Recommend;
 import com.leon.biuvideo.beans.homeBeans.WatchLater;
@@ -26,7 +24,7 @@ import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.home.DownloadManagerFragment;
 import com.leon.biuvideo.ui.home.FavoritesFragment;
 import com.leon.biuvideo.ui.home.HistoryFragment;
-import com.leon.biuvideo.ui.home.MyFollowsFragment;
+import com.leon.biuvideo.ui.home.FollowsFragment;
 import com.leon.biuvideo.ui.home.OrderFragment;
 import com.leon.biuvideo.ui.home.RecommendFragment;
 import com.leon.biuvideo.ui.home.SettingsFragment;
@@ -264,7 +262,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 ((NavFragment) getParentFragment()).startBrotherFragment(FavoritesFragment.getInstance());
                 break;
             case R.id.home_my_follows:
-                ((NavFragment) getParentFragment()).startBrotherFragment(MyFollowsFragment.getInstance());
+                ((NavFragment) getParentFragment()).startBrotherFragment(FollowsFragment.getInstance());
                 break;
             case R.id.home_my_history:
                 ((NavFragment) getParentFragment()).startBrotherFragment(HistoryFragment.getInstance());

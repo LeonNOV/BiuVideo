@@ -36,7 +36,8 @@
                 android:layout_height="24dp"
                 android:layout_gravity="bottom|end"
                 android:contentDescription="@string/description"
-                android:src="@drawable/ic_person_verify" />
+                android:src="@drawable/ic_person_verify"
+                android:visibility="gone" />
 
         </FrameLayout>
 
@@ -57,7 +58,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/followers_item_desc"
+                android:id="@+id/followers_item_sign"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"

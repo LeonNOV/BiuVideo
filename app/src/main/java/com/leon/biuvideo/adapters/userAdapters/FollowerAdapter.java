@@ -42,51 +42,54 @@ public class FollowerAdapter extends BaseAdapter<Follower> {
         ImageView followersItemVerifyMark = holder.findById(R.id.followers_item_verify_mark);
         if (follower.role == Role.NONE) {
             if (follower.vipStatus) {
+                followersItemVerifyMark.setVisibility(View.VISIBLE);
                 followersItemVerifyMark.setImageResource(R.drawable.ic_vip_mark);
             } else {
                 followersItemVerifyMark.setVisibility(View.GONE);
             }
         } else {
+            followersItemVerifyMark.setVisibility(View.VISIBLE);
             followersItemVerifyMark.setImageResource(follower.role == Role.PERSON ? R.drawable.ic_person_verify : R.drawable.ic_official_verify);
         }
 
         TextView followersItemName = holder.findById(R.id.followers_item_name);
-        followersItemName.setText(follower.followerName);
+        followersItemName.setText(follower.userName);
         if (follower.vipStatus) {
             followersItemName.setTextColor(context.getColor(R.color.BiliBili_pink));
+        } else {
+            followersItemName.setTextColor(context.getColor(R.color.black));
         }
 
         holder
-                .setImage(R.id.followers_item_face, follower.followerFace, ImagePixelSize.FACE)
-                .setText(R.id.followers_item_desc, follower.sign)
+                .setImage(R.id.followers_item_face, follower.userFace, ImagePixelSize.FACE)
+                .setText(R.id.followers_item_sign, follower.sign)
                 .setOnClickListener(R.id.followers_item_content, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        SimpleSnackBar.make(view, "点击了第" + position + "个Item,followerName：" + follower.followerName, SimpleSnackBar.LENGTH_SHORT).show();
+                        SimpleSnackBar.make(view, "点击了第" + position + "个Item,followerName：" + follower.userName, SimpleSnackBar.LENGTH_SHORT).show();
                     }
                 })
                 .setOnClickListener(R.id.followers_item_remove_follower, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        SimpleSnackBar.make(view, "移除粉丝：" + follower.followerName, SimpleSnackBar.LENGTH_SHORT).show();
+                        SimpleSnackBar.make(view, "移除粉丝：" + follower.userName, SimpleSnackBar.LENGTH_SHORT).show();
                     }
                 });
 
         TextView followersItemMutualFollower = holder.findById(R.id.followers_item_mutual_follower);
-        if (follower.followStatus == 0) {
+        if (follower.userStatus == 0) {
             followersItemMutualFollower.setText(R.string.follow);
-        } else if (follower.followStatus == 6) {
+        } else if (follower.userStatus == 6) {
             followersItemMutualFollower.setText(R.string.is_mutual_follower);
         }
         followersItemMutualFollower.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (follower.followStatus == 0) {
+                if (follower.userStatus == 0) {
                     followersItemMutualFollower.setText(R.string.is_mutual_follower);
                 } else {
                     // 取消互粉操作
-
-                    SimpleSnackBar.make(view, "取消互粉：" + follower.followerName, SimpleSnackBar.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(view, "取消互粉：" + follower.userName, SimpleSnackBar.LENGTH_SHORT).show();
                 }
             }
         });

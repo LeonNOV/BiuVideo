@@ -126,17 +126,6 @@ public class BiliBiliAPIs {
     public static String article = "https://api.bilibili.com/x/space/article";
 
     /**
-     * 获取Ta的关注列表接口<br/>
-     *      参数：
-     *          vmid：用户ID，必须
-     *          pn：页码，从1开始，必须
-     *          ps：获取数量，建议20，必须
-     *          order：排序方式，默认DESC，可选
-     *
-     */
-    public static String follow = "https://api.bilibili.com/x/relation/followings";
-
-    /**
      * 搜索接口<br/>
      *      参数：
      *          keyword：关键字，必须进行URLencoding
@@ -264,6 +253,19 @@ public class BiliBiliAPIs {
      *
      */
     public static final String USER_FOLLOWERS = "https://api.bilibili.com/x/relation/followers";
+
+    /**
+     * 获取Ta的关注列表接口<br/>
+     *      参数：
+     *          vmid：用户ID，必须
+     *          pn：页码，从1开始，必须
+     *          ps：获取数量，建议20，必须
+     *          order：排序方式，默认DESC，可选
+     * 请求信息
+     *  Referer：https://space.bilibili.com/
+     *
+     */
+    public static final String USER_FOLLOWINGS = "https://api.bilibili.com/x/relation/followings";
 
     /**
      * 获取用户历史记录,默认为20条

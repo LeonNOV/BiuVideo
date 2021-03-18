@@ -60,6 +60,17 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     }
 
     /**
+     * 重写该方法，防止数据出现错乱的问题
+     *
+     * @param position  position
+     * @return  position
+     */
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    /**
      * 刷新加载数据
      *
      * @param addOns    要加入的数据

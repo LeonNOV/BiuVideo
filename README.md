@@ -25,6 +25,8 @@
   - ~~**部分控件的数值还需要进行统一**~~
 - 对部分`dimen`和`Color`数值进行了统一
   - 修复部分已知的BUG
+- 完善了`FollowFragment`
+  - **在设置Adapter前需要使用`XXXAdapter.setHasStableIds(true)`,用来防止数据错乱的问题,部分未修改的将在后期整理代码的时候修改**
 
 ### 2020/03/17
 - 完善了`UserFragment`，但顶部图的显示还存在问题

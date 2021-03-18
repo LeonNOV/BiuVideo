@@ -64,10 +64,10 @@ public class FollowersParser implements ParserInterface<Follower> {
                 Follower follower = new Follower();
 
                 follower.followerMid = jsonObject.getIntValue("mid");
-                follower.followerName = jsonObject.getString("uname");
-                follower.followerFace = jsonObject.getString("face");
+                follower.userName = jsonObject.getString("uname");
+                follower.userFace = jsonObject.getString("face");
                 follower.followerMid = jsonObject.getIntValue("mid");
-                follower.followStatus = jsonObject.getIntValue("attribute");
+                follower.userStatus = jsonObject.getIntValue("attribute");
 
                 String sign = jsonObject.getString("sign");
                 follower.sign = "".equals(sign) ? context.getString(R.string.default_sign) : sign;

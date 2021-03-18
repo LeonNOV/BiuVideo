@@ -89,6 +89,7 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
         historys.add("撒大撒大撒大撒大撒大苏打倒萨大苏打倒萨大苏打倒萨倒萨");
 
         SearchHistoryAdapter searchHistoryAdapter = new SearchHistoryAdapter(historys, context);
+        searchHistoryAdapter.setHasStableIds(true);
         search_fragment_recyclerView_historyList.setAdapter(searchHistoryAdapter);
     }
 

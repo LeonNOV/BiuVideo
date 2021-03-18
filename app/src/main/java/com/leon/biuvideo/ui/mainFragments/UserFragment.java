@@ -26,7 +26,7 @@ import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.dialogs.WarnDialog;
 import com.leon.biuvideo.ui.home.FavoritesFragment;
-import com.leon.biuvideo.ui.home.MyFollowsFragment;
+import com.leon.biuvideo.ui.home.FollowsFragment;
 import com.leon.biuvideo.ui.otherFragments.LoginFragment;
 import com.leon.biuvideo.ui.user.FollowersFragment;
 import com.leon.biuvideo.ui.user.UserInfoFragment;
@@ -218,7 +218,7 @@ public class UserFragment extends BaseSupportFragment {
             userTopFollow.setOnTagViewClickListener(new TagView.OnTagViewClickListener() {
                 @Override
                 public void onClick() {
-                    ((NavFragment) getParentFragment()).startBrotherFragment(MyFollowsFragment.getInstance());
+                    ((NavFragment) getParentFragment()).startBrotherFragment(FollowsFragment.getInstance());
                 }
             });
 

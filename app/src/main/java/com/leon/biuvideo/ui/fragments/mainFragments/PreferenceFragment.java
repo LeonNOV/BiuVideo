@@ -25,12 +25,10 @@ import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.BackupLocalData;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
-import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.FollowParser;
 import com.leon.biuvideo.values.ThanksList;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * 设置fragment
@@ -117,11 +115,11 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                         //隐藏importFollowDialog
                         importFollowDialog.dismiss();
 
-                        SimpleSnackBar.make(view, "正在导入数据中，请不要随意进行任何操作", SimpleSnackBar.LENGTH_LONG).show();
+                        /*SimpleSnackBar.make(view, "正在导入数据中，请不要随意进行任何操作", SimpleSnackBar.LENGTH_LONG).show();
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                Map<String, Long> importMap = FollowParser.getFollowings(context, mid, cookie);
+                                Map<String, Long> importMap = FollowsParser.getFollowings(context, mid, cookie);
 
                                 if (importMap == null) {
                                     SimpleSnackBar.make(view, "导入成功0个，导入失败0个", SimpleSnackBar.LENGTH_LONG).show();
@@ -130,7 +128,7 @@ public class PreferenceFragment extends BaseFragment implements View.OnClickList
                                     sendLocalBroadcast();
                                 }
                             }
-                        }).start();
+                        }).start();*/
                     }
                 });
 

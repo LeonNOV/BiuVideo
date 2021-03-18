@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -15,18 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.home.MyFollowsAdapter;
-import com.leon.biuvideo.beans.Follow;
-import com.leon.biuvideo.ui.dialogs.LoadingDialog;
+import com.leon.biuvideo.adapters.home.FollowsAdapter;
+import com.leon.biuvideo.beans.userBeans.Follow;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
-import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.FollowParser;
 import com.sun.easysnackbar.EasySnackBar;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * MainActivity中的收藏片段
@@ -35,7 +30,7 @@ public class FavoriteUserFragment extends BaseFragment {
     private RecyclerView favorite_recyclerView;
 
     private FavoriteUserDatabaseUtils favoriteUserDatabaseUtils;
-    private MyFollowsAdapter myFollowsAdapter;
+    private FollowsAdapter followsAdapter;
     private List<Follow> follows;
 
     @Override
@@ -47,7 +42,7 @@ public class FavoriteUserFragment extends BaseFragment {
     public void initView(BindingUtils bindingUtils) {
         favorite_recyclerView = findView(R.id.main_favorite_up_fragment_recyclerView);
         FloatingActionButton main_favorite_up_fragment_refresh = findView(R.id.main_favorite_up_fragment_refresh);
-        main_favorite_up_fragment_refresh.setOnClickListener(new View.OnClickListener() {
+        /*main_favorite_up_fragment_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LoadingDialog loadingDialog = new LoadingDialog(context);
@@ -60,7 +55,7 @@ public class FavoriteUserFragment extends BaseFragment {
                         String cookie = initValues.getString("cookie", null);
                         long mid = initValues.getLong("mid", 0);
                         if (cookie != null) {
-                            Map<String, Long> importMap = FollowParser.getFollowings(context, mid, cookie);
+                            Map<String, Long> importMap = FollowsParser.getFollowings(context, mid, cookie);
 
                             Handler handler = new Handler(Looper.getMainLooper());
                             handler.post(new Runnable() {
@@ -80,7 +75,7 @@ public class FavoriteUserFragment extends BaseFragment {
                     }
                 }).start();
             }
-        });
+        });*/
 
         EasySnackBar easySnackBar = SimpleSnackBar.make(view, "建议不要频繁的刷新关注列表数据，否则本机网络IP会被封禁", SimpleSnackBar.LENGTH_INDEFINITE);
         SimpleSnackBar.setAction(easySnackBar, "我知道了", new View.OnClickListener() {
@@ -110,22 +105,22 @@ public class FavoriteUserFragment extends BaseFragment {
         follows = favoriteUserDatabaseUtils.queryFavorites(isVisit);
 
         if (follows != null) {
-            myFollowsAdapter = new MyFollowsAdapter(follows, context);
+            followsAdapter = new FollowsAdapter(follows, context);
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(context);
             favorite_recyclerView.setLayoutManager(layoutManager);
-            favorite_recyclerView.setAdapter(myFollowsAdapter);
+            favorite_recyclerView.setAdapter(followsAdapter);
         }
     }
 
     @Override
     public void onResume() {
-        if (myFollowsAdapter != null) {
+        if (followsAdapter != null) {
             SharedPreferences initValues = context.getSharedPreferences("initValues", Context.MODE_PRIVATE);
             boolean isVisit = initValues.getBoolean("isVisit", true);
 
             follows = favoriteUserDatabaseUtils.queryFavorites(isVisit);
-            myFollowsAdapter.refresh(follows);
+//            followsAdapter.refresh(follows);
         }
 
         super.onResume();

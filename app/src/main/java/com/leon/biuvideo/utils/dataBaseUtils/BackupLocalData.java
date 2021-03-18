@@ -3,7 +3,7 @@ package com.leon.biuvideo.utils.dataBaseUtils;
 import android.content.Context;
 
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.Follow;
+import com.leon.biuvideo.beans.userBeans.Follow;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedDetailMedia;
 import com.leon.biuvideo.beans.downloadedBeans.DownloadedRecordsForVideo;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;

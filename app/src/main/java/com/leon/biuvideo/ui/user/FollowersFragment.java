@@ -56,6 +56,7 @@ public class FollowersFragment extends BaseSupportFragment {
 
         SmartRefreshRecyclerView<Follower> followerSmartRefreshRecyclerView = findView(R.id.followers_smartRefreshLoadingRecyclerView);
         followerAdapter = new FollowerAdapter(followerList, context);
+        followerAdapter.setHasStableIds(true);
         followerSmartRefreshRecyclerView.setRecyclerViewAdapter(followerAdapter);
         followerSmartRefreshRecyclerView.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
         followerSmartRefreshRecyclerView.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -67,6 +68,8 @@ public class FollowersFragment extends BaseSupportFragment {
         });
 
         followerSmartRefreshRecyclerView.setStatus(LoadingRecyclerView.LOADING);
+
+        // 第一次加载数据
         setOnLoadListener(new OnLoadListener() {
             @Override
             public void onLoad(Message msg) {

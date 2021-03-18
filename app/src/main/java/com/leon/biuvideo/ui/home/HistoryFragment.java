@@ -32,8 +32,8 @@ public class HistoryFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        SimpleTopBar history_topBar = findView(R.id.history_topBar);
-        history_topBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
+        SimpleTopBar historyTopBar = findView(R.id.history_topBar);
+        historyTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
                 backPressed();
@@ -44,9 +44,9 @@ public class HistoryFragment extends BaseSupportFragment {
                 Toast.makeText(context, "more", Toast.LENGTH_SHORT).show();
             }
         });
-        RecyclerView history_recyclerView = findView(R.id.history_recyclerView);
+        RecyclerView historyRecyclerView = findView(R.id.history_recyclerView);
 
-        initValue(history_recyclerView);
+        initValue(historyRecyclerView);
     }
 
     private void initValue(RecyclerView recyclerView) {

@@ -20,7 +20,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.FragmentViewPagerAdapter;
-import com.leon.biuvideo.beans.Follow;
+import com.leon.biuvideo.beans.userBeans.Follow;
 import com.leon.biuvideo.beans.upMasterBean.BiliUserInfo;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.fragments.userFragments.UserArticlesFragment;
@@ -230,7 +230,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
                 break;
             case R.id.up_imageView_favoriteIconState:
                 //判断是否存在于数据库中
-                boolean state = favoriteUserDatabaseUtils.queryFavoriteState(mid);
+                /*boolean state = favoriteUserDatabaseUtils.queryFavoriteState(mid);
 
                 if (state) {
                     //从数据库中移除
@@ -254,7 +254,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
                     boolean addState = favoriteUserDatabaseUtils.addFavorite(follow);
 
                     SimpleSnackBar.make(v, addState ? "已加入至关注列表" : "关注失败", SimpleSnackBar.LENGTH_SHORT).show();
-                }
+                }*/
 
                 break;
             case R.id.user_textView_video:

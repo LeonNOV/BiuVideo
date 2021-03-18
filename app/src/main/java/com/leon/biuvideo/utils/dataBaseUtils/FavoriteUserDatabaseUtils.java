@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.leon.biuvideo.beans.Follow;
+import com.leon.biuvideo.beans.userBeans.Follow;
 import com.leon.biuvideo.values.Tables;
 
 import java.util.ArrayList;
@@ -70,7 +70,7 @@ public class FavoriteUserDatabaseUtils extends SQLiteHelper {
     public List<Follow> queryFavorites(boolean isByVisit) {
         Cursor cursor = sqLiteDatabase.query(tableName, null, "isDelete = ?", new String [] {"0"}, null, null, isByVisit ? "visit DESC" : "id DESC");
 
-        List<Follow> follows = new ArrayList<>();
+        /*List<Follow> follows = new ArrayList<>();
         while (cursor.moveToNext()) {
             Follow follow = new Follow();
 
@@ -80,17 +80,18 @@ public class FavoriteUserDatabaseUtils extends SQLiteHelper {
             follow.desc = cursor.getString(cursor.getColumnIndex("desc"));
 
             follows.add(follow);
-        }
+        }*/
 
         cursor.close();
-        return follows;
+//        return follows;
+        return null;
     }
 
     /**
      * 将UP的数据导入favorite_up库中
      */
     public boolean addFavorite(Follow follow) {
-        if (follow.name.equals("账号已注销")) {
+        /*if (follow.name.equals("账号已注销")) {
             return false;
         }
 
@@ -102,14 +103,15 @@ public class FavoriteUserDatabaseUtils extends SQLiteHelper {
 
         long insert = sqLiteDatabase.insert(tableName, null, values);
 
-        return insert > 0;
+        return insert > 0;*/
+        return false;
     }
 
     /**
      * 将用户的关注列表数据导入到本地
      */
     public Map<String, Long> addFavorite(List<Follow> follows) {
-        long successNum = 0;
+        /*long successNum = 0;
         long failNum = 0;
         for (Follow follow : follows) {
             ContentValues values = new ContentValues();
@@ -136,9 +138,10 @@ public class FavoriteUserDatabaseUtils extends SQLiteHelper {
 
         Map<String, Long> resultMap = new HashMap<>();
         resultMap.put("successNum", successNum);
-        resultMap.put("failNum", failNum);
+        resultMap.put("failNum", failNum);*/
 
-        return resultMap;
+//        return resultMap;
+        return null;
     }
 
     /**
