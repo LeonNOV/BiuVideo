@@ -1,11 +1,14 @@
 package com.leon.biuvideo.ui.home.orderFragments;
 
+import android.os.Bundle;
 import android.os.Message;
+
+import androidx.annotation.Nullable;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.TestBeans.RvTestBean;
 import com.leon.biuvideo.beans.orderBeans.Order;
-import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
+import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.OrderParser;
@@ -22,7 +25,7 @@ import java.util.Random;
  * @Time 2021/3/1
  * @Desc 订阅页面-番剧订阅
  */
-public class OrderBangumiFragment extends BaseLazySupportFragment {
+public class OrderBangumiFragment extends BaseSupportFragment {
     private SmartRefreshRecyclerView<RvTestBean> orderBangumiSmartRefreshRecyclerView;
     private OrderParser orderParser;
     private List<Order> orderList;
@@ -78,7 +81,9 @@ public class OrderBangumiFragment extends BaseLazySupportFragment {
     }
 
     @Override
-    protected void onLazy() {
+    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
+        super.onLazyInitView(savedInstanceState);
+
         // 加载初始数据
 //        SimpleSingleThreadPool.executor(new Runnable() {
 //            @Override

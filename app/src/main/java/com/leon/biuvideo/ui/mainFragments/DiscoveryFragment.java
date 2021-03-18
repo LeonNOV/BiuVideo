@@ -1,5 +1,6 @@
 package com.leon.biuvideo.ui.mainFragments;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.R;
@@ -16,6 +18,7 @@ import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.discovery.SearchFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.discoverParseUtils.HotSearchParser;
 
@@ -55,6 +58,13 @@ public class DiscoveryFragment extends BaseSupportFragment implements View.OnCli
                 return true;
             }
         });
+    }
+
+    @Override
+    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
+        super.onLazyInitView(savedInstanceState);
+
+        Fuck.blue("加载DiscoveryFragment");
 
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override

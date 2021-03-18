@@ -2,6 +2,9 @@ package com.leon.biuvideo.ui.baseSupportFragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +29,26 @@ public abstract class BaseSupportFragment extends SupportFragment {
     protected BindingUtils bindingUtils;
 
     /**
+     * 用于接收数据使用，并在主线程进行处理
+     */
+    protected Handler receiveDataHandler;
+
+    public interface OnLoadListener {
+        /**
+         * 实现该方法，用于在主线程中处理数据
+         *
+         * @param msg   data
+         */
+        void onLoad(Message msg);
+    }
+
+    private OnLoadListener onLoadListener;
+
+    public void setOnLoadListener(OnLoadListener onLoadListener) {
+        this.onLoadListener = onLoadListener;
+    }
+
+    /**
      * 设置LayoutId
      *
      * @return  LayoutId
@@ -38,6 +61,17 @@ public abstract class BaseSupportFragment extends SupportFragment {
         this.view = inflater.inflate(setLayout(), container, false);
         this.context = getContext();
         this.bindingUtils = new BindingUtils(view, context);
+
+        receiveDataHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                if (onLoadListener != null) {
+                    onLoadListener.onLoad(msg);
+                }
+
+                return true;
+            }
+        });
 
         initView();
 

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.bumptech.glide.Glide;
@@ -28,6 +30,7 @@ import com.leon.biuvideo.ui.user.UserInfoFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.TagView;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserInfoParser;
 import com.leon.biuvideo.values.Actions;
@@ -57,9 +60,6 @@ public class UserFragment extends BaseSupportFragment {
         userDataView = new UserDataView();
         userDataView.initDataView();
 
-        // 获取用户数据
-        getAccountInfo();
-
         handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
             @Override
             public boolean handleMessage(@NonNull Message msg) {
@@ -74,6 +74,16 @@ public class UserFragment extends BaseSupportFragment {
             }
         });
         initBroadcastReceiver();
+    }
+
+    @Override
+    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
+        super.onLazyInitView(savedInstanceState);
+
+        Fuck.blue("加载UserFragment");
+
+        // 获取用户数据
+//        getAccountInfo();
     }
 
     /**
@@ -102,7 +112,6 @@ public class UserFragment extends BaseSupportFragment {
                     userInfo.follows = statMap.get("following");
                     userInfo.fans = statMap.get("follower");
                     userInfo.dynamics = statMap.get("dynamicCount");
-
 
                     Message message = handler.obtainMessage();
                     message.obj = userInfo;
@@ -186,6 +195,7 @@ public class UserFragment extends BaseSupportFragment {
 
             userBaseInfoLinearLayout = findView(R.id.user_baseInfo_linearLayout);
             userAccountInfoLinearLayout = findView(R.id.user_accountInfo_linearLayout);
+
         }
 
         /**
@@ -318,12 +328,17 @@ public class UserFragment extends BaseSupportFragment {
                 userTopName.setText(userInfo.userName);
                 Glide.with(context).load(userInfo.userFace).into(userFace);
                 Glide.with(context).load(userInfo.banner).into(userBanner);
+//                Glide.with(view).load(userInfo.banner).into(userBanner);
+                Fuck.blue(userInfo.banner);
                 userTopFans.setLeftValue(String.valueOf(userInfo.fans));
                 userTopFollow.setLeftValue(String.valueOf(userInfo.follows));
                 userTopDynamic.setLeftValue(String.valueOf(userInfo.dynamics));
 
+                Fuck.blue("role:" + userInfo.role.value);
                 if (userInfo.role == Role.NONE) {
-                    findView(R.id.user_baseInfo_verify).setVisibility(View.GONE);
+//                    userBaseInfoVerify.setVisibility(View.GONE);
+                    userBaseInfoVerifyMark.setVisibility(View.GONE);
+                    userBaseInfoVerifyDesc.setVisibility(View.GONE);
                 } else {
                     userBaseInfoVerifyMark.setImageResource(userInfo.role == Role.PERSON ? R.drawable.ic_person_verify : R.drawable.ic_official_verify);
                     userBaseInfoVerifyDesc.setText(userInfo.verifyDesc);

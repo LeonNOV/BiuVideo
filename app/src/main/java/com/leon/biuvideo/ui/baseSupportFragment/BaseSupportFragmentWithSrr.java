@@ -23,7 +23,7 @@ import me.yokeyword.fragmentation.SupportFragment;
  * @Time 2021/3/9
  * @Desc 基本的LazySupportFragment，该Fragment默认设置{@link com.leon.biuvideo.ui.views.SmartRefreshRecyclerView}为布局,所以不用指定布局文件
  */
-public abstract class BaseLazySupportFragmentWithSrr<T> extends SupportFragment {
+public abstract class BaseSupportFragmentWithSrr<T> extends SupportFragment {
     protected Context context;
     protected BindingUtils bindingUtils;
     protected SmartRefreshRecyclerView<T> view;
@@ -32,31 +32,6 @@ public abstract class BaseLazySupportFragmentWithSrr<T> extends SupportFragment 
      * 用于接收数据使用，并在主线程进行处理
      */
     protected Handler receiveDataHandler;
-
-    /**
-     * 界面初始化状态
-     */
-    protected boolean isLoaded = false;
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.context = getContext();
-        this.view = new SmartRefreshRecyclerView<>(context);
-
-        if (container != null) {
-            container.addView(view);
-        }
-
-        this.bindingUtils = new BindingUtils(view, context);
-
-        return view;
-    }
-
-    /**
-     * 初始化控件
-     */
-    protected abstract void initView();
 
     public interface OnLoadListener {
         /**
@@ -73,35 +48,37 @@ public abstract class BaseLazySupportFragmentWithSrr<T> extends SupportFragment 
         this.onLoadListener = onLoadListener;
     }
 
+    @Nullable
     @Override
-    public void onResume() {
-        super.onResume();
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        this.context = getContext();
+        this.view = new SmartRefreshRecyclerView<>(context);
+        this.bindingUtils = new BindingUtils(view, context);
 
-        if (!isLoaded && isVisible()) {
-            initView();
-            isLoaded = true;
-
-            receiveDataHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
-                @Override
-                public boolean handleMessage(@NonNull Message msg) {
-                    if (onLoadListener != null) {
-                        onLoadListener.onLoad(msg);
-                    }
-
-                    return true;
+        receiveDataHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                if (onLoadListener != null) {
+                    onLoadListener.onLoad(msg);
                 }
-            });
 
-            Bundle bundle = new Bundle();
-            bundle.putBoolean("isVisible", isVisible());
-            onLazyInitView(bundle);
-        }
+                return true;
+            }
+        });
+
+        return view;
     }
+
+    /**
+     * 初始化控件
+     */
+    protected abstract void initView();
 
     /**
      * 返回方法，用于fragment的返回
      */
     protected void backPressed() {
+        receiveDataHandler = null;
         _mActivity.onBackPressed();
         onDestroy();
     }

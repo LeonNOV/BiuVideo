@@ -7,9 +7,8 @@ import androidx.annotation.Nullable;
 
 import com.leon.biuvideo.adapters.testAdapters.RvTestAdapter;
 import com.leon.biuvideo.beans.TestBeans.RvTestBean;
-import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragmentWithSrr;
+import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragmentWithSrr;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
-import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
@@ -22,7 +21,7 @@ import java.util.Random;
  * @Time 2021/3/1
  * @Desc 订阅页面-剧集订阅
  */
-public class OrderSeriesFragment extends BaseLazySupportFragmentWithSrr<RvTestBean> {
+public class OrderSeriesFragment extends BaseSupportFragmentWithSrr<RvTestBean> {
     @Override
     protected void initView() {
         view.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -52,34 +51,6 @@ public class OrderSeriesFragment extends BaseLazySupportFragmentWithSrr<RvTestBe
 //                orderBangumiSmartRefreshRecyclerView.setEnablePureScrollMode(true);
             }
         });
-    }
-
-    @Override
-    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            return;
-        }
-
-        boolean isVisible = savedInstanceState.getBoolean("isVisible", false);
-
-        if (isVisible) {
-            view.setStatus(LoadingRecyclerView.LOADING);
-            List<RvTestBean> rvTestBeanList = new ArrayList<>();
-
-            Random random = new Random();
-
-            for (int i = 0; i < 10; i++) {
-                RvTestBean rvTestBean = new RvTestBean();
-
-                rvTestBean.title = "Title" + (i + 1);
-                rvTestBean.view = (random.nextInt(5000) + 5000);
-
-                rvTestBeanList.add(rvTestBean);
-            }
-
-            view.setRecyclerViewAdapter(new RvTestAdapter(rvTestBeanList, context));
-            view.setStatus(LoadingRecyclerView.LOADING_FINISH);
-        }
 
         setOnLoadListener(new OnLoadListener() {
             @Override
@@ -87,7 +58,27 @@ public class OrderSeriesFragment extends BaseLazySupportFragmentWithSrr<RvTestBe
 
             }
         });
+    }
 
+    @Override
+    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
+
+        view.setStatus(LoadingRecyclerView.LOADING);
+        List<RvTestBean> rvTestBeanList = new ArrayList<>();
+
+        Random random = new Random();
+
+        for (int i = 0; i < 10; i++) {
+            RvTestBean rvTestBean = new RvTestBean();
+
+            rvTestBean.title = "Title" + (i + 1);
+            rvTestBean.view = (random.nextInt(5000) + 5000);
+
+            rvTestBeanList.add(rvTestBean);
+        }
+
+        view.setRecyclerViewAdapter(new RvTestAdapter(rvTestBeanList, context));
+        view.setStatus(LoadingRecyclerView.LOADING_FINISH);
     }
 }
