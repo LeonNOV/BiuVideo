@@ -519,17 +519,15 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
         private final Drawable SELECTED_BG = context.getDrawable(R.drawable.ic_selected);
         private final Drawable UNSELECTED_BG = context.getDrawable(R.drawable.ripple_round_corners6dp_no_padding_bg);
 
-        private SimpleBottomSheet setRecommendColumnBottomSheet;
         private View setRecommendColumnBottomSheetView;
         private BottomSheetDialog setRecommendColumnBottomSheetDialog;
-        private BottomSheetTopBar setRecommendColumnTopBar;
 
         private FrameLayout setRecommendColumnShowSingleColumn;
         private FrameLayout setRecommendColumnShowDoubleColumn;
 
         private void showSetRecommendColumnBottomSheet() {
             if (setLocationBottomSheet == null) {
-                setRecommendColumnBottomSheet = new SimpleBottomSheet(context, R.layout.settings_fragment_set_recommend_column_bottom_sheet);
+                SimpleBottomSheet setRecommendColumnBottomSheet = new SimpleBottomSheet(context, R.layout.settings_fragment_set_recommend_column_bottom_sheet);
                 setRecommendColumnBottomSheetView = setRecommendColumnBottomSheet.initView();
                 setRecommendColumnBottomSheetDialog = setRecommendColumnBottomSheet.bottomSheetDialog;
                 setRecommendColumnBottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -548,7 +546,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 });
             }
 
-            setRecommendColumnTopBar = setRecommendColumnBottomSheetView.findViewById(R.id.set_recommend_column_topBar);
+            BottomSheetTopBar setRecommendColumnTopBar = setRecommendColumnBottomSheetView.findViewById(R.id.set_recommend_column_topBar);
             setRecommendColumnTopBar.setOnCloseListener(new BottomSheetTopBar.OnCloseListener() {
                 @Override
                 public void onClose() {
@@ -571,7 +569,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.set_recommend_column_showSingleColumn:
-                    if (recommendColumns == SINGLE_COLUMN) {
+                    if (recommendColumnTemp == SINGLE_COLUMN) {
                         return;
                     }
 
@@ -580,7 +578,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                     setOptionsStyle(SINGLE_COLUMN);
                     break;
                 case R.id.set_recommend_column_showDoubleColumn:
-                    if (recommendColumns == DOUBLE_COLUMN) {
+                    if (recommendColumnTemp == DOUBLE_COLUMN) {
                         return;
                     }
 

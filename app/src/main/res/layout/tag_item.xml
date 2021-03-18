@@ -25,7 +25,7 @@
                 android:layout_height="match_parent"
                 android:contentDescription="@string/description"
                 android:background="@drawable/round_corners6dp_bg"
-                android:backgroundTint="#D1D1D1"
+                android:backgroundTint="#EDEDED"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_tag" />
 

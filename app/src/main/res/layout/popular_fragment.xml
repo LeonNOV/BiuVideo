@@ -12,27 +12,19 @@
         android:layout_height="wrap_content"
         app:topBarTitle="@string/popular"/>
 
-    <LinearLayout
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/popular_tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:background="@drawable/round_corners6dp_bg"
-        android:orientation="vertical">
+        android:background="@color/white"
+        app:tabIndicator="@drawable/indicator"
+        app:tabTextColor="@color/tabTextColor"
+        app:tabIndicatorColor="@color/tabLayoutIndicatorColor" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/popular_tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabIndicator="@drawable/indicator"
-            app:tabTextColor="@color/tabTextColor"
-            app:tabIndicatorColor="#FFA200" />
-
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/popular_viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="centerCrop" />
-
-    </LinearLayout>
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/popular_viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
 
 </LinearLayout>

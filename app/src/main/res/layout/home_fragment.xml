@@ -13,7 +13,7 @@
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/cardMargin"
             android:overScrollMode="never"
             android:scrollbars="none">
 
@@ -141,9 +141,9 @@
             android:id="@+id/home_model"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginStart="@dimen/cardMargin"
+            android:layout_marginTop="@dimen/cardMargin"
+            android:layout_marginEnd="@dimen/cardMargin"
             android:background="@drawable/ripple_round_corners6dp_bg"
             android:clickable="true"
             android:focusable="true"
@@ -176,7 +176,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="星期三"
                     android:textColor="@color/black"
                     android:textSize="13sp" />
 
@@ -185,7 +184,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="02/17"
                     android:textColor="@color/black"
                     android:textSize="13sp" />
 
@@ -198,9 +196,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginStart="@dimen/cardMargin"
+            android:layout_marginTop="@dimen/cardMargin"
+            android:layout_marginEnd="@dimen/cardMargin"
             android:background="@drawable/ripple_round_corners6dp_bg"
             android:backgroundTint="#ff716d"
             android:drawablePadding="10dp"
@@ -218,7 +216,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="20dp"
+            android:layout_margin="@dimen/cardMargin"
             android:background="@drawable/round_corners6dp_bg"
             android:orientation="vertical">
 
@@ -226,9 +224,9 @@
                 android:id="@+id/home_cardTitle_recommend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginStart="@dimen/cardMargin"
+                android:layout_marginTop="@dimen/cardMargin"
+                android:layout_marginEnd="@dimen/cardMargin"
                 app:card_action="@string/see_more"
                 app:card_title="@string/home_card_title_recommend" />
 

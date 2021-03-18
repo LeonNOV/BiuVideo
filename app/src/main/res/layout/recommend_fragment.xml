@@ -18,6 +18,7 @@
 
         <com.leon.biuvideo.ui.views.LoadingRecyclerView
             android:id="@+id/recommend_loadingRecyclerView"
+            android:padding="@dimen/recyclerViewPadding"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 

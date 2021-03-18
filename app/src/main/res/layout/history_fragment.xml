@@ -18,7 +18,7 @@
         android:id="@+id/history_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp"
+        android:padding="@dimen/recyclerViewPadding"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/history_item_video" />
 

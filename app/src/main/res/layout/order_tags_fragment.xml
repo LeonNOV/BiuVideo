@@ -8,6 +8,7 @@
     <com.leon.biuvideo.ui.views.LoadingRecyclerView
         android:id="@+id/order_tags_loadingRecyclerView"
         android:layout_width="match_parent"
+        android:padding="@dimen/recyclerViewPadding"
         android:layout_height="match_parent"/>
 
 </FrameLayout>

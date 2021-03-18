@@ -16,9 +16,9 @@
         android:id="@+id/order_fragment_tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
+        android:background="@color/white"
         app:tabIndicator="@drawable/indicator"
-        app:tabIndicatorColor="#FFA200"
+        app:tabIndicatorColor="@color/tabLayoutIndicatorColor"
         app:tabTextColor="@color/black" />
 
     <androidx.viewpager.widget.ViewPager

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:padding="10dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/ripple_round_corners6dp_bg"
-    android:layout_height="wrap_content">
+    android:orientation="horizontal">
 
     <androidx.cardview.widget.CardView
         android:layout_width="130dp"
@@ -20,9 +19,9 @@
                 android:id="@+id/order_item_imageView_cover"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_launcher_background"
+                android:contentDescription="@string/description"
                 android:scaleType="centerCrop"
-                android:contentDescription="@string/description" />
+                android:src="@drawable/ic_launcher_background" />
 
             <TextView
                 android:id="@+id/order_item_textView_badge"
@@ -31,9 +30,9 @@
                 android:layout_alignParentEnd="true"
                 android:layout_margin="5dp"
                 android:background="@drawable/order_item_badge_type_background"
-                android:textSize="13sp"
+                android:text="限时免费"
                 android:textColor="@color/white"
-                android:text="限时免费"/>
+                android:textSize="13sp" />
 
         </RelativeLayout>
 
@@ -49,34 +48,34 @@
             android:id="@+id/order_item_textView_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitle"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:maxLines="2"
             android:ellipsize="end"
-            android:textColor="@color/black"/>
+            android:maxLines="2"
+            android:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitle"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/order_item_textView_subtitle"
             android:layout_width="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
-            android:text="SubTitleSubTitleSubTitleSubTitleSubTitleSubTitleSubTitle"
-            android:maxLines="1"
+            android:layout_marginTop="10dp"
             android:ellipsize="end"
-            android:textSize="14sp"
-            android:textColor="@color/gray"/>
+            android:maxLines="1"
+            android:text="SubTitleSubTitleSubTitleSubTitleSubTitleSubTitleSubTitle"
+            android:textColor="@color/gray"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/order_item_textView_desc"
             android:layout_width="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
-            android:text="DescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDesc"
-            android:maxLines="2"
+            android:layout_marginTop="10dp"
             android:ellipsize="end"
-            android:textSize="13sp"
-            android:textColor="@color/gray"/>
+            android:maxLines="2"
+            android:text="DescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDesc"
+            android:textColor="@color/gray"
+            android:textSize="13sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -88,8 +87,8 @@
                 android:id="@+id/order_item_textView_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/gray"
-                android:text="番剧"/>
+                android:text="番剧"
+                android:textColor="@color/gray" />
 
             <View
                 android:layout_width="1dp"
@@ -97,14 +96,14 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:background="@color/gray"/>
+                android:background="@color/gray" />
 
             <TextView
                 android:id="@+id/order_item_textView_area"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/gray"
-                android:text="日本"/>
+                android:text="日本"
+                android:textColor="@color/gray" />
 
         </LinearLayout>
 
@@ -118,8 +117,8 @@
                 android:id="@+id/order_item_textView_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/gray"
-                android:text="看到第一话 7:13"/>
+                android:text="看到第一话 7:13"
+                android:textColor="@color/gray" />
 
             <View
                 android:id="@+id/order_item_view"
@@ -128,14 +127,14 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:background="@color/gray"/>
+                android:background="@color/gray" />
 
             <TextView
                 android:id="@+id/order_item_textView_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/gray"
-                android:text="全12话"/>
+                android:text="全12话"
+                android:textColor="@color/gray" />
 
         </LinearLayout>
 

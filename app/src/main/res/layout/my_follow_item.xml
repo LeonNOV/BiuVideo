@@ -58,22 +58,19 @@
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:paddingStart="10dp"
-        android:paddingEnd="0dp">
+        android:paddingStart="@dimen/swipeMenuPaddingStartEnd"
+        android:paddingEnd="@dimen/swipeMenuPaddingStartEnd">
 
         <TextView
             android:id="@+id/my_follow_item_cancel_follow"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/swipeMenuItemW"
             android:layout_height="match_parent"
             android:background="@drawable/ripple_round_corners6dp_bg"
-            android:backgroundTint="@color/BiliBili_pink"
+            android:backgroundTint="@color/cancel_color"
             android:gravity="center"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
             android:text="@string/cancel_follow"
             android:textColor="@color/white" />
 
     </FrameLayout>
-
 
 </com.mcxtzhang.swipemenulib.SwipeMenuLayout>

@@ -24,8 +24,8 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/followers_item_face"
-                android:layout_width="82dp"
-                android:layout_height="82dp"
+                android:layout_width="@dimen/BiliUserFaceWH"
+                android:layout_height="@dimen/BiliUserFaceWH"
                 android:src="@color/gray"
                 app:civ_border_color="@color/black"
                 app:civ_border_width="1dp" />
@@ -75,12 +75,12 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp">
+        android:paddingStart="@dimen/swipeMenuPaddingStartEnd"
+        android:paddingEnd="@dimen/swipeMenuPaddingStartEnd">
 
         <TextView
             android:id="@+id/followers_item_mutual_follower"
-            android:layout_width="80dp"
+            android:layout_width="@dimen/swipeMenuItemW"
             android:layout_height="match_parent"
             android:background="@drawable/ripple_round_corners6dp_bg"
             android:backgroundTint="@color/blue"
@@ -100,6 +100,5 @@
             android:textColor="@color/white" />
 
     </LinearLayout>
-
 
 </com.mcxtzhang.swipemenulib.SwipeMenuLayout>
