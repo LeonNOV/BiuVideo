@@ -62,40 +62,47 @@ public class FollowsFragment extends BaseSupportFragment {
         followsSmartRefreshLoadingRecyclerView.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-                // 加载数据
-
+                // 获取下一页数据
+                getFollows(1);
             }
         });
 
         followsSmartRefreshLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING);
 
-        // 第一次加载数据
+        // 获取初始数据
+        getFollows(0);
+
         setOnLoadListener(new OnLoadListener() {
             @Override
             public void onLoad(Message msg) {
-                if (msg.what == 0) {
-                    List<Follow> follows = (List<Follow>) msg.obj;
+                List<Follow> follows = (List<Follow>) msg.obj;
 
-                    if (follows.size() == 0) {
-                        followsSmartRefreshLoadingRecyclerView.setStatus(LoadingRecyclerView.NO_DATA);
-                        followsSmartRefreshLoadingRecyclerView.setEnableLoadMore(false);
-                    } else {
-                        followsAdapter.append(follows);
-                        followsSmartRefreshLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
-                    }
+                switch (msg.what) {
+                    case 0:
+                        if (follows.size() == 0) {
+                            followsSmartRefreshLoadingRecyclerView.setStatus(LoadingRecyclerView.NO_DATA);
+                            followsSmartRefreshLoadingRecyclerView.setEnableLoadMore(false);
+                        } else {
+                            followsAdapter.append(follows);
+                            followsSmartRefreshLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
+                            if (!followsParser.dataStatus) {
+                                followsSmartRefreshLoadingRecyclerView.setLoadStatus(SmartRefreshRecyclerView.NO_DATA);
+                            }
+                        }
+                        break;
+                    case 1:
+
+                        if (follows.size() > 0) {
+                            followsAdapter.append(follows);
+                            followsSmartRefreshLoadingRecyclerView.setLoadStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
+                        } else {
+                            followsSmartRefreshLoadingRecyclerView.setLoadStatus(SmartRefreshRecyclerView.NO_DATA);
+                        }
+
+                        break;
+                    default:
+                        break;
                 }
-            }
-        });
-
-        SimpleSingleThreadPool.executor(new Runnable() {
-            @Override
-            public void run() {
-                // 获取关注数据
-                List<Follow> follows = getFollows();
-
-                Message message = receiveDataHandler.obtainMessage(0);
-                message.obj = follows;
-                receiveDataHandler.sendMessage(message);
             }
         });
     }
@@ -105,11 +112,21 @@ public class FollowsFragment extends BaseSupportFragment {
      *
      * @return  Follow集合
      */
-    private List<Follow> getFollows() {
+    private void getFollows(int what) {
         if (followsParser == null) {
             followsParser = new FollowsParser(context);
         }
 
-        return followsParser.parseData();
+        SimpleSingleThreadPool.executor(new Runnable() {
+            @Override
+            public void run() {
+                // 获取关注数据
+                List<Follow> follows = followsParser.parseData();
+
+                Message message = receiveDataHandler.obtainMessage(what);
+                message.obj = follows;
+                receiveDataHandler.sendMessage(message);
+            }
+        });
     }
 }

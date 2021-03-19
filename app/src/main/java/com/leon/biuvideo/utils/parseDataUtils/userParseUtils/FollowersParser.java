@@ -40,7 +40,7 @@ public class FollowersParser implements ParserInterface<Follower> {
     /**
      * 数据状态
      */
-    private boolean dataStatus = true;
+    public boolean dataStatus = true;
 
     public FollowersParser(Context context) {
         this.context = context;

@@ -66,7 +66,7 @@ public class FollowsAdapter extends BaseAdapter<Follow> {
                 .setOnClickListener(R.id.follow_item_content, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        SimpleSnackBar.make(view, "点击了第" + position + "个Item,followName：" + follow.userName, SimpleSnackBar.LENGTH_SHORT).show();
+                        SimpleSnackBar.make(v, "点击了第" + position + "个Item,followName：" + follow.userName, SimpleSnackBar.LENGTH_SHORT).show();
                     }
                 });
 
@@ -80,7 +80,7 @@ public class FollowsAdapter extends BaseAdapter<Follow> {
             @Override
             public void onClick(View v) {
                 // 取消关注操作
-                SimpleSnackBar.make(view, "取消关注：" + follow.userName, SimpleSnackBar.LENGTH_SHORT).show();
+                SimpleSnackBar.make(v, "取消关注：" + follow.userName, SimpleSnackBar.LENGTH_SHORT).show();
             }
         });
     }

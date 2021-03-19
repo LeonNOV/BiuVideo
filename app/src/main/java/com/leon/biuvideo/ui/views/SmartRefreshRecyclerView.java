@@ -20,6 +20,9 @@ import java.util.List;
  * @Desc 带有上拉加载功能的LoadingRecyclerView
  */
 public class SmartRefreshRecyclerView<T> extends SmartRefreshLayout {
+    public static final int NO_DATA = 0;
+    public static final int LOADING_FINISHING = 1;
+
     private final Context context;
     private ClassicsFooter classicsFooter;
     private LoadingRecyclerView loadingRecyclerView;
@@ -124,6 +127,14 @@ public class SmartRefreshRecyclerView<T> extends SmartRefreshLayout {
     public void append(List<T> appends) {
         if (adapter != null) {
             adapter.append(appends);
+        }
+    }
+
+    public void setLoadStatus(int status) {
+        if (NO_DATA == status) {
+            setEnableLoadMore(false);
+        } else if (LOADING_FINISHING == status) {
+            finishLoadMore();
         }
     }
 }

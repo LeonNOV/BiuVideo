@@ -28,6 +28,7 @@ import com.scwang.smartrefresh.layout.constant.RefreshState;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 import java.util.concurrent.FutureTask;
 
 /**
@@ -134,8 +135,6 @@ public class UserOrderArticleFragment extends BaseLazyFragment {
     private void initAttr() {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(userOrderArticleAdapter);
-
-        Handler handler = new Handler();
 
         //添加加载更多监听事件
         smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {

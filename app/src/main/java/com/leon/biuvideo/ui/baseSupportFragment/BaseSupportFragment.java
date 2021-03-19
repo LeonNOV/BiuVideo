@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -32,6 +33,7 @@ public abstract class BaseSupportFragment extends SupportFragment {
      * 用于接收数据使用，并在主线程进行处理
      */
     protected Handler receiveDataHandler;
+    protected Handler loadMoreHandler;
 
     public interface OnLoadListener {
         /**
@@ -72,6 +74,8 @@ public abstract class BaseSupportFragment extends SupportFragment {
                 return true;
             }
         });
+
+        loadMoreHandler = new Handler(Looper.myLooper());
 
         initView();
 
