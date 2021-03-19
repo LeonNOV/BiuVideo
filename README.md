@@ -20,6 +20,7 @@
 ### 2020/03/19
 - `FollowsFragment`和`FollowersFragment`的上拉加载数据功能已完成
   - **`UserFragment`的用户数据获取方式还需要进行更改**
+  - 删除了不必要的代码
 
 ### 2020/03/18
 - 修复了`UserFragment`顶部图显示不正常的问题
