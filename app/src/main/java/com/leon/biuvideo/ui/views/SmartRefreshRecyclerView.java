@@ -24,7 +24,7 @@ public class SmartRefreshRecyclerView<T> extends SmartRefreshLayout {
 
     private final Context context;
     private ClassicsFooter classicsFooter;
-    private LoadingRecyclerView loadingRecyclerView;
+    public LoadingRecyclerView loadingRecyclerView;
     private BaseAdapter<T> adapter;
 
     public SmartRefreshRecyclerView(@NonNull Context context) {

@@ -11,7 +11,7 @@ import com.leon.biuvideo.adapters.TabLayoutViewPagerAdapter;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.home.favoriteFragments.FavoriteAlbumFragment;
 import com.leon.biuvideo.ui.home.favoriteFragments.FavoriteArticleFragment;
-import com.leon.biuvideo.ui.home.favoriteFragments.FavoriteVideoFragment;
+import com.leon.biuvideo.ui.home.favoriteFragments.FavoriteVideoFolderFragment;
 import com.leon.biuvideo.ui.home.favoriteFragments.FavoriteWatchLaterFragment;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.ViewUtils;
@@ -37,8 +37,8 @@ public class FavoritesFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        SimpleTopBar favorites_fragment_topBar = view.findViewById(R.id.favorites_fragment_topBar);
-        favorites_fragment_topBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
+        SimpleTopBar favoritesFragmentTopBar = view.findViewById(R.id.favorites_fragment_topBar);
+        favoritesFragmentTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
                 backPressed();
@@ -53,7 +53,7 @@ public class FavoritesFragment extends BaseSupportFragment {
         ViewPager favoritesFragmentViewPager = view.findViewById(R.id.favorites_fragment_viewPager);
 
         List<Fragment> viewPagerFragments = new ArrayList<>();
-        viewPagerFragments.add(new FavoriteVideoFragment());
+        viewPagerFragments.add(new FavoriteVideoFolderFragment());
         viewPagerFragments.add(new FavoriteArticleFragment());
         viewPagerFragments.add(new FavoriteAlbumFragment());
         viewPagerFragments.add(new FavoriteWatchLaterFragment());

@@ -21,6 +21,8 @@
 - `FollowsFragment`和`FollowersFragment`的上拉加载数据功能已完成
   - **`UserFragment`的用户数据获取方式还需要进行更改**
   - 删除了不必要的代码
+- `FavoriteVideoFolderFragment`及相关功能已完成
+  - **收藏夹中的视频点击事件还未完成**
 
 ### 2020/03/18
 - 修复了`UserFragment`顶部图显示不正常的问题

@@ -305,7 +305,7 @@ public class BiliBiliAPIs {
      *  参数：
      *      up_mid：用户ID，必须
      */
-    public static String userAllFolder = "https://api.bilibili.com/x/v3/fav/folder/created/list-all";
+    public static String USER_FAV_FOLDER = "https://api.bilibili.com/x/v3/fav/folder/created/list-all";
 
     /**
      * 获取收藏夹中的所有数据
@@ -321,7 +321,7 @@ public class BiliBiliAPIs {
      *      type：还不知道是啥，默认为0
      *      tid：分区ID，该值默认为0
      */
-    public static String userFolderData = "https://api.bilibili.com/x/v3/fav/resource/list";
+    public static String USER_FAV_FOLDER_DETAIL = "https://api.bilibili.com/x/v3/fav/resource/list";
 
     /**
      * 内容推荐接口

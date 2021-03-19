@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 easySnackBar.show();
             } else {
                 UserInfoParser userInfoParser = new UserInfoParser(getApplicationContext());
-//                userInfo = userInfoParser.parseData();
+//                userInfo = userInfoParser.FavoriteVideoFolderDetail();
                 if (userInfo != null) {
                     isLogin = true;
                     sharedPreferences.edit().putBoolean("isVIP", userInfo.isVip).apply();

@@ -1,37 +1,22 @@
 package com.leon.biuvideo.ui.fragments.orderFragments;
 
-import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.view.View;
 import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.userOrderAdapters.UserOrderVideoFolderAdapter;
-import com.leon.biuvideo.adapters.userOrderAdapters.UserOrderVideoFolderDetailAdapter;
-import com.leon.biuvideo.beans.orderBeans.UserFolder;
-import com.leon.biuvideo.beans.orderBeans.UserFolderData;
-import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.adapters.userOrderAdapters.FavoriteVideoFolderDetailAdapter;
+import com.leon.biuvideo.beans.orderBeans.FavoriteVideoFolder;
+import com.leon.biuvideo.beans.orderBeans.FavoriteVideoFolderDetail;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
-import com.leon.biuvideo.ui.views.SimpleSnackBar;
-import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.SimpleSingleThreadPool;
-import com.leon.biuvideo.utils.SimpleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
-import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserFolderParser;
+import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.FavoriteVideoFolderParser;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.constant.RefreshState;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.List;
-import java.util.concurrent.FutureTask;
 
 /**
  * PlayListFragment中的video片段
@@ -43,9 +28,9 @@ public class UserOrderVideoFragment extends BaseLazyFragment {
     private int pageNum = 1;
     private boolean dataState = true;
 
-    private List<UserFolder> userFolders;
-    private UserFolderData userFolderData;
-    private UserFolderParser userFolderParser;
+    private List<FavoriteVideoFolder> favoriteVideoFolders;
+    private FavoriteVideoFolderDetail FavoriteVideoFolderDetail;
+    private FavoriteVideoFolderParser favoriteVideoFolderParser;
 
     private LinearLayout fragment_favorite_video_linearLayout;
     private SmartRefreshLayout fragment_favorite_smartRefresh;
@@ -53,7 +38,7 @@ public class UserOrderVideoFragment extends BaseLazyFragment {
     private RecyclerView folderList;
     private RecyclerView folderDetail;
 
-    private UserOrderVideoFolderDetailAdapter userOrderVideoFolderDetailAdapter;
+    private FavoriteVideoFolderDetailAdapter favoriteVideoFolderDetailAdapter;
     private Handler handler;
 
     public UserOrderVideoFragment(long mid) {
@@ -77,15 +62,15 @@ public class UserOrderVideoFragment extends BaseLazyFragment {
 
     @Override
     public void loadData() {
-        SimpleSingleThreadPool.executor(new Runnable() {
+        /*SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                userFolderParser = new UserFolderParser();
-                userFolders = userFolderParser.parseUserFolder(mid);
+                favoriteVideoFolderParser = new FavoriteVideoFolderParser();
+                favoriteVideoFolders = favoriteVideoFolderParser.parseUserFolder(mid);
 
                 //获取第一个收藏夹ID
-                nowFolderId = userFolders.get(0).id;
-                userFolderData = userFolderParser.parseUserFolderData(nowFolderId, pageNum);
+                nowFolderId = favoriteVideoFolders.get(0).id;
+                FavoriteVideoFolderDetail = favoriteVideoFolderParser.parseUserFolderData(nowFolderId, pageNum);
                 pageNum ++;
 
                 Message message = handler.obtainMessage();
@@ -111,15 +96,15 @@ public class UserOrderVideoFragment extends BaseLazyFragment {
 
                 return true;
             }
-        });
+        });*/
     }
 
     @Override
     public void initValues() {
         // 设置收藏夹参数
-        setFolderInfo(userFolderData);
+        /*setFolderInfo(FavoriteVideoFolderDetail);
 
-        UserOrderVideoFolderAdapter userOrderVideoFolderAdapter = new UserOrderVideoFolderAdapter(userFolders, context);
+        UserOrderVideoFolderAdapter userOrderVideoFolderAdapter = new UserOrderVideoFolderAdapter(favoriteVideoFolders, context);
         userOrderVideoFolderAdapter.setOnClickFolderListener(new UserOrderVideoFolderAdapter.OnClickFolderListener() {
             @Override
             public void OnClick(long folderId) {
@@ -133,16 +118,16 @@ public class UserOrderVideoFragment extends BaseLazyFragment {
                 nowFolderId = folderId;
                 fragment_favorite_smartRefresh.setEnabled(true);
 
-                UserFolderData innerUserFolderData = userFolderParser.parseUserFolderData(nowFolderId, pageNum);
-                userOrderVideoFolderDetailAdapter.reset(innerUserFolderData.medias);
-                setFolderInfo(innerUserFolderData);
+                FavoriteVideoFolderDetail innerUserFavFolderDetail = favoriteVideoFolderParser.parseUserFolderData(nowFolderId, pageNum);
+                favoriteVideoFolderDetailAdapter.reset(innerUserFavFolderDetail.medias);
+                setFolderInfo(innerUserFavFolderDetail);
                 pageNum ++;
             }
         });
 
-        userOrderVideoFolderDetailAdapter = new UserOrderVideoFolderDetailAdapter(userFolderData.medias, context, view);
+        favoriteVideoFolderDetailAdapter = new FavoriteVideoFolderDetailAdapter(FavoriteVideoFolderDetail.medias, context, view);
         folderList.setAdapter(userOrderVideoFolderAdapter);
-        folderDetail.setAdapter(userOrderVideoFolderDetailAdapter);
+        folderDetail.setAdapter(favoriteVideoFolderDetailAdapter);
 
         folderList.setLayoutManager(new LinearLayoutManager(context));
         folderDetail.setLayoutManager(new LinearLayoutManager(context));
@@ -178,7 +163,7 @@ public class UserOrderVideoFragment extends BaseLazyFragment {
                                 getFavoriteVideo();
 
                                 //添加新数据
-                                userOrderVideoFolderDetailAdapter.append(userFolderData.medias);
+                                favoriteVideoFolderDetailAdapter.append(FavoriteVideoFolderDetail.medias);
                             }
                         }, 1000);
                     } else {
@@ -192,32 +177,32 @@ public class UserOrderVideoFragment extends BaseLazyFragment {
                 //结束加载更多动画
                 fragment_favorite_smartRefresh.finishLoadMore();
             }
-        });
+        });*/
     }
 
     /**
      * 设置收藏夹参数
      */
-    private void setFolderInfo(UserFolderData userFolderData) {
+    private void setFolderInfo(FavoriteVideoFolderDetail FavoriteVideoFolderDetail) {
         BindingUtils bindingUtils = new BindingUtils(view, context);
         bindingUtils
-                .setImage(R.id.fragment_favorite_video_imageView_cover, userFolderData.cover, ImagePixelSize.COVER)
-                .setText(R.id.fragment_favorite_video_textView_creator, userFolderData.userName)
-                .setText(R.id.fragment_favorite_video_textView_total, userFolderData.total + "个内容")
-                .setText(R.id.fragment_favorite_video_textView_ctime, "创建于" + ValueUtils.generateTime(userFolderData.ctime, true, false, "/"));
+                .setImage(R.id.fragment_favorite_video_imageView_cover, FavoriteVideoFolderDetail.cover, ImagePixelSize.COVER)
+                .setText(R.id.fragment_favorite_video_textView_creator, FavoriteVideoFolderDetail.userName)
+                .setText(R.id.fragment_favorite_video_textView_total, FavoriteVideoFolderDetail.count + "个内容")
+                .setText(R.id.fragment_favorite_video_textView_ctime, "创建于" + ValueUtils.generateTime(FavoriteVideoFolderDetail.addTime, true, false, "/"));
     }
 
     /**
      * 获取收藏的视频
      */
     private void getFavoriteVideo() {
-        userFolderData = userFolderParser.parseUserFolderData(nowFolderId, pageNum);
+        /*FavoriteVideoFolderDetail = favoriteVideoFolderParser.parseUserFolderData(nowFolderId, pageNum);
 
-        if (userFolderData.medias.size() < 20) {
+        if (FavoriteVideoFolderDetail.medias.size() < 20) {
             dataState = false;
             fragment_favorite_smartRefresh.setEnabled(false);
         }
 
-        pageNum++;
+        pageNum++;*/
     }
 }

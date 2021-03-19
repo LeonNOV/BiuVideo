@@ -8,19 +8,19 @@ import androidx.annotation.NonNull;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
-import com.leon.biuvideo.beans.orderBeans.UserFolder;
+import com.leon.biuvideo.beans.orderBeans.FavoriteVideoFolder;
 
 import java.util.List;
 
 /**
  * 用户收藏的视频文件夹适配器
  */
-public class UserOrderVideoFolderAdapter extends BaseAdapter<UserFolder> {
-    private final List<UserFolder> userFolders;
+public class UserOrderVideoFolderAdapter extends BaseAdapter<FavoriteVideoFolder> {
+    private final List<FavoriteVideoFolder> favoriteVideoFolders;
 
-    public UserOrderVideoFolderAdapter(List<UserFolder> userFolders, Context context) {
-        super(userFolders, context);
-        this.userFolders = userFolders;
+    public UserOrderVideoFolderAdapter(List<FavoriteVideoFolder> favoriteVideoFolders, Context context) {
+        super(favoriteVideoFolders, context);
+        this.favoriteVideoFolders = favoriteVideoFolders;
     }
 
     @Override
@@ -30,16 +30,16 @@ public class UserOrderVideoFolderAdapter extends BaseAdapter<UserFolder> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        UserFolder userFolder = userFolders.get(position);
+        FavoriteVideoFolder favoriteVideoFolder = favoriteVideoFolders.get(position);
 
         holder
-                .setText(R.id.item_favorite_video_textView_folderName, userFolder.title)
-                .setText(R.id.item_favorite_video_textView_folderTotal, String.valueOf(userFolder.total))
+                .setText(R.id.item_favorite_video_textView_folderName, favoriteVideoFolder.title)
+                .setText(R.id.item_favorite_video_textView_folderTotal, String.valueOf(favoriteVideoFolder.count))
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (onClickFolderListener != null) {
-                            onClickFolderListener.OnClick(userFolder.id);
+                            onClickFolderListener.OnClick(favoriteVideoFolder.id);
                         }
                     }
                 });

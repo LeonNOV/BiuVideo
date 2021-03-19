@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/ripple_item_bilibili_lite"
+    android:background="@drawable/ripple_round_corners6dp_bg"
+    android:layout_marginBottom="@dimen/itemMarginBottom"
     android:orientation="horizontal"
     android:padding="@dimen/item_padding">
 

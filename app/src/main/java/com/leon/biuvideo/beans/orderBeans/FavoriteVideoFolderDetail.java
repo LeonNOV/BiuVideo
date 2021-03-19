@@ -5,10 +5,10 @@ import java.util.List;
 /**
  * 用户收藏文件夹中的具体数据实体类
  */
-public class UserFolderData {
+public class FavoriteVideoFolderDetail {
     public long id;
-    public long ctime;
-    public int total;
+    public long addTime;
+    public int count;
     public String cover;
     public String title;
 

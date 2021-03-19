@@ -32,7 +32,7 @@ public class SimpleTopBar extends RelativeLayout implements View.OnClickListener
 
     private Drawable leftSrc;
     private Drawable rightSrc;
-    private String topBarTitle;
+    private String topBarTitle = "";
     private Typeface topBarTitleStyle = Typeface.DEFAULT_BOLD;
     private int topBarTitleGravity = Gravity.CENTER_HORIZONTAL;
     private TextView topBarTitleView;
@@ -95,9 +95,7 @@ public class SimpleTopBar extends RelativeLayout implements View.OnClickListener
 
         relativeLayout.setLayoutParams(relativeLayoutParams);
 
-        if (topBarTitle != null) {
-            addTitle();
-        }
+        addTitle();
 
         if (leftSrc == null) {
             this.leftSrc = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_back, null);
@@ -177,6 +175,15 @@ public class SimpleTopBar extends RelativeLayout implements View.OnClickListener
         moreViewLayoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
 
         rightView.setLayoutParams(moreViewLayoutParams);
+    }
+
+    /**
+     * 动态标题
+     *
+     * @param title 标题
+     */
+    public void setTopBarTitle(String title) {
+        this.topBarTitleView.setText(title);
     }
 
     @Override
