@@ -1,15 +1,22 @@
-package com.leon.biuvideo.ui.home.favoriteFragments;
+package com.leon.biuvideo.ui.home.favoriteFragments.favoriteVideo;
 
+import android.os.Bundle;
 import android.os.Message;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.home.FavoriteVideoFolderAdapter;
-import com.leon.biuvideo.beans.orderBeans.FavoriteVideoFolder;
+import com.leon.biuvideo.adapters.homeAdapters.favoriteAdapters.FavoriteVideoFolderAdapter;
+import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteVideoFolder;
+import com.leon.biuvideo.beans.userBeans.Follow;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragmentWithSrr;
 import com.leon.biuvideo.ui.home.FavoritesFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.FavoriteVideoFolderParser;
 
@@ -21,17 +28,10 @@ import java.util.List;
  * @Time 2021/3/1
  * @Desc 收藏页面-视频收藏
  */
-public class FavoriteVideoFolderFragment extends BaseSupportFragment {
-    @Override
-    protected int setLayout() {
-        return R.layout.favorites_video_folder_fragment;
-    }
+public class FavoriteVideoFolderFragment extends BaseSupportFragmentWithSrr<FavoriteVideoFolder> {
 
     @Override
     protected void initView() {
-        LoadingRecyclerView favoritesVideoFolderLoadingRecyclerView = findView(R.id.favorites_video_folder_loadingRecyclerView);
-        favoritesVideoFolderLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING);
-
         FavoriteVideoFolderAdapter favoriteVideoFolderAdapter = new FavoriteVideoFolderAdapter(new ArrayList<>(), context);
         favoriteVideoFolderAdapter.setOnClickVideoFolderListener(new FavoriteVideoFolderAdapter.OnClickVideoFolderListener() {
             @Override
@@ -40,11 +40,8 @@ public class FavoriteVideoFolderFragment extends BaseSupportFragment {
             }
         });
         favoriteVideoFolderAdapter.setHasStableIds(true);
-        favoritesVideoFolderLoadingRecyclerView.setRecyclerViewAdapter(favoriteVideoFolderAdapter);
-        favoritesVideoFolderLoadingRecyclerView.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
-
-        // 获取所有视频收藏夹
-        getVideoFolders();
+        view.setRecyclerViewAdapter(favoriteVideoFolderAdapter);
+        view.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
 
         setOnLoadListener(new OnLoadListener() {
             @Override
@@ -53,12 +50,24 @@ public class FavoriteVideoFolderFragment extends BaseSupportFragment {
 
                 if (favoriteVideoFolders.size() > 0) {
                     favoriteVideoFolderAdapter.append(favoriteVideoFolders);
-                    favoritesVideoFolderLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
+                    view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
                 } else {
-                    favoritesVideoFolderLoadingRecyclerView.setStatus(LoadingRecyclerView.NO_DATA);
+                    view.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
                 }
             }
         });
+    }
+
+    @Override
+    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
+        super.onLazyInitView(savedInstanceState);
+
+        view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+
+        Fuck.blue("one");
+
+        // 获取所有视频收藏夹
+        getVideoFolders();
     }
 
     /**

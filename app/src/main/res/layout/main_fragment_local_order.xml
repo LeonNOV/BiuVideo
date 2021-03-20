@@ -49,7 +49,7 @@
             android:layout_weight="1"
             android:background="@drawable/lndicator_bar_unselected"
             android:gravity="center"
-            android:text="@string/article"
+            android:text="@string/favoriteArticle"
             android:textColor="@color/black"
             android:textSize="15sp" />
 

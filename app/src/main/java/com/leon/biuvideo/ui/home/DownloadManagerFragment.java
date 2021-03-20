@@ -1,11 +1,11 @@
 package com.leon.biuvideo.ui.home;
 
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.TabLayoutViewPagerAdapter;
+import com.leon.biuvideo.adapters.ViewPager2Adapter;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.home.downloadManagerFragments.DownloadedFragment;
 import com.leon.biuvideo.ui.home.downloadManagerFragments.DownloadingFragment;
@@ -51,26 +51,10 @@ public class DownloadManagerFragment extends BaseSupportFragment {
 
         String[] titles = {"下载中", "已下载"};
         TabLayout downloadManagerFragmentTabLayout = findView(R.id.downloadManager_fragment_tabLayout);
-        ViewPager downloadManagerFragmentViewPager = findView(R.id.downloadManager_fragment_viewPager);
-        downloadManagerFragmentViewPager.setAdapter(new TabLayoutViewPagerAdapter(getChildFragmentManager(),titles, viewPagerFragments));
-        downloadManagerFragmentViewPager.setCurrentItem(0);
-        downloadManagerFragmentViewPager.setOffscreenPageLimit(2);
-        downloadManagerFragmentTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                ViewUtils.changeTabTitle(tab, true);
-            }
+        ViewPager2 downloadManagerFragmentViewPager = findView(R.id.downloadManager_fragment_viewPager);
+        downloadManagerFragmentViewPager.setAdapter(new ViewPager2Adapter(getActivity(), viewPagerFragments));
+        // 初始化ViewPager2和TabLayout
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                ViewUtils.changeTabTitle(tab, false);
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-        downloadManagerFragmentTabLayout.setupWithViewPager(downloadManagerFragmentViewPager, false);
+        ViewUtils.initTabLayoutAndViewPager2(downloadManagerFragmentTabLayout, downloadManagerFragmentViewPager, titles, 0);
     }
 }

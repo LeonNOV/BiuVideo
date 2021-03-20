@@ -2,7 +2,7 @@ package com.leon.biuvideo.utils.parseDataUtils.userParseUtils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.orderBeans.FavoriteVideoFolder;
+import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteVideoFolder;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.parseDataUtils.ParserInterface;

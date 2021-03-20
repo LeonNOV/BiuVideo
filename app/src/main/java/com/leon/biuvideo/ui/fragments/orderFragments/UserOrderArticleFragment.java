@@ -1,35 +1,26 @@
 package com.leon.biuvideo.ui.fragments.orderFragments;
 
-import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.userOrderAdapters.UserOrderArticleAdapter;
-import com.leon.biuvideo.beans.articleBeans.Article;
-import com.leon.biuvideo.ui.SimpleLoadDataThread;
+import com.leon.biuvideo.adapters.homeAdapters.favoriteAdapters.FavoriteArticleAdapter;
+import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteArticle;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.SimpleSingleThreadPool;
-import com.leon.biuvideo.utils.SimpleThreadPool;
-import com.leon.biuvideo.utils.parseDataUtils.articleParseUtils.UserArticleParser;
+import com.leon.biuvideo.utils.parseDataUtils.articleParseUtils.FavoriteArticleParser;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.FutureTask;
 
 /**
  * 用户订阅的专栏fragment
@@ -45,11 +36,11 @@ public class UserOrderArticleFragment extends BaseLazyFragment {
     private int currentCount;
     private boolean dataState = true;
 
-    private UserArticleParser userArticleParser;
-    private List<Article> articles;
+    private FavoriteArticleParser favoriteArticleParser;
+    private List<FavoriteArticle> favoriteArticles;
 
     private LinearLayoutManager linearLayoutManager;
-    private UserOrderArticleAdapter userOrderArticleAdapter;
+    private FavoriteArticleAdapter favoriteArticleAdapter;
     private Handler handler;
 
     @Override
@@ -70,11 +61,11 @@ public class UserOrderArticleFragment extends BaseLazyFragment {
 
     @Override
     public void loadData() {
-        SimpleSingleThreadPool.executor(new Runnable() {
+        /*SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                userArticleParser = new UserArticleParser();
-                total = userArticleParser.getTotal();
+                favoriteArticleParser = new FavoriteArticleParser();
+                total = favoriteArticleParser.getTotal();
 
                 Message message = handler.obtainMessage();
                 message.what = 0;
@@ -99,12 +90,12 @@ public class UserOrderArticleFragment extends BaseLazyFragment {
 
                 return true;
             }
-        });
+        });*/
     }
 
     @Override
     public void initValues() {
-        if (total <= 0) {
+        /*if (total <= 0) {
             //设置无数据提示界面
             no_data.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
@@ -114,27 +105,27 @@ public class UserOrderArticleFragment extends BaseLazyFragment {
             recyclerView.setVisibility(View.VISIBLE);
             smartRefresh.setEnabled(true);
 
-            articles = userArticleParser.parseArticle(pageNum);
-            currentCount += articles.size();
+            favoriteArticles = favoriteArticleParser.parseArticle(pageNum);
+            currentCount += favoriteArticles.size();
             pageNum++;
 
-            if (articles.size() < 16) {
+            if (favoriteArticles.size() < 16) {
                 dataState = false;
                 smartRefresh.setEnabled(false);
             }
 
-            if (linearLayoutManager == null || userOrderArticleAdapter == null) {
+            if (linearLayoutManager == null || favoriteArticleAdapter == null) {
                 linearLayoutManager = new LinearLayoutManager(context);
-                userOrderArticleAdapter = new UserOrderArticleAdapter(articles, context);
+                favoriteArticleAdapter = new FavoriteArticleAdapter(favoriteArticles, context);
             }
 
             initAttr();
-        }
+        }*/
     }
 
     private void initAttr() {
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(userOrderArticleAdapter);
+        recyclerView.setAdapter(favoriteArticleAdapter);
 
         //添加加载更多监听事件
         smartRefresh.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -161,10 +152,10 @@ public class UserOrderArticleFragment extends BaseLazyFragment {
                             @Override
                             public void run() {
                                 //获取新数据
-                                getUserArticleData();
+//                                getUserArticleData();
 
                                 //添加新数据
-                                userOrderArticleAdapter.append(articles);
+//                                favoriteArticleAdapter.append(favoriteArticles);
                             }
                         }, 1000);
                     } else {
@@ -181,15 +172,15 @@ public class UserOrderArticleFragment extends BaseLazyFragment {
         });
     }
 
-    private void getUserArticleData() {
-        this.articles = userArticleParser.parseArticle(pageNum);
+    /*private void getUserArticleData() {
+        this.favoriteArticles = favoriteArticleParser.parseArticle(pageNum);
 
-        currentCount += articles.size();
+        currentCount += favoriteArticles.size();
 
         if (currentCount == total) {
             dataState = false;
         }
 
         pageNum++;
-    }
+    }*/
 }

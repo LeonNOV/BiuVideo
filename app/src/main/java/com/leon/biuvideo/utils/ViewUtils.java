@@ -5,11 +5,21 @@ import android.graphics.Typeface;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.viewpager2.widget.ViewPager2;
+
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.adapters.ViewPager2Adapter;
 
 import java.util.Map;
 
+/**
+ * @Author Leon
+ * @Time 2021/3/21
+ * @Desc View工具类
+ */
 public class ViewUtils {
     /**
      * 切换Fragment时，顶部文字的变化
@@ -40,6 +50,12 @@ public class ViewUtils {
         }
     }
 
+    /**
+     * 改变Tab的样式
+     *
+     * @param tab   Tab
+     * @param isSelected    是否已选中
+     */
     public static void changeTabTitle(TabLayout.Tab tab, boolean isSelected) {
         if (isSelected) {
             View view = tab.getCustomView();
@@ -60,5 +76,46 @@ public class ViewUtils {
             textView.setTypeface(Typeface.DEFAULT);
             textView.setTextColor(Color.GRAY);
         }
+    }
+
+    /**
+     * 初始化ViewPager2和TabLayout
+     *
+     * @param tabLayout TabLayout
+     * @param viewPager2    ViewPager2
+     * @param titles    Tab标题
+     * @param firstShowItemPosition 第一个显示的item索引
+     */
+    public static void initTabLayoutAndViewPager2(TabLayout tabLayout, ViewPager2 viewPager2, String[] titles, int firstShowItemPosition) {
+        viewPager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+        viewPager2.setCurrentItem(firstShowItemPosition);
+
+        new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
+            @Override
+            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                if (position == firstShowItemPosition) {
+                    ViewUtils.changeTabTitle(tab, true);
+                }
+
+                tab.setText(titles[position]);
+            }
+        }).attach();
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                ViewUtils.changeTabTitle(tab, true);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                ViewUtils.changeTabTitle(tab, false);
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 }

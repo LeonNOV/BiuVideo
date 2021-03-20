@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.userAdapters.UserArticleAdapter;
-import com.leon.biuvideo.beans.articleBeans.Article;
+import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteArticle;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
@@ -44,7 +44,7 @@ public class UserArticlesFragment extends BaseLazyFragment {
     private int currentCount;
     private boolean dataState = true;
 
-    private List<Article> articles;
+    private List<FavoriteArticle> favoriteArticles;
     private int count;
     private Handler handler;
 
@@ -118,8 +118,8 @@ public class UserArticlesFragment extends BaseLazyFragment {
             smartRefresh.setEnabled(true);
 
             //获取初始数据
-            articles = articleParser.parseArticle(pageNum);
-            currentCount += articles.size();
+            favoriteArticles = articleParser.parseArticle(pageNum);
+            currentCount += favoriteArticles.size();
             pageNum++;
 
             if (currentCount == count) {
@@ -129,7 +129,7 @@ public class UserArticlesFragment extends BaseLazyFragment {
 
             if (linearLayoutManager == null || userArticleAdapter == null) {
                 linearLayoutManager = new LinearLayoutManager(context);
-                userArticleAdapter = new UserArticleAdapter(articles, context);
+                userArticleAdapter = new UserArticleAdapter(favoriteArticles, context);
             }
 
             initAttr();
@@ -171,7 +171,7 @@ public class UserArticlesFragment extends BaseLazyFragment {
                                 getArticles();
 
                                 //添加新数据
-                                userArticleAdapter.append(articles);
+                                userArticleAdapter.append(favoriteArticles);
                             }
                         }, 1000);
                     } else {
@@ -192,8 +192,8 @@ public class UserArticlesFragment extends BaseLazyFragment {
      * 获取下一页数据
      */
     private void getArticles() {
-        articles = articleParser.parseArticle(pageNum);
-        currentCount += articles.size();
+        favoriteArticles = articleParser.parseArticle(pageNum);
+        currentCount += favoriteArticles.size();
 
         //如果第一次获取的条目数小于30则设置dataState
         if (currentCount == count) {

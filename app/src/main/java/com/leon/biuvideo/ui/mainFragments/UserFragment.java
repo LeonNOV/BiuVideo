@@ -373,9 +373,9 @@ public class UserFragment extends BaseSupportFragment {
             userTopFollow.setLeftValue("0");
             userTopName.setText(R.string.no_login);
 
-            userCoinLoadingRecyclerView.setStatus(LoadingRecyclerView.NO_DATA);
-            userBangumiLoadingRecyclerView.setStatus(LoadingRecyclerView.NO_DATA);
-            userFavoriteLoadingRecyclerView.setStatus(LoadingRecyclerView.NO_DATA);
+            userCoinLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
+            userBangumiLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
+            userFavoriteLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
 
             userCoinLoadingRecyclerView.recyclerView.removeAllViews();
             userBangumiLoadingRecyclerView.recyclerView.removeAllViews();
@@ -402,9 +402,9 @@ public class UserFragment extends BaseSupportFragment {
         public void setData(UserInfo userInfo) {
             // 如果未登录，则不设置数据
             if (PreferenceUtils.getLoginStatus()) {
-                userFavoriteLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING);
-                userBangumiLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING);
-                userCoinLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING);
+                userFavoriteLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+                userBangumiLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+                userCoinLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
                 userVipMark.setVisibility(userInfo.isVip ? View.VISIBLE : View.GONE);
                 userTopName.setText(userInfo.userName);
@@ -438,9 +438,9 @@ public class UserFragment extends BaseSupportFragment {
                 userAccountInfExProgress.setMax(userInfo.totalExp);
                 userAccountInfExProgress.setProgress(userInfo.currentExp,true);
 
-                userFavoriteLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
-                userBangumiLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
-                userCoinLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
+                userFavoriteLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+                userBangumiLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+                userCoinLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
             }
         }
 

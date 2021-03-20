@@ -1,4 +1,4 @@
-package com.leon.biuvideo.adapters.home;
+package com.leon.biuvideo.adapters.homeAdapters.favoriteAdapters;
 
 import android.content.Context;
 import android.view.View;
@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
-import com.leon.biuvideo.beans.orderBeans.FavoriteVideoFolder;
+import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteVideoFolder;
 
 import java.util.List;
 

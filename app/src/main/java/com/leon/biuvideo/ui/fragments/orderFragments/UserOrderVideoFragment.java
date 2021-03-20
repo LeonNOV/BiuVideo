@@ -6,9 +6,9 @@ import android.widget.LinearLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.userOrderAdapters.FavoriteVideoFolderDetailAdapter;
-import com.leon.biuvideo.beans.orderBeans.FavoriteVideoFolder;
-import com.leon.biuvideo.beans.orderBeans.FavoriteVideoFolderDetail;
+import com.leon.biuvideo.adapters.homeAdapters.favoriteAdapters.FavoriteVideoFolderDetailAdapter;
+import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteVideoFolder;
+import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteVideoFolderDetail;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.ValueUtils;

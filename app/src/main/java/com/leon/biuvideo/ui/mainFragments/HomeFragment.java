@@ -15,7 +15,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.home.RecommendAdapter;
+import com.leon.biuvideo.adapters.homeAdapters.RecommendAdapter;
 import com.leon.biuvideo.beans.Weather;
 import com.leon.biuvideo.beans.homeBeans.Recommend;
 import com.leon.biuvideo.beans.homeBeans.WatchLater;
@@ -347,7 +347,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                     }
                     break;
                 case Actions.REFRESH_RECOMMEND_STYLE:
-                    homeRecommendLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING);
+                    homeRecommendLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
                     // 刷新推荐试图样式
                     int recommendColumns = intent.getIntExtra("recommendColumns", 2);
@@ -356,7 +356,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                     homeRecommendLoadingRecyclerView.setRecyclerViewLayoutManager(new GridLayoutManager(context, recommendColumns));
 
                     // 设置状态为已完成加载数据
-                    homeRecommendLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
+                    homeRecommendLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
                     break;
                 default:
                     break;

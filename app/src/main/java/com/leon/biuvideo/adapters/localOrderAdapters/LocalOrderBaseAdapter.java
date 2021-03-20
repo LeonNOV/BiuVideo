@@ -11,7 +11,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
-import com.leon.biuvideo.beans.articleBeans.Article;
+import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteArticle;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
 import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
 import com.leon.biuvideo.ui.activitys.ArticleActivity;
@@ -50,7 +50,7 @@ public class LocalOrderBaseAdapter extends BaseAdapter<LocalOrder> {
             case BANGUMI:
                 return R.layout.order_item;
             case ARTICLE:
-                return R.layout.user_data_article_item;
+                return R.layout.favorite_article_item;
             case AUDIO:
                 return R.layout.play_list_music_item;
             default:
@@ -112,7 +112,7 @@ public class LocalOrderBaseAdapter extends BaseAdapter<LocalOrder> {
                         });
                 break;
             case ARTICLE:
-                holder
+                /*holder
                         .setText(R.id.user_article_item_title, jsonObject.getString("title"))
                         .setText(R.id.user_article_item_desc, jsonObject.getString("summary"))
                         .setImage(R.id.user_article_item_cover, jsonObject.getString("cover"), ImagePixelSize.COVER)
@@ -125,30 +125,30 @@ public class LocalOrderBaseAdapter extends BaseAdapter<LocalOrder> {
                                     return;
                                 }
 
-                                Article article = new Article();
-                                article.mid = Long.parseLong(localOrder.subId);
-                                article.face = jsonObject.getString("face");
-                                article.articleId = Long.parseLong(localOrder.mainId);
-                                article.title = jsonObject.getString("title");
-                                article.summary = jsonObject.getString("summary");
-                                article.author = jsonObject.getString("author");
-                                article.coverUrl = jsonObject.getString("cover");
-                                article.category = jsonObject.getString("category");
-                                article.ctime = jsonObject.getLongValue("ctime");
-                                article.favoriteTime = jsonObject.getLongValue("favoriteTime");
-                                article.view = jsonObject.getIntValue("view");
-                                article.like = jsonObject.getIntValue("like");
-                                article.reply = jsonObject.getIntValue("reply");
+                                FavoriteArticle favoriteArticle = new FavoriteArticle();
+                                favoriteArticle.mid = Long.parseLong(localOrder.subId);
+                                favoriteArticle.face = jsonObject.getString("face");
+                                favoriteArticle.articleId = Long.parseLong(localOrder.mainId);
+                                favoriteArticle.title = jsonObject.getString("title");
+                                favoriteArticle.summary = jsonObject.getString("summary");
+                                favoriteArticle.author = jsonObject.getString("author");
+                                favoriteArticle.coverUrl = jsonObject.getString("cover");
+                                favoriteArticle.category = jsonObject.getString("category");
+                                favoriteArticle.ctime = jsonObject.getLongValue("ctime");
+                                favoriteArticle.favoriteTime = jsonObject.getLongValue("favoriteTime");
+                                favoriteArticle.view = jsonObject.getIntValue("view");
+                                favoriteArticle.like = jsonObject.getIntValue("like");
+                                favoriteArticle.reply = jsonObject.getIntValue("reply");
 
                                 Intent intent = new Intent(context, ArticleActivity.class);
                                 Bundle bundle = new Bundle();
-                                bundle.putSerializable("article", article);
+                                bundle.putSerializable("favoriteArticle", favoriteArticle);
                                 intent.putExtras(bundle);
 
                                 context.startActivity(intent);
                             }
                         });
-                break;
+                break;*/
             case AUDIO:
                 holder
                         .setText(R.id.play_list_music_textView_serial, String.valueOf(position + 1))

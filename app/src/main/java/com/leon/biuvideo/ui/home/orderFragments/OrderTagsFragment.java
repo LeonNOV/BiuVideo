@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.home.TagAdapter;
+import com.leon.biuvideo.adapters.homeAdapters.TagAdapter;
 import com.leon.biuvideo.beans.orderBeans.Tag;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
@@ -41,7 +41,7 @@ public class OrderTagsFragment extends BaseSupportFragment {
                     orderTagsLoadingRecyclerView.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
                     orderTagsLoadingRecyclerView.setRecyclerViewAdapter(new TagAdapter(tagList, context));
 
-                    orderTagsLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
+                    orderTagsLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
                 }
             }
         });
@@ -51,7 +51,7 @@ public class OrderTagsFragment extends BaseSupportFragment {
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
 
-        orderTagsLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING);
+        orderTagsLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override

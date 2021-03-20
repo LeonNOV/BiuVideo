@@ -14,6 +14,7 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 
 import me.yokeyword.fragmentation.SupportFragment;
@@ -58,8 +59,9 @@ public abstract class BaseSupportFragment extends SupportFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.view = inflater.inflate(setLayout(), container, false);
         this.context = getContext();
+        this.view = inflater.inflate(setLayout(), container, false);
+        this.view.setBackgroundColor(context.getColor(R.color.bg));
         this.bindingUtils = new BindingUtils(view, context);
 
         receiveDataHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {

@@ -1,4 +1,4 @@
-package com.leon.biuvideo.adapters.home;
+package com.leon.biuvideo.adapters.homeAdapters;
 
 import android.content.Context;
 import android.view.View;

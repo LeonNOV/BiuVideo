@@ -63,7 +63,7 @@ public class OrderSeriesFragment extends BaseSupportFragmentWithSrr<RvTestBean> 
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
 
-        view.setStatus(LoadingRecyclerView.LOADING);
+        view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
         List<RvTestBean> rvTestBeanList = new ArrayList<>();
 
@@ -79,6 +79,6 @@ public class OrderSeriesFragment extends BaseSupportFragmentWithSrr<RvTestBean> 
         }
 
         view.setRecyclerViewAdapter(new RvTestAdapter(rvTestBeanList, context));
-        view.setStatus(LoadingRecyclerView.LOADING_FINISH);
+        view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
     }
 }

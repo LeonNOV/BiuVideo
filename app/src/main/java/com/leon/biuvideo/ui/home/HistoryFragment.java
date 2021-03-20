@@ -5,7 +5,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.home.HistoryAdapter;
+import com.leon.biuvideo.adapters.homeAdapters.HistoryAdapter;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 

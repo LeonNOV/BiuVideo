@@ -5,6 +5,8 @@ import android.content.res.ColorStateList;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -110,6 +112,10 @@ public class LoadingRecyclerView extends FrameLayout {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         parentLayout.addView(recyclerView);
 
+        // 加载动画
+//        LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(context, R.anim.recycler_view_fall_down);
+//        recyclerView.setLayoutAnimation(animationController);
+
         LayoutParams layoutParams = (LayoutParams) recyclerView.getLayoutParams();
         layoutParams.width = LayoutParams.MATCH_PARENT;
         layoutParams.height = LayoutParams.MATCH_PARENT;
@@ -155,7 +161,7 @@ public class LoadingRecyclerView extends FrameLayout {
      *
      * @param status    NoData:{@value NO_DATA}, Loading:{@value LOADING}, LoadingFinish:{@value LOADING_FINISH}
      */
-    public void setStatus(@SRRStatus int status) {
+    public void setLoadingRecyclerViewStatus(@SRRStatus int status) {
         switch (status) {
             case NO_DATA:
                 setRecyclerViewVisibility(GONE);

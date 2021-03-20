@@ -17,6 +17,11 @@
 
 ## 📘开发日志
 
+### 2020/03/21
+- 完善了`FavoriteArticleFragment`
+- 现所有用到的`ViewPager`均已替换为`ViewPager2`
+  - 初始化`TabLayout`和`ViewPager2`可使用`ViewUtils.initTabLayoutAndViewPager2(TabLayout tabLayout, ViewPager2 viewPager2, String[] titles, int firstShowItemPosition)`进行初始化
+
 ### 2020/03/19
 - `FollowsFragment`和`FollowersFragment`的上拉加载数据功能已完成
   - **`UserFragment`的用户数据获取方式还需要进行更改**

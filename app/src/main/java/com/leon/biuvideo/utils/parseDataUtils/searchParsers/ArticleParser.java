@@ -1,10 +1,8 @@
 package com.leon.biuvideo.utils.parseDataUtils.searchParsers;
 
-import android.content.Context;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.articleBeans.Article;
+import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteArticle;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 import com.leon.biuvideo.values.SearchType;
@@ -35,7 +33,7 @@ public class ArticleParser {
      * @param sortType 排序方式
      * @return  返回专栏数据
      */
-    public List<Article> articleParse(String keyword, int pn, SortType sortType) {
+    public List<FavoriteArticle> articleParse(String keyword, int pn, SortType sortType) {
         Map<String, String> params = new HashMap<>();
         params.put("keyword", keyword);
         params.put("search_type", SearchType.ARTICLE.value);
@@ -45,12 +43,12 @@ public class ArticleParser {
         JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.search, Headers.of(requestHeader), params);
         JSONObject data = responseObject.getJSONObject("data");
 
-        List<Article> articles = new ArrayList<>();
+        List<FavoriteArticle> favoriteArticles = new ArrayList<>();
         if (data != null) {
-            articles = parseData(data);
+            favoriteArticles = parseData(data);
         }
 
-        return articles;
+        return favoriteArticles;
     }
 
     /**
@@ -59,49 +57,49 @@ public class ArticleParser {
      * @param data  JSONObject对象
      * @return  返回解析结果
      */
-    private List<Article> parseData(JSONObject data) {
+    private List<FavoriteArticle> parseData(JSONObject data) {
         JSONArray result = data.getJSONArray("result");
 
-        List<Article> articles;
+        List<FavoriteArticle> favoriteArticles;
         if (result.size() != 0) {
-            articles = new ArrayList<>();
+            favoriteArticles = new ArrayList<>();
 
             for (Object o : result) {
-                Article article = new Article();
+                FavoriteArticle favoriteArticle = new FavoriteArticle();
                 JSONObject jsonObject = (JSONObject) o;
 
                 //获取上传时间
-                article.ctime = jsonObject.getLongValue("pub_time");
+                favoriteArticle.ctime = jsonObject.getLongValue("pub_time");
 
                 //获取点赞数
-                article.like = jsonObject.getIntValue("like");
+                favoriteArticle.like = jsonObject.getIntValue("like");
 
                 //获取标题
-                article.title = jsonObject.getString("title").replaceAll("<em class=\"keyword\">", "").replaceAll("</em>", "");
+                favoriteArticle.title = jsonObject.getString("title").replaceAll("<em class=\"keyword\">", "").replaceAll("</em>", "");
 
                 //获取封面url
-                article.coverUrl = "http://" + jsonObject.getJSONArray("image_urls").getString(0);
+                favoriteArticle.coverUrl = "http://" + jsonObject.getJSONArray("image_urls").getString(0);
 
                 //获取阅读数
-                article.view = jsonObject.getIntValue("view");
+                favoriteArticle.view = jsonObject.getIntValue("view");
 
                 //获取评论数
-                article.reply = jsonObject.getIntValue("reply");
+                favoriteArticle.reply = jsonObject.getIntValue("reply");
 
                 //获取文章摘要
-                article.summary = jsonObject.getString("desc");
+                favoriteArticle.summary = jsonObject.getString("desc");
 
                 //获取文章ID
-                article.articleId = jsonObject.getLongValue("id");
+                favoriteArticle.articleId = jsonObject.getLongValue("id");
 
                 //获取文章分类标签
-                article.category = jsonObject.getString("category_name");
+                favoriteArticle.category = jsonObject.getString("category_name");
 
-                articles.add(article);
+                favoriteArticles.add(favoriteArticle);
             }
 
             //获取详细信息
-            List<Article> articlesWhitDetails = gteArticleDetail(articles);
+            List<FavoriteArticle> articlesWhitDetails = gteArticleDetail(favoriteArticles);
 
             return articlesWhitDetails;
         }
@@ -112,17 +110,17 @@ public class ArticleParser {
     /**
      * 将Article详细信息添加至articles中
      *
-     * @param articles  无face、name、mid的article集合
+     * @param favoriteArticles  无face、name、mid的article集合
      * @return  返回含有face、name、mid的article结合
      */
-    private List<Article> gteArticleDetail(List<Article> articles) {
+    private List<FavoriteArticle> gteArticleDetail(List<FavoriteArticle> favoriteArticles) {
 
         //获取articleID
         StringBuilder ids = new StringBuilder();
         String separator = ",";
 
-        for (Article article : articles) {
-            ids.append(article.articleId).append(separator);
+        for (FavoriteArticle favoriteArticle : favoriteArticles) {
+            ids.append(favoriteArticle.articleId).append(separator);
         }
 
         int length = ids.length();
@@ -146,23 +144,23 @@ public class ArticleParser {
         }
 
         //将对应详细信息放入对应Article对象中
-        for (Article article : articles) {
-            JSONObject articleObject = (JSONObject) details.get(String.valueOf(article.articleId));
+        for (FavoriteArticle favoriteArticle : favoriteArticles) {
+            JSONObject articleObject = (JSONObject) details.get(String.valueOf(favoriteArticle.articleId));
 
             //获取author对象
             JSONObject authorObject = articleObject.getJSONObject("author");
 
             //获取face
-            article.face = authorObject.getString("face");
+            favoriteArticle.face = authorObject.getString("face");
 
             //获取name
-            article.author = authorObject.getString("name");
+            favoriteArticle.author = authorObject.getString("name");
 
             //获取mid
-            article.mid = authorObject.getLongValue("mid");
+            favoriteArticle.mid = authorObject.getLongValue("mid");
         }
 
-        return articles;
+        return favoriteArticles;
     }
 
     /**

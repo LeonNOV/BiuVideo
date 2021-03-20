@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.beans.articleBeans.Article;
+import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteArticle;
 import com.leon.biuvideo.beans.orderBeans.LocalOrder;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.views.RoundPopupWindow;
@@ -65,7 +65,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
             article_textView_like,
             article_textView_replay;
 
-    private Article article;
+    private FavoriteArticle favoriteArticle;
     private LocalOrdersDatabaseUtils localOrdersDatabaseUtils;
 
     private boolean isHaveLocalOrder = false;
@@ -128,7 +128,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
             public void run() {
                 Intent intent = getIntent();
                 Bundle extras = intent.getExtras();
-                article = (Article) extras.getSerializable("article");
+                favoriteArticle = (FavoriteArticle) extras.getSerializable("favoriteArticle");
                 boolean isHistory = extras.getBoolean("isHistory", false);
 
                 Message message = handler.obtainMessage();
@@ -162,38 +162,38 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
 
     private void initValue(boolean isHistory) {
         //设置头像
-        Glide.with(getApplicationContext()).load(article.face).into(article_imageView_face);
+        Glide.with(getApplicationContext()).load(favoriteArticle.face).into(article_imageView_face);
 
         //设置作者名称
-        article_textView_author.setText(article.author);
+        article_textView_author.setText(favoriteArticle.author);
 
         //设置标题
-        article_textView_title.setText(article.title);
+        article_textView_title.setText(favoriteArticle.title);
 
         if (isHistory) {
             article_textView_category.setVisibility(View.GONE);
             article_textView_ctime.setVisibility(View.GONE);
         } else {
             //设置文章分类
-            article_textView_category.setText(article.category);
+            article_textView_category.setText(favoriteArticle.category);
 
             //设置创建时间
-            article_textView_ctime.setText(ValueUtils.generateTime(article.ctime, true, true, "-"));
+            article_textView_ctime.setText(ValueUtils.generateTime(favoriteArticle.ctime, true, true, "-"));
         }
 
         //设置观看量
-        String viewStr = ValueUtils.generateCN(article.view) + "次阅读";
+        String viewStr = ValueUtils.generateCN(favoriteArticle.view) + "次阅读";
         article_textView_view.setText(viewStr);
 
         //设置点赞数
-        String likeStr = ValueUtils.generateCN(article.like) + "次点赞";
+        String likeStr = ValueUtils.generateCN(favoriteArticle.like) + "次点赞";
         article_textView_like.setText(likeStr);
 
         //设置评论数
-        String replayStr = ValueUtils.generateCN(article.reply) + "次评论";
+        String replayStr = ValueUtils.generateCN(favoriteArticle.reply) + "次评论";
         article_textView_replay.setText(replayStr);
 
-        String path = BiliBiliAPIs.articleWebPage + article.articleId;
+        String path = BiliBiliAPIs.articleWebPage + favoriteArticle.articleId;
 
         //获取文章页面
         String unencodedHtml = parseHTMLonPhone(path);
@@ -206,7 +206,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         article_webView.loadData(encodedHtml, "text/html", "base64");
 
         localOrdersDatabaseUtils = new LocalOrdersDatabaseUtils(getApplicationContext());
-        isHaveLocalOrder = localOrdersDatabaseUtils.queryLocalOrder(String.valueOf(article.articleId), null, localOrderType);
+        isHaveLocalOrder = localOrdersDatabaseUtils.queryLocalOrder(String.valueOf(favoriteArticle.articleId), null, localOrderType);
         Fuck.blue(isHaveLocalOrder + "");
     }
 
@@ -223,7 +223,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         Document document = Jsoup.parse(html);
 
         //获取文章主要部分
-        Elements articleHolder = document.getElementsByClass("article-holder");
+        Elements articleHolder = document.getElementsByClass("favoriteArticle-holder");
 
         //获取所有类名为img-box的内容(即所有figure标签)
         Elements figures = articleHolder.first().getElementsByTag("figure");
@@ -276,7 +276,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
             //添加头部图片
             webPage.append("<div class=\"head-container\">\n" +
                     "        <div class=\"banner-img-holder\">\n" +
-                    "           <img src=\"" + article.coverUrl + "\">" +
+                    "           <img src=\"" + favoriteArticle.coverUrl + "\">" +
                     "        </div>\n" +
                     "    </div>");
 
@@ -326,7 +326,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                 }
 
                 Intent intent = new Intent(this, UserActivity.class);
-                intent.putExtra("mid", article.mid);
+                intent.putExtra("mid", favoriteArticle.mid);
                 startActivity(intent);
 
                 break;
@@ -360,7 +360,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                                 //跳转到源网站
                                 Intent intentOriginUrl = new Intent();
                                 intentOriginUrl.setAction("android.intent.action.VIEW");
-                                Uri uri = Uri.parse(BiliBiliAPIs.articleWebPage + article.articleId);
+                                Uri uri = Uri.parse(BiliBiliAPIs.articleWebPage + favoriteArticle.articleId);
                                 intentOriginUrl.setData(uri);
                                 startActivity(intentOriginUrl);
 
@@ -373,7 +373,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                                 boolean operatingStatus;
 
                                 if (isHaveLocalOrder) {
-                                    operatingStatus = localOrdersDatabaseUtils.deleteLocalOrder(String.valueOf(article.articleId), null, localOrderType);
+                                    operatingStatus = localOrdersDatabaseUtils.deleteLocalOrder(String.valueOf(favoriteArticle.articleId), null, localOrderType);
                                     if (operatingStatus) {
                                         roundPopupWindow.setText(R.id.article_more_menu_favorite, "收藏该文章");
                                         SimpleSnackBar.make(v, R.string.remFavoriteSign, SimpleSnackBar.LENGTH_SHORT).show();
@@ -382,20 +382,20 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                                 } else {
                                     LocalOrder localOrder = new LocalOrder();
                                     Map<String, Object> map = new HashMap<>();
-                                    map.put("face", article.face);
-                                    map.put("title", article.title);
-                                    map.put("summary", article.summary);
-                                    map.put("author", article.author);
-                                    map.put("cover", article.coverUrl);
-                                    map.put("category", article.category);
-                                    map.put("ctime", article.ctime);
-                                    map.put("favoriteTime", article.favoriteTime);
-                                    map.put("view", article.view);
-                                    map.put("like", article.like);
-                                    map.put("reply", article.reply);
+                                    map.put("face", favoriteArticle.face);
+                                    map.put("title", favoriteArticle.title);
+                                    map.put("summary", favoriteArticle.summary);
+                                    map.put("author", favoriteArticle.author);
+                                    map.put("cover", favoriteArticle.coverUrl);
+                                    map.put("category", favoriteArticle.category);
+                                    map.put("ctime", favoriteArticle.ctime);
+                                    map.put("favoriteTime", favoriteArticle.favoriteTime);
+                                    map.put("view", favoriteArticle.view);
+                                    map.put("like", favoriteArticle.like);
+                                    map.put("reply", favoriteArticle.reply);
                                     localOrder.jsonObject = new JSONObject(map);
-                                    localOrder.mainId = String.valueOf(article.articleId);
-                                    localOrder.subId = String.valueOf(article.mid);
+                                    localOrder.mainId = String.valueOf(favoriteArticle.articleId);
+                                    localOrder.subId = String.valueOf(favoriteArticle.mid);
                                     localOrder.orderType = localOrderType;
                                     localOrder.addTime = System.currentTimeMillis();
 

@@ -1,4 +1,4 @@
-package com.leon.biuvideo.ui.home.favoriteFragments;
+package com.leon.biuvideo.ui.home.favoriteFragments.favoriteVideo;
 
 import android.os.Message;
 import android.widget.ImageView;
@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.userOrderAdapters.FavoriteVideoFolderDetailAdapter;
-import com.leon.biuvideo.beans.orderBeans.FavoriteVideoFolderDetail;
+import com.leon.biuvideo.adapters.homeAdapters.favoriteAdapters.FavoriteVideoFolderDetailAdapter;
+import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteVideoFolderDetail;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
@@ -69,7 +69,7 @@ public class FavoriteVideoFolderDetailFragment extends BaseSupportFragment {
         });
 
         SmartRefreshRecyclerView<FavoriteVideoFolderDetail.Media> favoritesVideoFolderDetailSmartRefreshRecyclerView = findView(R.id.favorites_video_folder_detail_smartRefreshRecyclerView);
-        favoritesVideoFolderDetailSmartRefreshRecyclerView.setStatus(LoadingRecyclerView.LOADING);
+        favoritesVideoFolderDetailSmartRefreshRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
         favoritesVideoFolderDetailSmartRefreshRecyclerView.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
@@ -106,13 +106,13 @@ public class FavoriteVideoFolderDetailFragment extends BaseSupportFragment {
                         favoritesVideoFolderDetailCount.setText(favoriteVideoFolderDetail.count + "个内容");
 
                         if (favoriteVideoFolderDetail.medias.size() == 0) {
-                            favoritesVideoFolderDetailSmartRefreshRecyclerView.setStatus(LoadingRecyclerView.NO_DATA);
+                            favoritesVideoFolderDetailSmartRefreshRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
                             favoritesVideoFolderDetailSmartRefreshRecyclerView.setEnableLoadMore(false);
                         } else {
                             favoriteVideoFolderDetailAdapter.append(favoriteVideoFolderDetail.medias);
-                            favoritesVideoFolderDetailSmartRefreshRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
+                            favoritesVideoFolderDetailSmartRefreshRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
                             if (!favoriteVideoFolderDetailParser.dataStatus) {
-                                favoritesVideoFolderDetailSmartRefreshRecyclerView.setLoadStatus(SmartRefreshRecyclerView.NO_DATA);
+                                favoritesVideoFolderDetailSmartRefreshRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                             }
                         }
 
@@ -120,9 +120,9 @@ public class FavoriteVideoFolderDetailFragment extends BaseSupportFragment {
                     case 1:
                         if (favoriteVideoFolderDetail.medias.size() > 0) {
                             favoriteVideoFolderDetailAdapter.append(favoriteVideoFolderDetail.medias);
-                            favoritesVideoFolderDetailSmartRefreshRecyclerView.setLoadStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
+                            favoritesVideoFolderDetailSmartRefreshRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
                         } else {
-                            favoritesVideoFolderDetailSmartRefreshRecyclerView.setLoadStatus(SmartRefreshRecyclerView.NO_DATA);
+                            favoritesVideoFolderDetailSmartRefreshRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                         }
                         break;
                     default:

@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.userAdapters.UserArticleAdapter;
-import com.leon.biuvideo.beans.articleBeans.Article;
+import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteArticle;
 import com.leon.biuvideo.ui.fragments.baseFragment.BaseLazyFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
@@ -42,7 +42,7 @@ public class ArticleResultFragment extends BaseLazyFragment {
     private int currentCount;
 
     private ArticleParser articleParser;
-    private List<Article> articleList;
+    private List<FavoriteArticle> favoriteArticleList;
 
     private UserArticleAdapter userArticleAdapter;
     private LinearLayoutManager linearLayoutManager;
@@ -122,18 +122,18 @@ public class ArticleResultFragment extends BaseLazyFragment {
             search_result_recyclerView.setVisibility(View.VISIBLE);
             search_result_smartRefresh.setEnabled(true);
 
-            articleList = articleParser.articleParse(keyword, pageNum, SortType.DEFAULT);
-            currentCount += articleList.size();
+            favoriteArticleList = articleParser.articleParse(keyword, pageNum, SortType.DEFAULT);
+            currentCount += favoriteArticleList.size();
             pageNum++;
 
-            if (count == articleList.size()) {
+            if (count == favoriteArticleList.size()) {
                 dataState = false;
 
                 search_result_smartRefresh.setEnabled(false);
             }
 
             linearLayoutManager = new LinearLayoutManager(context);
-            userArticleAdapter = new UserArticleAdapter(articleList, context);
+            userArticleAdapter = new UserArticleAdapter(favoriteArticleList, context);
 
             initAttr();
         }
@@ -173,7 +173,7 @@ public class ArticleResultFragment extends BaseLazyFragment {
                             getArticles();
 
                             //添加新数据
-                            userArticleAdapter.append(articleList);
+                            userArticleAdapter.append(favoriteArticleList);
                         }
                     }, 1000);
                 } else {
@@ -193,10 +193,10 @@ public class ArticleResultFragment extends BaseLazyFragment {
      * 获取下一页数据
      */
     private void getArticles() {
-        articleList = articleParser.articleParse(keyword, pageNum, SortType.DEFAULT);
+        favoriteArticleList = articleParser.articleParse(keyword, pageNum, SortType.DEFAULT);
 
         //记录获取的总数
-        currentCount += articleList.size();
+        currentCount += favoriteArticleList.size();
 
         //判断是否已获取完所有的数据
         if (currentCount == count) {
@@ -224,7 +224,7 @@ public class ArticleResultFragment extends BaseLazyFragment {
         this.smart_refresh_layout_fragment_linearLayout.setVisibility(View.VISIBLE);
         this.search_result_no_data.setVisibility(View.GONE);
 
-        if (articleList != null) {
+        if (favoriteArticleList != null) {
             userArticleAdapter.removeAll();
         }
     }

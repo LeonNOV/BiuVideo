@@ -3,15 +3,15 @@ package com.leon.biuvideo.ui.home;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.TabLayoutViewPagerAdapter;
+import com.leon.biuvideo.adapters.ViewPager2Adapter;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.home.favoriteFragments.FavoriteAlbumFragment;
 import com.leon.biuvideo.ui.home.favoriteFragments.FavoriteArticleFragment;
-import com.leon.biuvideo.ui.home.favoriteFragments.FavoriteVideoFolderFragment;
+import com.leon.biuvideo.ui.home.favoriteFragments.favoriteVideo.FavoriteVideoFolderFragment;
 import com.leon.biuvideo.ui.home.favoriteFragments.FavoriteWatchLaterFragment;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.ViewUtils;
@@ -50,7 +50,7 @@ public class FavoritesFragment extends BaseSupportFragment {
             }
         });
         TabLayout favoritesFragmentTabLayout = view.findViewById(R.id.favorites_fragment_tabLayout);
-        ViewPager favoritesFragmentViewPager = view.findViewById(R.id.favorites_fragment_viewPager);
+        ViewPager2 favoritesFragmentViewPager = view.findViewById(R.id.favorites_fragment_viewPager);
 
         List<Fragment> viewPagerFragments = new ArrayList<>();
         viewPagerFragments.add(new FavoriteVideoFolderFragment());
@@ -59,25 +59,9 @@ public class FavoritesFragment extends BaseSupportFragment {
         viewPagerFragments.add(new FavoriteWatchLaterFragment());
 
         String[] titles = {"视频收藏夹", "专栏收藏夹", "相簿收藏夹", "稍后观看"};
-        favoritesFragmentViewPager.setAdapter(new TabLayoutViewPagerAdapter(getChildFragmentManager(), titles, viewPagerFragments));
-        favoritesFragmentViewPager.setCurrentItem(0);
-        favoritesFragmentViewPager.setOffscreenPageLimit(4);
-        favoritesFragmentTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                ViewUtils.changeTabTitle(tab, true);
-            }
+        favoritesFragmentViewPager.setAdapter(new ViewPager2Adapter(getActivity(), viewPagerFragments));
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                ViewUtils.changeTabTitle(tab, false);
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-        favoritesFragmentTabLayout.setupWithViewPager(favoritesFragmentViewPager, false);
+        // 初始化ViewPager2和TabLayout
+        ViewUtils.initTabLayoutAndViewPager2(favoritesFragmentTabLayout, favoritesFragmentViewPager, titles, 0);
     }
 }

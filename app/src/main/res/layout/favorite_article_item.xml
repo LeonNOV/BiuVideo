@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:selectableItemBackground"
-    android:orientation="vertical"
-    android:padding="10dp">
+    android:layout_marginBottom="@dimen/itemMarginBottom"
+    android:padding="@dimen/cardPadding"
+    android:background="@drawable/ripple_round_corners6dp_bg"
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/user_article_item_title"
+        android:id="@+id/favorite_article_item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="end"
@@ -17,17 +19,26 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <ImageView
-        android:id="@+id/user_article_item_cover"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="130dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher_background" />
+        app:cardCornerRadius="@dimen/corner_6dp"
+        app:cardMaxElevation="0dp">
+
+        <ImageView
+            android:id="@+id/favorite_article_item_cover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/description"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_background" />
+
+    </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/user_article_item_desc"
+        android:id="@+id/favorite_article_item_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="end"
@@ -36,13 +47,12 @@
         android:textColor="@color/black"
         android:textSize="17sp" />
 
-    <TextView
-        android:id="@+id/user_article_item_addTime"
+    <com.leon.biuvideo.ui.views.TagView
+        android:id="@+id/favorite_article_item_addTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="收藏于 2020/12/15 19:41"
-        android:textColor="@color/gray"
-        android:textSize="13sp" />
+        app:leftValue="收藏于"
+        app:rightValue="2020/12/15 19:41" />
 
 </LinearLayout>

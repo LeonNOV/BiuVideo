@@ -1,4 +1,4 @@
-package com.leon.biuvideo.beans.orderBeans;
+package com.leon.biuvideo.beans.homeBeans.favoriteBeans;
 
 /**
  * @Author Leon

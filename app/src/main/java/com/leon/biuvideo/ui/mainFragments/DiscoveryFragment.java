@@ -43,7 +43,7 @@ public class DiscoveryFragment extends BaseSupportFragment implements View.OnCli
         discoverySearchLinearLayout.setOnClickListener(this);
 
         discoveryLoadingRecyclerView = view.findViewById(R.id.discovery_loadingRecyclerView);
-        discoveryLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING);
+        discoveryLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
         handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
             @Override
@@ -52,7 +52,7 @@ public class DiscoveryFragment extends BaseSupportFragment implements View.OnCli
                 discoveryLoadingRecyclerView.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
                 discoveryLoadingRecyclerView.setRecyclerViewAdapter(new DiscoverHotSearchAdapter(hotSearchList, context));
 
-                discoveryLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
+                discoveryLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
 
                 return true;
             }

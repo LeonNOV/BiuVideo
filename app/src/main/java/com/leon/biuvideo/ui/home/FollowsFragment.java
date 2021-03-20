@@ -1,12 +1,14 @@
 package com.leon.biuvideo.ui.home;
 
+import android.os.Bundle;
 import android.os.Message;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.home.FollowsAdapter;
+import com.leon.biuvideo.adapters.homeAdapters.FollowsAdapter;
 import com.leon.biuvideo.beans.userBeans.Follow;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
@@ -29,6 +31,7 @@ public class FollowsFragment extends BaseSupportFragment {
     private final List<Follow> followList = new ArrayList<>();
     private FollowsAdapter followsAdapter;
     private FollowsParser followsParser;
+    private SmartRefreshRecyclerView<Follow> followsSmartRefreshLoadingRecyclerView;
 
     public static FollowsFragment getInstance() {
         return new FollowsFragment();
@@ -54,7 +57,7 @@ public class FollowsFragment extends BaseSupportFragment {
             }
         });
 
-        SmartRefreshRecyclerView<Follow> followsSmartRefreshLoadingRecyclerView = findView(R.id.follows_smartRefreshLoadingRecyclerView);
+        followsSmartRefreshLoadingRecyclerView = findView(R.id.follows_smartRefreshLoadingRecyclerView);
         followsAdapter = new FollowsAdapter(followList, context);
         followsAdapter.setHasStableIds(true);
         followsSmartRefreshLoadingRecyclerView.setRecyclerViewAdapter(followsAdapter);
@@ -67,11 +70,6 @@ public class FollowsFragment extends BaseSupportFragment {
             }
         });
 
-        followsSmartRefreshLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING);
-
-        // 获取初始数据
-        getFollows(0);
-
         setOnLoadListener(new OnLoadListener() {
             @Override
             public void onLoad(Message msg) {
@@ -80,13 +78,13 @@ public class FollowsFragment extends BaseSupportFragment {
                 switch (msg.what) {
                     case 0:
                         if (follows.size() == 0) {
-                            followsSmartRefreshLoadingRecyclerView.setStatus(LoadingRecyclerView.NO_DATA);
-                            followsSmartRefreshLoadingRecyclerView.setEnableLoadMore(false);
+                            followsSmartRefreshLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
+                            followsSmartRefreshLoadingRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                         } else {
                             followsAdapter.append(follows);
-                            followsSmartRefreshLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
+                            followsSmartRefreshLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
                             if (!followsParser.dataStatus) {
-                                followsSmartRefreshLoadingRecyclerView.setLoadStatus(SmartRefreshRecyclerView.NO_DATA);
+                                followsSmartRefreshLoadingRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                             }
                         }
                         break;
@@ -94,9 +92,9 @@ public class FollowsFragment extends BaseSupportFragment {
 
                         if (follows.size() > 0) {
                             followsAdapter.append(follows);
-                            followsSmartRefreshLoadingRecyclerView.setLoadStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
+                            followsSmartRefreshLoadingRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
                         } else {
-                            followsSmartRefreshLoadingRecyclerView.setLoadStatus(SmartRefreshRecyclerView.NO_DATA);
+                            followsSmartRefreshLoadingRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                         }
 
                         break;
@@ -105,6 +103,15 @@ public class FollowsFragment extends BaseSupportFragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
+        super.onLazyInitView(savedInstanceState);
+        followsSmartRefreshLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+
+        // 获取初始数据
+        getFollows(0);
     }
 
     /**

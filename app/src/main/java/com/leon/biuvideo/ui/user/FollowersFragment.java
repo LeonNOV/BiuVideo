@@ -67,7 +67,7 @@ public class FollowersFragment extends BaseSupportFragment {
             }
         });
 
-        followerSmartRefreshRecyclerView.setStatus(LoadingRecyclerView.LOADING);
+        followerSmartRefreshRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
         // 第一次加载数据
         getFollowers(0);
@@ -81,22 +81,22 @@ public class FollowersFragment extends BaseSupportFragment {
                 switch (msg.what) {
                     case 0:
                         if (followers.size() == 0) {
-                            followerSmartRefreshRecyclerView.setStatus(LoadingRecyclerView.NO_DATA);
+                            followerSmartRefreshRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
                             followerSmartRefreshRecyclerView.setEnableLoadMore(false);
                         } else {
                             followerAdapter.append(followers);
-                            followerSmartRefreshRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
+                            followerSmartRefreshRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
                             if (!followersParser.dataStatus) {
-                                followerSmartRefreshRecyclerView.setLoadStatus(SmartRefreshRecyclerView.NO_DATA);
+                                followerSmartRefreshRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                             }
                         }
                         break;
                     case 1:
                         if (followers.size() > 0) {
                             followerAdapter.append(followers);
-                            followerSmartRefreshRecyclerView.setLoadStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
+                            followerSmartRefreshRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
                         } else {
-                            followerSmartRefreshRecyclerView.setLoadStatus(SmartRefreshRecyclerView.NO_DATA);
+                            followerSmartRefreshRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                         }
 
                         break;

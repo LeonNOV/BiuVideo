@@ -74,7 +74,7 @@ public class OrderBangumiFragment extends BaseSupportFragment {
                 if (msg.what == 0) {
                     // 设置初始数据
 //                    orderBangumiSmartRefreshRecyclerView.setRecyclerViewAdapter();
-                    orderBangumiSmartRefreshRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
+                    orderBangumiSmartRefreshRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
                 }
             }
         });
@@ -96,6 +96,6 @@ public class OrderBangumiFragment extends BaseSupportFragment {
 //            }
 //        });
 
-        orderBangumiSmartRefreshRecyclerView.setStatus(LoadingRecyclerView.LOADING);
+        orderBangumiSmartRefreshRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
     }
 }

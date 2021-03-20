@@ -296,7 +296,7 @@ public class BiliBiliAPIs {
      *      ps：条目数，默认为16条，可选
      *
      */
-    public static String userArticle = "https://api.bilibili.com/x/article/favorites/list/all";
+    public static final String USER_ARTICLE = "https://api.bilibili.com/x/article/favorites/list/all";
 
     /**
      * 获取用户所有收藏夹<br/>

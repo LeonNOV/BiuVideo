@@ -114,8 +114,8 @@ public class SmartRefreshRecyclerView<T> extends SmartRefreshLayout {
         this.loadingRecyclerView.recyclerView.setLayoutManager(layoutManager);
     }
 
-    public void setStatus(@LoadingRecyclerView.SRRStatus int status) {
-        loadingRecyclerView.setStatus(status);
+    public void setLoadingRecyclerViewStatus(@LoadingRecyclerView.SRRStatus int status) {
+        loadingRecyclerView.setLoadingRecyclerViewStatus(status);
     }
 
     /**
@@ -129,7 +129,7 @@ public class SmartRefreshRecyclerView<T> extends SmartRefreshLayout {
         }
     }
 
-    public void setLoadStatus(int status) {
+    public void setSmartRefreshStatus(int status) {
         if (NO_DATA == status) {
             setEnableLoadMore(false);
         } else if (LOADING_FINISHING == status) {

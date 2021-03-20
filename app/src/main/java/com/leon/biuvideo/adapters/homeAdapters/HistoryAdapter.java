@@ -1,4 +1,4 @@
-package com.leon.biuvideo.adapters.home;
+package com.leon.biuvideo.adapters.homeAdapters;
 
 import android.content.Context;
 import android.view.View;
@@ -120,7 +120,7 @@ public class HistoryAdapter extends BaseAdapter<String[]> {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, "Position:" + position + "----Type:Article", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Position:" + position + "----Type:FavoriteArticle", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setText(R.id.history_item_article_type, strings[0])

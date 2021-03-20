@@ -1,11 +1,13 @@
-package com.leon.biuvideo.beans.articleBeans;
+package com.leon.biuvideo.beans.homeBeans.favoriteBeans;
 
 import java.io.Serializable;
 
 /**
- * 专栏相关数据
+ * @Author Leon
+ * @Time 2020/11/8
+ * @Desc 收藏的专栏数据
  */
-public class Article implements Serializable {
+public class FavoriteArticle implements Serializable {
     public long mid;
     public String face;
     public long articleId;
@@ -15,8 +17,16 @@ public class Article implements Serializable {
     public String coverUrl;
 
     public String category;
-    public long ctime;//秒
-    public long favoriteTime;//收藏时间（秒）
+
+    /**
+     * 秒
+     */
+    public long ctime;
+
+    /**
+     * 收藏时间（秒）
+     */
+    public long favoriteTime;
 
 //    public int coin;
     public int view;

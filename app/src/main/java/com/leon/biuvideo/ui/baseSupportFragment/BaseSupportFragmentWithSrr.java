@@ -8,13 +8,16 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -44,6 +47,11 @@ public abstract class BaseSupportFragmentWithSrr<T> extends SupportFragment {
 
     private OnLoadListener onLoadListener;
 
+    /**
+     * 在主线程中处理初始数据/新获取到的数据
+     *
+     * @param onLoadListener    {@link OnLoadListener}
+     */
     public void setOnLoadListener(OnLoadListener onLoadListener) {
         this.onLoadListener = onLoadListener;
     }
@@ -53,6 +61,9 @@ public abstract class BaseSupportFragmentWithSrr<T> extends SupportFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.context = getContext();
         this.view = new SmartRefreshRecyclerView<>(context);
+        int padding = context.getResources().getDimensionPixelOffset(R.dimen.recyclerViewPadding);
+        this.view.setBackgroundColor(context.getColor(R.color.bg));
+        this.view.setPadding(padding, padding, padding, padding);
         this.bindingUtils = new BindingUtils(view, context);
 
         receiveDataHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
@@ -66,6 +77,8 @@ public abstract class BaseSupportFragmentWithSrr<T> extends SupportFragment {
             }
         });
 
+        initView();
+
         return view;
     }
 
@@ -73,15 +86,6 @@ public abstract class BaseSupportFragmentWithSrr<T> extends SupportFragment {
      * 初始化控件
      */
     protected abstract void initView();
-
-    /**
-     * 返回方法，用于fragment的返回
-     */
-    protected void backPressed() {
-        receiveDataHandler = null;
-        _mActivity.onBackPressed();
-        onDestroy();
-    }
 
     /**
      * 获取本布局中的某一个控件

@@ -1,9 +1,11 @@
-package com.leon.biuvideo.beans.orderBeans;
+package com.leon.biuvideo.beans.homeBeans.favoriteBeans;
 
 import java.util.List;
 
 /**
- * 用户收藏文件夹中的具体数据实体类
+ * @Author Leon
+ * @Time 2020/12/15
+ * @Desc 用户收藏文件夹中的具体数据实体类
  */
 public class FavoriteVideoFolderDetail {
     public long id;

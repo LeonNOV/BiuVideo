@@ -21,9 +21,9 @@
         app:tabIndicatorColor="@color/tabLayoutIndicatorColor"
         app:tabTextColor="@color/black" />
 
-    <androidx.viewpager.widget.ViewPager
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/order_fragment_viewPager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

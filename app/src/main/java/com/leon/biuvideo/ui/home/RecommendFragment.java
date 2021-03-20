@@ -7,7 +7,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.home.RecommendAdapter;
+import com.leon.biuvideo.adapters.homeAdapters.RecommendAdapter;
 import com.leon.biuvideo.beans.homeBeans.Recommend;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
@@ -60,7 +60,7 @@ public class RecommendFragment extends BaseSupportFragment {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                recommendLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING);
+                recommendLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
                 int recommendColumns = PreferenceUtils.getRecommendColumns();
 
@@ -68,7 +68,7 @@ public class RecommendFragment extends BaseSupportFragment {
                 recommendLoadingRecyclerView.setRecyclerViewAdapter(new RecommendAdapter(recommendList, recommendColumns == 1 ? RecommendAdapter.SINGLE_COLUMN : RecommendAdapter.DOUBLE_COLUMN, context));
 
                 // 设置状态为已完成加载数据
-                recommendLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
+                recommendLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
             }
         });
     }

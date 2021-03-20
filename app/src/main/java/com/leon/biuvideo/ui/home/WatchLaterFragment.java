@@ -3,7 +3,7 @@ package com.leon.biuvideo.ui.home;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.home.WatchLaterAdapter;
+import com.leon.biuvideo.adapters.homeAdapters.WatchLaterAdapter;
 import com.leon.biuvideo.beans.homeBeans.WatchLater;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
@@ -45,9 +45,9 @@ public class WatchLaterFragment extends BaseSupportFragment {
 
         LoadingRecyclerView watchLaterFragmentLoadingRecyclerView = findView(R.id.watch_later_fragment_loadingRecyclerView);
 
-        watchLaterFragmentLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING);
+        watchLaterFragmentLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
         watchLaterFragmentLoadingRecyclerView.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
         watchLaterFragmentLoadingRecyclerView.setRecyclerViewAdapter(new WatchLaterAdapter(watchLaterList, context));
-        watchLaterFragmentLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
+        watchLaterFragmentLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
     }
 }

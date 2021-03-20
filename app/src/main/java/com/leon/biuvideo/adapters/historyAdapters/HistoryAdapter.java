@@ -1,34 +1,16 @@
 package com.leon.biuvideo.adapters.historyAdapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
-import com.leon.biuvideo.beans.articleBeans.Article;
-import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
 import com.leon.biuvideo.beans.userBeans.History;
-import com.leon.biuvideo.ui.activitys.ArticleActivity;
-import com.leon.biuvideo.ui.activitys.BangumiActivity;
-import com.leon.biuvideo.ui.activitys.VideoActivity;
-import com.leon.biuvideo.ui.views.SimpleSnackBar;
-import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.parseDataUtils.articleParseUtils.ArticleParser;
-import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BangumiParser;
-import com.leon.biuvideo.values.ImagePixelSize;
-import com.leon.biuvideo.values.SortType;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * 根据HistoryType创建对应的Item
@@ -156,7 +138,7 @@ public class HistoryAdapter extends BaseAdapter<History.InnerHistory> {
                                     articleParser = new ArticleParser(context);
                                 }
 
-                                Article article = articleParser.getArticle(history.oid);
+                                FavoriteArticle article = articleParser.getArticle(history.oid);
                                 article.coverUrl = history.cover;
                                 article.face = history.authorFace;
                                 article.title = history.title;

@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
-import com.leon.biuvideo.beans.articleBeans.Article;
+import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteArticle;
 import com.leon.biuvideo.ui.activitys.ArticleActivity;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -24,13 +24,13 @@ import java.util.Locale;
 /**
  * 文章列表适配器
  */
-public class UserArticleAdapter extends BaseAdapter<Article> {
-    private final List<Article> articles;
+public class UserArticleAdapter extends BaseAdapter<FavoriteArticle> {
+    private final List<FavoriteArticle> favoriteArticles;
     private final Context context;
 
-    public UserArticleAdapter(List<Article> articles, Context context) {
-        super(articles, context);
-        this.articles = articles;
+    public UserArticleAdapter(List<FavoriteArticle> favoriteArticles, Context context) {
+        super(favoriteArticles, context);
+        this.favoriteArticles = favoriteArticles;
         this.context = context;
     }
 
@@ -41,19 +41,19 @@ public class UserArticleAdapter extends BaseAdapter<Article> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        Article article = articles.get(position);
+        FavoriteArticle favoriteArticle = favoriteArticles.get(position);
 
         //设置封面
-        holder.setImage(R.id.article_imageView_cover, article.coverUrl, ImagePixelSize.COVER)
+        holder.setImage(R.id.article_imageView_cover, favoriteArticle.coverUrl, ImagePixelSize.COVER)
 
                 //设置文章标题
-                .setText(R.id.article_textView_title, article.title)
+                .setText(R.id.article_textView_title, favoriteArticle.title)
 
                 //设置文章类型
-                .setText(R.id.article_textView_category, article.category)
+                .setText(R.id.article_textView_category, favoriteArticle.category)
 
                 //设置创建时间
-                .setText(R.id.article_textView_ctime, new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA).format(new Date(article.ctime * 1000)))
+                .setText(R.id.article_textView_ctime, new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA).format(new Date(favoriteArticle.ctime * 1000)))
 
                 //设置点击监听
                 .setOnClickListener(new View.OnClickListener() {
@@ -68,11 +68,11 @@ public class UserArticleAdapter extends BaseAdapter<Article> {
                         }
 
                         //跳转至ArticleActivity
-                        Article article = articles.get(position);
+                        FavoriteArticle favoriteArticle = favoriteArticles.get(position);
 
                         Intent intent = new Intent(context, ArticleActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("article", article);
+                        bundle.putSerializable("favoriteArticle", favoriteArticle);
                         intent.putExtras(bundle);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 

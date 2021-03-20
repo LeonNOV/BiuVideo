@@ -4,11 +4,11 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.TabLayoutViewPagerAdapter;
+import com.leon.biuvideo.adapters.ViewPager2Adapter;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.home.orderFragments.OrderBangumiFragment;
 import com.leon.biuvideo.ui.home.orderFragments.OrderSeriesFragment;
@@ -63,26 +63,10 @@ public class OrderFragment extends BaseSupportFragment {
 
         String[] titles = {"番剧", "剧集", "标签"};
         TabLayout orderFragmentTabLayout = findView(R.id.order_fragment_tabLayout);
-        ViewPager orderFragmentViewPager = findView(R.id.order_fragment_viewPager);
-        orderFragmentViewPager.setAdapter(new TabLayoutViewPagerAdapter(getChildFragmentManager(),titles, viewPagerFragments));
-        orderFragmentViewPager.setCurrentItem(0);
-        orderFragmentViewPager.setOffscreenPageLimit(3);
-        orderFragmentTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                ViewUtils.changeTabTitle(tab, true);
-            }
+        ViewPager2 orderFragmentViewPager = findView(R.id.order_fragment_viewPager);
+        orderFragmentViewPager.setAdapter(new ViewPager2Adapter(getActivity(), viewPagerFragments));
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                ViewUtils.changeTabTitle(tab, false);
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-        orderFragmentTabLayout.setupWithViewPager(orderFragmentViewPager, false);
+        // 初始化ViewPager2和TabLayout
+        ViewUtils.initTabLayoutAndViewPager2(orderFragmentTabLayout, orderFragmentViewPager, titles, 0);
     }
 }

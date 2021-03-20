@@ -1,4 +1,4 @@
-package com.leon.biuvideo.adapters.userOrderAdapters;
+package com.leon.biuvideo.adapters.homeAdapters.favoriteAdapters;
 
 import android.content.Context;
 import android.view.View;
@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
-import com.leon.biuvideo.beans.orderBeans.FavoriteVideoFolderDetail;
+import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteVideoFolderDetail;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
 
@@ -18,14 +18,16 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * 用户收藏的文件夹详情列表适配器
+ * @Author Leon
+ * @Time 2021/3/19
+ * @Desc 用户收藏的文件夹详情列表适配器
  */
 public class FavoriteVideoFolderDetailAdapter extends BaseAdapter<FavoriteVideoFolderDetail.Media> {
-    private final List<FavoriteVideoFolderDetail.Media> userFolderDatas;
+    private final List<FavoriteVideoFolderDetail.Media> favoriteVideoFolderDetail;
 
-    public FavoriteVideoFolderDetailAdapter(List<FavoriteVideoFolderDetail.Media> userFolderDatas, Context context) {
-        super(userFolderDatas, context);
-        this.userFolderDatas = userFolderDatas;
+    public FavoriteVideoFolderDetailAdapter(List<FavoriteVideoFolderDetail.Media> favoriteVideoFolderDetail, Context context) {
+        super(favoriteVideoFolderDetail, context);
+        this.favoriteVideoFolderDetail = favoriteVideoFolderDetail;
     }
 
     @Override
@@ -35,7 +37,7 @@ public class FavoriteVideoFolderDetailAdapter extends BaseAdapter<FavoriteVideoF
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        FavoriteVideoFolderDetail.Media media = userFolderDatas.get(position);
+        FavoriteVideoFolderDetail.Media media = favoriteVideoFolderDetail.get(position);
 
         //设置封面
         holder
