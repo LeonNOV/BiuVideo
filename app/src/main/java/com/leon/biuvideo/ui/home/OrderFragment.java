@@ -59,12 +59,13 @@ public class OrderFragment extends BaseSupportFragment {
         List<Fragment> viewPagerFragments = new ArrayList<>();
         viewPagerFragments.add(new OrderBangumiFragment());
         viewPagerFragments.add(new OrderSeriesFragment());
-        viewPagerFragments.add(new OrderTagsFragment());
 
-        String[] titles = {"番剧", "剧集", "标签"};
+        /*viewPagerFragments.add(new OrderTagsFragment());*/
+
+        String[] titles = {"番剧", "剧集"};
         TabLayout orderFragmentTabLayout = findView(R.id.order_fragment_tabLayout);
         ViewPager2 orderFragmentViewPager = findView(R.id.order_fragment_viewPager);
-        orderFragmentViewPager.setAdapter(new ViewPager2Adapter(getActivity(), viewPagerFragments));
+        orderFragmentViewPager.setAdapter(new ViewPager2Adapter(this, viewPagerFragments));
 
         // 初始化ViewPager2和TabLayout
         ViewUtils.initTabLayoutAndViewPager2(orderFragmentTabLayout, orderFragmentViewPager, titles, 0);

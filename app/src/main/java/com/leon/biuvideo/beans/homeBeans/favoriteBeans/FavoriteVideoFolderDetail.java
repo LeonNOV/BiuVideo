@@ -35,5 +35,10 @@ public class FavoriteVideoFolderDetail {
 
         public long mid;
         public String name;
+
+        /**
+         * 是否已失效
+         */
+        public boolean isFailed;
     }
 }

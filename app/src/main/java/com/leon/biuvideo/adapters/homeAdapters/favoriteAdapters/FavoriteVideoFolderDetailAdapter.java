@@ -9,6 +9,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteVideoFolderDetail;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
 
@@ -56,7 +57,7 @@ public class FavoriteVideoFolderDetailAdapter extends BaseAdapter<FavoriteVideoF
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        SimpleSnackBar.make(v, media.isFailed ? "该视频已失效" : "position：" + position, SimpleSnackBar.LENGTH_SHORT).show();
                     }
                 });
     }

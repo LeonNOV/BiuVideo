@@ -105,7 +105,7 @@ public class FavoriteVideoFolderDetailFragment extends BaseSupportFragment {
                         favoritesVideoFolderDetailTitle.setText(title);
                         favoritesVideoFolderDetailCount.setText(favoriteVideoFolderDetail.count + "个内容");
 
-                        if (favoriteVideoFolderDetail.medias.size() == 0) {
+                        if (favoriteVideoFolderDetail.medias.size() == 0 || favoriteVideoFolderDetail.medias == null) {
                             favoritesVideoFolderDetailSmartRefreshRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
                             favoritesVideoFolderDetailSmartRefreshRecyclerView.setEnableLoadMore(false);
                         } else {
@@ -121,9 +121,13 @@ public class FavoriteVideoFolderDetailFragment extends BaseSupportFragment {
                         if (favoriteVideoFolderDetail.medias.size() > 0) {
                             favoriteVideoFolderDetailAdapter.append(favoriteVideoFolderDetail.medias);
                             favoritesVideoFolderDetailSmartRefreshRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
-                        } else {
-                            favoritesVideoFolderDetailSmartRefreshRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
+
+                            // 每加载一次就检查当前页是否为最后一页
+                            if (!favoriteVideoFolderDetailParser.dataStatus) {
+                                favoritesVideoFolderDetailSmartRefreshRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
+                            }
                         }
+
                         break;
                     default:
                         break;

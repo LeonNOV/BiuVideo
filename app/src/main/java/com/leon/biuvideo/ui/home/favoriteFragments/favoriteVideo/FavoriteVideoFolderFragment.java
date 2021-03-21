@@ -2,21 +2,16 @@ package com.leon.biuvideo.ui.home.favoriteFragments.favoriteVideo;
 
 import android.os.Bundle;
 import android.os.Message;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.homeAdapters.favoriteAdapters.FavoriteVideoFolderAdapter;
 import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteVideoFolder;
-import com.leon.biuvideo.beans.userBeans.Follow;
-import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragmentWithSrr;
 import com.leon.biuvideo.ui.home.FavoritesFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.FavoriteVideoFolderParser;
 
@@ -63,8 +58,6 @@ public class FavoriteVideoFolderFragment extends BaseSupportFragmentWithSrr<Favo
         super.onLazyInitView(savedInstanceState);
 
         view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-
-        Fuck.blue("one");
 
         // 获取所有视频收藏夹
         getVideoFolders();

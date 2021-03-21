@@ -87,6 +87,7 @@ public class FavoriteVideoFolderDetailParser {
                         media.title = jsonObject.getString("title");
                         media.desc = jsonObject.getString("intro");
                         media.link = jsonObject.getString("link");
+                        media.isFailed = jsonObject.getIntValue("attr") != 0;
 
                         JSONObject cntInfo = jsonObject.getJSONObject("cnt_info");
                         media.collect = cntInfo.getIntValue("collect");

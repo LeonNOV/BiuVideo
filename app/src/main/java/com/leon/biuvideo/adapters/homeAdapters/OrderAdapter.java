@@ -49,11 +49,11 @@ public class OrderAdapter extends BaseAdapter<Order> {
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         Order order = orders.get(position);
 
-        if (order.badgeType.equals("")) {
+        if ("".equals(order.badgeType)) {
             holder.setVisibility(R.id.order_item_textView_badge, View.GONE);
         }
 
-        if (order.seasonTitle.equals("")) {
+        if ("".equals(order.seasonTitle)) {
             holder.setVisibility(R.id.order_item_textView_subtitle, View.GONE);
         } else {
             holder.setText(R.id.order_item_textView_subtitle, order.seasonTitle);
@@ -66,7 +66,7 @@ public class OrderAdapter extends BaseAdapter<Order> {
                 .setText(R.id.order_item_textView_desc, order.desc)
                 .setText(R.id.order_item_textView_type, order.seasonType)
                 .setText(R.id.order_item_textView_area, Arrays.toString(order.areas))
-                .setText(R.id.order_item_textView_progress, order.progress.equals("") ? "尚未观看" : order.progress)
+                .setText(R.id.order_item_textView_progress, "".equals(order.progress) ? "尚未观看" : order.progress)
                 .setText(R.id.order_item_textView_total, order.total)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -100,14 +100,14 @@ public class OrderAdapter extends BaseAdapter<Order> {
                                 }
                             }
 
-                            if (targetBangumi != null) {
-                                Intent intent = new Intent(context, BangumiActivity.class);
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable("bangumi", targetBangumi);
-                                intent.putExtras(bundle);
-
-                                context.startActivity(intent);
-                            }
+//                            if (targetBangumi != null) {
+//                                Intent intent = new Intent(context, BangumiActivity.class);
+//                                Bundle bundle = new Bundle();
+//                                bundle.putSerializable("bangumi", targetBangumi);
+//                                intent.putExtras(bundle);
+//
+//                                context.startActivity(intent);
+//                            }
                         }
                     }
                 });

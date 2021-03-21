@@ -59,7 +59,7 @@ public class PopularFragment extends BaseSupportFragment {
         viewPagerFragments.add(new PopularTopListFragment());
 
         String[] titles = {"综合热门", "每周必看", "入站必刷", "排行榜"};
-        popularViewPager.setAdapter(new ViewPager2Adapter(getActivity(), viewPagerFragments));
+        popularViewPager.setAdapter(new ViewPager2Adapter(this, viewPagerFragments));
 
         // 初始化ViewPager2和TabLayout
         ViewUtils.initTabLayoutAndViewPager2(popularTabLayout, popularViewPager, titles, 0);

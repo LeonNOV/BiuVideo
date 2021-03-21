@@ -41,7 +41,7 @@ public class OrderParser implements ParserInterface<Order> {
     /**
      * 数据状态
      */
-    private boolean dataStatus = true;
+    public boolean dataStatus = true;
 
     /**
      * 请求头信息
@@ -57,10 +57,7 @@ public class OrderParser implements ParserInterface<Order> {
      * @param orderType     只接收OrderType.BANGUMI、Order.SERIES
      */
     public OrderParser (OrderType orderType) {
-        if (PreferenceUtils.getLoginStatus()) {
-            requestHeader.put("Cookie", PreferenceUtils.getCookie());
-        }
-        requestHeader.putAll(HttpUtils.getHeaders());
+        requestHeader.putAll(HttpUtils.getAPIRequestHeader());
 
         params.put("vmid", PreferenceUtils.getUserId());
         params.put("pn", String.valueOf(pageNum));

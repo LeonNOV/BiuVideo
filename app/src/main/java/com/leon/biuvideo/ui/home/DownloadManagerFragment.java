@@ -52,7 +52,7 @@ public class DownloadManagerFragment extends BaseSupportFragment {
         String[] titles = {"下载中", "已下载"};
         TabLayout downloadManagerFragmentTabLayout = findView(R.id.downloadManager_fragment_tabLayout);
         ViewPager2 downloadManagerFragmentViewPager = findView(R.id.downloadManager_fragment_viewPager);
-        downloadManagerFragmentViewPager.setAdapter(new ViewPager2Adapter(getActivity(), viewPagerFragments));
+        downloadManagerFragmentViewPager.setAdapter(new ViewPager2Adapter(this, viewPagerFragments));
         // 初始化ViewPager2和TabLayout
 
         ViewUtils.initTabLayoutAndViewPager2(downloadManagerFragmentTabLayout, downloadManagerFragmentViewPager, titles, 0);

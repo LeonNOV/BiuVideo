@@ -4,13 +4,14 @@ import android.os.Bundle;
 import android.os.Message;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.leon.biuvideo.R;
-import com.leon.biuvideo.beans.TestBeans.RvTestBean;
+import com.leon.biuvideo.adapters.homeAdapters.OrderAdapter;
 import com.leon.biuvideo.beans.orderBeans.Order;
-import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragmentWithSrr;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.OrderParser;
 import com.leon.biuvideo.values.OrderType;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -18,63 +19,57 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @Author Leon
  * @Time 2021/3/1
  * @Desc 订阅页面-番剧订阅
  */
-public class OrderBangumiFragment extends BaseSupportFragment {
-    private SmartRefreshRecyclerView<RvTestBean> orderBangumiSmartRefreshRecyclerView;
+public class OrderBangumiFragment extends BaseSupportFragmentWithSrr<Order> {
+    private final List<Order> orderList = new ArrayList<>();
     private OrderParser orderParser;
-    private List<Order> orderList;
-
-    @Override
-    protected int setLayout() {
-        return R.layout.order_bangumi_fragment;
-    }
 
     @Override
     protected void initView() {
-        orderBangumiSmartRefreshRecyclerView = findView(R.id.order_bangumi_smartRefreshRecyclerView);
-        orderBangumiSmartRefreshRecyclerView.setOnLoadMoreListener(new OnLoadMoreListener() {
+        OrderAdapter orderAdapter = new OrderAdapter(orderList, context, OrderType.BANGUMI);
+        orderAdapter.setHasStableIds(true);
+        view.setRecyclerViewAdapter(orderAdapter);
+        view.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
+        view.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-//                RefreshState state = refreshLayout.getState();
-                Random random = new Random();
-
-                List<RvTestBean> rvTestBeanList = new ArrayList<>();
-                RvTestBean rvTestBean = new RvTestBean();
-                rvTestBean.title = "Title" + random.nextInt(100);
-                rvTestBean.view = (random.nextInt(5000) + 5000);
-                rvTestBeanList.add(rvTestBean);
-
-                orderBangumiSmartRefreshRecyclerView.append(rvTestBeanList);
-
-                // 显示加载成功
-                refreshLayout.finishLoadMore(true);
-
-                // 标记没有更多的数据
-//                refreshLayout.finishLoadMoreWithNoMoreData();
-
-                //结束加载更多动画
-                orderBangumiSmartRefreshRecyclerView.finishLoadMore();
-
-                // 全部加载完后使用该方法
-//                orderBangumiSmartRefreshRecyclerView.setEnablePureScrollMode(true);
+                getOrderBangumis(1);
             }
         });
-
-        orderParser = new OrderParser(OrderType.BANGUMI);
 
         setOnLoadListener(new OnLoadListener() {
             @Override
             public void onLoad(Message msg) {
-                if (msg.what == 0) {
-                    // 设置初始数据
-//                    orderBangumiSmartRefreshRecyclerView.setRecyclerViewAdapter();
-                    orderBangumiSmartRefreshRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+                List<Order> orders = (List<Order>) msg.obj;
+
+                switch (msg.what) {
+                    case 0:
+                        if (orders.size() == 0) {
+                            view.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
+                            view.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
+                        } else {
+                            orderAdapter.append(orders);
+                            view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+                            if (!orderParser.dataStatus) {
+                                view.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
+                            }
+                        }
+                        break;
+                    case 1:
+                        if (orders.size() > 0) {
+                            orderAdapter.append(orders);
+                            view.setSmartRefreshStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
+                        } else {
+                            view.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
+                        }
+                        break;
+                    default:
+                        break;
                 }
             }
         });
@@ -85,17 +80,25 @@ public class OrderBangumiFragment extends BaseSupportFragment {
         super.onLazyInitView(savedInstanceState);
 
         // 加载初始数据
-//        SimpleSingleThreadPool.executor(new Runnable() {
-//            @Override
-//            public void run() {
-//                orderList = orderParser.parseOrder();
-//
-//                Message message = receiveDataHandler.obtainMessage();
-//                message.what = 0;
-//                receiveDataHandler.sendMessage(message);
-//            }
-//        });
+        getOrderBangumis(0);
 
-        orderBangumiSmartRefreshRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+        view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+    }
+
+    private void getOrderBangumis(int what) {
+        if (orderParser == null) {
+            orderParser = new OrderParser(OrderType.BANGUMI);
+        }
+
+        SimpleSingleThreadPool.executor(new Runnable() {
+            @Override
+            public void run() {
+                List<Order> orderList = orderParser.parseData();
+
+                Message message = receiveDataHandler.obtainMessage(what);
+                message.obj = orderList;
+                receiveDataHandler.sendMessage(message);
+            }
+        });
     }
 }

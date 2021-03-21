@@ -216,6 +216,15 @@ public class BiliBiliAPIs {
      */
     public static String bangumiEpCid = "https://api.bilibili.com/pgc/web/season/section";
 
+    /**
+     * 获取番剧详细信息
+     * 参数（二选一）
+     *      season_id：season_id与ep_id任选其一
+     *      ep_id：season_id与ep_id任选其一
+     *
+     */
+    public static final String BANGUMI_DETAIL = "http://api.bilibili.com/pgc/view/web/season";
+
     //========================以下接口数据的获取需要在请求头中添加Cookie========================
 
     /**

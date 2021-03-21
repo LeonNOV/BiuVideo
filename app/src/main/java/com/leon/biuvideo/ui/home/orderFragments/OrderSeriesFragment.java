@@ -4,11 +4,18 @@ import android.os.Bundle;
 import android.os.Message;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.leon.biuvideo.adapters.homeAdapters.OrderAdapter;
 import com.leon.biuvideo.adapters.testAdapters.RvTestAdapter;
 import com.leon.biuvideo.beans.TestBeans.RvTestBean;
+import com.leon.biuvideo.beans.orderBeans.Order;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragmentWithSrr;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
+import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
+import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.OrderParser;
+import com.leon.biuvideo.values.OrderType;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
@@ -21,40 +28,52 @@ import java.util.Random;
  * @Time 2021/3/1
  * @Desc 订阅页面-剧集订阅
  */
-public class OrderSeriesFragment extends BaseSupportFragmentWithSrr<RvTestBean> {
+public class OrderSeriesFragment extends BaseSupportFragmentWithSrr<Order> {
+    private final List<Order> orderList = new ArrayList<>();
+    private OrderParser orderParser;
+
     @Override
     protected void initView() {
+        OrderAdapter orderAdapter = new OrderAdapter(orderList, context, OrderType.SERIES);
+        orderAdapter.setHasStableIds(true);
+        view.setRecyclerViewAdapter(orderAdapter);
+        view.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
         view.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-                Random random = new Random();
-
-                List<RvTestBean> rvTestBeanList = new ArrayList<>();
-                RvTestBean rvTestBean = new RvTestBean();
-                rvTestBean.title = "Title" + random.nextInt(100);
-                rvTestBean.view = (random.nextInt(5000) + 5000);
-                rvTestBeanList.add(rvTestBean);
-
-                view.append(rvTestBeanList);
-
-                // 显示加载成功
-                refreshLayout.finishLoadMore(true);
-
-                // 标记没有更多的数据
-//                refreshLayout.finishLoadMoreWithNoMoreData();
-
-                //结束加载更多动画
-                view.finishLoadMore();
-
-                // 全部加载完后使用该方法
-//                orderBangumiSmartRefreshRecyclerView.setEnablePureScrollMode(true);
+                getOrderBangumis(1);
             }
         });
 
         setOnLoadListener(new OnLoadListener() {
             @Override
             public void onLoad(Message msg) {
+                List<Order> orders = (List<Order>) msg.obj;
 
+                switch (msg.what) {
+                    case 0:
+                        if (orders.size() == 0) {
+                            view.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
+                            view.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
+                        } else {
+                            orderAdapter.append(orders);
+                            view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+                            if (!orderParser.dataStatus) {
+                                view.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
+                            }
+                        }
+                        break;
+                    case 1:
+                        if (orders.size() > 0) {
+                            orderAdapter.append(orders);
+                            view.setSmartRefreshStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
+                        } else {
+                            view.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
         });
     }
@@ -63,22 +82,26 @@ public class OrderSeriesFragment extends BaseSupportFragmentWithSrr<RvTestBean> 
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
 
+        // 加载初始数据
+        getOrderBangumis(0);
+
         view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+    }
 
-        List<RvTestBean> rvTestBeanList = new ArrayList<>();
-
-        Random random = new Random();
-
-        for (int i = 0; i < 10; i++) {
-            RvTestBean rvTestBean = new RvTestBean();
-
-            rvTestBean.title = "Title" + (i + 1);
-            rvTestBean.view = (random.nextInt(5000) + 5000);
-
-            rvTestBeanList.add(rvTestBean);
+    private void getOrderBangumis(int what) {
+        if (orderParser == null) {
+            orderParser = new OrderParser(OrderType.SERIES);
         }
 
-        view.setRecyclerViewAdapter(new RvTestAdapter(rvTestBeanList, context));
-        view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+        SimpleSingleThreadPool.executor(new Runnable() {
+            @Override
+            public void run() {
+                List<Order> orderList = orderParser.parseData();
+
+                Message message = receiveDataHandler.obtainMessage(what);
+                message.obj = orderList;
+                receiveDataHandler.sendMessage(message);
+            }
+        });
     }
 }
