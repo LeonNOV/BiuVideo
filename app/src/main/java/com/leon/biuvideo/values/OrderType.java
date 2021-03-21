@@ -9,17 +9,17 @@ public enum OrderType {
     /**
      * 番剧
      */
-    BANGUMI(0),
+    BANGUMI(1),
 
     /**
      * 剧集
      */
-    SERIES(1),
+    SERIES(2),
 
     /**
      * 标签
      */
-    TAG(2);
+    TAG(3);
 
     public int value;
 

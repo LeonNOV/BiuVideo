@@ -59,7 +59,7 @@ public class BangumiDetailParser {
             bangumi.ratingScore = rating.getDoubleValue("score");
 
             JSONObject series = result.getJSONObject("series");
-            bangumi.seasonId = series.getString("series_id");
+            bangumi.seriesId = series.getString("series_id");
             bangumi.seriesTitle = series.getString("series_title");
 
             JSONObject stat = result.getJSONObject("stat");
@@ -92,6 +92,10 @@ public class BangumiDetailParser {
      * @return  BangumiEp集合
      */
     private List<BangumiEp> getBangumiEps(JSONArray episodes) {
+        if (episodes == null) {
+            return null;
+        }
+
         List<BangumiEp> bangumiEps = new ArrayList<>(episodes.size());
         for (Object o : episodes) {
             JSONObject jsonObject = (JSONObject) o;
@@ -123,12 +127,17 @@ public class BangumiDetailParser {
      * @return  BangumiSeason集合
      */
     private List<BangumiSeason> getBangumiSeasons(JSONArray seasons) {
+        if (seasons == null) {
+            return null;
+        }
+
         List<BangumiSeason> bangumiSeasonList = new ArrayList<>(seasons.size());
         for (Object season : seasons) {
             JSONObject jsonObject = (JSONObject) season;
             BangumiSeason bangumiSeason = new BangumiSeason();
 
-            bangumiSeason.badge = jsonObject.getString("badge");
+            String badge = jsonObject.getString("badge");
+            bangumiSeason.badge = "".equals(badge) ? null : badge;
             bangumiSeason.cover = jsonObject.getString("cover");
             bangumiSeason.mediaId = jsonObject.getString("media_id");
             bangumiSeason.seasonId = jsonObject.getString("season_id");
@@ -152,6 +161,10 @@ public class BangumiDetailParser {
      * @return  BangumiSection集合
      */
     private List<BangumiSection> getBangumiSections(JSONArray section) {
+        if (section == null) {
+            return null;
+        }
+
         List<BangumiSection> bangumiSectionList = new ArrayList<>(section.size());
         for (Object o : section) {
             JSONObject jsonObject = (JSONObject) o;
@@ -167,7 +180,10 @@ public class BangumiDetailParser {
 
                 episode1.aid = jsonObject1.getString("aid");
                 episode1.bvid = jsonObject1.getString("bvid");
-                episode1.badge = jsonObject1.getString("badge");
+
+                String badge = jsonObject.getString("badge");
+                episode1.badge = "".equals(badge) ? null : badge;
+
                 episode1.cid = jsonObject1.getString("cid");
                 episode1.cover = jsonObject1.getString("cover");
 

@@ -105,7 +105,7 @@ public class OrderInnerFragment extends BaseLazyFragment {
 
     @Override
     public void initValues() {
-        if (orderParser.getDataCount() <= 0) {
+        /*if (orderParser.getDataCount() <= 0) {
             //设置无数据提示界面
             no_data.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
@@ -128,7 +128,7 @@ public class OrderInnerFragment extends BaseLazyFragment {
             }
 
             initAttr();
-        }
+        }*/
     }
 
     private void initAttr() {
@@ -157,7 +157,7 @@ public class OrderInnerFragment extends BaseLazyFragment {
 
                 //判断是否处于拖拽已释放的状态
                 if (state.finishing == RefreshState.ReleaseToLoad.finishing) {
-                    if (orderParser.getDataStatus()) {
+                    /*if (orderParser.getDataStatus()) {
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -173,7 +173,7 @@ public class OrderInnerFragment extends BaseLazyFragment {
                         smartRefresh.setEnabled(false);
 
                         SimpleSnackBar.make(view, R.string.isDone, SimpleSnackBar.LENGTH_SHORT).show();
-                    }
+                    }*/
                 }
 
                 //结束加载更多动画

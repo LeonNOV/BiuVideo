@@ -34,11 +34,6 @@ public class OrderParser implements ParserInterface<Order> {
     private static final int PAGE_SIZE = 15;
 
     /**
-     * 总条目数
-     */
-    private int dataCount;
-
-    /**
      * 数据状态
      */
     public boolean dataStatus = true;
@@ -74,7 +69,6 @@ public class OrderParser implements ParserInterface<Order> {
         JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {
-            dataCount = data.getIntValue("total");
             return parseJSONArray(data.getJSONArray("list"));
         }
 
@@ -149,15 +143,6 @@ public class OrderParser implements ParserInterface<Order> {
             dataStatus = false;
         }
 
-
         return orders;
-    }
-
-    public int getDataCount() {
-        return dataCount;
-    }
-
-    public boolean getDataStatus() {
-        return dataStatus;
     }
 }

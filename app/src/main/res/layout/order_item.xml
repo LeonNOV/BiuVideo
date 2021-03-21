@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/ripple_round_corners6dp_bg"
+    android:padding="@dimen/cardPadding"
+    android:layout_marginBottom="@dimen/itemMarginBottom"
     android:orientation="horizontal">
 
     <androidx.cardview.widget.CardView
@@ -90,13 +92,14 @@
                 android:text="番剧"
                 android:textColor="@color/gray" />
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="15dp"
+            <ImageView
+                android:layout_width="3dp"
+                android:layout_height="3dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:background="@color/gray" />
+                android:contentDescription="@string/description"
+                android:src="@drawable/pointer" />
 
             <TextView
                 android:id="@+id/order_item_textView_area"
@@ -120,14 +123,14 @@
                 android:text="看到第一话 7:13"
                 android:textColor="@color/gray" />
 
-            <View
-                android:id="@+id/order_item_view"
-                android:layout_width="1dp"
-                android:layout_height="15dp"
+            <ImageView
+                android:layout_width="3dp"
+                android:layout_height="3dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:background="@color/gray" />
+                android:contentDescription="@string/description"
+                android:src="@drawable/pointer" />
 
             <TextView
                 android:id="@+id/order_item_textView_total"

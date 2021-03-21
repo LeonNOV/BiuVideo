@@ -74,7 +74,7 @@ public class LocalOrderBaseAdapter extends BaseAdapter<LocalOrder> {
                         .setText(R.id.order_item_textView_area, jsonObject.getString("area"))
                         .setText(R.id.order_item_textView_total, jsonObject.getString("bangumiState"))
                         .setVisibility(R.id.order_item_textView_progress, View.GONE)
-                        .setVisibility(R.id.order_item_view, View.GONE)
+//                        .setVisibility(R.id.order_item_view, View.GONE)
                         .setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {

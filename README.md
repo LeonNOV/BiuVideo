@@ -23,6 +23,7 @@
   - 初始化`TabLayout`和`ViewPager2`可使用`ViewUtils.initTabLayoutAndViewPager2(TabLayout tabLayout, ViewPager2 viewPager2, String[] titles, int firstShowItemPosition)`进行初始化
 - 修复了部分已知BUG
 - 加入了`BangumiDetailParser`，用来获取番剧具体数据
+- 新添加的番剧页面还未完善
 
 ### 2020/03/19
 - `FollowsFragment`和`FollowersFragment`的上拉加载数据功能已完成

@@ -29,15 +29,24 @@ import java.util.List;
  * @Desc 订阅数据适配器
  */
 public class OrderAdapter extends BaseAdapter<Order> {
-    private final Context context;
     private final List<Order> orders;
     private final OrderType orderType;
 
+    private OnClickMediaListener onClickMediaListener;
+
     public OrderAdapter(List<Order> orders, Context context, OrderType orderType) {
         super(orders, context);
-        this.context = context;
+
         this.orders = orders;
         this.orderType = orderType;
+    }
+
+    public interface OnClickMediaListener {
+        void onClick(String mediaId);
+    }
+
+    public void setOnClickMediaListener(OnClickMediaListener onClickMediaListener) {
+        this.onClickMediaListener = onClickMediaListener;
     }
 
     @Override
@@ -71,7 +80,11 @@ public class OrderAdapter extends BaseAdapter<Order> {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!InternetUtils.checkNetwork(context)) {
+                        if (onClickMediaListener != null) {
+                            onClickMediaListener.onClick(String.valueOf(order.seasonId));
+                        }
+
+                        /*if (!InternetUtils.checkNetwork(context)) {
                             SimpleSnackBar.make(v, R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
                             return;
                         }
@@ -100,15 +113,15 @@ public class OrderAdapter extends BaseAdapter<Order> {
                                 }
                             }
 
-//                            if (targetBangumi != null) {
-//                                Intent intent = new Intent(context, BangumiActivity.class);
-//                                Bundle bundle = new Bundle();
-//                                bundle.putSerializable("bangumi", targetBangumi);
-//                                intent.putExtras(bundle);
-//
-//                                context.startActivity(intent);
-//                            }
-                        }
+                            if (targetBangumi != null) {
+                                Intent intent = new Intent(context, BangumiActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("bangumi", targetBangumi);
+                                intent.putExtras(bundle);
+
+                                context.startActivity(intent);
+                            }
+                        }*/
                     }
                 });
     }
