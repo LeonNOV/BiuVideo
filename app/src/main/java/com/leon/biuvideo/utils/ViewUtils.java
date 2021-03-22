@@ -1,10 +1,16 @@
 package com.leon.biuvideo.utils;
 
+import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -12,6 +18,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.ViewPager2Adapter;
+import com.scwang.smartrefresh.layout.header.bezierradar.RippleView;
 
 import java.util.Map;
 

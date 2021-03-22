@@ -19,6 +19,8 @@
 
 ### 2020/03/22
 - 加入了`PartitionFragment`（分区页面）
+- 增加了`partition.json`资源文件，该文件存放了部分分区子分区的title及ID
+  - 子分区的标签会在后期慢慢加入
 
 ### 2020/03/21
 - 完善了`FavoriteArticleFragment`
