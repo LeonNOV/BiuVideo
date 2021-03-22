@@ -5,10 +5,17 @@
         android:checked="true"
         android:icon="@drawable/a_bottom_home"
         android:title="@string/home_nav_home" />
+
+    <item
+        android:id="@+id/partition"
+        android:icon="@drawable/a_bottom_partition"
+        android:title="@string/home_nav_partition"/>
+
     <item
         android:id="@+id/discovery"
         android:icon="@drawable/a_bottom_discovery"
         android:title="@string/home_nav_discover" />
+
     <item
         android:id="@+id/user"
         android:icon="@drawable/a_bottom_user"

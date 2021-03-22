@@ -23,12 +23,22 @@
 
     <dimen name="loadingRecyclerViewHeight">300dp</dimen>
     <dimen name="loadingRecyclerViewProgressBarHW">60dp</dimen>
+
     <dimen name="face_border_width">1dp</dimen>
+
     <dimen name="itemMarginBottom">10dp</dimen>
+
     <dimen name="recyclerViewPadding">10dp</dimen>
+
     <dimen name="cardMargin">20dp</dimen>
     <dimen name="cardPadding">20dp</dimen>
+
     <dimen name="BiliUserFaceWH">82dp</dimen>
+
     <dimen name="swipeMenuPaddingStartEnd">10dp</dimen>
     <dimen name="swipeMenuItemW">80dp</dimen>
+
+    <dimen name="partition_icon_W">38dp</dimen>
+    <dimen name="partition_icon_H">38dp</dimen>
+    <dimen name="partition_title_size">15sp</dimen>
 </resources>

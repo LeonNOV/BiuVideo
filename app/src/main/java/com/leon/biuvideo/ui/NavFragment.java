@@ -11,6 +11,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.mainFragments.DiscoveryFragment;
 import com.leon.biuvideo.ui.mainFragments.HomeFragment;
+import com.leon.biuvideo.ui.mainFragments.PartitionFragment;
 import com.leon.biuvideo.ui.mainFragments.UserFragment;
 
 import me.yokeyword.fragmentation.SupportFragment;
@@ -21,7 +22,7 @@ import me.yokeyword.fragmentation.SupportFragment;
  * @Desc 导航Fragment，用于显示底部导航栏
  */
 public class NavFragment extends BaseSupportFragment implements BottomNavigationView.OnNavigationItemSelectedListener {
-    private final SupportFragment[] supportFragments = new SupportFragment[3];
+    private final SupportFragment[] supportFragments = new SupportFragment[4];
 
     public static NavFragment newInstance() {
         return new NavFragment();
@@ -39,22 +40,24 @@ public class NavFragment extends BaseSupportFragment implements BottomNavigation
 
         if (homeFragment == null) {
             supportFragments[0] = new HomeFragment();
-            supportFragments[1] = new DiscoveryFragment();
-            supportFragments[2] = new UserFragment();
+            supportFragments[1] = new PartitionFragment();
+            supportFragments[2] = new DiscoveryFragment();
+            supportFragments[3] = new UserFragment();
 
-            loadMultipleRootFragment(R.id.fl_tab_container, 0, supportFragments[0], supportFragments[1], supportFragments[2]);
+            loadMultipleRootFragment(R.id.fl_tab_container, 0, supportFragments[0], supportFragments[1], supportFragments[2], supportFragments[3]);
         } else {
             supportFragments[0] = homeFragment;
-            supportFragments[1] = findChildFragment(DiscoveryFragment.class);
-            supportFragments[2] = findChildFragment(UserFragment.class);
+            supportFragments[1] = findChildFragment(PartitionFragment.class);
+            supportFragments[2] = findChildFragment(DiscoveryFragment.class);
+            supportFragments[3] = findChildFragment(UserFragment.class);
         }
     }
 
     @Override
     protected void initView() {
-        BottomNavigationView main_nav_bottom = view.findViewById(R.id.main_nav_bottom);
-        main_nav_bottom.setItemIconTintList(null);
-        main_nav_bottom.setOnNavigationItemSelectedListener(this);
+        BottomNavigationView mainNavBottom = view.findViewById(R.id.main_nav_bottom);
+        mainNavBottom.setItemIconTintList(null);
+        mainNavBottom.setOnNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -63,11 +66,14 @@ public class NavFragment extends BaseSupportFragment implements BottomNavigation
             case R.id.home:
                 showHideFragment(supportFragments[0]);
                 return true;
-            case R.id.discovery:
+            case R.id.partition:
                 showHideFragment(supportFragments[1]);
                 return true;
-            case R.id.user:
+            case R.id.discovery:
                 showHideFragment(supportFragments[2]);
+                return true;
+            case R.id.user:
+                showHideFragment(supportFragments[3]);
                 return true;
             default:
                 return false;

@@ -25,6 +25,7 @@
     <string name="hotSearch">热门搜索排行榜</string>
 
     <string name="home_nav_home">首页</string>
+    <string name="home_nav_partition">分区</string>
     <string name="home_nav_discover">发现</string>
     <string name="home_nav_user">我的</string>
 
@@ -165,4 +166,30 @@
     <string name="exporting">导出数据中</string>
     <string name="login_account">登录账户</string>
     <string name="Logout">退出当前账户</string>
+
+    <!-- 分区 -->
+    <string name="partition_anime">番剧</string>
+    <string name="partition_guochuang">国创</string>
+    <string name="partition_cinema">放映厅</string>
+    <string name="partition_documentary">纪录片</string>
+
+    <string name="partition_article">专栏</string>
+    <string name="partition_douga">动画</string>
+    <string name="partition_music">音乐</string>
+    <string name="partition_dance">舞蹈</string>
+
+    <string name="partition_game">游戏</string>
+    <string name="partition_technology">知识</string>
+    <string name="partition_digital">数码</string>
+    <string name="partition_life">生活</string>
+
+    <string name="partition_food">美食</string>
+    <string name="partition_animal">动物圈</string>
+    <string name="partition_kichiku">鬼畜</string>
+    <string name="partition_fashion">时尚</string>
+
+    <string name="partition_ent">娱乐</string>
+    <string name="partition_cinephile">影视</string>
+    <string name="partition_movie">电影</string>
+    <string name="partition_teleplay">电视剧</string>
 </resources>

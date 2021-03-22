@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/ripple_round_corners6dp_bg"
-    android:padding="@dimen/cardPadding"
+    android:padding="10dp"
     android:layout_marginBottom="@dimen/itemMarginBottom"
     android:orientation="horizontal">
 
@@ -30,8 +30,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:background="@drawable/round_corners6dp_bg"
+                android:backgroundTint="@color/BiliBili_pink"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
                 android:layout_margin="5dp"
-                android:background="@drawable/order_item_badge_type_background"
                 android:text="限时免费"
                 android:textColor="@color/white"
                 android:textSize="13sp" />
