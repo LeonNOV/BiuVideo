@@ -170,13 +170,14 @@
     <!-- 分区 -->
     <string name="partition_anime">番剧</string>
     <string name="partition_guochuang">国创</string>
-    <string name="partition_cinema">放映厅</string>
-    <string name="partition_documentary">纪录片</string>
+    <string name="partition_douga">动画</string>
+    <string name="partition_ent">娱乐</string>
 
     <string name="partition_article">专栏</string>
-    <string name="partition_douga">动画</string>
     <string name="partition_music">音乐</string>
     <string name="partition_dance">舞蹈</string>
+    <string name="partition_documentary">纪录片</string>
+
 
     <string name="partition_game">游戏</string>
     <string name="partition_technology">知识</string>
@@ -188,8 +189,9 @@
     <string name="partition_kichiku">鬼畜</string>
     <string name="partition_fashion">时尚</string>
 
-    <string name="partition_ent">娱乐</string>
     <string name="partition_cinephile">影视</string>
     <string name="partition_movie">电影</string>
     <string name="partition_teleplay">电视剧</string>
+    <string name="partition_channel">频道</string>
+
 </resources>

@@ -40,30 +40,30 @@
             app:drawableTopCompat="@drawable/partition_guochuang" />
 
         <TextView
-            android:id="@+id/partition_cinema"
+            android:id="@+id/partition_douga"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/ripple_round_corners6dp_partition_bg"
             android:drawablePadding="5dp"
             android:gravity="center_horizontal"
-            android:text="@string/partition_cinema"
+            android:text="@string/partition_douga"
             android:textColor="@color/black"
             android:textSize="@dimen/partition_title_size"
-            app:drawableTopCompat="@drawable/partition_cinema" />
+            app:drawableTopCompat="@drawable/partition_douga" />
 
         <TextView
-            android:id="@+id/partition_documentary"
+            android:id="@+id/partition_ent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/ripple_round_corners6dp_partition_bg"
             android:drawablePadding="5dp"
             android:gravity="center_horizontal"
-            android:text="@string/partition_documentary"
+            android:text="@string/partition_ent"
             android:textColor="@color/black"
             android:textSize="@dimen/partition_title_size"
-            app:drawableTopCompat="@drawable/partition_documentary" />
+            app:drawableTopCompat="@drawable/partition_ent" />
 
     </TableRow>
 
@@ -86,19 +86,6 @@
             android:textColor="@color/black"
             android:textSize="@dimen/partition_title_size"
             app:drawableTopCompat="@drawable/partition_article" />
-
-        <TextView
-            android:id="@+id/partition_douga"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/ripple_round_corners6dp_partition_bg"
-            android:drawablePadding="5dp"
-            android:gravity="center_horizontal"
-            android:text="@string/partition_douga"
-            android:textColor="@color/black"
-            android:textSize="@dimen/partition_title_size"
-            app:drawableTopCompat="@drawable/partition_douga" />
 
         <TextView
             android:id="@+id/partition_music"
@@ -125,6 +112,19 @@
             android:textColor="@color/black"
             android:textSize="@dimen/partition_title_size"
             app:drawableTopCompat="@drawable/partition_dance" />
+
+        <TextView
+            android:id="@+id/partition_documentary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_round_corners6dp_partition_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/partition_documentary"
+            android:textColor="@color/black"
+            android:textSize="@dimen/partition_title_size"
+            app:drawableTopCompat="@drawable/partition_documentary" />
 
     </TableRow>
 
@@ -258,19 +258,6 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/partition_ent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/ripple_round_corners6dp_partition_bg"
-            android:drawablePadding="5dp"
-            android:gravity="center_horizontal"
-            android:text="@string/partition_ent"
-            android:textColor="@color/black"
-            android:textSize="@dimen/partition_title_size"
-            app:drawableTopCompat="@drawable/partition_ent" />
-
-        <TextView
             android:id="@+id/partition_cinephile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -308,6 +295,19 @@
             android:textColor="@color/black"
             android:textSize="@dimen/partition_title_size"
             app:drawableTopCompat="@drawable/partition_teleplay" />
+
+        <TextView
+            android:id="@+id/partition_channel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_round_corners6dp_partition_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/partition_channel"
+            android:textColor="@color/black"
+            android:textSize="@dimen/partition_title_size"
+            app:drawableTopCompat="@drawable/partition_channel" />
 
     </TableRow>
 

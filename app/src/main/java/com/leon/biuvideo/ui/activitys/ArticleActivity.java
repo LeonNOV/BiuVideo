@@ -25,6 +25,7 @@ import com.leon.biuvideo.beans.orderBeans.LocalOrder;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.views.RoundPopupWindow;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
+import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.InternetUtils;
@@ -269,7 +270,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
                     "    <meta charset=\"UTF-8\">\n" +
                     "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0 ,user-scalable=no\">\n";
 
-            String css = "<style type=\"text/css\">" + readCSS() + "</style>";
+            String css = "<style type=\"text/css\">" + FileUtils.getAssetsContent(getApplicationContext(), "index.css") + "</style>";
 
             webPage.append(head + css + "</head>" + "<body>");
 
@@ -283,34 +284,6 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
             webPage.append(content + "</body>\n</html>");
 
             return webPage.toString();
-        }
-
-        return null;
-    }
-
-    /**
-     * 读取assets下的css文件
-     *
-     * @return 返回css源代码
-     */
-    private String readCSS() {
-        try {
-            InputStream inputStream = getApplicationContext().getAssets().open("index.css");
-
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-
-            String temp;
-            StringBuilder css = new StringBuilder();
-            while ((temp = bufferedReader.readLine()) != null) {
-                css.append(temp);
-            }
-
-            bufferedReader.close();
-            inputStream.close();
-
-            return css.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         return null;

@@ -7,9 +7,13 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 
+import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.service.WeatherService;
+import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.PreferenceUtils;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
+import com.leon.biuvideo.values.Partitions;
 
 import me.yokeyword.fragmentation.SupportActivity;
 import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator;
@@ -37,6 +41,14 @@ public class MainActivity extends SupportActivity {
 
         // 初始化PreferenceUtil类中的PREFERENCE
         PreferenceUtils.PREFERENCE = getSharedPreferences(PreferenceUtils.PREFERENCE_NAME, Context.MODE_PRIVATE);
+
+        // 初始化分区数据
+        SimpleSingleThreadPool.executor(new Runnable() {
+            @Override
+            public void run() {
+                Partitions.PARTITION = JSONObject.parseObject(FileUtils.getAssetsContent(getApplicationContext(), "partition.json"));
+            }
+        });
     }
 
     @Override
