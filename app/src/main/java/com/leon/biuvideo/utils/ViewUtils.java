@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 
@@ -73,6 +74,7 @@ public class ViewUtils {
             TextView textView = tab.getCustomView().findViewById(android.R.id.text1);
             textView.setTypeface(Typeface.DEFAULT_BOLD);
             textView.setTextColor(Color.BLACK);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         } else {
             View view = tab.getCustomView();
             if (view == null) {
@@ -81,7 +83,8 @@ public class ViewUtils {
 
             TextView textView = tab.getCustomView().findViewById(android.R.id.text1);
             textView.setTypeface(Typeface.DEFAULT);
-            textView.setTextColor(Color.GRAY);
+            textView.setTextColor(textView.getContext().getColor(R.color.gray));
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         }
     }
 

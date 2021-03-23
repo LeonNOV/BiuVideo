@@ -87,10 +87,10 @@ public class OrderBangumiFragment extends BaseSupportFragmentWithSrr<Order> {
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
 
+        view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+
         // 加载初始数据
         getOrderBangumis(0);
-
-        view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
     }
 
     private void getOrderBangumis(int what) {

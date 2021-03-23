@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * @Author Leon
  * @Time 2021/3/23
- * @Desc
+ * @Desc 分区详细页面
  */
 public class PartitionBaseFragment extends BaseSupportFragment {
     private final Partitions partitions;
@@ -41,8 +41,13 @@ public class PartitionBaseFragment extends BaseSupportFragment {
         List<Fragment> subFragments = new ArrayList<>();
 
         for (int i = 0; i < subPartition.size(); i++) {
-            titles[i] = subPartition.get(i).title;
-            subFragments.add(new PartitionSubBaseFragment(subPartition.get(i).id, subPartition.get(i).tags));
+            Partition partition = subPartition.get(i);
+            if ("-100".equals(partition.id)) {
+                continue;
+            }
+
+            titles[i] = partition.title;
+            subFragments.add(new PartitionSubBaseFragment(partition.id));
         }
 
         SimpleTopBar partitionBaseTopBar = findView(R.id.partition_base_topBar);

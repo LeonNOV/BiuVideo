@@ -7,12 +7,13 @@ import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.mainFragments.partitionFragments.PartitionBaseFragment;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.values.Partitions;
 
 /**
  * @Author Leon
  * @Time 2021/3/22
- * @Desc 分区页面
+ * @Desc 分区主页面
  */
 public class PartitionFragment extends BaseSupportFragment implements View.OnClickListener {
     @Override
@@ -62,6 +63,7 @@ public class PartitionFragment extends BaseSupportFragment implements View.OnCli
                 jumpToPartitionBaseFragment(Partitions.ENT);
                 break;
             case R.id.partition_article:
+                SimpleSnackBar.make(v, "该分区还在施工中~", SimpleSnackBar.LENGTH_LONG).show();
 //                jumpToPartitionBaseFragment(Partitions.ANIME);
                 break;
             case R.id.partition_music:
@@ -107,6 +109,7 @@ public class PartitionFragment extends BaseSupportFragment implements View.OnCli
                 jumpToPartitionBaseFragment(Partitions.TELEPLAY);
                 break;
             case R.id.partition_channel:
+                SimpleSnackBar.make(v, "该分区还在施工中~", SimpleSnackBar.LENGTH_LONG).show();
 //                jumpToPartitionBaseFragment(Partitions.);
                 break;
             default:

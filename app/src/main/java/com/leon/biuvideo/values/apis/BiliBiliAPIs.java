@@ -225,6 +225,29 @@ public class BiliBiliAPIs {
      */
     public static final String BANGUMI_DETAIL = "http://api.bilibili.com/pgc/view/web/season";
 
+    /**
+     * 获取分区的子分区数据
+     * 参数
+     *      main_ver：默认v3
+     *      search_type：默认video
+     *      view_type：默认为hot_rank
+     *      cate_id：子分区ID
+     *      copy_right：是否为原创；-1为全部，1为原创
+     *      order：排序方式
+     *          click：播放数
+     *          scores：评论数
+     *          stow：收藏数
+     *          coin：硬币数
+     *          dm：弹幕数
+     *      page：页码，从1开始
+     *      pagesize：单页条目数，20
+     *      time_from：日期起始时间，20210316
+     *      time_to：日期结束时间，20210323
+     *          time_from和time_to，默认相差7天
+     *      keyword：关键字，需要进行URL编码（可选）
+     */
+    public static final String PARTITION = "https://s.search.bilibili.com/cate/search";
+
     //========================以下接口数据的获取需要在请求头中添加Cookie========================
 
     /**

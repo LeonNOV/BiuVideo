@@ -48,4 +48,8 @@
         <item name="colorControlActivated">#000000</item>
     </style>
 
+    <style name="TabLayoutTextStyle">
+        <item name="android:textSize">@dimen/tabLayout_size</item>
+    </style>
+
 </resources>

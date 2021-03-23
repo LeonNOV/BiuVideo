@@ -24,6 +24,7 @@
             app:tabIndicator="@drawable/indicator"
             app:tabIndicatorColor="@color/tabLayoutIndicatorColor"
             app:tabMode="scrollable"
+            app:tabTextAppearance="@style/TabLayoutTextStyle"
             app:tabTextColor="@color/gray" />
 
     </com.google.android.material.appbar.AppBarLayout>

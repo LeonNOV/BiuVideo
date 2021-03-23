@@ -41,4 +41,6 @@
     <dimen name="partition_icon_W">38dp</dimen>
     <dimen name="partition_icon_H">38dp</dimen>
     <dimen name="partition_title_size">15sp</dimen>
+
+    <dimen name="tabLayout_size">16sp</dimen>
 </resources>

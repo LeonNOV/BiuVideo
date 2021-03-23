@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="@color/bg"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:orientation="vertical">
 
     <com.leon.biuvideo.ui.views.SimpleTopBar
         android:id="@+id/popular_topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:topBarTitle="@string/popular"/>
+        app:topBarTitle="@string/popular" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/popular_tabLayout"
@@ -18,8 +18,9 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         app:tabIndicator="@drawable/indicator"
-        app:tabTextColor="@color/tabTextColor"
-        app:tabIndicatorColor="@color/tabLayoutIndicatorColor" />
+        app:tabIndicatorColor="@color/tabLayoutIndicatorColor"
+        app:tabTextAppearance="@style/TabLayoutTextStyle"
+        app:tabTextColor="@color/tabTextColor" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/popular_viewPager"
