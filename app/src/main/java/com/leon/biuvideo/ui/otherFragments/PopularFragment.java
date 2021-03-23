@@ -1,14 +1,13 @@
 package com.leon.biuvideo.ui.otherFragments;
 
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.ViewPager2Adapter;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.otherFragments.popularFragments.PopularHistoryFragment;
+import com.leon.biuvideo.ui.otherFragments.popularFragments.PopularPreciousFragment;
 import com.leon.biuvideo.ui.otherFragments.popularFragments.PopularHotListFragment;
 import com.leon.biuvideo.ui.otherFragments.popularFragments.PopularTopListFragment;
 import com.leon.biuvideo.ui.otherFragments.popularFragments.PopularWeeklyFragment;
@@ -55,7 +54,7 @@ public class PopularFragment extends BaseSupportFragment {
         List<Fragment> viewPagerFragments = new ArrayList<>();
         viewPagerFragments.add(new PopularHotListFragment());
         viewPagerFragments.add(new PopularWeeklyFragment());
-        viewPagerFragments.add(new PopularHistoryFragment());
+        viewPagerFragments.add(new PopularPreciousFragment());
         viewPagerFragments.add(new PopularTopListFragment());
 
         String[] titles = {"综合热门", "每周必看", "入站必刷", "排行榜"};

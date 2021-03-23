@@ -73,7 +73,11 @@ public class FavoriteVideoFolderDetailFragment extends BaseSupportFragment {
         favoritesVideoFolderDetailSmartRefreshRecyclerView.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-                getFavoriteVideoFolderDetail(1);
+                if (!favoriteVideoFolderDetailParser.dataStatus) {
+                    favoritesVideoFolderDetailSmartRefreshRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
+                } else {
+                    getFavoriteVideoFolderDetail(1);
+                }
             }
         });
 

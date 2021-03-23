@@ -248,6 +248,13 @@ public class BiliBiliAPIs {
      */
     public static final String PARTITION = "https://s.search.bilibili.com/cate/search";
 
+    /**
+     *
+     *
+     */
+    public static final String HOT_LIST = "https://api.bilibili.com/x/web-interface/popular";
+
+
     //========================以下接口数据的获取需要在请求头中添加Cookie========================
 
     /**

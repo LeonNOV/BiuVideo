@@ -18,7 +18,7 @@ import me.yokeyword.fragmentation.SupportFragment;
  * @Time 2021/3/1
  * @Desc 热门排行榜页面-入站必刷
  */
-public class PopularHistoryFragment extends SupportFragment {
+public class PopularPreciousFragment extends SupportFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

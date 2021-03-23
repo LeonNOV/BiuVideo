@@ -131,6 +131,7 @@ public class SmartRefreshRecyclerView<T> extends SmartRefreshLayout {
 
     public void setSmartRefreshStatus(int status) {
         if (NO_DATA == status) {
+            finishLoadMore();
             setEnableLoadMore(false);
         } else if (LOADING_FINISHING == status) {
             finishLoadMore();
