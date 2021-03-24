@@ -6,6 +6,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.ViewPager2Adapter;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.otherFragments.popularFragments.PopularPreciousFragment;
 import com.leon.biuvideo.ui.otherFragments.popularFragments.PopularHotListFragment;
@@ -23,6 +24,7 @@ import java.util.List;
  * @Desc 热门（综合热门、每周必看、入站必刷、排行榜）页面
  */
 public class PopularFragment extends BaseSupportFragment {
+    private MainActivity.OnTouchListener onTouchListener;
 
     public static PopularFragment getInstance() {
         return new PopularFragment();
@@ -61,6 +63,14 @@ public class PopularFragment extends BaseSupportFragment {
         popularViewPager.setAdapter(new ViewPager2Adapter(this, viewPagerFragments));
 
         // 初始化ViewPager2和TabLayout
-        ViewUtils.initTabLayoutAndViewPager2(popularTabLayout, popularViewPager, titles, 1);
+        onTouchListener = ViewUtils.initTabLayoutAndViewPager2(getActivity(), popularTabLayout, popularViewPager, titles, 1);
+    }
+
+    @Override
+    public void onDestroyView() {
+        // 取消注册Touch事件
+        ((MainActivity) getActivity()).unregisterTouchEvenListener(onTouchListener);
+
+        super.onDestroyView();
     }
 }

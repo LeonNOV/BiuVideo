@@ -8,6 +8,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.ViewPager2Adapter;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.home.favoriteFragments.FavoriteArticleFragment;
 import com.leon.biuvideo.ui.home.favoriteFragments.favoriteVideo.FavoriteVideoFolderFragment;
@@ -23,6 +24,9 @@ import java.util.List;
  * @Desc 收藏夹页面
  */
 public class FavoritesFragment extends BaseSupportFragment {
+
+    private MainActivity.OnTouchListener onTouchListener;
+
     public static FavoritesFragment getInstance() {
         return new FavoritesFragment();
     }
@@ -57,6 +61,14 @@ public class FavoritesFragment extends BaseSupportFragment {
         favoritesFragmentViewPager.setAdapter(new ViewPager2Adapter(this, viewPagerFragments));
 
         // 初始化ViewPager2和TabLayout
-        ViewUtils.initTabLayoutAndViewPager2(favoritesFragmentTabLayout, favoritesFragmentViewPager, titles, 0);
+        onTouchListener = ViewUtils.initTabLayoutAndViewPager2(getActivity(), favoritesFragmentTabLayout, favoritesFragmentViewPager, titles, 0);
+    }
+
+    @Override
+    public void onDestroyView() {
+        // 取消注册Touch事件
+        ((MainActivity) getActivity()).unregisterTouchEvenListener(onTouchListener);
+
+        super.onDestroyView();
     }
 }

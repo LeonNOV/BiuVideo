@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 
 
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -18,11 +19,14 @@ import me.yokeyword.fragmentation.SupportFragment;
  * @Time 2021/3/1
  * @Desc 热门排行榜页面-入站必刷
  */
-public class PopularPreciousFragment extends SupportFragment {
-    @Nullable
+public class PopularPreciousFragment extends BaseSupportFragment {
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.discover_popular_history, container, false);
-        return view;
+    protected int setLayout() {
+        return R.layout.discover_popular_history;
+    }
+
+    @Override
+    protected void initView() {
+
     }
 }

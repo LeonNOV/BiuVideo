@@ -2,6 +2,7 @@ package com.leon.biuvideo.ui.otherFragments.popularFragments;
 
 import android.os.Bundle;
 import android.os.Message;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import com.leon.biuvideo.adapters.PopularWeeklySeriesAdapter;
 import com.leon.biuvideo.adapters.homeAdapters.popularAdapters.PopularHotListAndWeeklyAdapter;
 import com.leon.biuvideo.beans.homeBeans.PopularWeeklySeries;
 import com.leon.biuvideo.beans.homeBeans.popularBeans.HotVideo;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.BottomSheetTopBar;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
@@ -44,7 +46,38 @@ public class PopularWeeklyFragment extends BaseSupportFragment {
     private TextView discoveryPopularWeeklySelectedSubject;
     private TextView discoveryPopularWeeklySelectedName;
 
+    private int startX = 0;
+    private int startY = 0;
+
     private int selectedSeriesPosition = 0;
+
+    /*private MainActivity.OnTouchListener onTouchListener = new MainActivity.OnTouchListener() {
+        @Override
+        public void onTouch(MotionEvent event) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    startX = (int) event.getX();
+                    startY = (int) event.getY();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    int endX = (int) event.getX();
+                    int endY = (int) event.getY();
+
+                    int disX = Math.abs(endX - startX);
+                    int disY = Math.abs(endY - startY);
+                    if (disX < disY) {
+
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+                    break;
+                case MotionEvent.ACTION_CANCEL:
+                    break;
+                default:
+                    break;
+            }
+        }
+    };*/
 
     @Override
     protected int setLayout() {
@@ -180,4 +213,9 @@ public class PopularWeeklyFragment extends BaseSupportFragment {
             }
         });
     }
+
+//    @Override
+//    protected void unregisterTouchListener() {
+//        ((MainActivity) getActivity()).unregisterTouchEvenListener(onTouchListener);
+//    }
 }

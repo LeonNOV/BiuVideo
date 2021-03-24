@@ -6,6 +6,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.ViewPager2Adapter;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.home.downloadManagerFragments.DownloadedFragment;
 import com.leon.biuvideo.ui.home.downloadManagerFragments.DownloadingFragment;
@@ -21,6 +22,8 @@ import java.util.List;
  * @Desc 下载管理页面
  */
 public class DownloadManagerFragment extends BaseSupportFragment {
+
+    private MainActivity.OnTouchListener onTouchListener;
 
     public static DownloadManagerFragment getInstance() {
         return new DownloadManagerFragment();
@@ -55,6 +58,14 @@ public class DownloadManagerFragment extends BaseSupportFragment {
         downloadManagerFragmentViewPager.setAdapter(new ViewPager2Adapter(this, viewPagerFragments));
         // 初始化ViewPager2和TabLayout
 
-        ViewUtils.initTabLayoutAndViewPager2(downloadManagerFragmentTabLayout, downloadManagerFragmentViewPager, titles, 0);
+        onTouchListener = ViewUtils.initTabLayoutAndViewPager2(getActivity(), downloadManagerFragmentTabLayout, downloadManagerFragmentViewPager, titles, 0);
+    }
+
+    @Override
+    public void onDestroyView() {
+        // 取消注册Touch事件
+        ((MainActivity) getActivity()).unregisterTouchEvenListener(onTouchListener);
+
+        super.onDestroyView();
     }
 }

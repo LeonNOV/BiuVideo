@@ -6,14 +6,19 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.view.MotionEvent;
 
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.service.WeatherService;
 import com.leon.biuvideo.utils.FileUtils;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.values.Partitions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import me.yokeyword.fragmentation.SupportActivity;
 import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator;
@@ -23,6 +28,12 @@ public class MainActivity extends SupportActivity {
 
     private WeatherConnection weatherConnection;
     private Intent weatherServiceIntent;
+
+    private List<OnTouchListener> onTouchListenerList = new ArrayList<>();
+
+    public interface OnTouchListener {
+        void onTouch(MotionEvent event);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,5 +112,36 @@ public class MainActivity extends SupportActivity {
     @Override
     public FragmentAnimator onCreateFragmentAnimator() {
         return new DefaultHorizontalAnimator();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        for (OnTouchListener onTouchListener : onTouchListenerList) {
+            if (onTouchListener != null) {
+                onTouchListener.onTouch(ev);
+            }
+        }
+
+        return super.dispatchTouchEvent(ev);
+    }
+
+    /**
+     * 注册Touch事件
+     *
+     * @param onTouchListener   onTouchListener
+     */
+    public void registerTouchEvenListener (OnTouchListener onTouchListener) {
+        onTouchListenerList.add(onTouchListener);
+        Fuck.blue("Add Complete，OnTouchListenerList Now Size：" + onTouchListenerList.size());
+    }
+
+    /**
+     * 取消注册Touch事件
+     *
+     * @param onTouchListener   onTouchListener
+     */
+    public void unregisterTouchEvenListener (OnTouchListener onTouchListener) {
+        onTouchListenerList.remove(onTouchListener);
+        Fuck.blue("Removal Complete，OnTouchListenerList Now Size：" + onTouchListenerList.size());
     }
 }

@@ -26,7 +26,7 @@ import me.yokeyword.fragmentation.SupportFragment;
  * @Time 2021/3/9
  * @Desc 基本的LazySupportFragment，该Fragment默认设置{@link com.leon.biuvideo.ui.views.SmartRefreshRecyclerView}为布局,所以不用指定布局文件
  */
-public abstract class BaseSupportFragmentWithSrr<T> extends SupportFragment {
+public abstract class BaseSupportFragmentWithSrr<T> extends BaseSupportFragment {
     protected Context context;
     protected BindingUtils bindingUtils;
     protected SmartRefreshRecyclerView<T> view;
@@ -54,6 +54,11 @@ public abstract class BaseSupportFragmentWithSrr<T> extends SupportFragment {
      */
     public void setOnLoadListener(OnLoadListener onLoadListener) {
         this.onLoadListener = onLoadListener;
+    }
+
+    @Override
+    protected int setLayout() {
+        return 0;
     }
 
     @Nullable
@@ -85,16 +90,6 @@ public abstract class BaseSupportFragmentWithSrr<T> extends SupportFragment {
     /**
      * 初始化控件
      */
+    @Override
     protected abstract void initView();
-
-    /**
-     * 获取本布局中的某一个控件
-     *
-     * @param id  控件ID
-     * @param <T> 继承View类的控件
-     * @return 返回控件对象
-     */
-    protected <T extends View> T findView(@IdRes int id) {
-        return view.findViewById(id);
-    }
 }

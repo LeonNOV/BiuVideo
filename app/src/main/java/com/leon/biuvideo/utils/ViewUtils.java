@@ -1,25 +1,20 @@
 package com.leon.biuvideo.utils;
 
-import android.content.Context;
-import android.content.res.ColorStateList;
+import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.RippleDrawable;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.ColorInt;
-import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.ViewPager2Adapter;
-import com.scwang.smartrefresh.layout.header.bezierradar.RippleView;
+import com.leon.biuvideo.ui.MainActivity;
 
 import java.util.Map;
 
@@ -95,8 +90,9 @@ public class ViewUtils {
      * @param viewPager2    ViewPager2
      * @param titles    Tab标题
      * @param firstShowItemPosition 第一个显示的item索引
+     * @return MainActivity.OnTouchListener
      */
-    public static void initTabLayoutAndViewPager2(TabLayout tabLayout, ViewPager2 viewPager2, String[] titles, int firstShowItemPosition) {
+    public static MainActivity.OnTouchListener initTabLayoutAndViewPager2(Activity activity, TabLayout tabLayout, ViewPager2 viewPager2, String[] titles, int firstShowItemPosition) {
         viewPager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         viewPager2.setCurrentItem(firstShowItemPosition);
 
@@ -127,5 +123,56 @@ public class ViewUtils {
 
             }
         });
+
+        // 设置ViewPager2灵敏度
+        return setViewPagerSensitivity(activity, viewPager2);
+    }
+
+    /**
+     * 设置ViewPager2灵敏度
+     *
+     * @param activity  activity
+     * @param viewPager2    viewPager2
+     * @return  MainActivity.OnTouchListener
+     */
+    private static MainActivity.OnTouchListener setViewPagerSensitivity(Activity activity, ViewPager2 viewPager2) {
+        MainActivity.OnTouchListener onTouchListener = new MainActivity.OnTouchListener() {
+            private int startX = 0;
+            private int startY = 0;
+
+            @Override
+            public void onTouch(MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        startX = (int) event.getX();
+                        startY = (int) event.getY();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        int endX = (int) event.getX();
+                        int endY = (int) event.getY();
+
+                        int disX = Math.abs(endX - startX);
+                        int disY = Math.abs(endY - startY);
+                        if (disX < disY) {
+                            // 如果水平滑动的距离小于垂直的滑动距离，就关闭左右滑动操作
+                            viewPager2.setUserInputEnabled(false);
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        startX = 0;
+                        startY = 0;
+                        viewPager2.setUserInputEnabled(true);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+        };
+
+        // 注册Touch事件
+        ((MainActivity) activity).registerTouchEvenListener(onTouchListener);
+
+        return onTouchListener;
     }
 }

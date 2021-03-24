@@ -9,10 +9,10 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.ViewPager2Adapter;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.home.orderFragments.OrderBangumiFragment;
 import com.leon.biuvideo.ui.home.orderFragments.OrderSeriesFragment;
-import com.leon.biuvideo.ui.home.orderFragments.OrderTagsFragment;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.ViewUtils;
 
@@ -27,6 +27,8 @@ import me.yokeyword.fragmentation.SupportFragment;
  * @Desc 订阅页面
  */
 public class OrderFragment extends BaseSupportFragment {
+
+    private MainActivity.OnTouchListener onTouchListener;
 
     public static SupportFragment getInstance() {
         return new OrderFragment();
@@ -68,6 +70,14 @@ public class OrderFragment extends BaseSupportFragment {
         orderFragmentViewPager.setAdapter(new ViewPager2Adapter(this, viewPagerFragments));
 
         // 初始化ViewPager2和TabLayout
-        ViewUtils.initTabLayoutAndViewPager2(orderFragmentTabLayout, orderFragmentViewPager, titles, 0);
+        onTouchListener = ViewUtils.initTabLayoutAndViewPager2(getActivity(), orderFragmentTabLayout, orderFragmentViewPager, titles, 0);
+    }
+
+    @Override
+    public void onDestroyView() {
+        // 取消注册Touch事件
+        ((MainActivity) getActivity()).unregisterTouchEvenListener(onTouchListener);
+
+        super.onDestroyView();
     }
 }

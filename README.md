@@ -21,7 +21,48 @@
 - 加入了`每周必看`页面，部分功能还需要进行完善
   - 修复了已知的BUG
 - 修复了部分小问题
-  - **目前ViewPager2控件的灵敏度太过于灵敏，很容易在下滑过程中，滑到旁边的页面，后面会对ViewPager2部分对应功能进行重写**
+  - ~~**目前ViewPager2控件的灵敏度太过于灵敏，很容易在下滑过程中，滑到旁边的页面，后面会对ViewPager2部分对应功能进行重写**~~
+  - 重写个大爷！，ViewPager2是个太监，淦！！！
+- 对`ViewUtils.initTabLayoutAndViewPager2()`进行了修改,并修复了ViewPager2滑动灵敏的问题
+- 每次调用需要获取`Activity`，并返回一个`MainActivity.OnTouchListener`对象，使用示例
+- ```java
+    public class XXXFragment {
+        private MainActivity.OnTouchListener onTouchListener;
+        
+        @Override
+        protected void initView() {
+            SimpleTopBar topBar = view.findViewById(R.id.topBar);
+            topBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
+                @Override
+                public void onLeft() {
+                    backPressed();
+                }
+    
+                @Override
+                public void onRight() {
+    
+                }
+            });
+    
+            TabLayout tabLayout = view.findViewById(R.id.tabLayout);
+            ViewPager2 viewPager = view.findViewById(R.id.viewPager);
+            
+            // Do something...
+    
+            // 初始化ViewPager2和TabLayout
+            onTouchListener = ViewUtils.initTabLayoutAndViewPager2(getActivity(), tabLayout, viewPager, new String[]{"title1", "title2"}, 1);
+        }
+    
+        // 一定要重写onDestroyView
+        @Override
+        public void onDestroyView() {
+            // 取消注册Touch事件
+            ((MainActivity) getActivity()).unregisterTouchEvenListener(onTouchListener);
+    
+            super.onDestroyView();
+        }
+    }
+  ```
 
 ### 2020/03/23
 - 完善了分区数据，除`专栏分区`和`频道`外,其他分区均已完成其UI

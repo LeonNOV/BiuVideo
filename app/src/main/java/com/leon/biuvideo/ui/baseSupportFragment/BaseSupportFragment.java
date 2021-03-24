@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -34,6 +35,8 @@ public abstract class BaseSupportFragment extends SupportFragment {
      */
     protected Handler receiveDataHandler;
 
+    private OnLoadListener onLoadListener;
+
     public interface OnLoadListener {
         /**
          * 实现该方法，用于在主线程中处理数据
@@ -42,8 +45,6 @@ public abstract class BaseSupportFragment extends SupportFragment {
          */
         void onLoad(Message msg);
     }
-
-    private OnLoadListener onLoadListener;
 
     public void setOnLoadListener(OnLoadListener onLoadListener) {
         this.onLoadListener = onLoadListener;
