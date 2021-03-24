@@ -254,6 +254,18 @@ public class BiliBiliAPIs {
      */
     public static final String HOT_LIST = "https://api.bilibili.com/x/web-interface/popular";
 
+    /**
+     * 获取每周必看往期目录数据，该接口不需要任何参数
+     */
+    public static final String POPULAR_WEEKLY_SERIES = "https://api.bilibili.com/x/web-interface/popular/series/list";
+
+    /**
+     * 获取每周必看数据
+     * 参数
+     *      number：期数
+     *
+     */
+    public static final String POPULAR_WEEKLY_DATA = "https://api.bilibili.com/x/web-interface/popular/series/one";
 
     //========================以下接口数据的获取需要在请求头中添加Cookie========================
 

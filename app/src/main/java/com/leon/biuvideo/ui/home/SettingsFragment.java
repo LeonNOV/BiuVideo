@@ -78,6 +78,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     private LoadingRecyclerView loadingRecyclerView;
     private LocalBroadcastManager localBroadcastManager;
     private SetLocationBottomSheet setLocationBottomSheet;
+    private SetRecommendColumnBottomSheet setRecommendColumnBottomSheet;
 
     public static SettingsFragment getInstance() {
         return new SettingsFragment();
@@ -189,7 +190,9 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 thanksListDialog.show();
                 break;
             case R.id.settings_fragment_recommend_span_count:
-                SetRecommendColumnBottomSheet setRecommendColumnBottomSheet = new SetRecommendColumnBottomSheet();
+                if (setRecommendColumnBottomSheet == null) {
+                    setRecommendColumnBottomSheet = new SetRecommendColumnBottomSheet();
+                }
                 setRecommendColumnBottomSheet.showSetRecommendColumnBottomSheet();
                 break;
             case R.id.settings_fragment_feedback:
@@ -524,10 +527,11 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
 
         private FrameLayout setRecommendColumnShowSingleColumn;
         private FrameLayout setRecommendColumnShowDoubleColumn;
+        private SimpleBottomSheet setRecommendColumnBottomSheet;
 
         private void showSetRecommendColumnBottomSheet() {
-            if (setLocationBottomSheet == null) {
-                SimpleBottomSheet setRecommendColumnBottomSheet = new SimpleBottomSheet(context, R.layout.settings_fragment_set_recommend_column_bottom_sheet);
+            if (setRecommendColumnBottomSheet == null) {
+                setRecommendColumnBottomSheet = new SimpleBottomSheet(context, R.layout.settings_fragment_set_recommend_column_bottom_sheet);
                 setRecommendColumnBottomSheetView = setRecommendColumnBottomSheet.initView();
                 setRecommendColumnBottomSheetDialog = setRecommendColumnBottomSheet.bottomSheetDialog;
                 setRecommendColumnBottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {

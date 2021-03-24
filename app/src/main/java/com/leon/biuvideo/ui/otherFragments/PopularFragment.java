@@ -61,6 +61,6 @@ public class PopularFragment extends BaseSupportFragment {
         popularViewPager.setAdapter(new ViewPager2Adapter(this, viewPagerFragments));
 
         // 初始化ViewPager2和TabLayout
-        ViewUtils.initTabLayoutAndViewPager2(popularTabLayout, popularViewPager, titles, 0);
+        ViewUtils.initTabLayoutAndViewPager2(popularTabLayout, popularViewPager, titles, 1);
     }
 }

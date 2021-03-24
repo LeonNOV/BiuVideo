@@ -1,27 +1,183 @@
 package com.leon.biuvideo.ui.otherFragments.popularFragments;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.os.Message;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.adapters.PopularWeeklySeriesAdapter;
+import com.leon.biuvideo.adapters.homeAdapters.popularAdapters.PopularHotListAndWeeklyAdapter;
+import com.leon.biuvideo.beans.homeBeans.PopularWeeklySeries;
+import com.leon.biuvideo.beans.homeBeans.popularBeans.HotVideo;
+import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.views.BottomSheetTopBar;
+import com.leon.biuvideo.ui.views.LoadingRecyclerView;
+import com.leon.biuvideo.ui.views.SimpleBottomSheet;
+import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
+import com.leon.biuvideo.utils.parseDataUtils.PopularWeeklyDataParser;
+import com.leon.biuvideo.utils.parseDataUtils.PopularWeeklySeriesParser;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
-import me.yokeyword.fragmentation.SupportFragment;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author Leon
  * @Time 2021/3/1
  * @Desc 热门排行榜页面-每周必看
  */
-public class PopularWeeklyFragment extends SupportFragment {
-    @Nullable
+public class PopularWeeklyFragment extends BaseSupportFragment {
+    private final List<HotVideo> hotVideoList = new ArrayList<>();
+
+    private List<PopularWeeklySeries> popularWeeklySeriesList;
+    private PopularWeeklySeriesParser popularWeeklySeriesParser;
+    private LoadingRecyclerView discoveryPopularWeeklyData;
+    private PopularWeeklyDataParser popularWeeklyDataParser;
+    private TextView discoveryPopularWeeklySelectedSubject;
+    private TextView discoveryPopularWeeklySelectedName;
+
+    private int selectedSeriesPosition = 0;
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.discover_popular_weekly, container, false);
-        return view;
+    protected int setLayout() {
+        return R.layout.discover_popular_weekly;
+    }
+
+    @Override
+    protected void initView() {
+        discoveryPopularWeeklySelectedName = findView(R.id.discovery_popular_weekly_selected_name);
+        discoveryPopularWeeklySelectedSubject = findView(R.id.discovery_popular_weekly_selected_subject);
+
+        LinearLayout discoveryPopularWeeklySelectSeries = findView(R.id.discovery_popular_weekly_selectSeries);
+        discoveryPopularWeeklySelectSeries.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showBottomSheet(popularWeeklySeriesList, selectedSeriesPosition);
+            }
+        });
+
+        // 载数据未加载完成前不能操作discoveryPopularWeeklySelectSeries
+        discoveryPopularWeeklySelectSeries.setClickable(false);
+
+        discoveryPopularWeeklyData = findView(R.id.discovery_popular_weekly_data);
+        PopularHotListAndWeeklyAdapter popularHotListAndWeeklyAdapter = new PopularHotListAndWeeklyAdapter(hotVideoList, context, false);
+        popularHotListAndWeeklyAdapter.setHasStableIds(true);
+        discoveryPopularWeeklyData.setRecyclerViewAdapter(popularHotListAndWeeklyAdapter);
+        discoveryPopularWeeklyData.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
+
+        setOnLoadListener(new OnLoadListener() {
+            @Override
+            public void onLoad(Message msg) {
+                List<HotVideo> hotVideos = (List<HotVideo>) msg.obj;
+
+                switch (msg.what) {
+                    case 0:
+                        PopularWeeklySeries popularWeeklySeries = popularWeeklySeriesList.get(0);
+                        discoveryPopularWeeklySelectedName.setText(popularWeeklySeries.name);
+                        discoveryPopularWeeklySelectedSubject.setText(popularWeeklySeries.subject);
+
+                        popularHotListAndWeeklyAdapter.append(hotVideos);
+                        discoveryPopularWeeklyData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+
+                        discoveryPopularWeeklySelectSeries.setClickable(true);
+                        break;
+                    case 1:
+                        discoveryPopularWeeklyData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+
+                        popularHotListAndWeeklyAdapter.removeAll();
+                        popularHotListAndWeeklyAdapter.append(hotVideos);
+
+                        discoveryPopularWeeklyData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
+        super.onLazyInitView(savedInstanceState);
+
+        discoveryPopularWeeklyData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+
+        getData(0, -1);
+    }
+
+    private void showBottomSheet(List<PopularWeeklySeries> popularWeeklySeriesList, int selectedPosition) {
+        SimpleBottomSheet simpleBottomSheet = new SimpleBottomSheet(context, R.layout.popular_weekly_before_series_bottom_sheet);
+        View view = simpleBottomSheet.initView();
+        BottomSheetDialog bottomSheetDialog = simpleBottomSheet.bottomSheetDialog;
+
+        BottomSheetTopBar popularWeeklyBeforeSeriesBottomSheetTopBar = view.findViewById(R.id.popular_weekly_before_series_bottom_sheet_topBar);
+        popularWeeklyBeforeSeriesBottomSheetTopBar.setOnCloseListener(new BottomSheetTopBar.OnCloseListener() {
+            @Override
+            public void onClose() {
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        LoadingRecyclerView popularWeeklyBeforeSeriesBottomSheetLoadingRecyclerView = view.findViewById(R.id.popular_weekly_before_series_bottom_sheet_loadingRecyclerView);
+        popularWeeklyBeforeSeriesBottomSheetLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+        PopularWeeklySeriesAdapter popularWeeklySeriesAdapter = new PopularWeeklySeriesAdapter(popularWeeklySeriesList, selectedPosition, context);
+        popularWeeklySeriesAdapter.setOnSeriesChangedListener(new PopularWeeklySeriesAdapter.OnSeriesChangedListener() {
+            @Override
+            public void onChanged(PopularWeeklySeries popularWeeklySeries, int position) {
+                selectedSeriesPosition = position;
+
+                getData(1, popularWeeklySeries.number);
+                discoveryPopularWeeklySelectedName.setText(popularWeeklySeries.name);
+                discoveryPopularWeeklySelectedSubject.setText(popularWeeklySeries.subject);
+
+                bottomSheetDialog.dismiss();
+            }
+        });
+        popularWeeklySeriesAdapter.setHasStableIds(true);
+        popularWeeklyBeforeSeriesBottomSheetLoadingRecyclerView.setRecyclerViewAdapter(popularWeeklySeriesAdapter);
+        popularWeeklyBeforeSeriesBottomSheetLoadingRecyclerView.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
+
+        popularWeeklyBeforeSeriesBottomSheetLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+        bottomSheetDialog.show();
+    }
+
+    private void getData(int what, int number) {
+        if (popularWeeklySeriesParser == null) {
+            popularWeeklyDataParser = new PopularWeeklyDataParser();
+        }
+
+        SimpleSingleThreadPool.executor(new Runnable() {
+            @Override
+            public void run() {
+                if (what == 0) {
+                    // 保证只获取一次每周必看series数据
+                    if (popularWeeklySeriesParser == null) {
+                        popularWeeklySeriesParser = new PopularWeeklySeriesParser();
+                        popularWeeklySeriesList = popularWeeklySeriesParser.parseData();
+                    }
+                }
+
+                List<HotVideo> hotVideos;
+
+                // 如果number等于-1，则获取最新一期的数据
+                if (number == -1 && popularWeeklySeriesList != null) {
+                    hotVideos = popularWeeklyDataParser.parseData(popularWeeklySeriesList.get(0).number);
+                } else {
+                    hotVideos = popularWeeklyDataParser.parseData(number);
+                }
+
+                Message message = receiveDataHandler.obtainMessage(what);
+                message.obj = hotVideos;
+                receiveDataHandler.sendMessage(message);
+            }
+        });
     }
 }

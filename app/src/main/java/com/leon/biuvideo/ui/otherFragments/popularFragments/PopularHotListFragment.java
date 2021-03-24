@@ -6,7 +6,7 @@ import android.os.Message;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.leon.biuvideo.adapters.homeAdapters.popularAdapters.PopularHotListAdapter;
+import com.leon.biuvideo.adapters.homeAdapters.popularAdapters.PopularHotListAndWeeklyAdapter;
 import com.leon.biuvideo.beans.homeBeans.popularBeans.HotVideo;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragmentWithSrr;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
@@ -30,10 +30,10 @@ public class PopularHotListFragment extends BaseSupportFragmentWithSrr<HotVideo>
 
     @Override
     protected void initView() {
-        PopularHotListAdapter popularHotListAdapter = new PopularHotListAdapter(hotVideoList, context);
-        popularHotListAdapter.setHasStableIds(true);
+        PopularHotListAndWeeklyAdapter popularHotListAndWeeklyAdapter = new PopularHotListAndWeeklyAdapter(hotVideoList, context, true);
+        popularHotListAndWeeklyAdapter.setHasStableIds(true);
 
-        view.setRecyclerViewAdapter(popularHotListAdapter);
+        view.setRecyclerViewAdapter(popularHotListAndWeeklyAdapter);
         view.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
         view.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
@@ -57,7 +57,7 @@ public class PopularHotListFragment extends BaseSupportFragmentWithSrr<HotVideo>
                             view.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
                             view.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                         } else {
-                            popularHotListAdapter.append(hotVideos);
+                            popularHotListAndWeeklyAdapter.append(hotVideos);
                             view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
                             if (!popularHotListParser.dataStatus) {
                                 view.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
@@ -66,7 +66,7 @@ public class PopularHotListFragment extends BaseSupportFragmentWithSrr<HotVideo>
                         break;
                     case 1:
                         if (hotVideos.size() > 0) {
-                            popularHotListAdapter.append(hotVideos);
+                            popularHotListAndWeeklyAdapter.append(hotVideos);
                             view.setSmartRefreshStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
                         } else {
                             view.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);

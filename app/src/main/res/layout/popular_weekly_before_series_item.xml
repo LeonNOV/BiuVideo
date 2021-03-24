@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/itemMarginBottom"
+    android:background="@drawable/ripple_round_corners6dp_bg"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/popular_weekly_before_series_item_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="2019第4期 04.12 - 04.18"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/popular_weekly_before_series_item_subject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="巴黎圣母院"
+        android:textColor="@color/gray"
+        android:textSize="15sp" />
+
+</LinearLayout>
