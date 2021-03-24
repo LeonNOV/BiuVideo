@@ -46,7 +46,7 @@ public class PopularWeeklyDataParser {
             hotVideo.view = stat.getIntValue("view");
             hotVideo.danmaku = stat.getIntValue("danmaku");
 
-            String reason = stat.getString("rcmd_reason");
+            String reason = jsonObject.getString("rcmd_reason");
             hotVideo.reason = "".equals(reason) ? null : reason;
 
             hotVideo.duration = ValueUtils.lengthGenerate(jsonObject.getIntValue("duration"));

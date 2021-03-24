@@ -54,6 +54,8 @@ public class PopularWeeklySeriesAdapter extends BaseAdapter<PopularWeeklySeries>
 
         if (selectedPosition == position) {
             holder.getItemView().setBackgroundResource(R.drawable.ic_selected);
+        } else {
+            holder.getItemView().setBackgroundResource(R.drawable.ripple_round_corners6dp_bg);
         }
 
         holder
@@ -62,7 +64,7 @@ public class PopularWeeklySeriesAdapter extends BaseAdapter<PopularWeeklySeries>
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (onSeriesChangedListener != null) {
+                        if (onSeriesChangedListener != null && position != selectedPosition) {
                             onSeriesChangedListener.onChanged(popularWeeklySeries, position);
                         }
                     }

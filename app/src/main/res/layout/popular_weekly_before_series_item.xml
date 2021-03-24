@@ -3,9 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/itemMarginBottom"
-    android:background="@drawable/ripple_round_corners6dp_bg"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="15dp">
 
     <TextView
         android:id="@+id/popular_weekly_before_series_item_name"
