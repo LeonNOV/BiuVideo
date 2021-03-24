@@ -2,7 +2,6 @@ package com.leon.biuvideo.ui.otherFragments.popularFragments;
 
 import android.os.Bundle;
 import android.os.Message;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,20 +12,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.PopularWeeklySeriesAdapter;
-import com.leon.biuvideo.adapters.homeAdapters.popularAdapters.PopularHotListAndWeeklyAdapter;
+import com.leon.biuvideo.adapters.homeAdapters.popularAdapters.PopularAdapter;
 import com.leon.biuvideo.beans.homeBeans.PopularWeeklySeries;
-import com.leon.biuvideo.beans.homeBeans.popularBeans.HotVideo;
-import com.leon.biuvideo.ui.MainActivity;
+import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularVideo;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.BottomSheetTopBar;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleBottomSheet;
-import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
-import com.leon.biuvideo.utils.parseDataUtils.PopularWeeklyDataParser;
-import com.leon.biuvideo.utils.parseDataUtils.PopularWeeklySeriesParser;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.popularParsers.PopularWeeklyDataParser;
+import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.popularParsers.PopularWeeklySeriesParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +32,7 @@ import java.util.List;
  * @Desc 热门排行榜页面-每周必看
  */
 public class PopularWeeklyFragment extends BaseSupportFragment {
-    private final List<HotVideo> hotVideoList = new ArrayList<>();
+    private final List<PopularVideo> popularVideoList = new ArrayList<>();
 
     private List<PopularWeeklySeries> popularWeeklySeriesList;
     private PopularWeeklySeriesParser popularWeeklySeriesParser;
@@ -46,38 +41,7 @@ public class PopularWeeklyFragment extends BaseSupportFragment {
     private TextView discoveryPopularWeeklySelectedSubject;
     private TextView discoveryPopularWeeklySelectedName;
 
-    private int startX = 0;
-    private int startY = 0;
-
     private int selectedSeriesPosition = 0;
-
-    /*private MainActivity.OnTouchListener onTouchListener = new MainActivity.OnTouchListener() {
-        @Override
-        public void onTouch(MotionEvent event) {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    startX = (int) event.getX();
-                    startY = (int) event.getY();
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    int endX = (int) event.getX();
-                    int endY = (int) event.getY();
-
-                    int disX = Math.abs(endX - startX);
-                    int disY = Math.abs(endY - startY);
-                    if (disX < disY) {
-
-                    }
-                    break;
-                case MotionEvent.ACTION_UP:
-                    break;
-                case MotionEvent.ACTION_CANCEL:
-                    break;
-                default:
-                    break;
-            }
-        }
-    };*/
 
     @Override
     protected int setLayout() {
@@ -101,15 +65,15 @@ public class PopularWeeklyFragment extends BaseSupportFragment {
         discoveryPopularWeeklySelectSeries.setClickable(false);
 
         discoveryPopularWeeklyData = findView(R.id.discovery_popular_weekly_data);
-        PopularHotListAndWeeklyAdapter popularHotListAndWeeklyAdapter = new PopularHotListAndWeeklyAdapter(hotVideoList, context, false);
-        popularHotListAndWeeklyAdapter.setHasStableIds(true);
-        discoveryPopularWeeklyData.setRecyclerViewAdapter(popularHotListAndWeeklyAdapter);
+        PopularAdapter popularAdapter = new PopularAdapter(popularVideoList, context, PopularAdapter.WEEKLY);
+        popularAdapter.setHasStableIds(true);
+        discoveryPopularWeeklyData.setRecyclerViewAdapter(popularAdapter);
         discoveryPopularWeeklyData.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
 
         setOnLoadListener(new OnLoadListener() {
             @Override
             public void onLoad(Message msg) {
-                List<HotVideo> hotVideos = (List<HotVideo>) msg.obj;
+                List<PopularVideo> popularVideos = (List<PopularVideo>) msg.obj;
 
                 switch (msg.what) {
                     case 0:
@@ -117,7 +81,7 @@ public class PopularWeeklyFragment extends BaseSupportFragment {
                         discoveryPopularWeeklySelectedName.setText(popularWeeklySeries.name);
                         discoveryPopularWeeklySelectedSubject.setText(popularWeeklySeries.subject);
 
-                        popularHotListAndWeeklyAdapter.append(hotVideos);
+                        popularAdapter.append(popularVideos);
                         discoveryPopularWeeklyData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
 
                         discoveryPopularWeeklySelectSeries.setClickable(true);
@@ -125,8 +89,8 @@ public class PopularWeeklyFragment extends BaseSupportFragment {
                     case 1:
                         discoveryPopularWeeklyData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
-                        popularHotListAndWeeklyAdapter.removeAll();
-                        popularHotListAndWeeklyAdapter.append(hotVideos);
+                        popularAdapter.removeAll();
+                        popularAdapter.append(popularVideos);
 
                         discoveryPopularWeeklyData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
                         break;
@@ -198,24 +162,19 @@ public class PopularWeeklyFragment extends BaseSupportFragment {
                     }
                 }
 
-                List<HotVideo> hotVideos;
+                List<PopularVideo> popularVideos;
 
                 // 如果number等于-1，则获取最新一期的数据
                 if (number == -1 && popularWeeklySeriesList != null) {
-                    hotVideos = popularWeeklyDataParser.parseData(popularWeeklySeriesList.get(0).number);
+                    popularVideos = popularWeeklyDataParser.parseData(popularWeeklySeriesList.get(0).number);
                 } else {
-                    hotVideos = popularWeeklyDataParser.parseData(number);
+                    popularVideos = popularWeeklyDataParser.parseData(number);
                 }
 
                 Message message = receiveDataHandler.obtainMessage(what);
-                message.obj = hotVideos;
+                message.obj = popularVideos;
                 receiveDataHandler.sendMessage(message);
             }
         });
     }
-
-//    @Override
-//    protected void unregisterTouchListener() {
-//        ((MainActivity) getActivity()).unregisterTouchEvenListener(onTouchListener);
-//    }
 }

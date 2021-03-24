@@ -2,7 +2,7 @@ package com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.popularParsers;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.homeBeans.popularBeans.HotVideo;
+import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularVideo;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.parseDataUtils.ParserInterface;
@@ -20,13 +20,13 @@ import okhttp3.Headers;
  * @Time 2021/3/23
  * @Desc 获取综合热门数据
  */
-public class PopularHotListParser implements ParserInterface<HotVideo> {
+public class PopularHotListParser implements ParserInterface<PopularVideo> {
     private static final int PAGE_SIZE = 20;
     private int pageNum = 1;
     public boolean dataStatus = true;
 
     @Override
-    public List<HotVideo> parseData() {
+    public List<PopularVideo> parseData() {
         Map<String, String> params = new HashMap<>(2);
         params.put("pn", String.valueOf(pageNum));
         params.put("ps", String.valueOf(PAGE_SIZE));
@@ -38,34 +38,34 @@ public class PopularHotListParser implements ParserInterface<HotVideo> {
             dataStatus = !(data.getBoolean("no_more"));
 
             JSONArray list = data.getJSONArray("list");
-            List<HotVideo> hotVideos = new ArrayList<>(list.size());
+            List<PopularVideo> popularVideos = new ArrayList<>(list.size());
 
             for (Object o : list) {
                 JSONObject jsonObject = (JSONObject) o;
-                HotVideo hotVideo = new HotVideo();
+                PopularVideo popularVideo = new PopularVideo();
 
-                hotVideo.title = jsonObject.getString("title");
-                hotVideo.pic = jsonObject.getString("pic");
-                hotVideo.aid = jsonObject.getString("aid");
-                hotVideo.bvid = jsonObject.getString("bvid");
+                popularVideo.title = jsonObject.getString("title");
+                popularVideo.pic = jsonObject.getString("pic");
+                popularVideo.aid = jsonObject.getString("aid");
+                popularVideo.bvid = jsonObject.getString("bvid");
 
-                hotVideo.userName = jsonObject.getJSONObject("owner").getString("name");
+                popularVideo.userName = jsonObject.getJSONObject("owner").getString("name");
 
                 JSONObject stat = jsonObject.getJSONObject("stat");
-                hotVideo.view = stat.getIntValue("view");
-                hotVideo.danmaku = stat.getIntValue("danmaku");
+                popularVideo.view = stat.getIntValue("view");
+                popularVideo.danmaku = stat.getIntValue("danmaku");
 
                 String reasonContent = jsonObject.getJSONObject("rcmd_reason").getString("content");
-                hotVideo.reason = "".equals(reasonContent) ? null : reasonContent;
+                popularVideo.reason = "".equals(reasonContent) ? null : reasonContent;
 
-                hotVideo.duration = ValueUtils.lengthGenerate(jsonObject.getIntValue("duration"));
+                popularVideo.duration = ValueUtils.lengthGenerate(jsonObject.getIntValue("duration"));
 
-                hotVideos.add(hotVideo);
+                popularVideos.add(popularVideo);
             }
 
             pageNum ++;
 
-            return hotVideos;
+            return popularVideos;
         }
 
         return null;

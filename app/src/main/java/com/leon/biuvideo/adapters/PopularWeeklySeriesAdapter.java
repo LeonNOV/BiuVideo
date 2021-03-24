@@ -53,9 +53,9 @@ public class PopularWeeklySeriesAdapter extends BaseAdapter<PopularWeeklySeries>
         PopularWeeklySeries popularWeeklySeries = popularWeeklySeriesList.get(position);
 
         if (selectedPosition == position) {
-            holder.getItemView().setBackgroundResource(R.drawable.ic_selected);
+            holder.getItemView().setBackground(context.getDrawable(R.drawable.ic_selected));
         } else {
-            holder.getItemView().setBackgroundResource(R.drawable.ripple_round_corners6dp_bg);
+            holder.getItemView().setBackground(context.getDrawable(R.drawable.ripple_round_corners6dp_bg));
         }
 
         holder

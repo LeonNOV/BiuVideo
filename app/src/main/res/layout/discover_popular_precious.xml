@@ -3,13 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <com.leon.biuvideo.ui.views.LoadingRecyclerView
+        android:id="@+id/discover_popular_precious_loadingRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="History"
-        android:textColor="@color/black"
-        android:textSize="30sp" />
+        android:padding="@dimen/cardPadding"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

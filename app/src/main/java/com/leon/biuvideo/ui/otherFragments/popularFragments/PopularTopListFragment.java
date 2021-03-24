@@ -1,17 +1,10 @@
 package com.leon.biuvideo.ui.otherFragments.popularFragments;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-
-import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * @Author Leon
@@ -27,5 +20,10 @@ public class PopularTopListFragment extends BaseSupportFragment {
     @Override
     protected void initView() {
 
+    }
+
+    @Override
+    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
+        super.onLazyInitView(savedInstanceState);
     }
 }

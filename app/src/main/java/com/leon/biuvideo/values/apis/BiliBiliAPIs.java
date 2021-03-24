@@ -267,6 +267,15 @@ public class BiliBiliAPIs {
      */
     public static final String POPULAR_WEEKLY_DATA = "https://api.bilibili.com/x/web-interface/popular/series/one";
 
+    /**
+     * 获取入站必刷数据
+     * 参数
+     *      page_size：默认100（可选）
+     *      page：从1开始（可选）
+     *
+     */
+    public static final String POPULAR_PRECIOUS = "https://api.bilibili.com/x/web-interface/popular/precious";
+
     //========================以下接口数据的获取需要在请求头中添加Cookie========================
 
     /**

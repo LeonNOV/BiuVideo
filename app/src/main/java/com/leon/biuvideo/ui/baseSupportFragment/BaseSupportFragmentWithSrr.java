@@ -87,6 +87,8 @@ public abstract class BaseSupportFragmentWithSrr<T> extends BaseSupportFragment 
         return view;
     }
 
+
+
     /**
      * 初始化控件
      */

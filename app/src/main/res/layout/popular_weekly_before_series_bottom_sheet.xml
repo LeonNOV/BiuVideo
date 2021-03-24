@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="@color/bg"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/cardPadding"
+    android:paddingEnd="@dimen/cardPadding"
+    android:paddingBottom="@dimen/cardPadding">
 
     <com.leon.biuvideo.ui.views.BottomSheetTopBar
         android:id="@+id/popular_weekly_before_series_bottom_sheet_topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:bottomSheetTitle="往期每周必看"/>
+        app:bottomSheetTitle="@string/popular_weekly" />
 
     <com.leon.biuvideo.ui.views.LoadingRecyclerView
         android:id="@+id/popular_weekly_before_series_bottom_sheet_loadingRecyclerView"
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
-        android:padding="@dimen/recyclerViewPadding"
-        android:layout_height="match_parent"/>
+        android:layout_height="500dp"
+        android:layout_marginTop="20dp"
+        android:padding="@dimen/recyclerViewPadding" />
 
 </LinearLayout>

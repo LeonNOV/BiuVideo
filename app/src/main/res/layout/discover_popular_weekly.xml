@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="10dp"
+        android:gravity="center_horizontal"
         android:background="@drawable/ripple_rectangle"
         android:paddingEnd="10dp"
         android:paddingTop="5dp"
@@ -18,18 +19,18 @@
 
         <TextView
             android:id="@+id/discovery_popular_weekly_selected_name"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/discovery_popular_weekly_selected_subject"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/gray"
-            android:textSize="15sp" />
+            android:textSize="14sp" />
 
     </LinearLayout>
 
@@ -37,8 +38,6 @@
         android:id="@+id/discovery_popular_weekly_data"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:paddingBottom="10dp" />
+        android:padding="10dp" />
 
 </LinearLayout>

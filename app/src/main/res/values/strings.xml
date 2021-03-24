@@ -193,5 +193,6 @@
     <string name="partition_movie">电影</string>
     <string name="partition_teleplay">电视剧</string>
     <string name="partition_channel">频道</string>
+    <string name="popular_weekly">往期每周必看</string>
 
 </resources>

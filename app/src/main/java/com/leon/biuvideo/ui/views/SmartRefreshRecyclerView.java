@@ -133,8 +133,9 @@ public class SmartRefreshRecyclerView<T> extends SmartRefreshLayout {
         if (NO_DATA == status) {
             finishLoadMore();
             setEnableLoadMore(false);
+            finishLoadMoreWithNoMoreData();
         } else if (LOADING_FINISHING == status) {
-            finishLoadMore();
+            finishLoadMore(true);
         }
     }
 }

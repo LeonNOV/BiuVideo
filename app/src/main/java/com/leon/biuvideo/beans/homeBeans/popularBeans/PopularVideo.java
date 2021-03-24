@@ -3,9 +3,9 @@ package com.leon.biuvideo.beans.homeBeans.popularBeans;
 /**
  * @Author Leon
  * @Time 2021/3/23
- * @Desc 综合热门数据
+ * @Desc Popular数据
  */
-public class HotVideo {
+public class PopularVideo {
     public String title;
     public String pic;
     public String aid;

@@ -6,8 +6,8 @@ import android.os.Message;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.leon.biuvideo.adapters.homeAdapters.popularAdapters.PopularHotListAndWeeklyAdapter;
-import com.leon.biuvideo.beans.homeBeans.popularBeans.HotVideo;
+import com.leon.biuvideo.adapters.homeAdapters.popularAdapters.PopularAdapter;
+import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularVideo;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragmentWithSrr;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
@@ -24,16 +24,16 @@ import java.util.List;
  * @Time 2021/3/1
  * @Desc 热门排行榜页面-综合热门
  */
-public class PopularHotListFragment extends BaseSupportFragmentWithSrr<HotVideo> {
-    private final List<HotVideo> hotVideoList = new ArrayList<>();
+public class PopularHotListFragment extends BaseSupportFragmentWithSrr<PopularVideo> {
+    private final List<PopularVideo> popularVideoList = new ArrayList<>();
     private PopularHotListParser popularHotListParser;
 
     @Override
     protected void initView() {
-        PopularHotListAndWeeklyAdapter popularHotListAndWeeklyAdapter = new PopularHotListAndWeeklyAdapter(hotVideoList, context, true);
-        popularHotListAndWeeklyAdapter.setHasStableIds(true);
+        PopularAdapter popularAdapter = new PopularAdapter(popularVideoList, context, PopularAdapter.HOT_VIDEO);
+        popularAdapter.setHasStableIds(true);
 
-        view.setRecyclerViewAdapter(popularHotListAndWeeklyAdapter);
+        view.setRecyclerViewAdapter(popularAdapter);
         view.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
         view.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
@@ -49,15 +49,15 @@ public class PopularHotListFragment extends BaseSupportFragmentWithSrr<HotVideo>
         setOnLoadListener(new OnLoadListener() {
             @Override
             public void onLoad(Message msg) {
-                List<HotVideo> hotVideos = (List<HotVideo>) msg.obj;
+                List<PopularVideo> popularVideos = (List<PopularVideo>) msg.obj;
 
                 switch (msg.what) {
                     case 0:
-                        if (hotVideos.size() == 0) {
+                        if (popularVideos.size() == 0) {
                             view.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
                             view.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                         } else {
-                            popularHotListAndWeeklyAdapter.append(hotVideos);
+                            popularAdapter.append(popularVideos);
                             view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
                             if (!popularHotListParser.dataStatus) {
                                 view.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
@@ -65,8 +65,8 @@ public class PopularHotListFragment extends BaseSupportFragmentWithSrr<HotVideo>
                         }
                         break;
                     case 1:
-                        if (hotVideos.size() > 0) {
-                            popularHotListAndWeeklyAdapter.append(hotVideos);
+                        if (popularVideos.size() > 0) {
+                            popularAdapter.append(popularVideos);
                             view.setSmartRefreshStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
                         } else {
                             view.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
@@ -96,10 +96,10 @@ public class PopularHotListFragment extends BaseSupportFragmentWithSrr<HotVideo>
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                List<HotVideo> hotVideos = popularHotListParser.parseData();
+                List<PopularVideo> popularVideos = popularHotListParser.parseData();
 
                 Message message = receiveDataHandler.obtainMessage(what);
-                message.obj = hotVideos;
+                message.obj = popularVideos;
                 receiveDataHandler.sendMessage(message);
             }
         });
