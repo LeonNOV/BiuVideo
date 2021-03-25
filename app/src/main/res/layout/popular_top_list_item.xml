@@ -177,7 +177,7 @@
             <TextView
                 android:id="@+id/popular_top_list_item_expand_text"
                 android:layout_width="wrap_content"
-                android:text="显示此UP主全部上榜视频"
+                android:text="@string/popular_top_list_show_otherVideos"
                 android:textColor="@color/gray"
                 android:layout_height="wrap_content"/>
 

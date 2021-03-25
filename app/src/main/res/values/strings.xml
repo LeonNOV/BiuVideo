@@ -199,4 +199,7 @@
     <string name="popular_weekly">每周必看</string>
     <string name="popular_top_list">排行榜</string>
 
+    <string name="popular_top_list_show_otherVideos">显示此UP主全部上榜视频</string>
+    <string name="popular_top_list_hide_otherVideos">隐藏此UP主全部上榜视频</string>
+
 </resources>

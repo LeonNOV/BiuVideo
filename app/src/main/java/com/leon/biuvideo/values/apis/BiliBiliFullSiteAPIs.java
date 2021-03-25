@@ -11,162 +11,113 @@ package com.leon.biuvideo.values.apis;
  *      具体使用可看项目根目录下的`LeaderboardInterface.md`文件
  */
 public class BiliBiliFullSiteAPIs {
+/**
+* 全站
+**/
+public static final String ALL = "https://api.bilibili.com/x/web-interface/ranking/v2?rid=0&type=all";
 
-    /**
-     * 和RANKING_V2接口配合使用
-     */
-    public enum FullSiteRids {
-        /**
-         * 全站
-         */
-        ALL(0),
+/**
+* 番剧
+**/
+public static final String BANGUMI = "https://api.bilibili.com/pgc/web/rank/list?day=3&season_type=1";
 
-        /**
-         * 国创相关
-         */
-        GUOCHUANG(168),
+/**
+* 国产动画
+**/
+public static final String GUOCHAN = "https://api.bilibili.com/pgc/season/rank/web/list?day=3&season_type=4";
 
-        /**
-         * 动画
-         */
-        DOUGA(1),
+/**
+* 国创相关
+**/
+public static final String GUOCHUANG = "https://api.bilibili.com/x/web-interface/ranking/v2?rid=168&type=all";
 
-        /**
-         * 音乐
-         */
-        MUSIC(3),
+/**
+* 纪录片
+**/
+public static final String DOCUMENTARY = "https://api.bilibili.com/pgc/season/rank/web/list?day=3&season_type=3";
 
-        /**
-         * 舞蹈
-         */
-        DANCE(129),
+/**
+* 动画
+**/
+public static final String DOUGA = "https://api.bilibili.com/x/web-interface/ranking/v2?rid=1&type=all";
 
-        /**
-         * 游戏
-         */
-        GAME(4),
+/**
+* 音乐
+**/
+public static final String MUSIC = "https://api.bilibili.com/x/web-interface/ranking/v2?rid=3&type=all";
 
-        /**
-         * 知识
-         */
-        TECHNOLOGY(36),
+/**
+* 舞蹈
+**/
+public static final String DANCE = "https://api.bilibili.com/x/web-interface/ranking/v2?rid=129&type=all";
 
-        /**
-         * 数码
-         */
-        DIGITAL(188),
+/**
+* 游戏
+**/
+public static final String GAME = "https://api.bilibili.com/x/web-interface/ranking/v2?rid=4&type=all";
 
-        /**
-         * 生活
-         */
-        LIFE(160),
+/**
+* 知识
+**/
+public static final String TECHNOLOGY = "https://api.bilibili.com/x/web-interface/ranking/v2?rid=36&type=all";
 
-        /**
-         * 美食
-         */
-        FOOD(211),
+/**
+* 数码
+**/
+public static final String DIGITAL = "https://api.bilibili.com/x/web-interface/ranking/v2?rid=188&type=all";
 
-        /**
-         * 动物圈
-         */
-        ANIMAL(217),
+/**
+* 生活
+**/
+public static final String LIFE = "https://api.bilibili.com/x/web-interface/ranking/v2?rid=160&type=all";
 
-        /**
-         * 鬼畜
-         */
-        KICHIKU(119),
+/**
+* 美食
+**/
+public static final String FOOD = "https://api.bilibili.com/x/web-interface/ranking/v2?rid=211&type=all";
 
-        /**
-         * 时尚
-         */
-        FASHION(155),
+/**
+* 动物圈
+**/
+public static final String ANIMAL = "https://api.bilibili.com/x/web-interface/ranking/v2?rid=217&type=all";
 
-        /**
-         * 娱乐
-         */
-        ENT(5),
+/**
+* 鬼畜
+**/
+public static final String KICHIKU = "https://api.bilibili.com/x/web-interface/ranking/v2?rid=119&type=all";
 
-        /**
-         * 影视
-         */
-        CINEPHILE(181);
+/**
+* 时尚
+**/
+public static final String FASHION = "https://api.bilibili.com/x/web-interface/ranking/v2?rid=155&type=all";
 
-        public int value;
+/**
+* 娱乐
+**/
+public static final String ENT = "https://api.bilibili.com/x/web-interface/ranking/v2?rid=5&type=all";
 
-        FullSiteRids(int value) {
-            this.value = value;
-        }
-    }
+/**
+* 影视
+**/
+public static final String CINEPHILE = "https://api.bilibili.com/x/web-interface/ranking/v2?rid=181&type=all";
 
-    /**
-     * 和RANKING_V2接口配合使用
-     */
-    public enum RANKING_V2_TYPE {
-        /**
-         * 配合RANKING_V2和FullSiteRids使用
-         */
-        ALL("all"),
+/**
+* 电影
+**/
+public static final String MOVIE = "https://api.bilibili.com/pgc/season/rank/web/list?day=3&season_type=2";
 
-        /**
-         * 使用该接口时，rid的值为0
-         */
-        ORIGIN("origin"),
+/**
+* 电视剧
+**/
+public static final String TELEPLAY = "https://api.bilibili.com/pgc/season/rank/web/list?day=3&season_type=5";
 
-        /**
-         * 使用该接口时，rid的值为0
-         */
-        ROOKIE("rookie");
+/**
+* 原创
+**/
+public static final String ORIGIN = "https://api.bilibili.com/x/web-interface/ranking/v2?rid=0&type=origin";
 
-        public String value;
-
-        RANKING_V2_TYPE(String value) {
-            this.value = value;
-        }
-    }
-
-    /**
-     * 配合WEB_LIST使用
-     */
-    public enum SeasonType {
-        /**
-         * 国产动画
-         */
-        GUOCHAN(4),
-
-        /**
-         * 纪录片
-         */
-        DOCUMENTARY(3),
-
-        /**
-         * 电影
-         */
-        MOVIE(2),
-
-        /**
-         * 电视剧
-         */
-        TELEPLAY(5);
-
-        public int value;
-
-        SeasonType(int value) {
-            this.value = value;
-        }
-    }
-
-    /**
-     * 国创相关、动画、音乐、舞蹈、游戏、知识、数码、生活、美食、动物圈、鬼畜、时尚、娱乐、影视、原创、新人
-     */
-    public static final String RANKING_V2 = "https://api.bilibili.com/x/web-interface/ranking/v2";
-
-    /**
-     * 国产动画、纪录片、电影、电视剧
-     */
-    public static final String WEB_LIST = "https://api.bilibili.com/pgc/season/rank/web/list";
-
-    /**
-     * 番剧
-     */
-    public static final String BANGUMI = "https://api.bilibili.com/pgc/web/rank/list?day=3&season_type=1";
+/**
+* 新人
+**/
+public static final String ROOKIE = "https://api.bilibili.com/x/web-interface/ranking/v2?rid=0&type=rookie";
 }

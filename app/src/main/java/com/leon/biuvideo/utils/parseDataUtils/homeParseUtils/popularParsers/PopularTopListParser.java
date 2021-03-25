@@ -18,9 +18,9 @@ import java.util.Map;
  * @Desc 全站排行榜数据解析类，该类的所有请求均不需要Cookie
  */
 public class PopularTopListParser {
-    public static List<PopularTopList> parseRankingV2 (BiliBiliFullSiteAPIs.FullSiteRids fullSiteRids, BiliBiliFullSiteAPIs.RANKING_V2_TYPE rankingV2Type) {
+    public static List<PopularTopList> parseRankingV2 (BiliBiliFullSiteAPIs.RANKING_RID RANKINGRID, BiliBiliFullSiteAPIs.RANKING_TYPE rankingV2Type) {
         Map<String, String> params = new HashMap<>(2);
-        params.put("rid", String.valueOf(fullSiteRids.value));
+        params.put("rid", String.valueOf(RANKINGRID.value));
         params.put("type", rankingV2Type.value);
 
         JSONObject response = HttpUtils.getResponse(BiliBiliFullSiteAPIs.RANKING_V2, params);

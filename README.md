@@ -17,6 +17,10 @@
 
 ## 📘开发日志
 
+### 2020/03/26
+- 修改了部分代码，本次提交的版本存在未修改完成的代码
+  - **`PopularTopListFragment`、`PopularTopListSubFragment`和`PopularTopListParser`还未修改完成**
+
 ### 2020/03/25
 - 修改了`PopularFragment`的布局
   - **`PopularFragment`页面的`popular_hot_list`的item还需要进行更改**
