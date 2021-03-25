@@ -12,19 +12,78 @@
         android:layout_height="wrap_content"
         app:topBarTitle="@string/popular" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/popular_tabLayout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:tabIndicator="@drawable/indicator"
-        app:tabIndicatorColor="@color/tabLayoutIndicatorColor"
-        app:tabTextAppearance="@style/TabLayoutTextStyle"
-        app:tabTextColor="@color/tabTextColor" />
+        android:layout_height="match_parent">
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/popular_viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:background="@drawable/round_corners6dp_bg"
+                android:orientation="horizontal"
+                android:layout_margin="10dp"
+                android:padding="@dimen/cardPadding">
+
+                <TextView
+                    android:id="@+id/popular_top_list"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/ripple_round_corners6dp_bg"
+                    android:drawablePadding="5dp"
+                    android:gravity="center_horizontal"
+                    android:padding="10dp"
+                    android:text="@string/popular_top_list"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    app:drawableTopCompat="@drawable/popular_leader_board" />
+
+                <TextView
+                    android:id="@+id/popular_weekly"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ripple_round_corners6dp_bg"
+                    android:drawablePadding="5dp"
+                    android:gravity="center_horizontal"
+                    android:padding="10dp"
+                    android:text="@string/popular_weekly"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    app:drawableTopCompat="@drawable/popular_weekly" />
+
+                <TextView
+                    android:id="@+id/popular_precious"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/ripple_round_corners6dp_bg"
+                    android:drawablePadding="5dp"
+                    android:gravity="center_horizontal"
+                    android:padding="10dp"
+                    android:text="@string/popular_precious"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    app:drawableTopCompat="@drawable/popular_precious" />
+
+            </LinearLayout>
+
+            <com.leon.biuvideo.ui.views.SmartRefreshRecyclerView
+                android:id="@+id/popular_hot_list"
+                android:padding="@dimen/recyclerViewPadding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

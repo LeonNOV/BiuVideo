@@ -19,6 +19,7 @@ import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.BottomSheetTopBar;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleBottomSheet;
+import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.popularParsers.PopularWeeklyDataParser;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.popularParsers.PopularWeeklySeriesParser;
@@ -36,25 +37,38 @@ public class PopularWeeklyFragment extends BaseSupportFragment {
 
     private List<PopularWeeklySeries> popularWeeklySeriesList;
     private PopularWeeklySeriesParser popularWeeklySeriesParser;
-    private LoadingRecyclerView discoveryPopularWeeklyData;
+    private LoadingRecyclerView popularWeeklyData;
     private PopularWeeklyDataParser popularWeeklyDataParser;
-    private TextView discoveryPopularWeeklySelectedSubject;
-    private TextView discoveryPopularWeeklySelectedName;
+    private TextView popularWeeklySelectedSubject;
+    private TextView popularWeeklySelectedName;
 
     private int selectedSeriesPosition = 0;
 
     @Override
     protected int setLayout() {
-        return R.layout.discover_popular_weekly;
+        return R.layout.popular_weekly;
     }
 
     @Override
     protected void initView() {
-        discoveryPopularWeeklySelectedName = findView(R.id.discovery_popular_weekly_selected_name);
-        discoveryPopularWeeklySelectedSubject = findView(R.id.discovery_popular_weekly_selected_subject);
+        SimpleTopBar popularWeeklyTopBar = view.findViewById(R.id.popular_weekly_topBar);
+        popularWeeklyTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
+            @Override
+            public void onLeft() {
+                backPressed();
+            }
 
-        LinearLayout discoveryPopularWeeklySelectSeries = findView(R.id.discovery_popular_weekly_selectSeries);
-        discoveryPopularWeeklySelectSeries.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onRight() {
+
+            }
+        });
+
+        popularWeeklySelectedName = findView(R.id.popular_weekly_selected_name);
+        popularWeeklySelectedSubject = findView(R.id.popular_weekly_selected_subject);
+
+        LinearLayout popularWeeklySelectSeries = findView(R.id.popular_weekly_selectSeries);
+        popularWeeklySelectSeries.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showBottomSheet(popularWeeklySeriesList, selectedSeriesPosition);
@@ -62,13 +76,13 @@ public class PopularWeeklyFragment extends BaseSupportFragment {
         });
 
         // 载数据未加载完成前不能操作discoveryPopularWeeklySelectSeries
-        discoveryPopularWeeklySelectSeries.setClickable(false);
+        popularWeeklySelectSeries.setClickable(false);
 
-        discoveryPopularWeeklyData = findView(R.id.discovery_popular_weekly_data);
+        popularWeeklyData = findView(R.id.popular_weekly_data);
         PopularAdapter popularAdapter = new PopularAdapter(popularVideoList, context, PopularAdapter.WEEKLY);
         popularAdapter.setHasStableIds(true);
-        discoveryPopularWeeklyData.setRecyclerViewAdapter(popularAdapter);
-        discoveryPopularWeeklyData.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
+        popularWeeklyData.setRecyclerViewAdapter(popularAdapter);
+        popularWeeklyData.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
 
         setOnLoadListener(new OnLoadListener() {
             @Override
@@ -78,21 +92,21 @@ public class PopularWeeklyFragment extends BaseSupportFragment {
                 switch (msg.what) {
                     case 0:
                         PopularWeeklySeries popularWeeklySeries = popularWeeklySeriesList.get(0);
-                        discoveryPopularWeeklySelectedName.setText(popularWeeklySeries.name);
-                        discoveryPopularWeeklySelectedSubject.setText(popularWeeklySeries.subject);
+                        popularWeeklySelectedName.setText(popularWeeklySeries.name);
+                        popularWeeklySelectedSubject.setText(popularWeeklySeries.subject);
 
                         popularAdapter.append(popularVideos);
-                        discoveryPopularWeeklyData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+                        popularWeeklyData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
 
-                        discoveryPopularWeeklySelectSeries.setClickable(true);
+                        popularWeeklySelectSeries.setClickable(true);
                         break;
                     case 1:
-                        discoveryPopularWeeklyData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+                        popularWeeklyData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
                         popularAdapter.removeAll();
                         popularAdapter.append(popularVideos);
 
-                        discoveryPopularWeeklyData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+                        popularWeeklyData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
                         break;
                     default:
                         break;
@@ -105,9 +119,9 @@ public class PopularWeeklyFragment extends BaseSupportFragment {
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
 
-        discoveryPopularWeeklyData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+//        popularWeeklyData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
-        getData(0, -1);
+//        getData(0, -1);
     }
 
     private void showBottomSheet(List<PopularWeeklySeries> popularWeeklySeriesList, int selectedPosition) {
@@ -132,8 +146,8 @@ public class PopularWeeklyFragment extends BaseSupportFragment {
                 selectedSeriesPosition = position;
 
                 getData(1, popularWeeklySeries.number);
-                discoveryPopularWeeklySelectedName.setText(popularWeeklySeries.name);
-                discoveryPopularWeeklySelectedSubject.setText(popularWeeklySeries.subject);
+                popularWeeklySelectedName.setText(popularWeeklySeries.name);
+                popularWeeklySelectedSubject.setText(popularWeeklySeries.subject);
 
                 bottomSheetDialog.dismiss();
             }

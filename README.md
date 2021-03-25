@@ -17,6 +17,10 @@
 
 ## 📘开发日志
 
+### 2020/03/25
+- 修改了`PopularFragment`的布局
+  - `PopularFragment`页面的`popular_hot_list`的item还需要进行更改
+
 ### 2020/03/24
 - 加入了`每周必看`页面，部分功能还需要进行完善
   - 修复了已知的BUG

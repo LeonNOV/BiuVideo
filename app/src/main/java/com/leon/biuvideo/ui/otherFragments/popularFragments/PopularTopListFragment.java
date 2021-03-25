@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.views.SimpleTopBar;
 
 /**
  * @Author Leon
@@ -14,12 +15,23 @@ import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 public class PopularTopListFragment extends BaseSupportFragment {
     @Override
     protected int setLayout() {
-        return R.layout.discover_popular_top_list;
+        return R.layout.popular_top_list;
     }
 
     @Override
     protected void initView() {
+        SimpleTopBar popularTopList = view.findViewById(R.id.popular_top_list);
+        popularTopList.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
+            @Override
+            public void onLeft() {
+                backPressed();
+            }
 
+            @Override
+            public void onRight() {
+
+            }
+        });
     }
 
     @Override

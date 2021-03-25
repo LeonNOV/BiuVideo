@@ -11,6 +11,7 @@ import com.leon.biuvideo.adapters.homeAdapters.popularAdapters.PopularAdapter;
 import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularVideo;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
+import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.popularParsers.PopularPreciousParser;
 
@@ -28,11 +29,24 @@ public class PopularPreciousFragment extends BaseSupportFragment {
 
     @Override
     protected int setLayout() {
-        return R.layout.discover_popular_precious;
+        return R.layout.popular_precious;
     }
 
     @Override
     protected void initView() {
+        SimpleTopBar popularPreciousTopBar = view.findViewById(R.id.popular_precious_topBar);
+        popularPreciousTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
+            @Override
+            public void onLeft() {
+                backPressed();
+            }
+
+            @Override
+            public void onRight() {
+
+            }
+        });
+
         PopularAdapter popularAdapter = new PopularAdapter(popularVideoList, context, PopularAdapter.PRECIOUS);
         popularAdapter.setHasStableIds(true);
 
@@ -55,9 +69,9 @@ public class PopularPreciousFragment extends BaseSupportFragment {
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
 
-        discoverPopularPreciousLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+//        discoverPopularPreciousLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
-        getPrecious();
+//        getPrecious();
     }
 
     private void getPrecious() {

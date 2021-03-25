@@ -110,6 +110,7 @@ public class LoadingRecyclerView extends FrameLayout {
         // 禁止多点触发
         recyclerView.setMotionEventSplittingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setHasFixedSize(true);
         parentLayout.addView(recyclerView);
 
         // 加载动画

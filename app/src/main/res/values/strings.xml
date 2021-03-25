@@ -193,6 +193,10 @@
     <string name="partition_movie">电影</string>
     <string name="partition_teleplay">电视剧</string>
     <string name="partition_channel">频道</string>
-    <string name="popular_weekly">往期每周必看</string>
+    <string name="popular_weekly_before">往期每周必看</string>
+
+    <string name="popular_precious">入站必刷</string>
+    <string name="popular_weekly">每周必看</string>
+    <string name="popular_top_list">排行榜</string>
 
 </resources>
