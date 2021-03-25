@@ -35,11 +35,6 @@ public class OrderFragment extends BaseSupportFragment {
     }
 
     @Override
-    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
-        super.onLazyInitView(savedInstanceState);
-    }
-
-    @Override
     protected int setLayout() {
         return R.layout.order_fragment;
     }

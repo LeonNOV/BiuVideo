@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
-import com.leon.biuvideo.beans.homeBeans.PopularWeeklySeries;
+import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularWeeklySeries;
 
 import java.util.List;
 

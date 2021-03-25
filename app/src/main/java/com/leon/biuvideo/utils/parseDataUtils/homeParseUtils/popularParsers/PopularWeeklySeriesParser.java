@@ -2,7 +2,7 @@ package com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.popularParsers;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.homeBeans.PopularWeeklySeries;
+import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularWeeklySeries;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.parseDataUtils.ParserInterface;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;

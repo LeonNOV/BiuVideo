@@ -37,7 +37,7 @@ public class PopularAdapter extends BaseAdapter<PopularVideo> {
 
     @Override
     public int getLayout(int viewType) {
-        return R.layout.popular_hot_list_and_weekly_item;
+        return R.layout.popular_video_item;
     }
 
     @Override
@@ -72,11 +72,11 @@ public class PopularAdapter extends BaseAdapter<PopularVideo> {
         }
 
         holder
-                .setImage(R.id.popular_hot_list_and_weekly_item_cover, popularVideo.pic, ImagePixelSize.COVER)
-                .setText(R.id.popular_hot_list_and_weekly_item_duration, popularVideo.duration)
-                .setText(R.id.popular_hot_list_and_weekly_item_title, popularVideo.title)
-                .setText(R.id.popular_hot_list_and_weekly_item_view, ValueUtils.generateCN(popularVideo.view))
-                .setText(R.id.popular_hot_list_and_weekly_item_danmaku, ValueUtils.generateCN(popularVideo.danmaku))
+                .setImage(R.id.popular_video_item_cover, popularVideo.pic, ImagePixelSize.COVER)
+                .setText(R.id.popular_video_item_duration, popularVideo.duration)
+                .setText(R.id.popular_video_item_title, popularVideo.title)
+                .setText(R.id.popular_video_item_view, ValueUtils.generateCN(popularVideo.view))
+                .setText(R.id.popular_video_item_danmaku, ValueUtils.generateCN(popularVideo.danmaku))
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

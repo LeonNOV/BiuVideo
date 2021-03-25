@@ -6,7 +6,7 @@
     android:background="@drawable/ripple_round_corners6dp_bg"
     android:layout_marginBottom="@dimen/itemMarginBottom"
     android:orientation="horizontal"
-    android:padding="@dimen/item_padding">
+    android:padding="@dimen/itemPadding">
 
     <androidx.cardview.widget.CardView
         android:layout_width="@dimen/cover_width"

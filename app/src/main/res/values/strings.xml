@@ -99,7 +99,7 @@
 
     <string name="preference">initValues</string>
 
-    <dimen name="item_padding">5dp</dimen>
+    <dimen name="itemPadding">5dp</dimen>
 
     <dimen name="cover_width">128dp</dimen>
     <dimen name="cover_height">72dp</dimen>

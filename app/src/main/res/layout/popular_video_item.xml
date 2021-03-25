@@ -39,7 +39,7 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/popular_hot_list_and_weekly_item_cover"
+                    android:id="@+id/popular_video_item_cover"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/description"
@@ -47,7 +47,7 @@
                     android:src="@drawable/ic_launcher_background" />
 
                 <TextView
-                    android:id="@+id/popular_hot_list_and_weekly_item_duration"
+                    android:id="@+id/popular_video_item_duration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|start"
@@ -70,7 +70,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/popular_hot_list_and_weekly_item_title"
+                android:id="@+id/popular_video_item_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
@@ -83,7 +83,7 @@
                 android:id="@+id/popular_hot_list_item_reason"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@id/popular_hot_list_and_weekly_item_stat"
+                android:layout_above="@id/popular_video_item_stat"
                 android:background="@drawable/round_corners6dp_bg"
                 android:backgroundTint="#fff1ed"
                 android:padding="5dp"
@@ -91,14 +91,14 @@
                 android:visibility="gone" />
 
             <LinearLayout
-                android:id="@+id/popular_hot_list_and_weekly_item_stat"
+                android:id="@+id/popular_video_item_stat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/popular_hot_list_and_weekly_item_view"
+                    android:id="@+id/popular_video_item_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawablePadding="5dp"
@@ -108,7 +108,7 @@
                     app:drawableTint="@color/black" />
 
                 <TextView
-                    android:id="@+id/popular_hot_list_and_weekly_item_danmaku"
+                    android:id="@+id/popular_video_item_danmaku"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"

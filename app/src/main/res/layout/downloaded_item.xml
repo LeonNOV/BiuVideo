@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/ripple_item_bilibili_lite"
     android:orientation="horizontal"
-    android:padding="@dimen/item_padding">
+    android:padding="@dimen/itemPadding">
 
     <androidx.cardview.widget.CardView
         android:layout_width="@dimen/cover_width"
