@@ -31,7 +31,7 @@ import java.util.List;
  * @Time 2021/3/1
  * @Desc 热门（综合热门、每周必看、入站必刷、排行榜）页面
  */
-public class PopularFragment extends BaseSupportFragment implements View.OnClickListener {
+public class PopularFragment extends BaseSupportFragment {
     private final List<PopularVideo> popularVideoList = new ArrayList<>();
     private PopularHotListParser popularHotListParser;
     private SmartRefreshRecyclerView<PopularVideo> popularHotList;
@@ -60,11 +60,23 @@ public class PopularFragment extends BaseSupportFragment implements View.OnClick
             }
         });
 
-        findView(R.id.popular_top_list).setOnClickListener(this);
-        findView(R.id.popular_weekly).setOnClickListener(this);
-        findView(R.id.popular_precious).setOnClickListener(this);
-
         PopularAdapter popularAdapter = new PopularAdapter(popularVideoList, context, PopularAdapter.HOT_VIDEO);
+        popularAdapter.setOnClickFirstItemListener(new PopularAdapter.OnClickFirstItemListener() {
+            @Override
+            public void onClickTopList() {
+                start(new PopularTopListFragment());
+            }
+
+            @Override
+            public void onClickWeekly() {
+                start(new PopularWeeklyFragment());
+            }
+
+            @Override
+            public void onClickPrecious() {
+                start(new PopularPreciousFragment());
+            }
+        });
         popularAdapter.setHasStableIds(true);
         popularHotList = findView(R.id.popular_hot_list);
         popularHotList.setRecyclerViewAdapter(popularAdapter);
@@ -134,22 +146,5 @@ public class PopularFragment extends BaseSupportFragment implements View.OnClick
                 receiveDataHandler.sendMessage(message);
             }
         });
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.popular_top_list:
-                start(new PopularTopListFragment());
-                break;
-            case R.id.popular_weekly:
-                start(new PopularWeeklyFragment());
-                break;
-            case R.id.popular_precious:
-                start(new PopularPreciousFragment());
-                break;
-            default:
-                break;
-        }
     }
 }

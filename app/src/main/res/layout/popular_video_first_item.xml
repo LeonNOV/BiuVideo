@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/popular_top_navigation"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/itemMarginBottom"
+    android:background="@drawable/round_corners6dp_bg"
+    android:gravity="center_horizontal"
+    android:orientation="horizontal"
+    android:padding="@dimen/cardPadding">
+
+    <TextView
+        android:id="@+id/popular_top_list"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/ripple_round_corners6dp_bg"
+        android:drawablePadding="5dp"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="@string/popular_top_list"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:drawableTopCompat="@drawable/popular_leader_board" />
+
+    <TextView
+        android:id="@+id/popular_weekly"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_weight="1"
+        android:background="@drawable/ripple_round_corners6dp_bg"
+        android:drawablePadding="5dp"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="@string/popular_weekly"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:drawableTopCompat="@drawable/popular_weekly" />
+
+    <TextView
+        android:id="@+id/popular_precious"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/ripple_round_corners6dp_bg"
+        android:drawablePadding="5dp"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="@string/popular_precious"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:drawableTopCompat="@drawable/popular_precious" />
+
+</LinearLayout>

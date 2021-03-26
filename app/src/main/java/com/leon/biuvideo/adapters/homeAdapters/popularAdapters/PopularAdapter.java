@@ -21,7 +21,7 @@ import java.util.List;
  * @Time 2021/3/23
  * @Desc 综合热门/每周必看/入站必刷 适配器
  */
-public class PopularAdapter extends BaseAdapter<PopularVideo> {
+public class PopularAdapter extends BaseAdapter<PopularVideo> implements View.OnClickListener {
     public static final int HOT_VIDEO = 0;
     public static final int WEEKLY = 1;
     public static final int PRECIOUS = 2;
@@ -29,21 +29,63 @@ public class PopularAdapter extends BaseAdapter<PopularVideo> {
     private final List<PopularVideo> popularVideoList;
     private final int popularType;
 
+    private OnClickFirstItemListener onClickFirstItemListener;
+
     public PopularAdapter(List<PopularVideo> beans, Context context, int popularType) {
         super(beans, context);
         this.popularVideoList = beans;
         this.popularType = popularType;
     }
 
+    public interface OnClickFirstItemListener {
+        /**
+         * 排行榜
+         */
+        void onClickTopList();
+
+        /**
+         * 每周必看
+         */
+        void onClickWeekly();
+
+        /**
+         * 入站必刷
+         */
+        void onClickPrecious();
+    }
+
+    public void setOnClickFirstItemListener(OnClickFirstItemListener onClickFirstItemListener) {
+        this.onClickFirstItemListener = onClickFirstItemListener;
+    }
+
     @Override
     public int getLayout(int viewType) {
-        return R.layout.popular_video_item;
+        return viewType == 0 ? R.layout.popular_video_first_item : R.layout.popular_video_item;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position == 0 ? 0 : 1;
     }
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        PopularVideo popularVideo = popularVideoList.get(position);
 
+        if (position == 0) {
+            initFirstItem(holder);
+        } else {
+            initVideoItem(holder, popularVideoList.get(position - 1), position);
+        }
+    }
+
+    private void initFirstItem(BaseViewHolder holder) {
+        holder
+                .setOnClickListener(R.id.popular_top_list, this)
+                .setOnClickListener(R.id.popular_weekly, this)
+                .setOnClickListener(R.id.popular_precious, this);
+    }
+
+    private void initVideoItem(BaseViewHolder holder, PopularVideo popularVideo, int position) {
         TextView popularHotListItemReason = holder.findById(R.id.popular_hot_list_item_reason);
         TextView popularWeeklyItemReason = holder.findById(R.id.popular_weekly_item_reason);
         TextView popularPreciousItemReason = holder.findById(R.id.popular_precious_item_reason);
@@ -83,5 +125,28 @@ public class PopularAdapter extends BaseAdapter<PopularVideo> {
                         SimpleSnackBar.make(v, "点击了第" + position + "个item", SimpleSnackBar.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.popular_top_list:
+                if (onClickFirstItemListener != null) {
+                    onClickFirstItemListener.onClickTopList();
+                }
+                break;
+            case R.id.popular_weekly:
+                if (onClickFirstItemListener != null) {
+                    onClickFirstItemListener.onClickWeekly();
+                }
+                break;
+            case R.id.popular_precious:
+                if (onClickFirstItemListener != null) {
+                    onClickFirstItemListener.onClickPrecious();
+                }
+                break;
+            default:
+                break;
+        }
     }
 }

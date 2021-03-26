@@ -69,7 +69,7 @@ public class PopularTopListAdapter extends BaseAdapter<PopularTopList> {
             popularTopListItemDuration.setVisibility(View.GONE);
         }
 
-        if (popularTopList.duration != null) {
+        if (popularTopList.badge != null) {
             popularTopListItemBadge.setVisibility(View.VISIBLE);
             popularTopListItemBadge.setText(popularTopList.badge);
         } else {
@@ -132,6 +132,8 @@ public class PopularTopListAdapter extends BaseAdapter<PopularTopList> {
         if (popularTopList.otherVideoList == null || popularTopList.otherVideoList.size() == 0) {
             popularTopListExpandOther.setVisibility(View.GONE);
         } else {
+            popularTopListExpandOther.setVisibility(View.VISIBLE);
+
             RecyclerView popularTopListItemExpandOtherVideos = holder.findById(R.id.popular_top_list_item_expand_otherVideos);
             TextView popularTopListItemExpandText = holder.findById(R.id.popular_top_list_item_expand_text);
             ImageView popularTopListItemExpandImg = holder.findById(R.id.popular_top_list_item_expand_img);

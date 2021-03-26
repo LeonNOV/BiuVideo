@@ -5,12 +5,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularTopList;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.ValueUtils;
-import com.leon.biuvideo.values.apis.BiliBiliFullSiteAPIs;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author Leon
@@ -18,12 +15,21 @@ import java.util.Map;
  * @Desc 全站排行榜数据解析类，该类的所有请求均不需要Cookie
  */
 public class PopularTopListParser {
-    public static List<PopularTopList> parseRankingV2 (BiliBiliFullSiteAPIs.RANKING_RID RANKINGRID, BiliBiliFullSiteAPIs.RANKING_TYPE rankingV2Type) {
-        Map<String, String> params = new HashMap<>(2);
-        params.put("rid", String.valueOf(RANKINGRID.value));
-        params.put("type", rankingV2Type.value);
+    public static List<PopularTopList> parseData(String type, String url) {
+        switch (type) {
+            case "0":
+                return parseRankingV2(url);
+            case "1":
+                return parseWebListAndBangumi(url, false);
+            case "2":
+                return parseWebListAndBangumi(url, true);
+            default:
+                return null;
+        }
+    }
 
-        JSONObject response = HttpUtils.getResponse(BiliBiliFullSiteAPIs.RANKING_V2, params);
+    private static List<PopularTopList> parseRankingV2 (String rankingV2) {
+        JSONObject response = HttpUtils.getResponse(rankingV2, null);
         JSONArray jsonArray = response.getJSONObject("data").getJSONArray("list");
 
         List<PopularTopList> popularTopListList = new ArrayList<>(jsonArray.size());
@@ -45,7 +51,6 @@ public class PopularTopListParser {
 
             if (jsonObject.containsKey("others")) {
                 JSONArray others = jsonObject.getJSONArray("others");
-
                 popularTopList.otherVideoList = new ArrayList<>(others.size());
 
                 for (Object o1 : others) {
@@ -67,34 +72,11 @@ public class PopularTopListParser {
         return popularTopListList;
     }
 
-    /**
-     * 解析 BiliBiliFullSiteAPIs.WEB_LIST 接口数据<br/>
-     * 注意：参数`day`默认为3
-     *
-     * @param seasonType    seasonType
-     * @return  PopularTopList集合
-     */
-    public static List<PopularTopList> parseWebList (BiliBiliFullSiteAPIs.SeasonType seasonType) {
-        return parseWebListAndBangumi(false, seasonType);
-    }
+    private static List<PopularTopList> parseWebListAndBangumi(String url, boolean isBangumi) {
+        JSONObject response = HttpUtils.getResponse(url, null);
 
-    public static List<PopularTopList> parseBangumi () {
-        return parseWebListAndBangumi(true, null);
-    };
-
-    private static List<PopularTopList> parseWebListAndBangumi(boolean isBangumi, BiliBiliFullSiteAPIs.SeasonType seasonType) {
-        JSONObject response;
-
-        if (isBangumi && seasonType == null) {
-            response = HttpUtils.getResponse(BiliBiliFullSiteAPIs.BANGUMI, null);
-        } else {
-            Map<String, String> params = new HashMap<>(2);
-            params.put("day", "3");
-            params.put("season_type", String.valueOf(seasonType.value));
-            response = HttpUtils.getResponse(BiliBiliFullSiteAPIs.WEB_LIST, params);
-        }
-
-        JSONArray jsonArray = response.getJSONObject("data").getJSONArray("list");
+        String key = isBangumi ? "result" : "data";
+        JSONArray jsonArray = response.getJSONObject(key).getJSONArray("list");
         List<PopularTopList> popularTopListList = new ArrayList<>(jsonArray.size());
 
         for (Object o : jsonArray) {
@@ -108,13 +90,17 @@ public class PopularTopListParser {
 
             if (isBangumi) {
                 JSONObject stat = jsonObject.getJSONObject("stat");
-                popularTopList.extra1 = ValueUtils.lengthGenerate(stat.getIntValue("bangumi")) + "弹幕";
+                popularTopList.extra1 = ValueUtils.generateCN(stat.getIntValue("bangumi")) + "弹幕";
             } else {
                 popularTopList.extra1 = jsonObject.getString("desc");
             }
 
             JSONObject newEp = jsonObject.getJSONObject("new_ep");
             popularTopList.extra2 = newEp.getString("index_show");
+            if (popularTopList.extra1.equals(popularTopList.extra2)) {
+                popularTopList.extra2 = null;
+            }
+
             popularTopList.score = jsonObject.getString("pts");
 
             popularTopListList.add(popularTopList);

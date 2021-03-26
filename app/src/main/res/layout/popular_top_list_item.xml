@@ -97,17 +97,15 @@
                         android:id="@+id/popular_top_list_item_rank_bg"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:contentDescription="@string/description"
-                        android:src="@drawable/ic_rank" />
+                        android:contentDescription="@string/description" />
 
                     <TextView
                         android:id="@+id/popular_top_list_item_rank"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="2dp"
-                        android:background="@drawable/ic_rank"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingTop="3dp"
                         android:textColor="#bfbfbf"
+                        android:gravity="center"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
@@ -151,14 +149,15 @@
     <LinearLayout
         android:id="@+id/popular_top_list_expand_other"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="5dp"
+        android:descendantFocusability="blocksDescendants"
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/popular_top_list_item_expand_otherVideos"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="@dimen/recyclerViewPadding"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
