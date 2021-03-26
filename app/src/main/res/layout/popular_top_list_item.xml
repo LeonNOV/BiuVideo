@@ -2,18 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/round_corners6dp_bg"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/itemMarginBottom"
+    android:background="@drawable/round_corners6dp_bg"
     android:orientation="vertical"
     android:padding="@dimen/itemPadding">
 
     <LinearLayout
         android:id="@+id/popular_top_list_item_content"
-        android:background="@drawable/ripple_round_corners6dp_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/ripple_round_corners6dp_bg"
         android:orientation="horizontal">
 
         <androidx.cardview.widget.CardView
@@ -103,9 +103,9 @@
                         android:id="@+id/popular_top_list_item_rank"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:gravity="center"
                         android:paddingTop="3dp"
                         android:textColor="#bfbfbf"
-                        android:gravity="center"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
@@ -149,49 +149,27 @@
     <LinearLayout
         android:id="@+id/popular_top_list_expand_other"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:descendantFocusability="blocksDescendants"
         android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.leon.biuvideo.ui.views.LoadingRecyclerView
             android:id="@+id/popular_top_list_item_expand_otherVideos"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="@dimen/recyclerViewPadding"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-        <LinearLayout
-            android:id="@+id/popular_top_list_expand"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="5dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:padding="@dimen/recyclerViewPadding" />
+
+        <TextView
+            android:id="@+id/popular_top_list_item_expand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:background="@drawable/ripple_round_corners6dp_bg"
-            android:backgroundTint="#E4E4E4"
-            android:paddingBottom="5dp"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/popular_top_list_item_expand_text"
-                android:layout_width="wrap_content"
-                android:text="@string/popular_top_list_show_otherVideos"
-                android:textColor="@color/gray"
-                android:layout_height="wrap_content"/>
-
-            <ImageView
-                android:id="@+id/popular_top_list_item_expand_img"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_expand_small_holo_light"
-                android:contentDescription="@string/description" />
-
-        </LinearLayout>
-
-
+            android:padding="5dp"
+            android:text="@string/popular_top_list_show_otherVideos"
+            android:textColor="@color/gray" />
 
     </LinearLayout>
 

@@ -10,12 +10,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularTopList;
+import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.values.ImagePixelSize;
 
@@ -27,16 +29,6 @@ import java.util.List;
  * @Desc 排行榜数据适配器
  */
 public class PopularTopListAdapter extends BaseAdapter<PopularTopList> {
-    /**
-     * 其他视频是否已展开显示
-     */
-    private boolean isExpand = false;
-
-    /**
-     * 是否已初始化（设置Adapter）其他视频
-     */
-    private boolean isInitExpand = false;
-
     private final List<PopularTopList> popularTopLists;
 
     public PopularTopListAdapter(List<PopularTopList> beans, Context context) {
@@ -134,21 +126,32 @@ public class PopularTopListAdapter extends BaseAdapter<PopularTopList> {
         } else {
             popularTopListExpandOther.setVisibility(View.VISIBLE);
 
-            RecyclerView popularTopListItemExpandOtherVideos = holder.findById(R.id.popular_top_list_item_expand_otherVideos);
-            TextView popularTopListItemExpandText = holder.findById(R.id.popular_top_list_item_expand_text);
-            ImageView popularTopListItemExpandImg = holder.findById(R.id.popular_top_list_item_expand_img);
+            LoadingRecyclerView popularTopListItemExpandOtherVideos = holder.findById(R.id.popular_top_list_item_expand_otherVideos);
+            TextView popularTopListItemExpandText = holder.findById(R.id.popular_top_list_item_expand);
+            popularTopListItemExpandText.setOnClickListener(new View.OnClickListener() {
+                /**
+                 * 其他视频是否已展开显示
+                 */
+                private boolean isExpand = false;
 
-            holder.setOnClickListener(R.id.popular_top_list_expand, new View.OnClickListener() {
+                /**
+                 * 是否已初始化（设置Adapter）其他视频
+                 */
+                private boolean isInitExpand = false;
+
                 @Override
                 public void onClick(View v) {
                     if (!isExpand) {
                         if (!isInitExpand) {
+
                             // popularTopListItemExpandOtherVideos设置Adapter
                             PopularTopListExpandAdapter popularTopListExpandAdapter = new PopularTopListExpandAdapter(popularTopList.otherVideoList, context);
                             popularTopListExpandAdapter.setHasStableIds(true);
-                            popularTopListItemExpandOtherVideos.setAdapter(popularTopListExpandAdapter);
+                            popularTopListItemExpandOtherVideos.setRecyclerViewAdapter(popularTopListExpandAdapter);
+                            popularTopListItemExpandOtherVideos.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
 
                             isInitExpand = true;
+                            popularTopListItemExpandOtherVideos.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
                         }
                         popularTopListItemExpandOtherVideos.setVisibility(View.VISIBLE);
                         popularTopListItemExpandText.setText(context.getText(R.string.popular_top_list_hide_otherVideos));

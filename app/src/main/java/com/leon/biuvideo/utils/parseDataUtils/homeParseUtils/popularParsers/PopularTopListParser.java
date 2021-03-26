@@ -86,17 +86,22 @@ public class PopularTopListParser {
             popularTopList.seasonId = jsonObject.getString("season_id");
             popularTopList.title = jsonObject.getString("title");
             popularTopList.cover = jsonObject.getString("cover");
-            popularTopList.badge = jsonObject.getString("badge");
 
-            if (isBangumi) {
-                JSONObject stat = jsonObject.getJSONObject("stat");
-                popularTopList.extra1 = ValueUtils.generateCN(stat.getIntValue("bangumi")) + "弹幕";
-            } else {
+            String badge = jsonObject.getString("badge");
+            popularTopList.badge = "".equals(badge) ? null : badge;
+
+            if (!isBangumi) {
                 popularTopList.extra1 = jsonObject.getString("desc");
             }
 
             JSONObject newEp = jsonObject.getJSONObject("new_ep");
-            popularTopList.extra2 = newEp.getString("index_show");
+
+            if (isBangumi) {
+                popularTopList.extra1 = newEp.getString("index_show");
+            } else {
+                popularTopList.extra2 = newEp.getString("index_show");
+            }
+
             if (popularTopList.extra1.equals(popularTopList.extra2)) {
                 popularTopList.extra2 = null;
             }

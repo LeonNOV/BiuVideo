@@ -95,7 +95,8 @@ public class ViewUtils {
     public static MainActivity.OnTouchListener initTabLayoutAndViewPager2(Activity activity, TabLayout tabLayout, ViewPager2 viewPager2, String[] titles, int firstShowItemPosition) {
         viewPager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
         viewPager2.setCurrentItem(firstShowItemPosition, false);
-
+        viewPager2.setOffscreenPageLimit(titles.length);
+        
         new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {

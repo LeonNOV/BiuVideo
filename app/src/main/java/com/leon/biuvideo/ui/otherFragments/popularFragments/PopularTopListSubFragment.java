@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.homeAdapters.popularAdapters.PopularTopListAdapter;
 import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularTopList;
+import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.popularParsers.PopularTopListParser;
 
@@ -22,7 +24,7 @@ import java.util.List;
  * @Time 2021/3/25
  * @Desc 全站排行榜子页面
  */
-public class PopularTopListSubFragment extends BaseSupportFragment {
+public class PopularTopListSubFragment extends BaseLazySupportFragment {
     private final List<PopularTopList> popularTopLists = new ArrayList<>();
     private LoadingRecyclerView loadingRecyclerView;
 
@@ -62,9 +64,7 @@ public class PopularTopListSubFragment extends BaseSupportFragment {
     }
 
     @Override
-    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
-        super.onLazyInitView(savedInstanceState);
-
+    protected void onLazyLoad() {
         loadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
         SimpleSingleThreadPool.executor(new Runnable() {

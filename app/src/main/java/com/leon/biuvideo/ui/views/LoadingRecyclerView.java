@@ -114,8 +114,8 @@ public class LoadingRecyclerView extends FrameLayout {
         parentLayout.addView(recyclerView);
 
         // 加载动画
-//        LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(context, R.anim.recycler_view_fall_down);
-//        recyclerView.setLayoutAnimation(animationController);
+        LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(context, R.anim.recycler_view_fall_down);
+        recyclerView.setLayoutAnimation(animationController);
 
         LayoutParams layoutParams = (LayoutParams) recyclerView.getLayoutParams();
         layoutParams.width = LayoutParams.MATCH_PARENT;

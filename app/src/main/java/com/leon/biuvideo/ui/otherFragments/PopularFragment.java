@@ -126,9 +126,9 @@ public class PopularFragment extends BaseSupportFragment {
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
 
-//        popularHotList.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-//
-//        getPopularHotList(0);
+        popularHotList.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+
+        getPopularHotList(0);
     }
 
     private void getPopularHotList(int what) {
