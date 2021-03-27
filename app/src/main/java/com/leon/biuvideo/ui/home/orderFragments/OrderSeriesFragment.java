@@ -78,16 +78,6 @@ public class OrderSeriesFragment extends BaseSupportFragmentWithSrr<Order> {
         });
     }
 
-    @Override
-    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
-        super.onLazyInitView(savedInstanceState);
-
-        // 加载初始数据
-        getOrderBangumis(0);
-
-        view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-    }
-
     private void getOrderBangumis(int what) {
         if (orderParser == null) {
             orderParser = new OrderParser(OrderType.SERIES);
@@ -103,5 +93,13 @@ public class OrderSeriesFragment extends BaseSupportFragmentWithSrr<Order> {
                 receiveDataHandler.sendMessage(message);
             }
         });
+    }
+
+    @Override
+    protected void onLazyLoad() {
+        view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+
+        // 加载初始数据
+        getOrderBangumis(0);
     }
 }

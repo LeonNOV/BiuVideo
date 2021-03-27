@@ -22,7 +22,6 @@ import java.util.List;
  * @Desc 下载管理页面
  */
 public class DownloadManagerFragment extends BaseSupportFragment {
-
     private MainActivity.OnTouchListener onTouchListener;
 
     public static DownloadManagerFragment getInstance() {
@@ -36,11 +35,13 @@ public class DownloadManagerFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
+        ViewUtils.setStatusBar(getActivity(), true);
         SimpleTopBar downloadManagerFragmentTopBar = findView(R.id.downloadManager_fragment_topBar);
         downloadManagerFragmentTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
                 backPressed();
+                ViewUtils.setStatusBar(getActivity(), false);
             }
 
             @Override

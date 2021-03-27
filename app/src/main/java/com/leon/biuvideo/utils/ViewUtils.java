@@ -13,6 +13,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.jaeger.library.StatusBarUtil;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.MainActivity;
 
@@ -175,5 +176,15 @@ public class ViewUtils {
         ((MainActivity) activity).registerTouchEvenListener(onTouchListener);
 
         return onTouchListener;
+    }
+
+    public static void setStatusBar (Activity activity, boolean isWhite) {
+        if (isWhite) {
+            StatusBarUtil.setColor(activity, activity.getColor(R.color.white), 0);
+        } else {
+            StatusBarUtil.setColor(activity, activity.getColor(R.color.bg), 0);
+        }
+
+        activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
     }
 }

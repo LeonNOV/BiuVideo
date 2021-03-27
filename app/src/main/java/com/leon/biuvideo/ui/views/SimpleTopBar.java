@@ -1,5 +1,6 @@
 package com.leon.biuvideo.ui.views;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
 
+import com.jaeger.library.StatusBarUtil;
 import com.leon.biuvideo.R;
 
 /**

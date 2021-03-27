@@ -38,6 +38,7 @@ import com.leon.biuvideo.utils.LocationUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
+import com.leon.biuvideo.utils.ViewUtils;
 import com.leon.biuvideo.utils.WeatherUtil;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.RecommendParser;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.WatchLaterParser;

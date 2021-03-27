@@ -5,6 +5,7 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Lifecycle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.leon.biuvideo.R;
@@ -13,6 +14,7 @@ import com.leon.biuvideo.ui.mainFragments.DiscoveryFragment;
 import com.leon.biuvideo.ui.mainFragments.HomeFragment;
 import com.leon.biuvideo.ui.mainFragments.PartitionFragment;
 import com.leon.biuvideo.ui.mainFragments.UserFragment;
+import com.leon.biuvideo.utils.ViewUtils;
 
 import me.yokeyword.fragmentation.SupportFragment;
 

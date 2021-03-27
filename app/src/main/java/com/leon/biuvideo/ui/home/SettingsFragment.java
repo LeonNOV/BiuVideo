@@ -46,6 +46,7 @@ import com.leon.biuvideo.utils.PermissionUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
+import com.leon.biuvideo.utils.ViewUtils;
 import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.FeaturesName;
 import com.leon.biuvideo.values.ThanksList;
@@ -91,6 +92,8 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
 
     @Override
     protected void initView() {
+        ViewUtils.setStatusBar(getActivity(), true);
+
         SharedPreferences preferences = context.getSharedPreferences(PreferenceUtils.PREFERENCE_NAME, Context.MODE_PRIVATE);
 
         SimpleTopBar settingsFragmentTopBar = findView(R.id.settings_fragment_topBar);
@@ -98,6 +101,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
             @Override
             public void onLeft() {
                 backPressed();
+                ViewUtils.setStatusBar(getActivity(), false);
             }
 
             @Override

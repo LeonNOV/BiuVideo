@@ -1,5 +1,6 @@
 package com.leon.biuvideo.ui;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -7,14 +8,17 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.MotionEvent;
+import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jaeger.library.StatusBarUtil;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.service.WeatherService;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
+import com.leon.biuvideo.utils.ViewUtils;
 import com.leon.biuvideo.values.Partitions;
 
 import java.util.ArrayList;
@@ -25,7 +29,6 @@ import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
 public class MainActivity extends SupportActivity {
-
     private WeatherConnection weatherConnection;
     private Intent weatherServiceIntent;
 
@@ -40,6 +43,8 @@ public class MainActivity extends SupportActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+        ViewUtils.setStatusBar(this, false);
 
         if (findFragment(NavFragment.class) == null) {
             loadRootFragment(R.id.fl_container, NavFragment.newInstance());

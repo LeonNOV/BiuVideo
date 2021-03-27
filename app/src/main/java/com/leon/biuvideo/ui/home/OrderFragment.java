@@ -41,11 +41,13 @@ public class OrderFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
+        ViewUtils.setStatusBar(getActivity(), true);
         SimpleTopBar orderFragmentTopBar = findView(R.id.order_fragment_topBar);
         orderFragmentTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
                 backPressed();
+                ViewUtils.setStatusBar(getActivity(), false);
             }
 
             @Override

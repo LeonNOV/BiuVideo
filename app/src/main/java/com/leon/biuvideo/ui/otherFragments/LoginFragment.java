@@ -18,6 +18,7 @@ import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.PreferenceUtils;
+import com.leon.biuvideo.utils.ViewUtils;
 import com.leon.biuvideo.values.Actions;
 
 import java.util.HashMap;
@@ -47,11 +48,13 @@ public class LoginFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
+        ViewUtils.setStatusBar(getActivity(), true);
         SimpleTopBar loginTopBar = findView(R.id.login_topBar);
         loginTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
-                onBackPressedSupport();
+                backPressed();
+                ViewUtils.setStatusBar(getActivity(), false);
             }
 
             @Override

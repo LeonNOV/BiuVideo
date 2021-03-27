@@ -87,15 +87,6 @@ public class PartitionSubBaseFragment extends BaseSupportFragmentWithSrr<Partiti
         });
     }
 
-    @Override
-    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
-        super.onLazyInitView(savedInstanceState);
-
-        view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-
-        getPartitionResult(0);
-    }
-
     private void getPartitionResult(int what) {
         if (partitionParser == null) {
             partitionParser = new PartitionParser(id);
@@ -114,5 +105,12 @@ public class PartitionSubBaseFragment extends BaseSupportFragmentWithSrr<Partiti
                 receiveDataHandler.sendMessage(message);
             }
         });
+    }
+
+    @Override
+    protected void onLazyLoad() {
+        view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+
+        getPartitionResult(0);
     }
 }

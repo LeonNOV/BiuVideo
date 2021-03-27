@@ -76,17 +76,6 @@ public class FavoriteArticleFragment extends BaseSupportFragmentWithSrr<Favorite
         });
     }
 
-    @Override
-    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
-        super.onLazyInitView(savedInstanceState);
-        view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-
-        Fuck.blue("two");
-
-        // 获取初始数据
-        getFavoriteArticles(0);
-    }
-
     /**
      * 获取专栏数据
      *
@@ -107,5 +96,13 @@ public class FavoriteArticleFragment extends BaseSupportFragmentWithSrr<Favorite
                 receiveDataHandler.sendMessage(message);
             }
         });
+    }
+
+    @Override
+    protected void onLazyLoad() {
+        view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+
+        // 获取初始数据
+        getFavoriteArticles(0);
     }
 }

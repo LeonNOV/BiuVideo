@@ -26,7 +26,7 @@ import me.yokeyword.fragmentation.SupportFragment;
  * @Time 2021/3/9
  * @Desc 基本的LazySupportFragment，该Fragment默认设置{@link com.leon.biuvideo.ui.views.SmartRefreshRecyclerView}为布局,所以不用指定布局文件
  */
-public abstract class BaseSupportFragmentWithSrr<T> extends BaseSupportFragment {
+public abstract class BaseSupportFragmentWithSrr<T> extends BaseLazySupportFragment {
     protected Context context;
     protected BindingUtils bindingUtils;
     protected SmartRefreshRecyclerView<T> view;

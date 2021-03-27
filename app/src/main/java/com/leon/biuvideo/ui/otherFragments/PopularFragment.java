@@ -19,6 +19,7 @@ import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
+import com.leon.biuvideo.utils.ViewUtils;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.popularParsers.PopularHotListParser;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -29,7 +30,7 @@ import java.util.List;
 /**
  * @Author Leon
  * @Time 2021/3/1
- * @Desc 热门（综合热门、每周必看、入站必刷、排行榜）页面
+ * @Desc 综合热门页面
  */
 public class PopularFragment extends BaseSupportFragment {
     private final List<PopularVideo> popularVideoList = new ArrayList<>();
@@ -47,11 +48,13 @@ public class PopularFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
+        ViewUtils.setStatusBar(getActivity(), true);
         SimpleTopBar popularTopBar = view.findViewById(R.id.popular_topBar);
         popularTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
                 backPressed();
+                ViewUtils.setStatusBar(getActivity(), false);
             }
 
             @Override

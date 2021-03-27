@@ -18,15 +18,16 @@
 ## 📘开发日志
 
 ### 2021/03/27
+- 加入了页面沉浸式功能
+
+### 2021/03/26
+- 修改了部分代码，本次提交的版本存在未修改完成的代码
+  - ~~**`PopularTopListFragment`、`PopularTopListSubFragment`和`PopularTopListParser`还未修改完成**~~
 - 热门主页已基本完成
   - ~~**排行榜中`显示该UP主所有上榜视频`功能还存在问题未解决**~~
   - **突然发现开发日志中日期的年份还未修改为2021年，可能我还活在2020年吧~(￣▽￣)~***
 - 加入了`BaseLazySupportFragment`，该类用以执行懒加载数据，需要配合`ViewPager2`使用
   - **部分需要用到`BaseLazySupportFragment`的页面还未进行替换**
-
-### 2021/03/26
-- 修改了部分代码，本次提交的版本存在未修改完成的代码
-  - ~~**`PopularTopListFragment`、`PopularTopListSubFragment`和`PopularTopListParser`还未修改完成**~~
 
 ### 2021/03/25
 - 修改了`PopularFragment`的布局

@@ -53,16 +53,6 @@ public class FavoriteVideoFolderFragment extends BaseSupportFragmentWithSrr<Favo
         });
     }
 
-    @Override
-    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
-        super.onLazyInitView(savedInstanceState);
-
-        view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-
-        // 获取所有视频收藏夹
-        getVideoFolders();
-    }
-
     /**
      * 获取视频收藏夹数据
      */
@@ -77,5 +67,13 @@ public class FavoriteVideoFolderFragment extends BaseSupportFragmentWithSrr<Favo
                 receiveDataHandler.sendMessage(message);
             }
         });
+    }
+
+    @Override
+    protected void onLazyLoad() {
+        view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+
+        // 获取所有视频收藏夹
+        getVideoFolders();
     }
 }

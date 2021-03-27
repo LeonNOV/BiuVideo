@@ -15,6 +15,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.SearchHistoryAdapter;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
+import com.leon.biuvideo.utils.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,11 +54,13 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
 
     @Override
     protected void initView() {
+        ViewUtils.setStatusBar(getActivity(), true);
         search_fragment_topBar = view.findViewById(R.id.search_fragment_topBar);
         search_fragment_topBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
                 backPressed();
+                ViewUtils.setStatusBar(getActivity(), false);
             }
 
             @Override
