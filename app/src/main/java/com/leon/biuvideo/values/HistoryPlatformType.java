@@ -3,7 +3,7 @@ package com.leon.biuvideo.values;
 /**
  * @Author Leon
  * @Time 2021/3/28
- * @Desc
+ * @Desc 历史记录观看平台
  */
 public enum HistoryPlatformType {
     /**

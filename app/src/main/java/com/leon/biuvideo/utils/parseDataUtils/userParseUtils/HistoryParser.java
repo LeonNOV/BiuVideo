@@ -106,6 +106,8 @@ public class HistoryParser implements ParserInterface<History> {
             default:
                 break;
         }
+
+        // 获取历史记录观看平台
         int dt = historyJSONObject.getIntValue("dt");
         if (dt <= 7) {
             if (dt % 2 != 0) {
