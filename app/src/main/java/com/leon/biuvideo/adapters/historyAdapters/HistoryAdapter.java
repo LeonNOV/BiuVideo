@@ -15,12 +15,12 @@ import java.util.List;
 /**
  * 根据HistoryType创建对应的Item
  */
-public class HistoryAdapter extends BaseAdapter<History.InnerHistory> {
-    private final List<History.InnerHistory> historys;
+public class HistoryAdapter extends BaseAdapter<History> {
+    private final List<History> historys;
     private final Context context;
     private ArticleParser articleParser;
 
-    public HistoryAdapter(List<History.InnerHistory> historys, Context context) {
+    public HistoryAdapter(List<History> historys, Context context) {
         super(historys, context);
 
         this.historys = historys;

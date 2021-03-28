@@ -28,6 +28,7 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
+import java.util.List;
 import java.util.concurrent.FutureTask;
 
 /**
@@ -45,7 +46,7 @@ public class HistoryInnerFragment extends BaseLazyFragment {
     private boolean dataState = true;
 
     private HistoryParser historyParser;
-    private History history;
+    private List<History> history;
 
     private LinearLayoutManager linearLayoutManager;
     private HistoryAdapter historyAdapter;
@@ -78,7 +79,7 @@ public class HistoryInnerFragment extends BaseLazyFragment {
             @Override
             public void run() {
                 historyParser = new HistoryParser();
-                history = historyParser.parseHistory(cookie, -1, -1, historyType);
+                history = historyParser.parseData();
 
                 Message message = handler.obtainMessage();
                 message.what = 0;
@@ -109,7 +110,7 @@ public class HistoryInnerFragment extends BaseLazyFragment {
     @Override
     public void initValues() {
         //判断当前条目数量是否大于0
-        if (this.history.innerHistory.size() <= 0) {
+        if (this.history.size() <= 0) {
             //设置无数据提示界面
             no_data.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
@@ -120,7 +121,7 @@ public class HistoryInnerFragment extends BaseLazyFragment {
             smartRefresh.setEnabled(true);
 
             //判断第一次加载是否已加载完所有数据
-            if (this.history.innerHistory.size() < 20) {
+            if (this.history.size() < 20) {
                 dataState = false;
                 //关闭上滑加载
                 smartRefresh.setEnabled(false);
@@ -128,7 +129,7 @@ public class HistoryInnerFragment extends BaseLazyFragment {
 
             if (linearLayoutManager == null || historyAdapter == null) {
                 linearLayoutManager = new LinearLayoutManager(context);
-                historyAdapter = new HistoryAdapter(history.innerHistory, context);
+                historyAdapter = new HistoryAdapter(history, context);
             }
 
             initAttr();
@@ -168,11 +169,8 @@ public class HistoryInnerFragment extends BaseLazyFragment {
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                //获取新数据
-                                History temp = getVideoHistory(history.max, history.viewAt);
-
                                 //添加新数据
-                                historyAdapter.append(temp.innerHistory);
+                                historyAdapter.append(getVideoHistory());
                             }
                         }, 1000);
                     } else {
@@ -191,21 +189,16 @@ public class HistoryInnerFragment extends BaseLazyFragment {
 
     /**
      * 获取下一页视频历史记录
-     *
-     * @param max   history对象中的max变量的数值
-     * @param viewAt    history对象中的viewAt变量的数值
      * @return  返回下一页数据
      */
-    private History getVideoHistory(long max, long viewAt) {
-        History history = historyParser.parseHistory(cookie, max, viewAt, historyType);
-        this.history.max = history.max;
-        this.history.viewAt = history.viewAt;
+    private List<History> getVideoHistory() {
+        List<History> historyList = historyParser.parseData();
 
         //判断是否已获取完所有的数据
-        if (history.innerHistory.size() < 20) {
+        if (historyList.size() < 20) {
             dataState = false;
         }
 
-        return history;
+        return historyList;
     }
 }

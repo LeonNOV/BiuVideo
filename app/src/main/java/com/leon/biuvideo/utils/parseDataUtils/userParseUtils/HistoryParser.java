@@ -1,12 +1,12 @@
 package com.leon.biuvideo.utils.parseDataUtils.userParseUtils;
 
-import android.content.Context;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.userBeans.History;
 import com.leon.biuvideo.beans.userBeans.HistoryType;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.parseDataUtils.ParserInterface;
+import com.leon.biuvideo.values.HistoryPlatformType;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
@@ -16,120 +16,142 @@ import java.util.Map;
 
 import okhttp3.Headers;
 
-public class HistoryParser {
+/**
+ * @Author Leon
+ * @Time 2020/12/9
+ * @Desc 历史记录解析类
+ */
+public class HistoryParser implements ParserInterface<History> {
+    private long max = -1;
+    private long viewAt = -1;
+    public boolean dataStatus = true;
 
-    /**
-     * 获取历史记录
-     *
-     * @param cookie    用户Cookie
-     * @param max   第一次调用为-1,后面调用只需History类中的max的值即可
-     * @param viewAt    第一次调用为-1,后面调用只需History类中的viewAt的值即可
-     * @param historyType   记录类别
-     * @return  返回指定类别的历史记录
-     */
-    public History parseHistory(String cookie, long max, long viewAt, HistoryType historyType) {
-        Map<String, String> params = new HashMap<>();
-        params.put("max", max == -1 ? "0" : String.valueOf(max));
-        params.put("view_at", viewAt == -1 ? "0" : String.valueOf(viewAt));
-        params.put("type", historyType.value);
+    @Override
+    public List<History> parseData() {
+        Map<String, String> params = new HashMap<>(2);
+        params.put("max", String.valueOf(max));
+        params.put("view_at", String.valueOf(viewAt));
 
-        if (cookie != null) {
+        if (dataStatus) {
             JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.history, Headers.of(HttpUtils.getAPIRequestHeader()), params);
-            JSONObject data = responseObject.getJSONObject("data");
 
-            if (data != null) {
-                History history = new History();
+            int code = responseObject.getIntValue("code");
+            if (code == 0) {
+                JSONObject data = responseObject.getJSONObject("data");
 
                 JSONObject cursor = data.getJSONObject("cursor");
-                history.max = cursor.getLongValue("max");
-                history.viewAt = cursor.getLongValue("view_at");
-                history.innerHistory = parseJSONArray(data.getJSONArray("list"));
+                this.max = cursor.getLongValue("max");
+                this.viewAt = cursor.getLongValue("view_at");
+                if (this.max == 0 && this.viewAt == 0) {
+                    this.dataStatus = false;
+                }
 
-                return history;
+                JSONArray list = data.getJSONArray("list");
+                List<History> historyList = new ArrayList<>(list.size());
+
+                if (list.size() == 0) {
+                    return null;
+                }
+
+                for (Object o : list) {
+                    historyList.add(parseArrayElement((JSONObject) o));
+                }
+
+                return historyList;
             }
         }
 
         return null;
     }
 
-    private List<History.InnerHistory> parseJSONArray(JSONArray jsonArray) {
-        List<History.InnerHistory> innerHistories = new ArrayList<>();
+    private History parseArrayElement (JSONObject jsonObject) {
+        History history = new History();
 
-        for (Object o : jsonArray) {
-            JSONObject jsonObject = (JSONObject) o;
+        history.authorName = jsonObject.getString("author_name");
+        history.authorMid = jsonObject.getLongValue("author_mid");
+        history.authorFace = jsonObject.getString("author_face");
+        history.viewDate = jsonObject.getLongValue("view_at");
+        history.badge = jsonObject.getString("badge");
 
-            History.InnerHistory innerHistory = new History.InnerHistory();
-
-            innerHistory.authorName = jsonObject.getString("author_name");
-            innerHistory.authorMid = jsonObject.getLongValue("author_mid");
-            innerHistory.authorFace = jsonObject.getString("author_face");
-            innerHistory.viewDate = jsonObject.getLongValue("view_at");
-            innerHistory.badge = jsonObject.getString("badge");
-
-            //获取cover和covers两个值，那个有就获取那个
-            String cover = jsonObject.getString("cover");
-            if (!cover.equals("")) {
-                innerHistory.cover = cover;
-            } else {
-                innerHistory.cover = jsonObject.getJSONArray("covers").getString(0);
-            }
-
-            //获取historyJSONObject中的数据
-            JSONObject object = jsonObject.getJSONObject("history");
-            String business = object.getString("business");
-            switch (business) {
-                case "archive":
-                    innerHistory.historyType = HistoryType.VIDEO;
-                    if (innerHistory.badge.equals("")) {
-                        innerHistory.badge = "视频";
-                    }
-                    break;
-                case "article-list":
-                case "article":
-                    innerHistory.historyType = HistoryType.ARTICLE;
-                    break;
-                case "live":
-                    innerHistory.historyType = HistoryType.LIVE;
-                    break;
-                case "pgc":
-                    innerHistory.historyType = HistoryType.BANGUMI;
-                    innerHistory.newDesc = jsonObject.getString("new_desc");
-                    innerHistory.showTitle = jsonObject.getString("show_title");
-                    break;
-                default:
-                    break;
-            }
-
-            // 如果不存在以上business类型则不获取该历史记录
-            if (innerHistory.historyType == null) {
-                break;
-            }
-
-            innerHistory.bvid = object.getString("bvid");
-
-            innerHistory.cid = object.getLongValue("cid");
-
-            innerHistory.oid = object.getLongValue("oid");
-
-            innerHistory.duration = jsonObject.getIntValue("duration");
-
-            innerHistory.progress = jsonObject.getIntValue("progress");
-
-            innerHistory.isFinish = jsonObject.getIntValue("is_finish") != 0;
-
-            innerHistory.liveState = jsonObject.getIntValue("live_status") != 0;
-
-            innerHistory.tagName = jsonObject.getString("tag_name");
-
-            innerHistory.title = jsonObject.getString("title");
-
-            innerHistory.subTitle = jsonObject.getString("show_title");
-
-            innerHistory.videos = jsonObject.getIntValue("videos");
-
-            innerHistories.add(innerHistory);
+        //获取cover和covers两个值，那个有就获取那个
+        String cover = jsonObject.getString("cover");
+        if (!"".equals(cover)) {
+            history.cover = cover;
+        } else {
+            history.cover = jsonObject.getJSONArray("covers").getString(0);
         }
 
-        return innerHistories;
+        //获取historyJSONObject中的数据
+        JSONObject historyJSONObject = jsonObject.getJSONObject("history");
+        String business = historyJSONObject.getString("business");
+        switch (business) {
+            case "archive":
+                history.historyType = HistoryType.VIDEO;
+                if ("".equals(history.badge)) {
+                    history.badge = "视频";
+                }
+                break;
+            case "article-list":
+            case "article":
+                history.historyType = HistoryType.ARTICLE;
+                break;
+            case "live":
+                history.historyType = HistoryType.LIVE;
+                break;
+            case "pgc":
+                history.historyType = HistoryType.BANGUMI;
+                history.newDesc = jsonObject.getString("new_desc");
+                history.showTitle = jsonObject.getString("show_title");
+                break;
+            default:
+                break;
+        }
+        int dt = historyJSONObject.getIntValue("dt");
+        if (dt <= 7) {
+            if (dt % 2 != 0) {
+                history.historyPlatformType = HistoryPlatformType.PHOTO;
+            } else {
+                if (dt == 2) {
+                    history.historyPlatformType = HistoryPlatformType.PC;
+                } else if (dt == 4 || dt == 6) {
+                    history.historyPlatformType = HistoryPlatformType.PAD;
+                }
+            }
+        } else {
+            if (dt == 33) {
+                history.historyPlatformType = HistoryPlatformType.TV;
+            } else {
+                history.historyPlatformType = HistoryPlatformType.OTHER;
+            }
+        }
+
+        // 如果不存在以上business类型则不获取该历史记录
+        if (history.historyType == null) {
+            return null;
+        }
+
+        history.bvid = historyJSONObject.getString("bvid");
+
+        history.cid = historyJSONObject.getLongValue("cid");
+
+        history.oid = historyJSONObject.getLongValue("oid");
+
+        history.duration = jsonObject.getIntValue("duration");
+
+        history.progress = jsonObject.getIntValue("progress");
+
+        history.isFinish = jsonObject.getIntValue("is_finish") != 0;
+
+        history.liveState = jsonObject.getIntValue("live_status") != 0;
+
+        history.tagName = jsonObject.getString("tag_name");
+
+        history.title = jsonObject.getString("title");
+
+        history.subTitle = jsonObject.getString("show_title");
+
+        history.videos = jsonObject.getIntValue("videos");
+
+        return history;
     }
 }

@@ -11,15 +11,12 @@
         android:id="@+id/history_topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:rightSrc="@drawable/ic_more_vert"
         app:topBarTitle="@string/history" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/history_recyclerView"
+    <com.leon.biuvideo.ui.views.SmartRefreshRecyclerView
+        android:id="@+id/history_data"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:padding="@dimen/recyclerViewPadding"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/history_item_video" />
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
