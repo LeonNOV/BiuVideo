@@ -50,7 +50,15 @@ public class DiscoveryFragment extends BaseSupportFragment implements View.OnCli
             public boolean handleMessage(@NonNull Message msg) {
                 List<HotSearch> hotSearchList= (List<HotSearch>) msg.obj;
                 discoveryLoadingRecyclerView.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
-                discoveryLoadingRecyclerView.setRecyclerViewAdapter(new DiscoverHotSearchAdapter(hotSearchList, context));
+
+                DiscoverHotSearchAdapter discoverHotSearchAdapter = new DiscoverHotSearchAdapter(hotSearchList, context);
+                discoverHotSearchAdapter.setOnClickHotWordListener(new DiscoverHotSearchAdapter.OnClickHotWordListener() {
+                    @Override
+                    public void onClick(String keyword) {
+                        // 对该关键词进行搜索
+                    }
+                });
+                discoveryLoadingRecyclerView.setRecyclerViewAdapter(discoverHotSearchAdapter);
 
                 discoveryLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
 

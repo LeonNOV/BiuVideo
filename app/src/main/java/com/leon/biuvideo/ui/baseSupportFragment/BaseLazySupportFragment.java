@@ -11,11 +11,6 @@ public abstract class BaseLazySupportFragment extends BaseSupportFragment {
      */
     private boolean isLoaded = false;
 
-    /**
-     * 加载数据
-     */
-    protected abstract void onLazyLoad ();
-
     @Override
     public void onResume() {
         super.onResume();
@@ -24,4 +19,9 @@ public abstract class BaseLazySupportFragment extends BaseSupportFragment {
             isLoaded = true;
         }
     }
+
+    /**
+     * 加载数据
+     */
+    protected abstract void onLazyLoad ();
 }

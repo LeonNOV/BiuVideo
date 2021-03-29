@@ -202,4 +202,35 @@
     <string name="popular_top_list_show_otherVideos">显示此UP主全部上榜视频</string>
     <string name="popular_top_list_hide_otherVideos">隐藏此UP主全部上榜视频</string>
 
+    <string name="searchResultVideoMenuPartitionItemDefault">全部分区</string>
+    <string name="searchResultVideoMenuPartitionItemBangumi">番剧</string>
+    <string name="searchResultVideoMenuPartitionItemGuochuang">国创</string>
+    <string name="searchResultVideoMenuPartitionItemDocumentary">纪录片</string>
+    <string name="searchResultVideoMenuPartitionItemDouga">动画</string>
+    <string name="searchResultVideoMenuPartitionItemMusic">音乐</string>
+    <string name="searchResultVideoMenuPartitionItemDance">舞蹈</string>
+    <string name="searchResultVideoMenuPartitionItemGame">游戏</string>
+    <string name="searchResultVideoMenuPartitionItemTechnology">知识</string>
+    <string name="searchResultVideoMenuPartitionItemDigital">数码</string>
+    <string name="searchResultVideoMenuPartitionItemLife">生活</string>
+    <string name="searchResultVideoMenuPartitionItemFood">美食</string>
+    <string name="searchResultVideoMenuPartitionItemAnimal">动物圈</string>
+    <string name="searchResultVideoMenuPartitionItemKichiku">鬼畜</string>
+    <string name="searchResultVideoMenuPartitionItemFashion">时尚</string>
+    <string name="searchResultVideoMenuPartitionItemNews">资讯</string>
+    <string name="searchResultVideoMenuPartitionItemEnt">娱乐</string>
+    <string name="searchResultVideoMenuPartitionItemCinephile">影视</string>
+    <string name="searchResultVideoMenuPartitionItemMovie">电影</string>
+    <string name="searchResultVideoMenuPartitionItemTeleplay">电视剧</string>
+
+    <string name="searchResultVideoMenuOrderItemDefault">默认排序</string>
+    <string name="searchResultVideoMenuOrderItemPlay">播放多</string>
+    <string name="searchResultVideoMenuOrderItemNewPush">新发布</string>
+    <string name="searchResultVideoMenuOrderItemDanmaku">弹幕多</string>
+
+    <string name="searchResultVideoMenuLengthItemDefault">全部时长</string>
+    <string name="searchResultVideoMenuLengthItemTen">0–10分钟</string>
+    <string name="searchResultVideoMenuLengthItemThirty">10–30分钟</string>
+    <string name="searchResultVideoMenuLengthItemSixty">30–60分钟</string>
+    <string name="searchResultVideoMenuLengthItemSixtyPlus">60分钟+</string>
 </resources>

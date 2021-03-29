@@ -25,11 +25,26 @@ public class DiscoverHotSearchAdapter extends BaseAdapter<HotSearch> {
     private final List<HotSearch> hotSearchList;
     private final Context context;
 
+    private OnClickHotWordListener onClickHotWordListener;
+
     public DiscoverHotSearchAdapter(List<HotSearch> beans, Context context) {
         super(beans, context);
 
         this.hotSearchList = beans;
         this.context = context;
+    }
+
+    public interface OnClickHotWordListener {
+        /**
+         * 点击搜索热榜中的关键词
+         *
+         * @param keyword   关键词
+         */
+        void onClick(String keyword);
+    }
+
+    public void setOnClickHotWordListener(OnClickHotWordListener onClickHotWordListener) {
+        this.onClickHotWordListener = onClickHotWordListener;
     }
 
     @Override
@@ -62,7 +77,9 @@ public class DiscoverHotSearchAdapter extends BaseAdapter<HotSearch> {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, "Position：" + position + "----Keyword：" + hotSearch.keyword, Toast.LENGTH_SHORT).show();
+                        if (onClickHotWordListener != null) {
+                            onClickHotWordListener.onClick(hotSearch.keyword);
+                        }
                     }
                 });
     }
