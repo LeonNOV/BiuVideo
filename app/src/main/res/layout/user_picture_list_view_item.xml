@@ -85,7 +85,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/icon_video_time" />
+                    android:src="@drawable/ic_view_time" />
 
                 <TextView
                     android:id="@+id/up_picture_textView_ctime"

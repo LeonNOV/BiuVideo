@@ -25,7 +25,17 @@
                 android:layout_height="match_parent"
                 android:contentDescription="@string/description"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher_background" />
+                android:src="@color/gray" />
+
+            <ProgressBar
+                android:id="@+id/history_item_video_progress"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_gravity="bottom"
+                android:progressDrawable="@drawable/video_progress_layer"
+                android:progress="50"
+                />
 
             <TextView
                 android:id="@+id/history_item_video_duration"
@@ -37,21 +47,17 @@
                 android:backgroundTint="#99000000"
                 android:gravity="center"
                 android:padding="3dp"
-                android:text="02:49"
                 android:textColor="@color/white"
                 android:textSize="13sp" />
 
-            <TextView
-                android:id="@+id/history_item_video_badge"
+            <ImageView
+                android:id="@+id/history_item_video_live_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:padding="3dp"
                 android:layout_margin="6dp"
-                android:text="awdawdaw"
-                android:textColor="@color/white"
-                android:background="@drawable/round_corners6dp_bg"
-                android:backgroundTint="@color/BiliBili_pink"/>
+                android:src="@drawable/ic_not_live"
+                android:contentDescription="@string/description" />
 
         </FrameLayout>
 
@@ -70,18 +76,8 @@
             android:layout_gravity="top"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="介绍介绍介绍介介绍介绍绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介介绍介绍绍介绍介绍介绍介绍介绍介绍介绍介绍"
             android:textColor="@color/black"
             android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/history_item_video_progress"
-            android:layout_width="wrap_content"
-            android:layout_above="@id/history_item_video_stat"
-            android:text="已观看 %50"
-            android:textSize="12sp"
-            android:textColor="@color/black"
-            android:layout_height="wrap_content"/>
 
         <LinearLayout
             android:id="@+id/history_item_video_stat"
@@ -89,7 +85,16 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="5dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/history_item_video_subTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/history_item_video_biliUser"
@@ -97,7 +102,8 @@
                 android:layout_height="wrap_content"
                 android:drawablePadding="5dp"
                 android:layout_gravity="center_vertical"
-                android:text="WWWW"
+                android:maxLength="5"
+                android:ellipsize="end"
                 android:textColor="@color/black"
                 android:textSize="12sp"
                 app:drawableStartCompat="@drawable/ic_up_user"
@@ -106,7 +112,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -123,7 +129,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_gravity="center_vertical"
-                    android:text="03/28 14:22"
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     app:drawableTint="@color/black" />

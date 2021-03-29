@@ -38,13 +38,11 @@ public class FavoritesFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        ViewUtils.setStatusBar(getActivity(), true);
         SimpleTopBar favoritesFragmentTopBar = view.findViewById(R.id.favorites_fragment_topBar);
         favoritesFragmentTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
                 backPressed();
-                ViewUtils.setStatusBar(getActivity(), false);
             }
 
             @Override

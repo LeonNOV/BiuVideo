@@ -22,8 +22,8 @@ import okhttp3.Headers;
  * @Desc 历史记录解析类
  */
 public class HistoryParser implements ParserInterface<History> {
-    private long max = -1;
-    private long viewAt = -1;
+    private long max = 0;
+    private long viewAt = 0;
     public boolean dataStatus = true;
 
     @Override
@@ -54,7 +54,11 @@ public class HistoryParser implements ParserInterface<History> {
                 }
 
                 for (Object o : list) {
-                    historyList.add(parseArrayElement((JSONObject) o));
+                    History history = parseArrayElement((JSONObject) o);
+
+                    if (history != null) {
+                        historyList.add(history);
+                    }
                 }
 
                 return historyList;
@@ -70,7 +74,7 @@ public class HistoryParser implements ParserInterface<History> {
         history.authorName = jsonObject.getString("author_name");
         history.authorMid = jsonObject.getLongValue("author_mid");
         history.authorFace = jsonObject.getString("author_face");
-        history.viewDate = jsonObject.getLongValue("view_at");
+        history.viewTime = jsonObject.getLongValue("view_at");
         history.badge = jsonObject.getString("badge");
 
         //获取cover和covers两个值，那个有就获取那个
@@ -150,7 +154,8 @@ public class HistoryParser implements ParserInterface<History> {
 
         history.title = jsonObject.getString("title");
 
-        history.subTitle = jsonObject.getString("show_title");
+        String showTitle = jsonObject.getString("show_title");
+        history.subTitle = "".equals(showTitle) ? null : showTitle;
 
         history.videos = jsonObject.getIntValue("videos");
 

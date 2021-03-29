@@ -45,13 +45,11 @@ public class FollowsFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        ViewUtils.setStatusBar(getActivity(), true);
         SimpleTopBar followsTopBar = findView(R.id.follows_topBar);
         followsTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
                 backPressed();
-                ViewUtils.setStatusBar(getActivity(), false);
             }
 
             @Override

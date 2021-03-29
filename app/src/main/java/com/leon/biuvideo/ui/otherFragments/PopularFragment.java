@@ -48,13 +48,11 @@ public class PopularFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        ViewUtils.setStatusBar(getActivity(), true);
         SimpleTopBar popularTopBar = view.findViewById(R.id.popular_topBar);
         popularTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
                 backPressed();
-                ViewUtils.setStatusBar(getActivity(), false);
             }
 
             @Override

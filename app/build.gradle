@@ -94,7 +94,7 @@ dependencies {
     implementation "com.github.mcxtzhang:SwipeDelMenuLayout:V1.3.0"
 
     // 状态栏工具类
-    implementation 'com.jaeger.statusbarutil:library:1.4.0'
+//    implementation 'com.jaeger.statusbarutil:library:1.4.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

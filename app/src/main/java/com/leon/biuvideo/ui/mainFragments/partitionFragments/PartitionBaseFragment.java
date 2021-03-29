@@ -51,14 +51,12 @@ public class PartitionBaseFragment extends BaseSupportFragment {
             subFragments.add(new PartitionSubBaseFragment(partition.id));
         }
 
-        ViewUtils.setStatusBar(getActivity(), true);
         SimpleTopBar partitionBaseTopBar = findView(R.id.partition_base_topBar);
         partitionBaseTopBar.setTopBarTitle(Partitions.getName(partitions));
         partitionBaseTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
                 backPressed();
-                ViewUtils.setStatusBar(getActivity(), false);
             }
 
             @Override

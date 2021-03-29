@@ -35,13 +35,11 @@ public class DownloadManagerFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        ViewUtils.setStatusBar(getActivity(), true);
         SimpleTopBar downloadManagerFragmentTopBar = findView(R.id.downloadManager_fragment_topBar);
         downloadManagerFragmentTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
                 backPressed();
-                ViewUtils.setStatusBar(getActivity(), false);
             }
 
             @Override

@@ -21,7 +21,7 @@ public class History {
     /**
      * 观看日期(秒)
      */
-    public long viewDate;
+    public long viewTime;
 
     /**
      * 历史记录类别

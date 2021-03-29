@@ -48,13 +48,11 @@ public class LoginFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        ViewUtils.setStatusBar(getActivity(), true);
         SimpleTopBar loginTopBar = findView(R.id.login_topBar);
         loginTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
                 backPressed();
-                ViewUtils.setStatusBar(getActivity(), false);
             }
 
             @Override

@@ -13,7 +13,6 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.jaeger.library.StatusBarUtil;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.MainActivity;
 
@@ -35,8 +34,8 @@ public class ViewUtils {
         int selected = R.drawable.lndicator_bar_selected;
         int unselected = R.drawable.lndicator_bar_unselected;
 
-        Typeface typeface_bold = Typeface.defaultFromStyle(Typeface.BOLD);
-        Typeface typeface_normal = Typeface.defaultFromStyle(Typeface.NORMAL);
+        Typeface typefaceBold = Typeface.defaultFromStyle(Typeface.BOLD);
+        Typeface typefaceNormal = Typeface.defaultFromStyle(Typeface.NORMAL);
 
         TextView textView;
         for (Map.Entry<Integer, TextView> entry : textViewMap.entrySet()) {
@@ -44,12 +43,12 @@ public class ViewUtils {
                 textView = entry.getValue();
                 textView.setBackgroundResource(selected);
                 textView.setTextSize(18);
-                textView.setTypeface(typeface_bold);
+                textView.setTypeface(typefaceBold);
             } else {
                 textView = entry.getValue();
                 textView.setBackgroundResource(unselected);
                 textView.setTextSize(15);
-                textView.setTypeface(typeface_normal);
+                textView.setTypeface(typefaceNormal);
             }
         }
     }
@@ -176,15 +175,5 @@ public class ViewUtils {
         ((MainActivity) activity).registerTouchEvenListener(onTouchListener);
 
         return onTouchListener;
-    }
-
-    public static void setStatusBar (Activity activity, boolean isWhite) {
-        if (isWhite) {
-            StatusBarUtil.setColor(activity, activity.getColor(R.color.white), 0);
-        } else {
-            StatusBarUtil.setColor(activity, activity.getColor(R.color.bg), 0);
-        }
-
-        activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
     }
 }

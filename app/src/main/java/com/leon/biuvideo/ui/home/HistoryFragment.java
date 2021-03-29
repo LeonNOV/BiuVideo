@@ -1,10 +1,8 @@
 package com.leon.biuvideo.ui.home;
 
 import android.os.Message;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.homeAdapters.HistoryAdapter;
@@ -21,7 +19,6 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @Author Leon
@@ -43,13 +40,11 @@ public class HistoryFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        ViewUtils.setStatusBar(getActivity(), true);
         SimpleTopBar historyTopBar = findView(R.id.history_topBar);
         historyTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
                 backPressed();
-                ViewUtils.setStatusBar(getActivity(), false);
             }
 
             @Override
@@ -92,7 +87,7 @@ public class HistoryFragment extends BaseSupportFragment {
                         }
                         break;
                     case 1:
-                        if (histories != null || histories.size() > 0) {
+                        if (histories != null && histories.size() > 0) {
                             historyAdapter.append(histories);
                             historyData.setSmartRefreshStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
                         } else {
