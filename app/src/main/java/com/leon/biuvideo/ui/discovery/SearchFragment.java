@@ -101,7 +101,8 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
                 Toast.makeText(context, "点击了-清空搜索词", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.search_fragment_imageView_clearKeyword:
-                Toast.makeText(context, "点击了-清空搜索历史", Toast.LENGTH_SHORT).show();
+                start(new SearchResultFragment());
+//                Toast.makeText(context, "点击了-清空搜索历史", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;

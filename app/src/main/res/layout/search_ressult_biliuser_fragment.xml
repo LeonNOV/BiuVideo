@@ -3,4 +3,70 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/search_result_bili_user_menu_order"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_rectangle"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/search_result_bili_user_menu_order_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/searchResultBiliUserMenuOrderItemDefault"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/search_result_bili_user_menu_order_img"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/description"
+                android:src="@drawable/ic_expand_large_holo_light" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/search_result_bili_user_menu_category"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_rectangle"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/search_result_bili_user_menu_category_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/searchResultBiliUserMenuCategoryItemDefault"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/search_result_bili_user_menu_category_img"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/description"
+                android:src="@drawable/ic_expand_large_holo_light" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.leon.biuvideo.ui.views.SmartRefreshRecyclerView
+        android:id="@+id/search_result_bili_user_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/recyclerViewPadding" />
+    
 </LinearLayout>

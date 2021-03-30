@@ -71,18 +71,18 @@ public class DiscoveryFragment extends BaseSupportFragment implements View.OnCli
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
 
-        SimpleSingleThreadPool.executor(new Runnable() {
-            @Override
-            public void run() {
-                HotSearchParser hotSearchParser = new HotSearchParser();
-                List<HotSearch> hotSearchList = hotSearchParser.parseData();
-
-                Message message = handler.obtainMessage();
-                message.obj = hotSearchList;
-
-                handler.sendMessage(message);
-            }
-        });
+//        SimpleSingleThreadPool.executor(new Runnable() {
+//            @Override
+//            public void run() {
+//                HotSearchParser hotSearchParser = new HotSearchParser();
+//                List<HotSearch> hotSearchList = hotSearchParser.parseData();
+//
+//                Message message = handler.obtainMessage();
+//                message.obj = hotSearchList;
+//
+//                handler.sendMessage(message);
+//            }
+//        });
     }
 
     @Override
