@@ -44,7 +44,7 @@
         android:ellipsize="end"
         android:maxLines="3"
         android:text="DescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDesc"
-        android:textColor="@color/black"
+        android:textColor="@color/infoColor"
         android:textSize="17sp" />
 
     <com.leon.biuvideo.ui.views.TagView

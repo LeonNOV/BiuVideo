@@ -7,13 +7,23 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.adapters.discover.searchResultAdapters.SearchResultVideoAdapter;
+import com.leon.biuvideo.beans.searchResultBeans.SearchResultVideo;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
+import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.ui.views.searchResultViews.SearchResultMenuAdapter;
 import com.leon.biuvideo.ui.views.searchResultViews.SearchResultMenuPopupWindow;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
+import com.leon.biuvideo.utils.parseDataUtils.searchParsers.SearchResultVideoParser;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author Leon
@@ -21,6 +31,13 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
  * @Desc 视频搜索结果
  */
 public class SearchResultVideoFragment extends BaseLazySupportFragment implements View.OnClickListener {
+    private final List<SearchResultVideo> searchResultVideoList = new ArrayList<>();
+
+    private String keyword;
+    private String order;
+    private String length;
+    private String partition;
+
     private int orderSelectedPosition = 0;
     private int lengthSelectedPosition = 0;
     private int partitionSelectedPosition = 0;
@@ -32,6 +49,16 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
     private ObjectAnimator orderImgWhirl;
     private ObjectAnimator lengthImgWhirl;
     private ObjectAnimator partitionImgWhirl;
+    private SearchResultVideoParser searchResultVideoParser;
+    private SmartRefreshRecyclerView<SearchResultVideo> searchResultVideoData;
+    private SearchResultVideoAdapter searchResultVideoAdapter;
+
+    public SearchResultVideoFragment (String keyword) {
+        this.keyword = keyword;
+        this.order = "totalrank";
+        this.length = "0";
+        this.partition = "0";
+    }
 
     @Override
     protected int setLayout() {
@@ -60,14 +87,17 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
         partitionImgWhirl = ObjectAnimator.ofFloat(searchResultVideoMenuPartitionImg, "rotation", 0.0f, 180.0f);
         partitionImgWhirl.setDuration(400);
 
-        SmartRefreshRecyclerView searchResultVideoData = findView(R.id.search_result_video_data);
+        searchResultVideoData = findView(R.id.search_result_video_data);
         searchResultVideoData.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
 
             }
         });
-
+        searchResultVideoAdapter = new SearchResultVideoAdapter(searchResultVideoList, context);
+        searchResultVideoAdapter.setHasStableIds(true);
+        searchResultVideoData.setRecyclerViewAdapter(searchResultVideoAdapter);
+        searchResultVideoData.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
         setOnLoadListener(new OnLoadListener() {
             @Override
             public void onLoad(Message msg) {
@@ -78,11 +108,8 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
 
     @Override
     protected void onLazyLoad() {
-
-    }
-
-    private void getVideo(int what) {
-
+        searchResultVideoData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+//        getVideo(0);
     }
 
     @Override
@@ -97,6 +124,8 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
                         searchResultVideoMenuOrderText.setText(values[0]);
                         orderSelectedPosition = position;
                         searchResultOrderMenuPopupWindow.dismiss();
+                        order = values[1];
+                        reset();
                     }
                 });
                 searchResultOrderMenuPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
@@ -116,6 +145,8 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
                         searchResultVideoMenuLengthText.setText(values[0]);
                         lengthSelectedPosition = position;
                         searchResultLengthMenuPopupWindow.dismiss();
+                        length = values[1];
+                        reset();
                     }
                 });
                 searchResultLengthMenuPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
@@ -135,6 +166,8 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
                         searchResultVideoMenuPartitionText.setText(values[0]);
                         partitionSelectedPosition = position;
                         searchResultPartitionMenuPopupWindow.dismiss();
+                        partition = values[1];
+                        reset();
                     }
                 });
                 searchResultPartitionMenuPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
@@ -148,5 +181,38 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
             default:
                 break;
         }
+    }
+
+    private void getVideo(int what) {
+        if (searchResultVideoParser != null) {
+            searchResultVideoParser = new SearchResultVideoParser(keyword, order, length, partition);
+        }
+        requestData(what);
+    }
+
+    private void reset() {
+        // 清空列表中的数据
+        searchResultVideoAdapter.removeAll();
+
+        searchResultVideoParser = new SearchResultVideoParser(keyword, order, length, partition);
+        requestData(-1);
+    }
+
+    private void requestData(int what) {
+        SimpleSingleThreadPool.executor(new Runnable() {
+            @Override
+            public void run() {
+                List<SearchResultVideo> searchResultVideoList = searchResultVideoParser.parseData();
+
+                Message message;
+                if (what == -1) {
+                    message = receiveDataHandler.obtainMessage(0);
+                } else {
+                    message = receiveDataHandler.obtainMessage(what);
+                }
+                message.obj = searchResultVideoList;
+                receiveDataHandler.sendMessage(message);
+            }
+        });
     }
 }

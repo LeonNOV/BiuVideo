@@ -13,8 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.Headers;
-
 /**
  * @Author Leon
  * @Time 2021/3/30
@@ -57,7 +55,7 @@ public class SearchResultBangumiParser implements ParserInterface<SearchResultBa
         Map<String, String> params = new HashMap<>(3);
         params.put("search_type", "media_bangumi");
         params.put("page", String.valueOf(pageNum));
-        params.put("search_type", keyword);
+        params.put("keyword", keyword);
 
         if (dataStatus) {
             JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.SEARCH_WITH_TYPE, params);

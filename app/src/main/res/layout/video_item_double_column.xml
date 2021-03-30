@@ -75,10 +75,9 @@
                 android:layout_height="wrap_content"
                 android:drawablePadding="5dp"
                 android:text="1903.6万"
-                android:textColor="@color/black"
+                android:textColor="@color/infoColor"
                 android:textSize="12sp"
-                app:drawableStartCompat="@drawable/ic_play"
-                app:drawableTint="@color/black" />
+                app:drawableStartCompat="@drawable/ic_play" />
 
             <TextView
                 android:id="@+id/video_item_danmaku"
@@ -87,10 +86,9 @@
                 android:layout_marginStart="10dp"
                 android:drawablePadding="5dp"
                 android:text="1903.6万"
-                android:textColor="@color/black"
+                android:textColor="@color/infoColor"
                 android:textSize="12sp"
-                app:drawableStartCompat="@drawable/ic_danmaku"
-                app:drawableTint="@color/black" />
+                app:drawableStartCompat="@drawable/ic_danmaku" />
 
         </LinearLayout>
 

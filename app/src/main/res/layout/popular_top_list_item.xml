@@ -123,14 +123,14 @@
                     android:id="@+id/popular_top_list_item_extra2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/gray"
+                    android:textColor="@color/infoColor"
                     android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/popular_top_list_item_extra1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/gray"
+                    android:textColor="@color/infoColor"
                     android:textSize="15sp" />
 
                 <com.leon.biuvideo.ui.views.TagView
@@ -169,7 +169,7 @@
             android:background="@drawable/ripple_round_corners6dp_bg"
             android:padding="5dp"
             android:text="@string/popular_top_list_show_otherVideos"
-            android:textColor="@color/gray" />
+            android:textColor="@color/infoColor" />
 
     </LinearLayout>
 

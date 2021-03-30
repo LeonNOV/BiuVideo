@@ -54,11 +54,11 @@ public class SearchResultActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void initView() {
-        ImageView search_imageView_back = findViewById(R.id.search_imageView_back);
-        search_imageView_back.setOnClickListener(this);
+        ImageView searchImageViewBack = findViewById(R.id.search_imageView_back);
+        searchImageViewBack.setOnClickListener(this);
 
-        ImageView search_imageView_clean = findViewById(R.id.search_imageView_clean);
-        search_imageView_clean.setOnClickListener(this);
+        ImageView searchImageViewClean = findViewById(R.id.search_imageView_clean);
+        searchImageViewClean.setOnClickListener(this);
 
         search_editText_searchBox = findViewById(R.id.search_editText_searchBox);
         search_editText_searchBox.setOnEditorActionListener(new TextView.OnEditorActionListener() {

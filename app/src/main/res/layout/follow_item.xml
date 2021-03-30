@@ -65,7 +65,7 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:text="descdescdescdescdescdesc"
-                android:textColor="@color/black"
+                android:textColor="@color/infoColor"
                 android:textSize="12sp" />
 
         </LinearLayout>

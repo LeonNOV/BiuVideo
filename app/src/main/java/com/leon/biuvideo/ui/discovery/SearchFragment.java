@@ -2,7 +2,9 @@ package com.leon.biuvideo.ui.discovery;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,7 +17,6 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.SearchHistoryAdapter;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
-import com.leon.biuvideo.utils.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +27,8 @@ import java.util.List;
  * @Desc 搜索页面
  */
 public class SearchFragment extends BaseSupportFragment implements View.OnClickListener {
-    private static final String ARG_MSG = "arg_msg";
-
-    private SimpleTopBar search_fragment_topBar;
-    private EditText search_fragment_editText_keyword;
-    private ImageView search_fragment_imageView_clearKeyword;
-    private TextView search_fragment_textView_clearHistory;
-    private RecyclerView search_fragment_recyclerView_historyList;
+    private EditText searchFragmentEditTextKeyword;
+    private RecyclerView searchFragmentRecyclerViewHistoryList;
     private Context context;
 
     public static SearchFragment newInstance() {
@@ -42,8 +38,7 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // 接收数据
-//        Parcelable parcelable = getArguments().getParcelable(ARG_MSG);
+
         this.context = getContext();
     }
 
@@ -54,10 +49,11 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
 
     @Override
     protected void initView() {
-        search_fragment_topBar = view.findViewById(R.id.search_fragment_topBar);
-        search_fragment_topBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
+        SimpleTopBar searchFragmentTopBar = view.findViewById(R.id.search_fragment_topBar);
+        searchFragmentTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
+                hideSoftInput();
                 backPressed();
             }
 
@@ -67,14 +63,33 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
             }
         });
 
-        search_fragment_editText_keyword = view.findViewById(R.id.search_fragment_editText_keyword);
-        search_fragment_imageView_clearKeyword = view.findViewById(R.id.search_fragment_imageView_clearKeyword);
-        search_fragment_imageView_clearKeyword.setOnClickListener(this);
+        searchFragmentEditTextKeyword = view.findViewById(R.id.search_fragment_editText_keyword);
+        showSoftInput(searchFragmentEditTextKeyword);
+        searchFragmentEditTextKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                //按下软键盘的搜索按钮会触发该方法
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    //获取输入内容
+                    String value = searchFragmentEditTextKeyword.getText().toString();
 
-        search_fragment_textView_clearHistory = view.findViewById(R.id.search_fragment_textView_clearHistory);
-        search_fragment_textView_clearHistory.setOnClickListener(this);
+                    if (!"".equals(value)) {
+                        start(new SearchResultFragment(value));
+                        hideSoftInput();
+                    }
+                }
 
-        search_fragment_recyclerView_historyList = view.findViewById(R.id.search_fragment_recyclerView_historyList);
+                return false;
+            }
+        });
+
+        ImageView searchFragmentImageViewClearKeyword = view.findViewById(R.id.search_fragment_imageView_clearKeyword);
+        searchFragmentImageViewClearKeyword.setOnClickListener(this);
+
+        TextView searchFragmentTextViewClearHistory = view.findViewById(R.id.search_fragment_textView_clearHistory);
+        searchFragmentTextViewClearHistory.setOnClickListener(this);
+
+        searchFragmentRecyclerViewHistoryList = view.findViewById(R.id.search_fragment_recyclerView_historyList);
     }
 
     @Override
@@ -91,18 +106,17 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
 
         SearchHistoryAdapter searchHistoryAdapter = new SearchHistoryAdapter(historys, context);
         searchHistoryAdapter.setHasStableIds(true);
-        search_fragment_recyclerView_historyList.setAdapter(searchHistoryAdapter);
+        searchFragmentRecyclerViewHistoryList.setAdapter(searchHistoryAdapter);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.search_fragment_textView_clearHistory:
-                Toast.makeText(context, "点击了-清空搜索词", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "点击了-清空搜索历史", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.search_fragment_imageView_clearKeyword:
-                start(new SearchResultFragment());
-//                Toast.makeText(context, "点击了-清空搜索历史", Toast.LENGTH_SHORT).show();
+                searchFragmentEditTextKeyword.getText().clear();
                 break;
             default:
                 break;
@@ -113,6 +127,6 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
     public void onDestroyView() {
         super.onDestroyView();
 
-        search_fragment_recyclerView_historyList = null;
+        searchFragmentRecyclerViewHistoryList = null;
     }
 }

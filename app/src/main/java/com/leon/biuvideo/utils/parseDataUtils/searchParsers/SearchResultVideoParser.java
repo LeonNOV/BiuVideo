@@ -13,8 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.Headers;
-
 /**
  * @Author Leon
  * @Time 2020/11/22
@@ -69,7 +67,7 @@ public class SearchResultVideoParser implements ParserInterface<SearchResultVide
         params.put("tids", partition == null ? "" : partition);
 
         if (dataStatus) {
-            JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.SEARCH_WITH_TYPE, Headers.of(HttpUtils.getAPIRequestHeader()), params);
+            JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.SEARCH_WITH_TYPE, params);
             JSONObject data = response.getJSONObject("data");
 
             if (maxItems == -1 || maxPages == -1) {

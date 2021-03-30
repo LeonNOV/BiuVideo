@@ -83,7 +83,8 @@
                 android:layout_below="@id/watch_later_video_item_title"
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="10dp"
-                android:text="已看0%" />
+                android:text="已看0%"
+                android:textColor="@color/infoColor" />
 
             <TextView
                 android:id="@+id/watch_later_video_item_pubName"
@@ -91,10 +92,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:drawablePadding="5dp"
-                android:textColor="@color/black"
+                android:textColor="@color/infoColor"
                 android:textSize="15sp"
-                app:drawableStartCompat="@drawable/ic_up_user"
-                app:drawableTint="@color/black" />
+                app:drawableStartCompat="@drawable/ic_up_user" />
 
         </RelativeLayout>
 

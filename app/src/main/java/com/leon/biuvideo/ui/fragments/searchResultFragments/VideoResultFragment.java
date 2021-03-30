@@ -77,7 +77,7 @@ public class VideoResultFragment extends BaseLazyFragment {
 
     @Override
     public void loadData() {
-        SimpleSingleThreadPool.executor(new Runnable() {
+        /*SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
                 if (searchResultVideoParser == null) {
@@ -96,7 +96,7 @@ public class VideoResultFragment extends BaseLazyFragment {
                 message.setData(bundle);
                 handler.sendMessage(message);
             }
-        });
+        });*/
 
         handler = new Handler(new Handler.Callback() {
             @Override
@@ -128,7 +128,7 @@ public class VideoResultFragment extends BaseLazyFragment {
             search_result_smartRefresh.setEnabled(true);
 
             //获取第一页数据
-            videoList = searchResultVideoParser.videoParse(keyword, pageNum, SortType.DEFAULT);
+//            videoList = searchResultVideoParser.videoParse(keyword, pageNum, SortType.DEFAULT);
 
             //获取第一页结果总数，最大为20，最小为0
             currentCount += videoList.size();
@@ -206,7 +206,7 @@ public class VideoResultFragment extends BaseLazyFragment {
      * 获取下一页的数据
      */
     public void getVideos() {
-        videoList = searchResultVideoParser.videoParse(keyword, pageNum, SortType.DEFAULT);
+        /*videoList = searchResultVideoParser.videoParse(keyword, pageNum, SortType.DEFAULT);
 
         //记录获取的总数
         currentCount += videoList.size();
@@ -217,7 +217,7 @@ public class VideoResultFragment extends BaseLazyFragment {
             search_result_smartRefresh.setEnabled(false);
         }
 
-        pageNum++;
+        pageNum++;*/
     }
 
     /**

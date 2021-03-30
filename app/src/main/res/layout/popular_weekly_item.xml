@@ -72,7 +72,7 @@
             android:drawablePadding="5dp"
             android:padding="5dp"
             android:text="很多人点赞"
-            android:textColor="#9f9f9f"
+            android:textColor="@color/infoColor"
             app:drawableStartCompat="@drawable/ic_quotation_marks" />
 
         <LinearLayout
@@ -88,10 +88,9 @@
                 android:layout_height="wrap_content"
                 android:drawablePadding="5dp"
                 android:text="4.7万"
-                android:textColor="@color/black"
+                android:textColor="@color/infoColor"
                 android:textSize="15sp"
-                app:drawableStartCompat="@drawable/ic_play"
-                app:drawableTint="@color/black" />
+                app:drawableStartCompat="@drawable/ic_play" />
 
             <TextView
                 android:id="@+id/popular_weekly_item_danmaku"
@@ -100,10 +99,9 @@
                 android:layout_marginStart="10dp"
                 android:drawablePadding="5dp"
                 android:text="106"
-                android:textColor="@color/black"
+                android:textColor="@color/infoColor"
                 android:textSize="15sp"
-                app:drawableStartCompat="@drawable/ic_danmaku"
-                app:drawableTint="@color/black" />
+                app:drawableStartCompat="@drawable/ic_danmaku" />
 
         </LinearLayout>
 

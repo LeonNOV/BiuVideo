@@ -1,7 +1,11 @@
 package com.leon.biuvideo.ui.discovery;
 
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
@@ -15,6 +19,8 @@ import com.leon.biuvideo.ui.discovery.searchResultFragments.SearchResultArticleF
 import com.leon.biuvideo.ui.discovery.searchResultFragments.SearchResultBangumiFragment;
 import com.leon.biuvideo.ui.discovery.searchResultFragments.SearchResultBiliUserFragment;
 import com.leon.biuvideo.ui.discovery.searchResultFragments.SearchResultVideoFragment;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ViewUtils;
 
 import java.util.ArrayList;
@@ -29,6 +35,12 @@ public class SearchResultFragment extends BaseSupportFragment implements View.On
     private MainActivity.OnTouchListener onTouchListener;
     private EditText searchResultSearch;
 
+    private String keyword;
+
+    public SearchResultFragment (String keyword) {
+        this.keyword = keyword;
+    }
+
     @Override
     protected int setLayout() {
         return R.layout.search_result_fragment;
@@ -38,10 +50,29 @@ public class SearchResultFragment extends BaseSupportFragment implements View.On
     protected void initView() {
         findView(R.id.search_result_back).setOnClickListener(this);
         searchResultSearch = findView(R.id.search_result_search);
+        searchResultSearch.setText(keyword);
+        searchResultSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                //按下软键盘的搜索按钮会触发该方法
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    //获取输入内容
+                    String value = searchResultSearch.getText().toString();
+
+                    if (!"".equals(value)) {
+                        keyword = value;
+                        hideSoftInput();
+                        Toast.makeText(context, value, Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                return false;
+            }
+        });
         findView(R.id.search_result_clear).setOnClickListener(this);
 
         List<Fragment> viewPagerFragments = new ArrayList<>();
-        viewPagerFragments.add(new SearchResultVideoFragment());
+        viewPagerFragments.add(new SearchResultVideoFragment(keyword));
         viewPagerFragments.add(new SearchResultBangumiFragment());
         viewPagerFragments.add(new SearchResultArticleFragment());
         viewPagerFragments.add(new SearchResultBiliUserFragment());
@@ -53,7 +84,6 @@ public class SearchResultFragment extends BaseSupportFragment implements View.On
 
         // 初始化ViewPager2和TabLayout
         onTouchListener = ViewUtils.initTabLayoutAndViewPager2(getActivity(), searchResultTabLayout, searchResultViewPager, titles, 0);
-
     }
 
     @Override
@@ -69,6 +99,7 @@ public class SearchResultFragment extends BaseSupportFragment implements View.On
         switch (v.getId()) {
             case R.id.search_result_back:
                 backPressed();
+                hideSoftInput();
                 break;
             case R.id.search_result_clear:
                 searchResultSearch.getText().clear();
