@@ -146,7 +146,7 @@ public class BiliBiliAPIs {
      *              stow：按收藏数从高至低排序
      * 需要在请求头中添加referer，默认为`https://search.bilibili.com`
      */
-    public static String search = "https://api.bilibili.com/x/web-interface/search/type";
+    public static String SEARCH_WITH_TYPE = "https://api.bilibili.com/x/web-interface/search/type";
 
     /**
      * 获取专栏具体信息的接口<br/>
@@ -154,7 +154,7 @@ public class BiliBiliAPIs {
      *          ids：专栏id，多个参数，需要用URL编码格式的‘,’来分隔(%2C)
      *
      */
-    public static String metas = "https://api.bilibili.com/x/article/metas";
+    public static String METAS = "https://api.bilibili.com/x/article/metas";
 
     /**
      * 获取‘我的’订阅数据接口<br/>

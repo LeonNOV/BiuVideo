@@ -2,7 +2,7 @@ package com.leon.biuvideo.utils.parseDataUtils.searchParsers;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.searchBean.SearchBiliUser;
+import com.leon.biuvideo.beans.searchResultBeans.bangumi.SearchBiliUser;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.values.Role;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
@@ -41,7 +41,7 @@ public class BiliUserParser {
         params.put("page", String.valueOf(pn));
         params.put("order", sortType.value);
 
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.search, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.SEARCH_WITH_TYPE, Headers.of(requestHeader), params);
         JSONObject data = responseObject.getJSONObject("data");
 
         List<SearchBiliUser> searchBiliUsers = new ArrayList<>();
@@ -117,7 +117,7 @@ public class BiliUserParser {
         params.put("page", "1");
         params.put("order", SortType.DEFAULT.value);
 
-        HttpUtils httpUtils = new HttpUtils(BiliBiliAPIs.search, Headers.of(requestHeader), params);
+        HttpUtils httpUtils = new HttpUtils(BiliBiliAPIs.SEARCH_WITH_TYPE, Headers.of(requestHeader), params);
         String response = httpUtils.getData();
 
         JSONObject jsonObject = JSONObject.parseObject(response);

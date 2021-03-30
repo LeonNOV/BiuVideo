@@ -63,7 +63,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/icon_view" />
+                    android:src="@drawable/ic_view" />
 
                 <TextView
                     android:id="@+id/up_picture_textView_view"

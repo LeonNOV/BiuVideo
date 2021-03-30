@@ -1,4 +1,4 @@
-package com.leon.biuvideo.beans.searchBean.bangumi;
+package com.leon.biuvideo.beans.searchResultBeans.bangumi;
 
 import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
 

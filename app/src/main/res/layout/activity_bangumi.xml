@@ -209,7 +209,7 @@
                         <ImageView
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@drawable/icon_video_like"
+                            android:src="@drawable/ic_like"
                             app:tint="@color/black" />
 
                         <TextView

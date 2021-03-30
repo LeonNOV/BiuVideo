@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
+import com.leon.biuvideo.beans.searchResultBeans.bangumi.Bangumi;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.ImagePixelSize;

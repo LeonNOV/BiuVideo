@@ -1,8 +1,6 @@
 package com.leon.biuvideo.adapters.homeAdapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -10,15 +8,9 @@ import androidx.annotation.NonNull;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
-import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
 import com.leon.biuvideo.beans.orderBeans.Order;
-import com.leon.biuvideo.ui.activitys.BangumiActivity;
-import com.leon.biuvideo.ui.views.SimpleSnackBar;
-import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BangumiParser;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.values.OrderType;
-import com.leon.biuvideo.values.SortType;
 
 import java.util.Arrays;
 import java.util.List;

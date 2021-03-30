@@ -68,7 +68,7 @@
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/icon_view" />
+                        android:src="@drawable/ic_view" />
 
                     <TextView
                         android:id="@+id/picture_textView_view"
@@ -87,7 +87,7 @@
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/icon_video_like" />
+                        android:src="@drawable/ic_like" />
 
                     <TextView
                         android:id="@+id/picture_textView_like"

@@ -1,4 +1,4 @@
-package com.leon.biuvideo.beans.searchBean;
+package com.leon.biuvideo.beans.searchResultBeans.bangumi;
 
 import com.leon.biuvideo.values.Role;
 

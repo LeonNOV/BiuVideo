@@ -19,7 +19,7 @@ import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
-import com.leon.biuvideo.utils.parseDataUtils.searchParsers.VideoParser;
+import com.leon.biuvideo.utils.parseDataUtils.searchParsers.SearchResultVideoParser;
 import com.leon.biuvideo.values.SortType;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -42,7 +42,7 @@ public class VideoResultFragment extends BaseLazyFragment {
     private int count;
     private int currentCount;
 
-    private VideoParser videoParser;
+    private SearchResultVideoParser searchResultVideoParser;
     private List<Video> videoList;
 
     private LinearLayoutManager linearLayoutManager;
@@ -80,12 +80,12 @@ public class VideoResultFragment extends BaseLazyFragment {
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                if (videoParser == null) {
-                    videoParser = new VideoParser();
+                if (searchResultVideoParser == null) {
+                    searchResultVideoParser = new SearchResultVideoParser();
                 }
 
                 //获取总条目数，最大为1000，最小为0
-                count = videoParser.getSearchVideoCount(keyword);
+                count = searchResultVideoParser.getSearchVideoCount(keyword);
 
                 Message message = handler.obtainMessage();
                 message.what = 0;
@@ -116,7 +116,8 @@ public class VideoResultFragment extends BaseLazyFragment {
     @Override
     public void initValues() {
         //判断结果是否与搜索关键词匹配
-        if (videoParser.dataState(keyword) || count == 0) {
+//        if (searchResultVideoParser.dataState(keyword) || count == 0) {
+        if (count == 0) {
             //设置无数据提示界面
             search_result_no_data.setVisibility(View.VISIBLE);
             search_result_recyclerView.setVisibility(View.GONE);
@@ -127,7 +128,7 @@ public class VideoResultFragment extends BaseLazyFragment {
             search_result_smartRefresh.setEnabled(true);
 
             //获取第一页数据
-            videoList = videoParser.videoParse(keyword, pageNum, SortType.DEFAULT);
+            videoList = searchResultVideoParser.videoParse(keyword, pageNum, SortType.DEFAULT);
 
             //获取第一页结果总数，最大为20，最小为0
             currentCount += videoList.size();
@@ -205,7 +206,7 @@ public class VideoResultFragment extends BaseLazyFragment {
      * 获取下一页的数据
      */
     public void getVideos() {
-        videoList = videoParser.videoParse(keyword, pageNum, SortType.DEFAULT);
+        videoList = searchResultVideoParser.videoParse(keyword, pageNum, SortType.DEFAULT);
 
         //记录获取的总数
         currentCount += videoList.size();

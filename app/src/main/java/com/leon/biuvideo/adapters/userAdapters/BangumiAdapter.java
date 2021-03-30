@@ -1,22 +1,13 @@
 package com.leon.biuvideo.adapters.userAdapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
-import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
-import com.leon.biuvideo.ui.activitys.BangumiActivity;
-import com.leon.biuvideo.ui.views.SimpleSnackBar;
-import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.ValueUtils;
-import com.leon.biuvideo.values.ImagePixelSize;
+import com.leon.biuvideo.beans.searchResultBeans.bangumi.Bangumi;
 
 import java.util.List;
 
@@ -36,12 +27,12 @@ public class BangumiAdapter extends BaseAdapter<Bangumi> {
 
     @Override
     public int getLayout(int viewType) {
-        return R.layout.search_result_bangumi_item;
+        return R.layout.search_result_item_bangumi;
     }
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        Bangumi bangumi = bangumiList.get(position);
+        /*Bangumi bangumi = bangumiList.get(position);
         holder
                 .setImage(R.id.search_result_bangumi_imageView_cover, bangumi.cover, ImagePixelSize.COVER)
                 .setText(R.id.search_result_bangumi_textView_title, bangumi.title)
@@ -91,6 +82,6 @@ public class BangumiAdapter extends BaseAdapter<Bangumi> {
                 context.startActivity(intent);
             }
         });
-        recyclerView.setAdapter(bangumiEpAdapter);
+        recyclerView.setAdapter(bangumiEpAdapter);*/
     }
 }

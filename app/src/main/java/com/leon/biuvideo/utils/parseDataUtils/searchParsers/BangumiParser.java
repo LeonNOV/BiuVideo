@@ -1,11 +1,9 @@
 package com.leon.biuvideo.utils.parseDataUtils.searchParsers;
 
-import android.content.Context;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.searchBean.bangumi.Bangumi;
-import com.leon.biuvideo.beans.searchBean.bangumi.Ep;
+import com.leon.biuvideo.beans.searchResultBeans.bangumi.Bangumi;
+import com.leon.biuvideo.beans.searchResultBeans.bangumi.Ep;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 import com.leon.biuvideo.values.SearchType;
@@ -48,7 +46,7 @@ public class BangumiParser {
         params.put("page", String.valueOf(pn));
         params.put("order", sortType.value);
 
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.search, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.SEARCH_WITH_TYPE, Headers.of(requestHeader), params);
         JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {
@@ -155,7 +153,7 @@ public class BangumiParser {
         params.put("page", "1");
         params.put("order", SortType.DEFAULT.value);
 
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.search, Headers.of(requestHeader), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.SEARCH_WITH_TYPE, Headers.of(requestHeader), params);
         JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {

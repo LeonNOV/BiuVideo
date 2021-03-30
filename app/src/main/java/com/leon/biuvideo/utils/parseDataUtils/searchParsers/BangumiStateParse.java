@@ -1,9 +1,7 @@
 package com.leon.biuvideo.utils.parseDataUtils.searchParsers;
 
-import android.content.Context;
-
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.searchBean.bangumi.BangumiState;
+import com.leon.biuvideo.beans.searchResultBeans.bangumi.BangumiState;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
