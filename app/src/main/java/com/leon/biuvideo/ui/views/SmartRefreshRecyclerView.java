@@ -63,6 +63,9 @@ public class SmartRefreshRecyclerView<T> extends SmartRefreshLayout {
         
         addLoadingRecyclerView();
         addClassicsFooter();
+
+        // 默认关闭加载功能，在第一次加载数据后开启(需要调用setLoadingRecyclerViewStatus)
+        setEnableLoadMore(false);
     }
 
     /**
@@ -115,6 +118,9 @@ public class SmartRefreshRecyclerView<T> extends SmartRefreshLayout {
     }
 
     public void setLoadingRecyclerViewStatus(@LoadingRecyclerView.SRRStatus int status) {
+        if (status == LoadingRecyclerView.LOADING_FINISH && !isEnableLoadMore()) {
+            setEnableLoadMore(true);
+        }
         loadingRecyclerView.setLoadingRecyclerViewStatus(status);
     }
 
@@ -133,7 +139,6 @@ public class SmartRefreshRecyclerView<T> extends SmartRefreshLayout {
         if (NO_DATA == status) {
             finishLoadMore();
             setEnableLoadMore(false);
-            finishLoadMoreWithNoMoreData();
         } else if (LOADING_FINISHING == status) {
             finishLoadMore(true);
         }

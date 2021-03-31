@@ -8,11 +8,15 @@ import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.parseDataUtils.ParserInterface;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import okhttp3.Headers;
 
 /**
  * @Author Leon
@@ -73,6 +77,11 @@ public class SearchResultArticleParser implements ParserInterface<SearchResultAr
             }
 
             JSONArray jsonArray = data.getJSONArray("result");
+            if (jsonArray == null || jsonArray.size() == 0) {
+                dataStatus = false;
+                return null;
+            }
+
             List<SearchResultArticle> searchResultArticleList = new ArrayList<>(jsonArray.size());
             for (Object o : jsonArray) {
                 JSONObject jsonObject = (JSONObject) o;
@@ -97,13 +106,13 @@ public class SearchResultArticleParser implements ParserInterface<SearchResultAr
             }
 
             currentItems += searchResultArticleList.size();
-            pageNum ++;
 
             if (pageNum == maxPages && currentItems == maxItems) {
                 dataStatus = false;
             }
 
-            return getArticleAutherNames(searchResultArticleList);
+            pageNum ++;
+            return getArticleAuthorNames(searchResultArticleList);
         }
 
         return null;
@@ -115,18 +124,19 @@ public class SearchResultArticleParser implements ParserInterface<SearchResultAr
      * @param searchResultArticleList   searchResultArticleList
      * @return  searchResultArticleList
      */
-    private List<SearchResultArticle> getArticleAutherNames (List<SearchResultArticle> searchResultArticleList) {
+    private List<SearchResultArticle> getArticleAuthorNames(List<SearchResultArticle> searchResultArticleList) {
         Map<String, String> params = new HashMap<>(1);
 
         StringBuilder ids = new StringBuilder();
         for (SearchResultArticle searchResultArticle : searchResultArticleList) {
-            ids.append(searchResultArticle.articleId).append("%2C");
+            ids.append(searchResultArticle.articleId).append(",");
         }
+
+        ids.deleteCharAt(ids.length() - 1);
+        params.put("ids", ids.toString());
 
         JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.METAS, params);
         JSONObject data = response.getJSONObject("data");
-        Iterator<Map.Entry<String, Object>> iterator = data.entrySet().iterator();
-
         for (SearchResultArticle searchResultArticle : searchResultArticleList) {
             JSONObject jsonObject = data.getJSONObject(searchResultArticle.articleId);
             searchResultArticle.userName = jsonObject.getJSONObject("author").getString("name");

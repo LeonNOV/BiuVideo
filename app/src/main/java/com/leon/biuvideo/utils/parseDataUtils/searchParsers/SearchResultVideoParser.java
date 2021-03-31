@@ -76,6 +76,11 @@ public class SearchResultVideoParser implements ParserInterface<SearchResultVide
             }
 
             JSONArray jsonArray = data.getJSONArray("result");
+            if (jsonArray == null || jsonArray.size() == 0) {
+                dataStatus = false;
+                return null;
+            }
+
             List<SearchResultVideo> searchResultVideoList = new ArrayList<>(jsonArray.size());
             for (Object o : jsonArray) {
                 JSONObject jsonObject = (JSONObject) o;
@@ -97,12 +102,12 @@ public class SearchResultVideoParser implements ParserInterface<SearchResultVide
             }
 
             currentItems += searchResultVideoList.size();
-            pageNum ++;
 
             if (pageNum == maxPages && currentItems == maxItems) {
                 dataStatus = false;
             }
 
+            pageNum ++;
             return searchResultVideoList;
         }
 

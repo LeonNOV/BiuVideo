@@ -67,6 +67,11 @@ public class SearchResultBangumiParser implements ParserInterface<SearchResultBa
             }
 
             JSONArray jsonArray = data.getJSONArray("result");
+            if (jsonArray == null || jsonArray.size() == 0) {
+                dataStatus = false;
+                return null;
+            }
+
             List<SearchResultBangumi> searchResultBangumiList = new ArrayList<>(jsonArray.size());
             for (Object o : jsonArray) {
                 JSONObject jsonObject = (JSONObject) o;
@@ -88,8 +93,13 @@ public class SearchResultBangumiParser implements ParserInterface<SearchResultBa
                 searchResultBangumi.styles = jsonObject.getString("styles");
 
                 JSONObject mediaScore = jsonObject.getJSONObject("media_score");
-                searchResultBangumi.score = mediaScore.getString("score");
-                searchResultBangumi.userCount = mediaScore.getString("user_count");
+                if (mediaScore != null) {
+                    searchResultBangumi.score = mediaScore.getString("score");
+                    searchResultBangumi.userCount = ValueUtils.generateCN(mediaScore.getIntValue("user_count")) + "人评分";
+                } else {
+                    searchResultBangumi.score = "0";
+                    searchResultBangumi.userCount = "暂无评分";
+                }
 
                 JSONArray eps = jsonObject.getJSONArray("eps");
                 searchResultBangumi.searchResultBangumiEpList = new ArrayList<>(eps.size());
@@ -120,12 +130,12 @@ public class SearchResultBangumiParser implements ParserInterface<SearchResultBa
             }
 
             currentItems += searchResultBangumiList.size();
-            pageNum ++;
 
             if (pageNum == maxPages && currentItems == maxItems) {
                 dataStatus = false;
             }
 
+            pageNum ++;
             return searchResultBangumiList;
         }
 

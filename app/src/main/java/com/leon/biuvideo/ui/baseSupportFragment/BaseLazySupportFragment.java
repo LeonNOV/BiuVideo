@@ -25,6 +25,10 @@ public abstract class BaseLazySupportFragment extends BaseSupportFragment {
      */
     protected abstract void onLazyLoad ();
 
+    public boolean isLoaded() {
+        return isLoaded;
+    }
+
     public void setLoaded(boolean loaded) {
         isLoaded = loaded;
     }

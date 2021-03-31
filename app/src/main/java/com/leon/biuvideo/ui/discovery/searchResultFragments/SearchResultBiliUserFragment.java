@@ -165,6 +165,9 @@ public class SearchResultBiliUserFragment extends BaseLazySupportFragment implem
                             String[] split = values[1].split("\\|");
                             order = split[0];
                             orderSort = split[1];
+                        } else {
+                            order = null;
+                            orderSort = null;
                         }
                         reset();
                     }
@@ -208,7 +211,6 @@ public class SearchResultBiliUserFragment extends BaseLazySupportFragment implem
      */
     private void reset() {
         searchResultBiliUserData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-        setLoaded(false);
 
         // 清空列表中的数据
         searchResultBiliUserAdapter.removeAll();
@@ -225,6 +227,10 @@ public class SearchResultBiliUserFragment extends BaseLazySupportFragment implem
 
         this.orderSelectedPosition = 0;
         this.categorySelectedPosition = 0;
+
+        searchResultBiliUserMenuOrderText.setText(context.getString(R.string.searchResultBiliUserMenuOrderItemDefault));
+        searchResultBiliUserMenuCategoryText.setText(context.getString(R.string.searchResultBiliUserMenuCategoryItemDefault));
+
         reset();
     }
 }

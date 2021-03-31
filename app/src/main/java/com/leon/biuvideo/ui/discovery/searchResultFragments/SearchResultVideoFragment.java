@@ -240,7 +240,6 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
      */
     private void reset() {
         searchResultVideoData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-        setLoaded(false);
 
         // 清空列表中的数据
         searchResultVideoAdapter.removeAll();
@@ -258,6 +257,10 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
         this.orderSelectedPosition = 0;
         this.lengthSelectedPosition = 0;
         this.partitionSelectedPosition = 0;
+
+        searchResultVideoMenuOrderText.setText(context.getString(R.string.searchResultVideoMenuOrderItemDefault));
+        searchResultVideoMenuLengthText.setText(context.getString(R.string.searchResultVideoMenuLengthItemDefault));
+        searchResultVideoMenuPartitionText.setText(context.getString(R.string.searchResultVideoMenuPartitionItemDefault));
 
         reset();
     }

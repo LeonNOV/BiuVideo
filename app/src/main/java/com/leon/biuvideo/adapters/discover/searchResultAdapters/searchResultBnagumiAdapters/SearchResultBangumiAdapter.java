@@ -45,7 +45,7 @@ public class SearchResultBangumiAdapter extends BaseAdapter<SearchResultBangumi>
                 .setText(R.id.search_result_item_bangumi_areas, searchResultBangumi.areas)
                 .setText(R.id.search_result_item_bangumi_style, searchResultBangumi.styles)
                 .setText(R.id.search_result_item_bangumi_score, searchResultBangumi.score)
-                .setText(R.id.search_result_item_bangumi_reviews, searchResultBangumi.userCount + "人点评")
+                .setText(R.id.search_result_item_bangumi_reviews, searchResultBangumi.userCount)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

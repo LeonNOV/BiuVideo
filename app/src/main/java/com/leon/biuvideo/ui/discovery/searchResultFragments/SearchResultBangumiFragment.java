@@ -46,11 +46,7 @@ public class SearchResultBangumiFragment extends BaseLazySupportFragment {
         searchResultBangumiData.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-                if (!searchResultBangumiParser.dataStatus) {
-                    searchResultBangumiData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                } else {
-                    getBangumi(1);
-                }
+                getBangumi(1);
             }
         });
         searchResultBangumiAdapter = new SearchResultBangumiAdapter(searchResultBangumiList, context);
@@ -91,7 +87,6 @@ public class SearchResultBangumiFragment extends BaseLazySupportFragment {
     @Override
     protected void onLazyLoad() {
         searchResultBangumiData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-
         getBangumi(0);
     }
 
@@ -122,7 +117,6 @@ public class SearchResultBangumiFragment extends BaseLazySupportFragment {
      */
     private void reset() {
         searchResultBangumiData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-        setLoaded(false);
 
         // 清空列表中的数据
         searchResultBangumiAdapter.removeAll();

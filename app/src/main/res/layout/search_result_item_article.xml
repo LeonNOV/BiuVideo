@@ -15,7 +15,6 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:padding="10dp"
-        android:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitle"
         android:textColor="@color/black"
         android:textSize="15sp" />
 
@@ -36,10 +35,10 @@
         <ImageView
             android:id="@+id/search_result_item_article_cover2"
             android:layout_width="wrap_content"
-            android:layout_weight="1"
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
+            android:layout_weight="1"
             android:contentDescription="@string/description"
             android:scaleType="centerCrop"
             android:src="@color/gray" />
@@ -47,8 +46,8 @@
         <ImageView
             android:id="@+id/search_result_item_article_cover3"
             android:layout_width="wrap_content"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:contentDescription="@string/description"
             android:scaleType="centerCrop"
             android:src="@color/gray" />
@@ -66,9 +65,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:drawablePadding="5dp"
             android:textColor="@color/infoColor"
-            android:text="UserName"
             android:textSize="13sp"
             app:drawableStartCompat="@drawable/ic_up_user" />
 
@@ -77,11 +76,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:drawablePadding="5dp"
-            android:layout_marginStart="30dp"
             android:textColor="@color/infoColor"
             android:textSize="13sp"
-            android:text="1234"
             app:drawableStartCompat="@drawable/ic_view" />
 
         <TextView
@@ -89,11 +87,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:drawablePadding="5dp"
             android:textColor="@color/infoColor"
             android:textSize="13sp"
-            android:layout_marginStart="20dp"
-            android:text="1234"
             app:drawableStartCompat="@drawable/ic_like" />
 
         <TextView
@@ -101,11 +98,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:drawablePadding="5dp"
-            android:layout_marginStart="20dp"
             android:textColor="@color/infoColor"
             android:textSize="13sp"
-            android:text="1234"
             app:drawableStartCompat="@drawable/ic_comment" />
 
     </LinearLayout>

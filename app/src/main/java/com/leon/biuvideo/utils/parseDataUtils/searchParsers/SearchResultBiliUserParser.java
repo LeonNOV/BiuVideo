@@ -76,6 +76,11 @@ public class SearchResultBiliUserParser implements ParserInterface<SearchResultB
             }
 
             JSONArray jsonArray = data.getJSONArray("result");
+            if (jsonArray == null || jsonArray.size() == 0) {
+                dataStatus = false;
+                return null;
+            }
+
             List<SearchResultBiliUser> searchResultBiliUserList = new ArrayList<>(jsonArray.size());
             for (Object o : jsonArray) {
                 JSONObject jsonObject = (JSONObject) o;
@@ -96,12 +101,12 @@ public class SearchResultBiliUserParser implements ParserInterface<SearchResultB
             }
 
             currentItems += searchResultBiliUserList.size();
-            pageNum ++;
 
             if (pageNum == maxPages && currentItems == maxItems) {
                 dataStatus = false;
             }
 
+            pageNum ++;
             return searchResultBiliUserList;
         }
 

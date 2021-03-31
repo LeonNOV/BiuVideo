@@ -67,12 +67,10 @@ public class SearchResultFragment extends BaseSupportFragment implements View.On
                         keyword = value;
                         hideSoftInput();
 
-//                        searchResultVideoFragment.reSearch(value);
-//                        searchResultBangumiFragment.reSearch(value);
-//                        searchResultArticleFragment.reSearch(value);
-//                        searchResultBiliUserFragment.reSearch(value);
-
-                        Toast.makeText(context, value, Toast.LENGTH_SHORT).show();
+                        searchResultVideoFragment.reSearch(value);
+                        searchResultBangumiFragment.reSearch(value);
+                        searchResultArticleFragment.reSearch(value);
+                        searchResultBiliUserFragment.reSearch(value);
                     }
                 }
 

@@ -45,6 +45,7 @@ public class SearchResultArticleFragment extends BaseLazySupportFragment impleme
 
     private TextView searchResultArticleMenuOrderText;
     private TextView searchResultArticleMenuCategoryText;
+
     private SearchResultArticleParser searchResultArticleParser;
     private SmartRefreshRecyclerView<SearchResultArticle> searchResultArticleData;
     private SearchResultArticleAdapter searchResultArticleAdapter;
@@ -206,7 +207,6 @@ public class SearchResultArticleFragment extends BaseLazySupportFragment impleme
      */
     private void reset() {
         searchResultArticleData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-        setLoaded(false);
 
         // 清空列表中的数据
         searchResultArticleAdapter.removeAll();
@@ -222,6 +222,9 @@ public class SearchResultArticleFragment extends BaseLazySupportFragment impleme
 
         this.orderSelectedPosition = 0;
         this.categorySelectedPosition = 0;
+
+        searchResultArticleMenuOrderText.setText(context.getString(R.string.searchResultArticleMenuOrderItemDefault));
+        searchResultArticleMenuCategoryText.setText(context.getString(R.string.searchResultArticleMenuCategoryItemDefault));
 
         reset();
     }

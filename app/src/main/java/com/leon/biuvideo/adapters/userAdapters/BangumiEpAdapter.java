@@ -45,7 +45,7 @@ public class BangumiEpAdapter extends BaseAdapter<Ep> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        Ep ep = eps.get(position);
+        /*Ep ep = eps.get(position);
 
         if (ep.badge != null) {
             holder.setText(R.id.search_result_bangumi_ep_item_textView_badge, ep.badge);
@@ -81,7 +81,7 @@ public class BangumiEpAdapter extends BaseAdapter<Ep> {
                             toBangumi(position);
                         }
                     }
-                });
+                });*/
     }
 
     public void toBangumi (int position) {

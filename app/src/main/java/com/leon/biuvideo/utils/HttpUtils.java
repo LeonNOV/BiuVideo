@@ -89,7 +89,6 @@ public class HttpUtils {
         }
 
         try {
-
             if (headers != null) {
                 requestBuilder.headers(headers);
             } else {
@@ -211,6 +210,30 @@ public class HttpUtils {
         }
 
         return requestHeader;
+    }
+
+    /**
+     * 该方法适用于在获取接口数据时调用
+     */
+    public static Map<String, String> getAPIRequestHeaderNoCookie() {
+        return HttpUtils.getHeaders();
+    }
+
+    /**
+     * 该方法适用于在获取接口数据时调用
+     */
+    public static Map<String, String> getAPIRequestHeaderNoCookie(String key, String value) {
+        HashMap<String, String> headers = HttpUtils.getHeaders();
+
+        Set<Map.Entry<String, String>> entries = headers.entrySet();
+        for (Map.Entry<String, String> entry : entries) {
+            if (key.equals(entry.getKey())) {
+                entry.setValue(value);
+                break;
+            }
+        }
+
+        return headers;
     }
 
     /**
