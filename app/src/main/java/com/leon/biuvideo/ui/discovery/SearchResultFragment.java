@@ -36,6 +36,10 @@ public class SearchResultFragment extends BaseSupportFragment implements View.On
     private EditText searchResultSearch;
 
     private String keyword;
+    private SearchResultVideoFragment searchResultVideoFragment;
+    private SearchResultBangumiFragment searchResultBangumiFragment;
+    private SearchResultArticleFragment searchResultArticleFragment;
+    private SearchResultBiliUserFragment searchResultBiliUserFragment;
 
     public SearchResultFragment (String keyword) {
         this.keyword = keyword;
@@ -62,6 +66,12 @@ public class SearchResultFragment extends BaseSupportFragment implements View.On
                     if (!"".equals(value)) {
                         keyword = value;
                         hideSoftInput();
+
+//                        searchResultVideoFragment.reSearch(value);
+//                        searchResultBangumiFragment.reSearch(value);
+//                        searchResultArticleFragment.reSearch(value);
+//                        searchResultBiliUserFragment.reSearch(value);
+
                         Toast.makeText(context, value, Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -72,10 +82,17 @@ public class SearchResultFragment extends BaseSupportFragment implements View.On
         findView(R.id.search_result_clear).setOnClickListener(this);
 
         List<Fragment> viewPagerFragments = new ArrayList<>();
-        viewPagerFragments.add(new SearchResultVideoFragment(keyword));
-        viewPagerFragments.add(new SearchResultBangumiFragment());
-        viewPagerFragments.add(new SearchResultArticleFragment());
-        viewPagerFragments.add(new SearchResultBiliUserFragment());
+        searchResultVideoFragment = new SearchResultVideoFragment(keyword);
+        viewPagerFragments.add(searchResultVideoFragment);
+
+        searchResultBangumiFragment = new SearchResultBangumiFragment(keyword);
+        viewPagerFragments.add(searchResultBangumiFragment);
+
+        searchResultArticleFragment = new SearchResultArticleFragment(keyword);
+        viewPagerFragments.add(searchResultArticleFragment);
+
+        searchResultBiliUserFragment = new SearchResultBiliUserFragment(keyword);
+        viewPagerFragments.add(searchResultBiliUserFragment);
 
         String[] titles = {"视频", "番剧", "专栏", "用户"};
         TabLayout searchResultTabLayout = findView(R.id.search_result_tabLayout);

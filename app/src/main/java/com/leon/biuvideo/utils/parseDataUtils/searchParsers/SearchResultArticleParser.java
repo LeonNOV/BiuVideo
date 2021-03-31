@@ -28,7 +28,7 @@ public class SearchResultArticleParser implements ParserInterface<SearchResultAr
     /**
      * 数据状态
      */
-    private boolean dataStatus = true;
+    public boolean dataStatus = true;
 
     /**
      * 总页面数

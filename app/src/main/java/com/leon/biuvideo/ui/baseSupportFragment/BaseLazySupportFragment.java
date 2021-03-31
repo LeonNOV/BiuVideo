@@ -24,4 +24,8 @@ public abstract class BaseLazySupportFragment extends BaseSupportFragment {
      * 加载数据
      */
     protected abstract void onLazyLoad ();
+
+    public void setLoaded(boolean loaded) {
+        isLoaded = loaded;
+    }
 }

@@ -40,7 +40,7 @@ public class BangumiEpAdapter extends BaseAdapter<Ep> {
 
     @Override
     public int getLayout(int viewType) {
-        return R.layout.search_result_bangumi_ep_item;
+        return R.layout.search_result_item_bangumi_ep;
     }
 
     @Override

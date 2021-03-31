@@ -91,7 +91,11 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
         searchResultVideoData.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-
+                if (!searchResultVideoParser.dataStatus) {
+                    searchResultVideoData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
+                } else {
+                    getVideo(1);
+                }
             }
         });
         searchResultVideoAdapter = new SearchResultVideoAdapter(searchResultVideoList, context);
@@ -101,7 +105,29 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
         setOnLoadListener(new OnLoadListener() {
             @Override
             public void onLoad(Message msg) {
+                List<SearchResultVideo> searchResultVideos = (List<SearchResultVideo>) msg.obj;
 
+                switch (msg.what) {
+                    case 0:
+                        if (searchResultVideos == null || searchResultVideos.size() == 0) {
+                            searchResultVideoData.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
+                            searchResultVideoData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
+                        } else {
+                            searchResultVideoAdapter.append(searchResultVideos);
+                            searchResultVideoData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+                        }
+                        break;
+                    case 1:
+                        if (searchResultVideos != null && searchResultVideos.size() > 0) {
+                            searchResultVideoAdapter.append(searchResultVideos);
+                            searchResultVideoData.setSmartRefreshStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
+                        } else {
+                            searchResultVideoData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
         });
     }
@@ -109,7 +135,7 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
     @Override
     protected void onLazyLoad() {
         searchResultVideoData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-//        getVideo(0);
+        getVideo(0);
     }
 
     @Override
@@ -183,22 +209,15 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
         }
     }
 
+    /**
+     * 获取video数据
+     *
+     * @param what  what
+     */
     private void getVideo(int what) {
-        if (searchResultVideoParser != null) {
+        if (searchResultVideoParser == null) {
             searchResultVideoParser = new SearchResultVideoParser(keyword, order, length, partition);
         }
-        requestData(what);
-    }
-
-    private void reset() {
-        // 清空列表中的数据
-        searchResultVideoAdapter.removeAll();
-
-        searchResultVideoParser = new SearchResultVideoParser(keyword, order, length, partition);
-        requestData(-1);
-    }
-
-    private void requestData(int what) {
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
@@ -214,5 +233,32 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
                 receiveDataHandler.sendMessage(message);
             }
         });
+    }
+
+    /**
+     *  重置当前所有的数据
+     */
+    private void reset() {
+        searchResultVideoData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+        setLoaded(false);
+
+        // 清空列表中的数据
+        searchResultVideoAdapter.removeAll();
+
+        searchResultVideoParser = new SearchResultVideoParser(keyword, order, length, partition);
+        getVideo(-1);
+    }
+
+    public void reSearch (String keyword) {
+        this.keyword = keyword;
+        this.order = "totalrank";
+        this.length = "0";
+        this.partition = "0";
+
+        this.orderSelectedPosition = 0;
+        this.lengthSelectedPosition = 0;
+        this.partitionSelectedPosition = 0;
+
+        reset();
     }
 }

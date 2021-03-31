@@ -68,7 +68,7 @@ public class ViewUtils {
 
             TextView textView = tab.getCustomView().findViewById(android.R.id.text1);
             textView.setTypeface(Typeface.DEFAULT_BOLD);
-            textView.setTextColor(Color.BLACK);
+            textView.setTextColor(textView.getContext().getColor(R.color.black));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         } else {
             View view = tab.getCustomView();
@@ -78,7 +78,7 @@ public class ViewUtils {
 
             TextView textView = tab.getCustomView().findViewById(android.R.id.text1);
             textView.setTypeface(Typeface.DEFAULT);
-            textView.setTextColor(textView.getContext().getColor(R.color.gray));
+            textView.setTextColor(textView.getContext().getColor(R.color.tabTextColor));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         }
     }

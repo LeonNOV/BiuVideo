@@ -27,7 +27,7 @@ public class SearchResultVideoParser implements ParserInterface<SearchResultVide
     /**
      * 数据状态
      */
-    private boolean dataStatus = true;
+    public boolean dataStatus = true;
 
     /**
      * 总页面数
@@ -85,7 +85,10 @@ public class SearchResultVideoParser implements ParserInterface<SearchResultVide
                 searchResultVideo.bvid = jsonObject.getString("bvid");
                 searchResultVideo.duration = jsonObject.getString("duration");
                 searchResultVideo.cover = "https:" + jsonObject.getString("pic");
-                searchResultVideo.title = jsonObject.getString("title");
+
+                searchResultVideo.title = jsonObject.getString("title")
+                        .replaceAll("<em class=\"keyword\">", "<p style=\"color: #fb7299\">")
+                        .replaceAll("</em>", "</p>");
                 searchResultVideo.userName = jsonObject.getString("author");
                 searchResultVideo.play = ValueUtils.generateCN(jsonObject.getIntValue("play"));
                 searchResultVideo.danmaku = ValueUtils.generateCN(jsonObject.getIntValue("video_review"));

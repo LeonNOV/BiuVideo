@@ -36,8 +36,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="bottom|end"
                 android:contentDescription="@string/description"
-                android:src="@drawable/ic_person_verify"
-                android:visibility="gone" />
+                android:src="@drawable/ic_person_verify" />
 
         </FrameLayout>
 
@@ -86,7 +85,7 @@
             android:background="@drawable/ripple_round_corners6dp_bg"
             android:backgroundTint="@color/operation_color"
             android:gravity="center"
-            android:text="@string/cancel_follow"
+            android:text="@string/follow"
             android:textColor="@color/white" />
 
     </FrameLayout>

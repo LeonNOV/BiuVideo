@@ -27,7 +27,7 @@ public class SearchResultBiliUserParser implements ParserInterface<SearchResultB
     /**
      * 数据状态
      */
-    private boolean dataStatus = true;
+    public boolean dataStatus = true;
 
     /**
      * 总页面数
@@ -83,7 +83,9 @@ public class SearchResultBiliUserParser implements ParserInterface<SearchResultB
 
                 searchResultBiliUser.mid = jsonObject.getString("mid");
                 searchResultBiliUser.userName = jsonObject.getString("uname");
-                searchResultBiliUser.userSign = jsonObject.getString("usign");
+
+                String usign = jsonObject.getString("usign");
+                searchResultBiliUser.userSign = "".equals(usign) ? null : usign;
                 searchResultBiliUser.userFace = "https:" + jsonObject.getString("upic");
 
                 JSONObject officialVerify = jsonObject.getJSONObject("official_verify");

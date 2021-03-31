@@ -5,9 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
     android:background="@drawable/ripple_round_corners6dp_bg"
-    android:orientation="horizontal"
-    android:paddingStart="10dp"
-    android:paddingEnd="10dp">
+    android:orientation="horizontal">
 
     <androidx.cardview.widget.CardView
         android:layout_width="126dp"
@@ -66,9 +64,9 @@
             android:id="@+id/search_result_item_video_userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@id/search_result_item_video_stat"
             android:drawablePadding="5dp"
             android:text="啊吴大维达瓦的"
-            android:layout_above="@id/search_result_item_video_stat"
             android:textColor="@color/infoColor"
             android:textSize="15sp"
             app:drawableStartCompat="@drawable/ic_up_user" />
@@ -78,7 +76,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <TextView

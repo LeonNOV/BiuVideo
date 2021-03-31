@@ -64,7 +64,6 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
         });
 
         searchFragmentEditTextKeyword = view.findViewById(R.id.search_fragment_editText_keyword);
-        showSoftInput(searchFragmentEditTextKeyword);
         searchFragmentEditTextKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -82,6 +81,7 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
                 return false;
             }
         });
+        showSoftInput(searchFragmentEditTextKeyword);
 
         ImageView searchFragmentImageViewClearKeyword = view.findViewById(R.id.search_fragment_imageView_clearKeyword);
         searchFragmentImageViewClearKeyword.setOnClickListener(this);

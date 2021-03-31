@@ -20,7 +20,7 @@
         app:tabIndicator="@drawable/indicator"
         app:tabIndicatorColor="@color/tabLayoutIndicatorColor"
         app:tabTextAppearance="@style/TabLayoutTextStyle"
-        app:tabTextColor="@color/black" />
+        app:tabTextColor="@color/tabTextColor" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/order_fragment_viewPager"

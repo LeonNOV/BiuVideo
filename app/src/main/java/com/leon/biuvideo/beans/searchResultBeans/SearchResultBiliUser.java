@@ -20,5 +20,4 @@ public class SearchResultBiliUser {
      * 关系状态；0：未关注，2：已关注，6：已互粉
      */
     public int userStatus;
-    public boolean isVip;
 }

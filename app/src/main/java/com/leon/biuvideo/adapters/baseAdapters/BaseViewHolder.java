@@ -69,6 +69,20 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     /**
+     * 用于设置控件的text
+     *
+     * @param id    控件ID
+     * @param charSequence  设置的文本
+     * @return  返回this
+     */
+    public BaseViewHolder setText(int id, CharSequence charSequence) {
+        TextView view = findById(id);
+        view.setText(charSequence);
+
+        return this;
+    }
+
+    /**
      * 用于设置控件的image(网络图片)
      *
      * @param id    控件ID

@@ -27,7 +27,7 @@ public class SearchResultBangumiParser implements ParserInterface<SearchResultBa
     /**
      * 数据状态
      */
-    private boolean dataStatus = true;
+    public boolean dataStatus = true;
 
     /**
      * 总页面数
@@ -101,9 +101,17 @@ public class SearchResultBangumiParser implements ParserInterface<SearchResultBa
                     searchResultBangumiEp.title = ep.getString("title");
                     searchResultBangumiEp.longTitle = ep.getString("long_title");
 
-                    String badge = ((JSONObject) ep.getJSONArray("badges").get(0)).getString("text");;
-                    searchResultBangumiEp.badge = badge;
-                    searchResultBangumiEp.isVip = "会员".equals(badge);
+                    JSONArray badges = ep.getJSONArray("badges");
+                    if (badges.size() > 0) {
+                        String badge = ((JSONObject) badges.get(0)).getString("text");
+                        ;
+                        searchResultBangumiEp.badge = "".equals(badge) ? null : badge;
+                        searchResultBangumiEp.isVip = "会员".equals(badge);
+                    } else {
+                        searchResultBangumiEp.badge = null;
+                        searchResultBangumiEp.isVip = false;
+                    }
+
 
                     searchResultBangumi.searchResultBangumiEpList.add(searchResultBangumiEp);
                 }
