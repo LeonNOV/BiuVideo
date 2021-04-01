@@ -31,7 +31,7 @@ import java.util.List;
  * @Desc 用户搜索结果
  */
 public class SearchResultBiliUserFragment extends BaseLazySupportFragment implements View.OnClickListener {
-    private String keyword;
+    private final String keyword;
     private String order;
     private String orderSort;
     private String userType;
@@ -217,20 +217,5 @@ public class SearchResultBiliUserFragment extends BaseLazySupportFragment implem
 
         searchResultBiliUserParser = new SearchResultBiliUserParser(keyword, order, orderSort, userType);
         getArticle(-1);
-    }
-
-    public void reSearch (String keyword) {
-        this.keyword = keyword;
-        this.order = null;
-        this.orderSort = null;
-        this.userType = null;
-
-        this.orderSelectedPosition = 0;
-        this.categorySelectedPosition = 0;
-
-        searchResultBiliUserMenuOrderText.setText(context.getString(R.string.searchResultBiliUserMenuOrderItemDefault));
-        searchResultBiliUserMenuCategoryText.setText(context.getString(R.string.searchResultBiliUserMenuCategoryItemDefault));
-
-        reset();
     }
 }

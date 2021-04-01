@@ -33,7 +33,7 @@ import java.util.List;
 public class SearchResultVideoFragment extends BaseLazySupportFragment implements View.OnClickListener {
     private final List<SearchResultVideo> searchResultVideoList = new ArrayList<>();
 
-    private String keyword;
+    private final String keyword;
     private String order;
     private String length;
     private String partition;
@@ -246,22 +246,5 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
 
         searchResultVideoParser = new SearchResultVideoParser(keyword, order, length, partition);
         getVideo(-1);
-    }
-
-    public void reSearch (String keyword) {
-        this.keyword = keyword;
-        this.order = "totalrank";
-        this.length = "0";
-        this.partition = "0";
-
-        this.orderSelectedPosition = 0;
-        this.lengthSelectedPosition = 0;
-        this.partitionSelectedPosition = 0;
-
-        searchResultVideoMenuOrderText.setText(context.getString(R.string.searchResultVideoMenuOrderItemDefault));
-        searchResultVideoMenuLengthText.setText(context.getString(R.string.searchResultVideoMenuLengthItemDefault));
-        searchResultVideoMenuPartitionText.setText(context.getString(R.string.searchResultVideoMenuPartitionItemDefault));
-
-        reset();
     }
 }

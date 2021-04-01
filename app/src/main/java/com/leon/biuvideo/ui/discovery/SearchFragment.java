@@ -8,7 +8,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -65,7 +64,6 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
 
             @Override
             public void onRight() {
-                Toast.makeText(context, "wasd", Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -29,9 +29,9 @@ public class UserInfoParser {
     private OnSuccessListener onSuccessListener;
 
     private int bCoins = -1;
-    private String banner;
-    private UserInfo userInfo;
-    private Map<String, Integer> statMap;
+    private String banner = null;
+    private UserInfo userInfo = null;
+    private Map<String, Integer> statMap = null;
 
     private final Context context;
 
@@ -64,7 +64,7 @@ public class UserInfoParser {
             @Override
             public void run() {
                 userInfo = getBaseData();
-                if (onSuccessListener != null) {
+                if (onSuccessListener != null && userInfo != null) {
                     onSuccessListener.onCallback(userInfo, banner, bCoins, statMap);
                 }
             }
@@ -84,7 +84,7 @@ public class UserInfoParser {
                 if (data != null) {
                     banner = data.getJSONObject("space").getString("l_img");
 
-                    if (onSuccessListener != null) {
+                    if (onSuccessListener != null && banner != null) {
                         onSuccessListener.onCallback(userInfo, banner, bCoins, statMap);
                     }
                 }
@@ -98,7 +98,7 @@ public class UserInfoParser {
                 JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.USER_WALLET, Headers.of(HttpUtils.getAPIRequestHeader()), null);
                 bCoins = response.getJSONObject("data").getJSONObject("accountInfo").getIntValue("defaultBp");
 
-                if (onSuccessListener != null) {
+                if (onSuccessListener != null && bCoins != -1) {
                     onSuccessListener.onCallback(userInfo, banner, bCoins, statMap);
                 }
             }
@@ -117,7 +117,7 @@ public class UserInfoParser {
                 statMap.put("follower", data.getIntValue("follower"));
                 statMap.put("dynamicCount", data.getIntValue("dynamic_count"));
 
-                if (onSuccessListener != null) {
+                if (onSuccessListener != null && statMap != null) {
                     onSuccessListener.onCallback(userInfo, banner, bCoins, statMap);
                 }
             }

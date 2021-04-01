@@ -1,9 +1,6 @@
 package com.leon.biuvideo.ui.discovery;
 
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -30,13 +27,7 @@ import java.util.List;
  */
 public class SearchResultFragment extends BaseSupportFragment implements View.OnClickListener {
     private MainActivity.OnTouchListener onTouchListener;
-    private TextView searchResultSearch;
-
-    private String keyword;
-    private SearchResultVideoFragment searchResultVideoFragment;
-    private SearchResultBangumiFragment searchResultBangumiFragment;
-    private SearchResultArticleFragment searchResultArticleFragment;
-    private SearchResultBiliUserFragment searchResultBiliUserFragment;
+    private final String keyword;
 
     public SearchResultFragment (String keyword) {
         this.keyword = keyword;
@@ -51,44 +42,14 @@ public class SearchResultFragment extends BaseSupportFragment implements View.On
     protected void initView() {
         findView(R.id.search_result_back).setOnClickListener(this);
         findView(R.id.search_result_search).setOnClickListener(this);
-        searchResultSearch = findView(R.id.search_result_keyword);
-        searchResultSearch.setText(keyword);
-        /*searchResultSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                //按下软键盘的搜索按钮会触发该方法
-                if (i == EditorInfo.IME_ACTION_SEARCH) {
-                    //获取输入内容
-                    String value = searchResultSearch.getText().toString();
-
-                    if (!"".equals(value)) {
-                        keyword = value;
-                        hideSoftInput();
-
-                        searchResultVideoFragment.reSearch(value);
-                        searchResultBangumiFragment.reSearch(value);
-                        searchResultArticleFragment.reSearch(value);
-                        searchResultBiliUserFragment.reSearch(value);
-                    }
-                }
-
-                return false;
-            }
-        });*/
+        ((TextView) findView(R.id.search_result_keyword)).setText(keyword);
         findView(R.id.search_result_clear).setOnClickListener(this);
 
         List<Fragment> viewPagerFragments = new ArrayList<>();
-        searchResultVideoFragment = new SearchResultVideoFragment(keyword);
-        viewPagerFragments.add(searchResultVideoFragment);
-
-        searchResultBangumiFragment = new SearchResultBangumiFragment(keyword);
-        viewPagerFragments.add(searchResultBangumiFragment);
-
-        searchResultArticleFragment = new SearchResultArticleFragment(keyword);
-        viewPagerFragments.add(searchResultArticleFragment);
-
-        searchResultBiliUserFragment = new SearchResultBiliUserFragment(keyword);
-        viewPagerFragments.add(searchResultBiliUserFragment);
+        viewPagerFragments.add(new SearchResultVideoFragment(keyword));
+        viewPagerFragments.add(new SearchResultBangumiFragment(keyword));
+        viewPagerFragments.add(new SearchResultArticleFragment(keyword));
+        viewPagerFragments.add(new SearchResultBiliUserFragment(keyword));
 
         String[] titles = {"视频", "番剧", "专栏", "用户"};
         TabLayout searchResultTabLayout = findView(R.id.search_result_tabLayout);

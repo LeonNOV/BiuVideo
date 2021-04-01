@@ -24,7 +24,7 @@ import java.util.List;
  * @Desc 番剧搜索结果
  */
 public class SearchResultBangumiFragment extends BaseLazySupportFragment {
-    private String keyword;
+    private final String keyword;
 
     private final List<SearchResultBangumi> searchResultBangumiList = new ArrayList<>();
     private SmartRefreshRecyclerView<SearchResultBangumi> searchResultBangumiData;
@@ -110,24 +110,5 @@ public class SearchResultBangumiFragment extends BaseLazySupportFragment {
                 receiveDataHandler.sendMessage(message);
             }
         });
-    }
-
-    /**
-     *  重置当前所有的数据
-     */
-    private void reset() {
-        searchResultBangumiData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-
-        // 清空列表中的数据
-        searchResultBangumiAdapter.removeAll();
-
-        searchResultBangumiParser = new SearchResultBangumiParser(keyword);
-        getBangumi(-1);
-    }
-
-    public void reSearch (String keyword) {
-        this.keyword = keyword;
-
-        reset();
     }
 }

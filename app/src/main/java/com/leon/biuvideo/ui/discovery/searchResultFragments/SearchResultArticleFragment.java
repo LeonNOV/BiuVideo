@@ -31,7 +31,7 @@ import java.util.List;
  * @Desc 专栏搜索结果
  */
 public class SearchResultArticleFragment extends BaseLazySupportFragment implements View.OnClickListener {
-    private String keyword;
+    private final String keyword;
     private String order;
     private String category;
 
@@ -213,19 +213,5 @@ public class SearchResultArticleFragment extends BaseLazySupportFragment impleme
 
         searchResultArticleParser = new SearchResultArticleParser(keyword, order, category);
         getArticle(-1);
-    }
-
-    public void reSearch (String keyword) {
-        this.keyword = keyword;
-        this.order = "totalrank";
-        this.category = "0";
-
-        this.orderSelectedPosition = 0;
-        this.categorySelectedPosition = 0;
-
-        searchResultArticleMenuOrderText.setText(context.getString(R.string.searchResultArticleMenuOrderItemDefault));
-        searchResultArticleMenuCategoryText.setText(context.getString(R.string.searchResultArticleMenuCategoryItemDefault));
-
-        reset();
     }
 }
