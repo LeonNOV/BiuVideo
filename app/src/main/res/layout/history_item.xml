@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
+    android:layout_marginBottom="@dimen/itemMarginBottom"
     android:background="@drawable/ripple_round_corners6dp_bg"
-    android:orientation="vertical">
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
 
     <TextView
         android:id="@+id/history_item_keyword"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:maxLines="1"
+        android:layout_weight="1"
         android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="@color/black"
-        android:textSize="17sp"
-        android:layout_marginEnd="50dp"
-        android:text="啊我的娃d啊我的娃d啊我啊我啊我啊我啊我啊我啊我啊我啊我的娃d啊我的娃d132"/>
+        android:textSize="17sp" />
 
     <ImageView
         android:id="@+id/history_item_delete"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_clear"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ripple_round_corners6dp_bg"
+        android:contentDescription="@string/description"
+        android:src="@drawable/ic_clear" />
 
-</RelativeLayout>
+</LinearLayout>

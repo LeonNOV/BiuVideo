@@ -17,6 +17,7 @@ import com.leon.biuvideo.ui.mainFragments.UserFragment;
 import com.leon.biuvideo.utils.ViewUtils;
 
 import me.yokeyword.fragmentation.SupportFragment;
+import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
 /**
  * @Author Leon

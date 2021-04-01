@@ -11,14 +11,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.SearchHistoryAdapter;
+import com.leon.biuvideo.greendao.dao.DaoBaseUtils;
+import com.leon.biuvideo.greendao.dao.SearchHistory;
+import com.leon.biuvideo.greendao.daoutils.SearchHistoryUtils;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,8 +31,11 @@ import java.util.List;
  */
 public class SearchFragment extends BaseSupportFragment implements View.OnClickListener {
     private EditText searchFragmentEditTextKeyword;
-    private RecyclerView searchFragmentRecyclerViewHistoryList;
+    private LoadingRecyclerView searchFragmentHistoryList;
     private Context context;
+    private SearchResultFragment searchResultFragment;
+    private DaoBaseUtils<SearchHistory> searchHistoryDaoUtils;
+    private SearchHistoryAdapter searchHistoryAdapter;
 
     public static SearchFragment newInstance() {
         return new SearchFragment();
@@ -73,7 +79,18 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
                     String value = searchFragmentEditTextKeyword.getText().toString();
 
                     if (!"".equals(value)) {
-                        start(new SearchResultFragment(value));
+                        // 存放当前的关键词
+                        searchHistoryDaoUtils.insert(new SearchHistory(null, value));
+
+                        // 将之前的搜索结果界面弹出
+                        popTo(SearchResultFragment.class, false);
+
+                        // 保证不会产生其他同类型对象
+                        searchResultFragment = new SearchResultFragment(value);
+
+                        // 启动目标Fragment并弹出自身
+                        startWithPop(searchResultFragment);
+
                         hideSoftInput();
                     }
                 }
@@ -89,31 +106,51 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
         TextView searchFragmentTextViewClearHistory = view.findViewById(R.id.search_fragment_textView_clearHistory);
         searchFragmentTextViewClearHistory.setOnClickListener(this);
 
-        searchFragmentRecyclerViewHistoryList = view.findViewById(R.id.search_fragment_recyclerView_historyList);
+        searchFragmentHistoryList = view.findViewById(R.id.search_fragment_historyList);
+        searchFragmentHistoryList.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
     }
 
     @Override
     public void onEnterAnimationEnd(Bundle savedInstanceState) {
         super.onEnterAnimationEnd(savedInstanceState);
 
-        // 入场动画结束后执行
-        List<String> historys = new ArrayList<>();
-        historys.add("阿斯顿撒");
-        historys.add("wasd2");
-        historys.add("阿斯顿撒");
-        historys.add("啊实打实大苏打盛大的");
-        historys.add("撒大撒大撒大撒大撒大苏打倒萨大苏打倒萨大苏打倒萨倒萨");
+        SearchHistoryUtils searchHistoryUtils = new SearchHistoryUtils(context);
+        searchHistoryDaoUtils = searchHistoryUtils.getSearchHistoryDaoUtils();
 
-        SearchHistoryAdapter searchHistoryAdapter = new SearchHistoryAdapter(historys, context);
+        List<SearchHistory> searchHistoryList = searchHistoryDaoUtils.queryAll();
+
+        if (searchHistoryList.size() == 0) {
+            searchFragmentHistoryList.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
+        } else {
+            searchFragmentHistoryList.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+        }
+
+        searchHistoryAdapter = new SearchHistoryAdapter(searchHistoryList, context);
+        searchHistoryAdapter.setOnSearchHistoryListener(new SearchHistoryAdapter.OnSearchHistoryListener() {
+            @Override
+            public void onDelete(SearchHistory searchHistory) {
+                searchHistoryDaoUtils.delete(searchHistory);
+                searchHistoryAdapter.remove(searchHistory);
+            }
+
+            @Override
+            public void onClick(String keyword) {
+                searchFragmentEditTextKeyword.getText().clear();
+                searchFragmentEditTextKeyword.setText(keyword);
+                searchFragmentEditTextKeyword.setSelection(keyword.length());
+            }
+        });
         searchHistoryAdapter.setHasStableIds(true);
-        searchFragmentRecyclerViewHistoryList.setAdapter(searchHistoryAdapter);
+        searchFragmentHistoryList.setRecyclerViewAdapter(searchHistoryAdapter);
+        searchFragmentHistoryList.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.search_fragment_textView_clearHistory:
-                Toast.makeText(context, "点击了-清空搜索历史", Toast.LENGTH_SHORT).show();
+                searchHistoryDaoUtils.deleteAll();
+                searchHistoryAdapter.removeAll();
                 break;
             case R.id.search_fragment_imageView_clearKeyword:
                 searchFragmentEditTextKeyword.getText().clear();
@@ -126,7 +163,5 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
-        searchFragmentRecyclerViewHistoryList = null;
     }
 }

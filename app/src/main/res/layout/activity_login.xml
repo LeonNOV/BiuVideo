@@ -19,7 +19,7 @@
             android:layout_marginStart="15dp"
             android:background="@drawable/ripple_round_white_bg"
             android:padding="@dimen/small_view_padding_10dp"
-            android:src="@drawable/icon_close" />
+            android:src="@drawable/ic_close" />
 
         <TextView
             android:id="@+id/login_textView_title"

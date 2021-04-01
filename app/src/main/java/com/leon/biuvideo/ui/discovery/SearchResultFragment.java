@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
@@ -19,8 +18,6 @@ import com.leon.biuvideo.ui.discovery.searchResultFragments.SearchResultArticleF
 import com.leon.biuvideo.ui.discovery.searchResultFragments.SearchResultBangumiFragment;
 import com.leon.biuvideo.ui.discovery.searchResultFragments.SearchResultBiliUserFragment;
 import com.leon.biuvideo.ui.discovery.searchResultFragments.SearchResultVideoFragment;
-import com.leon.biuvideo.ui.views.SimpleSnackBar;
-import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ViewUtils;
 
 import java.util.ArrayList;
@@ -33,7 +30,7 @@ import java.util.List;
  */
 public class SearchResultFragment extends BaseSupportFragment implements View.OnClickListener {
     private MainActivity.OnTouchListener onTouchListener;
-    private EditText searchResultSearch;
+    private TextView searchResultSearch;
 
     private String keyword;
     private SearchResultVideoFragment searchResultVideoFragment;
@@ -53,9 +50,10 @@ public class SearchResultFragment extends BaseSupportFragment implements View.On
     @Override
     protected void initView() {
         findView(R.id.search_result_back).setOnClickListener(this);
-        searchResultSearch = findView(R.id.search_result_search);
+        findView(R.id.search_result_search).setOnClickListener(this);
+        searchResultSearch = findView(R.id.search_result_keyword);
         searchResultSearch.setText(keyword);
-        searchResultSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        /*searchResultSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 //按下软键盘的搜索按钮会触发该方法
@@ -76,7 +74,7 @@ public class SearchResultFragment extends BaseSupportFragment implements View.On
 
                 return false;
             }
-        });
+        });*/
         findView(R.id.search_result_clear).setOnClickListener(this);
 
         List<Fragment> viewPagerFragments = new ArrayList<>();
@@ -116,8 +114,9 @@ public class SearchResultFragment extends BaseSupportFragment implements View.On
                 backPressed();
                 hideSoftInput();
                 break;
+            case R.id.search_result_search:
             case R.id.search_result_clear:
-                searchResultSearch.getText().clear();
+                start(new SearchFragment());
                 break;
             default:
                 break;

@@ -20,7 +20,7 @@
                 android:layout_height="@dimen/small_view_w_h"
                 android:background="@drawable/ripple_round_bilibili_pink_bg"
                 android:padding="@dimen/small_view_padding_10dp"
-                android:src="@drawable/icon_close" />
+                android:src="@drawable/ic_close" />
 
         </androidx.appcompat.widget.Toolbar>
 

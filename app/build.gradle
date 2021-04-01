@@ -40,6 +40,22 @@ android {
     }
 }
 
+
+// GreenDaoPlugins
+apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
+
+greendao {
+    // 数据库版本号
+    schemaVersion 1
+
+    // 生成数据库文件的目录
+    targetGenDir 'src/main/java'
+
+    // 生成的数据库相关文件的包名
+    daoPackage 'com.leon.biuvideo.greendao.dao'
+}
+
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.2.0'
@@ -99,6 +115,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    // GreenDao
+    implementation 'org.greenrobot:greendao:3.3.0'
 
     implementation 'androidx.palette:palette:1.0.0'
 }

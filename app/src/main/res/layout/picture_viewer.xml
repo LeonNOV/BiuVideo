@@ -20,7 +20,7 @@
                 android:layout_height="@dimen/small_view_w_h"
                 android:background="?selectableItemBackgroundBorderless"
                 android:padding="@dimen/small_view_padding_10dp"
-                android:src="@drawable/icon_close"
+                android:src="@drawable/ic_close"
                 app:tint="#505050" />
 
             <ImageView

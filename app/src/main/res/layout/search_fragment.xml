@@ -95,12 +95,11 @@
 
         </RelativeLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/search_fragment_recyclerView_historyList"
+        <com.leon.biuvideo.ui.views.LoadingRecyclerView
+            android:id="@+id/search_fragment_historyList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/recyclerViewPadding"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            android:padding="@dimen/recyclerViewPadding" />
 
     </LinearLayout>
 

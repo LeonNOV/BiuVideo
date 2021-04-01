@@ -18,7 +18,7 @@
             android:layout_gravity="end"
             android:background="@drawable/ripple_image_view_pressed"
             android:padding="@dimen/small_view_padding_10dp"
-            android:src="@drawable/icon_close" />
+            android:src="@drawable/ic_close" />
 
         <LinearLayout
             android:layout_width="match_parent"
