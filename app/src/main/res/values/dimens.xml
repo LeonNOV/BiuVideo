@@ -9,9 +9,9 @@
     <dimen name="tagView_valueMarginEnd">5dp</dimen>
 
     <!-- 重写BottomNavigationView的文字与图片的间距，值越小间距越大 -->
-    <dimen name="design_bottom_navigation_margin" tools:override="true">8dp</dimen>
-    <dimen tools:override="true" name="design_bottom_navigation_text_size">10sp</dimen>
-    <dimen tools:override="true" name="design_bottom_navigation_active_text_size">13sp</dimen>
+<!--    <dimen name="design_bottom_navigation_margin" tools:override="true">8dp</dimen>-->
+<!--    <dimen tools:override="true" name="design_bottom_navigation_text_size">10sp</dimen>-->
+<!--    <dimen tools:override="true" name="design_bottom_navigation_active_text_size">13sp</dimen>-->
 
     <dimen name="card_title_layout_margin_bottom">20dp</dimen>
     <!--    <dimen name="card_title_layout_margin_top_bottom">10dp</dimen>-->
@@ -43,4 +43,6 @@
     <dimen name="partition_title_size">15sp</dimen>
 
     <dimen name="tabLayout_size">16sp</dimen>
+    <dimen name="navTextMarginTop">5dp</dimen>
+    <dimen name="navBottomTextSize">13sp</dimen>
 </resources>

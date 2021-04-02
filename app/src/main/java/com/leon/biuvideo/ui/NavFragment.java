@@ -1,11 +1,11 @@
 package com.leon.biuvideo.ui;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Lifecycle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.leon.biuvideo.R;
@@ -14,17 +14,15 @@ import com.leon.biuvideo.ui.mainFragments.DiscoveryFragment;
 import com.leon.biuvideo.ui.mainFragments.HomeFragment;
 import com.leon.biuvideo.ui.mainFragments.PartitionFragment;
 import com.leon.biuvideo.ui.mainFragments.UserFragment;
-import com.leon.biuvideo.utils.ViewUtils;
 
 import me.yokeyword.fragmentation.SupportFragment;
-import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
 /**
  * @Author Leon
  * @Time 2021/3/1
  * @Desc 导航Fragment，用于显示底部导航栏
  */
-public class NavFragment extends BaseSupportFragment implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class NavFragment extends BaseSupportFragment {
     private final SupportFragment[] supportFragments = new SupportFragment[4];
 
     public static NavFragment newInstance() {
@@ -60,27 +58,28 @@ public class NavFragment extends BaseSupportFragment implements BottomNavigation
     protected void initView() {
         BottomNavigationView mainNavBottom = view.findViewById(R.id.main_nav_bottom);
         mainNavBottom.setItemIconTintList(null);
-        mainNavBottom.setOnNavigationItemSelectedListener(this);
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.home:
-                showHideFragment(supportFragments[0]);
-                return true;
-            case R.id.partition:
-                showHideFragment(supportFragments[1]);
-                return true;
-            case R.id.discovery:
-                showHideFragment(supportFragments[2]);
-                return true;
-            case R.id.user:
-                showHideFragment(supportFragments[3]);
-                return true;
-            default:
-                return false;
-        }
+        mainNavBottom.setItemRippleColor(ColorStateList.valueOf(context.getColor(R.color.rippleColor)));
+        mainNavBottom.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.home:
+                        showHideFragment(supportFragments[0]);
+                        return true;
+                    case R.id.partition:
+                        showHideFragment(supportFragments[1]);
+                        return true;
+                    case R.id.discovery:
+                        showHideFragment(supportFragments[2]);
+                        return true;
+                    case R.id.user:
+                        showHideFragment(supportFragments[3]);
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
     }
 
     @Override

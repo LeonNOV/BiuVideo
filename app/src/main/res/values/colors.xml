@@ -49,4 +49,5 @@
     <color name="popular_top_list_third_text_color">#a28671</color>
     <color name="popular_top_list_other_text_color">#c0c0c0</color>
     <color name="infoColor">#686868</color>
+    <color name="navBottomUnselectedColor">#7E7E7E</color>
 </resources>
