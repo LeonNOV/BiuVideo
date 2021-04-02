@@ -58,4 +58,12 @@
         <item name="maxHeight">0dip</item>
     </style>
 
+    <style name="VideoSeekBarStyle">
+        <item name="android:maxHeight">5dp</item>
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/video_seek_bar</item>
+        <item name="android:minHeight">5dp</item>
+        <item name="android:thumb">@drawable/video_thumb</item>
+    </style>
+
 </resources>

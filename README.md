@@ -19,6 +19,7 @@
 
 ### 2021/04/02
 - 修改了主页的底部导航栏
+- 加入了[DKPlayer](https://github.com/Doikki/DKVideoPlayer)依赖，作为本APP的视频播放器框架
 
 ### 2021/04/01
 - 对搜索功能进行了更改
