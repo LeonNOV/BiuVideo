@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -24,14 +25,13 @@ import com.dueeeke.videoplayer.controller.IControlComponent;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.dueeeke.videoplayer.util.PlayerUtils;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.utils.ValueUtils;
 
 /**
  * @Author Leon
  * @Time 2021/4/3
  * @Desc 视频播放器底部控制视图
  */
-public class VideoPlayerBottomControlView extends LinearLayout implements IControlComponent,
+public class VideoPlayerBottomControlView extends FrameLayout implements IControlComponent,
         View.OnClickListener, SeekBar.OnSeekBarChangeListener{
     private ControlWrapper controlWrapper;
     private TextView videoPlayerBottomControlCurrentProgress;
@@ -48,6 +48,7 @@ public class VideoPlayerBottomControlView extends LinearLayout implements IContr
 
     private boolean isShowBottomProgress = true;
     private boolean isDragging;
+    private LinearLayout videoPlayerBottomControlContent;
 
     public VideoPlayerBottomControlView(Context context) {
         super(context);
@@ -66,8 +67,9 @@ public class VideoPlayerBottomControlView extends LinearLayout implements IContr
 
     private void initView() {
         setVisibility(GONE);
-        LayoutInflater.from(getContext()).inflate(R.layout.video_player_bottom_contrl, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.video_player_bottom_control, this, true);
 
+        videoPlayerBottomControlContent = findViewById(R.id.video_player_bottom_control_content);
         videoPlayerBottomControlCurrentProgress = findViewById(R.id.video_player_bottom_control_currentProgress);
         videoPlayerBottomControlTotalProgress = findViewById(R.id.video_player_bottom_control_totalProgress);
 
@@ -114,18 +116,18 @@ public class VideoPlayerBottomControlView extends LinearLayout implements IContr
     @Override
     public void onVisibilityChanged(boolean isVisible, Animation anim) {
         if (isVisible) {
-            this.setVisibility(VISIBLE);
+            videoPlayerBottomControlContent.setVisibility(VISIBLE);
             if (anim != null) {
-                this.startAnimation(anim);
+                videoPlayerBottomControlContent.startAnimation(anim);
             }
 
             if (isShowBottomProgress) {
                 videoPlayerBottomControlProgressBar.setVisibility(GONE);
             }
         } else {
-            this.setVisibility(GONE);
+            videoPlayerBottomControlContent.setVisibility(GONE);
             if (anim != null) {
-                this.startAnimation(anim);
+                videoPlayerBottomControlContent.startAnimation(anim);
             }
 
             if (isShowBottomProgress) {
@@ -162,13 +164,13 @@ public class VideoPlayerBottomControlView extends LinearLayout implements IContr
                 if (isShowBottomProgress) {
                     if (controlWrapper.isShowing()) {
                         videoPlayerBottomControlProgressBar.setVisibility(GONE);
-                        this.setVisibility(VISIBLE);
+                        videoPlayerBottomControlContent.setVisibility(VISIBLE);
                     } else {
                         videoPlayerBottomControlProgressBar.setVisibility(VISIBLE);
-                        this.setVisibility(GONE);
+                        videoPlayerBottomControlContent.setVisibility(GONE);
                     }
                 } else {
-                    this.setVisibility(GONE);
+                    videoPlayerBottomControlContent.setVisibility(GONE);
                 }
 
                 setVisibility(VISIBLE);
@@ -204,13 +206,13 @@ public class VideoPlayerBottomControlView extends LinearLayout implements IContr
             int orientation = activity.getRequestedOrientation();
             int cutoutHeight = controlWrapper.getCutoutHeight();
             if (orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-                this.setPadding(0, 0, 0, 0);
+                videoPlayerBottomControlContent.setPadding(0, 0, 0, 0);
                 videoPlayerBottomControlProgressBar.setPadding(0, 0, 0, 0);
             } else if (orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-                this.setPadding(cutoutHeight, 0, 0, 0);
+                videoPlayerBottomControlContent.setPadding(cutoutHeight, 0, 0, 0);
                 videoPlayerBottomControlProgressBar.setPadding(cutoutHeight, 0, 0, 0);
             } else if (orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) {
-                this.setPadding(0, 0, cutoutHeight, 0);
+                videoPlayerBottomControlContent.setPadding(0, 0, cutoutHeight, 0);
                 videoPlayerBottomControlProgressBar.setPadding(0, 0, cutoutHeight, 0);
             }
         }
@@ -244,11 +246,11 @@ public class VideoPlayerBottomControlView extends LinearLayout implements IContr
         }
 
         if (videoPlayerBottomControlTotalProgress != null) {
-            videoPlayerBottomControlTotalProgress.setText(ValueUtils.lengthGenerate(duration));
+            videoPlayerBottomControlTotalProgress.setText(PlayerUtils.stringForTime(duration));
         }
 
         if (videoPlayerBottomControlCurrentProgress != null) {
-            videoPlayerBottomControlCurrentProgress.setText(ValueUtils.lengthGenerate(duration));
+            videoPlayerBottomControlCurrentProgress.setText(PlayerUtils.stringForTime(position));
         }
     }
 
@@ -256,7 +258,6 @@ public class VideoPlayerBottomControlView extends LinearLayout implements IContr
     public void onLockStateChanged(boolean isLocked) {
         onVisibilityChanged(!isLocked, null);
     }
-
 
     @Override
     public void onClick(View v) {
@@ -293,7 +294,7 @@ public class VideoPlayerBottomControlView extends LinearLayout implements IContr
         long newPosition = (duration * progress) / videoPlayerBottomControlSeekBar.getMax();
 
         if (videoPlayerBottomControlCurrentProgress != null) {
-            videoPlayerBottomControlCurrentProgress.setText(ValueUtils.lengthGenerate((int) newPosition));
+            videoPlayerBottomControlCurrentProgress.setText(PlayerUtils.stringForTime((int) newPosition));
         }
     }
 
@@ -313,5 +314,16 @@ public class VideoPlayerBottomControlView extends LinearLayout implements IContr
         isDragging = false;
         controlWrapper.startProgress();
         controlWrapper.startFadeOut();
+    }
+
+    /**
+     * 设置底部视频进度条进度
+     *
+     * @param duration  总长度
+     * @param slidePosition 滑动进度
+     */
+    public void setBottomProgressPosition (int duration, int slidePosition) {
+        int pos = (int) (slidePosition * 1.0 / duration * videoPlayerBottomControlSeekBar.getMax());
+        videoPlayerBottomControlProgressBar.setProgress(pos);
     }
 }

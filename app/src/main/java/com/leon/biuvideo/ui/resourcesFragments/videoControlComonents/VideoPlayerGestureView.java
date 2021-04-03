@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -20,18 +21,21 @@ import com.dueeeke.videoplayer.controller.IGestureComponent;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.dueeeke.videoplayer.util.PlayerUtils;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.utils.Fuck;
 
 /**
  * @Author Leon
  * @Time 2021/4/3
  * @Desc 视频播放器手势控制视图
  */
-public class VideoPlayerGestureView extends LinearLayout implements IGestureComponent {
+public class VideoPlayerGestureView extends FrameLayout implements IGestureComponent {
     private ControlWrapper controlWrapper;
+    private OnDraggingListener onDraggingListener;
 
     private ImageView videoPlayerGestureIcon;
     private TextView videoPlayerGesturePercent;
     private ProgressBar videoPlayerGestureProgress;
+    private LinearLayout videoPlayerGestureContent;
 
     public VideoPlayerGestureView(Context context) {
         super(context);
@@ -40,16 +44,33 @@ public class VideoPlayerGestureView extends LinearLayout implements IGestureComp
 
     public VideoPlayerGestureView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        initView();
     }
 
     public VideoPlayerGestureView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initView();
+    }
+
+    public interface OnDraggingListener {
+        /**
+         * 手势快进/快退
+         *
+         * @param duration  总进度
+         * @param slidePosition 快进进度
+         */
+        void onDragging(int duration, int slidePosition);
+    }
+
+    public void setOnDraggingListener(OnDraggingListener onDraggingListener) {
+        this.onDraggingListener = onDraggingListener;
     }
 
     private void initView() {
-        this.setVisibility(GONE);
+        setVisibility(GONE);
         LayoutInflater.from(getContext()).inflate(R.layout.video_player_gesture_view, this, true);
 
+        videoPlayerGestureContent = findViewById(R.id.video_player_gesture_content);
         videoPlayerGestureIcon = findViewById(R.id.video_player_gesture_icon);
         videoPlayerGesturePercent = findViewById(R.id.video_player_gesture_percent);
         videoPlayerGestureProgress = findViewById(R.id.video_player_gesture_progress);
@@ -72,18 +93,15 @@ public class VideoPlayerGestureView extends LinearLayout implements IGestureComp
 
     @Override
     public void onPlayStateChanged(int playState) {
-        switch (playState) {
-            case VideoView.STATE_IDLE:
-            case VideoView.STATE_START_ABORT:
-            case VideoView.STATE_PREPARING:
-            case VideoView.STATE_PREPARED:
-            case VideoView.STATE_ERROR:
-            case VideoView.STATE_PLAYBACK_COMPLETED :
-                this.setVisibility(GONE);
-                break;
-            default:
-                this.setVisibility(VISIBLE);
-                break;
+        if (playState == VideoView.STATE_IDLE
+                || playState == VideoView.STATE_START_ABORT
+                || playState == VideoView.STATE_PREPARING
+                || playState == VideoView.STATE_PREPARED
+                || playState == VideoView.STATE_ERROR
+                || playState == VideoView.STATE_PLAYBACK_COMPLETED) {
+            setVisibility(GONE);
+        } else {
+            setVisibility(VISIBLE);
         }
     }
 
@@ -107,13 +125,13 @@ public class VideoPlayerGestureView extends LinearLayout implements IGestureComp
         // 显示控制窗口
         controlWrapper.hide();
 
-        this.setVisibility(VISIBLE);
-        this.setAlpha(1f);
+        videoPlayerGestureContent.setVisibility(VISIBLE);
+        videoPlayerGestureContent.setAlpha(1f);
     }
 
     @Override
     public void onStopSlide() {
-        this
+        videoPlayerGestureContent
                 .animate()
                 .alpha(0f)
                 .setDuration(300)
@@ -121,7 +139,7 @@ public class VideoPlayerGestureView extends LinearLayout implements IGestureComp
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        VideoPlayerGestureView.this.setVisibility(GONE);
+                        videoPlayerGestureContent.setVisibility(GONE);
                     }
                 })
                 .start();
@@ -138,6 +156,10 @@ public class VideoPlayerGestureView extends LinearLayout implements IGestureComp
         }
 
         videoPlayerGesturePercent.setText(String.format("%s/%s", PlayerUtils.stringForTime(slidePosition), PlayerUtils.stringForTime(duration)));
+
+        if (onDraggingListener != null) {
+            onDraggingListener.onDragging(duration, slidePosition);
+        }
     }
 
     @Override

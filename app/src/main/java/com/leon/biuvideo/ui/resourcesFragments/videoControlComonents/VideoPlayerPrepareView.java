@@ -73,7 +73,13 @@ public class VideoPlayerPrepareView extends FrameLayout implements IControlCompo
             }
         });
 
-        // 点击此界面开始播放视频
+
+    }
+
+    /**
+     * 点击此界面开始播放视频
+     */
+    public void setClickStart () {
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

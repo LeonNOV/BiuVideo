@@ -30,7 +30,6 @@ import com.leon.biuvideo.ui.resourcesFragments.videoControlComonents.VideoPlayer
  * @Desc 视频播放控制器
  */
 public class VideoPlayerController extends GestureVideoController {
-
     private ImageView videoPlayerControllerLock;
     private ProgressBar videoPlayerControllerLoading;
 
@@ -70,13 +69,22 @@ public class VideoPlayerController extends GestureVideoController {
         VideoPlayerCompleteView videoPlayerCompleteView = new VideoPlayerCompleteView(getContext());
         VideoPlayerErrorView videoPlayerErrorView = new VideoPlayerErrorView(getContext());
         VideoPlayerPrepareView videoPlayerPrepareView = new VideoPlayerPrepareView(getContext());
+        videoPlayerPrepareView.setClickStart();
 
         VideoPlayerTitleView videoPlayerTitleView = new VideoPlayerTitleView(getContext());
         videoPlayerTitleView.setTitle(title);
 
         addControlComponent(videoPlayerCompleteView, videoPlayerErrorView, videoPlayerPrepareView, videoPlayerTitleView);
-        addControlComponent(new VideoPlayerBottomControlView(getContext()));
-        addControlComponent(new VideoPlayerGestureView(getContext()));
+
+        VideoPlayerBottomControlView videoPlayerBottomControlView = new VideoPlayerBottomControlView(getContext());
+        VideoPlayerGestureView videoPlayerGestureView = new VideoPlayerGestureView(getContext());
+        videoPlayerGestureView.setOnDraggingListener(new VideoPlayerGestureView.OnDraggingListener() {
+            @Override
+            public void onDragging(int duration, int slidePosition) {
+                videoPlayerBottomControlView.setBottomProgressPosition(duration, slidePosition);
+            }
+        });
+        addControlComponent(videoPlayerBottomControlView, videoPlayerGestureView);
     }
 
     @Override

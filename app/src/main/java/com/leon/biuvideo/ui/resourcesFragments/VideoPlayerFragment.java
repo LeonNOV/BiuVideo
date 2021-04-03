@@ -23,7 +23,7 @@ public class VideoPlayerFragment extends BaseSupportFragment {
     @Override
     protected void initView() {
         videoPlayerContent = findView(R.id.video_player_content);
-        videoPlayerContent.setUrl("https://vd4.bdstatic.com/mda-md121r3dkiba9afy/sc/cae_h264_clips/1617327122/mda-md121r3dkiba9afy.mp4");
+        videoPlayerContent.setUrl("https://vd4.bdstatic.com/mda-kg8q8yiym6qp821f/sc/cae_h264_clips/mda-kg8q8yiym6qp821f.mp4");
 
         VideoPlayerController videoPlayerController = new VideoPlayerController(context);
         videoPlayerController.addDefaultControlComponent("BiliBili");
