@@ -211,4 +211,13 @@
 
     <string name="searchResultBiliUserMenuOrderItemDefault">默认排序</string>
     <string name="searchResultBiliUserMenuCategoryItemDefault">全部用户</string>
+
+
+    <string name="videoPlayerPrepareContinuePlay">继续播放</string>
+    <string name="videoPlayerPrepareNetWarning">当前处于移动网络，继续播放将会消耗流量</string>
+
+    <string name="videoPlayerCompleteReplay">重新播放</string>
+
+    <string name="videoPlayerErrorMsg">出了点小问题，请稍后重试</string>
+    <string name="videoPlayerErrorRetry">重试</string>
 </resources>

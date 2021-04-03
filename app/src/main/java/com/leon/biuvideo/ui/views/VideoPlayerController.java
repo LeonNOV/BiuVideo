@@ -2,51 +2,37 @@ package com.leon.biuvideo.ui.views;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.os.Handler;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.SeekBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.dueeeke.videocontroller.StandardVideoController;
-import com.dueeeke.videocontroller.component.CompleteView;
-import com.dueeeke.videocontroller.component.ErrorView;
-import com.dueeeke.videocontroller.component.GestureView;
-import com.dueeeke.videocontroller.component.LiveControlView;
-import com.dueeeke.videocontroller.component.PrepareView;
-import com.dueeeke.videocontroller.component.TitleView;
-import com.dueeeke.videocontroller.component.VodControlView;
-import com.dueeeke.videoplayer.controller.BaseVideoController;
 import com.dueeeke.videoplayer.controller.GestureVideoController;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.dueeeke.videoplayer.util.PlayerUtils;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.ui.resourcesFragments.videoControlComonents.VideoPlayerBottomControlView;
+import com.leon.biuvideo.ui.resourcesFragments.videoControlComonents.VideoPlayerCompleteView;
+import com.leon.biuvideo.ui.resourcesFragments.videoControlComonents.VideoPlayerErrorView;
+import com.leon.biuvideo.ui.resourcesFragments.videoControlComonents.VideoPlayerGestureView;
+import com.leon.biuvideo.ui.resourcesFragments.videoControlComonents.VideoPlayerPrepareView;
+import com.leon.biuvideo.ui.resourcesFragments.videoControlComonents.VideoPlayerTitleView;
 
 /**
  * @Author Leon
  * @Time 2021/4/2
  * @Desc 视频播放控制器
  */
-public class VideoPlayerController extends StandardVideoController implements View.OnClickListener {
+public class VideoPlayerController extends GestureVideoController {
 
-    private TextView videoControllerTitle;
-    private ImageView videoControllerLock;
-    private ImageView videoControllerControl;
-    private ProgressBar videoControllerLoading;
-    private SeekBar videoControllerSeekBar;
-    private TextView videoControllerTotalProgress;
-    private TextView videoControllerCurrentProgress;
+    private ImageView videoPlayerControllerLock;
+    private ProgressBar videoPlayerControllerLoading;
 
     public VideoPlayerController(@NonNull Context context) {
         super(context);
@@ -60,67 +46,138 @@ public class VideoPlayerController extends StandardVideoController implements Vi
         super(context, attrs, defStyleAttr);
     }
 
-    /*@Override
+    @Override
     protected int getLayoutId() {
-        return R.layout.video_controller;
-    }*/
+        return R.layout.video_player_controller;
+    }
 
     @Override
     protected void initView() {
         super.initView();
 
-        /*findViewById(R.id.video_controller_back).setOnClickListener(this);
-        videoControllerTitle = findViewById(R.id.video_controller_title);
-
-        videoControllerControl = findViewById(R.id.video_controller_control);
-        videoControllerLoading = findViewById(R.id.video_controller_loading);
-
-        videoControllerLock = findViewById(R.id.video_controller_lock);
-        videoControllerLock.setOnClickListener(this);
-
-        videoControllerCurrentProgress = findViewById(R.id.video_controller_currentProgress);
-        videoControllerTotalProgress = findViewById(R.id.video_controller_totalProgress);
-        videoControllerSeekBar = findViewById(R.id.video_controller_seekBar);
-        videoControllerSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        videoPlayerControllerLock = findViewById(R.id.video_player_controller_lock);
+        videoPlayerControllerLock.setOnClickListener(new OnClickListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+            public void onClick(View v) {
+                mControlWrapper.toggleLockState();
             }
+        });
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+        videoPlayerControllerLoading = findViewById(R.id.video_player_controller_loading);
+    }
 
-            }
+    public void addDefaultControlComponent (String title) {
+        VideoPlayerCompleteView videoPlayerCompleteView = new VideoPlayerCompleteView(getContext());
+        VideoPlayerErrorView videoPlayerErrorView = new VideoPlayerErrorView(getContext());
+        VideoPlayerPrepareView videoPlayerPrepareView = new VideoPlayerPrepareView(getContext());
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+        VideoPlayerTitleView videoPlayerTitleView = new VideoPlayerTitleView(getContext());
+        videoPlayerTitleView.setTitle(title);
 
-            }
-        });*/
-
-
+        addControlComponent(videoPlayerCompleteView, videoPlayerErrorView, videoPlayerPrepareView, videoPlayerTitleView);
+        addControlComponent(new VideoPlayerBottomControlView(getContext()));
+        addControlComponent(new VideoPlayerGestureView(getContext()));
     }
 
     @Override
-    public void onClick(View v) {
-        /*switch (v.getId()) {
-            case R.id.video_controller_back:
+    protected void onLockStateChanged(boolean isLocked) {
+        videoPlayerControllerLock.setSelected(isLocked);
+    }
+
+    @Override
+    protected void onVisibilityChanged(boolean isVisible, Animation anim) {
+        if (mControlWrapper.isFullScreen()) {
+            if (isVisible) {
+                if (videoPlayerControllerLock.getVisibility() == GONE) {
+                    videoPlayerControllerLock.setVisibility(VISIBLE);
+                    if (anim != null) {
+                        videoPlayerControllerLock.startAnimation(anim);
+                    }
+                }
+            } else {
+                videoPlayerControllerLock.setVisibility(GONE);
+                if (anim != null) {
+                    videoPlayerControllerLock.startAnimation(anim);
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onPlayerStateChanged(int playerState) {
+        super.onPlayerStateChanged(playerState);
+        switch (playerState) {
+            case VideoView.PLAYER_NORMAL:
+                setLayoutParams(new FrameLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT));
+                videoPlayerControllerLock.setVisibility(GONE);
                 break;
-            case R.id.video_controller_lock:
-                mControlWrapper.toggleLockState();
-                break;
-            case R.id.video_controller_control:
-                setPlayState();
+            case VideoView.PLAYER_FULL_SCREEN:
+                videoPlayerControllerLock.setVisibility(isShowing() ? VISIBLE : GONE);
                 break;
             default:
                 break;
-        }*/
+        }
+
+        if (mActivity != null && hasCutout()) {
+            int orientation = mActivity.getRequestedOrientation();
+            int dp24 = PlayerUtils.dp2px(getContext(), 24);
+            int cutoutHeight = getCutoutHeight();
+            if (orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+                FrameLayout.LayoutParams lblp = (LayoutParams) videoPlayerControllerLock.getLayoutParams();
+                lblp.setMargins(dp24, 0, dp24, 0);
+            } else if (orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+                FrameLayout.LayoutParams layoutParams = (LayoutParams) videoPlayerControllerLock.getLayoutParams();
+                layoutParams.setMargins(dp24 + cutoutHeight, 0, dp24 + cutoutHeight, 0);
+            } else if (orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) {
+                FrameLayout.LayoutParams layoutParams = (LayoutParams) videoPlayerControllerLock.getLayoutParams();
+                layoutParams.setMargins(dp24, 0, dp24, 0);
+            }
+        }
     }
 
     @Override
-    protected void setProgress(int duration, int position) {
-        super.setProgress(duration, position);
+    protected void onPlayStateChanged(int playState) {
+        super.onPlayStateChanged(playState);
+        switch (playState) {
+            //调用release方法会回到此状态
+            case VideoView.STATE_IDLE:
+                videoPlayerControllerLock.setSelected(false);
+                videoPlayerControllerLoading.setVisibility(GONE);
+                break;
+            case VideoView.STATE_PLAYING:
+            case VideoView.STATE_PAUSED:
+            case VideoView.STATE_PREPARED:
+            case VideoView.STATE_ERROR:
+            case VideoView.STATE_BUFFERED:
+                videoPlayerControllerLoading.setVisibility(GONE);
+                break;
+            case VideoView.STATE_PREPARING:
+            case VideoView.STATE_BUFFERING:
+                videoPlayerControllerLoading.setVisibility(VISIBLE);
+                break;
+            case VideoView.STATE_PLAYBACK_COMPLETED:
+                videoPlayerControllerLoading.setVisibility(GONE);
+                videoPlayerControllerLock.setVisibility(GONE);
+                videoPlayerControllerLock.setSelected(false);
+                break;
+            default:
+                break;
+        }
+    }
 
-        Fuck.blue("duration:" + duration + "----position:" + position);
+    @Override
+    public boolean onBackPressed() {
+        if (isLocked()) {
+            show();
+            return true;
+        }
+
+        if (mControlWrapper.isFullScreen()) {
+            return stopFullScreen();
+        }
+
+        return super.onBackPressed();
     }
 }

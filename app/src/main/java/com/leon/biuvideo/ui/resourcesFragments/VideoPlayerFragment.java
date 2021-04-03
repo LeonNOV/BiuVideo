@@ -13,8 +13,6 @@ import com.leon.biuvideo.ui.views.VideoPlayerController;
  * @Desc
  */
 public class VideoPlayerFragment extends BaseSupportFragment {
-
-    private SurfaceHolder surfaceHolder;
     private VideoView videoPlayerContent;
 
     @Override
@@ -27,15 +25,22 @@ public class VideoPlayerFragment extends BaseSupportFragment {
         videoPlayerContent = findView(R.id.video_player_content);
         videoPlayerContent.setUrl("https://vd4.bdstatic.com/mda-md121r3dkiba9afy/sc/cae_h264_clips/1617327122/mda-md121r3dkiba9afy.mp4");
 
-//        StandardVideoController standardVideoController = new StandardVideoController(context);
-//        standardVideoController.addDefaultControlComponent("BiliBili", false);
-
         VideoPlayerController videoPlayerController = new VideoPlayerController(context);
-        videoPlayerController.addDefaultControlComponent("BiliBili", false);
-
+        videoPlayerController.addDefaultControlComponent("BiliBili");
         videoPlayerContent.setVideoController(videoPlayerController);
 
-
         videoPlayerContent.start();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        videoPlayerContent.pause();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        videoPlayerContent.release();
     }
 }
