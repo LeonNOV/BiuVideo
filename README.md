@@ -17,6 +17,9 @@
 
 ## 📘开发日志
 
+### 2021/04/04
+- 该项目现已上传至[GitHub](https://github.com/LeonNOV/BiuVideo)
+
 ### 2021/04/03
 - 加入了播放器需要用到的各种View
   - **加入的各View还未进行测试**
@@ -24,7 +27,7 @@
 
 ### 2021/04/02
 - 修改了主页的底部导航栏
-- 加入了[DKPlayer](https://github.com/Doikki/DKVideoPlayer)依赖，作为本APP的视频播放器框架
+- 加入了[DKVideoPlayer](https://github.com/Doikki/DKVideoPlayer)依赖，作为本APP的视频播放器框架
 
 ### 2021/04/01
 - 对搜索功能进行了更改
