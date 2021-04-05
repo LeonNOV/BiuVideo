@@ -1,6 +1,2 @@
-include ':dkplayer-ijk'
-include ':mylibrary'
-include ':dkplayer-ui'
-include ':dkplayer-java'
 include ':app'
 rootProject.name = "BiuVideo"
