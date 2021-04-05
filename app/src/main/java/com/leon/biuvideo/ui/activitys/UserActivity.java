@@ -20,7 +20,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.FragmentViewPagerAdapter;
-import com.leon.biuvideo.beans.userBeans.Follow;
 import com.leon.biuvideo.beans.upMasterBean.BiliUserInfo;
 import com.leon.biuvideo.ui.dialogs.LoadingDialog;
 import com.leon.biuvideo.ui.fragments.userFragments.UserArticlesFragment;
@@ -30,9 +29,9 @@ import com.leon.biuvideo.ui.fragments.userFragments.UserVideosFragment;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ViewUtils;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.BiliUserInfoParser;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.BiliUserInfoParser;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;

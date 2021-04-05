@@ -9,6 +9,7 @@ import android.view.SurfaceHolder;
 
 import com.dueeeke.videoplayer.player.AbstractPlayer;
 import com.dueeeke.videoplayer.player.VideoViewManager;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 
 import java.io.IOException;
@@ -16,19 +17,21 @@ import java.util.Map;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
+import tv.danmaku.ijk.media.player.misc.IMediaFormat;
+import tv.danmaku.ijk.media.player.misc.IjkTrackInfo;
 
 /**
  * @Author Leon
  * @Time 2021/4/5
- * @Desc 可以播放音视频的自定义播放器
+ * @Desc 可以播放音视频的自定义播放器（不使用）
  */
-public class BiuVideoPlayer extends AbstractPlayer {
+public class BiuVideoPlayerWithAudio extends AbstractPlayer {
     protected IjkMediaPlayer mVideoPlayer;
     protected IjkMediaPlayer mAudioPlayer;
 
     private int mBufferedPercent;
 
-    public BiuVideoPlayer(Context context) {
+    public BiuVideoPlayerWithAudio(Context context) {
 
     }
 
@@ -36,6 +39,11 @@ public class BiuVideoPlayer extends AbstractPlayer {
     public void initPlayer() {
         initVideoPlayer();
         initAudioPlayer();
+    }
+
+    @Override
+    public void setDataSource(String path, Map<String, String> headers) {
+
     }
 
     private void initVideoPlayer() {
@@ -78,15 +86,15 @@ public class BiuVideoPlayer extends AbstractPlayer {
         });
     }
 
-    @Override
-    public void setDataSource(String videoPath, String audioPath, Map<String, String> headers) {
-        try {
-            mVideoPlayer.setDataSource(videoPath, headers);
-            mAudioPlayer.setDataSource(audioPath, headers);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    @Override
+//    public void setDataSource(String videoPath, String audioPath, Map<String, String> headers) {
+//        try {
+//            mVideoPlayer.setDataSource(videoPath, headers);
+//            mAudioPlayer.setDataSource(audioPath, headers);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Override
     public void setDataSource(AssetFileDescriptor fd) {

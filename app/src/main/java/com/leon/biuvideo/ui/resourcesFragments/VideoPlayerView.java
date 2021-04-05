@@ -24,12 +24,12 @@ public class VideoPlayerView extends FrameLayout implements MediaPlayerControl, 
     /**
      * 播放器
      */
-    protected BiuVideoPlayer biuVideoPlayer;
+    protected BiuVideoPlayerWithAudio biuVideoPlayerWithAudio;
 
     /**
      * 工厂类，用于实例化播放核心
      */
-    protected PlayerFactory<BiuVideoPlayer> mPlayerFactory;
+    protected PlayerFactory<BiuVideoPlayerWithAudio> mPlayerFactory;
 
     /**
      * 控制器

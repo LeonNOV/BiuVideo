@@ -41,7 +41,7 @@ import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.LocalOrdersDatabaseUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
-import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParser;
+import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.VideoWithFlvParser;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BangumiParser;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.BangumiStateParse;
 import com.leon.biuvideo.values.LocalOrderType;
@@ -75,7 +75,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
 
     private SimpleThreadPool simpleThreadPool;
     private DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils;
-    private MediaParser mediaParser;
+    private VideoWithFlvParser videoWithFlvParser;
     private LocalOrdersDatabaseUtils localOrdersDatabaseUtils;
     private ImageView bangumi_imageView_favoriteMark;
 
@@ -264,15 +264,16 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                     downloadRecordsDatabaseUtils = new DownloadRecordsDatabaseUtils(getApplicationContext());
                 }
 
-                if (mediaParser == null) {
-                    mediaParser = new MediaParser();
+                if (videoWithFlvParser == null) {
+//                    videoWithFlvParser = new VideoWithFlvParser();
                 }
 
                 // 如果番剧选集个数为1，则直接显示SingleVideoQualityDialog
                 if (isSingleAnthology) {
                     if (videoEntries == null) {
 
-                        Play play = mediaParser.parseMedia(null, bangumi.eps.get(selectAnthologyIndex).cid, true);
+//                        Play play = videoWithFlvParser.parseMedia(null, bangumi.eps.get(selectAnthologyIndex).cid, true);
+                        Play play = null;
 
                         videoEntries = play.videoEntries();
                         for (Map.Entry<Integer, Media> entry : videoEntries) {
@@ -306,7 +307,8 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                             }
 
                             //获取视频选集信息
-                            Play playWithDownload = mediaParser.parseMedia(null, cid, true);
+//                            Play playWithDownload = videoWithFlvParser.parseMedia(null, cid, true);
+                            Play playWithDownload = null;
 
                             if (playWithDownload == null) {
                                 SimpleSnackBar.make(anthologyDownloadDialog.view, "获取不到该番剧的下载数据，可能该番剧有地区限制", SimpleSnackBar.LENGTH_SHORT).show();

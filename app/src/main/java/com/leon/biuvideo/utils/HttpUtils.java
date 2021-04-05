@@ -5,7 +5,7 @@ import android.content.Context;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.videoBean.play.Play;
-import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParser;
+import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.VideoWithFlvParser;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicUrlParser;
 
 import java.io.IOException;
@@ -154,8 +154,9 @@ public class HttpUtils {
         if (subId != 0) {
             urls = new String[2];
 
-            MediaParser mediaParser = new MediaParser();
-            Play play = mediaParser.parseMedia(mainId, subId, isBangumi);
+//            VideoWithFlvParser videoWithFlvParser = new VideoWithFlvParser();
+//            Play play = videoWithFlvParser.parseMedia(mainId, subId, isBangumi);
+            Play play = null;
 
             if (play != null) {
                 urls[0] = play.videos.get(qualityId).baseUrl;

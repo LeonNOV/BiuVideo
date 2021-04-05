@@ -2,6 +2,7 @@ package com.leon.biuvideo;
 
 import android.app.Application;
 
+import com.dueeeke.videoplayer.ijk.IjkPlayerFactory;
 import com.dueeeke.videoplayer.player.VideoViewConfig;
 import com.dueeeke.videoplayer.player.VideoViewManager;
 import com.leon.biuvideo.ui.resourcesFragments.BiuVideoPlayerFactory;
@@ -35,7 +36,7 @@ public class App extends Application {
         VideoViewManager
                 .setConfig(VideoViewConfig
                         .newBuilder()
-                        .setPlayerFactory(BiuVideoPlayerFactory.create())
+                        .setPlayerFactory(IjkPlayerFactory.create())
                         .build());
     }
 }

@@ -19,7 +19,9 @@ import java.util.Objects;
 import okhttp3.Headers;
 
 /**
- * 视频接口解析
+ * @Author Leon
+ * @Time 2020/10/21
+ * @Desc 视频接口解析
  */
 public class VideoParser {
 

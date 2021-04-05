@@ -47,7 +47,7 @@ import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.WebViewUtils;
 import com.leon.biuvideo.values.LocalOrderType;
-import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParser;
+import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.VideoWithFlvParser;
 import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.ViewParser;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
@@ -99,7 +99,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
     private List<Map.Entry<Integer, Media>> audioEntries = null;
 
     private SimpleThreadPool simpleThreadPool;
-    private MediaParser mediaParser;
+    private VideoWithFlvParser videoWithFlvParser;
     private ViewParser viewParser;
     private LoadingDialog loadingDialog;
     private Handler handler;
@@ -177,12 +177,13 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                 }
                 viewPage = viewParser.parseView(bvid);
 
-                if (mediaParser == null) {
-                    mediaParser = new MediaParser();
+                if (videoWithFlvParser == null) {
+                    videoWithFlvParser = new VideoWithFlvParser(null, null);
                 }
 
                 //获取视频选集信息
-                play = mediaParser.parseMedia(bvid, viewPage.anthologyInfoList.get(0).cid, false);
+//                play = videoWithFlvParser.parseMedia(bvid, viewPage.anthologyInfoList.get(0).cid, false);
+                play = null;
 
                 Message message = handler.obtainMessage();
                 message.what = 0;
@@ -243,7 +244,8 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                     anthologySelectedIndex = position;
 
                     //重置当前play变量
-                    play = mediaParser.parseMedia(bvid, cid, false);
+//                    play = videoWithFlvParser.parseMedia(bvid, cid, false);
+                    play = null;
                 }
             });
 
@@ -367,7 +369,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                         @Override
                         public void onDownload(int qualityId, long cid, int position, String subTitle) {
                             //获取视频选集信息
-                            Play playWithDownload = mediaParser.parseMedia(viewPage.bvid, cid, false);
+                            /*Play playWithDownload = videoWithFlvParser.parseMedia(viewPage.bvid, cid, false);
 
                             videoEntries = playWithDownload.videoEntries();
                             for (Map.Entry<Integer, Media> entry : videoEntries) {
@@ -385,7 +387,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                                 }
                             }
 
-                            saveSingleVideo(videoEntry, position);
+                            saveSingleVideo(videoEntry, position);*/
                         }
 
                         @Override

@@ -120,10 +120,12 @@ dependencies {
     implementation 'org.greenrobot:greendao:3.3.0'
 
     // DKPlayer
-//    implementation 'com.github.dueeeke.dkplayer:dkplayer-java:3.2.6'
-//    implementation 'com.github.dueeeke.dkplayer:dkplayer-ui:3.2.6'
-//    implementation 'com.github.dueeeke.dkplayer:player-ijk:3.2.6'
-    implementation project(path: ':dkplayer-java')
-    implementation project(path: ':dkplayer-ui')
-    implementation project(path: ':dkplayer-ijk')
+    implementation 'com.github.dueeeke.dkplayer:dkplayer-java:3.2.6'
+    implementation 'com.github.dueeeke.dkplayer:dkplayer-ui:3.2.6'
+    implementation 'com.github.dueeeke.dkplayer:player-ijk:3.2.6'
+
+    // 自定义时使用
+//    implementation project(path: ':dkplayer-java')
+//    implementation project(path: ':dkplayer-ui')
+//    implementation project(path: ':dkplayer-ijk')
 }

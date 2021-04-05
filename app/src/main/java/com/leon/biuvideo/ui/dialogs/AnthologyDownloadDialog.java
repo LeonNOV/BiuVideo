@@ -19,7 +19,7 @@ import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
 import com.leon.biuvideo.ui.activitys.DownloadedActivity;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
-import com.leon.biuvideo.values.Qualitys;
+import com.leon.biuvideo.values.Quality;
 
 import java.util.List;
 
@@ -127,31 +127,31 @@ public class AnthologyDownloadDialog extends AlertDialog implements View.OnClick
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (position) {
+        /*switch (position) {
             case 0:
-                qualityId = Qualitys.F120;
+                qualityId = Quality.F120;
                 break;
             case 1:
-                qualityId = Qualitys.F116;
+                qualityId = Quality.F116;
                 break;
             case 2:
-                qualityId = Qualitys.F112;
+                qualityId = Quality.F112;
                 break;
             case 3:
-                qualityId = Qualitys.F80;
+                qualityId = Quality.F80;
                 break;
             case 4:
-                qualityId = Qualitys.F64;
+                qualityId = Quality.F64;
                 break;
             case 5:
-                qualityId = Qualitys.F32;
+                qualityId = Quality.F32;
                 break;
             case 6:
-                qualityId = Qualitys.F16;
+                qualityId = Quality.F16;
                 break;
             default:
                 break;
-        }
+        }*/
     }
 
     @Override

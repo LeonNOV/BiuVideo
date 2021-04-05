@@ -1,5 +1,6 @@
 package com.leon.biuvideo.ui.resourcesFragments;
 
+import com.dueeeke.videoplayer.ijk.IjkPlayer;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
@@ -12,7 +13,7 @@ import com.leon.biuvideo.utils.HttpUtils;
  * @Desc 视频播放页面
  */
 public class VideoPlayerFragment extends BaseSupportFragment {
-    private VideoView<BiuVideoPlayer> videoPlayerViewContent;
+    private VideoView<IjkPlayer> videoPlayerViewContent;
 
     @Override
     protected int setLayout() {
@@ -21,11 +22,10 @@ public class VideoPlayerFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        String videoUrl = "https://cn-jxnc-cmcc-bcache-07.bilivideo.com/upgcxcode/95/80/318008095/318008095-1-30080.m4s?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfqXBvEqxTEto8BTrNvN0GvT90W5JZMkX_YN0MvXg8gNEV4NC8xNEV4N03eN0B5tZlqNxTEto8BTrNvNeZVuJ10Kj_g2UB02J0mN0B5tZlqNCNEto8BTrNvNC7MTX502C8f2jmMQJ6mqF2fka1mqx6gqj0eN0B599M=&uipk=5&nbs=1&deadline=1617616102&gen=playurlv2&os=bcache&oi=3747315518&trid=548f782817cb4c25bc3ea8e10aa205c8u&platform=pc&upsig=caac5ed5242fdfdc05c838723d7dbac9&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,platform&cdnid=6634&mid=0&orderid=0,3&agrr=1&logo=80000000";
-        String audioUrl = "https://upos-sz-mirrorcoso1.bilivideo.com/upgcxcode/95/80/318008095/318008095-1-30280.m4s?e=ig8euxZM2rNcNbdlhoNvNC8BqJIzNbfqXBvEqxTEto8BTrNvN0GvT90W5JZMkX_YN0MvXg8gNEV4NC8xNEV4N03eN0B5tZlqNxTEto8BTrNvNeZVuJ10Kj_g2UB02J0mN0B5tZlqNCNEto8BTrNvNC7MTX502C8f2jmMQJ6mqF2fka1mqx6gqj0eN0B599M=&uipk=5&nbs=1&deadline=1617616102&gen=playurlv2&os=coso1bv&oi=3747315518&trid=548f782817cb4c25bc3ea8e10aa205c8u&platform=pc&upsig=f0560519cabcce75d123bd43cd22e71b&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,platform&mid=0&orderid=0,3&agrr=1&logo=80000000";
+        String videoUrl = "https://cn-hbwh-cmcc-bcache-04.bilivideo.com/upgcxcode/95/80/318008095/318008095-1-32.flv?e=ig8euxZM2rNcNbNHhwdVhoMgnWdVhwdEto8g5X10ugNcXBlqNxHxNEVE5XREto8KqJZHUa6m5J0SqE85tZvEuENvNo8g2ENvNo8i8o859r1qXg8xNEVE5XREto8GuFGv2U7SuxI72X6fTr859r1qXg8gNEVE5XREto8z5JZC2X2gkX5L5F1eTX1jkXlsTXHeux_f2o859IB_&uipk=5&nbs=1&deadline=1617641492&gen=playurlv2&os=bcache&oi=3747315555&trid=9cb960e57e90466e98577e0e1b7c8d45u&platform=pc&upsig=4742b7376bd42cc1cc41d3cbbbddf94a&uparams=e,uipk,nbs,deadline,gen,os,oi,trid,platform&cdnid=10200&mid=0&orderid=0,3&agrr=1&logo=80000000";
 
         videoPlayerViewContent = findView(R.id.video_player_content);
-        videoPlayerViewContent.setUrl(videoUrl, audioUrl, HttpUtils.getHeaders());
+        videoPlayerViewContent.setUrl(videoUrl, HttpUtils.getHeaders());
 
         VideoPlayerController videoPlayerController = new VideoPlayerController(context);
         videoPlayerController.addDefaultControlComponent("BiliBili");

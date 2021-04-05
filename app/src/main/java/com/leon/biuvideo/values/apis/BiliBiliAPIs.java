@@ -20,7 +20,7 @@ public class BiliBiliAPIs {
      *          bvid：视频id，可选
      *          其他参数默认即可
      */
-    public static String playUrl = "https://api.bilibili.com/x/player/playurl";
+    public static final String VIDEO_STREAM_INFO = "https://api.bilibili.com/x/player/playurl";
 
     /**
      * 获取番剧选集信息，返回番剧视频和音频原链接<br/>
@@ -28,7 +28,7 @@ public class BiliBiliAPIs {
      *          cid：cid，必须
      *          其他参数默认即可
      */
-    public static String playUrlForBangumi = "https://api.bilibili.com/pgc/player/web/playurl";
+    public static String BANGUMI_STREAM_INFO = "https://api.bilibili.com/pgc/player/web/playurl";
 
     /**
      * 视频播放请求地址<br/>
