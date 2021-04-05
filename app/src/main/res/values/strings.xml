@@ -220,4 +220,7 @@
 
     <string name="videoPlayerErrorMsg">出了点小问题，请稍后重试</string>
     <string name="videoPlayerErrorRetry">重试</string>
+
+    <string name="videoPlayerBottomSpeed">倍速</string>
+    <string name="videoPlayerBottomHint">快来分享一下自己的想法吧~</string>
 </resources>

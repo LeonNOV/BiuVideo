@@ -1,6 +1,7 @@
 package com.leon.biuvideo.ui.resourcesFragments.videoControlComonents;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +27,6 @@ import com.leon.biuvideo.R;
  */
 public class VideoPlayerPrepareView extends FrameLayout implements IControlComponent {
     private ControlWrapper controlWrapper;
-    private ProgressBar videoPlayerPrepareLoading;
     private ImageView videoPlayerPrepareControl;
     private LinearLayout videoPlayerPrepareNetWarning;
 
@@ -57,7 +57,6 @@ public class VideoPlayerPrepareView extends FrameLayout implements IControlCompo
 
     private void initView() {
         LayoutInflater.from(getContext()).inflate(R.layout.video_player_prepare_view, this, true);
-        videoPlayerPrepareLoading = findViewById(R.id.video_player_prepare_loading);
         videoPlayerPrepareControl = findViewById(R.id.video_player_prepare_control);
         videoPlayerPrepareNetWarning = findViewById(R.id.video_player_prepare_net_warning);
         findViewById(R.id.video_player_prepare_net_warning_continue).setOnClickListener(new OnClickListener() {
@@ -102,7 +101,6 @@ public class VideoPlayerPrepareView extends FrameLayout implements IControlCompo
                 setVisibility(VISIBLE);
                 videoPlayerPrepareControl.setVisibility(GONE);
                 videoPlayerPrepareNetWarning.setVisibility(GONE);
-                videoPlayerPrepareLoading.setVisibility(GONE);
                 break;
             case VideoView.STATE_PLAYING:
             case VideoView.STATE_PAUSED:
@@ -115,7 +113,6 @@ public class VideoPlayerPrepareView extends FrameLayout implements IControlCompo
             case VideoView.STATE_IDLE:
                 setVisibility(VISIBLE);
                 bringToFront();
-                videoPlayerPrepareLoading.setVisibility(GONE);
                 videoPlayerPrepareNetWarning.setVisibility(GONE);
                 videoPlayerPrepareControl.setVisibility(VISIBLE);
                 break;

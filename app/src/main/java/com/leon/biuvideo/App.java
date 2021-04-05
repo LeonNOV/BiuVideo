@@ -2,9 +2,9 @@ package com.leon.biuvideo;
 
 import android.app.Application;
 
-import com.dueeeke.videoplayer.ijk.IjkPlayerFactory;
 import com.dueeeke.videoplayer.player.VideoViewConfig;
 import com.dueeeke.videoplayer.player.VideoViewManager;
+import com.leon.biuvideo.ui.resourcesFragments.BiuVideoPlayerFactory;
 
 import me.yokeyword.fragmentation.Fragmentation;
 import me.yokeyword.fragmentation.helper.ExceptionHandler;
@@ -32,6 +32,10 @@ public class App extends Application {
                 })
                 .install();
 
-        VideoViewManager.setConfig(VideoViewConfig.newBuilder().setPlayerFactory(IjkPlayerFactory.create()).build());
+        VideoViewManager
+                .setConfig(VideoViewConfig
+                        .newBuilder()
+                        .setPlayerFactory(BiuVideoPlayerFactory.create())
+                        .build());
     }
 }

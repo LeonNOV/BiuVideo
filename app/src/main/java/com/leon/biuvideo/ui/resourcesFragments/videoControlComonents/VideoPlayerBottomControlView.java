@@ -3,6 +3,7 @@ package com.leon.biuvideo.ui.resourcesFragments.videoControlComonents;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.dueeeke.videoplayer.controller.IControlComponent;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.dueeeke.videoplayer.util.PlayerUtils;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.utils.Fuck;
 
 /**
  * @Author Leon
@@ -227,9 +229,10 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
             if (duration > 0) {
                 videoPlayerBottomControlSeekBar.setEnabled(true);
 
-                int pos = (int) (position * 1.0 / duration * videoPlayerBottomControlSeekBar.getMax());
-                videoPlayerBottomControlSeekBar.setProgress(pos);
-                videoPlayerBottomControlProgressBar.setProgress(pos);
+                int videoPos = (int) (position * 1.0 / duration * videoPlayerBottomControlSeekBar.getMax());
+
+                videoPlayerBottomControlSeekBar.setProgress(videoPos);
+                videoPlayerBottomControlProgressBar.setProgress(videoPos);
             } else {
                 videoPlayerBottomControlSeekBar.setEnabled(false);
             }
@@ -301,16 +304,18 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
         isDragging = true;
+
         controlWrapper.stopProgress();
         controlWrapper.stopFadeOut();
     }
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        long duration = controlWrapper.getDuration();
-        long newPosition = (duration * seekBar.getProgress()) / videoPlayerBottomControlSeekBar.getMax();
+        long videoDuration = controlWrapper.getDuration();
+        long videoNewPosition = (videoDuration * seekBar.getProgress()) / videoPlayerBottomControlSeekBar.getMax();
 
-        controlWrapper.seekTo((int) newPosition);
+        controlWrapper.seekTo((int) videoNewPosition);
+
         isDragging = false;
         controlWrapper.startProgress();
         controlWrapper.startFadeOut();

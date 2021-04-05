@@ -1,0 +1,22 @@
+apply plugin: 'com.android.library'
+apply from: '../constants.gradle'
+
+android {
+    compileSdkVersion project.ext.compileSdkVersion
+    buildToolsVersion project.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion project.ext.minSdkVersion
+        targetSdkVersion project.ext.targetSdkVersion
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    compileOnly project(':dkplayer-java')
+    api "tv.danmaku.ijk.media:ijkplayer-java:$project.ijkPlayerVersion"
+}
+
+ext {
+    releaseArtifact = 'player-ijk'
+}

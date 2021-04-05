@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom">
@@ -25,25 +26,33 @@
                 android:id="@+id/video_player_bottom_control_currentProgress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="01:03"
                 android:textColor="@color/white"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                tools:text="01:52" />
 
             <SeekBar
                 android:id="@+id/video_player_bottom_control_seekBar"
-                style="@style/VideoSeekBarStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight="1"
-                android:progress="50" />
+                android:background="@null"
+                android:max="1000"
+                android:maxHeight="4dp"
+                android:minHeight="4dp"
+                android:progressDrawable="@drawable/video_progress_bar"
+                android:thumb="@drawable/video_thumb"
+                android:thumbOffset="0dp"
+                tools:progress="500"
+                tools:secondaryProgress="600" />
 
             <TextView
                 android:id="@+id/video_player_bottom_control_totalProgress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="10:23"
                 android:textColor="@color/white"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                tools:text="10:23" />
 
             <ImageView
                 android:id="@+id/video_player_bottom_control_full_screen"
@@ -71,6 +80,7 @@
                 android:id="@+id/video_player_bottom_play_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/description"
                 android:src="@drawable/video_play_status" />
 
@@ -79,6 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/description"
                 android:src="@drawable/video_danmaku_close" />
 
@@ -92,14 +103,21 @@
                 android:layout_weight="1"
                 android:background="@drawable/round_corners6dp_bg"
                 android:backgroundTint="#808F8F8F"
-                android:inputType="text" />
+                android:gravity="center_vertical"
+                android:hint="@string/videoPlayerBottomHint"
+                android:inputType="text"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textColorHint="#B1B1B1"
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/video_player_bottom_control_speed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                android:text="倍速"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:text="@string/videoPlayerBottomSpeed"
                 android:textColor="@color/white"
                 android:textSize="17sp" />
 
@@ -107,9 +125,10 @@
                 android:id="@+id/video_player_bottom_control_quality"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1080P"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:textColor="@color/white"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                tools:text="1080P" />
 
         </LinearLayout>
 
@@ -121,9 +140,11 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_gravity="bottom"
-        android:progress="50"
-        android:progressDrawable="@drawable/video_player_bottom_progress"
-        android:visibility="gone" />
+        android:max="1000"
+        android:progressDrawable="@drawable/video_progress_bar"
+        android:visibility="gone"
+        tools:progress="500"
+        tools:secondaryProgress="600" />
 
 </FrameLayout>
 

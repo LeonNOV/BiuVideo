@@ -11,14 +11,6 @@
         android:contentDescription="@string/description"
         android:src="@drawable/video_pause" />
 
-    <ProgressBar
-        android:id="@+id/video_player_prepare_loading"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:indeterminateTint="@color/blue"
-        android:visibility="visible" />
-
     <LinearLayout
         android:id="@+id/video_player_prepare_net_warning"
         android:layout_width="match_parent"

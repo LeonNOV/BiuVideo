@@ -40,7 +40,7 @@
             android:max="100"
             android:maxHeight="5dp"
             android:minHeight="5dp"
-            android:progressDrawable="@drawable/video_seek_bar"
+            android:progressDrawable="@drawable/video_progress_bar"
             tools:progress="50" />
     </LinearLayout>
 

@@ -3,6 +3,7 @@ package com.leon.biuvideo.ui.resourcesFragments.videoControlComonents;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -120,6 +121,9 @@ public class VideoPlayerGestureView extends FrameLayout implements IGestureCompo
 
     }
 
+    /**
+     * 开始滑动
+     */
     @Override
     public void onStartSlide() {
         // 显示控制窗口
@@ -129,6 +133,9 @@ public class VideoPlayerGestureView extends FrameLayout implements IGestureCompo
         videoPlayerGestureContent.setAlpha(1f);
     }
 
+    /**
+     * 停止滑动
+     */
     @Override
     public void onStopSlide() {
         videoPlayerGestureContent
