@@ -15,16 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.userAdapters.AnthologyDownloadDialogAdapter;
-import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
+import com.leon.biuvideo.beans.mediaBeans.videoBeans.VideoDetailInfo;
 import com.leon.biuvideo.ui.activitys.DownloadedActivity;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
-import com.leon.biuvideo.values.Quality;
 
 import java.util.List;
 
 public class AnthologyDownloadDialog extends AlertDialog implements View.OnClickListener, AdapterView.OnItemSelectedListener {
-    private final List<AnthologyInfo> anthologyInfoList;
+    private final List<VideoDetailInfo.AnthologyInfo> anthologyInfoList;
     private final Context context;
     private int qualityId;
     public View view;
@@ -32,7 +31,7 @@ public class AnthologyDownloadDialog extends AlertDialog implements View.OnClick
     private RecyclerView anthology_download_dialog_recyclerView;
     private DownloadRecordsDatabaseUtils downloadRecordsDatabaseUtils;
 
-    public AnthologyDownloadDialog(@NonNull Context context, List<AnthologyInfo> anthologyInfoList) {
+    public AnthologyDownloadDialog(@NonNull Context context, List<VideoDetailInfo.AnthologyInfo> anthologyInfoList) {
         super(context);
         this.context = context;
         this.anthologyInfoList = anthologyInfoList;
@@ -82,9 +81,9 @@ public class AnthologyDownloadDialog extends AlertDialog implements View.OnClick
             downloadRecordsDatabaseUtils = new DownloadRecordsDatabaseUtils(context);
         }
 
-        for (AnthologyInfo anthologyInfo : anthologyInfoList) {
-            anthologyInfo.isDownloaded = downloadRecordsDatabaseUtils.queryVideo(anthologyInfo.mainId, String.valueOf(anthologyInfo.cid));
-        }
+//        for (AnthologyInfo anthologyInfo : anthologyInfoList) {
+//            anthologyInfo.isDownloaded = downloadRecordsDatabaseUtils.queryVideo(anthologyInfo.mainId, String.valueOf(anthologyInfo.cid));
+//        }
 
         AnthologyDownloadDialogAdapter anthologyDownloadDialogAdapter = new AnthologyDownloadDialogAdapter(anthologyInfoList, context);
         anthologyDownloadDialogAdapter.setOnAnthologyItemClickListener(new AnthologyDownloadDialogAdapter.OnAnthologyItemClickListener() {

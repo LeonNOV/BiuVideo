@@ -10,7 +10,15 @@ public class BiliBiliAPIs {
      *      参数：
      *          bvid：视频ID，必须
      */
-    public static String view = "https://api.bilibili.com/x/web-interface/view";
+    public static final String VIDEO_DETAIL_INFO = "https://api.bilibili.com/x/web-interface/view";
+
+    /**
+     * 获取视频tag(频道)
+     * 参数
+     *      aid：aid/bvid任选其一
+     *      bvid：aid/bvid任选其一
+     */
+    public static final String VIDEO_DETAIL_TAGS = "https://api.bilibili.com/x/web-interface/view/detail/tag?aid=714835497";
 
     /**
      * 获取选集信息，返回视频和音频原链接<br/>

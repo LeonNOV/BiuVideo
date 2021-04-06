@@ -159,8 +159,8 @@
                             android:orientation="vertical">
 
                             <ImageView
-                                android:layout_width="25dp"
-                                android:layout_height="25dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:src="@drawable/ic_like"
                                 app:tint="@color/black" />
 
@@ -184,7 +184,7 @@
                             <ImageView
                                 android:layout_width="25dp"
                                 android:layout_height="25dp"
-                                android:src="@drawable/icon_coin"
+                                android:src="@drawable/ic_coin"
                                 app:tint="@color/black" />
 
                             <TextView
@@ -210,7 +210,7 @@
                                 android:id="@+id/video_imageView_favoriteMark"
                                 android:layout_width="25dp"
                                 android:layout_height="25dp"
-                                android:src="@drawable/icon_video_no_favorite" />
+                                android:src="@drawable/ic_favorite" />
 
                             <TextView
                                 android:id="@+id/video_textView_favorite"
@@ -232,7 +232,7 @@
                             <ImageView
                                 android:layout_width="25dp"
                                 android:layout_height="25dp"
-                                android:src="@drawable/icon_video_share"
+                                android:src="@drawable/ic_share"
                                 app:tint="@color/black" />
 
                             <TextView

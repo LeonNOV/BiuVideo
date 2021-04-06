@@ -91,7 +91,7 @@
                 android:layout_marginStart="20dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/description"
-                android:src="@drawable/video_danmaku_close" />
+                android:src="@drawable/video_danmaku_status" />
 
             <EditText
                 android:id="@+id/video_player_bottom_control_danmaku_editText"

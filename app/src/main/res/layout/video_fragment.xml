@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
+            android:layout_height="231dp">
+
+            <com.dueeeke.videoplayer.player.VideoView
+                android:id="@+id/video_player_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <ImageView
+                android:id="@+id/video_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back"
+                android:layout_margin="20dp"
+                android:padding="10dp"
+                android:contentDescription="@string/description"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="@color/white" />
+
+        </FrameLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/video_tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:tabIndicator="@drawable/indicator"
+                app:tabIndicatorColor="@color/tabLayoutIndicatorColor"
+                app:tabTextAppearance="@style/TabLayoutTextStyle"
+                app:tabTextColor="@color/tabTextColor" />
+
+            <LinearLayout
+                android:layout_width="130dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:background="@drawable/ripple_round_corners6dp_frame_bg"
+                android:gravity="center_vertical"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="7dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/video_send_danmaku"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/gray"
+                    android:textSize="13sp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="xiu~xiu~xiu~"/>
+
+                <ImageView
+                    android:id="@+id/video_danmaku_status"
+                    android:layout_width="32dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|end"
+                    android:src="@drawable/video_danmaku_status"
+                    app:tint="@color/gray"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/description" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/video_viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
-import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
+import com.leon.biuvideo.beans.mediaBeans.videoBeans.VideoDetailInfo;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.PreferenceUtils;
 
@@ -17,11 +17,11 @@ import java.util.List;
 /**
  * 缓存视频选集时用到的选集列表适配器
  */
-public class AnthologyDownloadDialogAdapter extends BaseAdapter<AnthologyInfo> {
-    private final List<AnthologyInfo> anthologyInfoList;
+public class AnthologyDownloadDialogAdapter extends BaseAdapter<VideoDetailInfo.AnthologyInfo> {
+    private final List<VideoDetailInfo.AnthologyInfo> anthologyInfoList;
     private final Context context;
 
-    public AnthologyDownloadDialogAdapter(List<AnthologyInfo> anthologyInfoList, Context context) {
+    public AnthologyDownloadDialogAdapter(List<VideoDetailInfo.AnthologyInfo> anthologyInfoList, Context context) {
         super(anthologyInfoList, context);
         this.anthologyInfoList = anthologyInfoList;
         this.context = context;
@@ -51,7 +51,7 @@ public class AnthologyDownloadDialogAdapter extends BaseAdapter<AnthologyInfo> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        AnthologyInfo anthologyInfo = anthologyInfoList.get(position);
+        VideoDetailInfo.AnthologyInfo anthologyInfo = anthologyInfoList.get(position);
 
         if (anthologyInfo.badge != null) {
             holder.setText(R.id.anthology_download_item_textView_badge, anthologyInfo.badge);
@@ -60,26 +60,26 @@ public class AnthologyDownloadDialogAdapter extends BaseAdapter<AnthologyInfo> {
         }
 
         holder
-                .setVisibility(R.id.anthology_download_item_textView_isDownloaded, anthologyInfo.isDownloaded ? View.VISIBLE : View.GONE)
+//                .setVisibility(R.id.anthology_download_item_textView_isDownloaded, anthologyInfo.isDownloaded ? View.VISIBLE : View.GONE)
                 .setText(R.id.anthology_download_item_textView_name, anthologyInfo.part)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (anthologyInfo.isVIP) {
+                        /*if (anthologyInfo.isVIP) {
                             // 查询当前用户是否为大会员
                             if (!PreferenceUtils.getVipStatus()) {
                                 SimpleSnackBar.make(v, "该视频需要成为大会员才能下载", SimpleSnackBar.LENGTH_SHORT).show();
                                 return;
                             }
-                        }
+                        }*/
 
-                        if (anthologyInfo.isDownloaded) {
+                        /*if (anthologyInfo.isDownloaded) {
                             SimpleSnackBar.make(v, "该视频已下载过了哦~", SimpleSnackBar.LENGTH_SHORT).show();
                         } else {
                             if (onAnthologyItemClickListener != null) {
                                 onAnthologyItemClickListener.onItemClickListener(anthologyInfo.cid, position, anthologyInfo.part);
                             }
-                        }
+                        }*/
                     }
                 });
     }

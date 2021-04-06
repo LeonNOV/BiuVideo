@@ -1,6 +1,6 @@
 package com.leon.biuvideo.beans.searchResultBeans.bangumi;
 
-import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
+import com.leon.biuvideo.beans.mediaBeans.videoBeans.VideoDetailInfo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,26 +32,30 @@ public class Bangumi implements Serializable {
      *
      * @return  AnthologyInfo集合
      */
-    public List<AnthologyInfo> getAnthologyInfoList() {
+    public List<VideoDetailInfo.AnthologyInfo> getAnthologyInfoList() {
         List<AnthologyInfo> anthologyInfoList = new ArrayList<>();
 
         for (int i = 0; i < eps.size(); i++) {
             Ep ep = eps.get(i);
             AnthologyInfo anthologyInfo = new AnthologyInfo();
-            anthologyInfo.mainId = String.valueOf(seasonId);
-            anthologyInfo.cid = ep.cid;
-            anthologyInfo.isVIP = ep.isVIP;
-            anthologyInfo.badge = ep.badge;
-            anthologyInfo.part = (ep.title == null || ep.title.equals("") ? i : ep.title) + "-" + ep.longTitle;
-            anthologyInfo.duration = 0;
+//            anthologyInfo.mainId = String.valueOf(seasonId);
+//            anthologyInfo.cid = ep.cid;
+//            anthologyInfo.isVIP = ep.isVIP;
+//            anthologyInfo.badge = ep.badge;
+//            anthologyInfo.part = (ep.title == null || ep.title.equals("") ? i : ep.title) + "-" + ep.longTitle;
+//            anthologyInfo.duration = 0;
 
             anthologyInfoList.add(anthologyInfo);
         }
 
-        return anthologyInfoList;
+//        return anthologyInfoList;
+        return null;
     }
 
     public String angleTitle;
     public float score;
     public int reviewNum;
+
+    private class AnthologyInfo {
+    }
 }

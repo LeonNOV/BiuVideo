@@ -190,7 +190,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
         bangumi_textView_coin.setText(ValueUtils.generateCN(bangumiState.coins) + "投币");
         bangumi_textView_favorite.setText(ValueUtils.generateCN(bangumiState.follow) + "收藏");
 
-        bangumi_imageView_favoriteMark.setImageResource(isHaveLocalOrder ? R.drawable.icon_video_favorite : R.drawable.icon_video_no_favorite);
+        bangumi_imageView_favoriteMark.setImageResource(isHaveLocalOrder ? R.drawable.icon_video_favorite : R.drawable.ic_favorite);
 
         setSelectedAnthologyName();
 
@@ -352,7 +352,7 @@ public class BangumiActivity extends AppCompatActivity implements View.OnClickLi
                     operatingStatus = localOrdersDatabaseUtils.deleteLocalOrder(String.valueOf(bangumi.mediaId), String.valueOf(bangumi.seasonId), localOrderType);
 
                     if (operatingStatus) {
-                        bangumi_imageView_favoriteMark.setImageResource(R.drawable.icon_video_no_favorite);
+                        bangumi_imageView_favoriteMark.setImageResource(R.drawable.ic_favorite);
                         SimpleSnackBar.make(v, R.string.remFavoriteSign, SimpleSnackBar.LENGTH_SHORT).show();
                         isHaveLocalOrder = false;
                     }

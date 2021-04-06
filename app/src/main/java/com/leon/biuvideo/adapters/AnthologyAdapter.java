@@ -8,34 +8,32 @@ import androidx.annotation.NonNull;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
-import com.leon.biuvideo.beans.videoBean.view.AnthologyInfo;
-import com.leon.biuvideo.beans.videoBean.view.ViewPage;
+import com.leon.biuvideo.beans.mediaBeans.videoBeans.VideoDetailInfo;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
-import com.leon.biuvideo.utils.ValueUtils;
 
 import java.util.List;
 
 /**
  * videoActivity播放列表控件的适配器
  */
-public class AnthologyAdapter extends BaseAdapter<AnthologyInfo> {
-    private final List<AnthologyInfo> anthologyInfos;
+public class AnthologyAdapter extends BaseAdapter<VideoDetailInfo.AnthologyInfo> {
+    private final List<VideoDetailInfo.AnthologyInfo> anthologyInfos;
     private final Context context;
 
     //当前webView中播放的选集索引，默认为0
     private int anthologySelectedIndex = 0;
 
-    public AnthologyAdapter(ViewPage viewPage, Context context) {
-        super(viewPage.anthologyInfoList, context);
-        this.anthologyInfos = viewPage.anthologyInfoList;
+    public AnthologyAdapter(VideoDetailInfo videoDetailInfo, Context context) {
+        super(videoDetailInfo.anthologyInfoList, context);
+        this.anthologyInfos = videoDetailInfo.anthologyInfoList;
         this.context = context;
     }
 
     private OnClickAnthologyListener onClickAnthologyListener;
 
     public interface OnClickAnthologyListener {
-        void onClick(int position, long cid);
+        void onClick(int position, String cid);
     }
 
     public void setOnClickAnthologyListener(OnClickAnthologyListener onClickAnthologyListener) {
@@ -49,13 +47,13 @@ public class AnthologyAdapter extends BaseAdapter<AnthologyInfo> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        AnthologyInfo anthologyInfo = anthologyInfos.get(position);
+        VideoDetailInfo.AnthologyInfo anthologyInfo = anthologyInfos.get(position);
 
         holder
                 //设置选集序号
                 .setText(R.id.anthology_item_textView_index, "P" + (position + 1))
 
-                .setText(R.id.anthology_item_textView_duration, ValueUtils.lengthGenerate(anthologyInfo.duration))
+                .setText(R.id.anthology_item_textView_duration, anthologyInfo.duration)
 
                 //设置选集标题
                 .setText(R.id.anthology_item_textView_title, anthologyInfo.part)

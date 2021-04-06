@@ -41,14 +41,12 @@ public class VideoWithFlvParser {
     private static final String FOURK = "1";
 
     private final String bvid;
-    private final String cid;
 
-    public VideoWithFlvParser(String bvid, String cid) {
+    public VideoWithFlvParser(String bvid) {
         this.bvid = bvid;
-        this.cid = cid;
     }
 
-    public VideoWithFlv parseData() {
+    public VideoWithFlv parseData(String cid) {
         Map<String, String> params = new HashMap<>(4);
         params.put("bvid", String.valueOf(bvid));
         params.put("cid", String.valueOf(cid));
