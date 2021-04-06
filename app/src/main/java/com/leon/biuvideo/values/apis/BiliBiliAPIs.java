@@ -21,6 +21,14 @@ public class BiliBiliAPIs {
     public static final String VIDEO_DETAIL_TAGS = "https://api.bilibili.com/x/web-interface/view/detail/tag?aid=714835497";
 
     /**
+     * 获取当前视频与已登录账户的关系（需要Cookie）
+     * 参数
+     *      bvid/avid
+     *
+     */
+    public static final String VIDEO_STATUS = "https://api.bilibili.com/x/web-interface/archive/relation";
+
+    /**
      * 获取选集信息，返回视频和音频原链接<br/>
      *      参数：
      *          aid：aid，可选

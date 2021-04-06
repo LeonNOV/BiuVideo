@@ -123,8 +123,7 @@ public class PreferenceUtils {
      * 获取Cookie
      */
     public static String getCookie() {
-//        return PREFERENCE.getString(COOKIE, null);
-        return null;
+        return PREFERENCE.getString(COOKIE, null);
     }
 
     /**

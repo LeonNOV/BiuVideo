@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -40,15 +41,17 @@
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp">
+            android:orientation="horizontal"
+            android:layout_height="48dp"
+            android:baselineAligned="false">
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/video_tabLayout"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:layout_weight="1"
                 app:tabIndicator="@drawable/indicator"
                 app:tabIndicatorColor="@color/tabLayoutIndicatorColor"
                 app:tabTextAppearance="@style/TabLayoutTextStyle"
@@ -57,7 +60,7 @@
             <LinearLayout
                 android:layout_width="130dp"
                 android:layout_height="match_parent"
-                android:layout_gravity="end"
+                android:layout_gravity="end|center_vertical"
                 android:background="@drawable/ripple_round_corners6dp_frame_bg"
                 android:gravity="center_vertical"
                 android:layout_marginTop="7dp"
@@ -73,7 +76,7 @@
                     android:textSize="13sp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="xiu~xiu~xiu~"/>
+                    android:text="来一发~~~"/>
 
                 <ImageView
                     android:id="@+id/video_danmaku_status"
@@ -87,7 +90,7 @@
 
             </LinearLayout>
 
-        </FrameLayout>
+        </LinearLayout>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/video_viewPager"

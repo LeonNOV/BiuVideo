@@ -232,7 +232,7 @@
                         <ImageView
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@drawable/ic_coin"
+                            android:src="@drawable/ic_coin_a"
                             app:tint="@color/black" />
 
                         <TextView
@@ -258,7 +258,7 @@
                             android:id="@+id/bangumi_imageView_favoriteMark"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@drawable/ic_favorite" />
+                            android:src="@drawable/ic_collect" />
 
                         <TextView
                             android:id="@+id/bangumi_textView_favorite"

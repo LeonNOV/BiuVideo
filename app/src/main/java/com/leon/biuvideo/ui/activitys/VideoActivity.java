@@ -257,7 +257,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
     private void initVideoInfo() {
 //        Glide.with(getApplicationContext()).load(videoDetailInfo.userInfo.faceUrl + ImagePixelSize.FACE.value).into(video_circleImageView_face);
 //        video_textView_name.setText(videoDetailInfo.userInfo.name);
-        video_imageView_favoriteMark.setImageResource(isHaveLocalOrder ? R.drawable.icon_video_favorite : R.drawable.ic_favorite);
+        video_imageView_favoriteMark.setImageResource(isHaveLocalOrder ? R.drawable.icon_video_favorite : R.drawable.ic_collect);
         video_textView_title.setText(videoDetailInfo.title);
         video_textView_view.setText(ValueUtils.generateCN(videoDetailInfo.videoInfo.view) + "次观看");
         video_textView_danmaku.setText(ValueUtils.generateCN(videoDetailInfo.videoInfo.danmaku) + "弹幕");
@@ -306,7 +306,7 @@ public class VideoActivity extends AppCompatActivity implements View.OnClickList
                     boolean state = localOrdersDatabaseUtils.deleteLocalOrder(String.valueOf(videoDetailInfo.bvid), null, localOrderType);
 
                     if (state) {
-                        video_imageView_favoriteMark.setImageResource(R.drawable.ic_favorite);
+                        video_imageView_favoriteMark.setImageResource(R.drawable.ic_collect);
                         SimpleSnackBar.make(view, R.string.remFavoriteSign, SimpleSnackBar.LENGTH_SHORT).show();
                         isHaveLocalOrder = false;
                     }

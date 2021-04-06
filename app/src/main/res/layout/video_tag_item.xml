@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/video_tag"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/itemMarginBottom"
+    android:padding="10dp"
+    android:background="@drawable/ripple_round_corners6dp_bg"
+    android:backgroundTint="#f4f4f4"
+    android:textColor="@color/black"
+    android:text="黑科技" />

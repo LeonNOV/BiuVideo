@@ -50,4 +50,6 @@
     <color name="popular_top_list_other_text_color">#c0c0c0</color>
     <color name="infoColor">#686868</color>
     <color name="navBottomUnselectedColor">#7E7E7E</color>
+
+    <color name="tagColor">#00a1d6</color>
 </resources>

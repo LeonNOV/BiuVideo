@@ -1,6 +1,5 @@
 package com.leon.biuvideo.ui.resourcesFragment;
 
-import android.os.CountDownTimer;
 import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,7 +26,6 @@ import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.VideoWithFlvParser
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimerTask;
 
 /**
  * @Author Leon
@@ -75,6 +73,7 @@ public class VideoFragment extends BaseSupportFragment implements View.OnClickLi
                 if (msg.obj == null) {
                     SimpleSnackBar.make(getActivity().getWindow().getDecorView(), "获取数据失败", SimpleSnackBar.LENGTH_LONG).show();
                     backPressed();
+                    return;
                 }
 
                 switch (msg.what) {

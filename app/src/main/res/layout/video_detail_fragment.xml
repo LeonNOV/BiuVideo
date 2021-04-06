@@ -86,36 +86,36 @@
                 android:id="@+id/video_detail_play"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:drawablePadding="3dp"
                 android:gravity="center"
                 android:text="16.1万"
-                android:drawablePadding="3dp"
-                android:layout_marginEnd="10dp"
                 android:textColor="@color/infoColor"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 app:drawableStartCompat="@drawable/ic_play" />
 
             <TextView
                 android:id="@+id/video_detail_danmaku"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawablePadding="3dp"
                 android:layout_marginEnd="10dp"
+                android:drawablePadding="3dp"
                 android:gravity="center"
                 android:text="556"
                 android:textColor="@color/infoColor"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 app:drawableStartCompat="@drawable/ic_danmaku" />
 
             <TextView
                 android:id="@+id/video_detail_pubTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawablePadding="3dp"
                 android:layout_marginEnd="10dp"
+                android:drawablePadding="3dp"
                 android:gravity="center"
                 android:text="2021/04/06"
                 android:textColor="@color/infoColor"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 app:drawableStartCompat="@drawable/ic_view_time" />
 
             <TextView
@@ -125,7 +125,7 @@
                 android:gravity="center"
                 android:text="BV1E2S4D7F7F"
                 android:textColor="@color/infoColor"
-                android:textSize="15sp" />
+                android:textSize="13sp" />
 
         </LinearLayout>
 
@@ -146,7 +146,7 @@
                 android:text="2395"
                 android:textColor="@color/infoColor"
                 android:textSize="15sp"
-                app:drawableTopCompat="@drawable/ic_like" />
+                app:drawableTopCompat="@drawable/ic_like_status" />
 
             <TextView
                 android:id="@+id/video_detail_coin"
@@ -159,7 +159,7 @@
                 android:text="2395"
                 android:textColor="@color/infoColor"
                 android:textSize="15sp"
-                app:drawableTopCompat="@drawable/ic_coin" />
+                app:drawableTopCompat="@drawable/ic_coin_status" />
 
             <TextView
                 android:id="@+id/video_detail_favorite"
@@ -172,7 +172,7 @@
                 android:text="2395"
                 android:textColor="@color/infoColor"
                 android:textSize="15sp"
-                app:drawableTopCompat="@drawable/ic_favorite" />
+                app:drawableTopCompat="@drawable/ic_collect_status" />
 
             <TextView
                 android:id="@+id/video_detail_share"
@@ -192,10 +192,10 @@
         <com.leon.biuvideo.ui.views.LoadingRecyclerView
             android:id="@+id/video_detail_videoEps"
             android:layout_width="match_parent"
-            android:padding="@dimen/recyclerViewPadding"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:visibility="visible"
-            android:layout_height="wrap_content"/>
+            android:padding="@dimen/recyclerViewPadding"
+            android:visibility="visible" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/video_detail_tags"
@@ -204,7 +204,7 @@
             android:layout_marginTop="20dp"
             android:orientation="horizontal"
             android:padding="@dimen/recyclerViewPadding"
-            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <com.leon.biuvideo.ui.views.LoadingRecyclerView
             android:id="@+id/video_detail_recommends"
