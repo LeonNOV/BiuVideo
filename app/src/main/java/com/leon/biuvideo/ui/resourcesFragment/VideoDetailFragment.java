@@ -1,28 +1,37 @@
 package com.leon.biuvideo.ui.resourcesFragment;
 
+import android.graphics.drawable.Drawable;
 import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.VideoTagsAdapter;
+import com.leon.biuvideo.adapters.homeAdapters.RecommendAdapter;
+import com.leon.biuvideo.beans.homeBeans.Recommend;
 import com.leon.biuvideo.beans.mediaBeans.videoBeans.VideoDetailInfo;
 import com.leon.biuvideo.beans.mediaBeans.videoBeans.VideoTag;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
-import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
+import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.VideoRecommendParser;
 import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.VideoTagsParser;
+import com.leon.biuvideo.values.FeaturesName;
+import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.util.HashMap;
 import java.util.List;
@@ -61,17 +70,28 @@ public class VideoDetailFragment extends BaseSupportFragment implements View.OnC
 
     @Override
     protected void initView() {
+        findView(R.id.video_detail_container).setBackgroundResource(R.color.white);
+
         videoDetailFace = findView(R.id.video_detail_face);
         videoDetailFace.setOnClickListener(this);
 
+        Glide
+                .with(context)
+                .load(videoDetailInfo.userInfo.userFace += PreferenceUtils.getFeaturesStatus(FeaturesName.IMG_ORIGINAL_MODEL) ?
+                        ImagePixelSize.FACE.value : "")
+                .into(videoDetailFace);
+
         videoDetailFollow = findView(R.id.video_detail_follow);
         videoDetailFollow.setOnClickListener(this);
+
+        ((ExpandableTextView) findView(R.id.video_detail_desc)).setText(videoDetailInfo.desc);
 
         new BindingUtils(view, context)
                 .setText(R.id.video_detail_userName, videoDetailInfo.userInfo.userName)
                 .setText(R.id.video_detail_play, ValueUtils.generateCN(videoDetailInfo.videoInfo.view))
                 .setText(R.id.video_detail_danmaku, ValueUtils.generateCN(videoDetailInfo.videoInfo.danmaku))
                 .setText(R.id.video_detail_pubTime, ValueUtils.generateTime(videoDetailInfo.pubTime, "yyyy-MM-dd", true))
+                .setText(R.id.video_detail_title, videoDetailInfo.title)
                 .setText(R.id.video_detail_bvid, videoDetailInfo.bvid);
 
         videoDetailLike = findView(R.id.video_detail_like);
@@ -98,6 +118,7 @@ public class VideoDetailFragment extends BaseSupportFragment implements View.OnC
         }
 
         videoDetailRecommends = findView(R.id.video_detail_recommends);
+        videoDetailRecommends.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
         setOnLoadListener(new OnLoadListener() {
             @Override
@@ -109,6 +130,11 @@ public class VideoDetailFragment extends BaseSupportFragment implements View.OnC
                         // 获取当前账户是否已关注当前UP主
                         boolean attention = jsonObject.getBooleanValue("attention");
                         videoDetailFollow.setSelected(attention);
+                        if (attention) {
+                            Drawable wrap = DrawableCompat.wrap(ContextCompat.getDrawable(context, R.drawable.ripple_round_corners6dp_bg));
+                            DrawableCompat.setTint(wrap, context.getColor(R.color.infoColor));
+                            videoDetailFollow.setBackground(wrap);
+                        }
 
                         // 获取投币状态
                         boolean coin = jsonObject.getIntValue("coin") > 0;
@@ -132,7 +158,18 @@ public class VideoDetailFragment extends BaseSupportFragment implements View.OnC
                         getComments();
                         break;
                     case 1:
+                        List<Recommend> recommendList = (List<Recommend>) msg.obj;
 
+                        if (recommendList != null && recommendList.size() > 0) {
+                            RecommendAdapter recommendAdapter = new RecommendAdapter(recommendList, RecommendAdapter.SINGLE_COLUMN, context);
+                            recommendAdapter.setHasStableIds(true);
+                            videoDetailRecommends.setRecyclerViewAdapter(recommendAdapter);
+                            videoDetailRecommends.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
+                        } else {
+                            videoDetailRecommends.setVisibility(View.GONE);
+                        }
+
+                        videoDetailRecommends.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
                         break;
                     default:
                         break;
@@ -141,13 +178,6 @@ public class VideoDetailFragment extends BaseSupportFragment implements View.OnC
         });
 
         initData();
-    }
-
-    /**
-     * 获取推荐视频
-     */
-    private void getComments() {
-
     }
 
     private void initData () {
@@ -165,6 +195,22 @@ public class VideoDetailFragment extends BaseSupportFragment implements View.OnC
 
                 Message message = receiveDataHandler.obtainMessage(0);
                 message.obj = data;
+                receiveDataHandler.sendMessage(message);
+            }
+        });
+    }
+
+    /**
+     * 获取推荐视频
+     */
+    private void getComments() {
+        SimpleSingleThreadPool.executor(new Runnable() {
+            @Override
+            public void run() {
+                List<Recommend> recommendList = VideoRecommendParser.parseData(videoDetailInfo.bvid);
+
+                Message message = receiveDataHandler.obtainMessage(1);
+                message.obj = recommendList;
                 receiveDataHandler.sendMessage(message);
             }
         });

@@ -46,6 +46,7 @@ public class RecommendAdapter extends BaseAdapter<Recommend> {
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         Recommend recommend = recommendList.get(position);
+
         holder
                 .setImage(R.id.video_item_cover, recommend.cover, ImagePixelSize.COVER)
                 .setText(R.id.video_item_duration, recommend.duration)

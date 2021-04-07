@@ -1,6 +1,8 @@
 package com.leon.biuvideo.adapters;
 
 import android.content.Context;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,13 +37,14 @@ public class VideoTagsAdapter extends BaseAdapter<VideoTag> {
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         VideoTag videoTag = videoTagList.get(position);
 
-        TextView videoTagView = holder.findById(R.id.video_tag);
+        TextView videoTagView = holder.findById(R.id.video_tag_name);
         videoTagView.setText(videoTag.tagName);
 
+        ImageView videoTagIcon = holder.findById(R.id.video_tag_icon);
         if (videoTag.color != null) {
-            videoTagView.setCompoundDrawables(context.getDrawable(R.drawable.tag_default), null, null, null);
-//            videoTagView.setCompoundDrawablePadding(5);
             videoTagView.setTextColor(context.getColor(R.color.tagColor));
+        } else {
+            videoTagIcon.setVisibility(View.GONE);
         }
     }
 }

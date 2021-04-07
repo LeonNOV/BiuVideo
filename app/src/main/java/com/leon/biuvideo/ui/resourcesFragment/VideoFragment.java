@@ -57,6 +57,9 @@ public class VideoFragment extends BaseSupportFragment implements View.OnClickLi
     @Override
     protected void initView() {
         videoPlayerViewContent = findView(R.id.video_player_content);
+
+        findView(R.id.video_tab_container).setBackgroundResource(R.color.white);
+
         videoTabLayout = findView(R.id.video_tabLayout);
 
         findView(R.id.video_back).setOnClickListener(this);

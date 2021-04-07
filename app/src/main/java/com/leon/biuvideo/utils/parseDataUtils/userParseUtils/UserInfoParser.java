@@ -7,16 +7,13 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.userBeans.UserInfo;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.PreferenceUtils;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.Role;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import okhttp3.Headers;
 
@@ -27,11 +24,6 @@ import okhttp3.Headers;
  */
 public class UserInfoParser {
     private OnSuccessListener onSuccessListener;
-
-    private int bCoins = -1;
-    private String banner = null;
-    private UserInfo userInfo = null;
-    private Map<String, Integer> statMap = null;
 
     private final Context context;
 
@@ -59,76 +51,60 @@ public class UserInfoParser {
      * 通过Cookie获取用户基本信息
      */
     public void parseData() {
-        // 获取基本数据
-        UserInfoThreadPool.executor(new Runnable() {
+        SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                userInfo = getBaseData();
-                if (onSuccessListener != null && userInfo != null) {
-                    onSuccessListener.onCallback(userInfo, banner, bCoins, statMap);
-                }
-            }
-        });
+                if (onSuccessListener != null) {
+                    UserInfo userInfo = getBaseData();
+                    String userBannerPhoto = getUserBannerPhoto();
+                    int coinNum = getCoinNum();
+                    Map<String, Integer> userStat = getUserStat();
 
-        // 获取横幅图片
-        UserInfoThreadPool.executor(new Runnable() {
-            @Override
-            public void run() {
-                Map<String, String> params = new HashMap<>();
-                params.put("mid", PreferenceUtils.getUserId());
-                params.put("photo", "true");
-
-                JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.USER_BANNER, Headers.of(HttpUtils.getAPIRequestHeader()), params);
-                JSONObject data = responseObject.getJSONObject("data");
-
-                if (data != null) {
-                    banner = data.getJSONObject("space").getString("l_img");
-
-                    if (onSuccessListener != null && banner != null) {
-                        onSuccessListener.onCallback(userInfo, banner, bCoins, statMap);
-                    }
-                }
-            }
-        });
-
-        // 获取B币数量
-        UserInfoThreadPool.executor(new Runnable() {
-            @Override
-            public void run() {
-                JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.USER_WALLET, Headers.of(HttpUtils.getAPIRequestHeader()), null);
-                bCoins = response.getJSONObject("data").getJSONObject("accountInfo").getIntValue("defaultBp");
-
-                if (onSuccessListener != null && bCoins != -1) {
-                    onSuccessListener.onCallback(userInfo, banner, bCoins, statMap);
-                }
-            }
-        });
-
-        // 获取动态数、关注数、粉丝数
-        UserInfoThreadPool.executor(new Runnable() {
-            @Override
-            public void run() {
-
-                statMap = new HashMap<>(3);
-                JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.USER_STAT, Headers.of(HttpUtils.getAPIRequestHeader()), null);
-                JSONObject data = response.getJSONObject("data");
-
-                statMap.put("following", data.getIntValue("following"));
-                statMap.put("follower", data.getIntValue("follower"));
-                statMap.put("dynamicCount", data.getIntValue("dynamic_count"));
-
-                if (onSuccessListener != null && statMap != null) {
-                    onSuccessListener.onCallback(userInfo, banner, bCoins, statMap);
+                    onSuccessListener.onCallback(userInfo, userBannerPhoto, coinNum, userStat);
                 }
             }
         });
     }
 
     /**
-     * 关闭线程池
+     * 获取横幅图片
      */
-    public void shutDownThreadPool() {
-        UserInfoThreadPool.USER_INFO_THREAD_POOL.shutdown();
+    private String getUserBannerPhoto() {
+        Map<String, String> params = new HashMap<>(2);
+        params.put("mid", PreferenceUtils.getUserId());
+        params.put("photo", "true");
+
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.USER_BANNER, Headers.of(HttpUtils.getAPIRequestHeader()), params);
+        JSONObject data = responseObject.getJSONObject("data");
+
+        if (data != null) {
+            return data.getJSONObject("space").getString("l_img");
+        }
+
+        return null;
+    }
+
+    /**
+     * 获取B币数量
+     */
+    private int getCoinNum() {
+        JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.USER_WALLET, Headers.of(HttpUtils.getAPIRequestHeader()), null);
+        return response.getJSONObject("data").getJSONObject("accountInfo").getIntValue("defaultBp");
+    }
+
+    /**
+     * 获取动态数、关注数、粉丝数
+     */
+    private Map<String, Integer> getUserStat() {
+        Map<String, Integer> statMap = new HashMap<>(3);
+        JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.USER_STAT, Headers.of(HttpUtils.getAPIRequestHeader()), null);
+        JSONObject data = response.getJSONObject("data");
+
+        statMap.put("following", data.getIntValue("following"));
+        statMap.put("follower", data.getIntValue("follower"));
+        statMap.put("dynamicCount", data.getIntValue("dynamic_count"));
+
+        return statMap;
     }
 
     /**
@@ -180,22 +156,5 @@ public class UserInfoParser {
         }
 
         return null;
-    }
-
-    private static class UserInfoThreadPool  {
-        private static final ThreadPoolExecutor USER_INFO_THREAD_POOL;
-
-        static {
-            USER_INFO_THREAD_POOL = new ThreadPoolExecutor(4, 4, 0,TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), new ThreadFactory() {
-                @Override
-                public Thread newThread(Runnable r) {
-                    return new Thread(r);
-                }
-            });
-        }
-
-        public static void executor (Runnable runnable) {
-            USER_INFO_THREAD_POOL.execute(runnable);
-        }
     }
 }

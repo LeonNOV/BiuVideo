@@ -108,9 +108,10 @@ public class UserFragment extends BaseSupportFragment {
         userInfoParser.setOnSuccessListener(new UserInfoParser.OnSuccessListener() {
             @Override
             public void onCallback(UserInfo userInfo, String banner, int bCoins, Map<String, Integer> statMap) {
-                if (userInfo != null && banner != null && bCoins != -1 && statMap != null) {
-                    userInfoParser.shutDownThreadPool();
-
+                if (userInfo != null &&
+                        banner != null &&
+                        bCoins != -1 &&
+                        statMap != null) {
                     userInfo.banner = banner;
                     userInfo.bCoinBalance = bCoins;
                     userInfo.follows = statMap.get("following");

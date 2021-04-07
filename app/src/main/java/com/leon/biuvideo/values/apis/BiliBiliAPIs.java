@@ -29,6 +29,14 @@ public class BiliBiliAPIs {
     public static final String VIDEO_STATUS = "https://api.bilibili.com/x/web-interface/archive/relation";
 
     /**
+     * 获取推荐视频数据
+     * 参数
+     *      aid/bvid
+     *
+     */
+    public static final String VIDEO_RECOMMEND = "http://api.bilibili.com/x/web-interface/archive/related";
+
+    /**
      * 获取选集信息，返回视频和音频原链接<br/>
      *      参数：
      *          aid：aid，可选
