@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/comment_level2_item_message"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:textSize="15sp"
+    android:layout_height="match_parent"/>

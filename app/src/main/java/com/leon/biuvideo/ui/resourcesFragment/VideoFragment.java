@@ -85,7 +85,7 @@ public class VideoFragment extends BaseSupportFragment implements View.OnClickLi
 
                         VideoDetailInfo videoDetailInfo = (VideoDetailInfo) msg.obj;
                         viewPagerFragments.add(new VideoDetailFragment(videoDetailInfo));
-                        viewPagerFragments.add(new VideoCommentFragment());
+                        viewPagerFragments.add(new VideoCommentFragment(videoDetailInfo.aid));
                         videoViewPager.setAdapter(new ViewPager2Adapter(VideoFragment.this, viewPagerFragments));
 
                         // 初始化ViewPager2和TabLayout

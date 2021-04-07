@@ -1,7 +1,9 @@
 package com.leon.biuvideo.values.apis;
 
 /**
- * 接口请求地址
+ * @Author Leon
+ * @Time 2021/3/1
+ * @Desc 该项目所用到的部分B站开放API，该类中的部分API参考自[https://github.com/SocialSisterYi/bilibili-API-collect]
  */
 public class BiliBiliAPIs {
 
@@ -68,6 +70,46 @@ public class BiliBiliAPIs {
      *  mid：up主id
      */
     public static final String BILI_USER_INFO = "https://api.bilibili.com/x/space/acc/info";
+
+    /**
+     * 获取评论数据
+     * 参数
+     *      type:评论区类型代码
+     *          代码	    评论区类型	    oid的意义
+     *          1	    视频稿件	        稿件avID
+     *          2	    话题	            话题ID
+     *          4	    活动	            活动ID
+     *          5	    小视频	        小视频ID
+     *          6	    小黑屋封禁信息	    封禁公示ID
+     *          7	    公告信息	        公告ID
+     *          8	    直播活动	        直播间ID
+     *          9	    活动稿件
+     *          10	    直播公告
+     *          11	    相簿（图片动态）	相簿ID
+     *          12	    专栏	            专栏cvID
+     *          13	    票务
+     *          14	    音频	            音频auID
+     *          15	    风纪委员会	    众裁项目ID
+     *          16	    点评
+     *          17	    动态（纯文字动态&分享）	动态ID
+     *          18	    播单
+     *          19	    音乐播单
+     *          20	    漫画
+     *          21	    漫画
+     *          22	    漫画	            漫画mcID
+     *          33	    课程	            课程epID
+     *      oid:目标ID
+     *          视频aid/专栏id/相册id等
+     *      pn:页码，从1开始
+     *      ps:单页条目数，默认20
+     *      sort:排序方式
+     *          0：按时间
+     *          1：按点赞数
+     *          2：按回复数
+     *      nohot:是否显示热捧，默认不显示
+     *
+     */
+    public static final String COMMENT = "http://api.bilibili.com/x/v2/reply/main";
 
     /**
      * 获取指定up的所有视频<br/>

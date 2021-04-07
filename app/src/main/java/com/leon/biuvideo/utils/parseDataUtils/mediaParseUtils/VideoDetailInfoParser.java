@@ -37,7 +37,7 @@ public class VideoDetailInfoParser {
             VideoDetailInfo videoDetailInfo = new VideoDetailInfo();
 
             videoDetailInfo.bvid = dataObject.getString("bvid");
-            videoDetailInfo.aid = dataObject.getLong("aid");
+            videoDetailInfo.aid = dataObject.getString("aid");
             videoDetailInfo.title = dataObject.getString("title");
             videoDetailInfo.videos = dataObject.getIntValue("videos");
             videoDetailInfo.tagId = dataObject.getIntValue("tid");

@@ -178,10 +178,10 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
         Glide.with(getApplicationContext()).load(biliUserInfo.topPhoto).into(up_imageView_cover);
 
         //设置头像
-        Glide.with(getApplicationContext()).load(biliUserInfo.face + ImagePixelSize.FACE.value).into(up_circleImageView_face);
+        Glide.with(getApplicationContext()).load(biliUserInfo.userFace + ImagePixelSize.FACE.value).into(up_circleImageView_face);
 
         //设置昵称
-        up_textView_name.setText(biliUserInfo.name);
+        up_textView_name.setText(biliUserInfo.userName);
 
         //设置签名
         up_textView_sign.setText(biliUserInfo.sign);

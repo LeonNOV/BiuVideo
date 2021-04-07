@@ -37,10 +37,10 @@ public class BiliUserInfoParser {
             BiliUserInfo biliUserInfo = new BiliUserInfo();
 
             //获取name
-            biliUserInfo.name = dataObject.getString("name");
+            biliUserInfo.userName = dataObject.getString("name");
 
             //获取头像地址
-            biliUserInfo.face = dataObject.getString("face");
+            biliUserInfo.userFace = dataObject.getString("face");
 
             //获取个人签名
             biliUserInfo.sign = dataObject.getString("sign");

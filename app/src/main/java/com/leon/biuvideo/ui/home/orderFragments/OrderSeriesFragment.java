@@ -1,14 +1,10 @@
 package com.leon.biuvideo.ui.home.orderFragments;
 
-import android.os.Bundle;
 import android.os.Message;
 
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.adapters.homeAdapters.OrderAdapter;
-import com.leon.biuvideo.adapters.testAdapters.RvTestAdapter;
-import com.leon.biuvideo.beans.TestBeans.RvTestBean;
 import com.leon.biuvideo.beans.orderBeans.Order;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragmentWithSrr;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
@@ -21,7 +17,6 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @Author Leon

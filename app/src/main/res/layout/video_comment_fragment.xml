@@ -4,6 +4,7 @@
     android:layout_height="match_parent">
 
     <com.leon.biuvideo.ui.views.SmartRefreshRecyclerView
+        android:id="@+id/video_comment_commentData"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/recyclerViewPadding" />

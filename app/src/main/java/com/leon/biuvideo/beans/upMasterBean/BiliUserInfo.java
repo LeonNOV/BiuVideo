@@ -10,10 +10,12 @@ import java.io.Serializable;
  * @Desc B站用户信息数据
  */
 public class BiliUserInfo implements Serializable {
-    public String name;
-    public String face;
+    public String userMid;
+    public String userName;
+    public String userFace;
     public String sign;
     public String topPhoto;
     public Role role;
     public String verifyDesc;
+    public boolean isVIP;
 }

@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class VideoDetailInfo {
     public String bvid;
-    public long aid;
+    public String aid;
     public int videos;
     public int tagId;
     public String tagName;
