@@ -2,8 +2,6 @@ package com.leon.biuvideo.adapters;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Looper;
-import android.os.Message;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ImageSpan;
@@ -20,17 +18,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.FutureTarget;
 import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.mediaBeans.Comment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.FeaturesName;
@@ -129,6 +123,7 @@ public class CommentLevel1Adapter extends BaseAdapter<Comment> {
                     Toast.makeText(context, "查看所有回复：" + comment.rpid, Toast.LENGTH_SHORT).show();
                 }
             });
+            commentItemReplays.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
         } else {
             commentItemReplayContainer.setVisibility(View.GONE);
         }

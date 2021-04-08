@@ -151,6 +151,8 @@ public class CommentParser implements ParserInterface<Comment> {
                             subComment.replayUserName = o1.getString("uname");
                             subComment.replayUserMid = o1.getString("mid");
                         }
+
+                        comment.subCommentList.add(subComment);
                     }
                 }
 

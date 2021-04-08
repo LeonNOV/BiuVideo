@@ -256,7 +256,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.home_my_orders:
-                ((NavFragment) getParentFragment()).startBrotherFragment(new VideoFragment("BV1g64y1Q7PH"));
+                ((NavFragment) getParentFragment()).startBrotherFragment(new VideoFragment("BV1N64y1S77F"));
 //                ((NavFragment) getParentFragment()).startBrotherFragment(OrderFragment.getInstance());
                 break;
             case R.id.home_my_favorites:
@@ -353,7 +353,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                     // 刷新推荐试图样式
                     int recommendColumns = intent.getIntExtra("recommendColumns", 2);
 
-                    homeRecommendLoadingRecyclerView.recyclerView.setAdapter(new RecommendAdapter(homeRecommendList, recommendColumns == 1 ? RecommendAdapter.SINGLE_COLUMN : RecommendAdapter.DOUBLE_COLUMN, context));
+                    homeRecommendLoadingRecyclerView.setRecyclerViewAdapter(new RecommendAdapter(homeRecommendList, recommendColumns == 1 ? RecommendAdapter.SINGLE_COLUMN : RecommendAdapter.DOUBLE_COLUMN, context));
                     homeRecommendLoadingRecyclerView.setRecyclerViewLayoutManager(new GridLayoutManager(context, recommendColumns));
 
                     // 设置状态为已完成加载数据

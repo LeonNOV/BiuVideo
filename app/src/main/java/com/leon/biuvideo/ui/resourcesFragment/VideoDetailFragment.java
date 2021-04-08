@@ -84,7 +84,7 @@ public class VideoDetailFragment extends BaseSupportFragment implements View.OnC
         videoDetailFollow = findView(R.id.video_detail_follow);
         videoDetailFollow.setOnClickListener(this);
 
-        ((ExpandableTextView) findView(R.id.video_detail_desc)).setText(videoDetailInfo.desc);
+//        ((ExpandableTextView) findView(R.id.video_detail_desc)).setText(videoDetailInfo.desc);
 
         new BindingUtils(view, context)
                 .setText(R.id.video_detail_userName, videoDetailInfo.userInfo.userName)

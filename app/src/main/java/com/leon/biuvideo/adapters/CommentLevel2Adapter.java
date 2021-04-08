@@ -23,6 +23,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.mediaBeans.Comment;
+import com.leon.biuvideo.utils.Fuck;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,11 +90,17 @@ public class CommentLevel2Adapter extends BaseAdapter<Comment.SubComment> {
         int commentStartIndex = msg.indexOf(subComment.userName);
         spannableString.setSpan(clickableSpan, commentStartIndex, commentStartIndex + subComment.userName.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
 
-        // 对回复者添加点击事件
+        // 对回复接收者添加点击事件
         if (subComment.replayUserName != null) {
             String replay = "@" + subComment.replayUserName;
+            Fuck.blue("replay：" + replay);
             int replayStartIndex = msg.indexOf(replay);
+            Fuck.blue("replayStartIndex：" + replayStartIndex + "replayEndIndex：" + replayStartIndex + replay.length());
 
+            if (replayStartIndex < 0) {
+                commentLevel2ItemMessage.setText(spannableString);
+                return;
+            }
             spannableString.setSpan(clickableSpan, replayStartIndex, replayStartIndex + replay.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         }
 
