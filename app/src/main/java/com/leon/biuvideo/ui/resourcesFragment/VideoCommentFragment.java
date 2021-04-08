@@ -1,9 +1,10 @@
 package com.leon.biuvideo.ui.resourcesFragment;
 
 import android.os.Message;
+import android.widget.Toast;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.CommentLevel1Adapter;
+import com.leon.biuvideo.adapters.CommentLevelOneAdapter;
 import com.leon.biuvideo.beans.mediaBeans.Comment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
@@ -23,10 +24,16 @@ public class VideoCommentFragment extends BaseLazySupportFragment {
 
     private final String avid;
     private CommentParser commentParser;
-    private CommentLevel1Adapter commentLevel1Adapter;
+    private CommentLevelOneAdapter commentLevelOneAdapter;
+
+    private OnCommentListener onCommentListener;
 
     public VideoCommentFragment(String avid) {
         this.avid = avid;
+    }
+
+    public void setOnCommentListener(OnCommentListener onCommentListener) {
+        this.onCommentListener = onCommentListener;
     }
 
     @Override
@@ -52,9 +59,10 @@ public class VideoCommentFragment extends BaseLazySupportFragment {
                 switch (msg.what) {
                     case 0:
                         if (commentList != null && commentList.size() > 0) {
-                            commentLevel1Adapter = new CommentLevel1Adapter(commentList, context);
-                            commentLevel1Adapter.setHasStableIds(true);
-                            videoCommentCommentData.setRecyclerViewAdapter(commentLevel1Adapter);
+                            commentLevelOneAdapter = new CommentLevelOneAdapter(commentList, context);
+                            commentLevelOneAdapter.setOnCommentListener(onCommentListener);
+                            commentLevelOneAdapter.setHasStableIds(true);
+                            videoCommentCommentData.setRecyclerViewAdapter(commentLevelOneAdapter);
                             videoCommentCommentData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
                         } else {
                             videoCommentCommentData.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);

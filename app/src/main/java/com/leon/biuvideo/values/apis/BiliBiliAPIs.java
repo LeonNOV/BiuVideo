@@ -112,6 +112,17 @@ public class BiliBiliAPIs {
     public static final String COMMENT = "http://api.bilibili.com/x/v2/reply/main";
 
     /**
+     * 获取一级评论下的所有回复数据
+     * 参数
+     *      type：同上
+     *      oid:同上
+     *      root：一级评论ID/rpid
+     *      pn/ps：同上
+     *
+     */
+    public static final String COMMENT_DETAIL = "https://api.bilibili.com/x/v2/reply/reply";
+
+    /**
      * 获取指定up的所有视频<br/>
      *     参数：
      *       mid：up主id，必须

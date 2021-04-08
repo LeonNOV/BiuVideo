@@ -256,7 +256,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.home_my_orders:
-                ((NavFragment) getParentFragment()).startBrotherFragment(new VideoFragment("BV1N64y1S77F"));
+                ((NavFragment) getParentFragment()).startBrotherFragment(new VideoFragment("BV1Ri4y1P7tu"));
 //                ((NavFragment) getParentFragment()).startBrotherFragment(OrderFragment.getInstance());
                 break;
             case R.id.home_my_favorites:

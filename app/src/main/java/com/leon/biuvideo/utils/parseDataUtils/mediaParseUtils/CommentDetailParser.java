@@ -17,63 +17,50 @@ import java.util.Set;
 
 /**
  * @Author Leon
- * @Time 2021/4/7
- * @Desc 评论解析类
+ * @Time 2021/4/8
+ * @Desc 获取一级评论下所有二级评论
  */
-public class CommentParser implements ParserInterface<Comment> {
-    /**
-     * 按时间排序
-     */
-    public static final int SORT_TIME = 0;
-
-    /**
-     * 按点赞数排序
-     */
-    public static final int SORT_LIKE = 1;
-
-    /**
-     * 按回复数排序
-     */
-    public static final int SORT_REPLAY = 2;
-
-    public static final int TYPE_VIDEO = 1;
-    public static final int TYPE_PHOTO = 11;
-    public static final int TYPE_ARTICLE = 12;
+public class CommentDetailParser implements ParserInterface<Comment> {
+    public static final String PAGE_SIZE = "20";
 
     public int pageNum = 1;
-    public static final String PAGE_SIZE = "20";
     public boolean dataStatus = true;
+    public int total = -1;
+    public int currentCount = 0;
 
-    public final String oid;
     public final int type;
-    public final int sort;
+    public final String oid;
+    public final String root;
 
-    public CommentParser(String oid, int type, int sort) {
-        this.oid = oid;
+    public CommentDetailParser(int type, String oid, String rpid) {
         this.type = type;
-        this.sort = sort;
+        this.oid = oid;
+        this.root = rpid;
     }
 
     @Override
     public List<Comment> parseData() {
         Map<String, String> params = new HashMap<>(6);
         params.put("type", String.valueOf(type));
-        params.put("oid", String.valueOf(oid));
+        params.put("oid", oid);
+        params.put("root", root);
         params.put("pn", String.valueOf(pageNum));
         params.put("ps", PAGE_SIZE);
-        params.put("sort", String.valueOf(sort));
-        params.put("nohot", "1");
 
         if (dataStatus) {
-            JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.COMMENT, params);
+            JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.COMMENT_DETAIL, params);
             JSONObject data = response.getJSONObject("data");
 
-            JSONObject cursor = data.getJSONObject("cursor");
-
-            // 当前页是否为最后一页
-            dataStatus = cursor.getBooleanValue("is_end");
+            if (total == -1) {
+                this.total = data.getJSONObject("page").getIntValue("count");
+            }
 
             JSONArray replies = data.getJSONArray("replies");
+            this.currentCount += replies.size();
+            if (currentCount == total) {
+                dataStatus = false;
+            }
+
             List<Comment> commentList = new ArrayList<>(replies.size());
 
             for (Object o : replies) {
@@ -82,7 +69,6 @@ public class CommentParser implements ParserInterface<Comment> {
 
                 comment.rpid = reply.getString("rpid_str");
                 comment.oid = reply.getString("oid");
-                comment.rcount = reply.getIntValue("rcount");
                 comment.sendTime = reply.getLongValue("ctime");
                 comment.like = reply.getIntValue("like");
                 comment.action = reply.getIntValue("action") == 1;
@@ -99,6 +85,7 @@ public class CommentParser implements ParserInterface<Comment> {
                 comment.userInfo.isVIP = member.getJSONObject("vip").getIntValue("vipType") >= 1;
 
                 JSONObject content = reply.getJSONObject("content");
+
                 comment.content = new Comment.Content();
                 comment.content.message = content.getString("message");
 
@@ -121,41 +108,6 @@ public class CommentParser implements ParserInterface<Comment> {
                     }
                 }
 
-                JSONArray subReplies = reply.getJSONArray("replies");
-                if (subReplies != null && subReplies.size() > 0) {
-                    comment.levelTwoCommentList = new ArrayList<>(subReplies.size());
-                    for (Object subReply : subReplies) {
-                        JSONObject jsonObject = (JSONObject) subReply;
-                        Comment.LevelTwoComment levelTwoComment = new Comment.LevelTwoComment();
-
-                        levelTwoComment.levelTowMid = jsonObject.getString("mid");
-                        levelTwoComment.levelTwoName = jsonObject.getJSONObject("member").getString("uname");
-
-                        JSONObject replayContent = jsonObject.getJSONObject("content");
-                        levelTwoComment.levelTwoMessage = replayContent.getString("message");
-
-                        if (replayContent.containsKey("emote")) {
-                            JSONObject object = replayContent.getJSONObject("emote");
-                            levelTwoComment.levelTwoEmojiMap = new HashMap<>(1);
-                            for (Map.Entry<String, Object> entry : object.entrySet()) {
-                                levelTwoComment.levelTwoEmojiMap.put(entry.getKey(), ((JSONObject)entry.getValue()).getString("url"));
-                            }
-                        }
-
-                        JSONArray members = replayContent.getJSONArray("members");
-                        if (members != null && members.size() > 0) {
-                            levelTwoComment.levelTwoReplayAtMap = new HashMap<>(members.size());
-
-                            for (Object o1 : members) {
-                                JSONObject object = (JSONObject) o1;
-                                levelTwoComment.levelTwoReplayAtMap.put(object.getString("mid"), object.getString("uname"));
-                            }
-                        }
-
-                        comment.levelTwoCommentList.add(levelTwoComment);
-                    }
-                }
-
                 JSONObject upAction = reply.getJSONObject("up_action");
 
                 comment.upLike = upAction.getBooleanValue("like");
@@ -163,6 +115,8 @@ public class CommentParser implements ParserInterface<Comment> {
 
                 commentList.add(comment);
             }
+
+            pageNum ++;
 
             return commentList;
         }

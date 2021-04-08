@@ -71,6 +71,20 @@ public class BindingUtils {
     }
 
     /**
+     * 设置控件是否要隐藏/gone
+     *
+     * @param id    控件ID
+     * @param visibility    View.VISIBLE | View.INVISIBLE | View.GONE
+     * @return 返回this
+     */
+    public BindingUtils setVisibility (int id, int visibility) {
+        View view = this.view.findViewById(id);
+        view.setVisibility(visibility);
+
+        return this;
+    }
+
+    /**
      * 设置控件的点击事件
      *
      * @param id    控件ID

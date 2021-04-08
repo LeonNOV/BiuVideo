@@ -15,33 +15,8 @@ public class Comment {
      * 评论ID
      */
     public String rpid;
-    public String mid;
 
-    /**
-     * 根评论ID
-     * 如果为一级评论则为0，大于一级则为评论ID
-     */
-    public String root;
-
-    /**
-     * 回复父评论ID
-     * 如果为一级评论则为0，大于一级则为评论ID
-     *
-     */
-    public String parent;
-
-    /**
-     * 回复对方评论ID
-     * 若为一级则为0，若为二级则为该评论ID，大于二级评论为上一级评论ID
-     *
-     */
-    public String dialog;
-
-    /**
-     * 二级评论数
-     *
-     */
-    public int count;
+    public String oid;
 
     /**
      * 回复评论数
@@ -75,7 +50,7 @@ public class Comment {
     /**
      * 该评论回复信息
      */
-    public List<SubComment> subCommentList;
+    public List<LevelTwoComment> levelTwoCommentList;
 
     /**
      * UP点赞状态
@@ -97,15 +72,24 @@ public class Comment {
          * 评论Emoji
          */
         public Map<String, String> emojiMap;
+
+        /**
+         * 如果@了其他人，则该处不为null
+         */
+        public Map<String, String> contentMembers;
     }
 
-    public static class SubComment {
-        public String userMid;
-        public String userName;
-        public String message;
-        public Map<String, String> emojiMap;
+    /**
+     * 二级评论
+     * 示例
+     *      AAA : 回复 @BBB :卢本伟牛逼！！！
+     */
+    public static class LevelTwoComment {
+        public String levelTowMid;
+        public String levelTwoName;
+        public String levelTwoMessage;
+        public Map<String, String> levelTwoEmojiMap;
 
-        public String replayUserName;
-        public String replayUserMid;
+        public Map<String, String> levelTwoReplayAtMap;
     }
 }

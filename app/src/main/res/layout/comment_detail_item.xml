@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:layout_marginTop="15dp"
+    android:layout_marginBottom="@dimen/itemMarginBottom"
     android:orientation="vertical">
 
     <LinearLayout
@@ -19,7 +18,7 @@
             android:layout_height="42dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/comment_item_userFace"
+                android:id="@+id/comment_detail_item_userFace"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@color/gray"
@@ -27,7 +26,7 @@
                 app:civ_border_width="1dp" />
 
             <ImageView
-                android:id="@+id/comment_item_verifyMark"
+                android:id="@+id/comment_detail_item_verifyMark"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="bottom|end"
@@ -38,7 +37,7 @@
         </FrameLayout>
 
         <TextView
-            android:id="@+id/comment_item_userName"
+            android:id="@+id/comment_detail_item_userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -57,7 +56,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/comment_item_message"
+            android:id="@+id/comment_detail_item_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -72,7 +71,7 @@
             android:gravity="center_vertical">
 
             <TextView
-                android:id="@+id/comment_item_pubTime"
+                android:id="@+id/comment_detail_item_pubTime"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -82,7 +81,7 @@
                 tools:text="2021-4-7 19:20" />
 
             <TextView
-                android:id="@+id/comment_item_likeTotal"
+                android:id="@+id/comment_detail_item_likeTotal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawablePadding="5dp"
@@ -93,7 +92,7 @@
                 tools:text="80" />
 
             <TextView
-                android:id="@+id/comment_item_replayTotal"
+                android:id="@+id/comment_detail_item_replayTotal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -107,7 +106,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/comment_item_upAction"
+            android:id="@+id/comment_detail_item_upAction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/round_corners6dp_bg"
@@ -117,39 +116,6 @@
             android:layout_marginTop="10dp"
             android:textSize="13sp"
             android:text="@string/upLiked"/>
-
-        <LinearLayout
-            android:id="@+id/comment_item_replay_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/round_corners6dp_bg"
-            android:backgroundTint="#F4F4F4"
-            android:layout_marginTop="10dp"
-            android:orientation="vertical"
-            android:padding="10dp">
-
-            <com.leon.biuvideo.ui.views.LoadingRecyclerView
-                android:id="@+id/comment_item_replays"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" />
-
-            <TextView
-                android:id="@+id/comment_item_checkAll"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:drawablePadding="5dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical"
-                android:textColor="@color/blue"
-                android:background="@drawable/ripple_round_corners6dp_bg"
-                android:backgroundTint="#F4F4F4"
-                android:textSize="15sp"
-                app:drawableEndCompat="@drawable/ic_enter"
-                app:drawableTint="@color/blue"
-                tools:text="共12条回复" />
-
-        </LinearLayout>
 
     </LinearLayout>
 

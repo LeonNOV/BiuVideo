@@ -3,6 +3,7 @@ package com.leon.biuvideo.utils;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.text.SpannableString;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.beans.mediaBeans.Comment;
 import com.leon.biuvideo.ui.MainActivity;
 
 import java.util.Map;

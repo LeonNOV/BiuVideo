@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -13,7 +14,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="231dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed" >
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <com.dueeeke.videoplayer.player.VideoView
                 android:id="@+id/video_player_content"
@@ -35,75 +36,10 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/video_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <LinearLayout
-            android:id="@+id/video_tab_container"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:baselineAligned="false"
-            android:orientation="horizontal">
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/video_tabLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:tabIndicator="@drawable/indicator"
-                app:tabIndicatorColor="@color/tabLayoutIndicatorColor"
-                app:tabTextAppearance="@style/TabLayoutTextStyle"
-                app:tabTextColor="@color/tabTextColor" />
-
-            <LinearLayout
-                android:layout_width="130dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="end|center_vertical"
-                android:layout_marginTop="7dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="7dp"
-                android:background="@drawable/ripple_round_corners6dp_frame_bg"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/video_send_danmaku"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="来一发~~~"
-                    android:textColor="@color/gray"
-                    android:textSize="13sp" />
-
-                <ImageView
-                    android:id="@+id/video_danmaku_status"
-                    android:layout_width="32dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical|end"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/description"
-                    android:src="@drawable/video_danmaku_status"
-                    app:tint="@color/gray" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/video_viewPager"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </androidx.core.widget.NestedScrollView>
-
-    </LinearLayout>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

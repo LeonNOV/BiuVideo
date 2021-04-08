@@ -1,5 +1,8 @@
 package com.leon.biuvideo;
 
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.mediaBeans.videoBeans.VideoWithFlv;
 import com.leon.biuvideo.beans.searchResultBeans.SearchResultArticle;
@@ -28,9 +31,10 @@ public class ExampleUnitTest {
     @Test
     public void test() {
         Map<String, String> testMap = new HashMap<>();
-        testMap.put("[doge]", "111");
+
+        testMap.put("[脱单doge]", "111");
         testMap.put("[笑]", "222");
-        String str = "或者是直[doge]接[doge]主[doge]线剧情[笑]送[笑]";
+        String str = "若有忠 : 回复 @闇の火 :一些博士抽不到的原因找到了[笑]，池子里的夕都跑出来了。[脱单doge][脱单doge][脱单doge]";
 
         for (Map.Entry<String, String> entry : testMap.entrySet()) {
             String key = entry.getKey();
@@ -38,16 +42,15 @@ public class ExampleUnitTest {
             Pattern compile = Pattern.compile(key.replaceAll("\\[", "\\\\[").replaceAll("]", "\\\\]"));
             Matcher matcher = compile.matcher(str);
 
-            List<String> indexList = new ArrayList<>();
             while (matcher.find()) {
-                int[] position = new int[2];
-                position[0] = matcher.start();
-                position[1] = matcher.start() + key.length();
-
-                indexList.add(Arrays.toString(position));
+                int startIndex = matcher.start();
+                System.out.println("startIndex：" + startIndex + "----endIndex：" + (startIndex + key.length()));
             }
-
-            System.out.println(indexList);
         }
+
+        String replay = "@" + "闇の火";
+        int replayStartIndex = str.indexOf(replay);
+
+        System.out.println("name startIndex：" + replayStartIndex + "----enIndex：" + (replayStartIndex + replay.length()));
     }
 }

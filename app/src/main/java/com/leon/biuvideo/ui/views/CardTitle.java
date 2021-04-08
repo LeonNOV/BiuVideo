@@ -131,4 +131,8 @@ public class CardTitle extends LinearLayout {
         secondTitleViewLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
         actionView.setLayoutParams(secondTitleViewLayoutParams);
     }
+
+    public void setTitle (String title) {
+        this.titleView.setText(title);
+    }
 }
