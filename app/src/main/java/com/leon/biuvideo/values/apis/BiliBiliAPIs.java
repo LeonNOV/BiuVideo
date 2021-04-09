@@ -65,11 +65,24 @@ public class BiliBiliAPIs {
     public static String videoBaeUrl = "https://www.bilibili.com/blackboard/html5mobileplayer.html?";
 
     /**
-     * UP主基本信息接口<br/>
-     * 参数：
-     *  mid：up主id
+     * 获取B站用户信息<br/>
+     * 参数
+     *      mid
      */
     public static final String BILI_USER_INFO = "https://api.bilibili.com/x/space/acc/info";
+
+    /**
+     * 获取B站用户获赞数、播放数和阅读数（需要Cookie）
+     * 参数
+     *      mid
+     *
+     */
+    public static final String BILI_USER_UP_STATUS = "http://api.bilibili.com/x/space/upstat";
+
+    /**
+     * 获取B站用户关注数和粉丝数，参数同上（不需要Cookie）
+     */
+    public static final String BILI_USER_STATUS = "https://api.bilibili.com/x/relation/stat";
 
     /**
      * 获取评论数据

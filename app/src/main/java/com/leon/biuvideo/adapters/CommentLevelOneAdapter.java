@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -91,7 +90,7 @@ public class CommentLevelOneAdapter extends BaseAdapter<Comment> {
 
         TextView commentItemUserName = holder.findById(R.id.comment_item_userName);
         commentItemUserName.setText(comment.userInfo.userName);
-        if (comment.userInfo.isVIP) {
+        if (comment.userInfo.isVip) {
             commentItemUserName.setTextColor(context.getColor(R.color.BiliBili_pink));
         }
 

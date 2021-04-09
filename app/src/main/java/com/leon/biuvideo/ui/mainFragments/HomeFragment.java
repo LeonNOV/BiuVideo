@@ -22,13 +22,13 @@ import com.leon.biuvideo.beans.homeBeans.WatchLater;
 import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.home.DownloadManagerFragment;
-import com.leon.biuvideo.ui.home.FavoritesFragment;
 import com.leon.biuvideo.ui.home.HistoryFragment;
 import com.leon.biuvideo.ui.home.FollowsFragment;
 import com.leon.biuvideo.ui.home.RecommendFragment;
 import com.leon.biuvideo.ui.home.SettingsFragment;
 import com.leon.biuvideo.ui.home.WatchLaterFragment;
 import com.leon.biuvideo.ui.mainFragments.homeModels.WeatherModelInterface;
+import com.leon.biuvideo.ui.otherFragments.biliUserFRgaments.BiliUserFragment;
 import com.leon.biuvideo.ui.otherFragments.PopularFragment;
 import com.leon.biuvideo.ui.resourcesFragment.VideoFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
@@ -260,7 +260,9 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
 //                ((NavFragment) getParentFragment()).startBrotherFragment(OrderFragment.getInstance());
                 break;
             case R.id.home_my_favorites:
-                ((NavFragment) getParentFragment()).startBrotherFragment(FavoritesFragment.getInstance());
+//                ((NavFragment) getParentFragment()).startBrotherFragment(new BiliUserFragment("8047632"));
+                ((NavFragment) getParentFragment()).startBrotherFragment(new BiliUserFragment("2946474"));
+//                ((NavFragment) getParentFragment()).startBrotherFragment(FavoritesFragment.getInstance());
                 break;
             case R.id.home_my_follows:
                 ((NavFragment) getParentFragment()).startBrotherFragment(FollowsFragment.getInstance());

@@ -52,4 +52,11 @@
     <color name="navBottomUnselectedColor">#7E7E7E</color>
 
     <color name="tagColor">#00a1d6</color>
+
+    <color name="level1">#bebebe</color>
+    <color name="level2">#96dfb5</color>
+    <color name="level3">#93cfe6</color>
+    <color name="level4">#fbb481</color>
+    <color name="level5">#ff6e00</color>
+    <color name="level6">#fc0000</color>
 </resources>

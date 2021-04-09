@@ -29,7 +29,6 @@ import com.leon.biuvideo.ui.fragments.userFragments.UserVideosFragment;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ViewUtils;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.BiliUserInfoParser;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.utils.dataBaseUtils.FavoriteUserDatabaseUtils;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
@@ -121,12 +120,12 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
         loadingDialog = new LoadingDialog(UserActivity.this);
         loadingDialog.show();
 
-        loadData();
+//        loadData();
     }
 
     //初始化数据
     private void loadData() {
-        SimpleSingleThreadPool.executor(new Runnable() {
+        /*SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
                 //获取mid
@@ -169,7 +168,7 @@ public class UserActivity extends AppCompatActivity implements ViewPager.OnPageC
 
                 return true;
             }
-        });
+        });*/
     }
 
     //设置控件的数据

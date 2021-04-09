@@ -96,7 +96,7 @@ public class CommentParser implements ParserInterface<Comment> {
 
                 int type = member.getJSONObject("official_verify").getIntValue("type");
                 comment.userInfo.role = type == 0 ? Role.PERSON : type == 1 ? Role.OFFICIAL : Role.NONE;
-                comment.userInfo.isVIP = member.getJSONObject("vip").getIntValue("vipType") >= 1;
+                comment.userInfo.isVip = member.getJSONObject("vip").getIntValue("vipType") >= 1;
 
                 JSONObject content = reply.getJSONObject("content");
                 comment.content = new Comment.Content();

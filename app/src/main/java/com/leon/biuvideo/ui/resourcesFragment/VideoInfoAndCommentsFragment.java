@@ -102,7 +102,8 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
                         List<Fragment> viewPagerFragments = new ArrayList<>(2);
 
                         VideoDetailInfo videoDetailInfo = (VideoDetailInfo) msg.obj;
-                        viewPagerFragments.add(new VideoDetailFragment(videoDetailInfo));
+                        viewPagerFragments.add(new VideoInfoFragment(videoDetailInfo));
+
                         VideoCommentFragment videoCommentFragment = new VideoCommentFragment(videoDetailInfo.aid);
                         videoCommentFragment.setOnCommentListener(new OnCommentListener() {
                             @Override

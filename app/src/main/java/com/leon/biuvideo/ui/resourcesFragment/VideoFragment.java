@@ -2,7 +2,6 @@ package com.leon.biuvideo.ui.resourcesFragment;
 
 import android.view.View;
 
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.dueeeke.videoplayer.ijk.IjkPlayer;
@@ -12,8 +11,6 @@ import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.VideoPlayerController;
 import com.leon.biuvideo.utils.HttpUtils;
-
-import java.util.List;
 
 /**
  * @Author Leon

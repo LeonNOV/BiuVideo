@@ -85,7 +85,7 @@ public class CommentDetailAdapter extends BaseAdapter<Comment> {
 
         TextView commentItemUserName = holder.findById(R.id.comment_detail_item_userName);
         commentItemUserName.setText(comment.userInfo.userName);
-        if (comment.userInfo.isVIP) {
+        if (comment.userInfo.isVip) {
             commentItemUserName.setTextColor(context.getColor(R.color.BiliBili_pink));
         }
 
