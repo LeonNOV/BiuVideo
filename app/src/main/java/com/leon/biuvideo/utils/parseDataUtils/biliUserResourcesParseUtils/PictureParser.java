@@ -104,9 +104,10 @@ public class PictureParser {
         Map<String, String> values = new HashMap<>();
         values.put("uid", String.valueOf(mid));
 
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.pictureCount, Headers.of(HttpUtils.getAPIRequestHeader()), values);
-        JSONObject data = responseObject.getJSONObject("data");
-
-        return data.getIntValue("all_count");
+//        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.pictureCount, Headers.of(HttpUtils.getAPIRequestHeader()), values);
+//        JSONObject data = responseObject.getJSONObject("data");
+//
+//        return data.getIntValue("all_count");
+        return 0;
     }
 }

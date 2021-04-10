@@ -146,12 +146,12 @@ public class BiliUserFragment extends BaseSupportFragment {
         List<Fragment> viewPagerFragments = new ArrayList<>(4);
         viewPagerFragments.add(new BiliUserVideosFragment(mid));
         viewPagerFragments.add(new BiliUserAudiosFragment(mid));
-        viewPagerFragments.add(new BiliUserArticlesFragment());
-        viewPagerFragments.add(new BiliUserPicturesFragment());
+        viewPagerFragments.add(new BiliUserArticlesFragment(mid));
+        viewPagerFragments.add(new BiliUserPicturesFragment(mid));
 
         biliUserViewPager.setAdapter(new ViewPager2Adapter(this, viewPagerFragments));
 
-        onTouchListener = ViewUtils.initTabLayoutAndViewPager2(getActivity(), biliUserTabLayout, biliUserViewPager, tabLayoutTitles, 0);
+        onTouchListener = ViewUtils.initTabLayoutAndViewPager2(getActivity(), biliUserTabLayout, biliUserViewPager, tabLayoutTitles, 3);
 
         if (biliUserInfo.role == Role.NONE) {
             findView(R.id.bili_user_verify_container).setVisibility(View.GONE);

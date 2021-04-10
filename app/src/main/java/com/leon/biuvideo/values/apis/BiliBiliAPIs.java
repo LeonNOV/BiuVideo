@@ -181,18 +181,17 @@ public class BiliBiliAPIs {
     public static final String BILI_USER_PICTURE = "https://api.vc.bilibili.com/link_draw/v1/doc/doc_list";
 
     /**
-     * 相簿原链接<br/>
-     *      参数：后跟相簿ID
-     */
-    public static String pictureWebPage = "https://t.bilibili.com/h5/dynamic/detail/";
-
-
-    /**
      * 获取相簿总数<br/>
      *      参数
      *          uid：up主id
      */
-    public static String pictureCount = "https://api.vc.bilibili.com/link_draw/v1/doc/upload_count";
+    public static String BILI_USER_PICTURE_TOTAL = "https://api.vc.bilibili.com/link_draw/v1/doc/upload_count";
+
+    /**
+     * 相簿原链接<br/>
+     *      参数：后跟相簿ID
+     */
+    public static String pictureWebPage = "https://t.bilibili.com/h5/dynamic/detail/";
 
     /**
      * 歌曲基本信息接口<br/>

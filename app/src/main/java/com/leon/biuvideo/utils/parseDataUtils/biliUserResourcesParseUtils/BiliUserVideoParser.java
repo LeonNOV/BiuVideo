@@ -19,6 +19,10 @@ import java.util.Map;
  * @Desc 用户投稿视频数据解析类
  */
 public class BiliUserVideoParser implements ParserInterface<BiliUserVideo> {
+    /**
+     * 最新发布
+     */
+    public static final String ORDER_DEFAULT = "";
 
     /**
      * 最多播放
@@ -32,7 +36,6 @@ public class BiliUserVideoParser implements ParserInterface<BiliUserVideo> {
 
     private final String mid;
     private final String order;
-
 
     private static final String PAGE_SIZE = "30";
     private int pageNum = 1;
@@ -61,35 +64,41 @@ public class BiliUserVideoParser implements ParserInterface<BiliUserVideo> {
 
             if (total == -1) {
                 total = data.getJSONObject("page").getIntValue("count");
+                if (total == 0) {
+                    return null;
+                }
             }
 
             JSONArray jsonArray = data.getJSONObject("list").getJSONArray("vlist");
-            List<BiliUserVideo> biliUserVideoList = new ArrayList<>(jsonArray.size());
+            if (jsonArray != null) {
+                List<BiliUserVideo> biliUserVideoList = new ArrayList<>(jsonArray.size());
 
-            for (Object o : jsonArray) {
-                JSONObject jsonObject = (JSONObject) o;
-                BiliUserVideo biliUserVideo = new BiliUserVideo();
+                for (Object o : jsonArray) {
+                    JSONObject jsonObject = (JSONObject) o;
+                    BiliUserVideo biliUserVideo = new BiliUserVideo();
 
-                biliUserVideo.cover = "http://" + jsonObject.getString("pic");
-                biliUserVideo.bvid = jsonObject.getString("bvid");
-                biliUserVideo.avid = jsonObject.getString("aid");
-                biliUserVideo.play = ValueUtils.generateCN(jsonObject.getInteger("play"));
-                biliUserVideo.duration = jsonObject.getString("length");
-                biliUserVideo.pubTime = ValueUtils.generateTime(jsonObject.getLongValue("created"), "yyyy-MM-dd HH:mm", true);
-                biliUserVideo.title = jsonObject.getString("title");
+                    biliUserVideo.cover = "http://" + jsonObject.getString("pic");
+                    biliUserVideo.bvid = jsonObject.getString("bvid");
+                    biliUserVideo.avid = jsonObject.getString("aid");
+                    biliUserVideo.play = ValueUtils.generateCN(jsonObject.getInteger("play"));
+                    biliUserVideo.danmaku = ValueUtils.generateCN(jsonObject.getIntValue("video_review"));
+                    biliUserVideo.duration = jsonObject.getString("length");
+                    biliUserVideo.pubTime = ValueUtils.generateTime(jsonObject.getLongValue("created"), "yyyy-MM-dd HH:mm", true);
+                    biliUserVideo.title = jsonObject.getString("title");
 
-                biliUserVideoList.add(biliUserVideo);
+                    biliUserVideoList.add(biliUserVideo);
+                }
+
+                currentCount += biliUserVideoList.size();
+
+                if (currentCount == total) {
+                    dataStatus = false;
+                }
+
+                pageNum ++;
+
+                return biliUserVideoList;
             }
-
-            currentCount += biliUserVideoList.size();
-
-            if (currentCount == total) {
-                dataStatus = false;
-            }
-
-            pageNum ++;
-
-            return biliUserVideoList;
         }
 
         return null;

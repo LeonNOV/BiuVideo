@@ -231,5 +231,6 @@
 
     <string name="biliUserResourcesOrderByDefault">最新发布</string>
     <string name="biliUserResourcesOrderByClick">最多播放</string>
-    <string name="biliUserResourcesOrderByStow">最多收藏</string>
+    <string name="biliUserResourcesOrderByFav">最多收藏</string>
+    <string name="biliUserResourcesOrderByRead">最多阅读</string>
 </resources>

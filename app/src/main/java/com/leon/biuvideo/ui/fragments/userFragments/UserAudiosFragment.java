@@ -73,7 +73,7 @@ public class UserAudiosFragment extends BaseLazyFragment {
 
     @Override
     public void loadData() {
-        SimpleSingleThreadPool.executor(new Runnable() {
+        /*SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
                 biliUserAudiosParser = new BiliUserAudiosParser(mid, order);
@@ -102,12 +102,12 @@ public class UserAudiosFragment extends BaseLazyFragment {
 
                 return true;
             }
-        });
+        });*/
     }
 
     @Override
     public void initValues() {
-        if (count == 0) {
+        /*if (count == 0) {
             //设置无数据提示界面
             no_data.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
@@ -133,7 +133,7 @@ public class UserAudiosFragment extends BaseLazyFragment {
             }
 
             initAttr();
-        }
+        }*/
     }
 
     private void initAttr() {
@@ -191,7 +191,7 @@ public class UserAudiosFragment extends BaseLazyFragment {
      * 获取数据
      */
     private void getAudios() {
-        audios = biliUserAudiosParser.parseAudio(pageNum);
+        /*audios = biliUserAudiosParser.parseAudio(pageNum);
         currentCount += audios.size();
 
         //如果第一次获取的条目数小于30则设置dataState
@@ -200,6 +200,6 @@ public class UserAudiosFragment extends BaseLazyFragment {
             smartRefresh.setEnabled(false);
         }
 
-        pageNum++;
+        pageNum++;*/
     }
 }

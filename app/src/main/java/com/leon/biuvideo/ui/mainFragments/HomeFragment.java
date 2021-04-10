@@ -260,8 +260,8 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
 //                ((NavFragment) getParentFragment()).startBrotherFragment(OrderFragment.getInstance());
                 break;
             case R.id.home_my_favorites:
-//                ((NavFragment) getParentFragment()).startBrotherFragment(new BiliUserFragment("8047632"));
-                ((NavFragment) getParentFragment()).startBrotherFragment(new BiliUserFragment("2946474"));
+                ((NavFragment) getParentFragment()).startBrotherFragment(new BiliUserFragment("315229226"));
+//                ((NavFragment) getParentFragment()).startBrotherFragment(new BiliUserFragment("2946474"));
 //                ((NavFragment) getParentFragment()).startBrotherFragment(FavoritesFragment.getInstance());
                 break;
             case R.id.home_my_follows:

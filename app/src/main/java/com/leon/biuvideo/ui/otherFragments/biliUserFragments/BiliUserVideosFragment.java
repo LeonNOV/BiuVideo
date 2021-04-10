@@ -35,7 +35,7 @@ public class BiliUserVideosFragment extends BaseLazySupportFragment implements V
     private SmartRefreshRecyclerView<BiliUserVideo> biliUserVideosData;
     private BiliUserVideoParser biliUserVideoParser;
 
-    private String order = null;
+    private String order = BiliUserVideoParser.ORDER_DEFAULT;
     private BiliUserVideosAdapter biliUserVideosAdapter;
 
     public BiliUserVideosFragment(String mid) {
@@ -117,7 +117,7 @@ public class BiliUserVideosFragment extends BaseLazySupportFragment implements V
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bili_user_videos_order_default:
-                if (order == null) {
+                if (order.equals(BiliUserVideoParser.ORDER_DEFAULT)) {
                     return;
                 }
 
@@ -149,7 +149,7 @@ public class BiliUserVideosFragment extends BaseLazySupportFragment implements V
 
     private void getVideos (int what) {
         if (biliUserVideoParser == null) {
-            biliUserVideoParser = new BiliUserVideoParser(mid, null);
+            biliUserVideoParser = new BiliUserVideoParser(mid, order);
         }
 
         SimpleSingleThreadPool.executor(new Runnable() {

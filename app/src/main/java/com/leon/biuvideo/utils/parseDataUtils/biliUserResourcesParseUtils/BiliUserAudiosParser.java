@@ -64,6 +64,9 @@ public class BiliUserAudiosParser implements ParserInterface<BiliUserAudio> {
 
             if (total == -1) {
                 total = data.getIntValue("totalSize");
+                if (total == 0) {
+                    return null;
+                }
             }
 
             JSONArray jsonArray = data.getJSONArray("data");

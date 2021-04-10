@@ -41,7 +41,7 @@
             android:layout_weight="1"
             android:background="@drawable/ripple_round_corners6dp_bg"
             android:gravity="center"
-            android:text="@string/biliUserResourcesOrderByStow"
+            android:text="@string/biliUserResourcesOrderByFav"
             android:textColor="@color/infoColor"
             android:textSize="15sp" />
 
