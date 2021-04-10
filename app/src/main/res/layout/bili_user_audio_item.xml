@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/ripple_round_corners6dp_bg"
+    android:orientation="horizontal"
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="126dp"
+        android:layout_height="96dp"
+        app:cardCornerRadius="6dp"
+        app:cardElevation="0dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/bili_user_audio_item_cover"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/description"
+                android:scaleType="centerCrop"
+                android:src="@color/gray" />
+
+            <TextView
+                android:id="@+id/bili_user_audio_item_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_margin="6dp"
+                android:background="@drawable/round_corners6dp_bg"
+                android:backgroundTint="@color/video_length_bg"
+                android:gravity="center"
+                android:padding="3dp"
+                android:textColor="@color/white"
+                android:textSize="13sp" />
+
+        </FrameLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/bili_user_audio_item_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/bili_user_audio_item_pubTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:textSize="15sp"
+                android:textColor="@color/infoColor"
+                app:drawableStartCompat="@drawable/ic_view_time" />
+
+            <TextView
+                android:id="@+id/bili_user_audio_item_play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/infoColor"
+                android:textSize="15sp"
+                app:drawableStartCompat="@drawable/ic_audio_play" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

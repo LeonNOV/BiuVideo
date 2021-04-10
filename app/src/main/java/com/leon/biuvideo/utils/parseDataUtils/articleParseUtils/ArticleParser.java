@@ -39,7 +39,7 @@ public class ArticleParser {
         params.put("pn", String.valueOf(pn));
         params.put("ps", "12");
 
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.article, Headers.of(HttpUtils.getAPIRequestHeader()), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.BILI_USER_ARTICLE, Headers.of(HttpUtils.getAPIRequestHeader()), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {
@@ -172,7 +172,7 @@ public class ArticleParser {
         params.put("mid", String.valueOf(this.mid));
         params.put("pn", "1");
 
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.article, params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.BILI_USER_ARTICLE, params);
 
         return responseObject.getJSONObject("data").getIntValue("count");
     }

@@ -44,8 +44,8 @@ import com.leon.biuvideo.utils.dataBaseUtils.DownloadRecordsDatabaseUtils;
 import com.leon.biuvideo.utils.dataBaseUtils.LocalOrdersDatabaseUtils;
 import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 import com.leon.biuvideo.utils.ValueUtils;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicParser;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicUrlParser;
+import com.leon.biuvideo.utils.parseDataUtils.biliUserResourcesParseUtils.MusicParser;
+import com.leon.biuvideo.utils.parseDataUtils.biliUserResourcesParseUtils.MusicUrlParser;
 import com.leon.biuvideo.values.LocalOrderType;
 
 import java.util.ArrayList;

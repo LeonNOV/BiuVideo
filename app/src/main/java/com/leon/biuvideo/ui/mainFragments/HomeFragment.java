@@ -28,7 +28,7 @@ import com.leon.biuvideo.ui.home.RecommendFragment;
 import com.leon.biuvideo.ui.home.SettingsFragment;
 import com.leon.biuvideo.ui.home.WatchLaterFragment;
 import com.leon.biuvideo.ui.mainFragments.homeModels.WeatherModelInterface;
-import com.leon.biuvideo.ui.otherFragments.biliUserFRgaments.BiliUserFragment;
+import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.ui.otherFragments.PopularFragment;
 import com.leon.biuvideo.ui.resourcesFragment.VideoFragment;
 import com.leon.biuvideo.ui.views.CardTitle;

@@ -19,7 +19,7 @@ import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.PictureParser;
+import com.leon.biuvideo.utils.parseDataUtils.biliUserResourcesParseUtils.PictureParser;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;

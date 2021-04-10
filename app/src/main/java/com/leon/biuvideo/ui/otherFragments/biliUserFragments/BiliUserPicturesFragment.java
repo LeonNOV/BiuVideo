@@ -1,6 +1,7 @@
-package com.leon.biuvideo.ui.otherFragments.biliUserFRgaments;
+package com.leon.biuvideo.ui.otherFragments.biliUserFragments;
 
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 
 /**
@@ -8,7 +9,7 @@ import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
  * @Time 2021/4/9
  * @Desc B站用户相簿数据
  */
-public class BiliUserPicturesFragment extends BaseSupportFragment {
+public class BiliUserPicturesFragment extends BaseLazySupportFragment {
     @Override
     protected int setLayout() {
         return R.layout.bili_user_pictures_fragment;
@@ -16,6 +17,11 @@ public class BiliUserPicturesFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
+
+    }
+
+    @Override
+    protected void onLazyLoad() {
 
     }
 }

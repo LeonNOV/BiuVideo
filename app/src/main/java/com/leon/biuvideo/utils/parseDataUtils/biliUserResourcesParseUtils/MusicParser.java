@@ -1,4 +1,4 @@
-package com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils;
+package com.leon.biuvideo.utils.parseDataUtils.biliUserResourcesParseUtils;
 
 import android.util.Log;
 

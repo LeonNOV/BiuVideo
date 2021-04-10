@@ -1,6 +1,5 @@
-package com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils;
+package com.leon.biuvideo.utils.parseDataUtils.biliUserResourcesParseUtils;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSONArray;
@@ -36,7 +35,7 @@ public class PictureParser {
         params.put("page_size", String.valueOf(30));
         params.put("biz", "all");
 
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.picture, Headers.of(HttpUtils.getAPIRequestHeader()), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.BILI_USER_PICTURE, Headers.of(HttpUtils.getAPIRequestHeader()), params);
         JSONObject dataObject = responseObject.getJSONObject("data");
 
         if (dataObject != null) {

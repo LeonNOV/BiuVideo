@@ -19,7 +19,7 @@ import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.VideoParser;
+import com.leon.biuvideo.utils.parseDataUtils.biliUserResourcesParseUtils.BiliUserVideoParser;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
@@ -38,7 +38,7 @@ public class UserVideosFragment extends BaseLazyFragment {
     private SmartRefreshLayout smartRefresh;
     private TextView no_data;
 
-    private VideoParser videoParser;
+    private BiliUserVideoParser biliUserVideoParser;
 
     private int pageNum = 1;
     private int currentCount;
@@ -73,11 +73,11 @@ public class UserVideosFragment extends BaseLazyFragment {
 
     @Override
     public void loadData() {
-        SimpleSingleThreadPool.executor(new Runnable() {
+        /*SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                videoParser = new VideoParser();
-                count = videoParser.getVideoTotal(mid);
+                biliUserVideoParser = new BiliUserVideoParser(mid);
+                count = biliUserVideoParser.getVideoTotal(mid);
 
                 Message message = handler.obtainMessage();
                 message.what = 0;
@@ -102,12 +102,12 @@ public class UserVideosFragment extends BaseLazyFragment {
 
                 return true;
             }
-        });
+        });*/
     }
 
     @Override
     public void initValues() {
-        if (count == 0) {
+        /*if (count == 0) {
             //设置无数据提示界面
             no_data.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
@@ -118,7 +118,7 @@ public class UserVideosFragment extends BaseLazyFragment {
             smartRefresh.setEnabled(true);
 
             //获取初始数据
-            videos = videoParser.parseVideo(mid, pageNum);
+            videos = biliUserVideoParser.parseVideo(mid, pageNum);
             currentCount += videos.size();
             pageNum++;
 
@@ -133,7 +133,7 @@ public class UserVideosFragment extends BaseLazyFragment {
             }
 
             initAttr();
-        }
+        }*/
     }
 
     private void initAttr() {
@@ -191,17 +191,17 @@ public class UserVideosFragment extends BaseLazyFragment {
      * 获取下一页数据
      */
     private void getVideos() {
-        videos = videoParser.parseVideo(mid, pageNum);
-
-        //记录获取的总数
-        currentCount += videos.size();
-
-        //判断是否已获取完所有的数据
-        if (currentCount == count) {
-            dataState = false;
-            smartRefresh.setEnabled(false);
-        }
-
-        pageNum++;
+//        videos = biliUserVideoParser.parseVideo(mid, pageNum);
+//
+//        //记录获取的总数
+//        currentCount += videos.size();
+//
+//        //判断是否已获取完所有的数据
+//        if (currentCount == count) {
+//            dataState = false;
+//            smartRefresh.setEnabled(false);
+//        }
+//
+//        pageNum++;
     }
 }

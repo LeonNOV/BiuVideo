@@ -19,7 +19,7 @@ import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.AudioParser;
+import com.leon.biuvideo.utils.parseDataUtils.biliUserResourcesParseUtils.BiliUserAudiosParser;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.RefreshState;
@@ -38,7 +38,7 @@ public class UserAudiosFragment extends BaseLazyFragment {
     private SmartRefreshLayout smartRefresh;
     private TextView no_data;
 
-    private AudioParser audioParser;
+    private BiliUserAudiosParser biliUserAudiosParser;
 
     private int pageNum = 1;
     private int currentCount;
@@ -76,8 +76,8 @@ public class UserAudiosFragment extends BaseLazyFragment {
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                audioParser = new AudioParser(mid);
-                count = audioParser.getAudioTotal();
+                biliUserAudiosParser = new BiliUserAudiosParser(mid, order);
+                count = biliUserAudiosParser.getAudioTotal();
 
                 Message message = handler.obtainMessage();
                 message.what = 0;
@@ -118,7 +118,7 @@ public class UserAudiosFragment extends BaseLazyFragment {
             smartRefresh.setEnabled(true);
 
             //获取初始数据
-            audios = audioParser.parseAudio(pageNum);
+            audios = biliUserAudiosParser.parseAudio(pageNum);
             currentCount += audios.size();
             pageNum++;
 
@@ -191,7 +191,7 @@ public class UserAudiosFragment extends BaseLazyFragment {
      * 获取数据
      */
     private void getAudios() {
-        audios = audioParser.parseAudio(pageNum);
+        audios = biliUserAudiosParser.parseAudio(pageNum);
         currentCount += audios.size();
 
         //如果第一次获取的条目数小于30则设置dataState

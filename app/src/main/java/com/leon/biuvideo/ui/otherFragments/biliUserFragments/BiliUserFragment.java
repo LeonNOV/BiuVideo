@@ -1,5 +1,7 @@
-package com.leon.biuvideo.ui.otherFragments.biliUserFRgaments;
+package com.leon.biuvideo.ui.otherFragments.biliUserFragments;
 
+import android.content.Context;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Message;
 import android.view.View;
@@ -31,6 +33,7 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author Leon
@@ -141,8 +144,8 @@ public class BiliUserFragment extends BaseSupportFragment {
         ViewPager2 biliUserViewPager = findView(R.id.bili_user_viewPager);
 
         List<Fragment> viewPagerFragments = new ArrayList<>(4);
-        viewPagerFragments.add(new BiliUserVideosFragment());
-        viewPagerFragments.add(new BiliUserAudiosFragment());
+        viewPagerFragments.add(new BiliUserVideosFragment(mid));
+        viewPagerFragments.add(new BiliUserAudiosFragment(mid));
         viewPagerFragments.add(new BiliUserArticlesFragment());
         viewPagerFragments.add(new BiliUserPicturesFragment());
 
@@ -204,5 +207,21 @@ public class BiliUserFragment extends BaseSupportFragment {
 
         // 取消注冊触摸事件
         ((MainActivity) getActivity()).unregisterTouchEvenListener(onTouchListener);
+    }
+
+    public static void changeText (int position, Map<Integer, TextView> textViewMap, Context context) {
+        for (Map.Entry<Integer, TextView> entry : textViewMap.entrySet()) {
+            if (entry.getKey() == position) {
+                TextView textView = entry.getValue();
+                textView.setTextColor(context.getColor(R.color.BiliBili_pink));
+                textView.setTypeface(Typeface.DEFAULT_BOLD);
+                textView.setBackground(context.getDrawable(R.drawable.round_corners6dp_bg));
+            } else {
+                TextView textView = entry.getValue();
+                textView.setTextColor(context.getColor(R.color.black));
+                textView.setTypeface(Typeface.DEFAULT);
+                textView.setBackground(context.getDrawable(R.drawable.ripple_round_corners6dp_bg));
+            }
+        }
     }
 }

@@ -5,8 +5,7 @@ import android.content.Context;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.videoBean.play.Play;
-import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.VideoWithFlvParser;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicUrlParser;
+import com.leon.biuvideo.utils.parseDataUtils.biliUserResourcesParseUtils.MusicUrlParser;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

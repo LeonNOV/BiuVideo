@@ -141,11 +141,21 @@ public class BiliBiliAPIs {
      *       mid：up主id，必须
      *       ps：视频条目，建议30，必须
      *       pn：视频页码，从1开始，必须
-     *       tid：视频类型，0为全部，可选
-     *       order：排序方式，pubdate，可选
-     *       jsonp：返回类型，可选
+     *       order：排序方式，默认为pubdate，可选
+     *          最新发布：pubdate
+     *          最多播放：click
+     *          最多收藏：stow
      */
-    public static String videos = "https://api.bilibili.com/x/space/arc/search";
+    public static final String BILI_USER_VIDEO = "https://api.bilibili.com/x/space/arc/search";
+
+    /**
+     * 专栏列表接口<br/>
+     *      参数：
+     *          mid：用户id，必须
+     *          pn：页码，必须
+     *          ps: 条目数，默认12
+     */
+    public static final String BILI_USER_ARTICLE = "https://api.bilibili.com/x/space/article";
 
     /**
      * 获取up音频接口<br/>
@@ -155,7 +165,7 @@ public class BiliBiliAPIs {
      *          ps：条目数，默认30
      *          order：排序，默认为1
      */
-    public static String music = "https://api.bilibili.com/audio/music-service/web/song/upper";
+    public static final String BILI_USER_AUDIO = "https://api.bilibili.com/audio/music-service/web/song/upper";
 
     /**
      * 获取up相簿列表<br/>
@@ -168,7 +178,7 @@ public class BiliBiliAPIs {
      *  	  daily（日常）
      *  	  all（所有）
      */
-    public static String picture = "https://api.vc.bilibili.com/link_draw/v1/doc/doc_list";
+    public static final String BILI_USER_PICTURE = "https://api.vc.bilibili.com/link_draw/v1/doc/doc_list";
 
     /**
      * 相簿原链接<br/>
@@ -205,15 +215,6 @@ public class BiliBiliAPIs {
      *          from:默认值:category_0,可选
      */
     public static String articleWebPage = "https://www.bilibili.com/read/mobile/";
-
-    /**
-     * 专栏列表接口<br/>
-     *      参数：
-     *          mid：用户id，必须
-     *          pn：页码，必须
-     *          ps: 条目数，默认12
-     */
-    public static String article = "https://api.bilibili.com/x/space/article";
 
     /**
      * 搜索接口<br/>

@@ -228,4 +228,8 @@
     <string name="videoPlayerBottomHint">快来分享一下自己的想法吧~</string>
     <string name="upLiked">UP主已点赞</string>
     <string name="videoCommentDetail">回复详情</string>
+
+    <string name="biliUserResourcesOrderByDefault">最新发布</string>
+    <string name="biliUserResourcesOrderByClick">最多播放</string>
+    <string name="biliUserResourcesOrderByStow">最多收藏</string>
 </resources>
