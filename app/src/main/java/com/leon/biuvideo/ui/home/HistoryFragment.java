@@ -12,8 +12,7 @@ import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
-import com.leon.biuvideo.utils.ViewUtils;
-import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.HistoryParser;
+import com.leon.biuvideo.utils.parseDataUtils.userDataParsers.HistoryParser;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 

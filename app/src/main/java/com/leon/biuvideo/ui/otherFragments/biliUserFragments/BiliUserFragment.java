@@ -16,8 +16,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
 import com.google.android.material.tabs.TabLayout;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.ViewPager2Adapter;
-import com.leon.biuvideo.beans.upMasterBean.BiliUserInfo;
+import com.leon.biuvideo.adapters.otherAdapters.ViewPager2Adapter;
+import com.leon.biuvideo.beans.mediaBeans.BiliUserInfo;
 import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.TagView;
@@ -25,7 +25,7 @@ import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.ViewUtils;
-import com.leon.biuvideo.utils.parseDataUtils.BiliUserParser;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.BiliUserParser;
 import com.leon.biuvideo.values.FeaturesName;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.values.Role;
@@ -137,7 +137,6 @@ public class BiliUserFragment extends BaseSupportFragment {
         ((ExpandableTextView) findView(R.id.bili_user_sign))
                 .setText(biliUserInfo.sign == null ? context.getText(R.string.default_sign) : biliUserInfo.sign);
 
-
         String[] tabLayoutTitles = {"视频", "音频", "专栏", "相簿"};
 
         TabLayout biliUserTabLayout = findView(R.id.bili_user_tabLayout);
@@ -151,7 +150,7 @@ public class BiliUserFragment extends BaseSupportFragment {
 
         biliUserViewPager.setAdapter(new ViewPager2Adapter(this, viewPagerFragments));
 
-        onTouchListener = ViewUtils.initTabLayoutAndViewPager2(getActivity(), biliUserTabLayout, biliUserViewPager, tabLayoutTitles, 3);
+        onTouchListener = ViewUtils.initTabLayoutAndViewPager2(getActivity(), biliUserTabLayout, biliUserViewPager, tabLayoutTitles, 0);
 
         if (biliUserInfo.role == Role.NONE) {
             findView(R.id.bili_user_verify_container).setVisibility(View.GONE);

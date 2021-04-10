@@ -31,9 +31,7 @@ import com.leon.biuvideo.adapters.otherAdapters.SettingChoiceAddressAdapter;
 import com.leon.biuvideo.beans.AboutBean;
 import com.leon.biuvideo.beans.District;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.dialogs.FeedbackDialog;
-import com.leon.biuvideo.ui.dialogs.ThanksListDialog;
-import com.leon.biuvideo.ui.dialogs.WarnDialog;
+import com.leon.biuvideo.ui.views.WarnDialog;
 import com.leon.biuvideo.ui.views.BottomSheetTopBar;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleBottomSheet;
@@ -46,7 +44,6 @@ import com.leon.biuvideo.utils.PermissionUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
-import com.leon.biuvideo.utils.ViewUtils;
 import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.FeaturesName;
 import com.leon.biuvideo.values.ThanksList;
@@ -177,7 +174,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 break;
             case R.id.settings_fragment_thanks_list:
                 //设置Dialog显示内容
-                ArrayList<AboutBean> aboutBeans = new ArrayList<>();
+                /*ArrayList<AboutBean> aboutBeans = new ArrayList<>();
                 for (int i = 0; i < ThanksList.titles.length; i++) {
                     AboutBean aboutBean = new AboutBean();
                     aboutBean.title = ThanksList.titles[i];
@@ -188,7 +185,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
 
                 //显示Dialog
                 ThanksListDialog thanksListDialog = new ThanksListDialog(context, aboutBeans);
-                thanksListDialog.show();
+                thanksListDialog.show();*/
                 break;
             case R.id.settings_fragment_recommend_span_count:
                 if (setRecommendColumnBottomSheet == null) {
@@ -198,8 +195,8 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 break;
             case R.id.settings_fragment_feedback:
                 //显示反馈提交界面
-                FeedbackDialog feedbackDialog = new FeedbackDialog(context);
-                feedbackDialog.show();
+//                FeedbackDialog feedbackDialog = new FeedbackDialog(context);
+//                feedbackDialog.show();
                 break;
             default:
                 break;

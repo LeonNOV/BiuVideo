@@ -9,7 +9,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.leon.biuvideo.ui.dialogs.WarnDialog;
+import com.leon.biuvideo.ui.views.WarnDialog;
 
 /**
  * 权限申请类

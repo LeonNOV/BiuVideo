@@ -77,7 +77,7 @@
                 android:text="1903.6万"
                 android:textColor="@color/infoColor"
                 android:textSize="12sp"
-                app:drawableStartCompat="@drawable/ic_play" />
+                app:drawableStartCompat="@drawable/ic_video_play" />
 
             <TextView
                 android:id="@+id/video_item_danmaku"

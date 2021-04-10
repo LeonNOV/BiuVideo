@@ -12,14 +12,12 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.discover.DiscoverHotSearchAdapter;
+import com.leon.biuvideo.adapters.discoverAdapters.DiscoverHotSearchAdapter;
 import com.leon.biuvideo.beans.discoverBeans.HotSearch;
 import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.discovery.SearchFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
-import com.leon.biuvideo.utils.SimpleSingleThreadPool;
-import com.leon.biuvideo.utils.parseDataUtils.discoverParseUtils.HotSearchParser;
 
 import java.util.List;
 

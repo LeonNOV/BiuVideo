@@ -22,68 +22,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".ui.activitys.ChooseThemeColorActivity"
-            android:exported="false"
-            android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".ui.activitys.BangumiActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
-        <activity
-            android:name=".ui.activitys.DownloadedActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity
-            android:name=".ui.activitys.LoginActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity
-            android:name=".ui.activitys.SearchResultActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity
-            android:name=".ui.activitys.PictureActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity
-            android:name=".ui.activitys.ArticleActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity
-            android:name=".ui.activitys.MusicActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" /> <!-- 10以上需要使用requestLegacyExternalStorage属性 -->
-        <activity
-            android:name=".ui.activitys.UserActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity
-            android:name=".ui.activitys.VideoActivity"
-            android:exported="false"
-            android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
-<!--        <activity-->
-<!--            android:name=".ui.activitys.MainActivity"-->
-<!--            android:screenOrientation="portrait"-->
-<!--            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"-->
-<!--            android:theme="@style/Theme.AppCompat.NoActionBar">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
         <activity android:name=".ui.StartActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar">
@@ -107,10 +45,10 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".service.MusicService"
-            android:enabled="true"
-            android:exported="false" />
+<!--        <service-->
+<!--            android:name=".service.MusicService"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="false" />-->
 
         <service android:name=".service.WeatherService"
             android:enabled="true"

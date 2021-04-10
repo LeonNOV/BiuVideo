@@ -23,19 +23,19 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.CommentDetailAdapter;
-import com.leon.biuvideo.adapters.CommentLevelOneAdapter;
+import com.leon.biuvideo.adapters.commentAdapters.CommentDetailAdapter;
+import com.leon.biuvideo.adapters.commentAdapters.CommentLevelOneAdapter;
 import com.leon.biuvideo.beans.mediaBeans.Comment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.ui.views.CardTitle;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
-import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.CommentDetailParser;
-import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.CommentParser;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.CommentDetailParser;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.CommentParser;
 import com.leon.biuvideo.values.FeaturesName;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -83,12 +83,12 @@ public class VideoCommentDetailFragment extends BaseSupportFragment {
         CircleImageView videoCommentDetailItemUserFace = findView(R.id.video_comment_detail_item_userFace);
         Glide
                 .with(context)
-                .load(comment.userInfo.userFace +=
+                .load(comment.biliUserInfo.userFace +=
                         PreferenceUtils.getFeaturesStatus(FeaturesName.IMG_ORIGINAL_MODEL) ? ImagePixelSize.FACE.value : "")
                 .into(videoCommentDetailItemUserFace);
 
         ImageView videoCommentDetailItemVerifyMark = findView(R.id.video_comment_detail_item_verifyMark);
-        switch (comment.userInfo.role) {
+        switch (comment.biliUserInfo.role) {
             case PERSON:
                 videoCommentDetailItemVerifyMark.setImageResource(R.drawable.ic_person_verify);
                 break;
@@ -103,7 +103,7 @@ public class VideoCommentDetailFragment extends BaseSupportFragment {
         createEmojiAndClickable(comment.content, (TextView) findView(R.id.video_comment_detail_item_message));
 
         new BindingUtils(view, context)
-                .setText(R.id.video_comment_detail_item_userName, comment.userInfo.userName)
+                .setText(R.id.video_comment_detail_item_userName, comment.biliUserInfo.userName)
                 .setText(R.id.video_comment_detail_item_pubTime, ValueUtils.generateTime(comment.sendTime, "yyyy-MM-dd HH:mm", true))
                 .setText(R.id.video_comment_detail_item_likeTotal, String.valueOf(comment.like))
                 .setText(R.id.video_comment_detail_item_replayTotal, String.valueOf(comment.rcount))

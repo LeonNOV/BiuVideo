@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.PopularWeeklySeriesAdapter;
+import com.leon.biuvideo.adapters.otherAdapters.PopularWeeklySeriesAdapter;
 import com.leon.biuvideo.adapters.homeAdapters.popularAdapters.PopularAdapter;
 import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularWeeklySeries;
 import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularVideo;

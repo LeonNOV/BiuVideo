@@ -16,7 +16,7 @@ import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
-import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.FavoriteVideoFolderDetailParser;
+import com.leon.biuvideo.utils.parseDataUtils.userDataParsers.FavoriteVideoFolderDetailParser;
 import com.leon.biuvideo.values.FeaturesName;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;

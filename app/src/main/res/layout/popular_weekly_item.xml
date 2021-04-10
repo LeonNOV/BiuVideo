@@ -90,7 +90,7 @@
                 android:text="4.7万"
                 android:textColor="@color/infoColor"
                 android:textSize="15sp"
-                app:drawableStartCompat="@drawable/ic_play" />
+                app:drawableStartCompat="@drawable/ic_video_play" />
 
             <TextView
                 android:id="@+id/popular_weekly_item_danmaku"

@@ -13,7 +13,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardCornerRadius="6dp"
+        app:cardCornerRadius="@dimen/corner_6dp"
         app:cardElevation="0dp">
 
         <FrameLayout
@@ -35,7 +35,7 @@
                 android:layout_gravity="bottom|start"
                 android:layout_margin="6dp"
                 android:background="@drawable/round_corners6dp_bg"
-                android:backgroundTint="#99000000"
+                android:backgroundTint="@color/video_length_bg"
                 android:gravity="center"
                 android:padding="3dp"
                 android:text="4P"

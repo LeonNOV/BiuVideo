@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.utils.BindingUtils;
 
 import me.yokeyword.fragmentation.SupportFragment;
 

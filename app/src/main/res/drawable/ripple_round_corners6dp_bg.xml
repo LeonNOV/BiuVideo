@@ -9,7 +9,7 @@
                 android:left="5dp"
                 android:right="5dp"
                 android:top="5dp" />
-            <solid android:color="#FFFFFF" />
+            <solid android:color="@color/white" />
         </shape>
     </item>
 </ripple>

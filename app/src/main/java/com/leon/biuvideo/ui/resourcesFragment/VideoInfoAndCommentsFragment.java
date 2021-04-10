@@ -9,7 +9,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.ViewPager2Adapter;
+import com.leon.biuvideo.adapters.otherAdapters.ViewPager2Adapter;
 import com.leon.biuvideo.beans.mediaBeans.Comment;
 import com.leon.biuvideo.beans.mediaBeans.videoBeans.VideoDetailInfo;
 import com.leon.biuvideo.beans.mediaBeans.videoBeans.VideoWithFlv;
@@ -17,8 +17,8 @@ import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ViewUtils;
-import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.VideoDetailInfoParser;
-import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.VideoWithFlvParser;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoDetailInfoParser;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoWithFlvParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +59,13 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
          * @param status    显示/隐藏
          */
         void danmakuStatus (boolean status);
+
+        /**
+         * 进入用户主页
+         *
+         * @param mid   MID
+         */
+        void navUserFragment (String mid);
 
         /**
          * 错误事件
@@ -113,7 +120,9 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
 
                             @Override
                             public void navUserFragment(String mid) {
-
+                                if (videoFragmentContainerListener != null) {
+                                    videoFragmentContainerListener.navUserFragment(mid);
+                                }
                             }
                         });
                         viewPagerFragments.add(videoCommentFragment);

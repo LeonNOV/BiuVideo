@@ -24,7 +24,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.userBeans.UserInfo;
 import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.dialogs.WarnDialog;
+import com.leon.biuvideo.ui.views.WarnDialog;
 import com.leon.biuvideo.ui.home.FavoritesFragment;
 import com.leon.biuvideo.ui.home.FollowsFragment;
 import com.leon.biuvideo.ui.otherFragments.LoginFragment;
@@ -36,7 +36,7 @@ import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.PreferenceUtils;
-import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.UserInfoParser;
+import com.leon.biuvideo.utils.parseDataUtils.userDataParsers.UserInfoParser;
 import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.Role;
 

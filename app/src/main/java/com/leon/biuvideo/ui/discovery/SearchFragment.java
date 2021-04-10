@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.SearchHistoryAdapter;
+import com.leon.biuvideo.adapters.otherAdapters.SearchHistoryAdapter;
 import com.leon.biuvideo.greendao.dao.DaoBaseUtils;
 import com.leon.biuvideo.greendao.dao.SearchHistory;
 import com.leon.biuvideo.greendao.daoutils.SearchHistoryUtils;

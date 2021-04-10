@@ -10,7 +10,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.mediaBeans.bangumiBeans.Bangumi;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
-import com.leon.biuvideo.utils.parseDataUtils.BangumiDetailParser;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.BangumiDetailParser;
 
 /**
  * @Author Leon

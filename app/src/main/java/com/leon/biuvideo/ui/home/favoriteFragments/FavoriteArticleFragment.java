@@ -1,9 +1,7 @@
 package com.leon.biuvideo.ui.home.favoriteFragments;
 
-import android.os.Bundle;
 import android.os.Message;
 
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.adapters.homeAdapters.favoriteAdapters.FavoriteArticleAdapter;
@@ -11,9 +9,8 @@ import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteArticle;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragmentWithSrr;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
-import com.leon.biuvideo.utils.parseDataUtils.articleParseUtils.FavoriteArticleParser;
+import com.leon.biuvideo.utils.parseDataUtils.userDataParsers.FavoriteArticleParser;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 

@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.discover.searchResultAdapters.SearchResultVideoAdapter;
+import com.leon.biuvideo.adapters.discoverAdapters.searchResultAdapters.SearchResultVideoAdapter;
 import com.leon.biuvideo.beans.searchResultBeans.SearchResultVideo;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;

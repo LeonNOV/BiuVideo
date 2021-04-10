@@ -1,20 +1,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowFullscreen">true</item>
-    </style>
-
-    <!-- dialog动画 -->
-    <style name="music_list_dialog">
-        <!-- 进入时的动画 -->
-        <item name="android:windowEnterAnimation">@anim/music_play_list_scale_enter</item>
-
-        <!-- 退出时动画 -->
-        <item name="android:windowExitAnimation">@anim/music_play_list_scale_exit</item>
     </style>
 
     <!-- PictureViewer动画 -->

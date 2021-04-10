@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="55dp"
+    android:layout_gravity="center"
+    android:layout_marginEnd="10dp">
+
+    <TextView
+        android:id="@+id/search_result_item_bangumi_ep_title"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/ripple_white_wire_frame_bg"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingStart="7dp"
+        android:paddingTop="3dp"
+        android:paddingEnd="7dp"
+        android:paddingBottom="3dp"
+        android:textColor="@color/black"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/search_result_item_bangumi_ep_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/round_corners6dp_bg"
+        android:backgroundTint="@color/BiliBili_pink"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:textColor="@color/white"
+        android:textSize="13sp" />
+
+</FrameLayout>

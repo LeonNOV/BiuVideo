@@ -5,7 +5,7 @@ import android.os.Message;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.discover.searchResultAdapters.searchResultBnagumiAdapters.SearchResultBangumiAdapter;
+import com.leon.biuvideo.adapters.discoverAdapters.searchResultAdapters.searchResultBnagumiAdapters.SearchResultBangumiAdapter;
 import com.leon.biuvideo.beans.searchResultBeans.SearchResultBangumi;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;

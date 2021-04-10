@@ -5,7 +5,7 @@ import android.view.View;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.ui.mainFragments.partitionFragments.PartitionBaseFragment;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.values.Partitions;

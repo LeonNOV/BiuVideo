@@ -8,18 +8,13 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.ui.fragments.baseFragment.BindingUtils;
+import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-
-import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * @Author Leon

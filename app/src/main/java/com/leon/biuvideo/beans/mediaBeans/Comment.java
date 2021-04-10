@@ -1,7 +1,5 @@
 package com.leon.biuvideo.beans.mediaBeans;
 
-import com.leon.biuvideo.beans.upMasterBean.BiliUserInfo;
-
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +38,7 @@ public class Comment {
     /**
      * 用户信息
      */
-    public BiliUserInfo userInfo;
+    public BiliUserInfo biliUserInfo;
 
     /**
      * 评论内容

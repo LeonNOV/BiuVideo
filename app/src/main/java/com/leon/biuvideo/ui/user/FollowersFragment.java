@@ -5,14 +5,14 @@ import android.os.Message;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.userAdapters.FollowerAdapter;
+import com.leon.biuvideo.adapters.otherAdapters.FollowerAdapter;
 import com.leon.biuvideo.beans.userBeans.Follower;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
-import com.leon.biuvideo.utils.parseDataUtils.userParseUtils.FollowersParser;
+import com.leon.biuvideo.utils.parseDataUtils.userDataParsers.FollowersParser;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 

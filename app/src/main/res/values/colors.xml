@@ -6,12 +6,10 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
 
-    <color name="colorPrimary">#fb7299</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#fb7299</color>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#FFFFFF</color>
+    <color name="colorAccent">#FFFFFF</color>
 
-    <color name="BiliBili_pink_lite">#FD95B3</color>
-    <color name="BiliBili_pink_light">#FDB1C7</color>
     <color name="red">#D50000</color>
     <color name="light_gray">#707070</color>
     <color name="preference_item">#2B2B2B</color>

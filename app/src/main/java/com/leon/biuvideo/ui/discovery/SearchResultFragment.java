@@ -8,7 +8,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.ViewPager2Adapter;
+import com.leon.biuvideo.adapters.otherAdapters.ViewPager2Adapter;
 import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.discovery.searchResultFragments.SearchResultArticleFragment;

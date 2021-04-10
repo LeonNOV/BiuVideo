@@ -85,7 +85,7 @@
                 android:drawablePadding="5dp"
                 android:textColor="@color/infoColor"
                 android:textSize="15sp"
-                app:drawableStartCompat="@drawable/ic_play" />
+                app:drawableStartCompat="@drawable/ic_video_play" />
 
             <TextView
                 android:id="@+id/bili_user_video_item_danmaku"
