@@ -17,12 +17,12 @@ import com.dueeeke.videoplayer.controller.GestureVideoController;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.dueeeke.videoplayer.util.PlayerUtils;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.ui.resourcesFragment.videoControlComonents.VideoPlayerBottomControlView;
-import com.leon.biuvideo.ui.resourcesFragment.videoControlComonents.VideoPlayerCompleteView;
-import com.leon.biuvideo.ui.resourcesFragment.videoControlComonents.VideoPlayerErrorView;
-import com.leon.biuvideo.ui.resourcesFragment.videoControlComonents.VideoPlayerGestureView;
-import com.leon.biuvideo.ui.resourcesFragment.videoControlComonents.VideoPlayerPrepareView;
-import com.leon.biuvideo.ui.resourcesFragment.videoControlComonents.VideoPlayerTitleView;
+import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerBottomControlView;
+import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerCompleteView;
+import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerErrorView;
+import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerGestureView;
+import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerPrepareView;
+import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerTitleView;
 
 /**
  * @Author Leon

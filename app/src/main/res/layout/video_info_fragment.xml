@@ -180,7 +180,7 @@
             android:text="2395"
             android:textColor="@color/infoColor"
             android:textSize="15sp"
-            app:drawableTopCompat="@drawable/ic_collect_status" />
+            app:drawableTopCompat="@drawable/ic_favorite_status" />
 
         <TextView
             android:id="@+id/video_detail_share"

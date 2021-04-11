@@ -1,13 +1,10 @@
-package com.leon.biuvideo.ui.resourcesFragment;
+package com.leon.biuvideo.ui.resourcesFragment.video;
 
-import android.graphics.drawable.Drawable;
 import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -65,7 +62,7 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
 
     @Override
     protected int setLayout() {
-        return R.layout.video_detail_fragment;
+        return R.layout.video_info_fragment;
     }
 
     @Override

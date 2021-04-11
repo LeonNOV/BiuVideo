@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:background="@android:color/transparent">
+
+        <ImageView
+            android:id="@+id/article_banner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/description"
+            android:scaleType="centerCrop"
+            android:src="@drawable/user_default_banner" />
+
+        <ImageView
+            android:id="@+id/article_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|top"
+            android:layout_margin="15dp"
+            android:contentDescription="@string/description"
+            android:src="@drawable/ic_back" />
+
+    </FrameLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/article_textView_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitle" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/article_face"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_centerVertical="true"
+                    android:src="@color/gray"
+                    app:civ_border_color="@color/black"
+                    app:civ_border_width="@dimen/face_border_width" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/article_face"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/article_user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="UserName"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/article_pubTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2021-04-11 23:28"
+                        android:textColor="@color/infoColor"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/article_user_follow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="end|top"
+                    android:background="@drawable/bili_user_follow_status"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/follow"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:drawableStartCompat="@drawable/video_follow_status" />
+
+            </RelativeLayout>
+
+            <WebView
+                android:id="@+id/article_webView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/topBar_height"
+        android:background="@color/white"
+        android:elevation="10dp"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp">
+
+        <TextView
+            android:id="@+id/article_write_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/ripple_round_corners6dp_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="回复"
+            android:textColor="@color/infoColor"
+            android:textSize="15sp"
+            app:drawableStartCompat="@drawable/ic_write_comment" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/article_like_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:contentDescription="@string/description"
+                    android:src="@drawable/ic_like" />
+
+                <TextView
+                    android:id="@+id/article_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="597"
+                    android:textColor="@color/infoColor"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/article_comment_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:contentDescription="@string/description"
+                    android:src="@drawable/ic_comment" />
+
+                <TextView
+                    android:id="@+id/article_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="597"
+                    android:textColor="@color/infoColor"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/article_favorite_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:contentDescription="@string/description"
+                    android:src="@drawable/ic_favorite_status" />
+
+                <TextView
+                    android:id="@+id/article_favorite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="597"
+                    android:textColor="@color/infoColor"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+</LinearLayout>

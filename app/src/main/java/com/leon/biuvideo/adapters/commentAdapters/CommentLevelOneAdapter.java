@@ -26,7 +26,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.mediaBeans.Comment;
-import com.leon.biuvideo.ui.resourcesFragment.OnCommentListener;
+import com.leon.biuvideo.ui.resourcesFragment.video.OnCommentListener;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.ValueUtils;

@@ -1,4 +1,4 @@
-package com.leon.biuvideo.ui.resourcesFragment;
+package com.leon.biuvideo.ui.resourcesFragment.video;
 
 import com.leon.biuvideo.beans.mediaBeans.Comment;
 

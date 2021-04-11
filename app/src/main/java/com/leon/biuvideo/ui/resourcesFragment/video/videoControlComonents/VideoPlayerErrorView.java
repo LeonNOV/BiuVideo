@@ -1,4 +1,4 @@
-package com.leon.biuvideo.ui.resourcesFragment.videoControlComonents;
+package com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents;
 
 import android.content.Context;
 import android.util.AttributeSet;
