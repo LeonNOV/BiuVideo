@@ -72,10 +72,8 @@ public class SearchResultMenuAdapter extends BaseAdapter<String[]> {
                     }
                 });
 
-        Drawable wrap = DrawableCompat.wrap(ContextCompat.getDrawable(context,R.drawable.round_corners6dp_bg));
         if (selectedPosition == position) {
-            DrawableCompat.setTint(wrap, ContextCompat.getColor(context,R.color.BiliBili_pink));
-            searchResultMenuItemContent.setBackground(wrap);
+            searchResultMenuItemContent.setSelected(true);
             searchResultMenuItemContent.setTextColor(ContextCompat.getColor(context, R.color.white));
         }
     }

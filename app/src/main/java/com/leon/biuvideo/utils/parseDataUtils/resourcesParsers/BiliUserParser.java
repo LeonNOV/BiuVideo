@@ -59,7 +59,7 @@ public class BiliUserParser {
         Map<String, String> params = new HashMap<>(1);
         params.put("mid", mid);
 
-        JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.BILI_USER_INFO, params);
+        JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.BILI_USER_INFO, Headers.of(HttpUtils.getAPIRequestHeader()), params);
         JSONObject data = response.getJSONObject("data");
 
         if (data != null) {

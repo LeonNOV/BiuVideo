@@ -9,5 +9,5 @@
     android:layout_weight="1"
     android:textColor="@color/black"
     android:layout_gravity="center_horizontal"
-    android:background="@drawable/ripple_round_corners6dp_bg"
+    android:background="@drawable/search_result_menu_status"
     android:orientation="vertical"/>

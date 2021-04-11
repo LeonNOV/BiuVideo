@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/round_corners6dp_bg"
+            android:background="@drawable/round_corners6dp_padding5dp_bg"
             android:gravity="center"
             android:text="@string/biliUserResourcesOrderByDefault"
             android:textColor="@color/BiliBili_pink"

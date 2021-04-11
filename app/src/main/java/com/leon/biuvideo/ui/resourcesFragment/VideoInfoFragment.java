@@ -130,14 +130,9 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
                         // 获取当前账户是否已关注当前UP主
                         boolean attention = jsonObject.getBooleanValue("attention");
                         videoDetailFollow.setSelected(attention);
-                        Drawable wrap = DrawableCompat.wrap(ContextCompat.getDrawable(context, R.drawable.ripple_round_corners6dp_bg));
                         if (attention) {
-                            DrawableCompat.setTint(wrap, context.getColor(R.color.infoColor));
-                            videoDetailFollow.setBackground(wrap);
                             videoDetailFollow.setText("已关注");
                         } else {
-                            DrawableCompat.setTint(wrap, context.getColor(R.color.BiliBili_pink));
-                            videoDetailFollow.setBackground(wrap);
                             videoDetailFollow.setText("关注");
                         }
 
@@ -190,7 +185,7 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
             @Override
             public void run() {
                 // 获取当前视频与已登录用户的关系
-                Map<String, String> params = new HashMap<>();
+                Map<String, String> params = new HashMap<>(1);
                 params.put("bvid", videoDetailInfo.bvid);
                 JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.VIDEO_STATUS, Headers.of(HttpUtils.getAPIRequestHeader()), params);
                 JSONObject data = response.getJSONObject("data");

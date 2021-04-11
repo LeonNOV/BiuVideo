@@ -21,6 +21,7 @@ import com.leon.biuvideo.beans.mediaBeans.BiliUserInfo;
 import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.TagView;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
@@ -101,14 +102,9 @@ public class BiliUserFragment extends BaseSupportFragment {
 
         TextView biliUserFollow = findView(R.id.bili_user_follow);
         biliUserFollow.setSelected(biliUserInfo.attentionState);
-        Drawable wrap = DrawableCompat.wrap(ContextCompat.getDrawable(context, R.drawable.ripple_round_corners6dp_bg));
         if (biliUserInfo.attentionState) {
-            DrawableCompat.setTint(wrap, context.getColor(R.color.infoColor));
-            biliUserFollow.setBackground(wrap);
             biliUserFollow.setText("已关注");
         } else {
-            DrawableCompat.setTint(wrap, context.getColor(R.color.BiliBili_pink));
-            biliUserFollow.setBackground(wrap);
             biliUserFollow.setText("关注");
         }
 

@@ -69,8 +69,8 @@
                                 android:layout_width="25dp"
                                 android:layout_height="20dp"
                                 android:layout_marginStart="10dp"
-                                android:src="@drawable/bili_user_level"
-                                android:contentDescription="@string/description" />
+                                android:contentDescription="@string/description"
+                                android:src="@drawable/bili_user_level" />
 
                             <TextView
                                 android:id="@+id/bili_user_vipMark"
@@ -93,8 +93,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="end|top"
                             android:layout_marginTop="10dp"
-                            android:background="@drawable/ripple_round_corners6dp_bg"
-                            android:backgroundTint="@color/BiliBili_pink"
+                            android:background="@drawable/bili_user_follow_status"
                             android:drawablePadding="10dp"
                             android:gravity="center_vertical"
                             android:padding="10dp"
@@ -275,8 +274,7 @@
                     android:background="@drawable/ripple_round_corners6dp_bg"
                     android:backgroundTint="@android:color/transparent"
                     android:contentDescription="@string/description"
-                    android:src="@drawable/ic_back"
-                    app:tint="@color/white" />
+                    android:src="@drawable/ic_back" />
 
             </androidx.appcompat.widget.Toolbar>
 
