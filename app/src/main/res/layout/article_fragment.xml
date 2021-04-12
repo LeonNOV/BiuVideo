@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -73,8 +72,7 @@
                     android:layout_margin="10dp"
                     android:textColor="@color/black"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    tools:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitle" />
+                    android:textStyle="bold" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -86,38 +84,23 @@
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/article_face"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
                         android:layout_centerVertical="true"
                         android:src="@color/gray"
                         app:civ_border_color="@color/black"
                         app:civ_border_width="@dimen/face_border_width" />
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/article_user_name"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginStart="10dp"
                         android:layout_toEndOf="@id/article_face"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/article_user_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="UserName"
-                            android:textColor="@color/black"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:id="@+id/article_pubTime"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="2021-04-11 23:28"
-                            android:textColor="@color/infoColor"
-                            android:textSize="13sp" />
-
-                    </LinearLayout>
+                        android:text="awdwdawd"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/article_user_follow"
@@ -165,7 +148,7 @@
                 android:drawablePadding="5dp"
                 android:gravity="center_vertical"
                 android:padding="10dp"
-                android:text="回复"
+                android:text="@string/replay"
                 android:textColor="@color/infoColor"
                 android:textSize="15sp"
                 app:drawableStartCompat="@drawable/ic_write_comment" />

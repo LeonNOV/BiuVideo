@@ -31,6 +31,7 @@ import com.leon.biuvideo.ui.mainFragments.homeModels.WeatherModelInterface;
 import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.ui.otherFragments.PopularFragment;
 import com.leon.biuvideo.ui.resourcesFragment.article.ArticleFragment;
+import com.leon.biuvideo.ui.resourcesFragment.picture.PictureFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.VideoFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
@@ -270,7 +271,8 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
 //                ((NavFragment) getParentFragment()).startBrotherFragment(FollowsFragment.getInstance());
                 break;
             case R.id.home_my_history:
-                ((NavFragment) getParentFragment()).startBrotherFragment(HistoryFragment.getInstance());
+                ((NavFragment) getParentFragment()).startBrotherFragment(new PictureFragment());
+//                ((NavFragment) getParentFragment()).startBrotherFragment(HistoryFragment.getInstance());
                 break;
             case R.id.home_my_downloadManager:
                 ((NavFragment) getParentFragment()).startBrotherFragment(DownloadManagerFragment.getInstance());

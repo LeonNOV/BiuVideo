@@ -12,17 +12,21 @@ import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
 
+import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.mediaBeans.ArticleInfo;
 import com.leon.biuvideo.beans.mediaBeans.BiliUserInfo;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.ArticleInfoParser;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.BiliUserParser;
+import com.leon.biuvideo.values.FeaturesName;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
@@ -41,6 +45,7 @@ import okhttp3.Headers;
  */
 public class ArticleFragment extends BaseSupportFragment implements View.OnClickListener {
     private final String articleId;
+    private BiliUserInfo biliUserInfo;
 
     public ArticleFragment(String articleId) {
         this.articleId = articleId;
@@ -56,8 +61,10 @@ public class ArticleFragment extends BaseSupportFragment implements View.OnClick
         findView(R.id.article_back).setOnClickListener(this);
 
         ImageView articleFace = findView(R.id.article_face);
-        TextView articlePubTime = findView(R.id.article_pubTime);
+        articleFace.setOnClickListener(this);
+
         TextView articleUserFollow = findView(R.id.article_user_follow);
+        articleUserFollow.setOnClickListener(this);
 
         WebView articleWebView = findView(R.id.article_webView);
         WebSettings settings = articleWebView.getSettings();
@@ -76,12 +83,14 @@ public class ArticleFragment extends BaseSupportFragment implements View.OnClick
         settings.setDefaultFontSize(20);
 
         TextView articleWriteComment = findView(R.id.article_write_comment);
+        articleWriteComment.setOnClickListener(this);
+
+        findView(R.id.article_like_container).setOnClickListener(this);
+        findView(R.id.article_comment_container).setOnClickListener(this);
+        findView(R.id.article_favorite_container).setOnClickListener(this);
 
         ImageView articleLikeStatus = findView(R.id.article_like_status);
-//        TextView articleLike = findView(R.id.article_like);
-//        TextView articleComment = findView(R.id.article_comment);
         ImageView articleFavoriteStatus = findView(R.id.article_favorite_status);
-//        TextView articleFavorite = findView(R.id.article_favorite);
 
         setOnLoadListener(new OnLoadListener() {
             @Override
@@ -107,12 +116,16 @@ public class ArticleFragment extends BaseSupportFragment implements View.OnClick
 
                         break;
                     case 1:
-                        BiliUserInfo biliUserInfo = (BiliUserInfo) msg.obj;
+                        biliUserInfo = (BiliUserInfo) msg.obj;
 
                         if (biliUserInfo != null) {
-                            bindingUtils
-                                    .setImage(R.id.article_face, biliUserInfo.userFace, ImagePixelSize.FACE)
-                                    .setText(R.id.article_user_name, biliUserInfo.userName);
+                            Glide
+                                    .with(context)
+                                    .load(biliUserInfo.userFace += PreferenceUtils.getFeaturesStatus(FeaturesName.IMG_ORIGINAL_MODEL) ?
+                                            ImagePixelSize.FACE.value : "")
+                                    .into(articleFace);
+
+                            bindingUtils.setText(R.id.article_user_name, biliUserInfo.userName);
                         }
 
                         getArticleContent(BiliBiliAPIs.ARTICLE_PAGE_PATH + articleId);
@@ -266,6 +279,17 @@ public class ArticleFragment extends BaseSupportFragment implements View.OnClick
         switch (v.getId()) {
             case R.id.article_back:
                 backPressed();
+                break;
+            case R.id.article_face:
+                start(new BiliUserFragment(biliUserInfo.userMid));
+                break;
+            case R.id.article_user_follow:
+                break;
+            case R.id.article_like_container:
+                break;
+            case R.id.article_comment_container:
+                break;
+            case R.id.article_favorite_container:
                 break;
             default:
                 break;

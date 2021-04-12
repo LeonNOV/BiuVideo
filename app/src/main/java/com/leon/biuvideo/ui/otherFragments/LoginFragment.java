@@ -18,7 +18,6 @@ import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.PreferenceUtils;
-import com.leon.biuvideo.utils.ViewUtils;
 import com.leon.biuvideo.values.Actions;
 
 import java.util.HashMap;

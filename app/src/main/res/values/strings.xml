@@ -234,4 +234,5 @@
     <string name="biliUserResourcesOrderByFav">最多收藏</string>
     <string name="biliUserResourcesOrderByRead">最多阅读</string>
     <string name="bangumi_score">分</string>
+    <string name="replay">回复</string>
 </resources>
