@@ -74,7 +74,7 @@ public class UserInfoParser {
         params.put("mid", PreferenceUtils.getUserId());
         params.put("photo", "true");
 
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.USER_BANNER, Headers.of(HttpUtils.getAPIRequestHeader()), params);
+        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.USER_CARD, Headers.of(HttpUtils.getAPIRequestHeader()), params);
         JSONObject data = responseObject.getJSONObject("data");
 
         if (data != null) {

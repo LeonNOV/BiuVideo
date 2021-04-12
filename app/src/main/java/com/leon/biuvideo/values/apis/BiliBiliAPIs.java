@@ -188,6 +188,14 @@ public class BiliBiliAPIs {
     public static String BILI_USER_PICTURE_TOTAL = "https://api.vc.bilibili.com/link_draw/v1/doc/upload_count";
 
     /**
+     * 获取<strong>单个专栏<strong/>的信息
+     *
+     *      参数：
+     *          id：专栏ID
+     */
+    public static String ARTICLE_INFO = "https://api.bilibili.com/x/article/viewinfo";
+
+    /**
      * 相簿原链接<br/>
      *      参数：后跟相簿ID
      */
@@ -213,7 +221,7 @@ public class BiliBiliAPIs {
      *          后跟专栏ID（CVxxxxxxx）
      *          from:默认值:category_0,可选
      */
-    public static String articleWebPage = "https://www.bilibili.com/read/mobile/";
+    public static String ARTICLE_PAGE_PATH = "https://www.bilibili.com/read/mobile/";
 
     /**
      * 搜索接口<br/>
@@ -381,7 +389,7 @@ public class BiliBiliAPIs {
      *      mid：用户ID
      *      photo：是否含有顶部横幅图片
      */
-    public static final String USER_BANNER = "http://api.bilibili.com/x/web-interface/card";
+    public static final String USER_CARD = "http://api.bilibili.com/x/web-interface/card";
 
     /**
      * 获取用户动态数、关注数、粉丝数（只需Cookie）
@@ -428,15 +436,6 @@ public class BiliBiliAPIs {
      *              article：专栏
      */
     public static String history = "https://api.bilibili.com/x/web-interface/history/cursor";
-
-    /**
-     * 获取<strong>单个专栏<strong/>的信息
-     * Cookie可有可无
-     *
-     *      参数：
-     *          id：专栏ID
-     */
-    public static String articleInfo = "https://api.bilibili.com/x/article/viewinfo";
 
     /**
      * 获取用户收藏的所有专栏<br/>

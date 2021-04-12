@@ -41,7 +41,7 @@ public class BiliUserParser {
     }
 
     public void parseData () {
-        BiliUserInfo biliUserInfo = getUserInfo();
+        BiliUserInfo biliUserInfo = getUserInfo(mid);
         int[] status = getStatus();
         int[] upStatus = getUpStatus();
 
@@ -55,7 +55,7 @@ public class BiliUserParser {
      *
      * @return  BiliUserInfo
      */
-    private BiliUserInfo getUserInfo() {
+    public static BiliUserInfo getUserInfo(String mid) {
         Map<String, String> params = new HashMap<>(1);
         params.put("mid", mid);
 
