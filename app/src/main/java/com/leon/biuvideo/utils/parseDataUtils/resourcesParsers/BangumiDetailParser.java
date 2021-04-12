@@ -2,10 +2,10 @@ package com.leon.biuvideo.utils.parseDataUtils.resourcesParsers;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.mediaBeans.bangumiBeans.Bangumi;
-import com.leon.biuvideo.beans.mediaBeans.bangumiBeans.BangumiEp;
-import com.leon.biuvideo.beans.mediaBeans.bangumiBeans.BangumiSeason;
-import com.leon.biuvideo.beans.mediaBeans.bangumiBeans.BangumiSection;
+import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.Bangumi;
+import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiEp;
+import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiSeason;
+import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiSection;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 

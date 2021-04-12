@@ -4,7 +4,7 @@ import android.os.Message;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.commentAdapters.CommentLevelOneAdapter;
-import com.leon.biuvideo.beans.mediaBeans.Comment;
+import com.leon.biuvideo.beans.resourcesBeans.Comment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;

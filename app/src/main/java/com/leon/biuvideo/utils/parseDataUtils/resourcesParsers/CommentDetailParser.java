@@ -2,8 +2,8 @@ package com.leon.biuvideo.utils.parseDataUtils.resourcesParsers;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.mediaBeans.Comment;
-import com.leon.biuvideo.beans.mediaBeans.BiliUserInfo;
+import com.leon.biuvideo.beans.resourcesBeans.Comment;
+import com.leon.biuvideo.beans.resourcesBeans.BiliUserInfo;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.parseDataUtils.ParserInterface;
 import com.leon.biuvideo.values.Role;

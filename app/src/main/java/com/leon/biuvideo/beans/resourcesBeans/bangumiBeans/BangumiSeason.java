@@ -1,4 +1,4 @@
-package com.leon.biuvideo.beans.mediaBeans.bangumiBeans;
+package com.leon.biuvideo.beans.resourcesBeans.bangumiBeans;
 
 /**
  * @Author Leon

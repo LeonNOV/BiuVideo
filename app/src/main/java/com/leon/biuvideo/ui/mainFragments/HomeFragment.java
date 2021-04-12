@@ -271,7 +271,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
 //                ((NavFragment) getParentFragment()).startBrotherFragment(FollowsFragment.getInstance());
                 break;
             case R.id.home_my_history:
-                ((NavFragment) getParentFragment()).startBrotherFragment(new PictureFragment());
+                ((NavFragment) getParentFragment()).startBrotherFragment(new PictureFragment("122899178"));
 //                ((NavFragment) getParentFragment()).startBrotherFragment(HistoryFragment.getInstance());
                 break;
             case R.id.home_my_downloadManager:

@@ -1,6 +1,6 @@
 package com.leon.biuvideo.ui.resourcesFragment.video;
 
-import com.leon.biuvideo.beans.mediaBeans.Comment;
+import com.leon.biuvideo.beans.resourcesBeans.Comment;
 
 /**
  * @Author Leon

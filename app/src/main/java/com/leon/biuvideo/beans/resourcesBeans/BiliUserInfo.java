@@ -1,4 +1,4 @@
-package com.leon.biuvideo.beans.mediaBeans;
+package com.leon.biuvideo.beans.resourcesBeans;
 
 import com.leon.biuvideo.values.Role;
 

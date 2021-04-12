@@ -196,6 +196,14 @@ public class BiliBiliAPIs {
     public static String ARTICLE_INFO = "https://api.bilibili.com/x/article/viewinfo";
 
     /**
+     * 获取相簿详细信息
+     * 参数
+     *      rid：相簿ID
+     *      type：默认为2
+     */
+    public static final String BILI_USER_PICTURE_DETAIL = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/get_dynamic_detail";
+
+    /**
      * 相簿原链接<br/>
      *      参数：后跟相簿ID
      */

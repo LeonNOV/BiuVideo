@@ -2,7 +2,7 @@ package com.leon.biuvideo.utils.parseDataUtils.resourcesParsers;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.mediaBeans.videoBeans.VideoWithFlv;
+import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;

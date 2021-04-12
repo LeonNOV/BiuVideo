@@ -1,6 +1,6 @@
 package com.leon.biuvideo.beans.searchResultBeans.bangumi;
 
-import com.leon.biuvideo.beans.mediaBeans.videoBeans.VideoDetailInfo;
+import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoDetailInfo;
 
 import java.io.Serializable;
 import java.util.ArrayList;

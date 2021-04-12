@@ -1,4 +1,4 @@
-package com.leon.biuvideo.beans.mediaBeans.videoBeans;
+package com.leon.biuvideo.beans.resourcesBeans.videoBeans;
 
 import java.util.LinkedHashMap;
 import java.util.List;

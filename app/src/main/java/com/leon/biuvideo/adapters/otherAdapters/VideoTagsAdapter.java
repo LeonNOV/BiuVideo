@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
-import com.leon.biuvideo.beans.mediaBeans.videoBeans.VideoTag;
+import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoTag;
 
 import java.util.List;
 
