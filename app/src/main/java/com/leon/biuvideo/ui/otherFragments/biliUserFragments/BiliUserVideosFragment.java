@@ -83,6 +83,9 @@ public class BiliUserVideosFragment extends BaseLazySupportFragment implements V
                         if (biliUserVideoList != null && biliUserVideoList.size() > 0) {
                             biliUserVideosAdapter.append(biliUserVideoList);
                             biliUserVideosData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+                            if (!biliUserVideoParser.dataStatus) {
+                                biliUserVideosData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
+                            }
                         } else {
                             biliUserVideosData.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
                             biliUserVideosData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
@@ -94,7 +97,7 @@ public class BiliUserVideosFragment extends BaseLazySupportFragment implements V
                             biliUserVideosAdapter.append(biliUserVideoList);
 
                             if (!biliUserVideoParser.dataStatus) {
-                                biliUserVideosData.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
+                                biliUserVideosData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                             }
                         } else {
                             biliUserVideosData.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);

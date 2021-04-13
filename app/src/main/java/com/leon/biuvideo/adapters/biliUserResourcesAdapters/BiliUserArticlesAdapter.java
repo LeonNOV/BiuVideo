@@ -2,7 +2,6 @@ package com.leon.biuvideo.adapters.biliUserResourcesAdapters;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -10,6 +9,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.biliUserResourcesBeans.BiliUserArticle;
+import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.List;
@@ -46,7 +46,7 @@ public class BiliUserArticlesAdapter extends BaseAdapter<BiliUserArticle> {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, "ID:" + biliUserArticle.id, Toast.LENGTH_SHORT).show();
+                        startPublicFragment(FragmentType.ARTICLE, biliUserArticle.id);
                     }
                 });
     }

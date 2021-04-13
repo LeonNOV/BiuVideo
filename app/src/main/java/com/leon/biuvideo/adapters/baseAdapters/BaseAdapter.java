@@ -1,5 +1,7 @@
 package com.leon.biuvideo.adapters.baseAdapters;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -9,8 +11,19 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.leon.biuvideo.ui.MainActivity;
+import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
+import com.leon.biuvideo.ui.resourcesFragment.article.ArticleFragment;
+import com.leon.biuvideo.ui.resourcesFragment.picture.PictureFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoFragment;
+import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.values.FragmentType;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import me.yokeyword.fragmentation.SupportActivity;
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * @Author Leon
@@ -23,9 +36,17 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     public View view;
     protected ViewGroup parent;
 
+    private final SupportActivity supportActivity;
+
     public BaseAdapter(List<T> beans, Context context) {
         this.beans = beans;
         this.context = context;
+
+        if (context instanceof MainActivity) {
+            Fuck.blue("is MainActivity");
+        }
+
+        this.supportActivity = (SupportActivity) context;
     }
 
     /**
@@ -101,16 +122,6 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     }
 
     /**
-     * 根据索引进行删除
-     *
-     * @param index 索引值
-     */
-    public void remove(int index) {
-        this.beans.remove(index);
-        notifyDataSetChanged();
-    }
-
-    /**
      * 清空已存在的数据
      */
     public void removeAll() {
@@ -121,16 +132,32 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     }
 
     /**
-     * 刷新方法,使用时，必须对其进行重写
+     * 启动一个“公共”Fragment
+     *
+     * @param fragmentType  FragmentType
+     * @param params 参数
      */
-    public void refresh(String str) {
+    protected void startPublicFragment (FragmentType fragmentType, String params) {
+        // 获取栈顶的SupportFragment
+        SupportFragment topFragment = (SupportFragment) supportActivity.getTopFragment();
+        switch (fragmentType) {
+            case BILI_USER:
+                topFragment.start(new BiliUserFragment(params));
+                break;
+            case VIDEO:
+                topFragment.start(new VideoFragment(params));
+                break;
+            case AUDIO:
 
-    }
-
-    public void append(ArrayList<Parcelable> districtList) {
-        for (int i = 0; i < districtList.size(); i++) {
-            this.beans.add((T) districtList.get(i));
-            notifyItemInserted(i);
+                break;
+            case ARTICLE:
+                topFragment.start(new ArticleFragment(params));
+                break;
+            case PICTURE:
+                topFragment.start(new PictureFragment(params));
+                break;
+            default:
+                break;
         }
     }
 }

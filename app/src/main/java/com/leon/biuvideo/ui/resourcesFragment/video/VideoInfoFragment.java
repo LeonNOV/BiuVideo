@@ -26,10 +26,12 @@ import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoRecommendParser;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoTagsParser;
 import com.leon.biuvideo.values.FeaturesName;
+import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +45,8 @@ import okhttp3.Headers;
  */
 public class VideoInfoFragment extends BaseSupportFragment implements View.OnClickListener {
     private final VideoDetailInfo videoDetailInfo;
+    private final List<Recommend> recommendList = new ArrayList<>();
+
     private TextView videoDetailFollow;
     private ImageView videoDetailFace;
 
@@ -116,6 +120,10 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
 
         videoDetailRecommends = findView(R.id.video_detail_recommends);
         videoDetailRecommends.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+        RecommendAdapter recommendAdapter = new RecommendAdapter(recommendList, RecommendAdapter.SINGLE_COLUMN, context);
+        recommendAdapter.setHasStableIds(true);
+        videoDetailRecommends.setRecyclerViewAdapter(recommendAdapter);
+        videoDetailRecommends.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
 
         setOnLoadListener(new OnLoadListener() {
             @Override
@@ -158,10 +166,7 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
                         List<Recommend> recommendList = (List<Recommend>) msg.obj;
 
                         if (recommendList != null && recommendList.size() > 0) {
-                            RecommendAdapter recommendAdapter = new RecommendAdapter(recommendList, RecommendAdapter.SINGLE_COLUMN, context);
-                            recommendAdapter.setHasStableIds(true);
-                            videoDetailRecommends.setRecyclerViewAdapter(recommendAdapter);
-                            videoDetailRecommends.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
+                            recommendAdapter.append(recommendList);
                         } else {
                             videoDetailRecommends.setVisibility(View.GONE);
                         }
@@ -217,6 +222,7 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.video_detail_face:
+                startPublicFragment(FragmentType.BILI_USER, videoDetailInfo.userInfo.userMid);
 
                 break;
             case R.id.video_detail_follow:

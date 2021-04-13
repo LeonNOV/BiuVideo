@@ -4,8 +4,10 @@ import android.os.Message;
 import android.widget.TextView;
 
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.adapters.otherAdapters.PictureListAdapter;
 import com.leon.biuvideo.beans.resourcesBeans.PictureDetail;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.layoutManager.PictureGridLayoutManager;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.ui.views.TagView;
@@ -13,6 +15,11 @@ import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.PictureDetailParser;
 import com.leon.biuvideo.values.ImagePixelSize;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @Author Leon
@@ -76,6 +83,30 @@ public class PictureFragment extends BaseSupportFragment {
 
                     pictureComment.setRightValue(pictureDetail.comment);
                     pictureLike.setRightValue(pictureDetail.like);
+
+                    pictureData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+
+                    List<String[]> pictures = new ArrayList<>(pictureDetail.picturesCount);
+                    Set<Map.Entry<Integer, String[]>> entries = pictureDetail.pictures.entrySet();
+                    for (Map.Entry<Integer, String[]> entry : entries) {
+                        pictures.add(entry.getValue());
+                    }
+
+                    int spanCount = 0;
+                    //判断要显示的列数
+                    if (pictureDetail.picturesCount % 3 == 0) {
+                        spanCount = 3;
+                    } else if (pictureDetail.picturesCount % 2 == 0) {
+                        spanCount = 2;
+                    } else {
+                        spanCount = 1;
+                    }
+
+                    PictureListAdapter pictureListAdapter = new PictureListAdapter(pictures, context);
+                    pictureData.setRecyclerViewAdapter(pictureListAdapter);
+                    pictureData.setRecyclerViewLayoutManager( new PictureGridLayoutManager(context, spanCount));
+
+                    pictureData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
                 }
             }
         });

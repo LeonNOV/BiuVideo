@@ -26,11 +26,12 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.resourcesBeans.Comment;
-import com.leon.biuvideo.ui.resourcesFragment.video.OnCommentListener;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoInfoAndCommentsFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.FeaturesName;
+import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.List;
@@ -49,15 +50,15 @@ public class CommentLevelOneAdapter extends BaseAdapter<Comment> {
     private final List<Comment> commentList;
     private ImageSpan imageSpan;
 
-    private OnCommentListener onCommentListener;
+    private VideoInfoAndCommentsFragment.ToCommentDetailFragment toCommentDetailFragment;
 
     public CommentLevelOneAdapter(List<Comment> beans, Context context) {
         super(beans, context);
         this.commentList = beans;
     }
 
-    public void setOnCommentListener(OnCommentListener onCommentListener) {
-        this.onCommentListener = onCommentListener;
+    public void setToCommentDetailFragment(VideoInfoAndCommentsFragment.ToCommentDetailFragment toCommentDetailFragment) {
+        this.toCommentDetailFragment = toCommentDetailFragment;
     }
 
     @Override
@@ -70,6 +71,13 @@ public class CommentLevelOneAdapter extends BaseAdapter<Comment> {
         Comment comment = commentList.get(position);
 
         ImageView commentItemUserFace = holder.findById(R.id.comment_item_userFace);
+        commentItemUserFace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startPublicFragment(FragmentType.BILI_USER, comment.biliUserInfo.userMid);
+            }
+        });
+
         ImageView commentItemVerifyMark = holder.findById(R.id.comment_item_verifyMark);
         switch (comment.biliUserInfo.role) {
             case PERSON:
@@ -112,18 +120,6 @@ public class CommentLevelOneAdapter extends BaseAdapter<Comment> {
             commentItemReplays.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
             CommentLevelTwoAdapter commentLevelTwoAdapter = new CommentLevelTwoAdapter(comment.levelTwoCommentList, context);
-            commentLevelTwoAdapter.setOnCommentListener(new OnCommentListener() {
-                @Override
-                public void onClick(Comment comment) {
-                }
-
-                @Override
-                public void navUserFragment(String mid) {
-                    if (onCommentListener != null) {
-                        onCommentListener.navUserFragment(mid);
-                    }
-                }
-            });
             commentLevelTwoAdapter.setHasStableIds(true);
             commentItemReplays.setRecyclerViewAdapter(commentLevelTwoAdapter);
             commentItemReplays.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
@@ -133,8 +129,8 @@ public class CommentLevelOneAdapter extends BaseAdapter<Comment> {
             commentItemCheckAll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (onCommentListener != null) {
-                        onCommentListener.onClick(comment);
+                    if (toCommentDetailFragment != null) {
+                        toCommentDetailFragment.toCommentDetail(comment);
                     }
                 }
             });
@@ -163,9 +159,7 @@ public class CommentLevelOneAdapter extends BaseAdapter<Comment> {
 
                     @Override
                     public void onClick(@NonNull View widget) {
-                        if (onCommentListener != null) {
-                            onCommentListener.navUserFragment(stringEntry.getKey());
-                        }
+                        startPublicFragment(FragmentType.BILI_USER, stringEntry.getKey());
                     }
                 };
 

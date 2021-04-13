@@ -15,7 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.utils.BindingUtils;
+import com.leon.biuvideo.values.FragmentType;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -97,6 +99,32 @@ public abstract class BaseSupportFragment extends SupportFragment {
     public boolean onBackPressedSupport() {
         onDestroy();
         return super.onBackPressedSupport();
+    }
+
+    /**
+     * 启动一个“公共”Fragment
+     *
+     * @param fragmentType  FragmentType
+     * @param param 参数
+     */
+    public void startPublicFragment (FragmentType fragmentType, String ... param) {
+        // 获取栈顶的SupportFragment
+        SupportFragment topFragment = (SupportFragment) getTopFragment();
+        switch (fragmentType) {
+            case BILI_USER:
+                topFragment.start(new BiliUserFragment(param[0]));
+                break;
+            case VIDEO:
+                break;
+            case AUDIO:
+                break;
+            case ARTICLE:
+                break;
+            case PICTURE:
+                break;
+            default:
+                break;
+        }
     }
 
     /**

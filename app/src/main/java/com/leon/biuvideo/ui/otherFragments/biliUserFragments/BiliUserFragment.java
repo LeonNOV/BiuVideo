@@ -17,6 +17,9 @@ import com.leon.biuvideo.adapters.otherAdapters.ViewPager2Adapter;
 import com.leon.biuvideo.beans.resourcesBeans.BiliUserInfo;
 import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.resourcesFragment.article.ArticleFragment;
+import com.leon.biuvideo.ui.resourcesFragment.picture.PictureFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoFragment;
 import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
@@ -135,6 +138,7 @@ public class BiliUserFragment extends BaseSupportFragment {
         ViewPager2 biliUserViewPager = findView(R.id.bili_user_viewPager);
 
         List<Fragment> viewPagerFragments = new ArrayList<>(4);
+
         viewPagerFragments.add(new BiliUserVideosFragment(mid));
         viewPagerFragments.add(new BiliUserAudiosFragment(mid));
         viewPagerFragments.add(new BiliUserArticlesFragment(mid));

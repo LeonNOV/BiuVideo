@@ -128,4 +128,8 @@ dependencies {
 //    implementation project(path: ':dkplayer-java')
 //    implementation project(path: ':dkplayer-ui')
 //    implementation project(path: ':dkplayer-ijk')
+
+    // aria
+    implementation 'com.arialyy.aria:core:3.8.15'
+    annotationProcessor 'com.arialyy.aria:compiler:3.8.15'
 }

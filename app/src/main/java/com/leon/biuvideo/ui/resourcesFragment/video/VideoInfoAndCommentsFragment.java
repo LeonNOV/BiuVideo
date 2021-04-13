@@ -39,10 +39,15 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
     private VideoWithFlv videoWithFlv;
 
     private VideoFragmentContainerListener videoFragmentContainerListener;
+
     private MainActivity.OnTouchListener onTouchListener;
 
     public VideoInfoAndCommentsFragment(String bvid) {
         this.bvid = bvid;
+    }
+
+    public interface ToCommentDetailFragment {
+        void toCommentDetail(Comment comment);
     }
 
     public interface VideoFragmentContainerListener {
@@ -59,13 +64,6 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
          * @param status    显示/隐藏
          */
         void danmakuStatus (boolean status);
-
-        /**
-         * 进入用户主页
-         *
-         * @param mid   MID
-         */
-        void navUserFragment (String mid);
 
         /**
          * 错误事件
@@ -109,20 +107,14 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
                         List<Fragment> viewPagerFragments = new ArrayList<>(2);
 
                         VideoDetailInfo videoDetailInfo = (VideoDetailInfo) msg.obj;
-                        viewPagerFragments.add(new VideoInfoFragment(videoDetailInfo));
+                        VideoInfoFragment videoInfoFragment = new VideoInfoFragment(videoDetailInfo);
+                        viewPagerFragments.add(videoInfoFragment);
 
                         VideoCommentFragment videoCommentFragment = new VideoCommentFragment(videoDetailInfo.aid);
-                        videoCommentFragment.setOnCommentListener(new OnCommentListener() {
+                        videoCommentFragment.setToCommentDetailFragment(new ToCommentDetailFragment() {
                             @Override
-                            public void onClick(Comment comment) {
+                            public void toCommentDetail(Comment comment) {
                                 start(new VideoCommentDetailFragment(comment));
-                            }
-
-                            @Override
-                            public void navUserFragment(String mid) {
-                                if (videoFragmentContainerListener != null) {
-                                    videoFragmentContainerListener.navUserFragment(mid);
-                                }
                             }
                         });
                         viewPagerFragments.add(videoCommentFragment);

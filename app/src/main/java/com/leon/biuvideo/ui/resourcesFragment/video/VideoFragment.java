@@ -8,7 +8,6 @@ import com.dueeeke.videoplayer.ijk.IjkPlayer;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.VideoPlayerController;
 import com.leon.biuvideo.utils.HttpUtils;
@@ -60,12 +59,6 @@ public class VideoFragment extends BaseSupportFragment {
             @Override
             public void danmakuStatus(boolean status) {
 
-            }
-
-            @Override
-            public void navUserFragment(String mid) {
-                videoPlayerViewContent.pause();
-                start(new BiliUserFragment(mid));
             }
 
             @Override

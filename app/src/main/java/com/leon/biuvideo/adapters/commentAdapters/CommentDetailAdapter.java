@@ -24,10 +24,10 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.resourcesBeans.Comment;
-import com.leon.biuvideo.ui.resourcesFragment.video.OnCommentListener;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.FeaturesName;
+import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.List;
@@ -42,7 +42,6 @@ import java.util.regex.Pattern;
  */
 public class CommentDetailAdapter extends BaseAdapter<Comment> {
     private final List<Comment> commentList;
-    private OnCommentListener onCommentListener;
 
     private ImageSpan imageSpan;
 
@@ -56,15 +55,18 @@ public class CommentDetailAdapter extends BaseAdapter<Comment> {
         return R.layout.comment_detail_item;
     }
 
-    public void setOnCommentListener(OnCommentListener onCommentListener) {
-        this.onCommentListener = onCommentListener;
-    }
-
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         Comment comment = commentList.get(position);
 
         ImageView commentItemUserFace = holder.findById(R.id.comment_detail_item_userFace);
+        commentItemUserFace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startPublicFragment(FragmentType.BILI_USER, comment.biliUserInfo.userMid);
+            }
+        });
+
         ImageView commentItemVerifyMark = holder.findById(R.id.comment_detail_item_verifyMark);
         switch (comment.biliUserInfo.role) {
             case PERSON:
@@ -118,9 +120,7 @@ public class CommentDetailAdapter extends BaseAdapter<Comment> {
 
                     @Override
                     public void onClick(@NonNull View widget) {
-                        if (onCommentListener != null) {
-                            onCommentListener.navUserFragment(stringEntry.getKey());
-                        }
+                        startPublicFragment(FragmentType.BILI_USER, stringEntry.getKey());
                     }
                 };
 

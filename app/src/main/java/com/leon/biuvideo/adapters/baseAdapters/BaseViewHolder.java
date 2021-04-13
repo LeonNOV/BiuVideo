@@ -161,6 +161,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         View view = findById(id);
         view.setVisibility(visibility);
 
+
+
+
         return this;
     }
 

@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="125dp"
+    android:layout_height="125dp"
     android:layout_gravity="center"
     app:cardCornerRadius="@dimen/corner_6dp"
+    app:cardElevation="0dp"
+    app:cardMaxElevation="0dp"
     app:cardUseCompatPadding="true">
 
     <ImageView
-        android:id="@+id/picture_imageView_item"
-        android:layout_width="125dp"
-        android:layout_height="125dp"
+        android:id="@+id/picture_list_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/description"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_launcher_background" />
 

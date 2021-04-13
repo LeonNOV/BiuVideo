@@ -24,6 +24,7 @@ import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.home.DownloadManagerFragment;
 import com.leon.biuvideo.ui.home.HistoryFragment;
 import com.leon.biuvideo.ui.home.FollowsFragment;
+import com.leon.biuvideo.ui.home.OrderFragment;
 import com.leon.biuvideo.ui.home.RecommendFragment;
 import com.leon.biuvideo.ui.home.SettingsFragment;
 import com.leon.biuvideo.ui.home.WatchLaterFragment;
@@ -31,6 +32,7 @@ import com.leon.biuvideo.ui.mainFragments.homeModels.WeatherModelInterface;
 import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.ui.otherFragments.PopularFragment;
 import com.leon.biuvideo.ui.resourcesFragment.article.ArticleFragment;
+import com.leon.biuvideo.ui.resourcesFragment.audio.AudioFragment;
 import com.leon.biuvideo.ui.resourcesFragment.picture.PictureFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.VideoFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
@@ -258,21 +260,18 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.home_my_orders:
-                ((NavFragment) getParentFragment()).startBrotherFragment(new VideoFragment("BV1Ri4y1P7tu"));
+                ((NavFragment) getParentFragment()).startBrotherFragment(new AudioFragment());
 //                ((NavFragment) getParentFragment()).startBrotherFragment(OrderFragment.getInstance());
                 break;
             case R.id.home_my_favorites:
-                ((NavFragment) getParentFragment()).startBrotherFragment(new BiliUserFragment("315229226"));
-//                ((NavFragment) getParentFragment()).startBrotherFragment(new BiliUserFragment("2946474"));
+                ((NavFragment) getParentFragment()).startBrotherFragment(new BiliUserFragment("2946474"));
 //                ((NavFragment) getParentFragment()).startBrotherFragment(FavoritesFragment.getInstance());
                 break;
             case R.id.home_my_follows:
-                ((NavFragment) getParentFragment()).startBrotherFragment(new ArticleFragment("10684468"));
-//                ((NavFragment) getParentFragment()).startBrotherFragment(FollowsFragment.getInstance());
+                ((NavFragment) getParentFragment()).startBrotherFragment(FollowsFragment.getInstance());
                 break;
             case R.id.home_my_history:
-                ((NavFragment) getParentFragment()).startBrotherFragment(new PictureFragment("122899178"));
-//                ((NavFragment) getParentFragment()).startBrotherFragment(HistoryFragment.getInstance());
+                ((NavFragment) getParentFragment()).startBrotherFragment(HistoryFragment.getInstance());
                 break;
             case R.id.home_my_downloadManager:
                 ((NavFragment) getParentFragment()).startBrotherFragment(DownloadManagerFragment.getInstance());

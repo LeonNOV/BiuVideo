@@ -74,97 +74,99 @@ public class CommentParser implements ParserInterface<Comment> {
             dataStatus = cursor.getBooleanValue("is_end");
 
             JSONArray replies = data.getJSONArray("replies");
-            List<Comment> commentList = new ArrayList<>(replies.size());
+            if (replies != null && replies.size() > 0) {
+                List<Comment> commentList = new ArrayList<>(replies.size());
 
-            for (Object o : replies) {
-                JSONObject reply = (JSONObject) o;
-                Comment comment = new Comment();
+                for (Object o : replies) {
+                    JSONObject reply = (JSONObject) o;
+                    Comment comment = new Comment();
 
-                comment.rpid = reply.getString("rpid_str");
-                comment.oid = reply.getString("oid");
-                comment.rcount = reply.getIntValue("rcount");
-                comment.sendTime = reply.getLongValue("ctime");
-                comment.like = reply.getIntValue("like");
-                comment.action = reply.getIntValue("action") == 1;
+                    comment.rpid = reply.getString("rpid_str");
+                    comment.oid = reply.getString("oid");
+                    comment.rcount = reply.getIntValue("rcount");
+                    comment.sendTime = reply.getLongValue("ctime");
+                    comment.like = reply.getIntValue("like");
+                    comment.action = reply.getIntValue("action") == 1;
 
-                JSONObject member = reply.getJSONObject("member");
-                comment.biliUserInfo = new BiliUserInfo();
+                    JSONObject member = reply.getJSONObject("member");
+                    comment.biliUserInfo = new BiliUserInfo();
 
-                comment.biliUserInfo.userMid = member.getString("mid");
-                comment.biliUserInfo.userName = member.getString("uname");
-                comment.biliUserInfo.userFace = member.getString("avatar");
+                    comment.biliUserInfo.userMid = member.getString("mid");
+                    comment.biliUserInfo.userName = member.getString("uname");
+                    comment.biliUserInfo.userFace = member.getString("avatar");
 
-                int type = member.getJSONObject("official_verify").getIntValue("type");
-                comment.biliUserInfo.role = type == 0 ? Role.PERSON : type == 1 ? Role.OFFICIAL : Role.NONE;
-                comment.biliUserInfo.isVip = member.getJSONObject("vip").getIntValue("vipType") >= 1;
+                    int type = member.getJSONObject("official_verify").getIntValue("type");
+                    comment.biliUserInfo.role = type == 0 ? Role.PERSON : type == 1 ? Role.OFFICIAL : Role.NONE;
+                    comment.biliUserInfo.isVip = member.getJSONObject("vip").getIntValue("vipType") >= 1;
 
-                JSONObject content = reply.getJSONObject("content");
-                comment.content = new Comment.Content();
-                comment.content.message = content.getString("message");
+                    JSONObject content = reply.getJSONObject("content");
+                    comment.content = new Comment.Content();
+                    comment.content.message = content.getString("message");
 
-                if (content.containsKey("emote")) {
-                    JSONObject emote = content.getJSONObject("emote");
-                    Set<String> emoteKeys = emote.keySet();
-                    comment.content.emojiMap = new HashMap<>(emoteKeys.size());
-                    for (String key : emoteKeys) {
-                        JSONObject jsonObject = emote.getJSONObject(key);
-                        comment.content.emojiMap.put(key, jsonObject.getString("url"));
-                    }
-                }
-
-                JSONArray contentMembers = content.getJSONArray("members");
-                if (contentMembers.size() > 0) {
-                    comment.content.contentMembers = new HashMap<>(contentMembers.size());
-                    for (Object object : contentMembers) {
-                        JSONObject contentMember = (JSONObject) object;
-                        comment.content.contentMembers.put(contentMember.getString("mid"), contentMember.getString("uname"));
-                    }
-                }
-
-                JSONArray subReplies = reply.getJSONArray("replies");
-                if (subReplies != null && subReplies.size() > 0) {
-                    comment.levelTwoCommentList = new ArrayList<>(subReplies.size());
-                    for (Object subReply : subReplies) {
-                        JSONObject jsonObject = (JSONObject) subReply;
-                        Comment.LevelTwoComment levelTwoComment = new Comment.LevelTwoComment();
-
-                        levelTwoComment.levelTowMid = jsonObject.getString("mid");
-                        levelTwoComment.levelTwoName = jsonObject.getJSONObject("member").getString("uname");
-
-                        JSONObject replayContent = jsonObject.getJSONObject("content");
-                        levelTwoComment.levelTwoMessage = replayContent.getString("message");
-
-                        if (replayContent.containsKey("emote")) {
-                            JSONObject object = replayContent.getJSONObject("emote");
-                            levelTwoComment.levelTwoEmojiMap = new HashMap<>(1);
-                            for (Map.Entry<String, Object> entry : object.entrySet()) {
-                                levelTwoComment.levelTwoEmojiMap.put(entry.getKey(), ((JSONObject)entry.getValue()).getString("url"));
-                            }
+                    if (content.containsKey("emote")) {
+                        JSONObject emote = content.getJSONObject("emote");
+                        Set<String> emoteKeys = emote.keySet();
+                        comment.content.emojiMap = new HashMap<>(emoteKeys.size());
+                        for (String key : emoteKeys) {
+                            JSONObject jsonObject = emote.getJSONObject(key);
+                            comment.content.emojiMap.put(key, jsonObject.getString("url"));
                         }
-
-                        JSONArray members = replayContent.getJSONArray("members");
-                        if (members != null && members.size() > 0) {
-                            levelTwoComment.levelTwoReplayAtMap = new HashMap<>(members.size());
-
-                            for (Object o1 : members) {
-                                JSONObject object = (JSONObject) o1;
-                                levelTwoComment.levelTwoReplayAtMap.put(object.getString("mid"), object.getString("uname"));
-                            }
-                        }
-
-                        comment.levelTwoCommentList.add(levelTwoComment);
                     }
+
+                    JSONArray contentMembers = content.getJSONArray("members");
+                    if (contentMembers.size() > 0) {
+                        comment.content.contentMembers = new HashMap<>(contentMembers.size());
+                        for (Object object : contentMembers) {
+                            JSONObject contentMember = (JSONObject) object;
+                            comment.content.contentMembers.put(contentMember.getString("mid"), contentMember.getString("uname"));
+                        }
+                    }
+
+                    JSONArray subReplies = reply.getJSONArray("replies");
+                    if (subReplies != null && subReplies.size() > 0) {
+                        comment.levelTwoCommentList = new ArrayList<>(subReplies.size());
+                        for (Object subReply : subReplies) {
+                            JSONObject jsonObject = (JSONObject) subReply;
+                            Comment.LevelTwoComment levelTwoComment = new Comment.LevelTwoComment();
+
+                            levelTwoComment.levelTowMid = jsonObject.getString("mid");
+                            levelTwoComment.levelTwoName = jsonObject.getJSONObject("member").getString("uname");
+
+                            JSONObject replayContent = jsonObject.getJSONObject("content");
+                            levelTwoComment.levelTwoMessage = replayContent.getString("message");
+
+                            if (replayContent.containsKey("emote")) {
+                                JSONObject object = replayContent.getJSONObject("emote");
+                                levelTwoComment.levelTwoEmojiMap = new HashMap<>(1);
+                                for (Map.Entry<String, Object> entry : object.entrySet()) {
+                                    levelTwoComment.levelTwoEmojiMap.put(entry.getKey(), ((JSONObject)entry.getValue()).getString("url"));
+                                }
+                            }
+
+                            JSONArray members = replayContent.getJSONArray("members");
+                            if (members != null && members.size() > 0) {
+                                levelTwoComment.levelTwoReplayAtMap = new HashMap<>(members.size());
+
+                                for (Object o1 : members) {
+                                    JSONObject object = (JSONObject) o1;
+                                    levelTwoComment.levelTwoReplayAtMap.put(object.getString("mid"), object.getString("uname"));
+                                }
+                            }
+
+                            comment.levelTwoCommentList.add(levelTwoComment);
+                        }
+                    }
+
+                    JSONObject upAction = reply.getJSONObject("up_action");
+
+                    comment.upLike = upAction.getBooleanValue("like");
+                    comment.upReply = upAction.getBooleanValue("reply");
+
+                    commentList.add(comment);
                 }
 
-                JSONObject upAction = reply.getJSONObject("up_action");
-
-                comment.upLike = upAction.getBooleanValue("like");
-                comment.upReply = upAction.getBooleanValue("reply");
-
-                commentList.add(comment);
+                return commentList;
             }
-
-            return commentList;
         }
 
         return null;

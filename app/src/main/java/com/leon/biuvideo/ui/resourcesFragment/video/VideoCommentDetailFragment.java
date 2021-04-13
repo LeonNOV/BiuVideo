@@ -11,7 +11,6 @@ import android.text.style.ImageSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,10 +36,12 @@ import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.CommentDetailParser;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.CommentParser;
 import com.leon.biuvideo.values.FeaturesName;
+import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -54,6 +55,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * @Desc 查看评论详细页面
  */
 public class VideoCommentDetailFragment extends BaseSupportFragment {
+    private final List<Comment> commentList = new ArrayList<>();
+
     private final Comment comment;
     private CommentDetailParser commentDetailParser;
     private CommentDetailAdapter commentDetailAdapter;
@@ -100,7 +103,7 @@ public class VideoCommentDetailFragment extends BaseSupportFragment {
                 break;
         }
 
-        createEmojiAndClickable(comment.content, (TextView) findView(R.id.video_comment_detail_item_message));
+        createEmojiAndClickable(comment.content, findView(R.id.video_comment_detail_item_message));
 
         new BindingUtils(view, context)
                 .setText(R.id.video_comment_detail_item_userName, comment.biliUserInfo.userName)
@@ -110,6 +113,10 @@ public class VideoCommentDetailFragment extends BaseSupportFragment {
                 .setVisibility(R.id.video_comment_detail_item_upAction, comment.upLike ? View.VISIBLE : View.GONE);
 
         SmartRefreshRecyclerView<Comment> videoCommentDetailList = findView(R.id.video_comment_detail_list);
+        commentDetailAdapter = new CommentDetailAdapter(commentList, context);
+        commentDetailAdapter.setHasStableIds(true);
+        videoCommentDetailList.setRecyclerViewAdapter(commentDetailAdapter);
+        videoCommentDetailList.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
 
         videoCommentDetailList.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
@@ -127,21 +134,10 @@ public class VideoCommentDetailFragment extends BaseSupportFragment {
                 switch (msg.what) {
                     case 0:
                         if (commentList != null && commentList.size() > 0) {
-                            commentDetailAdapter = new CommentDetailAdapter(commentList, context);
-                            commentDetailAdapter.setOnCommentListener(new OnCommentListener() {
-                                @Override
-                                public void onClick(Comment comment) {
-
-                                }
-
-                                @Override
-                                public void navUserFragment(String mid) {
-
-                                }
-                            });
-                            commentDetailAdapter.setHasStableIds(true);
-                            videoCommentDetailList.setRecyclerViewAdapter(commentDetailAdapter);
-                            videoCommentDetailList.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
+                            commentDetailAdapter.append(commentList);
+                            if (!commentDetailParser.dataStatus) {
+                                videoCommentDetailList.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
+                            }
                         } else {
                             videoCommentDetailList.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
                             videoCommentDetailList.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
@@ -152,11 +148,11 @@ public class VideoCommentDetailFragment extends BaseSupportFragment {
                     case 1:
                         if (commentList != null && commentList.size() > 0) {
                             commentDetailAdapter.append(commentList);
-                        } else {
-                            videoCommentDetailList.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                        }
 
-                        if (!commentDetailParser.dataStatus) {
+                            if (!commentDetailParser.dataStatus) {
+                                videoCommentDetailList.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
+                            }
+                        } else {
                             videoCommentDetailList.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                         }
 
@@ -212,7 +208,7 @@ public class VideoCommentDetailFragment extends BaseSupportFragment {
 
                     @Override
                     public void onClick(@NonNull View widget) {
-                        Toast.makeText(context, "BiliUserMid：" + stringEntry.getKey(), Toast.LENGTH_SHORT).show();
+                        startPublicFragment(FragmentType.BILI_USER, stringEntry.getKey());
                     }
                 };
 
