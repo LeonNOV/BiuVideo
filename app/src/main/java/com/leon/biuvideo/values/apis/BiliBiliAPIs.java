@@ -214,14 +214,14 @@ public class BiliBiliAPIs {
      *      参数：
      *          sid：音频id
      */
-    public static String musicInfo = "https://www.bilibili.com/audio/music-service-c/web/song/info";
+    public static final String AUDIO_INFO = "https://www.bilibili.com/audio/music-service-c/web/song/info";
 
     /**
      *  获取歌曲链接<br/>
      *      参数：
      *          sid：音频sid，必须
      */
-    public static String musicUrl = "https://www.bilibili.com/audio/music-service-c/web/url";
+    public static final String AUDIO_STREAM_URL = "https://www.bilibili.com/audio/music-service-c/web/url";
 
     /**
      * 专栏页面链接<br/>

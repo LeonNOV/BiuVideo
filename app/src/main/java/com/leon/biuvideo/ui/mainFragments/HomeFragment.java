@@ -24,17 +24,13 @@ import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.home.DownloadManagerFragment;
 import com.leon.biuvideo.ui.home.HistoryFragment;
 import com.leon.biuvideo.ui.home.FollowsFragment;
-import com.leon.biuvideo.ui.home.OrderFragment;
 import com.leon.biuvideo.ui.home.RecommendFragment;
 import com.leon.biuvideo.ui.home.SettingsFragment;
 import com.leon.biuvideo.ui.home.WatchLaterFragment;
 import com.leon.biuvideo.ui.mainFragments.homeModels.WeatherModelInterface;
 import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.ui.otherFragments.PopularFragment;
-import com.leon.biuvideo.ui.resourcesFragment.article.ArticleFragment;
 import com.leon.biuvideo.ui.resourcesFragment.audio.AudioFragment;
-import com.leon.biuvideo.ui.resourcesFragment.picture.PictureFragment;
-import com.leon.biuvideo.ui.resourcesFragment.video.VideoFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
@@ -260,7 +256,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.home_my_orders:
-                ((NavFragment) getParentFragment()).startBrotherFragment(new AudioFragment());
+                ((NavFragment) getParentFragment()).startBrotherFragment(new AudioFragment("2205311"));
 //                ((NavFragment) getParentFragment()).startBrotherFragment(OrderFragment.getInstance());
                 break;
             case R.id.home_my_favorites:

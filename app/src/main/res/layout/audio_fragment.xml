@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/music_linearLayout"
+    android:id="@+id/audio_linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical">
 
     <com.leon.biuvideo.ui.views.SimpleTopBar
+        android:id="@+id/audio_topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -20,7 +21,7 @@
         android:paddingEnd="10dp">
 
         <TextView
-            android:id="@+id/music_textView_musicName"
+            android:id="@+id/audio_audioName"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -29,7 +30,7 @@
             android:textStyle="bold" />
 
         <!--        <TextView-->
-        <!--            android:id="@+id/music_textView_author"-->
+        <!--            android:id="@+id/audio_textView_author"-->
         <!--            android:layout_width="wrap_content"-->
         <!--            android:layout_height="match_parent"-->
         <!--            android:gravity="center"-->
@@ -41,7 +42,7 @@
     </LinearLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/music_circleImageView_cover"
+        android:id="@+id/audio_circleImageView_cover"
         android:layout_width="240dp"
         android:layout_height="0dp"
         android:layout_gravity="center"
@@ -64,7 +65,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/music_imageView_addFavorite"
+                android:id="@+id/audio_imageView_addFavorite"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_weight="1"
@@ -74,7 +75,7 @@
                 android:src="@drawable/ic_favorite_status" />
 
             <ImageView
-                android:id="@+id/music_imageView_isHaveVideo"
+                android:id="@+id/audio_musicVideo"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_weight="1"
@@ -85,7 +86,7 @@
                 android:src="@drawable/music_video" />
 
             <ImageView
-                android:id="@+id/music_imageView_link"
+                android:id="@+id/audio_link"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_weight="1"
@@ -95,7 +96,7 @@
                 android:src="@drawable/music_link" />
 
             <ImageView
-                android:id="@+id/music_imageView_download"
+                android:id="@+id/audio_download"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_weight="1"
@@ -113,17 +114,17 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/music_textView_nowProgress"
+                android:id="@+id/audio_currentProgress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/music_seekBar"
+                android:layout_below="@id/audio_seekBar"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="5dp"
                 android:text="00:00"
                 android:textColor="@color/infoColor" />
 
             <SeekBar
-                android:id="@+id/music_seekBar"
+                android:id="@+id/audio_seekBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -136,10 +137,10 @@
                 android:thumb="@drawable/dkplayer_seekbar_thumb" />
 
             <TextView
-                android:id="@+id/music_textView_length"
+                android:id="@+id/audio_length"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/music_seekBar"
+                android:layout_below="@id/audio_seekBar"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="30dp"
@@ -155,22 +156,22 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/music_imageView_up"
+                android:id="@+id/audio_prev"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginEnd="30dp"
                 android:contentDescription="@string/description"
-                android:src="@drawable/music_icon_up" />
+                android:src="@drawable/music_icon_prev" />
 
             <ImageView
-                android:id="@+id/music_imageView_control"
+                android:id="@+id/audio_control"
                 android:layout_width="55dp"
                 android:layout_height="55dp"
                 android:contentDescription="@string/description"
                 android:src="@drawable/music_play_status" />
 
             <ImageView
-                android:id="@+id/music_imageView_next"
+                android:id="@+id/audio_next"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="30dp"
