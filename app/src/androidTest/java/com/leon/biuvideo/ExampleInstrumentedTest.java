@@ -1,12 +1,23 @@
 package com.leon.biuvideo;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.leon.biuvideo.utils.Fuck;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 
@@ -19,8 +30,5 @@ import static org.junit.Assert.*;
 public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.leon.biuvideo", appContext.getPackageName());
     }
 }

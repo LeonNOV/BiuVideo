@@ -16,6 +16,9 @@ import androidx.annotation.Nullable;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
+import com.leon.biuvideo.ui.resourcesFragment.article.ArticleFragment;
+import com.leon.biuvideo.ui.resourcesFragment.picture.PictureFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoFragment;
 import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.values.FragmentType;
 
@@ -105,22 +108,26 @@ public abstract class BaseSupportFragment extends SupportFragment {
      * 启动一个“公共”Fragment
      *
      * @param fragmentType  FragmentType
-     * @param param 参数
+     * @param params 参数
      */
-    public void startPublicFragment (FragmentType fragmentType, String ... param) {
+    public void startPublicFragment (FragmentType fragmentType, String params) {
         // 获取栈顶的SupportFragment
         SupportFragment topFragment = (SupportFragment) getTopFragment();
         switch (fragmentType) {
             case BILI_USER:
-                topFragment.start(new BiliUserFragment(param[0]));
+                topFragment.start(new BiliUserFragment(params));
                 break;
             case VIDEO:
+                topFragment.start(new VideoFragment(params));
                 break;
             case AUDIO:
+
                 break;
             case ARTICLE:
+                topFragment.start(new ArticleFragment(params));
                 break;
             case PICTURE:
+                topFragment.start(new PictureFragment(params));
                 break;
             default:
                 break;

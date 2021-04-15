@@ -4,7 +4,6 @@
     android:id="@+id/audio_linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:orientation="vertical">
 
     <com.leon.biuvideo.ui.views.SimpleTopBar
@@ -42,7 +41,7 @@
     </LinearLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/audio_circleImageView_cover"
+        android:id="@+id/audio_cover"
         android:layout_width="240dp"
         android:layout_height="0dp"
         android:layout_gravity="center"
@@ -55,7 +54,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="50dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -130,9 +129,8 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:maxHeight="3dp"
+                android:max="1000"
                 android:minHeight="3dp"
-                android:progress="50"
-                android:secondaryProgress="60"
                 android:progressDrawable="@drawable/music_progress_bar"
                 android:thumb="@drawable/dkplayer_seekbar_thumb" />
 
