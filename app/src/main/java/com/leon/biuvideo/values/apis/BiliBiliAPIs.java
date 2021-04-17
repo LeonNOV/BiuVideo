@@ -65,6 +65,13 @@ public class BiliBiliAPIs {
     public static String videoBaeUrl = "https://www.bilibili.com/blackboard/html5mobileplayer.html?";
 
     /**
+     * 获取视频的弹幕数据
+     * 参数
+     *      oid：视频CID
+     */
+    public static final String DANMAKU = "http://api.bilibili.com/x/v1/dm/list.so";
+
+    /**
      * 获取B站用户信息<br/>
      * 参数
      *      mid

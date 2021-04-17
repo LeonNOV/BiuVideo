@@ -128,11 +128,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:maxHeight="3dp"
                 android:max="1000"
+                android:maxHeight="3dp"
                 android:minHeight="3dp"
                 android:progressDrawable="@drawable/music_progress_bar"
-                android:thumb="@drawable/dkplayer_seekbar_thumb" />
+                android:thumb="@drawable/dkplayer_seekbar_thumb"
+                android:thumbOffset="0dp" />
 
             <TextView
                 android:id="@+id/audio_length"

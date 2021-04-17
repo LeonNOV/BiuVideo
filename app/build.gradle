@@ -1,5 +1,9 @@
 apply plugin: 'com.android.application'
 
+// GreenDaoPlugins
+apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
@@ -34,16 +38,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
-
-
-// GreenDaoPlugins
-apply plugin: 'com.android.application'
-apply plugin: 'org.greenrobot.greendao'
 
 greendao {
     // 数据库版本号
@@ -104,7 +104,7 @@ dependencies {
 
     // 单Activity框架
     implementation 'me.yokeyword:fragmentationx:1.0.1'
-    implementation 'me.yokeyword:fragmentation-swipeback:1.0.1'
+//    implementation 'me.yokeyword:fragmentation-swipeback:1.0.1'
 
     // Item侧滑控件
     implementation "com.github.mcxtzhang:SwipeDelMenuLayout:V1.3.0"
@@ -128,6 +128,10 @@ dependencies {
 //    implementation project(path: ':dkplayer-java')
 //    implementation project(path: ':dkplayer-ui')
 //    implementation project(path: ':dkplayer-ijk')
+
+    // 烈焰弹幕使
+    implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
+    implementation 'com.github.ctiao:ndkbitmap-armv7a:0.9.21'
 
     // aria
     implementation 'com.arialyy.aria:core:3.8.15'

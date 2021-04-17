@@ -8,9 +8,12 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.resourcesBeans.Audio;
+import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.VideoFragment;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
@@ -18,6 +21,8 @@ import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.AudioParser;
+
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
