@@ -1,35 +1,41 @@
 package com.leon.biuvideo.ui.resourcesFragment.video;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
-import android.text.SpannableStringBuilder;
-import android.text.TextPaint;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Animation;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 
 import com.dueeeke.videoplayer.controller.ControlWrapper;
 import com.dueeeke.videoplayer.controller.IControlComponent;
 import com.dueeeke.videoplayer.player.VideoView;
-import com.dueeeke.videoplayer.util.PlayerUtils;
 import com.leon.biuvideo.beans.resourcesBeans.Danmaku;
+import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
+import com.leon.biuvideo.utils.ValueUtils;
+import com.leon.biuvideo.values.apis.BiliBiliAPIs;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import master.flame.danmaku.controller.DrawHandler;
+import master.flame.danmaku.danmaku.loader.ILoader;
+import master.flame.danmaku.danmaku.loader.IllegalDataException;
+import master.flame.danmaku.danmaku.loader.android.DanmakuLoaderFactory;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
 import master.flame.danmaku.danmaku.model.DanmakuTimer;
-import master.flame.danmaku.danmaku.model.IDanmakus;
 import master.flame.danmaku.danmaku.model.IDisplayer;
 import master.flame.danmaku.danmaku.model.android.DanmakuContext;
 import master.flame.danmaku.danmaku.model.android.Danmakus;
-import master.flame.danmaku.danmaku.model.android.SpannedCacheStuffer;
 import master.flame.danmaku.danmaku.parser.BaseDanmakuParser;
+import master.flame.danmaku.danmaku.parser.IDataSource;
 import master.flame.danmaku.ui.widget.DanmakuView;
 
 /**
@@ -38,12 +44,14 @@ import master.flame.danmaku.ui.widget.DanmakuView;
  * @Desc 弹幕视图
  */
 public class VideoDanmakuView extends DanmakuView implements IControlComponent {
-
-    private BaseDanmakuParser baseDanmakuParser;
+    private String cid;
     private DanmakuContext danmakuContext;
+    private Handler handler;
+    private BaseDanmakuParser baseDanmakuParser;
 
-    public VideoDanmakuView(Context context) {
+    public VideoDanmakuView(Context context, String cid) {
         super(context);
+        this.cid = cid;
         initView();
     }
 
@@ -58,21 +66,26 @@ public class VideoDanmakuView extends DanmakuView implements IControlComponent {
     }
 
     private void initView() {
+        // 设置最大显示行数
+        HashMap<Integer, Integer> maxLinesPair = new HashMap<>(1);
+
+        // 滚动弹幕最大显示5行
+        maxLinesPair.put(BaseDanmaku.TYPE_SCROLL_RL, 5);
+
+        // 设置是否禁止重叠
+        HashMap<Integer, Boolean> overlappingEnablePair = new HashMap<>(2);
+        overlappingEnablePair.put(BaseDanmaku.TYPE_SCROLL_RL, true);
+        overlappingEnablePair.put(BaseDanmaku.TYPE_FIX_TOP, true);
+
         danmakuContext = DanmakuContext.create();
         danmakuContext.setDanmakuStyle(IDisplayer.DANMAKU_STYLE_STROKEN, 3)
                 .setDuplicateMergingEnabled(false)
                 .setScrollSpeedFactor(1.2f)
                 .setScaleTextSize(1.2f)
-                .setMaximumLines(null)
-                .preventOverlapping(null)
+                .setMaximumLines(maxLinesPair)
+                .preventOverlapping(overlappingEnablePair)
                 .setDanmakuMargin(40);
 
-        baseDanmakuParser = new BaseDanmakuParser() {
-            @Override
-            protected IDanmakus parse() {
-                return new Danmakus();
-            }
-        };
         setCallback(new DrawHandler.Callback() {
             @Override
             public void prepared() {
@@ -94,9 +107,23 @@ public class VideoDanmakuView extends DanmakuView implements IControlComponent {
 
             }
         });
-        enableDanmakuDrawingCache(true);
-    }
 
+        handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                if (msg.obj != null) {
+                    InputStream inputStream = (InputStream) msg.obj;
+
+                    baseDanmakuParser = createDanmakuParser(inputStream);
+                    prepare(baseDanmakuParser, danmakuContext);
+                }
+
+                return true;
+            }
+        });
+
+        enableDanmakuDrawingCache(false);
+    }
 
     @Override
     public void attach(@NonNull ControlWrapper controlWrapper) {
@@ -123,7 +150,8 @@ public class VideoDanmakuView extends DanmakuView implements IControlComponent {
                 if (isPrepared()) {
                     restart();
                 }
-                prepare(baseDanmakuParser, danmakuContext);
+
+                getDanmakuData();
                 break;
             case VideoView.STATE_PLAYING:
                 if (isPrepared() && isPaused()) {
@@ -180,5 +208,57 @@ public class VideoDanmakuView extends DanmakuView implements IControlComponent {
         danmaku.borderColor = isSelf ? Color.GREEN : Color.TRANSPARENT;
 
         addDanmaku(danmaku);
+    }
+
+    /**
+     * 弹幕解析器
+     *
+     * @param inputStream   已解码过的数据流
+     * @return  BaseDanmakuParser
+     */
+    private BaseDanmakuParser  createDanmakuParser (InputStream inputStream) {
+        if (inputStream == null) {
+            return new BaseDanmakuParser() {
+                @Override
+                protected Danmakus parse() {
+                    return new Danmakus();
+                }
+            };
+        }
+
+        ILoader loader = DanmakuLoaderFactory.create(DanmakuLoaderFactory.TAG_BILI);
+
+        try {
+            loader.load(inputStream);
+        } catch (IllegalDataException e) {
+            e.printStackTrace();
+        }
+
+        BaseDanmakuParser parser = new BiliDanmakuParser();
+        IDataSource<?> dataSource = loader.getDataSource();
+        parser.load(dataSource);
+        return parser;
+    }
+
+    /**
+     * 获取弹幕数据
+     */
+    private void getDanmakuData () {
+        SimpleSingleThreadPool.executor(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, String> params = new HashMap<>(1);
+                params.put("oid", cid);
+
+                byte[] byteArray = new HttpUtils(BiliBiliAPIs.DANMAKU, params).getByteArray();
+
+                // 需要对响应结果进行解压
+                byte[] bytes = ValueUtils.unZipXML(byteArray);
+
+                Message message = handler.obtainMessage();
+                message.obj = new ByteArrayInputStream(bytes);
+                handler.sendMessage(message);
+            }
+        });
     }
 }

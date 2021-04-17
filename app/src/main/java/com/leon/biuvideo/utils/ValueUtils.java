@@ -1,11 +1,14 @@
 package com.leon.biuvideo.utils;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.zip.Inflater;
 
 public class ValueUtils {
     /**
@@ -180,5 +183,46 @@ public class ValueUtils {
             default:
                 return "ERROR";
         }
+    }
+
+    /**
+     * 将编码格式为deflate的响应体进行解码
+     *
+     * @param bytes 未解码数据
+     * @return  解码后的数据
+     */
+    public static byte[] unZipXML(byte[] bytes) {
+        byte[] byteArrayTemp = new byte[bytes.length + 2];
+        System.arraycopy(bytes, 0, byteArrayTemp, 2, bytes.length);
+        byteArrayTemp[0] = 0x78;
+        byteArrayTemp[1] = 0x01;
+
+        bytes = byteArrayTemp;
+
+        Inflater inflater = new Inflater();
+        inflater.setInput(bytes);
+
+        byte[] bufferArray = new byte[1024];
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(1024);
+        try {
+            int flag = 1;
+            while (flag != 0) {
+                flag = inflater.inflate(bufferArray);
+                byteArrayOutputStream.write(bufferArray, 0, flag);
+            }
+            bytes = byteArrayOutputStream.toByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                byteArrayOutputStream.flush();
+                byteArrayOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        inflater.end();
+        return bytes;
     }
 }

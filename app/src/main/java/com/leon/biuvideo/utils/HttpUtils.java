@@ -3,6 +3,7 @@ package com.leon.biuvideo.utils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -64,6 +65,19 @@ public class HttpUtils {
     public String getData() {
         try {
             return getInstance().body().string();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * @return  获取响应体字节码数据
+     */
+    public byte[] getByteArray () {
+        try {
+            return getInstance().body().bytes();
         } catch (IOException e) {
             e.printStackTrace();
         }

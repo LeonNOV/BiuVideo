@@ -23,6 +23,7 @@ public class VideoFragment extends BaseSupportFragment {
     private VideoView<IjkPlayer> videoPlayerViewContent;
 
     private boolean isFirstVideo = true;
+    private VideoDanmakuView videoDanmakuView;
 
     public VideoFragment(String bvid) {
         this.bvid = bvid;
@@ -46,9 +47,10 @@ public class VideoFragment extends BaseSupportFragment {
         VideoInfoAndCommentsFragment videoInfoAndCommentsFragment = new VideoInfoAndCommentsFragment(bvid);
         videoInfoAndCommentsFragment.setVideoFragmentContainerListener(new VideoInfoAndCommentsFragment.VideoFragmentContainerListener() {
             @Override
-            public void playVideo(String videoUrl) {
+            public void playVideo(String videoUrl, String cid) {
                 if (isFirstVideo) {
-                    initVideoPlayer(videoUrl);
+                    initVideoPlayer(videoUrl, cid);
+
                     isFirstVideo = false;
                 } else {
                     videoPlayerViewContent.setUrl(videoUrl);
@@ -73,6 +75,10 @@ public class VideoFragment extends BaseSupportFragment {
         }
     }
 
+    private void initVideoDanmakuView(String cid) {
+
+    }
+
     @Override
     public boolean onBackPressedSupport() {
         FragmentManager childFragmentManager = getChildFragmentManager();
@@ -94,10 +100,15 @@ public class VideoFragment extends BaseSupportFragment {
      *
      * @param videoUrl 视频链接
      */
-    private void initVideoPlayer(String videoUrl) {
+    private void initVideoPlayer(String videoUrl, String cid) {
         videoPlayerViewContent.setUrl(videoUrl, HttpUtils.getHeaders());
         VideoPlayerController videoPlayerController = new VideoPlayerController(context);
         videoPlayerController.addDefaultControlComponent("BiliBili");
+
+        videoDanmakuView = new VideoDanmakuView(context, cid);
+        videoPlayerController.addControlComponent(videoDanmakuView);
+
+        videoPlayerController.addControlComponent();
         videoPlayerViewContent.setVideoController(videoPlayerController);
 
         videoPlayerViewContent.start();

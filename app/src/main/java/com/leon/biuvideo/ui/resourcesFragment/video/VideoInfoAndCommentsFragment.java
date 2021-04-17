@@ -41,6 +41,7 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
     private VideoFragmentContainerListener videoFragmentContainerListener;
 
     private MainActivity.OnTouchListener onTouchListener;
+    private VideoDetailInfo videoDetailInfo;
 
     public VideoInfoAndCommentsFragment(String bvid) {
         this.bvid = bvid;
@@ -56,7 +57,7 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
          *
          * @param videoUrl  视频链接
          */
-        void playVideo (String videoUrl);
+        void playVideo (String videoUrl, String cid);
 
         /**
          * 控制弹幕 显示/隐藏
@@ -106,7 +107,7 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
                     case 0:
                         List<Fragment> viewPagerFragments = new ArrayList<>(2);
 
-                        VideoDetailInfo videoDetailInfo = (VideoDetailInfo) msg.obj;
+                        videoDetailInfo = (VideoDetailInfo) msg.obj;
                         VideoInfoFragment videoInfoFragment = new VideoInfoFragment(videoDetailInfo);
                         viewPagerFragments.add(videoInfoFragment);
 
@@ -132,7 +133,7 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
                         // 播放第一个视频
                         videoWithFlv = (VideoWithFlv) msg.obj;
                         if (videoFragmentContainerListener != null) {
-                            videoFragmentContainerListener.playVideo(videoWithFlv.videoStreamInfoList.get(0).url);
+                            videoFragmentContainerListener.playVideo(videoWithFlv.videoStreamInfoList.get(0).url, videoDetailInfo.anthologyInfoList.get(0).cid);
                         }
                         break;
                     default:
