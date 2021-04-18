@@ -20,17 +20,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <ImageView
-                android:id="@+id/video_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/description"
-                android:padding="10dp"
-                android:src="@drawable/ic_back"
-                app:tint="@color/white" />
-
         </FrameLayout>
 
     </com.google.android.material.appbar.AppBarLayout>

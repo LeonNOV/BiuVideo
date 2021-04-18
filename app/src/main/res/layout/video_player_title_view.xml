@@ -19,33 +19,43 @@
         android:src="@drawable/ic_back"
         app:tint="@color/white" />
 
-    <TextView
-        android:id="@+id/video_player_title_view_title"
+    <LinearLayout
+        android:id="@+id/video_player_title_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:paddingLeft="6dp"
-        android:paddingRight="6dp"
-        android:singleLine="true"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        tools:text="这是一个标题" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/video_player_title_view_battery"
-        android:layout_width="26dp"
-        android:layout_height="20dp"
-        android:src="@drawable/dkplayer_battery_level"
-        android:contentDescription="@string/description" />
+        <TextView
+            android:id="@+id/video_player_title_view_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            tools:text="这是一个标题" />
 
-    <TextView
-        android:id="@+id/video_player_title_view_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="14dp"
-        android:textColor="@android:color/white"
-        tools:text="12:00" />
+        <ImageView
+            android:id="@+id/video_player_title_view_battery"
+            android:layout_width="26dp"
+            android:layout_height="20dp"
+            android:src="@drawable/dkplayer_battery_level"
+            android:contentDescription="@string/description" />
+
+        <TextView
+            android:id="@+id/video_player_title_view_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="14dp"
+            android:textColor="@android:color/white"
+            tools:text="12:00" />
+
+    </LinearLayout>
 
 </LinearLayout>

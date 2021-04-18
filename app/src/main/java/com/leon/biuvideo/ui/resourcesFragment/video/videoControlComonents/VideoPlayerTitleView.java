@@ -36,10 +36,24 @@ public class VideoPlayerTitleView extends LinearLayout implements IControlCompon
     private TextView videoPlayerTitleViewTime;
     private BatteryReceiver batteryReceiver;
 
+    private OnBackListener onBackListener;
+
+    public interface OnBackListener {
+        /**
+         * 视频播放界面顶部返回键事件
+         */
+        void onBack();
+    }
+
+    public void setOnBackListener(OnBackListener onBackListener) {
+        this.onBackListener = onBackListener;
+    }
+
     /**
      * 是否注册BatteryReceiver
      */
     private boolean isRegister;
+    private LinearLayout videoPlayerTitleContent;
 
     public VideoPlayerTitleView(Context context) {
         super(context);
@@ -66,14 +80,19 @@ public class VideoPlayerTitleView extends LinearLayout implements IControlCompon
                 if (activity != null && controlWrapper.isFullScreen()) {
                     activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                     controlWrapper.stopFullScreen();
+                } else {
+                    if (onBackListener != null) {
+                        onBackListener.onBack();
+                    }
                 }
             }
         });
-        videoPlayerTitleViewTitle = findViewById(R.id.video_player_title_view_title);
 
         batteryReceiver = new BatteryReceiver(findViewById(R.id.video_player_title_view_battery));
 
+        videoPlayerTitleViewTitle = findViewById(R.id.video_player_title_view_title);
         videoPlayerTitleViewTime = findViewById(R.id.video_player_title_view_time);
+        videoPlayerTitleContent = findViewById(R.id.video_player_title_content);
     }
 
     public void setTitle (String title) {
@@ -110,11 +129,6 @@ public class VideoPlayerTitleView extends LinearLayout implements IControlCompon
 
     @Override
     public void onVisibilityChanged(boolean isVisible, Animation anim) {
-        // 在全屏时有效
-        if (!controlWrapper.isFullScreen()) {
-            return;
-        }
-
         if (isVisible) {
             if (getVisibility() == GONE) {
                 videoPlayerTitleViewTime.setText(PlayerUtils.getCurrentSystemTime());
@@ -122,6 +136,13 @@ public class VideoPlayerTitleView extends LinearLayout implements IControlCompon
 
                 if (anim != null) {
                     startAnimation(anim);
+                }
+
+                // 在全屏时显示标题、时间等信息，竖屏则不显示
+                if (controlWrapper.isFullScreen()) {
+                    videoPlayerTitleContent.setVisibility(VISIBLE);
+                } else {
+                    videoPlayerTitleContent.setVisibility(GONE);
                 }
             }
         } else {
@@ -155,12 +176,11 @@ public class VideoPlayerTitleView extends LinearLayout implements IControlCompon
         if (playerState == VideoView.PLAYER_FULL_SCREEN) {
             if (controlWrapper.isShowing() && !controlWrapper.isLocked()) {
                 setVisibility(VISIBLE);
+                videoPlayerTitleContent.setVisibility(VISIBLE);
                 videoPlayerTitleViewTime.setText(PlayerUtils.getCurrentSystemTime());
             }
-            videoPlayerTitleViewTitle.setSelected(true);
         } else {
-            setVisibility(GONE);
-            videoPlayerTitleViewTitle.setSelected(false);
+            videoPlayerTitleContent.setVisibility(GONE);
         }
 
         Activity activity = PlayerUtils.scanForActivity(getContext());

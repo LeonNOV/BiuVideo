@@ -1,13 +1,12 @@
 package com.leon.biuvideo.ui.resourcesFragment.video;
 
-import android.view.View;
-
 import androidx.fragment.app.FragmentManager;
 
 import com.dueeeke.videoplayer.ijk.IjkPlayer;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerTitleView;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.VideoPlayerController;
 import com.leon.biuvideo.utils.HttpUtils;
@@ -23,7 +22,7 @@ public class VideoFragment extends BaseSupportFragment {
     private VideoView<IjkPlayer> videoPlayerViewContent;
 
     private boolean isFirstVideo = true;
-    private VideoDanmakuView videoDanmakuView;
+    private VideoPlayerController videoPlayerController;
 
     public VideoFragment(String bvid) {
         this.bvid = bvid;
@@ -36,12 +35,6 @@ public class VideoFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        findView(R.id.video_back).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                backPressed();
-            }
-        });
         videoPlayerViewContent = findView(R.id.video_player_content);
 
         VideoInfoAndCommentsFragment videoInfoAndCommentsFragment = new VideoInfoAndCommentsFragment(bvid);
@@ -60,7 +53,7 @@ public class VideoFragment extends BaseSupportFragment {
 
             @Override
             public void danmakuStatus(boolean status) {
-
+                videoPlayerController.setDanmakuVisibility(status);
             }
 
             @Override
@@ -73,10 +66,6 @@ public class VideoFragment extends BaseSupportFragment {
         if (findChildFragment(videoInfoAndCommentsFragment.getClass()) == null) {
             loadRootFragment(R.id.video_fragment_container, videoInfoAndCommentsFragment);
         }
-    }
-
-    private void initVideoDanmakuView(String cid) {
-
     }
 
     @Override
@@ -102,12 +91,14 @@ public class VideoFragment extends BaseSupportFragment {
      */
     private void initVideoPlayer(String videoUrl, String cid) {
         videoPlayerViewContent.setUrl(videoUrl, HttpUtils.getHeaders());
-        VideoPlayerController videoPlayerController = new VideoPlayerController(context);
-        videoPlayerController.addDefaultControlComponent("BiliBili");
-
-        videoDanmakuView = new VideoDanmakuView(context, cid);
-        videoPlayerController.addControlComponent(videoDanmakuView);
-
+        videoPlayerController = new VideoPlayerController(context);
+        videoPlayerController.setOnBackListener(new VideoPlayerTitleView.OnBackListener() {
+            @Override
+            public void onBack() {
+                backPressed();
+            }
+        });
+        videoPlayerController.addDefaultControlComponent("BiliBili", cid);
         videoPlayerController.addControlComponent();
         videoPlayerViewContent.setVideoController(videoPlayerController);
 

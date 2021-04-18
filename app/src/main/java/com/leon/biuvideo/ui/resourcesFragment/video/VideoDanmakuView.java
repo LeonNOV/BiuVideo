@@ -179,7 +179,6 @@ public class VideoDanmakuView extends DanmakuView implements IControlComponent {
 
     @Override
     public void setProgress(int duration, int position) {
-
     }
 
     @Override
@@ -187,26 +186,35 @@ public class VideoDanmakuView extends DanmakuView implements IControlComponent {
 
     }
 
-    public void addDanmaku (Danmaku danmakuBean, boolean isSelf) {
+    public void hideDanmaku () {
+        hide();
+        pause();
+    }
+
+    public void setPosition (long position) {
+        if (isPaused()) {
+            showAndResumeDrawTask(position);
+        }
+    }
+
+    public void addDanmaku (String text, boolean isSelf) {
         BaseDanmaku danmaku = danmakuContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
         if (danmaku == null) {
             return;
         }
 
-        danmaku.text = danmakuBean.content;
+        danmaku.text = text;
 
         // 可能会被各种过滤器过滤并隐藏显示
         danmaku.priority = 0;
-
         danmaku.isLive = false;
-        danmaku.setTime(danmakuBean.danmakuTimestamp);
-        danmaku.textSize = danmakuBean.danmakuSize;
-
-        danmaku.textColor = danmakuBean.danmakuColor;
+        danmaku.padding = 5;
+        danmaku.setTime(getCurrentTime() + 1200);
+        danmaku.textSize = 25f * (baseDanmakuParser.getDisplayer().getDensity() - 0.6f);
+        danmaku.textColor = Color.WHITE;
         danmaku.textShadowColor = Color.GRAY;
 
         danmaku.borderColor = isSelf ? Color.GREEN : Color.TRANSPARENT;
-
         addDanmaku(danmaku);
     }
 

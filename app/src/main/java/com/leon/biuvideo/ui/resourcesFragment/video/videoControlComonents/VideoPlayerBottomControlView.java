@@ -50,6 +50,12 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
     private boolean isDragging;
     private LinearLayout videoPlayerBottomControlContent;
 
+    private OnDanmakuPositionStateListener onDanmakuPositionStateListener;
+
+    public void setOnDanmakuPositionStateListener(OnDanmakuPositionStateListener onDanmakuPositionStateListener) {
+        this.onDanmakuPositionStateListener = onDanmakuPositionStateListener;
+    }
+
     public VideoPlayerBottomControlView(Context context) {
         super(context);
         initView();
@@ -305,6 +311,10 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
 
         controlWrapper.stopProgress();
         controlWrapper.stopFadeOut();
+
+        if (onDanmakuPositionStateListener != null) {
+            onDanmakuPositionStateListener.onStart();
+        }
     }
 
     @Override
@@ -317,6 +327,10 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
         isDragging = false;
         controlWrapper.startProgress();
         controlWrapper.startFadeOut();
+
+        if (onDanmakuPositionStateListener != null) {
+            onDanmakuPositionStateListener.onStop(videoNewPosition);
+        }
     }
 
     /**

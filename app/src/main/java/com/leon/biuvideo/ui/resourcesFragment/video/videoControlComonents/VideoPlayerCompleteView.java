@@ -1,5 +1,6 @@
 package com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import androidx.annotation.Nullable;
 import com.dueeeke.videoplayer.controller.ControlWrapper;
 import com.dueeeke.videoplayer.controller.IControlComponent;
 import com.dueeeke.videoplayer.player.VideoView;
+import com.dueeeke.videoplayer.util.PlayerUtils;
 import com.leon.biuvideo.R;
 
 /**
@@ -72,6 +74,12 @@ public class VideoPlayerCompleteView extends LinearLayout implements IControlCom
         // 如果此视频已播放完毕,就显示当前界面
         if (playState == VideoView.STATE_PLAYBACK_COMPLETED) {
             setVisibility(VISIBLE);
+
+            // 如果为全屏，则退出全屏
+            if (controlWrapper.isFullScreen()) {
+                controlWrapper.stopFullScreen();
+            }
+
         } else {
             setVisibility(GONE);
         }

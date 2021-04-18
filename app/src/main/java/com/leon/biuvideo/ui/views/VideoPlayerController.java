@@ -17,6 +17,8 @@ import com.dueeeke.videoplayer.controller.GestureVideoController;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.dueeeke.videoplayer.util.PlayerUtils;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoDanmakuView;
+import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.OnDanmakuPositionStateListener;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerBottomControlView;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerCompleteView;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerErrorView;
@@ -32,6 +34,13 @@ import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoP
 public class VideoPlayerController extends GestureVideoController {
     private ImageView videoPlayerControllerLock;
     private ProgressBar videoPlayerControllerLoading;
+    private VideoDanmakuView videoDanmakuView;
+
+    private VideoPlayerTitleView.OnBackListener onBackListener;
+
+    public void setOnBackListener(VideoPlayerTitleView.OnBackListener onBackListener) {
+        this.onBackListener = onBackListener;
+    }
 
     public VideoPlayerController(@NonNull Context context) {
         super(context);
@@ -65,18 +74,31 @@ public class VideoPlayerController extends GestureVideoController {
         videoPlayerControllerLoading = findViewById(R.id.video_player_controller_loading);
     }
 
-    public void addDefaultControlComponent (String title) {
+    public void addDefaultControlComponent (String title, String cid) {
         VideoPlayerCompleteView videoPlayerCompleteView = new VideoPlayerCompleteView(getContext());
         VideoPlayerErrorView videoPlayerErrorView = new VideoPlayerErrorView(getContext());
         VideoPlayerPrepareView videoPlayerPrepareView = new VideoPlayerPrepareView(getContext());
         videoPlayerPrepareView.setClickStart();
 
         VideoPlayerTitleView videoPlayerTitleView = new VideoPlayerTitleView(getContext());
+        videoPlayerTitleView.setOnBackListener(onBackListener);
         videoPlayerTitleView.setTitle(title);
 
         addControlComponent(videoPlayerCompleteView, videoPlayerErrorView, videoPlayerPrepareView, videoPlayerTitleView);
 
         VideoPlayerBottomControlView videoPlayerBottomControlView = new VideoPlayerBottomControlView(getContext());
+        videoPlayerBottomControlView.setOnDanmakuPositionStateListener(new OnDanmakuPositionStateListener() {
+            @Override
+            public void onStart() {
+                videoDanmakuView.hideDanmaku();
+            }
+
+            @Override
+            public void onStop(long position) {
+                videoDanmakuView.setPosition(position);
+            }
+        });
+
         VideoPlayerGestureView videoPlayerGestureView = new VideoPlayerGestureView(getContext());
         videoPlayerGestureView.setOnDraggingListener(new VideoPlayerGestureView.OnDraggingListener() {
             @Override
@@ -84,7 +106,40 @@ public class VideoPlayerController extends GestureVideoController {
                 videoPlayerBottomControlView.setBottomProgressPosition(duration, slidePosition);
             }
         });
-        addControlComponent(videoPlayerBottomControlView, videoPlayerGestureView);
+        videoPlayerGestureView.setOnDanmakuPositionStateListener(new OnDanmakuPositionStateListener() {
+            @Override
+            public void onStart() {
+                videoDanmakuView.hideDanmaku();
+            }
+
+            @Override
+            public void onStop(long position) {
+                videoDanmakuView.setPosition(position);
+            }
+        });
+
+        videoDanmakuView = new VideoDanmakuView(getContext(), cid);
+
+        addControlComponent(videoPlayerBottomControlView, videoPlayerGestureView, videoDanmakuView);
+    }
+
+    /**
+     * 控制弹幕视图是否显示
+     *
+     * @param stat  显示状态
+     */
+    public void setDanmakuVisibility (boolean stat) {
+        if (stat) {
+            videoDanmakuView.show();
+        } else {
+            videoDanmakuView.hide();
+        }
+    }
+
+    private void addDanmaku (String text) {
+        if (videoDanmakuView != null) {
+            videoDanmakuView.addDanmaku(null, true);
+        }
     }
 
     @Override

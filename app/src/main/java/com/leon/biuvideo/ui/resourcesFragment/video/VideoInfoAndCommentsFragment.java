@@ -188,7 +188,8 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
         switch (v.getId()) {
             case R.id.video_info_and_comments_danmaku_status:
                 if (videoFragmentContainerListener != null) {
-                    videoFragmentContainerListener.danmakuStatus(false);
+                    videoFragmentContainerListener.danmakuStatus(!videoInfoAndCommentsDanmakuStatus.isSelected());
+                    videoInfoAndCommentsDanmakuStatus.setSelected(!videoInfoAndCommentsDanmakuStatus.isSelected());
                 }
                 break;
             default:

@@ -21,6 +21,7 @@ import com.dueeeke.videoplayer.controller.IGestureComponent;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.dueeeke.videoplayer.util.PlayerUtils;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.utils.Fuck;
 
 /**
  * @Author Leon
@@ -35,6 +36,17 @@ public class VideoPlayerGestureView extends FrameLayout implements IGestureCompo
     private TextView videoPlayerGesturePercent;
     private ProgressBar videoPlayerGestureProgress;
     private LinearLayout videoPlayerGestureContent;
+
+    /**
+     * 是否为第一次出现VideoView.STATE_PLAYING
+     */
+    private boolean isFirstPlayingState = true;
+
+    private OnDanmakuPositionStateListener onDanmakuPositionStateListener;
+
+    public void setOnDanmakuPositionStateListener(OnDanmakuPositionStateListener onDanmakuPositionStateListener) {
+        this.onDanmakuPositionStateListener = onDanmakuPositionStateListener;
+    }
 
     public VideoPlayerGestureView(Context context) {
         super(context);
@@ -92,6 +104,7 @@ public class VideoPlayerGestureView extends FrameLayout implements IGestureCompo
 
     @Override
     public void onPlayStateChanged(int playState) {
+
         if (playState == VideoView.STATE_IDLE
                 || playState == VideoView.STATE_START_ABORT
                 || playState == VideoView.STATE_PREPARING
@@ -100,7 +113,15 @@ public class VideoPlayerGestureView extends FrameLayout implements IGestureCompo
                 || playState == VideoView.STATE_PLAYBACK_COMPLETED) {
             setVisibility(GONE);
         } else {
-            setVisibility(VISIBLE);
+            // 解决第一次打开视频播放界面，会显示手势控制视图的问题
+            // 注意：第一次使用手势控制不会显示，后面再使用才能显示
+            if (playState == VideoView.STATE_PLAYING && isFirstPlayingState) {
+                Fuck.blue("VideoPlayerGestureView is GONE");
+                setVisibility(GONE);
+                isFirstPlayingState = false;
+            } else {
+                setVisibility(VISIBLE);
+            }
         }
     }
 
@@ -129,6 +150,10 @@ public class VideoPlayerGestureView extends FrameLayout implements IGestureCompo
 
         videoPlayerGestureContent.setVisibility(VISIBLE);
         videoPlayerGestureContent.setAlpha(1f);
+
+        if (onDanmakuPositionStateListener != null) {
+            onDanmakuPositionStateListener.onStart();
+        }
     }
 
     /**
@@ -148,6 +173,10 @@ public class VideoPlayerGestureView extends FrameLayout implements IGestureCompo
                     }
                 })
                 .start();
+
+        if (onDanmakuPositionStateListener != null) {
+            onDanmakuPositionStateListener.onStop(controlWrapper.getCurrentPosition());
+        }
     }
 
     @Override
