@@ -25,6 +25,11 @@ import com.dueeeke.videoplayer.controller.IControlComponent;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.dueeeke.videoplayer.util.PlayerUtils;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.ui.resourcesFragment.video.DanmakuWrap;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * @Author Leon
@@ -40,7 +45,7 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
     private ImageView videoPlayerBottomControlFullScreen;
     private LinearLayout videoPlayerBottomControlSetting;
     private ImageView videoPlayerBottomPlayButton;
-    private ImageView videoPlayerBottomControlDanmakuControl;
+    public ImageView videoPlayerBottomControlDanmakuControl;
     private EditText videoPlayerBottomControlDanmakuEditText;
     private TextView videoPlayerBottomControlSpeed;
     private TextView videoPlayerBottomControlQuality;
@@ -50,10 +55,10 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
     private boolean isDragging;
     private LinearLayout videoPlayerBottomControlContent;
 
-    private OnDanmakuPositionStateListener onDanmakuPositionStateListener;
+    private OnDanmakuListener onDanmakuListener;
 
-    public void setOnDanmakuPositionStateListener(OnDanmakuPositionStateListener onDanmakuPositionStateListener) {
-        this.onDanmakuPositionStateListener = onDanmakuPositionStateListener;
+    public void setOnDanmakuListener(OnDanmakuListener onDanmakuListener) {
+        this.onDanmakuListener = onDanmakuListener;
     }
 
     public VideoPlayerBottomControlView(Context context) {
@@ -72,6 +77,9 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
     }
 
     private void initView() {
+        // 注册监听
+        EventBus.getDefault().register(this);
+
         setVisibility(GONE);
         LayoutInflater.from(getContext()).inflate(R.layout.video_player_bottom_control, this, true);
 
@@ -90,6 +98,7 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
         videoPlayerBottomPlayButton.setOnClickListener(this);
 
         videoPlayerBottomControlDanmakuControl = findViewById(R.id.video_player_bottom_control_danmaku_control);
+        videoPlayerBottomControlDanmakuControl.setSelected(true);
         videoPlayerBottomControlDanmakuControl.setOnClickListener(this);
 
         videoPlayerBottomControlDanmakuEditText = findViewById(R.id.video_player_bottom_control_danmaku_editText);
@@ -278,7 +287,9 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
                 controlWrapper.togglePlay();
                 break;
             case R.id.video_player_bottom_control_danmaku_control:
-                Toast.makeText(getContext(), "弹幕开关", Toast.LENGTH_SHORT).show();
+                boolean selected = videoPlayerBottomControlDanmakuControl.isSelected();
+                videoPlayerBottomControlDanmakuControl.setSelected(!selected);
+                EventBus.getDefault().post(DanmakuWrap.getInstance(videoPlayerBottomControlDanmakuControl.isSelected()));
                 break;
             case R.id.video_player_bottom_control_speed:
                 Toast.makeText(getContext(), "倍速播放", Toast.LENGTH_SHORT).show();
@@ -312,8 +323,8 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
         controlWrapper.stopProgress();
         controlWrapper.stopFadeOut();
 
-        if (onDanmakuPositionStateListener != null) {
-            onDanmakuPositionStateListener.onStart();
+        if (onDanmakuListener != null) {
+            onDanmakuListener.onStart();
         }
     }
 
@@ -328,9 +339,14 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
         controlWrapper.startProgress();
         controlWrapper.startFadeOut();
 
-        if (onDanmakuPositionStateListener != null) {
-            onDanmakuPositionStateListener.onStop(videoNewPosition);
+        if (onDanmakuListener != null) {
+            onDanmakuListener.onStop(videoNewPosition);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetMessage (DanmakuWrap danmakuWrap) {
+        videoPlayerBottomControlDanmakuControl.setSelected(danmakuWrap.danmakuState);
     }
 
     /**

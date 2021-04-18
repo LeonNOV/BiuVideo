@@ -133,6 +133,9 @@ dependencies {
     implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
     implementation 'com.github.ctiao:ndkbitmap-armv7a:0.9.21'
 
+    // EventBus
+    implementation 'org.greenrobot:eventbus:3.2.0'
+
     // aria
     implementation 'com.arialyy.aria:core:3.8.15'
     annotationProcessor 'com.arialyy.aria:compiler:3.8.15'

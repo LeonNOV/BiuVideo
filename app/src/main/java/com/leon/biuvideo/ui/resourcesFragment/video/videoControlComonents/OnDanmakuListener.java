@@ -5,7 +5,7 @@ package com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents;
  * @Time 2021/4/18
  * @Desc 控制弹幕监听
  */
-public interface OnDanmakuPositionStateListener {
+public interface OnDanmakuListener {
     /**
      * 开始拖动进度条/开始滑动屏幕调整进度
      */

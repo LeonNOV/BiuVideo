@@ -20,6 +20,10 @@ import com.leon.biuvideo.utils.ViewUtils;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoDetailInfoParser;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoWithFlvParser;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,13 +64,6 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
         void playVideo (String videoUrl, String cid);
 
         /**
-         * 控制弹幕 显示/隐藏
-         *
-         * @param status    显示/隐藏
-         */
-        void danmakuStatus (boolean status);
-
-        /**
          * 错误事件
          */
         void onError();
@@ -83,12 +80,16 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
 
     @Override
     protected void initView() {
+        // 注册监听
+        EventBus.getDefault().register(this);
+
         findView(R.id.video_info_and_comments_tab_container).setBackgroundResource(R.color.white);
 
         videoInfoAndCommentsTabLayout = findView(R.id.video_info_and_comments_tabLayout);
 
         findView(R.id.video_info_and_comments_send_danmaku).setOnClickListener(this);
         videoInfoAndCommentsDanmakuStatus = findView(R.id.video_info_and_comments_danmaku_status);
+        videoInfoAndCommentsDanmakuStatus.setSelected(true);
         videoInfoAndCommentsDanmakuStatus.setOnClickListener(this);
 
         videoInfoAndCommentsViewPager = findView(R.id.video_info_and_comments_viewPager);
@@ -183,14 +184,18 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
         });
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetMessage (DanmakuWrap danmakuWrap) {
+        videoInfoAndCommentsDanmakuStatus.setSelected(danmakuWrap.danmakuState);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.video_info_and_comments_danmaku_status:
-                if (videoFragmentContainerListener != null) {
-                    videoFragmentContainerListener.danmakuStatus(!videoInfoAndCommentsDanmakuStatus.isSelected());
-                    videoInfoAndCommentsDanmakuStatus.setSelected(!videoInfoAndCommentsDanmakuStatus.isSelected());
-                }
+                boolean selected = videoInfoAndCommentsDanmakuStatus.isSelected();
+                videoInfoAndCommentsDanmakuStatus.setSelected(!selected);
+                EventBus.getDefault().post(DanmakuWrap.getInstance(!selected));
                 break;
             default:
                 break;

@@ -38,6 +38,7 @@ public class VideoFragment extends BaseSupportFragment {
         videoPlayerViewContent = findView(R.id.video_player_content);
 
         VideoInfoAndCommentsFragment videoInfoAndCommentsFragment = new VideoInfoAndCommentsFragment(bvid);
+
         videoInfoAndCommentsFragment.setVideoFragmentContainerListener(new VideoInfoAndCommentsFragment.VideoFragmentContainerListener() {
             @Override
             public void playVideo(String videoUrl, String cid) {
@@ -52,16 +53,12 @@ public class VideoFragment extends BaseSupportFragment {
             }
 
             @Override
-            public void danmakuStatus(boolean status) {
-                videoPlayerController.setDanmakuVisibility(status);
-            }
-
-            @Override
             public void onError() {
                 SimpleSnackBar.make(getActivity().getWindow().getDecorView(), "获取数据失败", SimpleSnackBar.LENGTH_LONG).show();
                 backPressed();
             }
         });
+
 
         if (findChildFragment(videoInfoAndCommentsFragment.getClass()) == null) {
             loadRootFragment(R.id.video_fragment_container, videoInfoAndCommentsFragment);

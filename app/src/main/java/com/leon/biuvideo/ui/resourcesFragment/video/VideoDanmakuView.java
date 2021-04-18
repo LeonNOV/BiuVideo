@@ -14,11 +14,14 @@ import androidx.annotation.NonNull;
 import com.dueeeke.videoplayer.controller.ControlWrapper;
 import com.dueeeke.videoplayer.controller.IControlComponent;
 import com.dueeeke.videoplayer.player.VideoView;
-import com.leon.biuvideo.beans.resourcesBeans.Danmaku;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -66,6 +69,9 @@ public class VideoDanmakuView extends DanmakuView implements IControlComponent {
     }
 
     private void initView() {
+        // 注册监听
+        EventBus.getDefault().register(this);
+
         // 设置最大显示行数
         HashMap<Integer, Integer> maxLinesPair = new HashMap<>(1);
 
@@ -186,13 +192,22 @@ public class VideoDanmakuView extends DanmakuView implements IControlComponent {
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetMessage (DanmakuWrap danmakuWrap) {
+        if (danmakuWrap.danmakuState) {
+            show();
+        } else {
+            hide();
+        }
+    }
+
     public void hideDanmaku () {
         hide();
         pause();
     }
 
     public void setPosition (long position) {
-        if (isPaused()) {
+        if (!isShown()) {
             showAndResumeDrawTask(position);
         }
     }

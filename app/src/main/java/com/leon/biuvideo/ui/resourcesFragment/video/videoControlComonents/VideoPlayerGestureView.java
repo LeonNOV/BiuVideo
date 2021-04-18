@@ -42,10 +42,10 @@ public class VideoPlayerGestureView extends FrameLayout implements IGestureCompo
      */
     private boolean isFirstPlayingState = true;
 
-    private OnDanmakuPositionStateListener onDanmakuPositionStateListener;
+    private OnDanmakuListener onDanmakuListener;
 
-    public void setOnDanmakuPositionStateListener(OnDanmakuPositionStateListener onDanmakuPositionStateListener) {
-        this.onDanmakuPositionStateListener = onDanmakuPositionStateListener;
+    public void setOnDanmakuListener(OnDanmakuListener onDanmakuListener) {
+        this.onDanmakuListener = onDanmakuListener;
     }
 
     public VideoPlayerGestureView(Context context) {
@@ -151,8 +151,8 @@ public class VideoPlayerGestureView extends FrameLayout implements IGestureCompo
         videoPlayerGestureContent.setVisibility(VISIBLE);
         videoPlayerGestureContent.setAlpha(1f);
 
-        if (onDanmakuPositionStateListener != null) {
-            onDanmakuPositionStateListener.onStart();
+        if (onDanmakuListener != null) {
+            onDanmakuListener.onStart();
         }
     }
 
@@ -174,8 +174,8 @@ public class VideoPlayerGestureView extends FrameLayout implements IGestureCompo
                 })
                 .start();
 
-        if (onDanmakuPositionStateListener != null) {
-            onDanmakuPositionStateListener.onStop(controlWrapper.getCurrentPosition());
+        if (onDanmakuListener != null) {
+            onDanmakuListener.onStop(controlWrapper.getCurrentPosition());
         }
     }
 

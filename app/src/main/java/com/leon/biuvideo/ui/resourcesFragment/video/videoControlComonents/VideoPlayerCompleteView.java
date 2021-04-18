@@ -75,9 +75,10 @@ public class VideoPlayerCompleteView extends LinearLayout implements IControlCom
         if (playState == VideoView.STATE_PLAYBACK_COMPLETED) {
             setVisibility(VISIBLE);
 
-            // 如果为全屏，则退出全屏
+            // 如果为全屏，则退出全屏并旋转屏幕至竖屏
             if (controlWrapper.isFullScreen()) {
-                controlWrapper.stopFullScreen();
+                Activity activity = PlayerUtils.scanForActivity(getContext());
+                controlWrapper.toggleFullScreen(activity);
             }
 
         } else {

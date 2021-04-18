@@ -18,25 +18,27 @@ import com.dueeeke.videoplayer.player.VideoView;
 import com.dueeeke.videoplayer.util.PlayerUtils;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.resourcesFragment.video.VideoDanmakuView;
-import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.OnDanmakuPositionStateListener;
+import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.OnDanmakuListener;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerBottomControlView;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerCompleteView;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerErrorView;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerGestureView;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerPrepareView;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerTitleView;
+import com.leon.biuvideo.utils.Fuck;
 
 /**
  * @Author Leon
  * @Time 2021/4/2
  * @Desc 视频播放控制器
  */
-public class VideoPlayerController extends GestureVideoController {
+public class VideoPlayerController extends GestureVideoController implements OnDanmakuListener {
     private ImageView videoPlayerControllerLock;
     private ProgressBar videoPlayerControllerLoading;
     private VideoDanmakuView videoDanmakuView;
 
     private VideoPlayerTitleView.OnBackListener onBackListener;
+    private VideoPlayerBottomControlView videoPlayerBottomControlView;
 
     public void setOnBackListener(VideoPlayerTitleView.OnBackListener onBackListener) {
         this.onBackListener = onBackListener;
@@ -86,54 +88,21 @@ public class VideoPlayerController extends GestureVideoController {
 
         addControlComponent(videoPlayerCompleteView, videoPlayerErrorView, videoPlayerPrepareView, videoPlayerTitleView);
 
-        VideoPlayerBottomControlView videoPlayerBottomControlView = new VideoPlayerBottomControlView(getContext());
-        videoPlayerBottomControlView.setOnDanmakuPositionStateListener(new OnDanmakuPositionStateListener() {
-            @Override
-            public void onStart() {
-                videoDanmakuView.hideDanmaku();
-            }
-
-            @Override
-            public void onStop(long position) {
-                videoDanmakuView.setPosition(position);
-            }
-        });
+        videoPlayerBottomControlView = new VideoPlayerBottomControlView(getContext());
+        videoPlayerBottomControlView.setOnDanmakuListener(this);
 
         VideoPlayerGestureView videoPlayerGestureView = new VideoPlayerGestureView(getContext());
+        videoPlayerGestureView.setOnDanmakuListener(this);
         videoPlayerGestureView.setOnDraggingListener(new VideoPlayerGestureView.OnDraggingListener() {
             @Override
             public void onDragging(int duration, int slidePosition) {
                 videoPlayerBottomControlView.setBottomProgressPosition(duration, slidePosition);
             }
         });
-        videoPlayerGestureView.setOnDanmakuPositionStateListener(new OnDanmakuPositionStateListener() {
-            @Override
-            public void onStart() {
-                videoDanmakuView.hideDanmaku();
-            }
-
-            @Override
-            public void onStop(long position) {
-                videoDanmakuView.setPosition(position);
-            }
-        });
 
         videoDanmakuView = new VideoDanmakuView(getContext(), cid);
 
         addControlComponent(videoPlayerBottomControlView, videoPlayerGestureView, videoDanmakuView);
-    }
-
-    /**
-     * 控制弹幕视图是否显示
-     *
-     * @param stat  显示状态
-     */
-    public void setDanmakuVisibility (boolean stat) {
-        if (stat) {
-            videoDanmakuView.show();
-        } else {
-            videoDanmakuView.hide();
-        }
     }
 
     private void addDanmaku (String text) {
@@ -242,5 +211,17 @@ public class VideoPlayerController extends GestureVideoController {
         }
 
         return super.onBackPressed();
+    }
+
+    @Override
+    public void onStart() {
+        Fuck.blue("Danmaku Stoped");
+        videoDanmakuView.hideDanmaku();
+    }
+
+    @Override
+    public void onStop(long position) {
+        Fuck.blue("Danmaku seekTo " + PlayerUtils.stringForTime((int) position));
+        videoDanmakuView.setPosition(position);
     }
 }
