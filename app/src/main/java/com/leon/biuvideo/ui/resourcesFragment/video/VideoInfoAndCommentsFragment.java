@@ -19,6 +19,7 @@ import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ViewUtils;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoDetailInfoParser;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoWithFlvParser;
+import com.leon.biuvideo.wraps.DanmakuWrap;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

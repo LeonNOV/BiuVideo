@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <com.leon.biuvideo.ui.views.LoadingRecyclerView
-        android:id="@+id/quality_popup_window_qualityInfo"
+        android:id="@+id/list"
         style="@style/QualityDialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

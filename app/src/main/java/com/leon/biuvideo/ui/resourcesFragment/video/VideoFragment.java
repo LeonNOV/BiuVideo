@@ -11,6 +11,12 @@ import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoP
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.VideoPlayerController;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.wraps.VideoQualityWrap;
+import com.leon.biuvideo.wraps.VideoSpeedWrap;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * @Author Leon
@@ -36,6 +42,9 @@ public class VideoFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
+        // 注册监听
+        EventBus.getDefault().register(this);
+
         videoPlayerViewContent = findView(R.id.video_player_content);
 
         VideoInfoAndCommentsFragment videoInfoAndCommentsFragment = new VideoInfoAndCommentsFragment(bvid);
@@ -58,7 +67,6 @@ public class VideoFragment extends BaseSupportFragment {
                 backPressed();
             }
         });
-
 
         if (findChildFragment(videoInfoAndCommentsFragment.getClass()) == null) {
             loadRootFragment(R.id.video_fragment_container, videoInfoAndCommentsFragment);
@@ -101,6 +109,16 @@ public class VideoFragment extends BaseSupportFragment {
         videoPlayerViewContent.setVideoController(videoPlayerController);
 
         videoPlayerViewContent.start();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetQualityMessage (VideoQualityWrap qualityWrap) {
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetSpeedMessage (VideoSpeedWrap videoSpeedWrap) {
+        videoPlayerViewContent.setSpeed(videoSpeedWrap.speed);
     }
 
     @Override

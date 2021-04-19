@@ -41,8 +41,8 @@ public class QualityPopupWindow extends PopupWindow {
         }
 
         View inflate = LayoutInflater.from(context).inflate(R.layout.quality_popup_window, null);
-        LoadingRecyclerView qualityPopupWindowQualityInfo = inflate.findViewById(R.id.quality_popup_window_qualityInfo);
-//        QualityInfoAdapter qualityInfoAdapter = new QualityInfoAdapter(currentQualityId, strings, context);
+        LoadingRecyclerView qualityPopupWindowQualityInfo = inflate.findViewById(R.id.list);
+//        VideoQualityAdapter qualityInfoAdapter = new VideoQualityAdapter(currentQualityId, strings, context);
 //        qualityInfoAdapter.setHasStableIds(true);
 //        qualityPopupWindowQualityInfo.setRecyclerViewAdapter(qualityInfoAdapter);
 

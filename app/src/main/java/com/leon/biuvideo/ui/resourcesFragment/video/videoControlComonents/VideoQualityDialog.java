@@ -12,7 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.otherAdapters.QualityInfoAdapter;
+import com.leon.biuvideo.adapters.otherAdapters.VideoQualityAdapter;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 
 import java.util.ArrayList;
@@ -23,34 +23,30 @@ import java.util.Map;
 /**
  * @Author Leon
  * @Time 2021/4/19
- * @Desc
+ * @Desc 视频画质选择弹窗
  */
-public class VideoInfoDialog extends AlertDialog {
+public class VideoQualityDialog extends AlertDialog {
     private final Context context;
-    private int currentQuality;
-    private LinkedHashMap<Integer, String> qualityMap;
+    private final int currentQuality;
+    private final LinkedHashMap<Integer, String> qualityMap;
 
-    public VideoInfoDialog(@NonNull Context context, int currentQuality, LinkedHashMap<Integer, String> qualityMap) {
+    private VideoQualityAdapter.OnVideoQualityListener onVideoQualityListener;
+
+    public void setOnVideoQualityListener(VideoQualityAdapter.OnVideoQualityListener onVideoQualityListener) {
+        this.onVideoQualityListener = onVideoQualityListener;
+    }
+
+    public VideoQualityDialog(@NonNull Context context, int currentQuality, LinkedHashMap<Integer, String> qualityMap) {
         super(context);
         this.context = context;
         this.currentQuality = currentQuality;
         this.qualityMap = qualityMap;
     }
 
-    public VideoInfoDialog(@NonNull Context context, int themeResId) {
-        super(context, themeResId);
-        this.context = context;
-    }
-
-    public VideoInfoDialog(@NonNull Context context, boolean cancelable, @Nullable OnCancelListener cancelListener) {
-        super(context, cancelable, cancelListener);
-        this.context = context;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.video_info_dialog);
+        setContentView(R.layout.video_loading_recycler_view_dialog);
 
         Window window = getWindow();
         window.setGravity(Gravity.END);
@@ -71,14 +67,15 @@ public class VideoInfoDialog extends AlertDialog {
             strings.add(new String[]{String.valueOf(integerStringEntry.getKey()), integerStringEntry.getValue()});
         }
 
-        LoadingRecyclerView qualityPopupWindowQualityInfo = findViewById(R.id.quality_popup_window_qualityInfo);
-        qualityPopupWindowQualityInfo.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+        LoadingRecyclerView loadingRecyclerView = findViewById(R.id.list);
+        loadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
-        QualityInfoAdapter qualityInfoAdapter = new QualityInfoAdapter(currentQuality, strings, context);
-        qualityInfoAdapter.setHasStableIds(true);
+        VideoQualityAdapter videoQualityAdapter = new VideoQualityAdapter(currentQuality, strings, context);
+        videoQualityAdapter.setOnVideoQualityListener(onVideoQualityListener);
+        videoQualityAdapter.setHasStableIds(true);
 
-        qualityPopupWindowQualityInfo.setRecyclerViewAdapter(qualityInfoAdapter);
-        qualityPopupWindowQualityInfo.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
-        qualityPopupWindowQualityInfo.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+        loadingRecyclerView.setRecyclerViewAdapter(videoQualityAdapter);
+        loadingRecyclerView.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
+        loadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
     }
 }

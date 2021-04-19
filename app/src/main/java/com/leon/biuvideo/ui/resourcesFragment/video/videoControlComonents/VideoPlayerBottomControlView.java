@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,8 +24,12 @@ import com.dueeeke.videoplayer.controller.IControlComponent;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.dueeeke.videoplayer.util.PlayerUtils;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.adapters.otherAdapters.VideoQualityAdapter;
+import com.leon.biuvideo.adapters.otherAdapters.VideoSpeedAdapter;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
-import com.leon.biuvideo.ui.resourcesFragment.video.DanmakuWrap;
+import com.leon.biuvideo.wraps.DanmakuWrap;
+import com.leon.biuvideo.wraps.VideoQualityWrap;
+import com.leon.biuvideo.wraps.VideoSpeedWrap;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -52,6 +55,7 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
     private TextView videoPlayerBottomControlQuality;
     private ProgressBar videoPlayerBottomControlProgressBar;
 
+    private float speed = 1.0f;
     private boolean isShowBottomProgress = true;
     private boolean isDragging;
     private LinearLayout videoPlayerBottomControlContent;
@@ -296,11 +300,29 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
                 EventBus.getDefault().post(DanmakuWrap.getInstance(videoPlayerBottomControlDanmakuControl.isSelected()));
                 break;
             case R.id.video_player_bottom_control_speed:
-                Toast.makeText(getContext(), "倍速播放", Toast.LENGTH_SHORT).show();
+                VideoSpeedDialog videoSpeedDialog = new VideoSpeedDialog(getContext(), speed);
+                videoSpeedDialog.setOnVideoSpeedListener(new VideoSpeedAdapter.OnVideoSpeedListener() {
+                    @Override
+                    public void onSpeed(float speed) {
+                        VideoPlayerBottomControlView.this.speed = speed;
+                        EventBus.getDefault().post(VideoSpeedWrap.getInstance(speed));
+                        videoSpeedDialog.dismiss();
+                    }
+                });
+                videoSpeedDialog.show();
                 break;
             case R.id.video_player_bottom_control_quality:
-                VideoInfoDialog videoInfoDialog = new VideoInfoDialog(getContext(), videoWithFlv.currentQualityId, videoWithFlv.qualityMap);
-                videoInfoDialog.show();
+                VideoQualityDialog videoQualityDialog = new VideoQualityDialog(getContext(), videoWithFlv.currentQualityId, videoWithFlv.qualityMap);
+                videoQualityDialog.setOnVideoQualityListener(new VideoQualityAdapter.OnVideoQualityListener() {
+                    @Override
+                    public void onQuality(int qualityId) {
+                        videoWithFlv.currentQualityId = qualityId;
+                        EventBus.getDefault().post(VideoQualityWrap.getInstance(qualityId));
+
+                        videoQualityDialog.dismiss();
+                    }
+                });
+                videoQualityDialog.show();
                 break;
             default:
                 break;

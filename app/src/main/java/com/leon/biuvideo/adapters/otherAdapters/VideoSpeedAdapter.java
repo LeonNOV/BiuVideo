@@ -5,29 +5,37 @@ import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
-import com.leon.biuvideo.utils.Fuck;
 
 import java.util.List;
 
 /**
  * @Author Leon
  * @Time 2021/4/19
- * @Desc
+ * @Desc 视频速度选择适配器
  */
-public class QualityInfoAdapter extends BaseAdapter<String[]> {
-    private final List<String[]> qualityList;
-    private int currentQuality;
+public class VideoSpeedAdapter extends BaseAdapter<Float> {
+    private final List<Float> speedList;
+    private final float currentSpeed;
 
-    public QualityInfoAdapter(int currentQuality, List<String[]> beans, Context context) {
+    private OnVideoSpeedListener onVideoSpeedListener;
+
+    public interface OnVideoSpeedListener {
+        void onSpeed (float speed);
+    }
+
+    public void setOnVideoSpeedListener(OnVideoSpeedListener onVideoSpeedListener) {
+        this.onVideoSpeedListener = onVideoSpeedListener;
+    }
+
+    public VideoSpeedAdapter(float currentSpeed, List<Float> beans, Context context) {
         super(beans, context);
-        this.currentQuality = currentQuality;
-        this.qualityList = beans;
+        this.currentSpeed = currentSpeed;
+        this.speedList = beans;
     }
 
     @Override
@@ -37,21 +45,26 @@ public class QualityInfoAdapter extends BaseAdapter<String[]> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        String[] strings = qualityList.get(position);
+        Float speed = speedList.get(position);
 
         TextView textView = holder.findById(android.R.id.text1);
         textView.setGravity(Gravity.CENTER_HORIZONTAL);
-        if (currentQuality == Integer.parseInt(strings[0])) {
+        if (currentSpeed == speed) {
             textView.setTextColor(Color.parseColor("#FB7299"));
         } else {
             textView.setTextColor(Color.WHITE);
         }
-        Fuck.blue(strings[1]);
-        textView.setText(strings[1]);
+        textView.setText(speed + "x");
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, strings[0] + "----" + strings[1], Toast.LENGTH_SHORT).show();
+                if (speed == currentSpeed) {
+                    return;
+                }
+
+                if (onVideoSpeedListener != null) {
+                    onVideoSpeedListener.onSpeed(speed);
+                }
             }
         });
     }

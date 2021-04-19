@@ -18,6 +18,8 @@ import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
+import com.leon.biuvideo.wraps.DanmakuWrap;
+import com.leon.biuvideo.wraps.VideoSpeedWrap;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -53,6 +55,11 @@ public class VideoDanmakuView extends DanmakuView implements IControlComponent {
     private BaseDanmakuParser baseDanmakuParser;
 
     private ControlWrapper controlWrapper;
+
+    /**
+     * 弹幕速度，和视频速度始终相同
+     */
+    private float speed = 1.0f;
 
     public VideoDanmakuView(Context context, String cid) {
         super(context);
@@ -102,7 +109,11 @@ public class VideoDanmakuView extends DanmakuView implements IControlComponent {
 
             @Override
             public void updateTimer(DanmakuTimer timer) {
-                timer.update(controlWrapper.getCurrentPosition());
+                if (speed > 1.0) {
+                    timer.add((long) (timer.lastInterval() * (speed - 1)));
+                } else {
+                    timer.update(controlWrapper.getCurrentPosition());
+                }
             }
 
             @Override
@@ -195,12 +206,17 @@ public class VideoDanmakuView extends DanmakuView implements IControlComponent {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onGetMessage (DanmakuWrap danmakuWrap) {
+    public void onGetDanmakuMessage(DanmakuWrap danmakuWrap) {
         if (danmakuWrap.danmakuState) {
             show();
         } else {
             hide();
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetSpeedMessage (VideoSpeedWrap videoSpeedWrap) {
+        this.speed = videoSpeedWrap.speed;
     }
 
     public void setPosition (long position) {

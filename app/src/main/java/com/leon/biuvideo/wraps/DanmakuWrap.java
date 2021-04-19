@@ -1,4 +1,4 @@
-package com.leon.biuvideo.ui.resourcesFragment.video;
+package com.leon.biuvideo.wraps;
 
 /**
  * @Author Leon
