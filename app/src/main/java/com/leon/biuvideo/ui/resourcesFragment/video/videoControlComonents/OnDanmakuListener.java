@@ -7,14 +7,9 @@ package com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents;
  */
 public interface OnDanmakuListener {
     /**
-     * 开始拖动进度条/开始滑动屏幕调整进度
-     */
-    void onStart ();
-
-    /**
      * 停止拖动进度条/停止滑动屏幕调整进度
      *
      * @param position  当前视频进度（毫秒值）
      */
-    void onStop (long position);
+    void onSeekTo(long position);
 }

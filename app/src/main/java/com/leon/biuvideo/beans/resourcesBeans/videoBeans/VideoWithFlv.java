@@ -9,6 +9,7 @@ import java.util.List;
  * @Desc 单视频数据（flv方式）
  */
 public class VideoWithFlv {
+    public String cid;
     public int currentQualityId;
     public LinkedHashMap<Integer, String> qualityMap;
 

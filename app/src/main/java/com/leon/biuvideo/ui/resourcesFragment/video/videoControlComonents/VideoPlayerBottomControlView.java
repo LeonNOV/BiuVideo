@@ -25,6 +25,7 @@ import com.dueeeke.videoplayer.controller.IControlComponent;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.dueeeke.videoplayer.util.PlayerUtils;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
 import com.leon.biuvideo.ui.resourcesFragment.video.DanmakuWrap;
 
 import org.greenrobot.eventbus.EventBus;
@@ -56,13 +57,15 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
     private LinearLayout videoPlayerBottomControlContent;
 
     private OnDanmakuListener onDanmakuListener;
+    private VideoWithFlv videoWithFlv;
 
     public void setOnDanmakuListener(OnDanmakuListener onDanmakuListener) {
         this.onDanmakuListener = onDanmakuListener;
     }
 
-    public VideoPlayerBottomControlView(Context context) {
+    public VideoPlayerBottomControlView(Context context, VideoWithFlv videoWithFlv) {
         super(context);
+        this.videoWithFlv = videoWithFlv;
         initView();
     }
 
@@ -106,6 +109,7 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
         videoPlayerBottomControlSpeed.setOnClickListener(this);
 
         videoPlayerBottomControlQuality = findViewById(R.id.video_player_bottom_control_quality);
+        videoPlayerBottomControlQuality.setText(videoWithFlv.qualityMap.get(videoWithFlv.currentQualityId));
         videoPlayerBottomControlQuality.setOnClickListener(this);
 
         videoPlayerBottomControlProgressBar = findViewById(R.id.video_player_bottom_control_progressBar);
@@ -295,7 +299,8 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
                 Toast.makeText(getContext(), "倍速播放", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.video_player_bottom_control_quality:
-                Toast.makeText(getContext(), "清晰度选择", Toast.LENGTH_SHORT).show();
+                VideoInfoDialog videoInfoDialog = new VideoInfoDialog(getContext(), videoWithFlv.currentQualityId, videoWithFlv.qualityMap);
+                videoInfoDialog.show();
                 break;
             default:
                 break;
@@ -322,10 +327,6 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
 
         controlWrapper.stopProgress();
         controlWrapper.stopFadeOut();
-
-        if (onDanmakuListener != null) {
-            onDanmakuListener.onStart();
-        }
     }
 
     @Override
@@ -340,7 +341,7 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
         controlWrapper.startFadeOut();
 
         if (onDanmakuListener != null) {
-            onDanmakuListener.onStop(videoNewPosition);
+            onDanmakuListener.onSeekTo(videoNewPosition);
         }
     }
 

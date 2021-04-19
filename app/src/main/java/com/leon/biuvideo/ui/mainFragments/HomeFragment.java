@@ -19,6 +19,7 @@ import com.leon.biuvideo.adapters.homeAdapters.RecommendAdapter;
 import com.leon.biuvideo.beans.Weather;
 import com.leon.biuvideo.beans.homeBeans.Recommend;
 import com.leon.biuvideo.beans.homeBeans.WatchLater;
+import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
 import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.home.DownloadManagerFragment;
@@ -31,6 +32,7 @@ import com.leon.biuvideo.ui.mainFragments.homeModels.WeatherModelInterface;
 import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.ui.otherFragments.PopularFragment;
 import com.leon.biuvideo.ui.resourcesFragment.audio.AudioFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoInfoDialog;
 import com.leon.biuvideo.ui.views.CardTitle;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
@@ -45,6 +47,8 @@ import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.FeaturesName;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -264,7 +268,15 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
 //                ((NavFragment) getParentFragment()).startBrotherFragment(FavoritesFragment.getInstance());
                 break;
             case R.id.home_my_follows:
-                ((NavFragment) getParentFragment()).startBrotherFragment(FollowsFragment.getInstance());
+                VideoWithFlv videoWithFlv = new VideoWithFlv();
+                videoWithFlv.currentQualityId = 12;
+                videoWithFlv.qualityMap = new LinkedHashMap<>(2);
+                videoWithFlv.qualityMap.put(12, "121212");
+                videoWithFlv.qualityMap.put(15, "151515");
+
+                VideoInfoDialog videoInfoDialog = new VideoInfoDialog(getContext(), videoWithFlv.currentQualityId, videoWithFlv.qualityMap);
+                videoInfoDialog.show();
+//                ((NavFragment) getParentFragment()).startBrotherFragment(FollowsFragment.getInstance());
                 break;
             case R.id.home_my_history:
                 ((NavFragment) getParentFragment()).startBrotherFragment(HistoryFragment.getInstance());

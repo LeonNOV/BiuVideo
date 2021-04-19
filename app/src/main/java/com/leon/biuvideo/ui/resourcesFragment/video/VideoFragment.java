@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentManager;
 import com.dueeeke.videoplayer.ijk.IjkPlayer;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerTitleView;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
@@ -38,16 +39,15 @@ public class VideoFragment extends BaseSupportFragment {
         videoPlayerViewContent = findView(R.id.video_player_content);
 
         VideoInfoAndCommentsFragment videoInfoAndCommentsFragment = new VideoInfoAndCommentsFragment(bvid);
-
         videoInfoAndCommentsFragment.setVideoFragmentContainerListener(new VideoInfoAndCommentsFragment.VideoFragmentContainerListener() {
             @Override
-            public void playVideo(String videoUrl, String cid) {
+            public void playVideo(VideoWithFlv videoWithFlv) {
                 if (isFirstVideo) {
-                    initVideoPlayer(videoUrl, cid);
+                    initVideoPlayer(videoWithFlv);
 
                     isFirstVideo = false;
                 } else {
-                    videoPlayerViewContent.setUrl(videoUrl);
+                    videoPlayerViewContent.setUrl(videoWithFlv.videoStreamInfoList.get(0).url);
                     videoPlayerViewContent.start();
                 }
             }
@@ -84,19 +84,20 @@ public class VideoFragment extends BaseSupportFragment {
     /**
      * 第一次加载视频
      *
-     * @param videoUrl 视频链接
+     * @param videoWithFlv 视频画质信息
      */
-    private void initVideoPlayer(String videoUrl, String cid) {
-        videoPlayerViewContent.setUrl(videoUrl, HttpUtils.getHeaders());
-        videoPlayerController = new VideoPlayerController(context);
+    private void initVideoPlayer(VideoWithFlv videoWithFlv) {
+        videoPlayerViewContent.setUrl(videoWithFlv.videoStreamInfoList.get(0).url, HttpUtils.getHeaders());
+        videoPlayerController = new VideoPlayerController(context, videoWithFlv);
         videoPlayerController.setOnBackListener(new VideoPlayerTitleView.OnBackListener() {
             @Override
             public void onBack() {
                 backPressed();
             }
         });
-        videoPlayerController.addDefaultControlComponent("BiliBili", cid);
+        videoPlayerController.addDefaultControlComponent("BiliBili", videoWithFlv.cid);
         videoPlayerController.addControlComponent();
+
         videoPlayerViewContent.setVideoController(videoPlayerController);
 
         videoPlayerViewContent.start();

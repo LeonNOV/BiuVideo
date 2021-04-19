@@ -45,4 +45,6 @@
     <dimen name="tabLayout_size">16sp</dimen>
     <dimen name="navTextMarginTop">5dp</dimen>
     <dimen name="navBottomTextSize">13sp</dimen>
+
+    <dimen name="qualityWidth">150dp</dimen>
 </resources>

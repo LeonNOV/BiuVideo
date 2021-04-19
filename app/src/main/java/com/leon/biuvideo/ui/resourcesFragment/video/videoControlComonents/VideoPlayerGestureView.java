@@ -116,7 +116,6 @@ public class VideoPlayerGestureView extends FrameLayout implements IGestureCompo
             // 解决第一次打开视频播放界面，会显示手势控制视图的问题
             // 注意：第一次使用手势控制不会显示，后面再使用才能显示
             if (playState == VideoView.STATE_PLAYING && isFirstPlayingState) {
-                Fuck.blue("VideoPlayerGestureView is GONE");
                 setVisibility(GONE);
                 isFirstPlayingState = false;
             } else {
@@ -150,10 +149,6 @@ public class VideoPlayerGestureView extends FrameLayout implements IGestureCompo
 
         videoPlayerGestureContent.setVisibility(VISIBLE);
         videoPlayerGestureContent.setAlpha(1f);
-
-        if (onDanmakuListener != null) {
-            onDanmakuListener.onStart();
-        }
     }
 
     /**
@@ -173,10 +168,6 @@ public class VideoPlayerGestureView extends FrameLayout implements IGestureCompo
                     }
                 })
                 .start();
-
-        if (onDanmakuListener != null) {
-            onDanmakuListener.onStop(controlWrapper.getCurrentPosition());
-        }
     }
 
     @Override
@@ -193,6 +184,10 @@ public class VideoPlayerGestureView extends FrameLayout implements IGestureCompo
 
         if (onDraggingListener != null) {
             onDraggingListener.onDragging(duration, slidePosition);
+        }
+
+        if (onDanmakuListener != null) {
+            onDanmakuListener.onSeekTo(controlWrapper.getCurrentPosition());
         }
     }
 

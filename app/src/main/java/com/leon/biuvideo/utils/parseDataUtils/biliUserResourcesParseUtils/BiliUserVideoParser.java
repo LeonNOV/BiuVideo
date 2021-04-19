@@ -77,7 +77,12 @@ public class BiliUserVideoParser implements ParserInterface<BiliUserVideo> {
                     JSONObject jsonObject = (JSONObject) o;
                     BiliUserVideo biliUserVideo = new BiliUserVideo();
 
-                    biliUserVideo.cover = "http://" + jsonObject.getString("pic");
+                    String pic = jsonObject.getString("pic");
+                    if (!pic.startsWith("http")) {
+                        biliUserVideo.cover = "http://" + pic;
+                    } else {
+                        biliUserVideo.cover = pic;
+                    }
                     biliUserVideo.bvid = jsonObject.getString("bvid");
                     biliUserVideo.avid = jsonObject.getString("aid");
                     biliUserVideo.play = ValueUtils.generateCN(jsonObject.getInteger("play"));

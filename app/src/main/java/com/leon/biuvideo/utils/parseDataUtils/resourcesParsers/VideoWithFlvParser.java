@@ -57,6 +57,7 @@ public class VideoWithFlvParser {
         JSONObject data = response.getJSONObject("data");
         if (data != null) {
             VideoWithFlv videoWithFlv = new VideoWithFlv();
+            videoWithFlv.cid = cid;
 
             JSONArray supportFormats = data.getJSONArray("support_formats");
             videoWithFlv.qualityMap = new LinkedHashMap<>(supportFormats.size());

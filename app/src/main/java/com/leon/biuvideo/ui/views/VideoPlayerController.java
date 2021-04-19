@@ -17,6 +17,7 @@ import com.dueeeke.videoplayer.controller.GestureVideoController;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.dueeeke.videoplayer.util.PlayerUtils;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
 import com.leon.biuvideo.ui.resourcesFragment.video.VideoDanmakuView;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.OnDanmakuListener;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerBottomControlView;
@@ -40,12 +41,15 @@ public class VideoPlayerController extends GestureVideoController implements OnD
     private VideoPlayerTitleView.OnBackListener onBackListener;
     private VideoPlayerBottomControlView videoPlayerBottomControlView;
 
+    private VideoWithFlv videoWithFlv;
+
     public void setOnBackListener(VideoPlayerTitleView.OnBackListener onBackListener) {
         this.onBackListener = onBackListener;
     }
 
-    public VideoPlayerController(@NonNull Context context) {
+    public VideoPlayerController(@NonNull Context context, VideoWithFlv videoWithFlv) {
         super(context);
+        this.videoWithFlv = videoWithFlv;
     }
 
     public VideoPlayerController(@NonNull Context context, @Nullable AttributeSet attrs) {
@@ -79,6 +83,7 @@ public class VideoPlayerController extends GestureVideoController implements OnD
     public void addDefaultControlComponent (String title, String cid) {
         VideoPlayerCompleteView videoPlayerCompleteView = new VideoPlayerCompleteView(getContext());
         VideoPlayerErrorView videoPlayerErrorView = new VideoPlayerErrorView(getContext());
+
         VideoPlayerPrepareView videoPlayerPrepareView = new VideoPlayerPrepareView(getContext());
         videoPlayerPrepareView.setClickStart();
 
@@ -88,7 +93,7 @@ public class VideoPlayerController extends GestureVideoController implements OnD
 
         addControlComponent(videoPlayerCompleteView, videoPlayerErrorView, videoPlayerPrepareView, videoPlayerTitleView);
 
-        videoPlayerBottomControlView = new VideoPlayerBottomControlView(getContext());
+        videoPlayerBottomControlView = new VideoPlayerBottomControlView(getContext(), videoWithFlv);
         videoPlayerBottomControlView.setOnDanmakuListener(this);
 
         VideoPlayerGestureView videoPlayerGestureView = new VideoPlayerGestureView(getContext());
@@ -214,13 +219,7 @@ public class VideoPlayerController extends GestureVideoController implements OnD
     }
 
     @Override
-    public void onStart() {
-        Fuck.blue("Danmaku Stoped");
-        videoDanmakuView.hideDanmaku();
-    }
-
-    @Override
-    public void onStop(long position) {
+    public void onSeekTo(long position) {
         Fuck.blue("Danmaku seekTo " + PlayerUtils.stringForTime((int) position));
         videoDanmakuView.setPosition(position);
     }

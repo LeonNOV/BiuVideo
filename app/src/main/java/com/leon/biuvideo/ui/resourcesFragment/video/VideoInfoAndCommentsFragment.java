@@ -59,9 +59,9 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
         /**
          * 播放视频
          *
-         * @param videoUrl  视频链接
+         * @param videoWithFlv  单集视频信息
          */
-        void playVideo (String videoUrl, String cid);
+        void playVideo (VideoWithFlv videoWithFlv);
 
         /**
          * 错误事件
@@ -112,6 +112,7 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
                         VideoInfoFragment videoInfoFragment = new VideoInfoFragment(videoDetailInfo);
                         viewPagerFragments.add(videoInfoFragment);
 
+
                         VideoCommentFragment videoCommentFragment = new VideoCommentFragment(videoDetailInfo.aid);
                         videoCommentFragment.setToCommentDetailFragment(new ToCommentDetailFragment() {
                             @Override
@@ -134,7 +135,7 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
                         // 播放第一个视频
                         videoWithFlv = (VideoWithFlv) msg.obj;
                         if (videoFragmentContainerListener != null) {
-                            videoFragmentContainerListener.playVideo(videoWithFlv.videoStreamInfoList.get(0).url, videoDetailInfo.anthologyInfoList.get(0).cid);
+                            videoFragmentContainerListener.playVideo(videoWithFlv);
                         }
                         break;
                     default:

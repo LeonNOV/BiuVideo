@@ -52,6 +52,8 @@ public class VideoDanmakuView extends DanmakuView implements IControlComponent {
     private Handler handler;
     private BaseDanmakuParser baseDanmakuParser;
 
+    private ControlWrapper controlWrapper;
+
     public VideoDanmakuView(Context context, String cid) {
         super(context);
         this.cid = cid;
@@ -100,7 +102,7 @@ public class VideoDanmakuView extends DanmakuView implements IControlComponent {
 
             @Override
             public void updateTimer(DanmakuTimer timer) {
-
+                timer.update(controlWrapper.getCurrentPosition());
             }
 
             @Override
@@ -133,7 +135,7 @@ public class VideoDanmakuView extends DanmakuView implements IControlComponent {
 
     @Override
     public void attach(@NonNull ControlWrapper controlWrapper) {
-
+        this.controlWrapper = controlWrapper;
     }
 
     @Override
@@ -201,15 +203,8 @@ public class VideoDanmakuView extends DanmakuView implements IControlComponent {
         }
     }
 
-    public void hideDanmaku () {
-        hide();
-        pause();
-    }
-
     public void setPosition (long position) {
-        if (!isShown()) {
-            showAndResumeDrawTask(position);
-        }
+        seekTo(position);
     }
 
     public void addDanmaku (String text, boolean isSelf) {
