@@ -13,7 +13,7 @@ import com.leon.biuvideo.R;
 /**
  * @Author Leon
  * @Time 2021/3/10
- * @Desc
+ * @Desc 一个简单的底部对话框
  */
 public class SimpleBottomSheet {
     private final Context context;

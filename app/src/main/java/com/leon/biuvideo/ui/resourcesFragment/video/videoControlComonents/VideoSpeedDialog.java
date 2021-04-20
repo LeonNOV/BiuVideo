@@ -31,7 +31,7 @@ public class VideoSpeedDialog extends AlertDialog {
     }
 
     public VideoSpeedDialog(@NonNull Context context, float currentSpeed) {
-        super(context);
+        super(context, R.style.DialogStyle);
         this.context = context;
         this.currentSpeed = currentSpeed;
     }

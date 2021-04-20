@@ -27,6 +27,11 @@ public class VideoQualityAdapter extends BaseAdapter<String[]> {
     private OnVideoQualityListener onVideoQualityListener;
 
     public interface OnVideoQualityListener {
+        /**
+         * 清晰度选择
+         *
+         * @param qualityId 清晰度ID
+         */
         void onQuality (int qualityId);
     }
 

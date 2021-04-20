@@ -107,7 +107,7 @@
     <dimen name="cover_height">72dp</dimen>
 
     <dimen name="small_view_w_h">40dp</dimen>
-    <dimen name="small_view_padding_10dp">10dp</dimen>
+    <dimen name="padding_10dp">10dp</dimen>
 
     <string name="main_button_start">开始获取</string>
     <string name="main_editText_hint1">输入关键词进行搜索</string>
@@ -235,4 +235,8 @@
     <string name="biliUserResourcesOrderByRead">最多阅读</string>
     <string name="bangumi_score">分</string>
     <string name="replay">回复</string>
+
+    <string name="videoNowPlay">正在观看</string>
+    <string name="videoClickChangeAnthology">点击切换</string>
+    <string name="videoChangeAnthology">切换选集</string>
 </resources>

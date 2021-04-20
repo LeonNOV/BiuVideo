@@ -20,6 +20,7 @@ import com.leon.biuvideo.utils.ViewUtils;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoDetailInfoParser;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoWithFlvParser;
 import com.leon.biuvideo.wraps.DanmakuWrap;
+import com.leon.biuvideo.wraps.VideoQualityWrap;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,6 +36,8 @@ import java.util.List;
  */
 public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements View.OnClickListener {
     private final String bvid;
+    private final int videoIndex = 0;
+    private int anthologyPosition = 0;
 
     private ImageView videoInfoAndCommentsDanmakuStatus;
     private TabLayout videoInfoAndCommentsTabLayout;
@@ -53,6 +56,11 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
     }
 
     public interface ToCommentDetailFragment {
+        /**
+         * 查看评论详情
+         *
+         * @param comment   主评论
+         */
         void toCommentDetail(Comment comment);
     }
 
@@ -60,9 +68,11 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
         /**
          * 播放视频
          *
+         * @param title 选集标题
          * @param videoWithFlv  单集视频信息
+         * @param videoIndex    选集索引
          */
-        void playVideo (VideoWithFlv videoWithFlv);
+        void playVideo (String title, VideoWithFlv videoWithFlv, int videoIndex);
 
         /**
          * 错误事件
@@ -110,9 +120,16 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
                         List<Fragment> viewPagerFragments = new ArrayList<>(2);
 
                         videoDetailInfo = (VideoDetailInfo) msg.obj;
-                        VideoInfoFragment videoInfoFragment = new VideoInfoFragment(videoDetailInfo);
-                        viewPagerFragments.add(videoInfoFragment);
 
+                        VideoInfoFragment videoInfoFragment = new VideoInfoFragment(videoDetailInfo);
+                        videoInfoFragment.setOnChangeVideoAnthologyListener(new VideoInfoFragment.OnChangeVideoAnthologyListener() {
+                            @Override
+                            public void onChangeAnthology(int position, String cid) {
+                                anthologyPosition = position;
+                                getVideoStreamUrl(cid, VideoWithFlvParser.DEFAULT_QUALITY);
+                            }
+                        });
+                        viewPagerFragments.add(videoInfoFragment);
 
                         VideoCommentFragment videoCommentFragment = new VideoCommentFragment(videoDetailInfo.aid);
                         videoCommentFragment.setToCommentDetailFragment(new ToCommentDetailFragment() {
@@ -128,15 +145,14 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
                         // 初始化ViewPager2和TabLayout
                         onTouchListener = ViewUtils.initTabLayoutAndViewPager2(getActivity(), videoInfoAndCommentsTabLayout, videoInfoAndCommentsViewPager, titles, 0);
 
-                        // 获取第一个视频
-                        VideoDetailInfo.AnthologyInfo anthologyInfo = videoDetailInfo.anthologyInfoList.get(0);
-                        getVideoStreamUrl(anthologyInfo.cid);
+                        // 获取第一个视频，清晰度按照最高获取
+                        VideoDetailInfo.AnthologyInfo anthologyInfo = videoDetailInfo.anthologyInfoList.get(videoIndex);
+                        getVideoStreamUrl(anthologyInfo.cid, VideoWithFlvParser.DEFAULT_QUALITY);
                         break;
                     case 1:
-                        // 播放第一个视频
                         videoWithFlv = (VideoWithFlv) msg.obj;
                         if (videoFragmentContainerListener != null) {
-                            videoFragmentContainerListener.playVideo(videoWithFlv);
+                            videoFragmentContainerListener.playVideo(videoDetailInfo.anthologyInfoList.get(anthologyPosition).part, videoWithFlv, videoIndex);
                         }
                         break;
                     default:
@@ -169,7 +185,7 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
      *
      * @param cid   视频cid
      */
-    public void getVideoStreamUrl (String cid) {
+    public void getVideoStreamUrl (String cid, String qualityId) {
         if (videoWithFlvParser == null) {
             videoWithFlvParser = new VideoWithFlvParser(bvid);
         }
@@ -177,7 +193,7 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                VideoWithFlv videoWithFlv = videoWithFlvParser.parseData(cid);
+                VideoWithFlv videoWithFlv = videoWithFlvParser.parseData(cid, qualityId);
 
                 Message message = receiveDataHandler.obtainMessage(1);
                 message.obj = videoWithFlv;
@@ -189,6 +205,11 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetMessage (DanmakuWrap danmakuWrap) {
         videoInfoAndCommentsDanmakuStatus.setSelected(danmakuWrap.danmakuState);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetQualityMessage (VideoQualityWrap qualityWrap) {
+        getVideoStreamUrl(videoDetailInfo.anthologyInfoList.get(videoIndex).cid, String.valueOf(qualityWrap.qualityId));
     }
 
     @Override

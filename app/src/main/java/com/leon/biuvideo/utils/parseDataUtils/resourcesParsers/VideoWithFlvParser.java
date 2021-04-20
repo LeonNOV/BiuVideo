@@ -3,6 +3,7 @@ package com.leon.biuvideo.utils.parseDataUtils.resourcesParsers;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
@@ -33,7 +34,7 @@ public class VideoWithFlvParser {
      * 116	1080P60 高清（大会员）
      * 120	4K 超清（大会员）
      */
-    private static final String DEFAULT_QUALITY = "120";
+    public static final String DEFAULT_QUALITY = "120";
 
     /**
      * 获取4K画质需要添加该参数，默认添加
@@ -46,12 +47,14 @@ public class VideoWithFlvParser {
         this.bvid = bvid;
     }
 
-    public VideoWithFlv parseData(String cid) {
+    public VideoWithFlv parseData(String cid, String qualityId) {
         Map<String, String> params = new HashMap<>(4);
         params.put("bvid", String.valueOf(bvid));
         params.put("cid", String.valueOf(cid));
-        params.put("qn", DEFAULT_QUALITY);
+        params.put("qn", qualityId);
         params.put("fourk", FOURK);
+
+        Fuck.blue("cid----" + cid);
 
         JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.VIDEO_STREAM_INFO, Headers.of(HttpUtils.getAPIRequestHeader()), params);
         JSONObject data = response.getJSONObject("data");

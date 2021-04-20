@@ -42,6 +42,7 @@ public class VideoPlayerController extends GestureVideoController implements OnD
     private VideoPlayerBottomControlView videoPlayerBottomControlView;
 
     private VideoWithFlv videoWithFlv;
+    private VideoPlayerTitleView videoPlayerTitleView;
 
     public void setOnBackListener(VideoPlayerTitleView.OnBackListener onBackListener) {
         this.onBackListener = onBackListener;
@@ -87,7 +88,7 @@ public class VideoPlayerController extends GestureVideoController implements OnD
         VideoPlayerPrepareView videoPlayerPrepareView = new VideoPlayerPrepareView(getContext());
         videoPlayerPrepareView.setClickStart();
 
-        VideoPlayerTitleView videoPlayerTitleView = new VideoPlayerTitleView(getContext());
+        videoPlayerTitleView = new VideoPlayerTitleView(getContext());
         videoPlayerTitleView.setOnBackListener(onBackListener);
         videoPlayerTitleView.setTitle(title);
 
@@ -114,6 +115,10 @@ public class VideoPlayerController extends GestureVideoController implements OnD
         if (videoDanmakuView != null) {
             videoDanmakuView.addDanmaku(null, true);
         }
+    }
+
+    public void setTitle (String title) {
+        videoPlayerTitleView.setTitle(title);
     }
 
     @Override

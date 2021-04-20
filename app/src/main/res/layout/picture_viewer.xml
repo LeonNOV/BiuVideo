@@ -19,7 +19,7 @@
                 android:layout_width="@dimen/small_view_w_h"
                 android:layout_height="@dimen/small_view_w_h"
                 android:background="?selectableItemBackgroundBorderless"
-                android:padding="@dimen/small_view_padding_10dp"
+                android:padding="@dimen/padding_10dp"
                 android:src="@drawable/ic_close"
                 app:tint="#505050" />
 
@@ -30,7 +30,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="20dp"
                 android:background="?selectableItemBackgroundBorderless"
-                android:padding="@dimen/small_view_padding_10dp"
+                android:padding="@dimen/padding_10dp"
                 android:src="@drawable/icon_download"
                 app:tint="#505050" />
 

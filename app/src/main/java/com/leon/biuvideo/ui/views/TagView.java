@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -101,6 +102,14 @@ public class TagView extends LinearLayout {
         addLeftView();
         addRightView();
 
+        if (tagMark == 1) {
+            rightView.setMaxLines(1);
+            rightView.setEllipsize(TextUtils.TruncateAt.END);
+        } else if (tagMark == 2) {
+            leftView.setMaxLines(1);
+            leftView.setEllipsize(TextUtils.TruncateAt.START);
+        }
+
         setTagMark();
         setClick();
     }
@@ -151,7 +160,7 @@ public class TagView extends LinearLayout {
         linearLayout.addView(rightView);
     }
 
-    private void setClick () {
+    private void setClick() {
         if (isClick) {
             linearLayout.setBackgroundResource(R.drawable.ripple_round_corners6dp_bg);
             linearLayout.setOnClickListener(new OnClickListener() {

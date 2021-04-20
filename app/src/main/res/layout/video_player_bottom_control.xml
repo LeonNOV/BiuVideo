@@ -104,6 +104,7 @@
                 android:background="@drawable/round_corners6dp_bg"
                 android:backgroundTint="#808F8F8F"
                 android:gravity="center_vertical"
+                android:imeOptions="flagNoExtractUi"
                 android:hint="@string/videoPlayerBottomHint"
                 android:inputType="text"
                 android:paddingStart="10dp"

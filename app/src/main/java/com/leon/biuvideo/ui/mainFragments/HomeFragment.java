@@ -31,6 +31,7 @@ import com.leon.biuvideo.ui.mainFragments.homeModels.WeatherModelInterface;
 import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.ui.otherFragments.PopularFragment;
 import com.leon.biuvideo.ui.resourcesFragment.audio.AudioFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoQualityDialog;
 import com.leon.biuvideo.ui.views.CardTitle;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
@@ -266,14 +267,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
 //                ((NavFragment) getParentFragment()).startBrotherFragment(FavoritesFragment.getInstance());
                 break;
             case R.id.home_my_follows:
-                VideoWithFlv videoWithFlv = new VideoWithFlv();
-                videoWithFlv.currentQualityId = 12;
-                videoWithFlv.qualityMap = new LinkedHashMap<>(2);
-                videoWithFlv.qualityMap.put(12, "121212");
-                videoWithFlv.qualityMap.put(15, "151515");
-
-                VideoQualityDialog videoQualityDialog = new VideoQualityDialog(getContext(), videoWithFlv.currentQualityId, videoWithFlv.qualityMap);
-                videoQualityDialog.show();
+                ((NavFragment) getParentFragment()).startBrotherFragment(new VideoFragment("BV1Rx411876f"));
 //                ((NavFragment) getParentFragment()).startBrotherFragment(FollowsFragment.getInstance());
                 break;
             case R.id.home_my_history:

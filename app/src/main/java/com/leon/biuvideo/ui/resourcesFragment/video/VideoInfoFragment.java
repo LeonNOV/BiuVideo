@@ -3,6 +3,7 @@ package com.leon.biuvideo.ui.resourcesFragment.video;
 import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,12 +12,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.adapters.otherAdapters.VideoAnthologyAdapter;
 import com.leon.biuvideo.adapters.otherAdapters.VideoTagsAdapter;
 import com.leon.biuvideo.adapters.homeAdapters.RecommendAdapter;
 import com.leon.biuvideo.beans.homeBeans.Recommend;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoDetailInfo;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoTag;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoAnthologyBottomSheet;
+import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.utils.HttpUtils;
@@ -56,12 +60,24 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
     private TextView videoDetailLike;
 
     private RecyclerView videoDetailTags;
-    private LoadingRecyclerView videoDetailVideoEps;
     private LoadingRecyclerView videoDetailRecommends;
     private List<VideoTag> videoTagList;
 
+    private int currentAnthologyPosition = 0;
+
+    private OnChangeVideoAnthologyListener onChangeVideoAnthologyListener;
+    private TagView videoDetailNowAnthology;
+
     public VideoInfoFragment(VideoDetailInfo videoDetailInfo) {
         this.videoDetailInfo = videoDetailInfo;
+    }
+
+    public interface OnChangeVideoAnthologyListener {
+        void onChangeAnthology (int position, String cid);
+    }
+
+    public void setOnChangeVideoAnthologyListener(OnChangeVideoAnthologyListener onChangeVideoAnthologyListener) {
+        this.onChangeVideoAnthologyListener = onChangeVideoAnthologyListener;
     }
 
     @Override
@@ -113,9 +129,13 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
 
         videoDetailTags = findView(R.id.video_detail_tags);
 
-        videoDetailVideoEps = findView(R.id.video_detail_videoEps);
+        LinearLayout videoDetailAnthologyContainer = findView(R.id.video_detail_anthology_container);
         if (videoDetailInfo.anthologyInfoList.size() <= 1) {
-            videoDetailVideoEps.setVisibility(View.GONE);
+            videoDetailAnthologyContainer.setVisibility(View.GONE);
+        } else {
+            videoDetailAnthologyContainer.setOnClickListener(this);
+            videoDetailNowAnthology = findView(R.id.video_detail_now_anthology);
+            videoDetailNowAnthology.setRightValue(videoDetailInfo.anthologyInfoList.get(currentAnthologyPosition).part);
         }
 
         videoDetailRecommends = findView(R.id.video_detail_recommends);
@@ -227,6 +247,21 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
                 break;
             case R.id.video_detail_follow:
 
+                break;
+            case R.id.video_detail_anthology_container:
+                VideoAnthologyBottomSheet videoAnthologyBottomSheet = new VideoAnthologyBottomSheet(context, currentAnthologyPosition, videoDetailInfo.anthologyInfoList);
+                videoAnthologyBottomSheet.setOnVideoAnthologyListener(new VideoAnthologyAdapter.OnVideoAnthologyListener() {
+                    @Override
+                    public void onVideoAnthology(int position, String cid) {
+                        if (onChangeVideoAnthologyListener != null) {
+                            currentAnthologyPosition = position;
+                            videoDetailNowAnthology.setRightValue(videoDetailInfo.anthologyInfoList.get(currentAnthologyPosition).part);
+                            onChangeVideoAnthologyListener.onChangeAnthology(currentAnthologyPosition, cid);
+                            videoAnthologyBottomSheet.dismiss();
+                        }
+                    }
+                });
+                videoAnthologyBottomSheet.show();
                 break;
             case R.id.video_detail_like:
 
