@@ -1,4 +1,4 @@
-package com.leon.biuvideo.ui.resourcesFragment.video;
+package com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import com.dueeeke.videoplayer.controller.ControlWrapper;
 import com.dueeeke.videoplayer.controller.IControlComponent;
 import com.dueeeke.videoplayer.player.VideoView;
+import com.leon.biuvideo.ui.resourcesFragment.video.BiliDanmakuParser;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
@@ -171,6 +173,7 @@ public class VideoDanmakuView extends DanmakuView implements IControlComponent {
                 }
 
                 getDanmakuData();
+                Fuck.blue("danmaku cid----" + cid);
                 break;
             case VideoView.STATE_PLAYING:
                 if (isPrepared() && isPaused()) {
@@ -294,5 +297,10 @@ public class VideoDanmakuView extends DanmakuView implements IControlComponent {
                 handler.sendMessage(message);
             }
         });
+    }
+
+    public void reset (String cid) {
+        release();
+        this.cid = cid;
     }
 }

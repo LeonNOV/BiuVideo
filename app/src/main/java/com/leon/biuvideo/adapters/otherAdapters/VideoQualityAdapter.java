@@ -5,13 +5,11 @@ import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
-import com.leon.biuvideo.utils.Fuck;
 
 import java.util.List;
 
@@ -75,6 +73,4 @@ public class VideoQualityAdapter extends BaseAdapter<String[]> {
             }
         });
     }
-
-    
 }

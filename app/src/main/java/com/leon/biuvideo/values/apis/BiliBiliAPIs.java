@@ -192,7 +192,7 @@ public class BiliBiliAPIs {
      *      参数
      *          uid：up主id
      */
-    public static String BILI_USER_PICTURE_TOTAL = "https://api.vc.bilibili.com/link_draw/v1/doc/upload_count";
+    public static final String BILI_USER_PICTURE_TOTAL = "https://api.vc.bilibili.com/link_draw/v1/doc/upload_count";
 
     /**
      * 获取<strong>单个专栏<strong/>的信息
@@ -200,7 +200,7 @@ public class BiliBiliAPIs {
      *      参数：
      *          id：专栏ID
      */
-    public static String ARTICLE_INFO = "https://api.bilibili.com/x/article/viewinfo";
+    public static final String ARTICLE_INFO = "https://api.bilibili.com/x/article/viewinfo";
 
     /**
      * 获取相簿详细信息
@@ -209,12 +209,6 @@ public class BiliBiliAPIs {
      *      type：默认为2
      */
     public static final String BILI_USER_PICTURE_DETAIL = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/get_dynamic_detail";
-
-    /**
-     * 相簿原链接<br/>
-     *      参数：后跟相簿ID
-     */
-    public static String pictureWebPage = "https://t.bilibili.com/h5/dynamic/detail/";
 
     /**
      * 歌曲基本信息接口<br/>
@@ -236,7 +230,7 @@ public class BiliBiliAPIs {
      *          后跟专栏ID（CVxxxxxxx）
      *          from:默认值:category_0,可选
      */
-    public static String ARTICLE_PAGE_PATH = "https://www.bilibili.com/read/mobile/";
+    public static final String ARTICLE_PAGE_PATH = "https://www.bilibili.com/read/mobile/";
 
     /**
      * 搜索接口<br/>
@@ -259,7 +253,7 @@ public class BiliBiliAPIs {
      *              stow：按收藏数从高至低排序
      * 需要在请求头中添加referer，默认为`https://search.bilibili.com`
      */
-    public static String SEARCH_WITH_TYPE = "https://api.bilibili.com/x/web-interface/search/type";
+    public static final String SEARCH_WITH_TYPE = "https://api.bilibili.com/x/web-interface/search/type";
 
     /**
      * 获取专栏具体信息的接口<br/>
@@ -267,7 +261,7 @@ public class BiliBiliAPIs {
      *          ids：专栏id，多个参数，需要用URL编码格式的‘,’来分隔(%2C)
      *
      */
-    public static String METAS = "https://api.bilibili.com/x/article/metas";
+    public static final String METAS = "https://api.bilibili.com/x/article/metas";
 
     /**
      * 获取‘我的’订阅数据接口<br/>

@@ -18,7 +18,7 @@ import com.dueeeke.videoplayer.player.VideoView;
 import com.dueeeke.videoplayer.util.PlayerUtils;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
-import com.leon.biuvideo.ui.resourcesFragment.video.VideoDanmakuView;
+import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoDanmakuView;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.OnDanmakuListener;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerBottomControlView;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerCompleteView;
@@ -117,6 +117,20 @@ public class VideoPlayerController extends GestureVideoController implements OnD
         }
     }
 
+    /**
+     * 对视频弹幕进行重新设置
+     *
+     * @param cid   视频CID
+     */
+    public void resetDanmaku (String cid) {
+        videoDanmakuView.reset(cid);
+    }
+
+    /**
+     * 设置标题
+     *
+     * @param title 标题内容
+     */
     public void setTitle (String title) {
         videoPlayerTitleView.setTitle(title);
     }

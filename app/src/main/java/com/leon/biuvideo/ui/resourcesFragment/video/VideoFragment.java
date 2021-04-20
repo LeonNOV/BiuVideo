@@ -62,6 +62,9 @@ public class VideoFragment extends BaseSupportFragment {
                 } else {
                     videoPlayerViewContent.release();
                     videoPlayerViewContent.setUrl(videoWithFlv.videoStreamInfoList.get(videoIndex).url, HttpUtils.getHeaders());
+
+                    // 重新设置弹幕
+                    videoPlayerController.resetDanmaku(videoWithFlv.cid);
                     videoPlayerViewContent.start();
                 }
 

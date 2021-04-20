@@ -3,7 +3,6 @@ package com.leon.biuvideo.utils.parseDataUtils.resourcesParsers;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
@@ -53,8 +52,6 @@ public class VideoWithFlvParser {
         params.put("cid", String.valueOf(cid));
         params.put("qn", qualityId);
         params.put("fourk", FOURK);
-
-        Fuck.blue("cid----" + cid);
 
         JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.VIDEO_STREAM_INFO, Headers.of(HttpUtils.getAPIRequestHeader()), params);
         JSONObject data = response.getJSONObject("data");
