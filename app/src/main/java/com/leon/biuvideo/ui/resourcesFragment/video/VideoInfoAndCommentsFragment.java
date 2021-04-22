@@ -36,8 +36,7 @@ import java.util.List;
  */
 public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements View.OnClickListener {
     private final String bvid;
-    private final int videoIndex = 0;
-    private int anthologyPosition = 0;
+    private int videoIndex = 0;
 
     private ImageView videoInfoAndCommentsDanmakuStatus;
     private TabLayout videoInfoAndCommentsTabLayout;
@@ -70,9 +69,9 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
          *
          * @param title 选集标题
          * @param videoWithFlv  单集视频信息
-         * @param videoIndex    选集索引
+         * @param videoStreamIndex    分段视频索引，默认只播放第一个（该值为0）
          */
-        void playVideo (String title, VideoWithFlv videoWithFlv, int videoIndex);
+        void playVideo (String title, VideoWithFlv videoWithFlv, int videoStreamIndex);
 
         /**
          * 错误事件
@@ -125,7 +124,7 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
                         videoInfoFragment.setOnChangeVideoAnthologyListener(new VideoInfoFragment.OnChangeVideoAnthologyListener() {
                             @Override
                             public void onChangeAnthology(int position, String cid) {
-                                anthologyPosition = position;
+                                videoIndex = position;
                                 getVideoStreamUrl(cid, VideoWithFlvParser.DEFAULT_QUALITY);
                             }
                         });
@@ -152,7 +151,7 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
                     case 1:
                         videoWithFlv = (VideoWithFlv) msg.obj;
                         if (videoFragmentContainerListener != null) {
-                            videoFragmentContainerListener.playVideo(videoDetailInfo.anthologyInfoList.get(anthologyPosition).part, videoWithFlv, videoIndex);
+                            videoFragmentContainerListener.playVideo(videoDetailInfo.anthologyInfoList.get(videoIndex).part, videoWithFlv, 0);
                         }
                         break;
                     default:

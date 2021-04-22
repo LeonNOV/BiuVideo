@@ -54,14 +54,14 @@ public class VideoFragment extends BaseSupportFragment {
         VideoInfoAndCommentsFragment videoInfoAndCommentsFragment = new VideoInfoAndCommentsFragment(bvid);
         videoInfoAndCommentsFragment.setVideoFragmentContainerListener(new VideoInfoAndCommentsFragment.VideoFragmentContainerListener() {
             @Override
-            public void playVideo(String title, VideoWithFlv videoWithFlv, int videoIndex) {
+            public void playVideo(String title, VideoWithFlv videoWithFlv, int videoStreamIndex) {
                 if (isFirstVideo) {
                     initVideoPlayer(videoWithFlv);
 
                     isFirstVideo = false;
                 } else {
                     videoPlayerViewContent.release();
-                    videoPlayerViewContent.setUrl(videoWithFlv.videoStreamInfoList.get(videoIndex).url, HttpUtils.getHeaders());
+                    videoPlayerViewContent.setUrl(videoWithFlv.videoStreamInfoList.get(videoStreamIndex).url, HttpUtils.getHeaders());
 
                     // 重新设置弹幕
                     videoPlayerController.resetDanmaku(videoWithFlv.cid);
