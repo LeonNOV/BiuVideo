@@ -26,6 +26,7 @@ import com.leon.biuvideo.adapters.commentAdapters.CommentDetailAdapter;
 import com.leon.biuvideo.adapters.commentAdapters.CommentLevelOneAdapter;
 import com.leon.biuvideo.beans.resourcesBeans.Comment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoFragment;
 import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.ui.views.CardTitle;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;

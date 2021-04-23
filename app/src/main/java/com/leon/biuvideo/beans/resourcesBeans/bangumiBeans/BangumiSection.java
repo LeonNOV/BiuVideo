@@ -25,7 +25,7 @@ public class BangumiSection {
         public String shortLink;
 
         public int coin;
-        public int danmakus;
+        public int danmaku;
         public int likes;
         public int play;
         public int reply;

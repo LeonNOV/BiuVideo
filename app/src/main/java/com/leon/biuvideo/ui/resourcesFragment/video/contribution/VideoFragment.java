@@ -1,14 +1,13 @@
-package com.leon.biuvideo.ui.resourcesFragment.video;
+package com.leon.biuvideo.ui.resourcesFragment.video.contribution;
 
 import androidx.fragment.app.FragmentManager;
 
 import com.dueeeke.videoplayer.ijk.IjkPlayer;
 import com.dueeeke.videoplayer.player.VideoView;
-import com.dueeeke.videoplayer.player.VideoViewConfig;
-import com.dueeeke.videoplayer.player.VideoViewManager;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoStatListener;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerTitleView;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.VideoPlayerController;
@@ -19,8 +18,6 @@ import com.leon.biuvideo.wraps.VideoSpeedWrap;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.lang.reflect.Field;
 
 /**
  * @Author Leon
@@ -52,7 +49,7 @@ public class VideoFragment extends BaseSupportFragment {
         videoPlayerViewContent = findView(R.id.video_player_content);
 
         VideoInfoAndCommentsFragment videoInfoAndCommentsFragment = new VideoInfoAndCommentsFragment(bvid);
-        videoInfoAndCommentsFragment.setVideoFragmentContainerListener(new VideoInfoAndCommentsFragment.VideoFragmentContainerListener() {
+        videoInfoAndCommentsFragment.setVideoStatListener(new VideoStatListener() {
             @Override
             public void playVideo(String title, VideoWithFlv videoWithFlv, int videoStreamIndex) {
                 if (isFirstVideo) {

@@ -64,7 +64,7 @@ public class BangumiDetailParser {
 
             JSONObject stat = result.getJSONObject("stat");
             bangumi.coins = stat.getIntValue("coins");
-            bangumi.danmakus = stat.getIntValue("danmakus");
+            bangumi.danmaku = stat.getIntValue("danmakus");
             bangumi.favorites = stat.getIntValue("favorites");
             bangumi.likes = stat.getIntValue("likes");
             bangumi.reply = stat.getIntValue("reply");
@@ -77,7 +77,6 @@ public class BangumiDetailParser {
             bangumi.bangumiEpList = getBangumiEps(result.getJSONArray("episodes"));
             bangumi.bangumiSeasonList = getBangumiSeasons(result.getJSONArray("seasons"));
             bangumi.bangumiSectionList = getBangumiSections(result.getJSONArray("section"));
-
 
             return bangumi;
         } else {
@@ -194,7 +193,7 @@ public class BangumiDetailParser {
 
                 JSONObject stat = jsonObject1.getJSONObject("stat");
                 episode1.coin = stat.getIntValue("coin");
-                episode1.danmakus = stat.getIntValue("danmakus");
+                episode1.danmaku = stat.getIntValue("danmakus");
                 episode1.likes = stat.getIntValue("likes");
                 episode1.play = stat.getIntValue("play");
                 episode1.reply = stat.getIntValue("reply");

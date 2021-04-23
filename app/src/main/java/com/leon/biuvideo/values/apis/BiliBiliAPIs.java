@@ -54,15 +54,7 @@ public class BiliBiliAPIs {
      *          cid：cid，必须
      *          其他参数默认即可
      */
-    public static String BANGUMI_STREAM_INFO = "https://api.bilibili.com/pgc/player/web/playurl";
-
-    /**
-     * 视频播放请求地址<br/>
-     * 参数：
-     *      aid
-     *      cid
-     */
-    public static String videoBaeUrl = "https://www.bilibili.com/blackboard/html5mobileplayer.html?";
+    public static final String BANGUMI_STREAM_INFO = "https://api.bilibili.com/pgc/player/web/playurl";
 
     /**
      * 获取视频的弹幕数据
@@ -324,13 +316,21 @@ public class BiliBiliAPIs {
     public static String bangumiEpCid = "https://api.bilibili.com/pgc/web/season/section";
 
     /**
-     * 获取番剧详细信息
+     * 获取 番剧/电影/电视剧/纪录片/综艺 详细信息
      * 参数（二选一）
      *      season_id：season_id与ep_id任选其一
      *      ep_id：season_id与ep_id任选其一
      *
      */
     public static final String BANGUMI_DETAIL = "http://api.bilibili.com/pgc/view/web/season";
+
+    /**
+     * 获取用户与番剧的状态，如：点赞状态、投币状态等（用户状态数需要cookie，否则默认为0）
+     * <br/><strong>该接口是与番剧/电视剧等的每一集对应的（每切换一集都需要调用该接口）</strong>
+     * 参数：
+     *      ep_id：ep_id
+     */
+    public static final String BANGUMI_SERIES_STAT = "https://api.bilibili.com/pgc/season/episode/web/info";
 
     /**
      * 获取分区的子分区数据

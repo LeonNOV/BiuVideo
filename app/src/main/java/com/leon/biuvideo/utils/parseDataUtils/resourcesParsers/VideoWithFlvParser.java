@@ -40,20 +40,30 @@ public class VideoWithFlvParser {
      */
     private static final String FOURK = "1";
 
-    private final String bvid;
+    private String bvid;
+
+    public VideoWithFlvParser() {
+    }
 
     public VideoWithFlvParser(String bvid) {
         this.bvid = bvid;
     }
 
-    public VideoWithFlv parseData(String cid, String qualityId) {
-        Map<String, String> params = new HashMap<>(4);
-        params.put("bvid", String.valueOf(bvid));
+    public VideoWithFlv parseData(String cid, String qualityId, boolean isBangumi) {
+        Map<String, String> params = new HashMap<>(3);
         params.put("cid", String.valueOf(cid));
         params.put("qn", qualityId);
         params.put("fourk", FOURK);
+        if (!isBangumi) {
+            params.put("bvid", String.valueOf(bvid));
+        }
 
-        JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.VIDEO_STREAM_INFO, Headers.of(HttpUtils.getAPIRequestHeader()), params);
+        JSONObject response = HttpUtils.getResponse(isBangumi ?
+                BiliBiliAPIs.BANGUMI_STREAM_INFO:
+                BiliBiliAPIs.VIDEO_STREAM_INFO,
+                Headers.of(HttpUtils.getAPIRequestHeader()),
+                params);
+
         JSONObject data = response.getJSONObject("data");
         if (data != null) {
             VideoWithFlv videoWithFlv = new VideoWithFlv();

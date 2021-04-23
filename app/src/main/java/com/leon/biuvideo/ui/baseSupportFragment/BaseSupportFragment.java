@@ -18,7 +18,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.ui.resourcesFragment.article.ArticleFragment;
 import com.leon.biuvideo.ui.resourcesFragment.picture.PictureFragment;
-import com.leon.biuvideo.ui.resourcesFragment.video.VideoFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoFragment;
 import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.values.FragmentType;
 

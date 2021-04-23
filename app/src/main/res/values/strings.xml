@@ -239,4 +239,5 @@
     <string name="videoNowPlay">正在观看</string>
     <string name="videoClickChangeAnthology">点击切换</string>
     <string name="videoChangeAnthology">切换选集</string>
+    <string name="bangumiNowSeries">已选系列</string>
 </resources>

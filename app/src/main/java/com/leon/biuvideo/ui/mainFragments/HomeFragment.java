@@ -19,7 +19,6 @@ import com.leon.biuvideo.adapters.homeAdapters.RecommendAdapter;
 import com.leon.biuvideo.beans.Weather;
 import com.leon.biuvideo.beans.homeBeans.Recommend;
 import com.leon.biuvideo.beans.homeBeans.WatchLater;
-import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
 import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.home.DownloadManagerFragment;
@@ -31,8 +30,7 @@ import com.leon.biuvideo.ui.mainFragments.homeModels.WeatherModelInterface;
 import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.ui.otherFragments.PopularFragment;
 import com.leon.biuvideo.ui.resourcesFragment.audio.AudioFragment;
-import com.leon.biuvideo.ui.resourcesFragment.video.VideoFragment;
-import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoQualityDialog;
+import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
@@ -47,7 +45,6 @@ import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.FeaturesName;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 /**

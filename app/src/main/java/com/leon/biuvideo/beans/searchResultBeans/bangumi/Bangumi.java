@@ -1,6 +1,6 @@
 package com.leon.biuvideo.beans.searchResultBeans.bangumi;
 
-import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoDetailInfo;
+import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoInfo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class Bangumi implements Serializable {
      *
      * @return  AnthologyInfo集合
      */
-    public List<VideoDetailInfo.AnthologyInfo> getAnthologyInfoList() {
+    public List<VideoInfo.AnthologyInfo> getAnthologyInfoList() {
         List<AnthologyInfo> anthologyInfoList = new ArrayList<>();
 
         for (int i = 0; i < eps.size(); i++) {

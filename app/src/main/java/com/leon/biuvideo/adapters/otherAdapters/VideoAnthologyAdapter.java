@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
-import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoDetailInfo;
+import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoInfo;
 
 import java.util.List;
 
@@ -18,13 +18,13 @@ import java.util.List;
  * @Time 2021/4/20
  * @Desc 视频选集适配器
  */
-public class VideoAnthologyAdapter extends BaseAdapter<VideoDetailInfo.AnthologyInfo> {
-    private final List<VideoDetailInfo.AnthologyInfo> anthologyInfoList;
+public class VideoAnthologyAdapter extends BaseAdapter<VideoInfo.AnthologyInfo> {
+    private final List<VideoInfo.AnthologyInfo> anthologyInfoList;
     private final int currentIndex;
 
     private OnVideoAnthologyListener onVideoAnthologyListener;
 
-    public VideoAnthologyAdapter(int currentIndex, List<VideoDetailInfo.AnthologyInfo> beans, Context context) {
+    public VideoAnthologyAdapter(int currentIndex, List<VideoInfo.AnthologyInfo> beans, Context context) {
         super(beans, context);
         this.currentIndex = currentIndex;
         this.anthologyInfoList = beans;
@@ -35,9 +35,8 @@ public class VideoAnthologyAdapter extends BaseAdapter<VideoDetailInfo.Anthology
          * 视频选集点击事件
          *
          * @param position position
-         * @param cid 选集cid
          */
-        void onVideoAnthology (int position, String cid);
+        void onVideoAnthology (int position);
     }
 
     public void setOnVideoAnthologyListener(OnVideoAnthologyListener onVideoAnthologyListener) {
@@ -51,7 +50,7 @@ public class VideoAnthologyAdapter extends BaseAdapter<VideoDetailInfo.Anthology
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        VideoDetailInfo.AnthologyInfo anthologyInfo = anthologyInfoList.get(position);
+        VideoInfo.AnthologyInfo anthologyInfo = anthologyInfoList.get(position);
 
         holder.setText(R.id.video_anthology_item_name, anthologyInfo.part);
         TextView videoAnthologyItemBadge = holder.findById(R.id.video_anthology_item_badge);
@@ -71,7 +70,7 @@ public class VideoAnthologyAdapter extends BaseAdapter<VideoDetailInfo.Anthology
                 }
 
                 if (onVideoAnthologyListener != null) {
-                    onVideoAnthologyListener.onVideoAnthology(position, anthologyInfo.cid);
+                    onVideoAnthologyListener.onVideoAnthology(position);
                 }
             }
         });

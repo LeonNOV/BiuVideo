@@ -52,7 +52,7 @@ public class Bangumi {
     public String seriesTitle;
 
     public int coins;
-    public int danmakus;
+    public int danmaku;
     public int favorites;
     public int likes;
     public int reply;

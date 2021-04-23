@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.otherAdapters.VideoAnthologyAdapter;
-import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoDetailInfo;
+import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoInfo;
 import com.leon.biuvideo.ui.views.BottomSheetTopBar;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 
@@ -27,10 +27,10 @@ import java.util.List;
 public class VideoAnthologyBottomSheet extends BottomSheetDialog {
     private final Context context;
     private final int currentPosition;
-    private final List<VideoDetailInfo.AnthologyInfo> anthologyInfoList;
+    private final List<VideoInfo.AnthologyInfo> anthologyInfoList;
     private VideoAnthologyAdapter.OnVideoAnthologyListener onVideoAnthologyListener;
 
-    public VideoAnthologyBottomSheet(@NonNull Context context, int currentPosition, List<VideoDetailInfo.AnthologyInfo> anthologyInfoList) {
+    public VideoAnthologyBottomSheet(@NonNull Context context, int currentPosition, List<VideoInfo.AnthologyInfo> anthologyInfoList) {
         super(context, R.style.DialogStyle);
         this.context = context;
         this.currentPosition = currentPosition;

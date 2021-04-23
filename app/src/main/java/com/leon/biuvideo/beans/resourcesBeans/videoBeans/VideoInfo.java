@@ -7,7 +7,7 @@ import java.util.List;
  * @Time 2020/10/18
  * @Desc 视频详细信息数据
  */
-public class VideoDetailInfo {
+public class VideoInfo {
     public String bvid;
     public String aid;
     public int videos;
@@ -19,7 +19,7 @@ public class VideoDetailInfo {
     public String desc;
 
     public UserInfo userInfo;
-    public VideoInfo videoInfo;
+    public VideoStat videoStat;
 
     public List<AnthologyInfo> anthologyInfoList;
 
@@ -29,7 +29,7 @@ public class VideoDetailInfo {
         public String userFace;
     }
 
-    public static class VideoInfo {
+    public static class VideoStat {
         public int view;
         public int danmaku;
         public int comment;

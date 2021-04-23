@@ -1,9 +1,6 @@
 package com.leon.biuvideo.adapters.baseAdapters;
 
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +12,10 @@ import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.ui.resourcesFragment.article.ArticleFragment;
 import com.leon.biuvideo.ui.resourcesFragment.picture.PictureFragment;
-import com.leon.biuvideo.ui.resourcesFragment.video.VideoFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoFragment;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.values.FragmentType;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import me.yokeyword.fragmentation.SupportActivity;

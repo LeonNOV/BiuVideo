@@ -8,6 +8,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.commentAdapters.CommentLevelOneAdapter;
 import com.leon.biuvideo.beans.resourcesBeans.Comment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoInfoAndCommentsFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;

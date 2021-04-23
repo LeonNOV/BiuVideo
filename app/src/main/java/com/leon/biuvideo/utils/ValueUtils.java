@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.zip.Inflater;
 
@@ -224,5 +225,34 @@ public class ValueUtils {
 
         inflater.end();
         return bytes;
+    }
+
+    /**
+     * BVID转AVID
+     *
+     * @param bvid  bvid
+     * @return  avid
+     */
+    public static String bv2av (String bvid) {
+        HashMap<String, Integer> mp = new HashMap<>();
+        String table = "fZodR9XQDSUm21yCkr6zBqiveYah8bt4xsWpHnJE7jL5VG3guMTKNPAwcF";
+        int[] ints = {11, 10, 3, 8, 4, 6, 2, 9, 5, 7};
+
+        long xor = 177451812;
+        long add = 8728348608L;
+
+        long r = 0;
+        for (int i = 0; i < 58; i++) {
+            String s1 = table.substring(i, i + 1);
+            mp.put(s1, i);
+        }
+
+        for (int i = 0; i < 6; i++) {
+            String substring = bvid.substring(ints[i], ints[i] + 1);
+            Integer integer = mp.get(substring);
+            r += integer * Math.pow(58, i);
+        }
+
+        return String.valueOf((r - add) ^ xor);
     }
 }
