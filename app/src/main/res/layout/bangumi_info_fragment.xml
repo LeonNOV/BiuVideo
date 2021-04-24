@@ -25,17 +25,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="刀剑神域 爱丽丝篇 异界战争 -终章-"
                 android:textColor="@color/black"
                 android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="刀剑神域 爱丽丝篇 异界战争 -终章-" />
 
             <ImageView
                 android:id="@+id/bangumi_info_order"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/bangumi_info_order_state"
-                android:contentDescription="@string/description" />
+                android:contentDescription="@string/description"
+                android:src="@drawable/bangumi_info_order_state" />
 
         </LinearLayout>
 
@@ -50,17 +50,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:text="会员专享"
                 android:textColor="@color/infoColor"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                tools:text="会员专享" />
 
             <TextView
                 android:id="@+id/bangumi_info_state"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="已完结,全12话"
                 android:textColor="@color/infoColor"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                tools:text="已完结,全12话" />
 
         </LinearLayout>
 
@@ -81,26 +81,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
-                    android:text="4.8分"
                     android:textColor="#ffa726"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    tools:text="4.8分" />
 
                 <TextView
                     android:id="@+id/bangumi_info_play"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
-                    android:text="8429万播放"
                     android:textColor="@color/infoColor"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    tools:text="8429万播放" />
 
                 <TextView
                     android:id="@+id/bangumi_info_orderTotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="718.9万系列追番"
                     android:textColor="@color/infoColor"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    tools:text="718.9万系列追番" />
 
             </LinearLayout>
 
@@ -111,7 +111,7 @@
                 android:layout_gravity="end"
                 android:background="@drawable/ripple_round_corners6dp_bg"
                 android:drawablePadding="5dp"
-                android:text="详情"
+                android:text="@string/bangumiInfoDetail"
                 android:textColor="@color/infoColor"
                 android:textSize="14sp"
                 app:drawableEndCompat="@drawable/ic_enter"
@@ -133,10 +133,10 @@
                 android:background="@drawable/ripple_round_corners6dp_bg"
                 android:drawablePadding="5dp"
                 android:gravity="center"
-                android:text="0"
                 android:textColor="@color/infoColor"
                 android:textSize="15sp"
-                app:drawableTopCompat="@drawable/ic_like_status" />
+                app:drawableTopCompat="@drawable/ic_like_status"
+                tools:text="0" />
 
             <TextView
                 android:id="@+id/bangumi_info_coin"
@@ -146,10 +146,10 @@
                 android:background="@drawable/ripple_round_corners6dp_bg"
                 android:drawablePadding="5dp"
                 android:gravity="center"
-                android:text="0"
                 android:textColor="@color/infoColor"
                 android:textSize="15sp"
-                app:drawableTopCompat="@drawable/ic_coin_status" />
+                app:drawableTopCompat="@drawable/ic_coin_status"
+                tools:text="0" />
 
             <TextView
                 android:id="@+id/bangumi_info_favorite"
@@ -159,10 +159,10 @@
                 android:background="@drawable/ripple_round_corners6dp_bg"
                 android:drawablePadding="5dp"
                 android:gravity="center"
-                android:text="0"
                 android:textColor="@color/infoColor"
                 android:textSize="15sp"
-                app:drawableTopCompat="@drawable/ic_favorite_status" />
+                app:drawableTopCompat="@drawable/ic_favorite_status"
+                tools:text="0" />
 
             <TextView
                 android:id="@+id/bangumi_info_share"
@@ -172,10 +172,10 @@
                 android:background="@drawable/ripple_round_corners6dp_bg"
                 android:drawablePadding="5dp"
                 android:gravity="center"
-                android:text="0"
                 android:textColor="@color/infoColor"
                 android:textSize="15sp"
-                app:drawableTopCompat="@drawable/ic_share" />
+                app:drawableTopCompat="@drawable/ic_share"
+                tools:text="0" />
 
         </LinearLayout>
 
@@ -236,11 +236,13 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/bangumi_info_section_container_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:orientation="vertical"
+            android:overScrollMode="never"
+            android:focusable="false"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <com.leon.biuvideo.ui.views.LoadingRecyclerView

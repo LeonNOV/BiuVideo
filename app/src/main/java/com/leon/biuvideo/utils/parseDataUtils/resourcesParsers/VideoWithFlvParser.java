@@ -64,7 +64,12 @@ public class VideoWithFlvParser {
                 Headers.of(HttpUtils.getAPIRequestHeader()),
                 params);
 
-        JSONObject data = response.getJSONObject("data");
+        JSONObject data;
+        if (isBangumi) {
+            data = response.getJSONObject("result");
+        } else {
+            data = response.getJSONObject("data");
+        }
         if (data != null) {
             VideoWithFlv videoWithFlv = new VideoWithFlv();
             videoWithFlv.cid = cid;

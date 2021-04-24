@@ -12,9 +12,9 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.otherAdapters.BangumiSectionContainerAdapter;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.Bangumi;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiAnthologyStat;
-import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiEp;
-import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
+import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiAnthology;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoAnthologyBottomSheet;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.utils.BindingUtils;
@@ -27,9 +27,9 @@ import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoWithFlvParse
 /**
  * @Author Leon
  * @Time 2021/4/23
- * @Desc
+ * @Desc 番剧介绍页面
  */
-public class BangumiInfoFragment extends BaseSupportFragment {
+public class BangumiInfoFragment extends BaseSupportFragment implements View.OnClickListener {
     private final String seasonId;
 
     private ImageView bangumiInfoOrder;
@@ -46,18 +46,33 @@ public class BangumiInfoFragment extends BaseSupportFragment {
     private TagView bangumiInfoNowSeries;
 
     private RecyclerView bangumiInfoSectionContainerList;
-    private LoadingRecyclerView bangumi_info_recommends;
+    private LoadingRecyclerView bangumiInfoRecommends;
 
     private int seriesIndex = 0;
     private int anthologyIndex = 0;
 
-    private VideoWithFlv videoWithFlv;
     private BangumiAnthologyStat bangumiAnthologyStat;
-    private VideoWithFlvParser videoWithFlvParser;
     private Bangumi bangumi;
+
+    private OnBangumiInfoListener onBangumiInfoListener;
 
     public BangumiInfoFragment(String seasonId) {
         this.seasonId = seasonId;
+    }
+
+    public interface OnBangumiInfoListener {
+        /**
+         * 切换番剧选集
+         *
+         * @param aid   视频aid
+         * @param cid   视频cid
+         * @param title 视频标题
+         */
+        void onBangumiAnthologyListener (String aid, String cid, String title);
+    }
+
+    public void setOnBangumiInfoListener(OnBangumiInfoListener onBangumiInfoListener) {
+        this.onBangumiInfoListener = onBangumiInfoListener;
     }
 
     @Override
@@ -68,6 +83,7 @@ public class BangumiInfoFragment extends BaseSupportFragment {
     @Override
     protected void initView() {
         bangumiInfoOrder = findView(R.id.bangumi_info_order);
+        bangumiInfoOrder.setOnClickListener(this);
 
         bangumiInfoLike = findView(R.id.bangumi_info_like);
         bangumiInfoCoin = findView(R.id.bangumi_info_coin);
@@ -75,13 +91,15 @@ public class BangumiInfoFragment extends BaseSupportFragment {
         bangumiInfoShare = findView(R.id.bangumi_info_share);
 
         bangumiInfoAnthologyContainer = findView(R.id.bangumi_info_anthology_container);
+        bangumiInfoAnthologyContainer.setOnClickListener(this);
         bangumiInfoNowAnthology = findView(R.id.bangumi_info_now_anthology);
 
         bangumiInfoSeriesContainer = findView(R.id.bangumi_info_series_container);
+        bangumiInfoSeriesContainer.setOnClickListener(this);
         bangumiInfoNowSeries = findView(R.id.bangumi_info_nowSeries);
 
         bangumiInfoSectionContainerList = findView(R.id.bangumi_info_section_container_list);
-        bangumi_info_recommends = findView(R.id.bangumi_info_recommends);
+        bangumiInfoRecommends = findView(R.id.bangumi_info_recommends);
 
         initHandler();
         getBangumiInfo();
@@ -104,15 +122,16 @@ public class BangumiInfoFragment extends BaseSupportFragment {
                             bindingUtils.setVisibility(R.id.bangumi_info_badge, View.GONE);
                         }
 
-                        bindingUtils.setText(R.id.bangumi_info_state, bangumi.newEpDesc)
+                        bindingUtils
+                                .setText(R.id.bangumi_info_state, bangumi.newEpDesc)
                                 .setText(R.id.bangumi_info_score, bangumi.ratingScore + "分")
                                 .setText(R.id.bangumi_info_play, ValueUtils.generateCN(bangumi.views) + "播放")
                                 .setText(R.id.bangumi_info_orderTotal, ValueUtils.generateCN(bangumi.bangumiSeasonList.get(seriesIndex).seriesFollow) + "系列追番");
 
-                        if (bangumi.bangumiEpList.size() < 2) {
+                        if (bangumi.bangumiAnthologyList.size() < 2) {
                             bangumiInfoAnthologyContainer.setVisibility(View.GONE);
                         } else {
-                            bangumiInfoNowAnthology.setLeftValue(bangumi.bangumiEpList.get(anthologyIndex).longTitle);
+                            bangumiInfoNowAnthology.setRightValue(bangumi.bangumiAnthologyList.get(anthologyIndex).longTitle);
                         }
 
                         if (bangumi.bangumiSeasonList.size() < 2) {
@@ -129,7 +148,7 @@ public class BangumiInfoFragment extends BaseSupportFragment {
                             bangumiInfoSectionContainerList.setVisibility(View.GONE);
                         }
 
-                        getFirstVideoAndState();
+                        getBangumiState();
                         break;
                     case 1:
                         bangumiInfoLike.setText(ValueUtils.generateCN(bangumiAnthologyStat.like));
@@ -143,7 +162,11 @@ public class BangumiInfoFragment extends BaseSupportFragment {
 
                         bangumiInfoShare.setText(ValueUtils.generateCN(bangumi.share));
 
-
+                        // 播放第一个视频
+                        if (onBangumiInfoListener != null) {
+                            BangumiAnthology bangumiAnthology = bangumi.bangumiAnthologyList.get(anthologyIndex);
+                            onBangumiInfoListener.onBangumiAnthologyListener(bangumiAnthology.aid, bangumiAnthology.cid, bangumiAnthology.longTitle);
+                        }
                         break;
                     default:
                         break;
@@ -166,22 +189,60 @@ public class BangumiInfoFragment extends BaseSupportFragment {
         });
     }
 
-    private void getFirstVideoAndState() {
-        if (videoWithFlvParser != null) {
-            videoWithFlvParser = new VideoWithFlvParser();
-        }
-
+    private void getBangumiState() {
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                BangumiEp bangumiEp = bangumi.bangumiEpList.get(anthologyIndex);
-
-                videoWithFlv = videoWithFlvParser.parseData(bangumiEp.cid, VideoWithFlvParser.DEFAULT_QUALITY, true);
-                bangumiAnthologyStat = BangumiAnthologyStatParser.parseData(bangumiEp.id);
+                bangumiAnthologyStat = BangumiAnthologyStatParser.parseData(bangumi.bangumiAnthologyList.get(anthologyIndex).id);
 
                 Message message = receiveDataHandler.obtainMessage(1);
                 receiveDataHandler.sendMessage(message);
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bangumi_info_order:
+                break;
+            case R.id.bangumi_info_detail:
+                break;
+            case R.id.bangumi_info_like:
+                break;
+            case R.id.bangumi_info_coin:
+                break;
+            case R.id.bangumi_info_favorite:
+                break;
+            case R.id.bangumi_info_share:
+                break;
+            case R.id.bangumi_info_anthology_container:
+                VideoAnthologyBottomSheet videoAnthologyBottomSheet = new VideoAnthologyBottomSheet(context, anthologyIndex);
+                videoAnthologyBottomSheet.setBangumiAnthologyList(bangumi.bangumiAnthologyList);
+                videoAnthologyBottomSheet.setOnVideoAnthologyListener(new VideoAnthologyBottomSheet.OnVideoAnthologyListener() {
+                    @Override
+                    public void onVideoAnthology(int position) {
+                        if (anthologyIndex == position) {
+                            return;
+                        }
+
+                        if (onBangumiInfoListener != null) {
+                            anthologyIndex = position;
+
+                            BangumiAnthology bangumiAnthology = bangumi.bangumiAnthologyList.get(anthologyIndex);
+                            bangumiInfoNowAnthology.setRightValue(bangumiAnthology.longTitle);
+                            onBangumiInfoListener.onBangumiAnthologyListener(bangumiAnthology.aid, bangumiAnthology.cid, bangumiAnthology.longTitle);
+
+                            videoAnthologyBottomSheet.dismiss();
+                        }
+                    }
+                });
+                videoAnthologyBottomSheet.show();
+                break;
+            case R.id.bangumi_info_series_container:
+                break;
+            default:
+                break;
+        }
     }
 }

@@ -136,16 +136,16 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
                         videoInfoFavorite.setText(ValueUtils.generateCN(videoInfo.videoStat.like));
                         videoInfoShare.setText(ValueUtils.generateCN(videoInfo.videoStat.like));
 
-                        if (videoInfo.anthologyInfoList.size() == 0) {
+                        if (videoInfo.videoAnthologyList.size() == 0) {
                             videoInfoAnthologyContainer.setVisibility(View.GONE);
                         } else {
-                            videoInfoNowAnthology.setRightValue(videoInfo.anthologyInfoList.get(anthologyIndex).part);
+                            videoInfoNowAnthology.setRightValue(videoInfo.videoAnthologyList.get(anthologyIndex).part);
                         }
 
                         // 开始播放视频
                         if (onVideoAnthologyListener != null) {
-                            VideoInfo.AnthologyInfo anthologyInfo = videoInfo.anthologyInfoList.get(anthologyIndex);
-                            onVideoAnthologyListener.onAnthology(anthologyInfo.cid, anthologyInfo.part);
+                            VideoInfo.VideoAnthology videoAnthology = videoInfo.videoAnthologyList.get(anthologyIndex);
+                            onVideoAnthologyListener.onAnthology(videoAnthology.cid, videoAnthology.part);
                         }
 
                         getOtherData();
@@ -249,8 +249,9 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
 
                 break;
             case R.id.video_info_anthology_container:
-                VideoAnthologyBottomSheet videoAnthologyBottomSheet = new VideoAnthologyBottomSheet(context, anthologyIndex, videoInfo.anthologyInfoList);
-                videoAnthologyBottomSheet.setOnVideoAnthologyListener(new VideoAnthologyAdapter.OnVideoAnthologyListener() {
+                VideoAnthologyBottomSheet videoAnthologyBottomSheet = new VideoAnthologyBottomSheet(context, anthologyIndex);
+                videoAnthologyBottomSheet.setVideoAnthologyList(videoInfo.videoAnthologyList);
+                videoAnthologyBottomSheet.setOnVideoAnthologyListener(new VideoAnthologyBottomSheet.OnVideoAnthologyListener() {
                     @Override
                     public void onVideoAnthology(int position) {
                         if (anthologyIndex == position) {
@@ -260,10 +261,10 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
                         if (onVideoAnthologyListener != null) {
                             anthologyIndex = position;
 
-                            VideoInfo.AnthologyInfo anthologyInfo = videoInfo.anthologyInfoList.get(anthologyIndex);
+                            VideoInfo.VideoAnthology videoAnthology = videoInfo.videoAnthologyList.get(anthologyIndex);
 
-                            videoInfoNowAnthology.setRightValue(anthologyInfo.part);
-                            onVideoAnthologyListener.onAnthology(anthologyInfo.cid, anthologyInfo.part);
+                            videoInfoNowAnthology.setRightValue(videoAnthology.part);
+                            onVideoAnthologyListener.onAnthology(videoAnthology.cid, videoAnthology.part);
                             videoAnthologyBottomSheet.dismiss();
                         }
                     }

@@ -5,7 +5,7 @@ package com.leon.biuvideo.beans.resourcesBeans.bangumiBeans;
  * @Time 2021/3/21
  * @Desc 番剧单集数据
  */
-public class BangumiEp {
+public class BangumiAnthology {
     public String aid;
     public String bvid;
     public String cid;

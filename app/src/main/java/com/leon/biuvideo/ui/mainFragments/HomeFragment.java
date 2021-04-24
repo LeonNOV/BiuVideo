@@ -30,6 +30,7 @@ import com.leon.biuvideo.ui.mainFragments.homeModels.WeatherModelInterface;
 import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.ui.otherFragments.PopularFragment;
 import com.leon.biuvideo.ui.resourcesFragment.audio.AudioFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.bangumi.BangumiFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
@@ -256,7 +257,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.home_my_orders:
-                ((NavFragment) getParentFragment()).startBrotherFragment(new AudioFragment("2205311"));
+                ((NavFragment) getParentFragment()).startBrotherFragment(new BangumiFragment("36167"));
 //                ((NavFragment) getParentFragment()).startBrotherFragment(OrderFragment.getInstance());
                 break;
             case R.id.home_my_favorites:

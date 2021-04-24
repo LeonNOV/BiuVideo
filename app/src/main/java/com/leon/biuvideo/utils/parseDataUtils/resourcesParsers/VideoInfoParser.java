@@ -63,17 +63,17 @@ public class VideoInfoParser {
             videoInfo.videoStat.share = stat.getIntValue("share");
 
             JSONArray pages = dataObject.getJSONArray("pages");
-            videoInfo.anthologyInfoList = new ArrayList<>(pages.size());
+            videoInfo.videoAnthologyList = new ArrayList<>(pages.size());
             for (Object object : pages) {
-                VideoInfo.AnthologyInfo anthologyInfo = new VideoInfo.AnthologyInfo();
+                VideoInfo.VideoAnthology videoAnthology = new VideoInfo.VideoAnthology();
                 JSONObject jsonObject = (JSONObject) object;
 
-                anthologyInfo.mainId = bvid;
-                anthologyInfo.cid = jsonObject.getString("cid");
-                anthologyInfo.part = jsonObject.getString("part");
-                anthologyInfo.duration = ValueUtils.lengthGenerate(jsonObject.getIntValue("duration"));
+                videoAnthology.mainId = bvid;
+                videoAnthology.cid = jsonObject.getString("cid");
+                videoAnthology.part = jsonObject.getString("part");
+                videoAnthology.duration = ValueUtils.lengthGenerate(jsonObject.getIntValue("duration"));
 
-                videoInfo.anthologyInfoList.add(anthologyInfo);
+                videoInfo.videoAnthologyList.add(videoAnthology);
             }
 
             return videoInfo;

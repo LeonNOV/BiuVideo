@@ -7,19 +7,32 @@ import com.dueeeke.videoplayer.player.VideoView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoFragment;
-import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoInfoAndCommentsFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoInfoAndCommentsFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoStatListener;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerTitleView;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.VideoPlayerController;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.wraps.VideoSpeedWrap;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * @Author Leon
  * @Time 2021/4/23
- * @Desc
+ * @Desc 番剧播放页面
  */
 public class BangumiFragment extends BaseSupportFragment {
+    private final String seasonId;
+    private boolean isFirstVideo = true;
+    private VideoPlayerController videoPlayerController;
+
+    public BangumiFragment(String seasonId) {
+        this.seasonId = seasonId;
+    }
+
     private VideoView<IjkPlayer> videoPlayerViewContent;
 
     @Override
@@ -29,14 +42,40 @@ public class BangumiFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
+        // 注册监听
+        EventBus.getDefault().register(this);
+
         videoPlayerViewContent = findView(R.id.video_player_content);
 
+        VideoInfoAndCommentsFragment videoInfoAndCommentsFragment = new VideoInfoAndCommentsFragment(seasonId,  true);
+        videoInfoAndCommentsFragment.setVideoStatListener(new VideoStatListener() {
+            @Override
+            public void playVideo(String title, VideoWithFlv videoWithFlv, int videoStreamIndex) {
+                if (isFirstVideo) {
+                    initVideoPlayer(videoWithFlv);
+                    isFirstVideo = false;
+                } else {
+                    videoPlayerViewContent.release();
+                    videoPlayerViewContent.setUrl(videoWithFlv.videoStreamInfoList.get(videoStreamIndex).url, HttpUtils.getHeaders());
 
-//        if (findChildFragment(videoInfoAndCommentsFragment.getClass()) == null) {
-//            loadRootFragment(R.id.video_fragment_container, videoInfoAndCommentsFragment);
-//        }
+                    // 重新设置弹幕
+                    videoPlayerController.resetDanmaku(videoWithFlv.cid);
+                    videoPlayerViewContent.start();
+                }
 
-        initVideoPlayer(null);
+                videoPlayerController.setTitle(title);
+            }
+
+            @Override
+            public void onError() {
+                SimpleSnackBar.make(getActivity().getWindow().getDecorView(), "获取数据失败", SimpleSnackBar.LENGTH_LONG).show();
+                backPressed();
+            }
+        });
+
+        if (findChildFragment(videoInfoAndCommentsFragment.getClass()) == null) {
+            loadRootFragment(R.id.video_fragment_container, videoInfoAndCommentsFragment);
+        }
     }
 
     /**
@@ -46,7 +85,7 @@ public class BangumiFragment extends BaseSupportFragment {
      */
     private void initVideoPlayer(VideoWithFlv videoWithFlv) {
         videoPlayerViewContent.setUrl(videoWithFlv.videoStreamInfoList.get(0).url, HttpUtils.getHeaders());
-        VideoPlayerController videoPlayerController = new VideoPlayerController(context, videoWithFlv);
+        videoPlayerController = new VideoPlayerController(context, videoWithFlv);
         videoPlayerController.setOnBackListener(new VideoPlayerTitleView.OnBackListener() {
             @Override
             public void onBack() {
@@ -75,6 +114,11 @@ public class BangumiFragment extends BaseSupportFragment {
         }
 
         return true;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetSpeedMessage (VideoSpeedWrap videoSpeedWrap) {
+        videoPlayerViewContent.setSpeed(videoSpeedWrap.speed);
     }
 
     @Override

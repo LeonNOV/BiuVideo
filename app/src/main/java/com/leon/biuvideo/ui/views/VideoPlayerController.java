@@ -26,7 +26,6 @@ import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoP
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerGestureView;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerPrepareView;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerTitleView;
-import com.leon.biuvideo.utils.Fuck;
 
 /**
  * @Author Leon
@@ -239,7 +238,6 @@ public class VideoPlayerController extends GestureVideoController implements OnD
 
     @Override
     public void onSeekTo(long position) {
-        Fuck.blue("Danmaku seekTo " + PlayerUtils.stringForTime((int) position));
         videoDanmakuView.setPosition(position);
     }
 }

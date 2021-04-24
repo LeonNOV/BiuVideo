@@ -7,12 +7,12 @@ import com.dueeeke.videoplayer.player.VideoView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoInfoAndCommentsFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.VideoStatListener;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerTitleView;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.VideoPlayerController;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.wraps.VideoQualityWrap;
 import com.leon.biuvideo.wraps.VideoSpeedWrap;
 
 import org.greenrobot.eventbus.EventBus;
@@ -48,7 +48,7 @@ public class VideoFragment extends BaseSupportFragment {
 
         videoPlayerViewContent = findView(R.id.video_player_content);
 
-        VideoInfoAndCommentsFragment videoInfoAndCommentsFragment = new VideoInfoAndCommentsFragment(bvid);
+        VideoInfoAndCommentsFragment videoInfoAndCommentsFragment = new VideoInfoAndCommentsFragment(bvid, false);
         videoInfoAndCommentsFragment.setVideoStatListener(new VideoStatListener() {
             @Override
             public void playVideo(String title, VideoWithFlv videoWithFlv, int videoStreamIndex) {

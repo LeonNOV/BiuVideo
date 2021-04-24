@@ -1,29 +1,45 @@
-package com.leon.biuvideo.ui.resourcesFragment.video;
+package com.leon.biuvideo.ui.resourcesFragment.video.bangumi;
 
 import android.os.Message;
+import android.view.View;
+import android.widget.ImageView;
 
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.tabs.TabLayout;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.commentAdapters.CommentLevelOneAdapter;
+import com.leon.biuvideo.adapters.otherAdapters.ViewPager2Adapter;
 import com.leon.biuvideo.beans.resourcesBeans.Comment;
-import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
+import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
+import com.leon.biuvideo.ui.MainActivity;
+import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoCommentFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoInfoAndCommentsFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoStatListener;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
+import com.leon.biuvideo.utils.ValueUtils;
+import com.leon.biuvideo.utils.ViewUtils;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.CommentParser;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoWithFlvParser;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @Author Leon
- * @Time 2021/4/6
- * @Desc 视频评论页面
+ * @Time 2021/4/24
+ * @Desc
  */
-public class VideoCommentFragment extends BaseLazySupportFragment {
+public class BangumiCommentFragment extends BaseSupportFragment  {
     private final List<Comment> commentList = new ArrayList<>();
     private SmartRefreshRecyclerView<Comment> videoCommentCommentData;
 
@@ -33,20 +49,8 @@ public class VideoCommentFragment extends BaseLazySupportFragment {
 
     private VideoInfoAndCommentsFragment.ToCommentDetailFragment toCommentDetailFragment;
 
-    public VideoCommentFragment(String avid) {
-        this.avid = avid;
-    }
-
     public void setToCommentDetailFragment(VideoInfoAndCommentsFragment.ToCommentDetailFragment toCommentDetailFragment) {
         this.toCommentDetailFragment = toCommentDetailFragment;
-    }
-
-    @Override
-    protected void onLazyLoad() {
-        if (avid != null) {
-            videoCommentCommentData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-            getComments(0);
-        }
     }
 
     @Override
@@ -134,7 +138,7 @@ public class VideoCommentFragment extends BaseLazySupportFragment {
      *
      * @param avid  视频avid
      */
-    public void resetComments(String avid) {
+    public void setCommentDatas(String avid) {
         videoCommentCommentData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
         this.avid = avid;
 

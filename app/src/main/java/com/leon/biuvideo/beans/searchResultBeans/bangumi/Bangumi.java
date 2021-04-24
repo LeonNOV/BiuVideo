@@ -32,7 +32,7 @@ public class Bangumi implements Serializable {
      *
      * @return  AnthologyInfo集合
      */
-    public List<VideoInfo.AnthologyInfo> getAnthologyInfoList() {
+    public List<VideoInfo.VideoAnthology> getAnthologyInfoList() {
         List<AnthologyInfo> anthologyInfoList = new ArrayList<>();
 
         for (int i = 0; i < eps.size(); i++) {
@@ -48,7 +48,7 @@ public class Bangumi implements Serializable {
             anthologyInfoList.add(anthologyInfo);
         }
 
-//        return anthologyInfoList;
+//        return videoAnthologyList;
         return null;
     }
 

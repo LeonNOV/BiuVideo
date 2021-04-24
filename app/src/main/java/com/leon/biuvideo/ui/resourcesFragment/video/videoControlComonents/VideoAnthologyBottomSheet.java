@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.adapters.otherAdapters.BangumiAnthologyAdapter;
 import com.leon.biuvideo.adapters.otherAdapters.VideoAnthologyAdapter;
+import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiAnthology;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoInfo;
 import com.leon.biuvideo.ui.views.BottomSheetTopBar;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
@@ -27,17 +29,28 @@ import java.util.List;
 public class VideoAnthologyBottomSheet extends BottomSheetDialog {
     private final Context context;
     private final int currentPosition;
-    private final List<VideoInfo.AnthologyInfo> anthologyInfoList;
-    private VideoAnthologyAdapter.OnVideoAnthologyListener onVideoAnthologyListener;
 
-    public VideoAnthologyBottomSheet(@NonNull Context context, int currentPosition, List<VideoInfo.AnthologyInfo> anthologyInfoList) {
+    private List<VideoInfo.VideoAnthology> videoAnthologyList;
+    private List<BangumiAnthology> bangumiAnthologyList;
+
+    private OnVideoAnthologyListener onVideoAnthologyListener;
+
+    public VideoAnthologyBottomSheet(@NonNull Context context, int currentPosition) {
         super(context, R.style.DialogStyle);
         this.context = context;
         this.currentPosition = currentPosition;
-        this.anthologyInfoList = anthologyInfoList;
     }
 
-    public void setOnVideoAnthologyListener(VideoAnthologyAdapter.OnVideoAnthologyListener onVideoAnthologyListener) {
+    public interface OnVideoAnthologyListener {
+        /**
+         * 视频选集点击事件
+         *
+         * @param position position
+         */
+        void onVideoAnthology(int position);
+    }
+
+    public void setOnVideoAnthologyListener(OnVideoAnthologyListener onVideoAnthologyListener) {
         this.onVideoAnthologyListener = onVideoAnthologyListener;
     }
 
@@ -47,6 +60,14 @@ public class VideoAnthologyBottomSheet extends BottomSheetDialog {
         setContentView(R.layout.video_anthology_bottom_sheet_dialog);
 
         initView();
+    }
+
+    public void setVideoAnthologyList(List<VideoInfo.VideoAnthology> videoAnthologyList) {
+        this.videoAnthologyList = videoAnthologyList;
+    }
+
+    public void setBangumiAnthologyList(List<BangumiAnthology> bangumiAnthologyList) {
+        this.bangumiAnthologyList = bangumiAnthologyList;
     }
 
     private void initView() {
@@ -71,14 +92,21 @@ public class VideoAnthologyBottomSheet extends BottomSheetDialog {
         });
 
         LoadingRecyclerView videoAnthologyListData = findViewById(R.id.video_anthology_list_data);
-
         videoAnthologyListData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
-        VideoAnthologyAdapter videoAnthologyAdapter = new VideoAnthologyAdapter(currentPosition, anthologyInfoList, context);
-        videoAnthologyAdapter.setHasStableIds(true);
-        videoAnthologyAdapter.setOnVideoAnthologyListener(onVideoAnthologyListener);
-        videoAnthologyListData.setRecyclerViewAdapter(videoAnthologyAdapter);
-        videoAnthologyListData.setRecyclerViewLayoutManager(linearLayoutManager);
+
+        if (videoAnthologyList != null) {
+            VideoAnthologyAdapter videoAnthologyAdapter = new VideoAnthologyAdapter(currentPosition, videoAnthologyList, context);
+            videoAnthologyAdapter.setHasStableIds(true);
+            videoAnthologyAdapter.setOnVideoAnthologyListener(onVideoAnthologyListener);
+            videoAnthologyListData.setRecyclerViewAdapter(videoAnthologyAdapter);
+        } else if (bangumiAnthologyList != null) {
+            BangumiAnthologyAdapter bangumiAnthologyAdapter = new BangumiAnthologyAdapter(bangumiAnthologyList, context, currentPosition);
+            bangumiAnthologyAdapter.setHasStableIds(true);
+            bangumiAnthologyAdapter.setOnVideoAnthologyListener(onVideoAnthologyListener);
+            videoAnthologyListData.setRecyclerViewAdapter(bangumiAnthologyAdapter);
+        }
+
+        videoAnthologyListData.setRecyclerViewLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
         videoAnthologyListData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
     }
 }

@@ -36,7 +36,7 @@ public class Bangumi {
     /**
      * 单集信息
      */
-    public List<BangumiEp> bangumiEpList;
+    public List<BangumiAnthology> bangumiAnthologyList;
 
     /**
      * 其他季数

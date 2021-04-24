@@ -9,7 +9,7 @@ public abstract class BaseLazySupportFragment extends BaseSupportFragment {
     /**
      * 数据读取标记
      */
-    private boolean isLoaded = false;
+    protected boolean isLoaded = false;
 
     @Override
     public void onResume() {

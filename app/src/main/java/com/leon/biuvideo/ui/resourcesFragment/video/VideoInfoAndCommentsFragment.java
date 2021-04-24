@@ -1,4 +1,4 @@
-package com.leon.biuvideo.ui.resourcesFragment.video.contribution;
+package com.leon.biuvideo.ui.resourcesFragment.video;
 
 import android.os.Message;
 import android.view.View;
@@ -11,13 +11,13 @@ import com.google.android.material.tabs.TabLayout;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.otherAdapters.ViewPager2Adapter;
 import com.leon.biuvideo.beans.resourcesBeans.Comment;
+import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.Bangumi;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
 import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.resourcesFragment.video.OnVideoAnthologyListener;
-import com.leon.biuvideo.ui.resourcesFragment.video.VideoCommentDetailFragment;
-import com.leon.biuvideo.ui.resourcesFragment.video.VideoCommentFragment;
-import com.leon.biuvideo.ui.resourcesFragment.video.VideoStatListener;
+import com.leon.biuvideo.ui.resourcesFragment.video.bangumi.BangumiCommentFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.bangumi.BangumiInfoFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoInfoFragment;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.ViewUtils;
@@ -38,11 +38,12 @@ import java.util.List;
  * @Desc 视频信息及评论内容
  */
 public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements View.OnClickListener {
-    private final String bvid;
+    private final String resourceId;
+    private final boolean isBangumi;
+    private final String[] tabLayoutTitles = {"简介", "评论"};
+    private final List<Fragment> viewPagerFragments = new ArrayList<>(2);
 
     private ImageView videoInfoAndCommentsDanmakuStatus;
-    private TabLayout videoInfoAndCommentsTabLayout;
-    private ViewPager2 videoInfoAndCommentsViewPager;
 
     private VideoWithFlvParser videoWithFlvParser;
     private String cid;
@@ -50,9 +51,16 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
 
     private VideoStatListener videoStatListener;
     private MainActivity.OnTouchListener onTouchListener;
+    private VideoCommentFragment videoCommentFragment;
+    private BangumiCommentFragment bangumiCommentFragment;
 
-    public VideoInfoAndCommentsFragment(String bvid) {
-        this.bvid = bvid;
+    /**
+     * @param resourceId    视频（bvid）/番剧（seasonId）/电视剧（seasonId）
+     * @param isBangumi 是否为番剧资源
+     */
+    public VideoInfoAndCommentsFragment(String resourceId, boolean isBangumi) {
+        this.resourceId = resourceId;
+        this.isBangumi = isBangumi;
     }
 
     public interface ToCommentDetailFragment {
@@ -80,14 +88,14 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
 
         findView(R.id.video_info_and_comments_tab_container).setBackgroundResource(R.color.white);
 
-        videoInfoAndCommentsTabLayout = findView(R.id.video_info_and_comments_tabLayout);
+        TabLayout videoInfoAndCommentsTabLayout = findView(R.id.video_info_and_comments_tabLayout);
 
         findView(R.id.video_info_and_comments_send_danmaku).setOnClickListener(this);
         videoInfoAndCommentsDanmakuStatus = findView(R.id.video_info_and_comments_danmaku_status);
         videoInfoAndCommentsDanmakuStatus.setSelected(true);
         videoInfoAndCommentsDanmakuStatus.setOnClickListener(this);
 
-        videoInfoAndCommentsViewPager = findView(R.id.video_info_and_comments_viewPager);
+        ViewPager2 videoInfoAndCommentsViewPager = findView(R.id.video_info_and_comments_viewPager);
 
         setOnLoadListener(new OnLoadListener() {
             @Override
@@ -105,14 +113,51 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
             }
         });
 
-        addSubFragment();
+        if (isBangumi) {
+            addBangumiInfoFragment();
+            bangumiCommentFragment = new BangumiCommentFragment();
+//            bangumiCommentFragment.setToCommentDetailFragment(new VideoInfoAndCommentsFragment.ToCommentDetailFragment() {
+//
+//                @Override
+//                public void toCommentDetail(Comment comment) {
+//                    start(new VideoCommentDetailFragment(comment));
+//                }
+//            });
+            viewPagerFragments.add(bangumiCommentFragment);
+        } else {
+            addVideoInfoFragment();
+            addVideoCommentFragment(ValueUtils.bv2av(resourceId));
+        }
+
+        videoInfoAndCommentsViewPager.setAdapter(new ViewPager2Adapter(this, viewPagerFragments));
+        onTouchListener = ViewUtils.initTabLayoutAndViewPager2(getActivity(), videoInfoAndCommentsTabLayout, videoInfoAndCommentsViewPager, tabLayoutTitles, 0);
     }
 
-    private void addSubFragment () {
-        String[] titles = {"简介", "评论"};
-        List<Fragment> viewPagerFragments = new ArrayList<>(2);
+    /**
+     * 番剧介绍页面
+     */
+    private void addBangumiInfoFragment() {
+        BangumiInfoFragment bangumiInfoFragment = new BangumiInfoFragment(resourceId);
+        bangumiInfoFragment.setOnBangumiInfoListener(new BangumiInfoFragment.OnBangumiInfoListener() {
+            @Override
+            public void onBangumiAnthologyListener(String aid, String cid, String title) {
+                VideoInfoAndCommentsFragment.this.cid = cid;
+                VideoInfoAndCommentsFragment.this.title = title;
 
-        VideoInfoFragment videoInfoFragment = new VideoInfoFragment(bvid);
+                getVideoStreamUrl(VideoWithFlvParser.DEFAULT_QUALITY);
+
+                // 番剧评论无论是首次加载还是二次加载都需要调用resetComments(aid)
+                bangumiCommentFragment.setCommentDatas(aid);
+            }
+        });
+        viewPagerFragments.add(bangumiInfoFragment);
+    }
+
+    /**
+     * 投稿视频介绍页面
+     */
+    private void addVideoInfoFragment() {
+        VideoInfoFragment videoInfoFragment = new VideoInfoFragment(resourceId);
         videoInfoFragment.setOnVideoAnthologyListener(new OnVideoAnthologyListener() {
             @Override
             public void onAnthology(String cid, String title) {
@@ -123,8 +168,18 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
             }
         });
         viewPagerFragments.add(videoInfoFragment);
+    }
 
-        VideoCommentFragment videoCommentFragment = new VideoCommentFragment(ValueUtils.bv2av(bvid));
+    /**
+     * 视频评论页面
+     *
+     * 注意：番剧/电视剧等视频的评论是和其选集一一对应的
+     * <br/>如果为投稿视频，则该处只需将BVID转换为aid，如果为番剧/电视剧等视频，则需要获取其选集数据后再调用该方法
+     *
+     * @param aid   视频aid
+     */
+    private void addVideoCommentFragment (String aid) {
+        videoCommentFragment = new VideoCommentFragment(aid);
         videoCommentFragment.setToCommentDetailFragment(new ToCommentDetailFragment() {
             @Override
             public void toCommentDetail(Comment comment) {
@@ -132,10 +187,6 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
             }
         });
         viewPagerFragments.add(videoCommentFragment);
-
-        videoInfoAndCommentsViewPager.setAdapter(new ViewPager2Adapter(VideoInfoAndCommentsFragment.this, viewPagerFragments));
-
-        onTouchListener = ViewUtils.initTabLayoutAndViewPager2(getActivity(), videoInfoAndCommentsTabLayout, videoInfoAndCommentsViewPager, titles, 0);
     }
 
     /**
@@ -143,13 +194,13 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
      */
     public void getVideoStreamUrl (String qualityId) {
         if (videoWithFlvParser == null) {
-            videoWithFlvParser = new VideoWithFlvParser(bvid);
+            videoWithFlvParser = new VideoWithFlvParser(resourceId);
         }
 
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                VideoWithFlv videoWithFlv = videoWithFlvParser.parseData(cid, qualityId, false);
+                VideoWithFlv videoWithFlv = videoWithFlvParser.parseData(cid, qualityId, isBangumi);
 
                 Message message = receiveDataHandler.obtainMessage();
                 message.obj = videoWithFlv;

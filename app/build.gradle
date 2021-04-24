@@ -103,7 +103,8 @@ dependencies {
     implementation 'com.sun.easysnackbar:easysnackbar:1.0.1'
 
     // 单Activity框架
-    implementation 'me.yokeyword:fragmentationx:1.0.1'
+    implementation 'me.xuexuan:fragmentationx:1.0.6'
+//    implementation 'me.yokeyword:fragmentationx:1.0.1'
 //    implementation 'me.yokeyword:fragmentation-swipeback:1.0.1'
 
     // Item侧滑控件

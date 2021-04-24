@@ -71,7 +71,7 @@ public class CommentParser implements ParserInterface<Comment> {
             JSONObject cursor = data.getJSONObject("cursor");
 
             // 当前页是否为最后一页
-            dataStatus = cursor.getBooleanValue("is_end");
+            dataStatus = !cursor.getBooleanValue("is_end");
 
             JSONArray replies = data.getJSONArray("replies");
             if (replies != null && replies.size() > 0) {

@@ -21,7 +21,7 @@ public class VideoInfo {
     public UserInfo userInfo;
     public VideoStat videoStat;
 
-    public List<AnthologyInfo> anthologyInfoList;
+    public List<VideoAnthology> videoAnthologyList;
 
     public static class UserInfo {
         public String userMid;
@@ -39,7 +39,7 @@ public class VideoInfo {
         public int share;
     }
 
-    public static class AnthologyInfo {
+    public static class VideoAnthology {
         public String mainId;
         public String cid;
         public String part;

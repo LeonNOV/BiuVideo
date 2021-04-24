@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/itemMarginBottom"
     android:orientation="vertical">
 
@@ -21,7 +21,9 @@
         android:id="@+id/bangumi_section_container_item_data"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:focusable="false"
         android:orientation="horizontal"
+        android:overScrollMode="never"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/bangumi_section_item" />
 

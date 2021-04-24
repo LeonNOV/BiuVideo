@@ -1,34 +1,37 @@
 package com.leon.biuvideo.adapters.otherAdapters;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
-import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoInfo;
+import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiAnthology;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoAnthologyBottomSheet;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 
 import java.util.List;
 
 /**
  * @Author Leon
  * @Time 2021/4/20
- * @Desc 视频选集适配器
+ * @Desc 番剧/电视剧 选集适配器
  */
-public class VideoAnthologyAdapter extends BaseAdapter<VideoInfo.VideoAnthology> {
-    private final List<VideoInfo.VideoAnthology> videoAnthologyList;
+public class BangumiAnthologyAdapter extends BaseAdapter<BangumiAnthology> {
     private final int currentIndex;
+    private final List<BangumiAnthology> bangumiAnthologyList;
 
     private VideoAnthologyBottomSheet.OnVideoAnthologyListener onVideoAnthologyListener;
 
-    public VideoAnthologyAdapter(int currentIndex, List<VideoInfo.VideoAnthology> beans, Context context) {
+    public BangumiAnthologyAdapter(List<BangumiAnthology> beans, Context context, int currentIndex) {
         super(beans, context);
         this.currentIndex = currentIndex;
-        this.videoAnthologyList = beans;
+        this.bangumiAnthologyList = beans;
     }
 
     public void setOnVideoAnthologyListener(VideoAnthologyBottomSheet.OnVideoAnthologyListener onVideoAnthologyListener) {
@@ -42,12 +45,12 @@ public class VideoAnthologyAdapter extends BaseAdapter<VideoInfo.VideoAnthology>
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        VideoInfo.VideoAnthology videoAnthology = videoAnthologyList.get(position);
+        BangumiAnthology bangumiAnthology = bangumiAnthologyList.get(position);
 
-        holder.setText(R.id.video_anthology_item_name, videoAnthology.part);
+        holder.setText(R.id.video_anthology_item_name, bangumiAnthology.longTitle);
         TextView videoAnthologyItemBadge = holder.findById(R.id.video_anthology_item_badge);
-        if (videoAnthology.badge != null) {
-            videoAnthologyItemBadge.setText(videoAnthology.badge);
+        if (bangumiAnthology.badge != null) {
+            videoAnthologyItemBadge.setText(bangumiAnthology.badge);
         } else {
             videoAnthologyItemBadge.setVisibility(View.GONE);
         }
@@ -58,6 +61,14 @@ public class VideoAnthologyAdapter extends BaseAdapter<VideoInfo.VideoAnthology>
             @Override
             public void onClick(View v) {
                 if (currentIndex == position) {
+                    return;
+                }
+
+                if ("会员".equals(bangumiAnthology.badge)) {
+//                    SimpleSnackBar.make(view, "需要开通大会员才能进行观看哦~", SimpleSnackBar.LENGTH_LONG).show();
+                    Toast toast = Toast.makeText(context, "需要开通大会员才能进行观看哦~", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.BOTTOM, 0, 10);
+                    toast.show();
                     return;
                 }
 

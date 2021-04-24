@@ -3,7 +3,7 @@ package com.leon.biuvideo.utils.parseDataUtils.resourcesParsers;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.Bangumi;
-import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiEp;
+import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiAnthology;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiSeason;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiSection;
 import com.leon.biuvideo.utils.HttpUtils;
@@ -74,7 +74,7 @@ public class BangumiDetailParser {
             bangumi.subtitle = result.getString("subtitle");
             bangumi.title = result.getString("title");
 
-            bangumi.bangumiEpList = getBangumiEps(result.getJSONArray("episodes"));
+            bangumi.bangumiAnthologyList = getBangumiEps(result.getJSONArray("episodes"));
             bangumi.bangumiSeasonList = getBangumiSeasons(result.getJSONArray("seasons"));
             bangumi.bangumiSectionList = getBangumiSections(result.getJSONArray("section"));
 
@@ -90,33 +90,33 @@ public class BangumiDetailParser {
      * @param episodes  JSONArray
      * @return  BangumiEp集合
      */
-    private List<BangumiEp> getBangumiEps(JSONArray episodes) {
+    private List<BangumiAnthology> getBangumiEps(JSONArray episodes) {
         if (episodes == null) {
             return null;
         }
 
-        List<BangumiEp> bangumiEps = new ArrayList<>(episodes.size());
+        List<BangumiAnthology> bangumiAnthologies = new ArrayList<>(episodes.size());
         for (Object o : episodes) {
             JSONObject jsonObject = (JSONObject) o;
-            BangumiEp bangumiEp = new BangumiEp();
+            BangumiAnthology bangumiAnthology = new BangumiAnthology();
 
-            bangumiEp.aid = jsonObject.getString("aid");
-            bangumiEp.bvid = jsonObject.getString("bvid");
-            bangumiEp.cid = jsonObject.getString("cid");
-            bangumiEp.id = jsonObject.getString("id");
+            bangumiAnthology.aid = jsonObject.getString("aid");
+            bangumiAnthology.bvid = jsonObject.getString("bvid");
+            bangumiAnthology.cid = jsonObject.getString("cid");
+            bangumiAnthology.id = jsonObject.getString("id");
 
             String badge = jsonObject.getString("badge");
-            bangumiEp.badge = "".equals(badge) ? null : badge;
-            bangumiEp.cover = jsonObject.getString("cover");
-            bangumiEp.longTitle = jsonObject.getString("long_title");
-            bangumiEp.pubTime = jsonObject.getLongValue("pub_time");
-            bangumiEp.shortLink = jsonObject.getString("short_link");
-            bangumiEp.subTitle = jsonObject.getString("subTitle");
+            bangumiAnthology.badge = "".equals(badge) ? null : badge;
+            bangumiAnthology.cover = jsonObject.getString("cover");
+            bangumiAnthology.longTitle = jsonObject.getString("long_title");
+            bangumiAnthology.pubTime = jsonObject.getLongValue("pub_time");
+            bangumiAnthology.shortLink = jsonObject.getString("short_link");
+            bangumiAnthology.subTitle = jsonObject.getString("subTitle");
 
-            bangumiEps.add(bangumiEp);
+            bangumiAnthologies.add(bangumiAnthology);
         }
 
-        return bangumiEps;
+        return bangumiAnthologies;
     }
 
     /**
