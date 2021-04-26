@@ -73,6 +73,7 @@ public class BangumiDetailParser {
 
             bangumi.subtitle = result.getString("subtitle");
             bangumi.title = result.getString("title");
+            bangumi.link = result.getString("link");
 
             bangumi.bangumiAnthologyList = getBangumiEps(result.getJSONArray("episodes"));
             bangumi.bangumiSeasonList = getBangumiSeasons(result.getJSONArray("seasons"));

@@ -29,7 +29,6 @@ import com.leon.biuvideo.adapters.otherAdapters.VideoSpeedAdapter;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
 import com.leon.biuvideo.wraps.DanmakuWrap;
 import com.leon.biuvideo.wraps.VideoQualityWrap;
-import com.leon.biuvideo.wraps.VideoSpeedWrap;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -305,7 +304,7 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
                     @Override
                     public void onSpeed(float speed) {
                         VideoPlayerBottomControlView.this.speed = speed;
-                        EventBus.getDefault().post(VideoSpeedWrap.getInstance(speed));
+                        controlWrapper.setSpeed(speed);
                         videoSpeedDialog.dismiss();
                     }
                 });
@@ -317,6 +316,7 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
                     @Override
                     public void onQuality(int qualityId) {
                         videoWithFlv.currentQualityId = qualityId;
+                        videoPlayerBottomControlQuality.setText(videoWithFlv.qualityMap.get(qualityId));
                         EventBus.getDefault().post(VideoQualityWrap.getInstance(qualityId));
 
                         videoQualityDialog.dismiss();

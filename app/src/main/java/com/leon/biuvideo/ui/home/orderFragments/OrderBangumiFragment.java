@@ -1,16 +1,13 @@
 package com.leon.biuvideo.ui.home.orderFragments;
 
-import android.os.Bundle;
 import android.os.Message;
 
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.adapters.homeAdapters.OrderAdapter;
 import com.leon.biuvideo.beans.orderBeans.Order;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragmentWithSrr;
 import com.leon.biuvideo.ui.home.OrderFragment;
-import com.leon.biuvideo.ui.otherFragments.BangumiFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
@@ -37,7 +34,7 @@ public class OrderBangumiFragment extends BaseSupportFragmentWithSrr<Order> {
         orderAdapter.setOnClickMediaListener(new OrderAdapter.OnClickMediaListener() {
             @Override
             public void onClick(String mediaId) {
-                ((OrderFragment) getParentFragment()).start(new BangumiFragment(mediaId));
+
             }
         });
         orderAdapter.setHasStableIds(true);

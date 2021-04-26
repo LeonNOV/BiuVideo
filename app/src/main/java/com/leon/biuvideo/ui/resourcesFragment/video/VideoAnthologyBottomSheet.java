@@ -1,4 +1,4 @@
-package com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents;
+package com.leon.biuvideo.ui.resourcesFragment.video;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -33,25 +33,16 @@ public class VideoAnthologyBottomSheet extends BottomSheetDialog {
     private List<VideoInfo.VideoAnthology> videoAnthologyList;
     private List<BangumiAnthology> bangumiAnthologyList;
 
-    private OnVideoAnthologyListener onVideoAnthologyListener;
+    private OnBottomSheetWithItemListener onBottomSheetWithItemListener;
 
     public VideoAnthologyBottomSheet(@NonNull Context context, int currentPosition) {
-        super(context, R.style.DialogStyle);
+        super(context);
         this.context = context;
         this.currentPosition = currentPosition;
     }
 
-    public interface OnVideoAnthologyListener {
-        /**
-         * 视频选集点击事件
-         *
-         * @param position position
-         */
-        void onVideoAnthology(int position);
-    }
-
-    public void setOnVideoAnthologyListener(OnVideoAnthologyListener onVideoAnthologyListener) {
-        this.onVideoAnthologyListener = onVideoAnthologyListener;
+    public void setOnBottomSheetWithItemListener(OnBottomSheetWithItemListener onBottomSheetWithItemListener) {
+        this.onBottomSheetWithItemListener = onBottomSheetWithItemListener;
     }
 
     @Override
@@ -97,12 +88,12 @@ public class VideoAnthologyBottomSheet extends BottomSheetDialog {
         if (videoAnthologyList != null) {
             VideoAnthologyAdapter videoAnthologyAdapter = new VideoAnthologyAdapter(currentPosition, videoAnthologyList, context);
             videoAnthologyAdapter.setHasStableIds(true);
-            videoAnthologyAdapter.setOnVideoAnthologyListener(onVideoAnthologyListener);
+            videoAnthologyAdapter.setOnBottomSheetWithItemListener(onBottomSheetWithItemListener);
             videoAnthologyListData.setRecyclerViewAdapter(videoAnthologyAdapter);
         } else if (bangumiAnthologyList != null) {
             BangumiAnthologyAdapter bangumiAnthologyAdapter = new BangumiAnthologyAdapter(bangumiAnthologyList, context, currentPosition);
             bangumiAnthologyAdapter.setHasStableIds(true);
-            bangumiAnthologyAdapter.setOnVideoAnthologyListener(onVideoAnthologyListener);
+            bangumiAnthologyAdapter.setOnBottomSheetWithItemListener(onBottomSheetWithItemListener);
             videoAnthologyListData.setRecyclerViewAdapter(bangumiAnthologyAdapter);
         }
 

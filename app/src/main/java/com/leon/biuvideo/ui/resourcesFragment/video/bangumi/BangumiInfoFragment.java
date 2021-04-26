@@ -10,19 +10,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.otherAdapters.BangumiSectionContainerAdapter;
+import com.leon.biuvideo.beans.resourcesBeans.Comment;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.Bangumi;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiAnthologyStat;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiAnthology;
+import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiSeason;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoAnthologyBottomSheet;
+import com.leon.biuvideo.ui.resourcesFragment.video.OnBottomSheetWithItemListener;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoAnthologyBottomSheet;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoCommentDetailFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoCommentFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoInfoAndCommentsFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.parseDataUtils.bangumiParsers.BangumiAnthologyStatParser;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.BangumiDetailParser;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoWithFlvParser;
 
 /**
  * @Author Leon
@@ -30,7 +36,7 @@ import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoWithFlvParse
  * @Desc 番剧介绍页面
  */
 public class BangumiInfoFragment extends BaseSupportFragment implements View.OnClickListener {
-    private final String seasonId;
+    private String seasonId;
 
     private ImageView bangumiInfoOrder;
 
@@ -38,6 +44,8 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
     private TextView bangumiInfoCoin;
     private TextView bangumiInfoFavorite;
     private TextView bangumiInfoShare;
+
+    private TagView bangumiInfoComments;
 
     private LinearLayout bangumiInfoAnthologyContainer;
     private TagView bangumiInfoNowAnthology;
@@ -82,13 +90,25 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
 
     @Override
     protected void initView() {
+        findView(R.id.video_info_container).setBackgroundResource(R.color.white);
+
         bangumiInfoOrder = findView(R.id.bangumi_info_order);
         bangumiInfoOrder.setOnClickListener(this);
 
         bangumiInfoLike = findView(R.id.bangumi_info_like);
+        bangumiInfoLike.setOnClickListener(this);
+
         bangumiInfoCoin = findView(R.id.bangumi_info_coin);
+        bangumiInfoCoin.setOnClickListener(this);
+
         bangumiInfoFavorite = findView(R.id.bangumi_info_favorite);
+        bangumiInfoFavorite.setOnClickListener(this);
+
         bangumiInfoShare = findView(R.id.bangumi_info_share);
+        bangumiInfoShare.setOnClickListener(this);
+
+        findView(R.id.bangumi_info_comments_container).setOnClickListener(this);
+        bangumiInfoComments = findView(R.id.bangumi_info_comments);
 
         bangumiInfoAnthologyContainer = findView(R.id.bangumi_info_anthology_container);
         bangumiInfoAnthologyContainer.setOnClickListener(this);
@@ -137,7 +157,7 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
                         if (bangumi.bangumiSeasonList.size() < 2) {
                             bangumiInfoSeriesContainer.setVisibility(View.GONE);
                         } else {
-                            bangumiInfoNowSeries.setLeftValue(bangumi.bangumiSeasonList.get(seriesIndex).seasonTitle);
+                            bangumiInfoNowSeries.setRightValue(bangumi.bangumiSeasonList.get(seriesIndex).seasonTitle);
                         }
 
                         if (bangumi.bangumiSectionList.size() != 0) {
@@ -148,6 +168,13 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
                             bangumiInfoSectionContainerList.setVisibility(View.GONE);
                         }
 
+                        // 播放第一个视频
+                        if (onBangumiInfoListener != null) {
+                            BangumiAnthology bangumiAnthology = bangumi.bangumiAnthologyList.get(anthologyIndex);
+                            onBangumiInfoListener.onBangumiAnthologyListener(bangumiAnthology.aid, bangumiAnthology.cid, bangumiAnthology.longTitle);
+                        }
+
+                        // 获取第一个选集的状态数
                         getBangumiState();
                         break;
                     case 1:
@@ -162,11 +189,7 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
 
                         bangumiInfoShare.setText(ValueUtils.generateCN(bangumi.share));
 
-                        // 播放第一个视频
-                        if (onBangumiInfoListener != null) {
-                            BangumiAnthology bangumiAnthology = bangumi.bangumiAnthologyList.get(anthologyIndex);
-                            onBangumiInfoListener.onBangumiAnthologyListener(bangumiAnthology.aid, bangumiAnthology.cid, bangumiAnthology.longTitle);
-                        }
+                        bangumiInfoComments.setRightValue(ValueUtils.generateCN(bangumiAnthologyStat.reply));
                         break;
                     default:
                         break;
@@ -207,6 +230,7 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
             case R.id.bangumi_info_order:
                 break;
             case R.id.bangumi_info_detail:
+                SimpleSnackBar.make(v, "该功能还在建设中~", SimpleSnackBar.LENGTH_LONG).show();
                 break;
             case R.id.bangumi_info_like:
                 break;
@@ -216,18 +240,28 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
                 break;
             case R.id.bangumi_info_share:
                 break;
+            case R.id.bangumi_info_comments_container:
+                VideoCommentFragment videoCommentFragment = new VideoCommentFragment(bangumi.bangumiAnthologyList.get(anthologyIndex).aid);
+                videoCommentFragment.setToCommentDetailFragment(new VideoInfoAndCommentsFragment.ToCommentDetailFragment() {
+                    @Override
+                    public void toCommentDetail(Comment comment) {
+                        start(new VideoCommentDetailFragment(comment));
+                    }
+                });
+
+                start(videoCommentFragment);
+                break;
             case R.id.bangumi_info_anthology_container:
                 VideoAnthologyBottomSheet videoAnthologyBottomSheet = new VideoAnthologyBottomSheet(context, anthologyIndex);
                 videoAnthologyBottomSheet.setBangumiAnthologyList(bangumi.bangumiAnthologyList);
-                videoAnthologyBottomSheet.setOnVideoAnthologyListener(new VideoAnthologyBottomSheet.OnVideoAnthologyListener() {
+                videoAnthologyBottomSheet.setOnBottomSheetWithItemListener(new OnBottomSheetWithItemListener() {
                     @Override
-                    public void onVideoAnthology(int position) {
-                        if (anthologyIndex == position) {
-                            return;
-                        }
-
+                    public void onItem(int position) {
                         if (onBangumiInfoListener != null) {
                             anthologyIndex = position;
+
+                            // 刷新状态数
+                            getBangumiState();
 
                             BangumiAnthology bangumiAnthology = bangumi.bangumiAnthologyList.get(anthologyIndex);
                             bangumiInfoNowAnthology.setRightValue(bangumiAnthology.longTitle);
@@ -240,6 +274,19 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
                 videoAnthologyBottomSheet.show();
                 break;
             case R.id.bangumi_info_series_container:
+                VideoSeriesBottomSheet videoSeriesBottomSheet = new VideoSeriesBottomSheet(context, seriesIndex, bangumi.bangumiSeasonList);
+                videoSeriesBottomSheet.setOnBottomSheetWithItemListener(new OnBottomSheetWithItemListener() {
+                    @Override
+                    public void onItem(int position) {
+                        seriesIndex = position;
+                        anthologyIndex = 0;
+
+                        seasonId = bangumi.bangumiSeasonList.get(seriesIndex).seasonId;
+                        videoSeriesBottomSheet.dismiss();
+                        getBangumiInfo();
+                    }
+                });
+                videoSeriesBottomSheet.show();
                 break;
             default:
                 break;

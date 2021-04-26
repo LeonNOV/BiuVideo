@@ -238,7 +238,10 @@
 
     <string name="videoNowPlay">正在观看</string>
     <string name="videoClickChangeAnthology">点击切换</string>
+    <string name="videoClickCheck">点击查看</string>
     <string name="videoChangeAnthology">切换选集</string>
+    <string name="videoChangeSeries">切换系列</string>
     <string name="bangumiNowSeries">已选系列</string>
     <string name="bangumiInfoDetail">详情</string>
+    <string name="videoComment">评论</string>
 </resources>

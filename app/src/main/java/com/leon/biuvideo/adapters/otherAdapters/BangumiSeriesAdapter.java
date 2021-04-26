@@ -9,26 +9,26 @@ import androidx.annotation.NonNull;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
-import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoInfo;
+import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiSeason;
 import com.leon.biuvideo.ui.resourcesFragment.video.OnBottomSheetWithItemListener;
 
 import java.util.List;
 
 /**
  * @Author Leon
- * @Time 2021/4/20
- * @Desc 视频选集适配器
+ * @Time 2021/4/26
+ * @Desc 番剧系列适配器
  */
-public class VideoAnthologyAdapter extends BaseAdapter<VideoInfo.VideoAnthology> {
-    private final List<VideoInfo.VideoAnthology> videoAnthologyList;
-    private final int currentIndex;
+public class BangumiSeriesAdapter extends BaseAdapter<BangumiSeason> {
+    private final int currentPosition;
+    private final List<BangumiSeason> bangumiSeasonList;
 
     private OnBottomSheetWithItemListener onBottomSheetWithItemListener;
 
-    public VideoAnthologyAdapter(int currentIndex, List<VideoInfo.VideoAnthology> beans, Context context) {
+    public BangumiSeriesAdapter(List<BangumiSeason> beans, Context context, int currentPosition) {
         super(beans, context);
-        this.currentIndex = currentIndex;
-        this.videoAnthologyList = beans;
+        this.currentPosition = currentPosition;
+        this.bangumiSeasonList = beans;
     }
 
     public void setOnBottomSheetWithItemListener(OnBottomSheetWithItemListener onBottomSheetWithItemListener) {
@@ -37,27 +37,20 @@ public class VideoAnthologyAdapter extends BaseAdapter<VideoInfo.VideoAnthology>
 
     @Override
     public int getLayout(int viewType) {
-        return R.layout.video_anthology_item;
+        return R.layout.bangumi_series_item;
     }
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        VideoInfo.VideoAnthology videoAnthology = videoAnthologyList.get(position);
+        BangumiSeason bangumiSeason = bangumiSeasonList.get(position);
 
-        holder.setText(R.id.video_anthology_item_name, videoAnthology.part);
-        TextView videoAnthologyItemBadge = holder.findById(R.id.video_anthology_item_badge);
-        if (videoAnthology.badge != null) {
-            videoAnthologyItemBadge.setText(videoAnthology.badge);
-        } else {
-            videoAnthologyItemBadge.setVisibility(View.GONE);
-        }
-
-        View itemView = holder.getItemView();
-        itemView.setSelected(currentIndex == position);
-        itemView.setOnClickListener(new View.OnClickListener() {
+        TextView textView = holder.findById(R.id.bangumi_series_item_content);
+        textView.setText(bangumiSeason.seasonTitle);
+        textView.setSelected(currentPosition == position);
+        textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentIndex == position) {
+                if (currentPosition == position) {
                     return;
                 }
 

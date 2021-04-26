@@ -1,5 +1,9 @@
 package com.leon.biuvideo.ui.resourcesFragment.video.bangumi;
 
+import android.os.Message;
+import android.view.View;
+import android.widget.ImageView;
+
 import androidx.fragment.app.FragmentManager;
 
 import com.dueeeke.videoplayer.ijk.IjkPlayer;
@@ -7,13 +11,13 @@ import com.dueeeke.videoplayer.player.VideoView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.resourcesFragment.video.VideoInfoAndCommentsFragment;
-import com.leon.biuvideo.ui.resourcesFragment.video.VideoStatListener;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerTitleView;
-import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.VideoPlayerController;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.wraps.VideoSpeedWrap;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoWithFlvParser;
+import com.leon.biuvideo.wraps.DanmakuWrap;
+import com.leon.biuvideo.wraps.VideoQualityWrap;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -24,20 +28,26 @@ import org.greenrobot.eventbus.ThreadMode;
  * @Time 2021/4/23
  * @Desc 番剧播放页面
  */
-public class BangumiFragment extends BaseSupportFragment {
+public class BangumiFragment extends BaseSupportFragment implements View.OnClickListener {
     private final String seasonId;
-    private boolean isFirstVideo = true;
+    private boolean isInitialize = false;
+    private String cid;
+    private String title;
+
     private VideoPlayerController videoPlayerController;
+    private ImageView videoDanmakuStatus;
+
+    private VideoWithFlvParser videoWithFlvParser;
 
     public BangumiFragment(String seasonId) {
         this.seasonId = seasonId;
     }
 
-    private VideoView<IjkPlayer> videoPlayerViewContent;
+    private VideoView<IjkPlayer> videoPlayerContent;
 
     @Override
     protected int setLayout() {
-        return R.layout.video_fragment;
+        return R.layout.bangumi_fragment;
     }
 
     @Override
@@ -45,37 +55,55 @@ public class BangumiFragment extends BaseSupportFragment {
         // 注册监听
         EventBus.getDefault().register(this);
 
-        videoPlayerViewContent = findView(R.id.video_player_content);
+        videoPlayerContent = findView(R.id.video_player_content);
 
-        VideoInfoAndCommentsFragment videoInfoAndCommentsFragment = new VideoInfoAndCommentsFragment(seasonId,  true);
-        videoInfoAndCommentsFragment.setVideoStatListener(new VideoStatListener() {
+        findView(R.id.video_danmaku_style).setOnClickListener(this);
+        findView(R.id.video_send_danmaku).setOnClickListener(this);
+
+        videoDanmakuStatus = findView(R.id.video_danmaku_status);
+        videoDanmakuStatus.setSelected(true);
+        videoDanmakuStatus.setOnClickListener(this);
+
+        BangumiInfoFragment bangumiInfoFragment = new BangumiInfoFragment(seasonId);
+        bangumiInfoFragment.setOnBangumiInfoListener(new BangumiInfoFragment.OnBangumiInfoListener() {
             @Override
-            public void playVideo(String title, VideoWithFlv videoWithFlv, int videoStreamIndex) {
-                if (isFirstVideo) {
+            public void onBangumiAnthologyListener(String aid, String cid, String title) {
+                BangumiFragment.this.cid = cid;
+                BangumiFragment.this.title = title;
+
+                getVideoStreamUrl(cid, VideoWithFlvParser.DEFAULT_QUALITY);
+            }
+        });
+
+        if (findChildFragment(bangumiInfoFragment.getClass()) == null) {
+            loadRootFragment(R.id.video_fragment_container, bangumiInfoFragment);
+        }
+
+        setOnLoadListener(new OnLoadListener() {
+            @Override
+            public void onLoad(Message msg) {
+                if (msg.obj == null) {
+                    backPressed();
+                    return;
+                }
+
+                VideoWithFlv videoWithFlv = (VideoWithFlv) msg.obj;
+
+                if (!isInitialize) {
                     initVideoPlayer(videoWithFlv);
-                    isFirstVideo = false;
+                    isInitialize = true;
                 } else {
-                    videoPlayerViewContent.release();
-                    videoPlayerViewContent.setUrl(videoWithFlv.videoStreamInfoList.get(videoStreamIndex).url, HttpUtils.getHeaders());
+                    videoPlayerContent.release();
+                    videoPlayerContent.setUrl(videoWithFlv.videoStreamInfoList.get(0).url, HttpUtils.getHeaders());
 
                     // 重新设置弹幕
                     videoPlayerController.resetDanmaku(videoWithFlv.cid);
-                    videoPlayerViewContent.start();
+                    videoPlayerContent.start();
                 }
 
                 videoPlayerController.setTitle(title);
             }
-
-            @Override
-            public void onError() {
-                SimpleSnackBar.make(getActivity().getWindow().getDecorView(), "获取数据失败", SimpleSnackBar.LENGTH_LONG).show();
-                backPressed();
-            }
         });
-
-        if (findChildFragment(videoInfoAndCommentsFragment.getClass()) == null) {
-            loadRootFragment(R.id.video_fragment_container, videoInfoAndCommentsFragment);
-        }
     }
 
     /**
@@ -84,7 +112,7 @@ public class BangumiFragment extends BaseSupportFragment {
      * @param videoWithFlv 视频画质信息
      */
     private void initVideoPlayer(VideoWithFlv videoWithFlv) {
-        videoPlayerViewContent.setUrl(videoWithFlv.videoStreamInfoList.get(0).url, HttpUtils.getHeaders());
+        videoPlayerContent.setUrl(videoWithFlv.videoStreamInfoList.get(0).url, HttpUtils.getHeaders());
         videoPlayerController = new VideoPlayerController(context, videoWithFlv);
         videoPlayerController.setOnBackListener(new VideoPlayerTitleView.OnBackListener() {
             @Override
@@ -93,20 +121,16 @@ public class BangumiFragment extends BaseSupportFragment {
             }
         });
         videoPlayerController.addDefaultControlComponent("BiliBili", videoWithFlv.cid);
-        videoPlayerController.addControlComponent();
 
-        videoPlayerViewContent.setVideoController(videoPlayerController);
-
-        videoPlayerViewContent.start();
+        videoPlayerContent.setVideoController(videoPlayerController);
+        videoPlayerContent.start();
     }
 
     @Override
     public boolean onBackPressedSupport() {
         FragmentManager childFragmentManager = getChildFragmentManager();
 
-        // 如果子Fragment的个数等于2，则意味着VideoCommentDetailFragment存在于子管理器当中
-        // 等于1则弹出VideoFragment
-        if (childFragmentManager.getFragments().size() == 2) {
+        if (childFragmentManager.getFragments().size() > 1) {
             popChild();
         } else {
             onDestroy();
@@ -116,26 +140,65 @@ public class BangumiFragment extends BaseSupportFragment {
         return true;
     }
 
+    /**
+     * 获取视频流链接
+     */
+    public void getVideoStreamUrl (String cid, String qualityId) {
+        if (videoWithFlvParser == null) {
+            videoWithFlvParser = new VideoWithFlvParser(seasonId);
+        }
+
+        SimpleSingleThreadPool.executor(new Runnable() {
+            @Override
+            public void run() {
+                VideoWithFlv videoWithFlv = videoWithFlvParser.parseData(cid, qualityId, true);
+
+                Message message = receiveDataHandler.obtainMessage();
+                message.obj = videoWithFlv;
+                receiveDataHandler.sendMessage(message);
+            }
+        });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.video_danmaku_status:
+                boolean selected = videoDanmakuStatus.isSelected();
+                videoDanmakuStatus.setSelected(!selected);
+                EventBus.getDefault().post(DanmakuWrap.getInstance(!selected));
+                break;
+            default:
+                break;
+        }
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onGetSpeedMessage (VideoSpeedWrap videoSpeedWrap) {
-        videoPlayerViewContent.setSpeed(videoSpeedWrap.speed);
+    public void onGetMessage (DanmakuWrap danmakuWrap) {
+        videoDanmakuStatus.setSelected(danmakuWrap.danmakuState);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetQualityMessage (VideoQualityWrap qualityWrap) {
+        getVideoStreamUrl(this.cid, String.valueOf(qualityWrap.qualityId));
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        videoPlayerViewContent.pause();
+        videoPlayerContent.pause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        videoPlayerViewContent.resume();
+        videoPlayerContent.resume();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        videoPlayerViewContent.release();
+        videoPlayerContent.release();
+        EventBus.getDefault().unregister(this);
     }
 }

@@ -138,6 +138,6 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.2.0'
 
     // aria
-    implementation 'com.arialyy.aria:core:3.8.15'
-    annotationProcessor 'com.arialyy.aria:compiler:3.8.15'
+//    implementation 'com.arialyy.aria:core:3.8.15'
+//    annotationProcessor 'com.arialyy.aria:compiler:3.8.15'
 }

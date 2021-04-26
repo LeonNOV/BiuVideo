@@ -9,15 +9,9 @@ import android.os.IBinder;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.alibaba.fastjson.JSONObject;
-import com.arialyy.aria.core.Aria;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.service.WeatherService;
-import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.PreferenceUtils;
@@ -70,9 +64,6 @@ public class MainActivity extends SupportActivity {
                 Partitions.PARTITION = JSONObject.parseObject(FileUtils.getAssetsContent(getApplicationContext(), "partition.json"));
             }
         });
-
-        // 注册Aria
-        Aria.download(this).register();
     }
 
     @Override

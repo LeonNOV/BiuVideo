@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/video_info_container"
+        android:id="@+id/video_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -243,7 +243,7 @@
         <com.leon.biuvideo.ui.views.LoadingRecyclerView
             android:id="@+id/video_info_recommends"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:padding="@dimen/recyclerViewPadding" />
 

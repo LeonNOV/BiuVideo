@@ -12,8 +12,8 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiAnthology;
-import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoAnthologyBottomSheet;
-import com.leon.biuvideo.ui.views.SimpleSnackBar;
+import com.leon.biuvideo.ui.resourcesFragment.video.OnBottomSheetWithItemListener;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoAnthologyBottomSheet;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class BangumiAnthologyAdapter extends BaseAdapter<BangumiAnthology> {
     private final int currentIndex;
     private final List<BangumiAnthology> bangumiAnthologyList;
 
-    private VideoAnthologyBottomSheet.OnVideoAnthologyListener onVideoAnthologyListener;
+    private OnBottomSheetWithItemListener onBottomSheetWithItemListener;
 
     public BangumiAnthologyAdapter(List<BangumiAnthology> beans, Context context, int currentIndex) {
         super(beans, context);
@@ -34,8 +34,8 @@ public class BangumiAnthologyAdapter extends BaseAdapter<BangumiAnthology> {
         this.bangumiAnthologyList = beans;
     }
 
-    public void setOnVideoAnthologyListener(VideoAnthologyBottomSheet.OnVideoAnthologyListener onVideoAnthologyListener) {
-        this.onVideoAnthologyListener = onVideoAnthologyListener;
+    public void setOnBottomSheetWithItemListener(OnBottomSheetWithItemListener onBottomSheetWithItemListener) {
+        this.onBottomSheetWithItemListener = onBottomSheetWithItemListener;
     }
 
     @Override
@@ -72,8 +72,8 @@ public class BangumiAnthologyAdapter extends BaseAdapter<BangumiAnthology> {
                     return;
                 }
 
-                if (onVideoAnthologyListener != null) {
-                    onVideoAnthologyListener.onVideoAnthology(position);
+                if (onBottomSheetWithItemListener != null) {
+                    onBottomSheetWithItemListener.onItem(position);
                 }
             }
         });

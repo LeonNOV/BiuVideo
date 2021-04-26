@@ -21,7 +21,6 @@ import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 import com.leon.biuvideo.wraps.DanmakuWrap;
-import com.leon.biuvideo.wraps.VideoSpeedWrap;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -215,11 +214,6 @@ public class VideoDanmakuView extends DanmakuView implements IControlComponent {
         } else {
             hide();
         }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onGetSpeedMessage (VideoSpeedWrap videoSpeedWrap) {
-        this.speed = videoSpeedWrap.speed;
     }
 
     public void setPosition (long position) {

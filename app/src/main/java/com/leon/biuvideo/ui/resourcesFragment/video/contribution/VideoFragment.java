@@ -7,17 +7,13 @@ import com.dueeeke.videoplayer.player.VideoView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.resourcesFragment.video.VideoInfoAndCommentsFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.VideoStatListener;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerTitleView;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.VideoPlayerController;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.wraps.VideoSpeedWrap;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * @Author Leon
@@ -43,12 +39,9 @@ public class VideoFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        // 注册监听
-        EventBus.getDefault().register(this);
-
         videoPlayerViewContent = findView(R.id.video_player_content);
 
-        VideoInfoAndCommentsFragment videoInfoAndCommentsFragment = new VideoInfoAndCommentsFragment(bvid, false);
+        VideoInfoAndCommentsFragment videoInfoAndCommentsFragment = new VideoInfoAndCommentsFragment(bvid);
         videoInfoAndCommentsFragment.setVideoStatListener(new VideoStatListener() {
             @Override
             public void playVideo(String title, VideoWithFlv videoWithFlv, int videoStreamIndex) {
@@ -116,11 +109,6 @@ public class VideoFragment extends BaseSupportFragment {
         videoPlayerViewContent.setVideoController(videoPlayerController);
 
         videoPlayerViewContent.start();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onGetSpeedMessage (VideoSpeedWrap videoSpeedWrap) {
-        videoPlayerViewContent.setSpeed(videoSpeedWrap.speed);
     }
 
     @Override

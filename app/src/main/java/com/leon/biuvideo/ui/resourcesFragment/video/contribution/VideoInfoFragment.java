@@ -12,12 +12,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.homeAdapters.RecommendAdapter;
-import com.leon.biuvideo.adapters.otherAdapters.VideoAnthologyAdapter;
 import com.leon.biuvideo.beans.homeBeans.Recommend;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoInfo;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.OnBottomSheetWithItemListener;
 import com.leon.biuvideo.ui.resourcesFragment.video.OnVideoAnthologyListener;
-import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoAnthologyBottomSheet;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoAnthologyBottomSheet;
 import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.utils.BindingUtils;
@@ -77,7 +77,7 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
 
     @Override
     protected void initView() {
-        findView(R.id.video_info_container).setBackgroundResource(R.color.white);
+        findView(R.id.video_fragment_container).setBackgroundResource(R.color.white);
         
         videoInfoFace = findView(R.id.video_info_face);
         videoInfoFace.setOnClickListener(this);
@@ -251,13 +251,9 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
             case R.id.video_info_anthology_container:
                 VideoAnthologyBottomSheet videoAnthologyBottomSheet = new VideoAnthologyBottomSheet(context, anthologyIndex);
                 videoAnthologyBottomSheet.setVideoAnthologyList(videoInfo.videoAnthologyList);
-                videoAnthologyBottomSheet.setOnVideoAnthologyListener(new VideoAnthologyBottomSheet.OnVideoAnthologyListener() {
+                videoAnthologyBottomSheet.setOnBottomSheetWithItemListener(new OnBottomSheetWithItemListener() {
                     @Override
-                    public void onVideoAnthology(int position) {
-                        if (anthologyIndex == position) {
-                            return;
-                        }
-
+                    public void onItem(int position) {
                         if (onVideoAnthologyListener != null) {
                             anthologyIndex = position;
 

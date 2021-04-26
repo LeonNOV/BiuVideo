@@ -8,8 +8,10 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.commentAdapters.CommentLevelOneAdapter;
 import com.leon.biuvideo.beans.resourcesBeans.Comment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoInfoAndCommentsFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.CommentParser;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -27,7 +29,7 @@ public class VideoCommentFragment extends BaseLazySupportFragment {
     private final List<Comment> commentList = new ArrayList<>();
     private SmartRefreshRecyclerView<Comment> videoCommentCommentData;
 
-    private String avid;
+    private final String avid;
     private CommentParser commentParser;
     private CommentLevelOneAdapter commentLevelOneAdapter;
 
@@ -43,10 +45,8 @@ public class VideoCommentFragment extends BaseLazySupportFragment {
 
     @Override
     protected void onLazyLoad() {
-        if (avid != null) {
-            videoCommentCommentData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-            getComments(0);
-        }
+        videoCommentCommentData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+        getComments(0);
     }
 
     @Override
@@ -56,6 +56,8 @@ public class VideoCommentFragment extends BaseLazySupportFragment {
 
     @Override
     protected void initView() {
+        findView(R.id.video_comment_container).setBackgroundResource(R.color.white);
+
         videoCommentCommentData = findView(R.id.video_comment_commentData);
         videoCommentCommentData.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
@@ -127,20 +129,5 @@ public class VideoCommentFragment extends BaseLazySupportFragment {
                 receiveDataHandler.sendMessage(message);
             }
         });
-    }
-
-    /**
-     * 对评论内容进行重置
-     *
-     * @param avid  视频avid
-     */
-    public void resetComments(String avid) {
-        videoCommentCommentData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-        this.avid = avid;
-
-        commentLevelOneAdapter.removeAll();
-        this.commentParser = new CommentParser(avid, CommentParser.TYPE_VIDEO, CommentParser.SORT_REPLAY);
-
-        getComments(0);
     }
 }

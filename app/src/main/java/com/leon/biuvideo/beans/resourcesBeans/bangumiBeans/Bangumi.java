@@ -61,4 +61,5 @@ public class Bangumi {
 
     public String subtitle;
     public String title;
+    public String link;
 }
