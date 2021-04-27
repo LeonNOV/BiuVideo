@@ -236,6 +236,18 @@ public class VideoPlayerController extends GestureVideoController implements OnD
         return super.onBackPressed();
     }
 
+    public void pauseDanmaku () {
+        videoDanmakuView.pause();
+    }
+
+    public void resumeDanmaku() {
+        videoDanmakuView.resume();
+    }
+
+    public void releaseDanmaku () {
+        videoDanmakuView.release();
+    }
+
     @Override
     public void onSeekTo(long position) {
         videoDanmakuView.setPosition(position);

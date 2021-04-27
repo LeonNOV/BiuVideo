@@ -13,8 +13,6 @@ import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.VideoPlayerController;
 import com.leon.biuvideo.utils.HttpUtils;
 
-import org.greenrobot.eventbus.EventBus;
-
 /**
  * @Author Leon
  * @Time 2021/4/2
@@ -23,7 +21,7 @@ import org.greenrobot.eventbus.EventBus;
 public class VideoFragment extends BaseSupportFragment {
     private final String bvid;
 
-    private VideoView<IjkPlayer> videoPlayerViewContent;
+    private VideoView<IjkPlayer> videoPlayerContent;
 
     private boolean isFirstVideo = true;
     private VideoPlayerController videoPlayerController;
@@ -39,7 +37,7 @@ public class VideoFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        videoPlayerViewContent = findView(R.id.video_player_content);
+        videoPlayerContent = findView(R.id.video_player_content);
 
         VideoInfoAndCommentsFragment videoInfoAndCommentsFragment = new VideoInfoAndCommentsFragment(bvid);
         videoInfoAndCommentsFragment.setVideoStatListener(new VideoStatListener() {
@@ -50,12 +48,12 @@ public class VideoFragment extends BaseSupportFragment {
 
                     isFirstVideo = false;
                 } else {
-                    videoPlayerViewContent.release();
-                    videoPlayerViewContent.setUrl(videoWithFlv.videoStreamInfoList.get(videoStreamIndex).url, HttpUtils.getHeaders());
+                    videoPlayerContent.release();
+                    videoPlayerContent.setUrl(videoWithFlv.videoStreamInfoList.get(videoStreamIndex).url, HttpUtils.getHeaders());
 
                     // 重新设置弹幕
                     videoPlayerController.resetDanmaku(videoWithFlv.cid);
-                    videoPlayerViewContent.start();
+                    videoPlayerContent.start();
                 }
 
                 videoPlayerController.setTitle(title);
@@ -95,7 +93,12 @@ public class VideoFragment extends BaseSupportFragment {
      * @param videoWithFlv 视频画质信息
      */
     private void initVideoPlayer(VideoWithFlv videoWithFlv) {
-        videoPlayerViewContent.setUrl(videoWithFlv.videoStreamInfoList.get(0).url, HttpUtils.getHeaders());
+        if (videoWithFlv == null) {
+            SimpleSnackBar.make(getActivity().getWindow().getDecorView(), "获取数据失败", SimpleSnackBar.LENGTH_LONG).show();
+            backPressed();
+            return;
+        }
+        videoPlayerContent.setUrl(videoWithFlv.videoStreamInfoList.get(0).url, HttpUtils.getHeaders());
         videoPlayerController = new VideoPlayerController(context, videoWithFlv);
         videoPlayerController.setOnBackListener(new VideoPlayerTitleView.OnBackListener() {
             @Override
@@ -106,26 +109,38 @@ public class VideoFragment extends BaseSupportFragment {
         videoPlayerController.addDefaultControlComponent("BiliBili", videoWithFlv.cid);
         videoPlayerController.addControlComponent();
 
-        videoPlayerViewContent.setVideoController(videoPlayerController);
+        videoPlayerContent.setVideoController(videoPlayerController);
 
-        videoPlayerViewContent.start();
+        videoPlayerContent.start();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        videoPlayerViewContent.pause();
+
+        if (videoPlayerController != null) {
+            videoPlayerController.pauseDanmaku();
+        }
+        videoPlayerContent.pause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        videoPlayerViewContent.resume();
+
+        if (videoPlayerController != null) {
+            videoPlayerController.resumeDanmaku();
+        }
+        videoPlayerContent.resume();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        videoPlayerViewContent.release();
+
+        if (videoPlayerController != null) {
+            videoPlayerController.releaseDanmaku();
+        }
+        videoPlayerContent.release();
     }
 }

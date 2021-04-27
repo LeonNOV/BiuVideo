@@ -6,15 +6,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.adapters.homeAdapters.RecommendAdapter;
 import com.leon.biuvideo.adapters.otherAdapters.BangumiSectionContainerAdapter;
+import com.leon.biuvideo.beans.resourcesBeans.BangumiRecommend;
+import com.leon.biuvideo.beans.resourcesBeans.VideoRecommend;
 import com.leon.biuvideo.beans.resourcesBeans.Comment;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.Bangumi;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiAnthologyStat;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiAnthology;
-import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiSeason;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.OnBottomSheetWithItemListener;
 import com.leon.biuvideo.ui.resourcesFragment.video.VideoAnthologyBottomSheet;
@@ -29,6 +32,10 @@ import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.parseDataUtils.bangumiParsers.BangumiAnthologyStatParser;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.BangumiDetailParser;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.BangumiRecommendParser;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoRecommendParser;
+
+import java.util.List;
 
 /**
  * @Author Leon
@@ -54,12 +61,14 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
     private TagView bangumiInfoNowSeries;
 
     private RecyclerView bangumiInfoSectionContainerList;
+
     private LoadingRecyclerView bangumiInfoRecommends;
 
     private int seriesIndex = 0;
     private int anthologyIndex = 0;
 
     private BangumiAnthologyStat bangumiAnthologyStat;
+    private List<BangumiRecommend> bangumiRecommendList;
     private Bangumi bangumi;
 
     private OnBangumiInfoListener onBangumiInfoListener;
@@ -168,6 +177,19 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
                             bangumiInfoSectionContainerList.setVisibility(View.GONE);
                         }
 
+                        bangumiInfoRecommends.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+
+//                        if (recommendAdapter == null) {
+//                            recommendAdapter = new RecommendAdapter(videoRecommendList, RecommendAdapter.SINGLE_COLUMN, context);
+//                            recommendAdapter.setHasStableIds(true);
+//                            bangumiInfoRecommends.setRecyclerViewAdapter(recommendAdapter);
+//                            bangumiInfoRecommends.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
+//                        }
+
+                        // 由于RecommendAdapter对象中的数据集与该类中recommendList是同一个对象，所以该处无论是初始化还是其他操作，只需对Item进行刷新即可
+//                        recommendAdapter.notifyDataSetChanged();
+//                        bangumiInfoRecommends.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+
                         // 播放第一个视频
                         if (onBangumiInfoListener != null) {
                             BangumiAnthology bangumiAnthology = bangumi.bangumiAnthologyList.get(anthologyIndex);
@@ -175,7 +197,7 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
                         }
 
                         // 获取第一个选集的状态数
-                        getBangumiState();
+                        getBangumiStateAndRecommend();
                         break;
                     case 1:
                         bangumiInfoLike.setText(ValueUtils.generateCN(bangumiAnthologyStat.like));
@@ -205,6 +227,8 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
                 BangumiDetailParser bangumiDetailParser = new BangumiDetailParser(seasonId);
                 Bangumi bangumi = bangumiDetailParser.parseData();
 
+                bangumiRecommendList = BangumiRecommendParser.parseData(seasonId);
+
                 Message message = receiveDataHandler.obtainMessage(0);
                 message.obj = bangumi;
                 receiveDataHandler.sendMessage(message);
@@ -212,7 +236,7 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
         });
     }
 
-    private void getBangumiState() {
+    private void getBangumiStateAndRecommend() {
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
@@ -228,17 +252,12 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bangumi_info_order:
-                break;
             case R.id.bangumi_info_detail:
-                SimpleSnackBar.make(v, "该功能还在建设中~", SimpleSnackBar.LENGTH_LONG).show();
-                break;
             case R.id.bangumi_info_like:
-                break;
             case R.id.bangumi_info_coin:
-                break;
             case R.id.bangumi_info_favorite:
-                break;
             case R.id.bangumi_info_share:
+                SimpleSnackBar.make(v, getString(R.string.snackBarBuildingWarn), SimpleSnackBar.LENGTH_LONG).show();
                 break;
             case R.id.bangumi_info_comments_container:
                 VideoCommentFragment videoCommentFragment = new VideoCommentFragment(bangumi.bangumiAnthologyList.get(anthologyIndex).aid);
@@ -261,7 +280,7 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
                             anthologyIndex = position;
 
                             // 刷新状态数
-                            getBangumiState();
+                            getBangumiStateAndRecommend();
 
                             BangumiAnthology bangumiAnthology = bangumi.bangumiAnthologyList.get(anthologyIndex);
                             bangumiInfoNowAnthology.setRightValue(bangumiAnthology.longTitle);

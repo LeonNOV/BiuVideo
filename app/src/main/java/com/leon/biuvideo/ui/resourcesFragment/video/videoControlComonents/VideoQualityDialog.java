@@ -7,13 +7,13 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.otherAdapters.VideoQualityAdapter;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
+import com.leon.biuvideo.utils.PreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -55,16 +55,28 @@ public class VideoQualityDialog extends AlertDialog {
 
         WindowManager.LayoutParams attributes = window.getAttributes();
         attributes.height = WindowManager.LayoutParams.MATCH_PARENT;
-        attributes.width = context.getResources().getDimensionPixelOffset(R.dimen.qualityWidth);
+        attributes.width = context.getResources().getDimensionPixelOffset(R.dimen.qualityDialogWidth);
         window.setAttributes(attributes);
 
         initView();
     }
 
     private void initView() {
+        boolean loginStatus = PreferenceUtils.getLoginStatus();
+        boolean vipStatus = PreferenceUtils.getVipStatus();
+
         List<String[]> strings = new ArrayList<>(qualityMap.size());
         for (Map.Entry<Integer, String> integerStringEntry : qualityMap.entrySet()) {
-            strings.add(new String[]{String.valueOf(integerStringEntry.getKey()), integerStringEntry.getValue()});
+            String reason = null;
+            Integer qualityCode = integerStringEntry.getKey();
+            if (qualityCode > 32) {
+                if (qualityCode == 80 || qualityCode == 64) {
+                    reason = loginStatus ? null : "登录";
+                } else {
+                    reason = vipStatus ? null : "大会员";
+                }
+            }
+            strings.add(new String[]{String.valueOf(qualityCode), integerStringEntry.getValue(), reason});
         }
 
         LoadingRecyclerView loadingRecyclerView = findViewById(R.id.list);

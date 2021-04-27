@@ -20,7 +20,7 @@ public class BiliBiliAPIs {
      *      aid：aid/bvid任选其一
      *      bvid：aid/bvid任选其一
      */
-    public static final String VIDEO_DETAIL_TAGS = "https://api.bilibili.com/x/web-interface/view/detail/tag?aid=714835497";
+    public static final String VIDEO_DETAIL_TAGS = "https://api.bilibili.com/x/web-interface/view/detail/tag";
 
     /**
      * 获取当前视频与已登录账户的关系（需要Cookie）
@@ -36,7 +36,14 @@ public class BiliBiliAPIs {
      *      aid/bvid
      *
      */
-    public static final String VIDEO_RECOMMEND = "http://api.bilibili.com/x/web-interface/archive/related";
+    public static final String VIDEO_RECOMMENDS = "http://api.bilibili.com/x/web-interface/archive/related";
+
+    /**
+     * 获取番剧推荐数据
+     * 参数
+     *      seasonId
+     */
+    public static final String BANGUMI_RECOMMENDS = "https://api.bilibili.com/pgc/season/web/related/recommend?season_id=36167";
 
     /**
      * 获取选集信息，返回视频和音频原链接<br/>

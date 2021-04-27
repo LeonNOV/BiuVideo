@@ -1,6 +1,8 @@
 package com.leon.biuvideo.ui.views;
 
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import androidx.annotation.LayoutRes;
@@ -19,7 +21,7 @@ public class SimpleSnackBar {
     public static final int LENGTH_INDEFINITE = -2;
 
     public static EasySnackBar make(View view, int resId, int duration) {
-        return make(view, view.getResources().getText(resId).toString(), duration);
+        return setAnimation(make(view, view.getResources().getText(resId).toString(), duration));
     }
 
     /**
@@ -33,7 +35,7 @@ public class SimpleSnackBar {
         View convert = convertToContentView(view, R.layout.simple_snackbar_layout);
         ((TextView) convert.findViewById(R.id.simple_snackbar_content)).setText(content);
 
-        return EasySnackBar.make(view, convert, duration, false);
+        return setAnimation(EasySnackBar.make(view, convert, duration, false));
     }
 
     /**
@@ -62,5 +64,25 @@ public class SimpleSnackBar {
      */
     private static View convertToContentView(View view, @LayoutRes int layout) {
         return EasySnackBar.convertToContentView(view, layout);
+    }
+
+    private static EasySnackBar setAnimation(EasySnackBar easySnackBar) {
+        Animation enterAnimation = AnimationUtils.loadAnimation(easySnackBar.getContext(), R.anim.simple_snackbar_anim_enter);
+        Animation exitAnimation = AnimationUtils.loadAnimation(easySnackBar.getContext(), R.anim.simple_snackbar_anim_exit);
+
+        View view = easySnackBar.getView();
+        easySnackBar.addCallback(new EasySnackBar.Callback() {
+            @Override
+            public void onShown(EasySnackBar sb) {
+                view.startAnimation(enterAnimation);
+            }
+
+            @Override
+            public void onDismissed(EasySnackBar transientBottomBar, int event) {
+                view.startAnimation(exitAnimation);
+            }
+        });
+
+        return easySnackBar;
     }
 }

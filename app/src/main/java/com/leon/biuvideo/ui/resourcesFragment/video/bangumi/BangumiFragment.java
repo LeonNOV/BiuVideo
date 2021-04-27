@@ -12,6 +12,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerTitleView;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.VideoPlayerController;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
@@ -83,6 +84,7 @@ public class BangumiFragment extends BaseSupportFragment implements View.OnClick
             @Override
             public void onLoad(Message msg) {
                 if (msg.obj == null) {
+                    SimpleSnackBar.make(getActivity().getWindow().getDecorView(), context.getString(R.string.snackBarDataErrorWarn), SimpleSnackBar.LENGTH_LONG).show();
                     backPressed();
                     return;
                 }
@@ -186,18 +188,30 @@ public class BangumiFragment extends BaseSupportFragment implements View.OnClick
     @Override
     public void onPause() {
         super.onPause();
+
+        if (videoPlayerController != null) {
+            videoPlayerController.pauseDanmaku();
+        }
         videoPlayerContent.pause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
+        if (videoPlayerController != null) {
+            videoPlayerController.resumeDanmaku();
+        }
         videoPlayerContent.resume();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        if (videoPlayerController != null) {
+            videoPlayerController.releaseDanmaku();
+        }
         videoPlayerContent.release();
         EventBus.getDefault().unregister(this);
     }

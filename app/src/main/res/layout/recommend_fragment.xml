@@ -10,7 +10,7 @@
         android:id="@+id/recommend_topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:topBarTitle="@string/recommend" />
+        app:topBarTitle="@string/videoRecommend" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"

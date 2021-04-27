@@ -1,7 +1,7 @@
 package com.leon.biuvideo.utils.parseDataUtils.homeParseUtils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.homeBeans.Recommend;
+import com.leon.biuvideo.beans.resourcesBeans.VideoRecommend;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.parseDataUtils.ParserInterface;
@@ -10,7 +10,6 @@ import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +22,7 @@ import okhttp3.Headers;
  * @Time 2021/3/10
  * @Desc 推荐数据解析类
  */
-public class RecommendParser implements ParserInterface<Recommend> {
+public class RecommendParser implements ParserInterface<VideoRecommend> {
     private final String cookie;
 
     /**
@@ -39,36 +38,27 @@ public class RecommendParser implements ParserInterface<Recommend> {
      * @return  返回一个被打乱“顺序”的集合
      */
     @Override
-    public List<Recommend> parseData() {
-        Map<String, String> headers;
-        if (cookie != null) {
-            headers = new HashMap<>(4);
-            headers.put("Cookie", cookie);
-            headers.putAll(HttpUtils.getHeaders());
-        } else {
-            headers = HttpUtils.getHeaders();
-        }
-
-        JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.RECOMMEND, Headers.of(headers), null);
+    public List<VideoRecommend> parseData() {
+        JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.RECOMMEND, Headers.of(HttpUtils.getAPIRequestHeader()), null);
 
         Set<Map.Entry<String, Object>> entrySet = response.entrySet();
         Iterator<Map.Entry<String, Object>> iterator = entrySet.iterator();
 
-        List<Recommend> recommendList= new ArrayList<>();
+        List<VideoRecommend> videoRecommendList = new ArrayList<>();
         while (iterator.hasNext()) {
             Map.Entry<String, Object> next = iterator.next();
             RecommendType recommendType = RecommendType.getRecommendType(next.getKey());
 
             Object value = next.getValue();
             if (value instanceof JSONObject) {
-                recommendList.addAll(parseByType(recommendType, (JSONObject) value));
+                videoRecommendList.addAll(parseByType(recommendType, (JSONObject) value));
             }
         }
 
         // 对推荐数据进行打乱
-        Collections.shuffle(recommendList);
+        Collections.shuffle(videoRecommendList);
 
-        return recommendList;
+        return videoRecommendList;
     }
 
     /**
@@ -79,43 +69,43 @@ public class RecommendParser implements ParserInterface<Recommend> {
      * @param jsonObject    jsonObject
      * @return  返回Recommend集合
      */
-    private List<Recommend> parseByType(RecommendType recommendType, JSONObject jsonObject) {
+    private List<VideoRecommend> parseByType(RecommendType recommendType, JSONObject jsonObject) {
         Set<Map.Entry<String, Object>> entrySet = jsonObject.entrySet();
         Iterator<Map.Entry<String, Object>> iterator = entrySet.iterator();
 
-        List<Recommend> recommendList = new ArrayList<>(entrySet.size());
+        List<VideoRecommend> videoRecommendList = new ArrayList<>(entrySet.size());
 
         while (iterator.hasNext()) {
-            Recommend recommend = new Recommend();
-            recommend.recommendType = recommendType;
+            VideoRecommend videoRecommend = new VideoRecommend();
+            videoRecommend.recommendType = recommendType;
 
             JSONObject nextValue = (JSONObject) iterator.next().getValue();
 
-            recommend.aid = nextValue.getLongValue("aid");
-            recommend.bvid = nextValue.getString("bvid");
-            recommend.cover = nextValue.getString("pic");
-            recommend.title = nextValue.getString("title");
-            recommend.desc = nextValue.getString("desc");
-            recommend.pubdate = nextValue.getLong("pubdate");
-            recommend.duration = ValueUtils.lengthGenerate(nextValue.getIntValue("duration"));
+            videoRecommend.aid = nextValue.getLongValue("aid");
+            videoRecommend.bvid = nextValue.getString("bvid");
+            videoRecommend.cover = nextValue.getString("pic");
+            videoRecommend.title = nextValue.getString("title");
+            videoRecommend.desc = nextValue.getString("desc");
+            videoRecommend.pubdate = nextValue.getLong("pubdate");
+            videoRecommend.duration = ValueUtils.lengthGenerate(nextValue.getIntValue("duration"));
 
             JSONObject owner = nextValue.getJSONObject("owner");
-            recommend.userName = owner.getString("name");
-            recommend.userFace = owner.getString("face");
-            recommend.userMid = owner.getString("mid");
+            videoRecommend.userName = owner.getString("name");
+            videoRecommend.userFace = owner.getString("face");
+            videoRecommend.userMid = owner.getString("mid");
 
             JSONObject stat = nextValue.getJSONObject("stat");
-            recommend.view = stat.getIntValue("view");
-            recommend.danmaku = stat.getIntValue("danmaku");
-            recommend.reply = stat.getIntValue("reply");
-            recommend.favorite = stat.getIntValue("favorite");
-            recommend.coin = stat.getIntValue("coin");
-            recommend.share = stat.getIntValue("share");
-            recommend.like = stat.getIntValue("like");
+            videoRecommend.view = stat.getIntValue("view");
+            videoRecommend.danmaku = stat.getIntValue("danmaku");
+            videoRecommend.reply = stat.getIntValue("reply");
+            videoRecommend.favorite = stat.getIntValue("favorite");
+            videoRecommend.coin = stat.getIntValue("coin");
+            videoRecommend.share = stat.getIntValue("share");
+            videoRecommend.like = stat.getIntValue("like");
 
-            recommendList.add(recommend);
+            videoRecommendList.add(videoRecommend);
         }
 
-        return recommendList;
+        return videoRecommendList;
     }
 }

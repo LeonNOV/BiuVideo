@@ -48,19 +48,23 @@ public class VideoSpeedDialog extends AlertDialog {
 
         WindowManager.LayoutParams attributes = window.getAttributes();
         attributes.height = WindowManager.LayoutParams.MATCH_PARENT;
-        attributes.width = context.getResources().getDimensionPixelOffset(R.dimen.qualityWidth);
+        attributes.width = context.getResources().getDimensionPixelOffset(R.dimen.qualityDialogWidth);
         window.setAttributes(attributes);
 
         initView();
     }
 
     private void initView() {
-        float max = 2.0f;
-        float min = 0.25f;
-        float step = 0.25f;
+        float maxSpeed = 2.0f;
+
+        // 暂不开放低倍速
+//        float minSpeed = 0.25f;
+        float minSpeed = 1.0f;
+
+        float speedStep = 0.25f;
 
         ArrayList<Float> speedList = new ArrayList<>();
-        for (float i = max; i > min; i -= step) {
+        for (float i = maxSpeed; i > minSpeed; i -= speedStep) {
             speedList.add(i);
         }
 

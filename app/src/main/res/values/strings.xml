@@ -10,7 +10,7 @@
     <string name="settings">设置</string>
     <string name="biliUserInfo">用户信息</string>
     <string name="popular">热门</string>
-    <string name="recommend">推荐</string>
+    <string name="videoRecommend">推荐</string>
     <string name="downloadManager">下载管理</string>
 
     <string name="video">视频</string>
@@ -244,4 +244,10 @@
     <string name="bangumiNowSeries">已选系列</string>
     <string name="bangumiInfoDetail">详情</string>
     <string name="videoComment">评论</string>
+
+    <string name="snackBarDataErrorWarn">获取数据失败~</string>
+    <string name="snackBarBuildingWarn">该功能还在开放中~</string>
+
+    <string name="qualityLoginWarn">该清晰度需要 登录 才能观看哦~</string>
+    <string name="qualityVipWarn">该清晰度需要 大会员 才能观看哦~</string>
 </resources>

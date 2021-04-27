@@ -5,19 +5,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.homeAdapters.RecommendAdapter;
+import com.leon.biuvideo.adapters.homeAdapters.WatchLaterAdapter;
 import com.leon.biuvideo.beans.Weather;
-import com.leon.biuvideo.beans.homeBeans.Recommend;
+import com.leon.biuvideo.beans.resourcesBeans.VideoRecommend;
 import com.leon.biuvideo.beans.homeBeans.WatchLater;
 import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
@@ -29,7 +28,6 @@ import com.leon.biuvideo.ui.home.WatchLaterFragment;
 import com.leon.biuvideo.ui.mainFragments.homeModels.WeatherModelInterface;
 import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.ui.otherFragments.PopularFragment;
-import com.leon.biuvideo.ui.resourcesFragment.audio.AudioFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.bangumi.BangumiFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
@@ -61,7 +59,6 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
 
     private LocationUtil locationUtil;
 
-    private Handler handler;
     private WeatherModelInterface weatherModel;
     private WeatherUtil weatherUtil;
 
@@ -71,7 +68,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
     /**
      * 所有的推荐内容（已打乱）
      */
-    private List<Recommend> recommendList;
+    private List<VideoRecommend> videoRecommendList;
 
     /**
      * 稍后观看数据
@@ -81,7 +78,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
     /**
      * 主页显示的推荐内容
      */
-    private final List<Recommend> homeRecommendList = new ArrayList<>(10);
+    private final List<VideoRecommend> homeVideoRecommendList = new ArrayList<>(10);
     private final List<WatchLater> homeWatchLaterList = new ArrayList<>(10);
 
     @Override
@@ -105,7 +102,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         ((CardTitle) findView(R.id.home_cardTitle_recommend)).setOnClickActionListener(new CardTitle.OnClickActionListener() {
             @Override
             public void onClickAction() {
-                ((NavFragment) getParentFragment()).startBrotherFragment(new RecommendFragment(recommendList));
+                ((NavFragment) getParentFragment()).startBrotherFragment(new RecommendFragment(videoRecommendList));
             }
         });
 
@@ -119,49 +116,79 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         homeRecommendLoadingRecyclerView = findView(R.id.home_recommend_loadingRecyclerView);
         homeWatchLaterLoadingRecyclerView = findView(R.id.home_watchLater_loadingRecyclerView);
 
-        initValue();
+//        initHandler();
+//        initValue();
+    }
+
+    private void initHandler() {
+        setOnLoadListener(new OnLoadListener() {
+            @Override
+            public void onLoad(Message msg) {
+                switch (msg.what) {
+                    case 0:
+                        // 设置推荐数据
+                        int recommendColumns = PreferenceUtils.getRecommendColumns();
+                        homeRecommendLoadingRecyclerView.setRecyclerViewLayoutManager(new GridLayoutManager(context, recommendColumns));
+                        RecommendAdapter recommendAdapter = new RecommendAdapter(homeVideoRecommendList, recommendColumns == 1 ? RecommendAdapter.SINGLE_COLUMN : RecommendAdapter.DOUBLE_COLUMN, context);
+                        recommendAdapter.setHasStableIds(true);
+                        homeRecommendLoadingRecyclerView.setRecyclerViewAdapter(recommendAdapter);
+                        homeRecommendLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+
+                        // 设置稍后再看数据
+                        homeWatchLaterLoadingRecyclerView.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
+                        WatchLaterAdapter watchLaterAdapter = new WatchLaterAdapter(homeWatchLaterList, context);
+                        watchLaterAdapter.setHasStableIds(true);
+                        homeWatchLaterLoadingRecyclerView.setRecyclerViewAdapter(watchLaterAdapter);
+                        homeWatchLaterLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+                        break;
+                    case 1:
+                        Bundle data = msg.getData();
+                        boolean weatherModelStatus = data.getBoolean("weatherModelStatus");
+                        Weather currentWeather = (Weather) data.getSerializable("currentWeather");
+
+                        // 如果配置文件中未开启天气模块，则在此处停止运行此方法
+                        if (PreferenceUtils.getFeaturesStatus(FeaturesName.WEATHER_MODEL)) {
+                            if (currentWeather != null && weatherModelStatus) {
+                                // 更新天气数据
+                                weatherModel.onRefresh(currentWeather);
+                            }
+
+                            // 定位服务或已手动设置位置，则显示天气模块
+                            weatherModel.setDisplayState(PreferenceUtils.getLocationServiceStatus() || PreferenceUtils.getManualSetLocationStatus());
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     private void initValue() {
         initBroadcastReceiver();
 
         // 设置状态为加载数据中
-//        homeRecommendLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING);
-//        homeWatchLaterLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING);
+        homeRecommendLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+        homeWatchLaterLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
         // 开启单线程加载网络数据
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
                 // 获取推荐内容
-//                recommendList = getRecommendData();
+                videoRecommendList = getRecommendData();
 
                 // 获取稍后观看数据
-//                watchLaterList = getWatchLaterData();
+                watchLaterList = getWatchLaterData();
 
                 // 各获取前十个数据作为主页的数据
-//                for (int i = 0; i < HOME_DATA_COUNT; i++) {
-//                    homeRecommendList.add(recommendList.get(i));
-//                    homeWatchLaterList.add(watchLaterList.get(i));
-//                }
+                for (int i = 0; i < HOME_DATA_COUNT; i++) {
+                    homeVideoRecommendList.add(videoRecommendList.get(i));
+                    homeWatchLaterList.add(watchLaterList.get(i));
+                }
 
-                // 设置数据
-//                Handler mHandler = new Handler(Looper.getMainLooper());
-//                mHandler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        // 设置推荐数据
-//                        int recommendColumns = PreferenceUtils.getRecommendColumns();
-//                        homeRecommendLoadingRecyclerView.setRecyclerViewLayoutManager(new GridLayoutManager(context, recommendColumns));
-//                        homeRecommendLoadingRecyclerView.setRecyclerViewAdapter(new RecommendAdapter(homeRecommendList, recommendColumns == 1 ? RecommendAdapter.SINGLE_COLUMN : RecommendAdapter.DOUBLE_COLUMN, context));
-//                        homeRecommendLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
-//
-//                        // 设置稍后再看数据
-//                        homeWatchLaterLoadingRecyclerView.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
-//                        homeWatchLaterLoadingRecyclerView.setRecyclerViewAdapter(new WatchLaterAdapter(homeWatchLaterList, context));
-//                        homeWatchLaterLoadingRecyclerView.setStatus(LoadingRecyclerView.LOADING_FINISH);
-//                    }
-//                });
+                Message message = receiveDataHandler.obtainMessage(0);
+                receiveDataHandler.sendMessage(message);
             }
 
             /**
@@ -179,7 +206,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
              *
              * @return  Recommend集合
              */
-            private List<Recommend> getRecommendData() {
+            private List<VideoRecommend> getRecommendData() {
                 RecommendParser recommendParser = new RecommendParser(null);
                 return recommendParser.parseData();
             }
@@ -192,29 +219,6 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
             weatherModel = new WeatherModelInterface();
             weatherModel.onInitialize(view, context);
         }
-
-        // 在主线程中更新天气信息
-        handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
-            @Override
-            public boolean handleMessage(@NonNull Message msg) {
-                Bundle data = msg.getData();
-                boolean weatherModelStatus = data.getBoolean("weatherModelStatus");
-                Weather currentWeather = (Weather) data.getSerializable("currentWeather");
-
-                // 如果配置文件中未开启天气模块，则在此处停止运行此方法
-                if (PreferenceUtils.getFeaturesStatus(FeaturesName.WEATHER_MODEL)) {
-                    if (currentWeather != null && weatherModelStatus) {
-                        // 更新天气数据
-                        weatherModel.onRefresh(currentWeather);
-                    }
-
-                    // 定位服务或已手动设置位置，则显示天气模块
-                    weatherModel.setDisplayState(PreferenceUtils.getLocationServiceStatus() || PreferenceUtils.getManualSetLocationStatus());
-                }
-
-                return true;
-            }
-        });
 
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
@@ -229,7 +233,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
      * 获取当前天气，并向handler发送消息
      */
     private void getCurrentWeather() {
-        Message message = handler.obtainMessage();
+        Message message = receiveDataHandler.obtainMessage(1);
         Bundle bundle = new Bundle();
 
         // 检查天气模块是否设置为开启状态
@@ -250,7 +254,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         }
 
         message.setData(bundle);
-        handler.sendMessage(message);
+        receiveDataHandler.sendMessage(message);
     }
 
     @Override
@@ -358,7 +362,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                     // 刷新推荐试图样式
                     int recommendColumns = intent.getIntExtra("recommendColumns", 2);
 
-                    homeRecommendLoadingRecyclerView.setRecyclerViewAdapter(new RecommendAdapter(homeRecommendList, recommendColumns == 1 ? RecommendAdapter.SINGLE_COLUMN : RecommendAdapter.DOUBLE_COLUMN, context));
+                    homeRecommendLoadingRecyclerView.setRecyclerViewAdapter(new RecommendAdapter(homeVideoRecommendList, recommendColumns == 1 ? RecommendAdapter.SINGLE_COLUMN : RecommendAdapter.DOUBLE_COLUMN, context));
                     homeRecommendLoadingRecyclerView.setRecyclerViewLayoutManager(new GridLayoutManager(context, recommendColumns));
 
                     // 设置状态为已完成加载数据

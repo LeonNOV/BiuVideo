@@ -22,6 +22,7 @@ import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoFragment;
 import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.values.FragmentType;
 
+import me.yokeyword.fragmentation.SupportActivity;
 import me.yokeyword.fragmentation.SupportFragment;
 
 /**
@@ -112,7 +113,7 @@ public abstract class BaseSupportFragment extends SupportFragment {
      */
     public void startPublicFragment (FragmentType fragmentType, String params) {
         // 获取栈顶的SupportFragment
-        SupportFragment topFragment = (SupportFragment) getTopFragment();
+        SupportFragment topFragment = (SupportFragment) ((SupportActivity) getActivity()).getTopFragment();
         switch (fragmentType) {
             case BILI_USER:
                 topFragment.start(new BiliUserFragment(params));

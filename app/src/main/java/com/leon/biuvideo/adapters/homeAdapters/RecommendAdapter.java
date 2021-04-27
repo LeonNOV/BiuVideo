@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
-import com.leon.biuvideo.beans.homeBeans.Recommend;
+import com.leon.biuvideo.beans.resourcesBeans.VideoRecommend;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -20,18 +20,18 @@ import java.util.List;
  * @Time 2021/3/10
  * @Desc 推荐视频适配器
  */
-public class RecommendAdapter extends BaseAdapter<Recommend> {
+public class RecommendAdapter extends BaseAdapter<VideoRecommend> {
     public static final int SINGLE_COLUMN = 1;
     public static final int DOUBLE_COLUMN = 2;
 
-    private final List<Recommend> recommendList;
+    private final List<VideoRecommend> videoRecommendList;
     private final int columns;
 
-    public RecommendAdapter(List<Recommend> beans, int columns, Context context) {
+    public RecommendAdapter(List<VideoRecommend> beans, int columns, Context context) {
         super(beans, context);
 
         this.columns = columns;
-        this.recommendList = beans;
+        this.videoRecommendList = beans;
     }
 
     @Override
@@ -45,18 +45,18 @@ public class RecommendAdapter extends BaseAdapter<Recommend> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        Recommend recommend = recommendList.get(position);
+        VideoRecommend videoRecommend = videoRecommendList.get(position);
 
         holder
-                .setImage(R.id.video_item_cover, recommend.cover, ImagePixelSize.COVER)
-                .setText(R.id.video_item_duration, recommend.duration)
-                .setText(R.id.video_item_view, ValueUtils.generateCN(recommend.view))
-                .setText(R.id.video_item_danmaku, ValueUtils.generateCN(recommend.danmaku))
-                .setText(R.id.video_item_desc, recommend.desc)
+                .setImage(R.id.video_item_cover, videoRecommend.cover, ImagePixelSize.COVER)
+                .setText(R.id.video_item_duration, videoRecommend.duration)
+                .setText(R.id.video_item_view, ValueUtils.generateCN(videoRecommend.view))
+                .setText(R.id.video_item_danmaku, ValueUtils.generateCN(videoRecommend.danmaku))
+                .setText(R.id.video_item_desc, videoRecommend.desc)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startPublicFragment(FragmentType.VIDEO, recommend.bvid);
+                        startPublicFragment(FragmentType.VIDEO, videoRecommend.bvid);
                     }
                 });
     }

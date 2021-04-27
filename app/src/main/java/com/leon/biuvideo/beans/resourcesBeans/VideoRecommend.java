@@ -1,4 +1,4 @@
-package com.leon.biuvideo.beans.homeBeans;
+package com.leon.biuvideo.beans.resourcesBeans;
 
 import com.leon.biuvideo.values.RecommendType;
 
@@ -7,7 +7,7 @@ import com.leon.biuvideo.values.RecommendType;
  * @Time 2021/3/10
  * @Desc 推荐内容
  */
-public class Recommend {
+public class VideoRecommend {
     public RecommendType recommendType;
 
     public long aid;

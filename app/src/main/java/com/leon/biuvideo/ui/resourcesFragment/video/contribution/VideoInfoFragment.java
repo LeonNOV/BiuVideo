@@ -12,12 +12,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.homeAdapters.RecommendAdapter;
-import com.leon.biuvideo.beans.homeBeans.Recommend;
+import com.leon.biuvideo.beans.resourcesBeans.VideoRecommend;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoInfo;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.OnBottomSheetWithItemListener;
 import com.leon.biuvideo.ui.resourcesFragment.video.OnVideoAnthologyListener;
 import com.leon.biuvideo.ui.resourcesFragment.video.VideoAnthologyBottomSheet;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.utils.BindingUtils;
@@ -177,9 +178,9 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
                         getComments();
                         break;
                     case 2:
-                        List<Recommend> recommendList = (List<Recommend>) msg.obj;
+                        List<VideoRecommend> videoRecommendList = (List<VideoRecommend>) msg.obj;
 
-                        RecommendAdapter recommendAdapter = new RecommendAdapter(recommendList, RecommendAdapter.SINGLE_COLUMN, context);
+                        RecommendAdapter recommendAdapter = new RecommendAdapter(videoRecommendList, RecommendAdapter.SINGLE_COLUMN, context);
                         recommendAdapter.setHasStableIds(true);
                         videoInfoRecommends.setRecyclerViewAdapter(recommendAdapter);
                         videoInfoRecommends.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
@@ -229,10 +230,10 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                List<Recommend> recommendList = VideoRecommendParser.parseData(videoInfo.bvid);
+                List<VideoRecommend> videoRecommendList = VideoRecommendParser.parseData(videoInfo.bvid);
 
                 Message message = receiveDataHandler.obtainMessage(2);
-                message.obj = recommendList;
+                message.obj = videoRecommendList;
                 receiveDataHandler.sendMessage(message);
             }
         });
@@ -243,10 +244,13 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
         switch (v.getId()) {
             case R.id.video_info_face:
                 startPublicFragment(FragmentType.BILI_USER, videoInfo.userInfo.userMid);
-
                 break;
             case R.id.video_info_follow:
-
+            case R.id.video_info_like:
+            case R.id.video_info_coin:
+            case R.id.video_info_favorite:
+            case R.id.video_info_share:
+                SimpleSnackBar.make(v, getString(R.string.snackBarBuildingWarn), SimpleSnackBar.LENGTH_LONG).show();
                 break;
             case R.id.video_info_anthology_container:
                 VideoAnthologyBottomSheet videoAnthologyBottomSheet = new VideoAnthologyBottomSheet(context, anthologyIndex);
@@ -266,18 +270,6 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
                     }
                 });
                 videoAnthologyBottomSheet.show();
-                break;
-            case R.id.video_info_like:
-
-                break;
-            case R.id.video_info_coin:
-
-                break;
-            case R.id.video_info_favorite:
-
-                break;
-            case R.id.video_info_share:
-
                 break;
             default:
                 break;

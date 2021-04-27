@@ -2,13 +2,19 @@ package com.leon.biuvideo.adapters.otherAdapters;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiSection;
+import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.PreferenceUtils;
+import com.leon.biuvideo.values.FeaturesName;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
@@ -42,7 +48,7 @@ public class BangumiSectionItemAdapter extends BaseAdapter<BangumiSection.Episod
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startPublicFragment(FragmentType.VIDEO, episode.cid);
+                        startPublicFragment(FragmentType.VIDEO, episode.bvid);
                     }
                 });
     }

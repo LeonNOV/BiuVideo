@@ -38,7 +38,7 @@ import java.util.List;
  * @Desc 视频信息及评论内容
  */
 public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements View.OnClickListener {
-    private final String resourceId;
+    private final String bvid;
     private final String[] tabLayoutTitles = {"简介", "评论"};
     private final List<Fragment> viewPagerFragments = new ArrayList<>(2);
 
@@ -53,10 +53,10 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
     private VideoCommentFragment videoCommentFragment;
 
     /**
-     * @param resourceId    视频bvid
+     * @param bvid    视频bvid
      */
-    public VideoInfoAndCommentsFragment(String resourceId) {
-        this.resourceId = resourceId;
+    public VideoInfoAndCommentsFragment(String bvid) {
+        this.bvid = bvid;
     }
 
     public interface ToCommentDetailFragment {
@@ -119,7 +119,7 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
      * 投稿视频介绍页面
      */
     private void addSubFragments() {
-        VideoInfoFragment videoInfoFragment = new VideoInfoFragment(resourceId);
+        VideoInfoFragment videoInfoFragment = new VideoInfoFragment(bvid);
         videoInfoFragment.setOnVideoAnthologyListener(new OnVideoAnthologyListener() {
             @Override
             public void onAnthology(String cid, String title) {
@@ -130,7 +130,7 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
             }
         });
 
-        videoCommentFragment = new VideoCommentFragment(ValueUtils.bv2av(resourceId));
+        videoCommentFragment = new VideoCommentFragment(ValueUtils.bv2av(bvid));
         videoCommentFragment.setToCommentDetailFragment(new ToCommentDetailFragment() {
             @Override
             public void toCommentDetail(Comment comment) {
@@ -147,7 +147,7 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
      */
     public void getVideoStreamUrl (String qualityId) {
         if (videoWithFlvParser == null) {
-            videoWithFlvParser = new VideoWithFlvParser(resourceId);
+            videoWithFlvParser = new VideoWithFlvParser(bvid);
         }
 
         SimpleSingleThreadPool.executor(new Runnable() {

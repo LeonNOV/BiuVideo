@@ -8,12 +8,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.homeAdapters.RecommendAdapter;
-import com.leon.biuvideo.beans.homeBeans.Recommend;
+import com.leon.biuvideo.beans.resourcesBeans.VideoRecommend;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.PreferenceUtils;
-import com.leon.biuvideo.utils.ViewUtils;
 
 import java.util.List;
 
@@ -24,10 +23,10 @@ import java.util.List;
  */
 public class RecommendFragment extends BaseSupportFragment {
     private LoadingRecyclerView recommendLoadingRecyclerView;
-    private final List<Recommend> recommendList;
+    private final List<VideoRecommend> videoRecommendList;
 
-    public RecommendFragment(List<Recommend> recommendList) {
-        this.recommendList = recommendList;
+    public RecommendFragment(List<VideoRecommend> videoRecommendList) {
+        this.videoRecommendList = videoRecommendList;
     }
 
     @Override
@@ -66,7 +65,7 @@ public class RecommendFragment extends BaseSupportFragment {
                 int recommendColumns = PreferenceUtils.getRecommendColumns();
 
                 recommendLoadingRecyclerView.setRecyclerViewLayoutManager(new GridLayoutManager(context, recommendColumns));
-                recommendLoadingRecyclerView.setRecyclerViewAdapter(new RecommendAdapter(recommendList, recommendColumns == 1 ? RecommendAdapter.SINGLE_COLUMN : RecommendAdapter.DOUBLE_COLUMN, context));
+                recommendLoadingRecyclerView.setRecyclerViewAdapter(new RecommendAdapter(videoRecommendList, recommendColumns == 1 ? RecommendAdapter.SINGLE_COLUMN : RecommendAdapter.DOUBLE_COLUMN, context));
 
                 // 设置状态为已完成加载数据
                 recommendLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);

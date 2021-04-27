@@ -15,6 +15,7 @@ import com.leon.biuvideo.beans.homeBeans.WatchLater;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.FeaturesName;
+import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.List;
@@ -76,7 +77,7 @@ public class WatchLaterAdapter extends BaseAdapter<WatchLater> {
                             return;
                         }
 
-                        Toast.makeText(context, "position：" + position + "----bvid：" + watchLater.bvid, Toast.LENGTH_SHORT).show();
+                        startPublicFragment(FragmentType.VIDEO, watchLater.bvid);
                     }
                 })
                 .setOnClickListener(R.id.watch_later_video_item_cover_remove, new View.OnClickListener() {
