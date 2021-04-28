@@ -12,6 +12,7 @@ import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.ui.resourcesFragment.article.ArticleFragment;
 import com.leon.biuvideo.ui.resourcesFragment.picture.PictureFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.bangumi.BangumiFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoFragment;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.values.FragmentType;
@@ -142,6 +143,9 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
                 break;
             case VIDEO:
                 topFragment.start(new VideoFragment(params));
+                break;
+            case BANGUMI:
+                topFragment.start(new BangumiFragment(params));
                 break;
             case AUDIO:
 

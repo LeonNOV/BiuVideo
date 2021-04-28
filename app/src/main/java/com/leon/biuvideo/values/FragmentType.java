@@ -17,19 +17,24 @@ public enum  FragmentType {
     VIDEO(1),
 
     /**
+     * 番剧页面
+     */
+    BANGUMI(2),
+
+    /**
      * 音频页面
      */
-    AUDIO(2),
+    AUDIO(3),
 
     /**
      * 专栏页面
      */
-    ARTICLE(3),
+    ARTICLE(4),
 
     /**
      * 相簿页面
      */
-    PICTURE(4);
+    PICTURE(5);
 
     public int value;
 

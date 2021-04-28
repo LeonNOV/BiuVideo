@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.homeAdapters.RecommendAdapter;
+import com.leon.biuvideo.adapters.otherAdapters.BangumiRecommendAdapter;
 import com.leon.biuvideo.adapters.otherAdapters.BangumiSectionContainerAdapter;
 import com.leon.biuvideo.beans.resourcesBeans.BangumiRecommend;
 import com.leon.biuvideo.beans.resourcesBeans.VideoRecommend;
@@ -35,6 +36,7 @@ import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.BangumiDetailPars
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.BangumiRecommendParser;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoRecommendParser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -68,10 +70,11 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
     private int anthologyIndex = 0;
 
     private BangumiAnthologyStat bangumiAnthologyStat;
-    private List<BangumiRecommend> bangumiRecommendList;
+    private List<BangumiRecommend> bangumiRecommendList = new ArrayList<>();
     private Bangumi bangumi;
 
     private OnBangumiInfoListener onBangumiInfoListener;
+    private BangumiRecommendAdapter bangumiRecommendAdapter;
 
     public BangumiInfoFragment(String seasonId) {
         this.seasonId = seasonId;
@@ -128,7 +131,11 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
         bangumiInfoNowSeries = findView(R.id.bangumi_info_nowSeries);
 
         bangumiInfoSectionContainerList = findView(R.id.bangumi_info_section_container_list);
+
         bangumiInfoRecommends = findView(R.id.bangumi_info_recommends);
+        bangumiRecommendAdapter = new BangumiRecommendAdapter(bangumiRecommendList, context);
+        bangumiInfoRecommends.setRecyclerViewAdapter(bangumiRecommendAdapter);
+        bangumiInfoRecommends.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
 
         initHandler();
         getBangumiInfo();
@@ -141,6 +148,8 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
                 switch (msg.what) {
                     case 0:
                         bangumi = (Bangumi) msg.obj;
+
+                        bangumiInfoRecommends.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
                         BindingUtils bindingUtils = new BindingUtils(view, context);
                         bindingUtils.setText(R.id.bangumi_info_title, bangumi.title);
@@ -157,38 +166,29 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
                                 .setText(R.id.bangumi_info_play, ValueUtils.generateCN(bangumi.views) + "播放")
                                 .setText(R.id.bangumi_info_orderTotal, ValueUtils.generateCN(bangumi.bangumiSeasonList.get(seriesIndex).seriesFollow) + "系列追番");
 
-                        if (bangumi.bangumiAnthologyList.size() < 2) {
+                        if (bangumi.bangumiAnthologyList == null || bangumi.bangumiAnthologyList.size() < 2) {
                             bangumiInfoAnthologyContainer.setVisibility(View.GONE);
                         } else {
                             bangumiInfoNowAnthology.setRightValue(bangumi.bangumiAnthologyList.get(anthologyIndex).longTitle);
                         }
 
-                        if (bangumi.bangumiSeasonList.size() < 2) {
+                        if (bangumi.bangumiSeasonList == null || bangumi.bangumiSeasonList.size() < 2) {
                             bangumiInfoSeriesContainer.setVisibility(View.GONE);
                         } else {
                             bangumiInfoNowSeries.setRightValue(bangumi.bangumiSeasonList.get(seriesIndex).seasonTitle);
                         }
 
-                        if (bangumi.bangumiSectionList.size() != 0) {
+                        if (bangumi.bangumiSectionList == null || bangumi.bangumiSectionList.size() < 2) {
+                            bangumiInfoSectionContainerList.setVisibility(View.GONE);
+                        } else {
                             BangumiSectionContainerAdapter bangumiSectionContainerAdapter = new BangumiSectionContainerAdapter(bangumi.bangumiSectionList, context);
                             bangumiSectionContainerAdapter.setHasStableIds(true);
                             bangumiInfoSectionContainerList.setAdapter(bangumiSectionContainerAdapter);
-                        } else {
-                            bangumiInfoSectionContainerList.setVisibility(View.GONE);
                         }
 
-                        bangumiInfoRecommends.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+                        bangumiRecommendAdapter.notifyItemRangeChanged(0, bangumiRecommendList.size() - 1);
 
-//                        if (recommendAdapter == null) {
-//                            recommendAdapter = new RecommendAdapter(videoRecommendList, RecommendAdapter.SINGLE_COLUMN, context);
-//                            recommendAdapter.setHasStableIds(true);
-//                            bangumiInfoRecommends.setRecyclerViewAdapter(recommendAdapter);
-//                            bangumiInfoRecommends.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
-//                        }
-
-                        // 由于RecommendAdapter对象中的数据集与该类中recommendList是同一个对象，所以该处无论是初始化还是其他操作，只需对Item进行刷新即可
-//                        recommendAdapter.notifyDataSetChanged();
-//                        bangumiInfoRecommends.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+                        bangumiInfoRecommends.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
 
                         // 播放第一个视频
                         if (onBangumiInfoListener != null) {
@@ -227,7 +227,15 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
                 BangumiDetailParser bangumiDetailParser = new BangumiDetailParser(seasonId);
                 Bangumi bangumi = bangumiDetailParser.parseData();
 
-                bangumiRecommendList = BangumiRecommendParser.parseData(seasonId);
+                if (bangumiRecommendList != null) {
+                    if (bangumiRecommendList.size() > 0) {
+                        bangumiRecommendList.clear();
+                    }
+
+                    bangumiRecommendList.addAll(BangumiRecommendParser.parseData(seasonId));
+                } else {
+                    bangumiRecommendList = BangumiRecommendParser.parseData(seasonId);;
+                }
 
                 Message message = receiveDataHandler.obtainMessage(0);
                 message.obj = bangumi;

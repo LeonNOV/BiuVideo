@@ -101,14 +101,6 @@
 
     <string name="preference">initValues</string>
 
-    <dimen name="itemPadding">5dp</dimen>
-
-    <dimen name="cover_width">128dp</dimen>
-    <dimen name="cover_height">72dp</dimen>
-
-    <dimen name="small_view_w_h">40dp</dimen>
-    <dimen name="padding_10dp">10dp</dimen>
-
     <string name="main_button_start">开始获取</string>
     <string name="main_editText_hint1">输入关键词进行搜索</string>
     <string name="main_editText_hint2">输入链接或id</string>
@@ -246,7 +238,7 @@
     <string name="videoComment">评论</string>
 
     <string name="snackBarDataErrorWarn">获取数据失败~</string>
-    <string name="snackBarBuildingWarn">该功能还在开放中~</string>
+    <string name="snackBarBuildingWarn">该功能还在开发中~</string>
 
     <string name="qualityLoginWarn">该清晰度需要 登录 才能观看哦~</string>
     <string name="qualityVipWarn">该清晰度需要 大会员 才能观看哦~</string>

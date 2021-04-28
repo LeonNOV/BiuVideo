@@ -19,18 +19,15 @@ public class ValueUtils {
      * @return  返回结果
      */
     public static String generateCN(long number) {
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+
         //确定数量区间
         if (number < 10000) {
             return String.valueOf(number);
+        } else if (number >= 100000000) {
+            return decimalFormat.format((double) number / 100000000) + "亿";
         } else {
-            //获取千位
-            int thousand = (int) (number / 1000) % 10;
-
-            //获取万位前面的数
-            int tenThousand = (int) number / 10000;
-
-            //组合为万位数
-            return tenThousand + "." + thousand + "万";
+            return decimalFormat.format((double) number / 10000) + "万";
         }
     }
 

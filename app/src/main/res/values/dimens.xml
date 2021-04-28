@@ -47,4 +47,16 @@
     <dimen name="navBottomTextSize">13sp</dimen>
 
     <dimen name="qualityDialogWidth">200dp</dimen>
+
+    <dimen name="badgeSize">10sp</dimen>
+
+    <dimen name="itemPadding">5dp</dimen>
+
+    <dimen name="videoCoverWidth">126dp</dimen>
+    <dimen name="videoCoverHeight">96dp</dimen>
+    <dimen name="videoCoverRadius">5dp</dimen>
+    <dimen name="videoLengthSize">12sp</dimen>
+
+    <dimen name="small_view_w_h">40dp</dimen>
+    <dimen name="padding_10dp">10dp</dimen>
 </resources>

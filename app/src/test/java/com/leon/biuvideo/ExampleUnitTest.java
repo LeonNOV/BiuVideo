@@ -1,5 +1,7 @@
 package com.leon.biuvideo;
 
+import com.leon.biuvideo.utils.ValueUtils;
+
 import org.junit.Test;
 
 /**
@@ -11,5 +13,6 @@ public class ExampleUnitTest {
 
     @Test
     public void test() {
+        System.out.println(ValueUtils.generateCN(12345678));
     }
 }

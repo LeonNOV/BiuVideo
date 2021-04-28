@@ -35,11 +35,13 @@ public class BangumiRecommendParser {
             bangumiRecommend.cover = jsonObject.getString("cover");
 
             bangumiRecommend.newEp = jsonObject.getJSONObject("new_ep").getString("index_show");
-            bangumiRecommend.badge = jsonObject.getString("badge");
+
+            String badge = jsonObject.getString("badge");
+            bangumiRecommend.badge = "".equals(badge) ? null : badge;
 
             JSONObject rating = jsonObject.getJSONObject("rating");
-            bangumiRecommend.ratingCount = ValueUtils.generateCN(rating.getIntValue("count")) + "人点评";
-            bangumiRecommend.ratingScore = ValueUtils.generateCN(rating.getIntValue("score"));
+            bangumiRecommend.ratingCount = ValueUtils.generateCN(rating.getIntValue("count"));
+            bangumiRecommend.ratingScore = String.valueOf(rating.getDouble("score"));
 
             JSONObject stat = jsonObject.getJSONObject("stat");
             bangumiRecommend.play = ValueUtils.generateCN(stat.getIntValue("view"));
