@@ -14,6 +14,7 @@ import com.leon.biuvideo.beans.resourcesBeans.ArticleInfo;
 import com.leon.biuvideo.beans.resourcesBeans.BiliUserInfo;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.HttpUtils;
@@ -121,6 +122,10 @@ public class ArticleFragment extends BaseSupportFragment implements View.OnClick
                                     .into(articleFace);
 
                             bindingUtils.setText(R.id.article_user_name, biliUserInfo.userName);
+                        } else {
+                            SimpleSnackBar.make(view, getString(R.string.snackBarDataErrorWarn), SimpleSnackBar.LENGTH_LONG).show();
+                            backPressed();
+                            return;
                         }
 
                         getArticleContent(BiliBiliAPIs.ARTICLE_PAGE_PATH + articleId);

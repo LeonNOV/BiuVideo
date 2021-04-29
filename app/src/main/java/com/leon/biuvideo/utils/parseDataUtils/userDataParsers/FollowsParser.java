@@ -22,11 +22,12 @@ import okhttp3.Headers;
 /**
  * @Author Leon
  * @Time 2021/1/22
- * @Desc 获取用户（B站用户/已登录用户）的关注列表数据
+ * @Desc 关注数据解析类
  */
 public class FollowsParser implements ParserInterface<Follow> {
     private static final String REFERER = "https://space.bilibili.com/";
     private final Context context;
+    private final String mid;
 
     /**
      * 页码数
@@ -43,14 +44,15 @@ public class FollowsParser implements ParserInterface<Follow> {
      */
     public boolean dataStatus = true;
 
-    public FollowsParser(Context context) {
+    public FollowsParser(Context context, String mid) {
         this.context = context;
+        this.mid = mid;
     }
 
     @Override
     public List<Follow> parseData() {
         Map<String, String> params = new HashMap<>(4);
-        params.put("vmid", PreferenceUtils.getUserId());
+        params.put("vmid", mid);
         params.put("pn", String.valueOf(pageNum));
         params.put("ps", String.valueOf(PAGE_SIZE));
         params.put("order", "desc");

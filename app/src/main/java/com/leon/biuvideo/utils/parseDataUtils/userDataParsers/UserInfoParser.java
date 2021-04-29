@@ -31,16 +31,17 @@ public class UserInfoParser {
         this.context = context;
     }
 
-    public interface OnSuccessListener{
+    public interface OnSuccessListener {
         /**
          * 获取完数据后的回调方法
          *
-         * @param userInfo  用户基本信息
-         * @param banner    横幅图片
-         * @param bCoins    B币数量
-         * @param statMap   动态数、关注数、粉丝数
+         * @param userInfo 用户基本信息
+         * @param banner   横幅图片
+         * @param bCoins   B币数量
+         * @param stat  关注数和粉丝数
+         * @param upStat 播放数、阅读数和获赞数
          */
-        void onCallback(UserInfo userInfo, String banner, int bCoins, Map<String, Integer> statMap);
+        void onCallback(UserInfo userInfo, String banner, int bCoins, int[] stat, int[] upStat);
     }
 
     public void setOnSuccessListener(OnSuccessListener onSuccessListener) {
@@ -58,9 +59,10 @@ public class UserInfoParser {
                     UserInfo userInfo = getBaseData();
                     String userBannerPhoto = getUserBannerPhoto();
                     int coinNum = getCoinNum();
-                    Map<String, Integer> userStat = getUserStat();
+                    int[] status = getStatus();
+                    int[] upStatus = getUpStatus();
 
-                    onSuccessListener.onCallback(userInfo, userBannerPhoto, coinNum, userStat);
+                    onSuccessListener.onCallback(userInfo, userBannerPhoto, coinNum, status, upStatus);
                 }
             }
         });
@@ -93,23 +95,54 @@ public class UserInfoParser {
     }
 
     /**
-     * 获取动态数、关注数、粉丝数
+     * 获关注数和粉丝数
+     *
+     * @return int[关注数, 粉丝数]
      */
-    private Map<String, Integer> getUserStat() {
-        Map<String, Integer> statMap = new HashMap<>(3);
-        JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.USER_STAT, Headers.of(HttpUtils.getAPIRequestHeader()), null);
+    private int[] getStatus() {
+        Map<String, String> paramsA = new HashMap<>(1);
+        paramsA.put("vmid", PreferenceUtils.getUserId());
+
+        JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.BILI_USER_STATUS, paramsA);
         JSONObject data = response.getJSONObject("data");
 
-        statMap.put("following", data.getIntValue("following"));
-        statMap.put("follower", data.getIntValue("follower"));
-        statMap.put("dynamicCount", data.getIntValue("dynamic_count"));
+        int[] status = new int[2];
+        if (data != null) {
+            status[0] = data.getIntValue("following");
+            status[1] = data.getIntValue("follower");
+        }
 
-        return statMap;
+        return status;
+    }
+
+    /**
+     * 播放数、阅读数和获赞数
+     *
+     * @return int[播放数, 阅读数, 获赞数]
+     */
+    private int[] getUpStatus() {
+        Map<String, String> params = new HashMap<>(1);
+        params.put("mid", PreferenceUtils.getUserId());
+
+        int[] upStatus = new int[3];
+        if (PreferenceUtils.getLoginStatus()) {
+            JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.BILI_USER_UP_STATUS, Headers.of(HttpUtils.getAPIRequestHeader()), params);
+            JSONObject data = response.getJSONObject("data");
+
+            if (data != null) {
+                upStatus[0] = data.getJSONObject("archive").getIntValue("view");
+                upStatus[1] = data.getJSONObject("article").getIntValue("view");
+                upStatus[2] = data.getIntValue("likes");
+            }
+        }
+
+        return upStatus;
     }
 
     /**
      * 获取用户基本数据
-     * @return  UserInfo
+     *
+     * @return UserInfo
      */
     private UserInfo getBaseData() {
         JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.USER_BASE_INFO, Headers.of(HttpUtils.getAPIRequestHeader()), null);

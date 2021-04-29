@@ -12,8 +12,10 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.userBeans.Follower;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
+import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.values.Role;
+import com.mcxtzhang.swipemenulib.SwipeMenuLayout;
 
 import java.util.List;
 
@@ -23,11 +25,13 @@ import java.util.List;
  * @Desc 粉丝数据适配器
  */
 public class FollowerAdapter extends BaseAdapter<Follower> {
+    private final boolean isBiliUser;
     private final List<Follower> followers;
 
-    public FollowerAdapter(List<Follower> beans, Context context) {
+    public FollowerAdapter(List<Follower> beans, Context context, boolean isBiliUser) {
         super(beans, context);
         this.followers = beans;
+        this.isBiliUser = isBiliUser;
     }
 
     @Override
@@ -38,6 +42,8 @@ public class FollowerAdapter extends BaseAdapter<Follower> {
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         Follower follower = followers.get(position);
+
+        ((SwipeMenuLayout) holder.findById(R.id.followers_item_swipeLayout)).setSwipeEnable(!isBiliUser);
 
         ImageView followersItemVerifyMark = holder.findById(R.id.followers_item_verify_mark);
         if (follower.role == Role.NONE) {
@@ -63,35 +69,40 @@ public class FollowerAdapter extends BaseAdapter<Follower> {
         holder
                 .setImage(R.id.followers_item_face, follower.userFace, ImagePixelSize.FACE)
                 .setText(R.id.followers_item_sign, follower.sign)
-                .setOnClickListener(R.id.followers_item_content, new View.OnClickListener() {
+                .setOnClickListener(R.id.followers_item_container, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        SimpleSnackBar.make(view, "点击了第" + position + "个Item,followerName：" + follower.userName, SimpleSnackBar.LENGTH_SHORT).show();
-                    }
-                })
-                .setOnClickListener(R.id.followers_item_remove_follower, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        SimpleSnackBar.make(view, "移除粉丝：" + follower.userName, SimpleSnackBar.LENGTH_SHORT).show();
+                        startPublicFragment(FragmentType.BILI_USER, String.valueOf(follower.followerMid));
                     }
                 });
 
-        TextView followersItemMutualFollower = holder.findById(R.id.followers_item_mutual_follower);
-        if (follower.userStatus == 0) {
-            followersItemMutualFollower.setText(R.string.follow);
-        } else if (follower.userStatus == 6) {
-            followersItemMutualFollower.setText(R.string.is_mutual_follower);
-        }
-        followersItemMutualFollower.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (follower.userStatus == 0) {
-                    followersItemMutualFollower.setText(R.string.is_mutual_follower);
-                } else {
-                    // 取消互粉操作
-                    SimpleSnackBar.make(view, "取消互粉：" + follower.userName, SimpleSnackBar.LENGTH_SHORT).show();
+        if (!isBiliUser) {
+            holder.setOnClickListener(R.id.followers_item_remove_follower, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SimpleSnackBar.make(v, context.getString(R.string.snackBarBuildingWarn), SimpleSnackBar.LENGTH_LONG).show();
                 }
+            });
+
+            TextView followersItemMutualFollower = holder.findById(R.id.followers_item_mutual_follower);
+            if (follower.userStatus == 0) {
+                followersItemMutualFollower.setText(R.string.follow);
+            } else if (follower.userStatus == 6) {
+                followersItemMutualFollower.setText(R.string.is_mutual_follower);
             }
-        });
+            followersItemMutualFollower.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SimpleSnackBar.make(v, context.getString(R.string.snackBarBuildingWarn), SimpleSnackBar.LENGTH_LONG).show();
+
+                    /*if (follower.userStatus == 0) {
+                        followersItemMutualFollower.setText(R.string.is_mutual_follower);
+                    } else {
+                        // 取消互粉操作
+                        SimpleSnackBar.make(view, "取消互粉：" + follower.userName, SimpleSnackBar.LENGTH_SHORT).show();
+                    }*/
+                }
+            });
+        }
     }
 }

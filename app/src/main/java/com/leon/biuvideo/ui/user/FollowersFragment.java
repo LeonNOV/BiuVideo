@@ -22,16 +22,23 @@ import java.util.List;
 /**
  * @Author Leon
  * @Time 2021/3/18
- * @Desc 我的粉丝页面
+ * @Desc 粉丝页面
  */
 public class FollowersFragment extends BaseSupportFragment {
-    private FollowersParser followersParser;
+    private final boolean isBiliUser;
+    private final String mid;
 
+    private FollowersParser followersParser;
     private FollowerAdapter followerAdapter;
     private final List<Follower> followerList = new ArrayList<>();
 
-    public static FollowersFragment getInstance() {
-        return new FollowersFragment();
+    public FollowersFragment(boolean isBiliUser, String mid) {
+        this.isBiliUser = isBiliUser;
+        this.mid = mid;
+    }
+
+    public static FollowersFragment getInstance(boolean isBiliUser, String mid) {
+        return new FollowersFragment(isBiliUser, mid);
     }
 
     @Override
@@ -55,7 +62,7 @@ public class FollowersFragment extends BaseSupportFragment {
         });
 
         SmartRefreshRecyclerView<Follower> followerSmartRefreshRecyclerView = findView(R.id.followers_smartRefreshLoadingRecyclerView);
-        followerAdapter = new FollowerAdapter(followerList, context);
+        followerAdapter = new FollowerAdapter(followerList, context, isBiliUser);
         followerAdapter.setHasStableIds(true);
         followerSmartRefreshRecyclerView.setRecyclerViewAdapter(followerAdapter);
         followerSmartRefreshRecyclerView.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
@@ -105,18 +112,14 @@ public class FollowersFragment extends BaseSupportFragment {
                 }
             }
         });
-
-
     }
 
     /**
      * 获取粉丝数据
-     *
-     * @return  Follower集合
      */
     private void getFollowers(int what) {
         if (followersParser == null) {
-            followersParser = new FollowersParser(context);
+            followersParser = new FollowersParser(context, mid);
         }
 
         SimpleSingleThreadPool.executor(new Runnable() {

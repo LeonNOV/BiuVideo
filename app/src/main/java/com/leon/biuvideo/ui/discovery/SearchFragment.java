@@ -16,11 +16,13 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.otherAdapters.SearchHistoryAdapter;
 import com.leon.biuvideo.greendao.dao.DaoBaseUtils;
 import com.leon.biuvideo.greendao.dao.SearchHistory;
+import com.leon.biuvideo.greendao.dao.SearchHistoryDao;
 import com.leon.biuvideo.greendao.daoutils.SearchHistoryUtils;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -77,8 +79,20 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
                     String value = searchFragmentEditTextKeyword.getText().toString();
 
                     if (!"".equals(value)) {
+                        // 生成唯一key
+                        long hashCode = value.hashCode();
+
+                        List<SearchHistory> searchHistories = searchHistoryDaoUtils.queryByQueryBuilder(SearchHistoryDao.Properties.HashCode.eq(hashCode));
+
+                        for (SearchHistory searchHistory : searchHistories) {
+                            if (searchHistory.getHashCode() == hashCode) {
+                                searchHistoryDaoUtils.delete(searchHistory);
+                                break;
+                            }
+                        }
+
                         // 存放当前的关键词
-                        searchHistoryDaoUtils.insert(new SearchHistory(null, value));
+                        searchHistoryDaoUtils.insert(new SearchHistory(null, hashCode, value));
 
                         // 将之前的搜索结果界面弹出
                         popTo(SearchResultFragment.class, false);
@@ -120,27 +134,37 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
         if (searchHistoryList.size() == 0) {
             searchFragmentHistoryList.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
         } else {
+            searchHistoryList.sort(new Comparator<SearchHistory>() {
+                @Override
+                public int compare(SearchHistory o1, SearchHistory o2) {
+                    return (int) (o2.getId() - o1.getId());
+                }
+            });
+
+            searchHistoryAdapter = new SearchHistoryAdapter(searchHistoryList, context);
+            searchHistoryAdapter.setOnSearchHistoryListener(new SearchHistoryAdapter.OnSearchHistoryListener() {
+                @Override
+                public void onDelete(SearchHistory searchHistory) {
+                    searchHistoryDaoUtils.delete(searchHistory);
+                    searchHistoryAdapter.remove(searchHistory);
+                    if (searchHistoryAdapter.getItemCount() == 0) {
+                        searchFragmentHistoryList.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
+                    }
+                }
+
+                @Override
+                public void onClick(String keyword) {
+                    searchFragmentEditTextKeyword.getText().clear();
+                    searchFragmentEditTextKeyword.setText(keyword);
+                    searchFragmentEditTextKeyword.setSelection(keyword.length());
+                }
+            });
+            searchHistoryAdapter.setHasStableIds(true);
+            searchFragmentHistoryList.setRecyclerViewAdapter(searchHistoryAdapter);
+            searchFragmentHistoryList.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
+
             searchFragmentHistoryList.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
         }
-
-        searchHistoryAdapter = new SearchHistoryAdapter(searchHistoryList, context);
-        searchHistoryAdapter.setOnSearchHistoryListener(new SearchHistoryAdapter.OnSearchHistoryListener() {
-            @Override
-            public void onDelete(SearchHistory searchHistory) {
-                searchHistoryDaoUtils.delete(searchHistory);
-                searchHistoryAdapter.remove(searchHistory);
-            }
-
-            @Override
-            public void onClick(String keyword) {
-                searchFragmentEditTextKeyword.getText().clear();
-                searchFragmentEditTextKeyword.setText(keyword);
-                searchFragmentEditTextKeyword.setSelection(keyword.length());
-            }
-        });
-        searchHistoryAdapter.setHasStableIds(true);
-        searchFragmentHistoryList.setRecyclerViewAdapter(searchHistoryAdapter);
-        searchFragmentHistoryList.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
     }
 
     @Override
@@ -149,6 +173,7 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
             case R.id.search_fragment_textView_clearHistory:
                 searchHistoryDaoUtils.deleteAll();
                 searchHistoryAdapter.removeAll();
+                searchFragmentHistoryList.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
                 break;
             case R.id.search_fragment_imageView_clearKeyword:
                 searchFragmentEditTextKeyword.getText().clear();

@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,7 +18,6 @@ import com.leon.biuvideo.R;
 public class TagView extends LinearLayout {
     private String rightValue = null;
     private String leftValue = null;
-    private boolean isClick;
 
     // 1:left,2:right
     private int tagMark;
@@ -27,7 +27,6 @@ public class TagView extends LinearLayout {
 
     private TextView rightView;
     private TextView leftView;
-    private LinearLayout linearLayout;
 
     public TagView(Context context) {
         super(context);
@@ -49,16 +48,6 @@ public class TagView extends LinearLayout {
         this.attrs = attrs;
 
         initView();
-    }
-
-    private OnTagViewClickListener onTagViewClickListener;
-
-    public interface OnTagViewClickListener {
-        void onClick();
-    }
-
-    public void setOnTagViewClickListener(OnTagViewClickListener onTagViewClickListener) {
-        this.onTagViewClickListener = onTagViewClickListener;
     }
 
     public String getLeftValue() {
@@ -93,12 +82,12 @@ public class TagView extends LinearLayout {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.TagView);
         this.leftValue = typedArray.getString(R.styleable.TagView_leftValue);
         this.rightValue = typedArray.getString(R.styleable.TagView_rightValue);
-        this.isClick = typedArray.getBoolean(R.styleable.TagView_isClick, false);
         this.tagMark = typedArray.getInt(R.styleable.TagView_tagMark, 1);
 
         typedArray.recycle();
 
-        addParent();
+        setBackgroundResource(R.drawable.ripple_round_corners6dp_bg);
+
         addLeftView();
         addRightView();
 
@@ -111,23 +100,6 @@ public class TagView extends LinearLayout {
         }
 
         setTagMark();
-        setClick();
-    }
-
-    /**
-     * 添加一个LinearLayout
-     */
-    private void addParent() {
-        linearLayout = new LinearLayout(context);
-        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-
-        addView(linearLayout);
-
-        LayoutParams layoutParams = (LayoutParams) linearLayout.getLayoutParams();
-        layoutParams.width = LayoutParams.WRAP_CONTENT;
-        layoutParams.height = LayoutParams.WRAP_CONTENT;
-
-        linearLayout.setLayoutParams(layoutParams);
     }
 
     /**
@@ -140,7 +112,7 @@ public class TagView extends LinearLayout {
         leftView.setText(leftValue);
         leftView.setTextColor(getResources().getColor(R.color.gray));
 
-        linearLayout.addView(leftView);
+        addView(leftView);
 
         LayoutParams valueViewLayoutParams = (LayoutParams) leftView.getLayoutParams();
         valueViewLayoutParams.setMarginEnd(getResources().getDimensionPixelSize(R.dimen.tagView_valueMarginEnd));
@@ -157,21 +129,7 @@ public class TagView extends LinearLayout {
         rightView.setText(rightValue);
         rightView.setTextColor(getResources().getColor(R.color.gray));
 
-        linearLayout.addView(rightView);
-    }
-
-    private void setClick() {
-        if (isClick) {
-            linearLayout.setBackgroundResource(R.drawable.ripple_round_corners6dp_bg);
-            linearLayout.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onTagViewClickListener != null) {
-                        onTagViewClickListener.onClick();
-                    }
-                }
-            });
-        }
+        addView(rightView);
     }
 
     private void setTagMark() {

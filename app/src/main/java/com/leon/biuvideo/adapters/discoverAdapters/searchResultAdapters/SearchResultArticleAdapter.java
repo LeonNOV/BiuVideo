@@ -13,6 +13,7 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.searchResultBeans.SearchResultArticle;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.values.FeaturesName;
+import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.List;
@@ -49,7 +50,7 @@ public class SearchResultArticleAdapter extends BaseAdapter<SearchResultArticle>
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        startPublicFragment(FragmentType.ARTICLE, searchResultArticle.articleId);
                     }
                 });
 

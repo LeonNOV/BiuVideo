@@ -52,7 +52,7 @@ public class RecommendAdapter extends BaseAdapter<VideoRecommend> {
                 .setText(R.id.video_item_duration, videoRecommend.duration)
                 .setText(R.id.video_item_view, ValueUtils.generateCN(videoRecommend.view))
                 .setText(R.id.video_item_danmaku, ValueUtils.generateCN(videoRecommend.danmaku))
-                .setText(R.id.video_item_desc, videoRecommend.desc)
+                .setText(R.id.video_item_title, videoRecommend.title)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

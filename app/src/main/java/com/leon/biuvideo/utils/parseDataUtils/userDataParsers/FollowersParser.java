@@ -7,7 +7,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.userBeans.Follower;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.parseDataUtils.ParserInterface;
 import com.leon.biuvideo.values.Role;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
@@ -26,6 +25,7 @@ import okhttp3.Headers;
  */
 public class FollowersParser implements ParserInterface<Follower> {
     private final Context context;
+    private final String mid;
 
     /**
      * 页码数
@@ -42,14 +42,15 @@ public class FollowersParser implements ParserInterface<Follower> {
      */
     public boolean dataStatus = true;
 
-    public FollowersParser(Context context) {
+    public FollowersParser(Context context, String mid) {
         this.context = context;
+        this.mid = mid;
     }
 
     @Override
     public List<Follower> parseData() {
         Map<String, String> params = new HashMap<>(3);
-        params.put("vmid", PreferenceUtils.getUserId());
+        params.put("vmid", mid);
         params.put("pn", String.valueOf(pageNum));
         params.put("ps", String.valueOf(PAGE_SIZE));
 

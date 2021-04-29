@@ -41,7 +41,7 @@ public class PartitionAdapter extends BaseAdapter<PartitionVideo> {
         holder
                 .setImage(R.id.video_item_cover, partitionVideo.pic, ImagePixelSize.COVER)
                 .setText(R.id.video_item_duration, partitionVideo.duration)
-                .setText(R.id.video_item_desc, partitionVideo.title)
+                .setText(R.id.video_item_title, partitionVideo.title)
                 .setText(R.id.video_item_view, ValueUtils.generateCN(partitionVideo.play))
                 .setText(R.id.video_item_danmaku, ValueUtils.generateCN(partitionVideo.danmaku))
                 .setOnClickListener(new View.OnClickListener() {

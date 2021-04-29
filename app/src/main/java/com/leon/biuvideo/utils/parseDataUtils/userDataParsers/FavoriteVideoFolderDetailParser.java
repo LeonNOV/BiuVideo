@@ -63,7 +63,10 @@ public class FavoriteVideoFolderDetailParser {
                 JSONObject info = data.getJSONObject("info");
                 favoriteVideoFolderDetail.id = info.getLongValue("id");
                 favoriteVideoFolderDetail.addTime = info.getLongValue("ctime");
-                favoriteVideoFolderDetail.cover = info.getString("cover");
+
+                String cover = info.getString("cover");
+                favoriteVideoFolderDetail.cover = "".equals(cover) ? null : cover;
+
                 favoriteVideoFolderDetail.count = info.getIntValue("media_count");
                 favoriteVideoFolderDetail.title = info.getString("title");
 
@@ -73,9 +76,9 @@ public class FavoriteVideoFolderDetailParser {
                 favoriteVideoFolderDetail.userName = upper.getString("name");
 
                 JSONArray medias = data.getJSONArray("medias");
-                favoriteVideoFolderDetail.medias = new ArrayList<>(medias.size());
 
                 if (medias != null) {
+                    favoriteVideoFolderDetail.medias = new ArrayList<>(medias.size());
                     for (Object o : medias) {
                         JSONObject jsonObject = (JSONObject) o;
                         FavoriteVideoFolderDetail.Media media = new FavoriteVideoFolderDetail.Media();
@@ -101,13 +104,13 @@ public class FavoriteVideoFolderDetailParser {
 
                         favoriteVideoFolderDetail.medias.add(media);
                     }
-                }
 
-                if (favoriteVideoFolderDetail.medias.size() < PAGE_SIZE) {
-                    dataStatus = false;
-                }
+                    if (favoriteVideoFolderDetail.medias.size() < PAGE_SIZE) {
+                        dataStatus = false;
+                    }
 
-                pageNum ++;
+                    pageNum ++;
+                }
 
                 return favoriteVideoFolderDetail;
             }

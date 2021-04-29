@@ -28,6 +28,14 @@ public class FavoriteArticleFragment extends BaseSupportFragmentWithSrr<Favorite
     private FavoriteArticleParser favoriteArticleParser;
 
     @Override
+    protected void onLazyLoad() {
+        view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+
+        // 获取初始数据
+        getFavoriteArticles(0);
+    }
+
+    @Override
     protected void initView() {
         FavoriteArticleAdapter favoriteArticleAdapter = new FavoriteArticleAdapter(favoriteArticleList, context);
         favoriteArticleAdapter.setHasStableIds(true);
@@ -47,21 +55,24 @@ public class FavoriteArticleFragment extends BaseSupportFragmentWithSrr<Favorite
 
                 switch (msg.what) {
                     case 0:
-                        if (favoriteArticles.size() == 0) {
-                            view.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
-                            view.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                        } else {
+                        if (favoriteArticles != null && favoriteArticles.size() > 0) {
                             favoriteArticleAdapter.append(favoriteArticles);
                             view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
                             if (!favoriteArticleParser.dataStatus) {
                                 view.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                             }
+                        } else {
+                            view.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
+                            view.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                         }
                         break;
                     case 1:
-                        if (favoriteArticles.size() > 0) {
+                        if (favoriteArticles != null && favoriteArticles.size() > 0) {
                             favoriteArticleAdapter.append(favoriteArticles);
                             view.setSmartRefreshStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
+                            if (!favoriteArticleParser.dataStatus) {
+                                view.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
+                            }
                         } else {
                             view.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                         }
@@ -93,13 +104,5 @@ public class FavoriteArticleFragment extends BaseSupportFragmentWithSrr<Favorite
                 receiveDataHandler.sendMessage(message);
             }
         });
-    }
-
-    @Override
-    protected void onLazyLoad() {
-        view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-
-        // 获取初始数据
-        getFavoriteArticles(0);
     }
 }

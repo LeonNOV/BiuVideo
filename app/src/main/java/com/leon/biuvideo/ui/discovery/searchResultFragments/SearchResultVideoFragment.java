@@ -109,18 +109,24 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
 
                 switch (msg.what) {
                     case 0:
-                        if (searchResultVideos == null || searchResultVideos.size() == 0) {
-                            searchResultVideoData.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
-                            searchResultVideoData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                        } else {
+                        if (searchResultVideos != null && searchResultVideos.size() > 0) {
                             searchResultVideoAdapter.append(searchResultVideos);
                             searchResultVideoData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+                            if (!searchResultVideoParser.dataStatus) {
+                                searchResultVideoData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
+                            }
+                        } else {
+                            searchResultVideoData.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
+                            searchResultVideoData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                         }
                         break;
                     case 1:
                         if (searchResultVideos != null && searchResultVideos.size() > 0) {
                             searchResultVideoAdapter.append(searchResultVideos);
                             searchResultVideoData.setSmartRefreshStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
+                            if (!searchResultVideoParser.dataStatus) {
+                                searchResultVideoData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
+                            }
                         } else {
                             searchResultVideoData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                         }

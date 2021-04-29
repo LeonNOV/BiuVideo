@@ -73,11 +73,7 @@ public class FavoriteVideoFolderDetailFragment extends BaseSupportFragment {
         favoritesVideoFolderDetailSmartRefreshRecyclerView.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-                if (!favoriteVideoFolderDetailParser.dataStatus) {
-                    favoritesVideoFolderDetailSmartRefreshRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                } else {
-                    getFavoriteVideoFolderDetail(1);
-                }
+                getFavoriteVideoFolderDetail(1);
             }
         });
 
@@ -100,36 +96,39 @@ public class FavoriteVideoFolderDetailFragment extends BaseSupportFragment {
 
                 switch (msg.what) {
                     case 0:
-                        Glide
-                                .with(context)
-                                .load(PreferenceUtils.getFeaturesStatus(FeaturesName.IMG_ORIGINAL_MODEL)
-                                        ? favoriteVideoFolderDetail.cover
-                                        : favoriteVideoFolderDetail.cover + ImagePixelSize.COVER.value)
-                                .into(favoritesVideoFolderDetailCover);
+                        if (favoriteVideoFolderDetail.cover != null) {
+                            Glide
+                                    .with(context)
+                                    .load(PreferenceUtils.getFeaturesStatus(FeaturesName.IMG_ORIGINAL_MODEL)
+                                            ? favoriteVideoFolderDetail.cover
+                                            : favoriteVideoFolderDetail.cover + ImagePixelSize.COVER.value)
+                                    .into(favoritesVideoFolderDetailCover);
+                        }
                         favoritesVideoFolderDetailTitle.setText(title);
                         favoritesVideoFolderDetailCount.setText(favoriteVideoFolderDetail.count + "个内容");
 
-                        if (favoriteVideoFolderDetail.medias.size() == 0 || favoriteVideoFolderDetail.medias == null) {
-                            favoritesVideoFolderDetailSmartRefreshRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
-                            favoritesVideoFolderDetailSmartRefreshRecyclerView.setEnableLoadMore(false);
-                        } else {
+                        if (favoriteVideoFolderDetail.medias != null && favoriteVideoFolderDetail.medias.size() > 0) {
                             favoriteVideoFolderDetailAdapter.append(favoriteVideoFolderDetail.medias);
                             favoritesVideoFolderDetailSmartRefreshRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
                             if (!favoriteVideoFolderDetailParser.dataStatus) {
                                 favoritesVideoFolderDetailSmartRefreshRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                             }
+                        } else {
+                            favoritesVideoFolderDetailSmartRefreshRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
+                            favoritesVideoFolderDetailSmartRefreshRecyclerView.setEnableLoadMore(false);
                         }
 
                         break;
                     case 1:
-                        if (favoriteVideoFolderDetail.medias.size() > 0) {
+                        if (favoriteVideoFolderDetail.medias != null && favoriteVideoFolderDetail.medias.size() > 0) {
                             favoriteVideoFolderDetailAdapter.append(favoriteVideoFolderDetail.medias);
                             favoritesVideoFolderDetailSmartRefreshRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
 
-                            // 每加载一次就检查当前页是否为最后一页
                             if (!favoriteVideoFolderDetailParser.dataStatus) {
                                 favoritesVideoFolderDetailSmartRefreshRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                             }
+                        } else {
+                            favoritesVideoFolderDetailSmartRefreshRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                         }
 
                         break;

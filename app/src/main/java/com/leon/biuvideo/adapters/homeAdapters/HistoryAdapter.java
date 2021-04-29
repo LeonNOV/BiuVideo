@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -14,7 +13,9 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.userBeans.History;
 import com.leon.biuvideo.beans.userBeans.HistoryType;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.ValueUtils;
+import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.List;
@@ -56,7 +57,7 @@ public class HistoryAdapter extends BaseAdapter<History> {
         History history = historyList.get(position);
 
         if (history.historyType == HistoryType.ARTICLE) {
-            initArticleItemView(holder, history, position);
+            initArticleItemView(holder, history);
         } else {
             initVideoItemView(holder, history,  position);
         }
@@ -131,10 +132,28 @@ public class HistoryAdapter extends BaseAdapter<History> {
                 .setImage(R.id.history_item_video_cover, history.cover, ImagePixelSize.COVER)
                 .setText(R.id.history_item_video_title, history.title)
                 .setText(R.id.history_item_video_time, ValueUtils.generateTime(history.viewTime, "MM-dd HH:mm", true))
-                .setOnClickListener(new View.OnClickListener() {
+                .setOnClickListener(R.id.history_item_video_container, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, "Video\t" + history.bvid, Toast.LENGTH_SHORT).show();
+                        switch (history.historyType) {
+                            case VIDEO:
+                                startPublicFragment(FragmentType.VIDEO, history.bvid);
+                                break;
+                            case BANGUMI:
+                                startPublicFragment(FragmentType.BANGUMI, history.seasonId);
+                                break;
+                            case LIVE:
+                                SimpleSnackBar.make(v, context.getString(R.string.snackBarBuildingWarn), SimpleSnackBar.LENGTH_LONG).show();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                })
+                .setOnClickListener(R.id.history_item_video_operation, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        SimpleSnackBar.make(v, context.getString(R.string.snackBarBuildingWarn), SimpleSnackBar.LENGTH_LONG).show();
                     }
                 });
     }
@@ -143,27 +162,30 @@ public class HistoryAdapter extends BaseAdapter<History> {
      * 初始化article条目
      * @param holder    holder
      * @param history   history
-     * @param position  position
      */
-    private void initArticleItemView(BaseViewHolder holder, History history, int position) {
+    private void initArticleItemView(BaseViewHolder holder, History history) {
         TextView historyItemArticlePlatform = holder.findById(R.id.history_item_article_platform);
-        String text = "";
-        switch (history.historyPlatformType) {
-            case PHOTO:
-                text = "已在手机端上进行阅读";
-                break;
-            case PC:
-                text = "已在PC端上进行阅读";
-                break;
-            case PAD:
-                text = "已在Pad端上进行阅读";
-                break;
-            case TV:
-                text = "已在TV端上进行阅读";
-                break;
-            default:
-                historyItemArticlePlatform.setVisibility(View.GONE);
-                break;
+        String text;
+        if (history.historyPlatformType != null) {
+            switch (history.historyPlatformType) {
+                case PHOTO:
+                    text = "已在手机端上进行阅读";
+                    break;
+                case PC:
+                    text = "已在PC端上进行阅读";
+                    break;
+                case PAD:
+                    text = "已在Pad端上进行阅读";
+                    break;
+                case TV:
+                    text = "已在TV端上进行阅读";
+                    break;
+                default:
+                    text = "使用未知设备阅读";
+                    break;
+            }
+        } else {
+            text = "使用未知设备阅读";
         }
 
         historyItemArticlePlatform.setText(text);
@@ -171,10 +193,16 @@ public class HistoryAdapter extends BaseAdapter<History> {
         holder.setImage(R.id.history_item_article_cover, history.cover, ImagePixelSize.COVER)
                 .setText(R.id.history_item_article_title, history.title)
                 .setText(R.id.history_item_article_biliUser, history.authorName)
-                .setOnClickListener(new View.OnClickListener() {
+                .setOnClickListener(R.id.history_item_article_container, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        startPublicFragment(FragmentType.ARTICLE, history.articleId);
+                    }
+                })
+                .setOnClickListener(R.id.history_item_article_operation, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        SimpleSnackBar.make(v, context.getString(R.string.snackBarBuildingWarn), SimpleSnackBar.LENGTH_LONG).show();
                     }
                 });
     }

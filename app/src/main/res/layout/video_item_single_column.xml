@@ -51,13 +51,12 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/video_item_desc"
+            android:id="@+id/video_item_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:ellipsize="end"
-            android:maxLines="3"
-            android:text="介绍介绍介绍介介绍介绍绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介介绍介绍绍介绍介绍介绍介绍介绍介绍介绍介绍"
+            android:maxLines="2"
             android:textColor="@color/black"
             android:textSize="15sp" />
 

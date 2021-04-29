@@ -12,6 +12,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.homeBeans.WatchLater;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.FeaturesName;
@@ -83,7 +84,7 @@ public class WatchLaterAdapter extends BaseAdapter<WatchLater> {
                 .setOnClickListener(R.id.watch_later_video_item_cover_remove, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, "remove：" + watchLater.bvid, Toast.LENGTH_SHORT).show();
+                        SimpleSnackBar.make(v, context.getString(R.string.snackBarBuildingWarn), SimpleSnackBar.LENGTH_LONG);
                     }
                 });
     }

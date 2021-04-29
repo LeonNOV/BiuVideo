@@ -10,6 +10,9 @@ import com.leon.biuvideo.values.HistoryPlatformType;
 public class History {
     public HistoryPlatformType historyPlatformType;
 
+    public String business;
+    public String kid;
+
     public String authorName;
     public long authorMid;
     public String authorFace;
@@ -32,13 +35,8 @@ public class History {
      * 视频bvid
      */
     public String bvid;
-    public long cid;
-
-    /**
-     * 只有类别为直播或专栏时，该值才有效
-     * 专栏需要在前面加上`cv`两个字母，直播啥都不需要
-     */
-    public long oid;
+    public String articleId;
+    public String seasonId;
 
     /**
      * 视频总长度（秒）

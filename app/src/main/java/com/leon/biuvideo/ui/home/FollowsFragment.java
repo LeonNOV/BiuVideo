@@ -28,13 +28,21 @@ import java.util.List;
  * @Desc 关注数据界面
  */
 public class FollowsFragment extends BaseSupportFragment {
+    private final String mid;
+    private final boolean isBiliUser;
+
     private final List<Follow> followList = new ArrayList<>();
     private FollowsAdapter followsAdapter;
     private FollowsParser followsParser;
     private SmartRefreshRecyclerView<Follow> followsSmartRefreshLoadingRecyclerView;
 
-    public static FollowsFragment getInstance() {
-        return new FollowsFragment();
+    public FollowsFragment(boolean isBiliUser, String mid) {
+        this.isBiliUser = isBiliUser;
+        this.mid = mid;
+    }
+
+    public static FollowsFragment getInstance(boolean isBiliUser, String mid) {
+        return new FollowsFragment(isBiliUser, mid);
     }
 
     @Override
@@ -58,7 +66,7 @@ public class FollowsFragment extends BaseSupportFragment {
         });
 
         followsSmartRefreshLoadingRecyclerView = findView(R.id.follows_smartRefreshLoadingRecyclerView);
-        followsAdapter = new FollowsAdapter(followList, context);
+        followsAdapter = new FollowsAdapter(followList, context, isBiliUser);
         followsAdapter.setHasStableIds(true);
         followsSmartRefreshLoadingRecyclerView.setRecyclerViewAdapter(followsAdapter);
         followsSmartRefreshLoadingRecyclerView.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
@@ -77,22 +85,25 @@ public class FollowsFragment extends BaseSupportFragment {
 
                 switch (msg.what) {
                     case 0:
-                        if (follows.size() == 0) {
-                            followsSmartRefreshLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
-                            followsSmartRefreshLoadingRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                        } else {
+                        if (follows != null && follows.size() > 0) {
                             followsAdapter.append(follows);
                             followsSmartRefreshLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
                             if (!followsParser.dataStatus) {
                                 followsSmartRefreshLoadingRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                             }
+                        } else {
+                            followsSmartRefreshLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
+                            followsSmartRefreshLoadingRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                         }
+
                         break;
                     case 1:
-
-                        if (follows.size() > 0) {
+                        if (follows != null && follows.size() > 0) {
                             followsAdapter.append(follows);
                             followsSmartRefreshLoadingRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
+                            if (!followsParser.dataStatus) {
+                                followsSmartRefreshLoadingRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
+                            }
                         } else {
                             followsSmartRefreshLoadingRecyclerView.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                         }
@@ -116,12 +127,10 @@ public class FollowsFragment extends BaseSupportFragment {
 
     /**
      * 获取关注数据
-     *
-     * @return  Follow集合
      */
     private void getFollows(int what) {
         if (followsParser == null) {
-            followsParser = new FollowsParser(context);
+            followsParser = new FollowsParser(context, mid);
         }
 
         SimpleSingleThreadPool.executor(new Runnable() {

@@ -24,28 +24,32 @@ public class ArticleInfoParser {
         JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.ARTICLE_INFO, Headers.of(HttpUtils.getAPIRequestHeader()), params);
         JSONObject data = response.getJSONObject("data");
 
-        ArticleInfo articleInfo = new ArticleInfo();
+        if (data != null) {
+            ArticleInfo articleInfo = new ArticleInfo();
 
-        articleInfo.title = data.getString("title");
+            articleInfo.title = data.getString("title");
 
-        String bannerUrl = data.getString("banner_url");
-        if ("".equals(bannerUrl)) {
-            articleInfo.banner = (String) data.getJSONArray("image_urls").get(0);
-        } else {
-            articleInfo.banner = bannerUrl;
+            String bannerUrl = data.getString("banner_url");
+            if ("".equals(bannerUrl)) {
+                articleInfo.banner = (String) data.getJSONArray("image_urls").get(0);
+            } else {
+                articleInfo.banner = bannerUrl;
+            }
+
+            articleInfo.mid = data.getString("mid");
+            articleInfo.likeStatus = data.getIntValue("like") == 1;
+            articleInfo.favoriteStatus = data.getBooleanValue("favorite");
+            articleInfo.attentionStatus = data.getBooleanValue("attention");
+
+            JSONObject stats = data.getJSONObject("stats");
+            articleInfo.view = ValueUtils.generateCN(stats.getIntValue("view"));
+            articleInfo.favorite = ValueUtils.generateCN(stats.getIntValue("favorite"));
+            articleInfo.like = ValueUtils.generateCN(stats.getIntValue("like"));
+            articleInfo.comment = ValueUtils.generateCN(stats.getIntValue("reply"));
+
+            return articleInfo;
         }
 
-        articleInfo.mid = data.getString("mid");
-        articleInfo.likeStatus = data.getIntValue("like") == 1;
-        articleInfo.favoriteStatus = data.getBooleanValue("favorite");
-        articleInfo.attentionStatus = data.getBooleanValue("attention");
-
-        JSONObject stats = data.getJSONObject("stats");
-        articleInfo.view = ValueUtils.generateCN(stats.getIntValue("view"));
-        articleInfo.favorite = ValueUtils.generateCN(stats.getIntValue("favorite"));
-        articleInfo.like = ValueUtils.generateCN(stats.getIntValue("like"));
-        articleInfo.comment = ValueUtils.generateCN(stats.getIntValue("reply"));
-
-        return articleInfo;
+        return null;
     }
 }

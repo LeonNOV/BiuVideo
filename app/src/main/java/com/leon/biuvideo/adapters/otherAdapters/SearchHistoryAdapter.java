@@ -75,6 +75,5 @@ public class SearchHistoryAdapter extends BaseAdapter<SearchHistory> {
                         }
                     }
                 });
-
     }
 }

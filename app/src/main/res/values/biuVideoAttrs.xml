@@ -25,7 +25,6 @@
     <declare-styleable name="TagView">
         <attr name="leftValue" format="string" localization="suggested"/>
         <attr name="rightValue" format="string" localization="suggested"/>
-        <attr name="isClick" format="boolean"/>
         <attr name="tagMark" format="enum">
             <enum name="none" value="0"/>
             <enum name="left" value="1"/>

@@ -55,7 +55,7 @@
             </FrameLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
@@ -78,53 +78,65 @@
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
-                    <LinearLayout
+                    <HorizontalScrollView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="10dp"
-                        android:orientation="horizontal">
+                        android:overScrollMode="never">
 
-                        <com.leon.biuvideo.ui.views.TagView
-                            android:id="@+id/user_top_follow"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:isClick="true"
-                            app:leftValue="0"
-                            app:rightValue="@string/user_follow"
-                            app:tagMark="right" />
+                            android:orientation="horizontal">
 
-                        <com.leon.biuvideo.ui.views.TagView
-                            android:id="@+id/user_top_fans"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            app:isClick="true"
-                            app:leftValue="0"
-                            app:rightValue="@string/user_fans"
-                            app:tagMark="right" />
+                            <com.leon.biuvideo.ui.views.TagView
+                                android:id="@+id/user_top_following"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:leftValue="0"
+                                app:rightValue="@string/user_follow"
+                                app:tagMark="right" />
 
-                        <com.leon.biuvideo.ui.views.TagView
-                            android:id="@+id/user_top_dynamic"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
-                            app:isClick="true"
-                            app:leftValue="0"
-                            app:rightValue="@string/user_dynamic"
-                            app:tagMark="right" />
+                            <com.leon.biuvideo.ui.views.TagView
+                                android:id="@+id/user_top_fans"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                app:leftValue="0"
+                                app:rightValue="@string/user_fans"
+                                app:tagMark="right" />
 
-                        <!--                        <com.leon.biuvideo.ui.views.TagView-->
-                        <!--                            android:id="@+id/user_top_like"-->
-                        <!--                            android:layout_width="wrap_content"-->
-                        <!--                            android:layout_height="wrap_content"-->
-                        <!--                            android:layout_marginStart="20dp"-->
-                        <!--                            app:isClick="true"-->
-                        <!--                            app:leftValue="0"-->
-                        <!--                            app:rightValue="@string/user_like"-->
-                        <!--                            app:tagMark="right" />-->
+                            <com.leon.biuvideo.ui.views.TagView
+                                android:id="@+id/user_top_like"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                app:leftValue="0"
+                                app:rightValue="@string/user_like"
+                                app:tagMark="right" />
 
-                    </LinearLayout>
+                            <com.leon.biuvideo.ui.views.TagView
+                                android:id="@+id/user_top_play"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                app:leftValue="0"
+                                app:rightValue="@string/user_play"
+                                app:tagMark="right" />
+
+                            <com.leon.biuvideo.ui.views.TagView
+                                android:id="@+id/user_top_read"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                app:leftValue="0"
+                                app:rightValue="@string/user_read"
+                                app:tagMark="right" />
+
+                        </LinearLayout>
+
+                    </HorizontalScrollView>
 
                 </LinearLayout>
 
@@ -200,7 +212,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        app:isClick="false"
                         app:leftValue="@string/user_name"
                         app:tagMark="none" />
 
@@ -209,7 +220,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        app:isClick="false"
                         app:leftValue="@string/user_sex"
                         app:tagMark="none" />
 
@@ -218,7 +228,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        app:isClick="false"
                         app:leftValue="@string/user_level"
                         app:tagMark="none" />
 
@@ -343,7 +352,8 @@
 
                 </LinearLayout>
 
-                <LinearLayout
+                <!-- 该内容暂不进行添加 -->
+                <!--<LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -416,7 +426,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
-                </LinearLayout>
+                </LinearLayout>-->
 
                 <TextView
                     android:id="@+id/user_logout"

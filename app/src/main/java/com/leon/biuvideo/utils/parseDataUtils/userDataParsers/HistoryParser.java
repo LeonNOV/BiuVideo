@@ -136,11 +136,17 @@ public class HistoryParser implements ParserInterface<History> {
             return null;
         }
 
+        history.business = historyJSONObject.getString("business");
+        history.kid = jsonObject.getString("kid");
+
         history.bvid = historyJSONObject.getString("bvid");
+        history.seasonId = jsonObject.getString("kid");
 
-        history.cid = historyJSONObject.getLongValue("cid");
-
-        history.oid = historyJSONObject.getLongValue("oid");
+        if ("article-list".equals(history.business)) {
+            history.articleId = historyJSONObject.getString("cid");
+        } else {
+            history.articleId = history.seasonId;
+        }
 
         history.duration = jsonObject.getIntValue("duration");
 

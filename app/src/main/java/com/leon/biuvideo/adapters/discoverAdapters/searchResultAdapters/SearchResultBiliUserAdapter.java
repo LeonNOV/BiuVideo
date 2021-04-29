@@ -11,6 +11,8 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.searchResultBeans.SearchResultBiliUser;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
+import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.values.Role;
 
@@ -59,7 +61,6 @@ public class SearchResultBiliUserAdapter extends BaseAdapter<SearchResultBiliUse
             }
         }
 
-
         holder
                 .setImage(R.id.search_result_item_bili_user_face, searchResultBiliUser.userFace, ImagePixelSize.FACE)
                 .setText(R.id.search_result_item_bili_user_name, searchResultBiliUser.userName)
@@ -67,7 +68,7 @@ public class SearchResultBiliUserAdapter extends BaseAdapter<SearchResultBiliUse
                 .setOnClickListener(R.id.search_result_item_bili_user_content, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        startPublicFragment(FragmentType.BILI_USER, searchResultBiliUser.mid);
                     }
                 });
         TextView searchResultItemBiliUserOperation = holder.findById(R.id.search_result_item_bili_user_operation);
@@ -76,7 +77,7 @@ public class SearchResultBiliUserAdapter extends BaseAdapter<SearchResultBiliUse
         searchResultItemBiliUserOperation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                SimpleSnackBar.make(v, context.getString(R.string.snackBarBuildingWarn), SimpleSnackBar.LENGTH_LONG).show();
             }
         });
     }

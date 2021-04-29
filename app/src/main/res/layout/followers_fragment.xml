@@ -10,7 +10,7 @@
         android:id="@+id/followers_topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:topBarTitle="@string/my_followers" />
+        app:topBarTitle="@string/followers" />
 
     <com.leon.biuvideo.ui.views.SmartRefreshRecyclerView
         android:id="@+id/followers_smartRefreshLoadingRecyclerView"

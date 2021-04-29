@@ -1,91 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.mcxtzhang.swipemenulib.SwipeMenuLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
-    android:background="@drawable/ripple_round_corners6dp_bg"
-    android:orientation="horizontal"
-    android:paddingStart="10dp"
-    android:paddingEnd="10dp">
+    android:layout_marginBottom="@dimen/itemMarginBottom">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="126dp"
-        android:layout_height="96dp"
-        app:cardCornerRadius="6dp"
-        app:cardElevation="0dp">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/history_item_article_cover"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/description"
-                android:scaleType="centerCrop"
-                android:src="@color/gray" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:padding="3dp"
-                android:layout_margin="6dp"
-                android:textSize="12sp"
-                android:text="@string/partition_article"
-                android:textColor="@color/white"
-                android:background="@drawable/round_corners6dp_bg"
-                android:backgroundTint="@color/BiliBili_pink"/>
-
-        </FrameLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/history_item_article_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="10dp"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/ripple_round_corners6dp_bg"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp">
 
-        <TextView
-            android:id="@+id/history_item_article_title"
+        <androidx.cardview.widget.CardView
+            android:layout_width="@dimen/videoCoverWidth"
+            android:layout_height="@dimen/videoCoverHeight"
+            app:cardCornerRadius="@dimen/videoCoverRadius"
+            app:cardElevation="0dp">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/history_item_article_cover"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/description"
+                    android:scaleType="centerCrop"
+                    android:src="@color/gray" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:padding="3dp"
+                    android:layout_margin="6dp"
+                    android:textSize="12sp"
+                    android:text="@string/partition_article"
+                    android:textColor="@color/white"
+                    android:background="@drawable/round_corners6dp_bg"
+                    android:backgroundTint="@color/BiliBili_pink"/>
+
+            </FrameLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="5dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/history_item_article_biliUser"
-                android:layout_width="wrap_content"
+                android:id="@+id/history_item_article_title"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawablePadding="5dp"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="top"
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:textColor="@color/black"
-                android:textSize="12sp"
-                app:drawableStartCompat="@drawable/ic_up_user" />
+                android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/history_item_article_platform"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textColor="@color/infoColor"
-                android:textSize="12sp" />
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/history_item_article_biliUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:drawableStartCompat="@drawable/ic_up_user" />
 
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/history_item_article_platform"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/infoColor"
+                    android:textSize="12sp" />
 
-</LinearLayout>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/swipeMenuPaddingStartEnd"
+        android:paddingEnd="@dimen/swipeMenuPaddingStartEnd">
+
+        <TextView
+            android:id="@+id/history_item_article_operation"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/ripple_round_corners6dp_bg"
+            android:backgroundTint="@color/cancel_color"
+            android:gravity="center"
+            android:text="@string/delete"
+            android:textColor="@color/white" />
+
+    </FrameLayout>
+
+</com.mcxtzhang.swipemenulib.SwipeMenuLayout>

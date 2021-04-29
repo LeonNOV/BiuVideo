@@ -4,10 +4,9 @@ import android.os.Message;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.leon.biuvideo.adapters.homeAdapters.OrderAdapter;
+import com.leon.biuvideo.adapters.homeAdapters.OrderDataAdapter;
 import com.leon.biuvideo.beans.orderBeans.Order;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragmentWithSrr;
-import com.leon.biuvideo.ui.home.OrderFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
@@ -22,28 +21,35 @@ import java.util.List;
 /**
  * @Author Leon
  * @Time 2021/3/1
- * @Desc 订阅页面-番剧订阅
+ * @Desc 订阅页面-剧集订阅
  */
-public class OrderBangumiFragment extends BaseSupportFragmentWithSrr<Order> {
+public class OrderDataFragment extends BaseSupportFragmentWithSrr<Order> {
+    private final OrderType orderType;
     private final List<Order> orderList = new ArrayList<>();
     private OrderParser orderParser;
 
+    public OrderDataFragment(OrderType orderType) {
+        this.orderType = orderType;
+    }
+
+    @Override
+    protected void onLazyLoad() {
+        view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+
+        // 加载初始数据
+        getOrderData(0);
+    }
+
     @Override
     protected void initView() {
-        OrderAdapter orderAdapter = new OrderAdapter(orderList, context, OrderType.BANGUMI);
-        orderAdapter.setOnClickMediaListener(new OrderAdapter.OnClickMediaListener() {
-            @Override
-            public void onClick(String mediaId) {
-
-            }
-        });
-        orderAdapter.setHasStableIds(true);
-        view.setRecyclerViewAdapter(orderAdapter);
+        OrderDataAdapter orderDataAdapter = new OrderDataAdapter(orderList, context);
+        orderDataAdapter.setHasStableIds(true);
+        view.setRecyclerViewAdapter(orderDataAdapter);
         view.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
         view.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-                getOrderBangumis(1);
+                getOrderData(1);
             }
         });
 
@@ -54,21 +60,25 @@ public class OrderBangumiFragment extends BaseSupportFragmentWithSrr<Order> {
 
                 switch (msg.what) {
                     case 0:
-                        if (orders.size() == 0) {
-                            view.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
-                            view.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                        } else {
-                            orderAdapter.append(orders);
+                        if (orders != null && orders.size() > 0) {
+                            orderDataAdapter.append(orders);
                             view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
                             if (!orderParser.dataStatus) {
                                 view.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                             }
+                        } else {
+                            view.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
+                            view.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                         }
+
                         break;
                     case 1:
-                        if (orders.size() > 0) {
-                            orderAdapter.append(orders);
+                        if (orders != null && orders.size() > 0) {
+                            orderDataAdapter.append(orders);
                             view.setSmartRefreshStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
+                            if (!orderParser.dataStatus) {
+                                view.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
+                            }
                         } else {
                             view.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
                         }
@@ -80,9 +90,9 @@ public class OrderBangumiFragment extends BaseSupportFragmentWithSrr<Order> {
         });
     }
 
-    private void getOrderBangumis(int what) {
+    private void getOrderData(int what) {
         if (orderParser == null) {
-            orderParser = new OrderParser(OrderType.BANGUMI);
+            orderParser = new OrderParser(orderType);
         }
 
         SimpleSingleThreadPool.executor(new Runnable() {
@@ -95,13 +105,5 @@ public class OrderBangumiFragment extends BaseSupportFragmentWithSrr<Order> {
                 receiveDataHandler.sendMessage(message);
             }
         });
-    }
-
-    @Override
-    protected void onLazyLoad() {
-        view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-
-        // 加载初始数据
-        getOrderBangumis(0);
     }
 }

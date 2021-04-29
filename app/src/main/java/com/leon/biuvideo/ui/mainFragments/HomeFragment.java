@@ -21,7 +21,10 @@ import com.leon.biuvideo.beans.homeBeans.WatchLater;
 import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.home.DownloadManagerFragment;
+import com.leon.biuvideo.ui.home.FavoritesFragment;
+import com.leon.biuvideo.ui.home.FollowsFragment;
 import com.leon.biuvideo.ui.home.HistoryFragment;
+import com.leon.biuvideo.ui.home.OrderFragment;
 import com.leon.biuvideo.ui.home.RecommendFragment;
 import com.leon.biuvideo.ui.home.SettingsFragment;
 import com.leon.biuvideo.ui.home.WatchLaterFragment;
@@ -261,18 +264,13 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.home_my_orders:
-                // 26801
-                // 36167
-                ((NavFragment) getParentFragment()).startBrotherFragment(new BangumiFragment("26801"));
-//                ((NavFragment) getParentFragment()).startBrotherFragment(OrderFragment.getInstance());
+                ((NavFragment) getParentFragment()).startBrotherFragment(OrderFragment.getInstance());
                 break;
             case R.id.home_my_favorites:
-                ((NavFragment) getParentFragment()).startBrotherFragment(new BiliUserFragment("2946474"));
-//                ((NavFragment) getParentFragment()).startBrotherFragment(FavoritesFragment.getInstance());
+                ((NavFragment) getParentFragment()).startBrotherFragment(FavoritesFragment.getInstance());
                 break;
             case R.id.home_my_follows:
-                ((NavFragment) getParentFragment()).startBrotherFragment(new VideoFragment("BV1Rx411876f"));
-//                ((NavFragment) getParentFragment()).startBrotherFragment(FollowsFragment.getInstance());
+                ((NavFragment) getParentFragment()).startBrotherFragment(FollowsFragment.getInstance(false, PreferenceUtils.getUserId()));
                 break;
             case R.id.home_my_history:
                 ((NavFragment) getParentFragment()).startBrotherFragment(HistoryFragment.getInstance());

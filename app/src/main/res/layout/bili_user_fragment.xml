@@ -52,9 +52,11 @@
                             android:textStyle="bold" />
 
                         <LinearLayout
+                            android:id="@+id/bili_user_info_container"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="60dp"
+                            android:visibility="gone"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
@@ -198,7 +200,6 @@
                                 android:id="@+id/bili_user_following"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                app:isClick="true"
                                 app:leftValue="0"
                                 app:rightValue="@string/user_follow"
                                 app:tagMark="right" />
@@ -208,7 +209,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="20dp"
-                                app:isClick="true"
                                 app:leftValue="0"
                                 app:rightValue="@string/user_fans"
                                 app:tagMark="right" />
@@ -218,7 +218,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="20dp"
-                                app:isClick="true"
                                 app:leftValue="0"
                                 app:rightValue="@string/user_like"
                                 app:tagMark="right" />
@@ -228,7 +227,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="20dp"
-                                app:isClick="true"
                                 app:leftValue="0"
                                 app:rightValue="@string/user_play"
                                 app:tagMark="right" />
@@ -238,7 +236,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="20dp"
-                                app:isClick="true"
                                 app:leftValue="0"
                                 app:rightValue="@string/user_read"
                                 app:tagMark="right" />

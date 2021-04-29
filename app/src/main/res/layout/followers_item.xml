@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.mcxtzhang.swipemenulib.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/followers_item_swipeLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/itemMarginBottom"
@@ -8,7 +9,7 @@
     app:barrierMargin="10dp">
 
     <LinearLayout
-        android:id="@+id/followers_item_content"
+        android:id="@+id/followers_item_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/ripple_round_corners6dp_bg"

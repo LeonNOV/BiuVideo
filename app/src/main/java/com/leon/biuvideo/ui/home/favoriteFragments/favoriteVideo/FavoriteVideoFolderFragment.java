@@ -23,6 +23,14 @@ import java.util.List;
 public class FavoriteVideoFolderFragment extends BaseSupportFragmentWithSrr<FavoriteVideoFolder> {
 
     @Override
+    protected void onLazyLoad() {
+        view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+
+        // 获取所有视频收藏夹
+        getVideoFolders();
+    }
+
+    @Override
     protected void initView() {
         FavoriteVideoFolderAdapter favoriteVideoFolderAdapter = new FavoriteVideoFolderAdapter(new ArrayList<>(), context);
         favoriteVideoFolderAdapter.setOnClickVideoFolderListener(new FavoriteVideoFolderAdapter.OnClickVideoFolderListener() {
@@ -64,13 +72,5 @@ public class FavoriteVideoFolderFragment extends BaseSupportFragmentWithSrr<Favo
                 receiveDataHandler.sendMessage(message);
             }
         });
-    }
-
-    @Override
-    protected void onLazyLoad() {
-        view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-
-        // 获取所有视频收藏夹
-        getVideoFolders();
     }
 }

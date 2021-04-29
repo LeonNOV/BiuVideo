@@ -23,7 +23,8 @@ public class SearchHistoryDao extends AbstractDao<SearchHistory, Long> {
      */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Keyword = new Property(1, String.class, "keyword", false, "KEYWORD");
+        public final static Property HashCode = new Property(1, Long.class, "hashCode", false, "HASH_CODE");
+        public final static Property Keyword = new Property(2, String.class, "keyword", false, "KEYWORD");
     }
 
 
@@ -40,7 +41,8 @@ public class SearchHistoryDao extends AbstractDao<SearchHistory, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"SEARCH_HISTORY\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"KEYWORD\" TEXT);"); // 1: keyword
+                "\"HASH_CODE\" INTEGER," + // 1: hashCode
+                "\"KEYWORD\" TEXT);"); // 2: keyword
     }
 
     /** Drops the underlying database table. */
@@ -58,9 +60,14 @@ public class SearchHistoryDao extends AbstractDao<SearchHistory, Long> {
             stmt.bindLong(1, id);
         }
  
+        Long hashCode = entity.getHashCode();
+        if (hashCode != null) {
+            stmt.bindLong(2, hashCode);
+        }
+ 
         String keyword = entity.getKeyword();
         if (keyword != null) {
-            stmt.bindString(2, keyword);
+            stmt.bindString(3, keyword);
         }
     }
 
@@ -73,9 +80,14 @@ public class SearchHistoryDao extends AbstractDao<SearchHistory, Long> {
             stmt.bindLong(1, id);
         }
  
+        Long hashCode = entity.getHashCode();
+        if (hashCode != null) {
+            stmt.bindLong(2, hashCode);
+        }
+ 
         String keyword = entity.getKeyword();
         if (keyword != null) {
-            stmt.bindString(2, keyword);
+            stmt.bindString(3, keyword);
         }
     }
 
@@ -88,7 +100,8 @@ public class SearchHistoryDao extends AbstractDao<SearchHistory, Long> {
     public SearchHistory readEntity(Cursor cursor, int offset) {
         SearchHistory entity = new SearchHistory( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1) // keyword
+            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // hashCode
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) // keyword
         );
         return entity;
     }
@@ -96,7 +109,8 @@ public class SearchHistoryDao extends AbstractDao<SearchHistory, Long> {
     @Override
     public void readEntity(Cursor cursor, SearchHistory entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setKeyword(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setHashCode(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
+        entity.setKeyword(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
      }
     
     @Override

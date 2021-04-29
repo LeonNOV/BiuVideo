@@ -85,23 +85,9 @@ public class UserInfo {
      */
     public String banner;
 
-    /**
-     * 关注数
-     */
     public int follows;
-
-    /**
-     * 粉丝数
-     */
     public int fans;
-
-    /**
-     * 动态数
-     */
-    public int dynamics;
-
-    /**
-     * 获赞数（暂不使用）
-     */
     public int likes;
+    public int plays;
+    public int reads;
 }

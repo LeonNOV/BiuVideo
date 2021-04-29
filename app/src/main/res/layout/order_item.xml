@@ -30,16 +30,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:background="@drawable/round_corners6dp_bg"
+                android:background="@drawable/video_badge_bg"
                 android:backgroundTint="@color/BiliBili_pink"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
-                android:paddingTop="3dp"
-                android:paddingBottom="3dp"
                 android:layout_margin="5dp"
                 android:text="限时免费"
                 android:textColor="@color/white"
-                android:textSize="13sp" />
+                android:textSize="@dimen/badgeSize" />
 
         </RelativeLayout>
 

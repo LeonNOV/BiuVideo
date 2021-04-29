@@ -17,6 +17,9 @@ import com.leon.biuvideo.adapters.otherAdapters.ViewPager2Adapter;
 import com.leon.biuvideo.beans.resourcesBeans.BiliUserInfo;
 import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.home.FollowsFragment;
+import com.leon.biuvideo.ui.user.FollowersFragment;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
@@ -37,7 +40,7 @@ import java.util.Map;
  * @Time 2021/4/8
  * @Desc 用户界面
  */
-public class BiliUserFragment extends BaseSupportFragment {
+public class BiliUserFragment extends BaseSupportFragment implements View.OnClickListener {
     private final String mid;
 
     private BiliUserInfo biliUserInfo;
@@ -103,6 +106,7 @@ public class BiliUserFragment extends BaseSupportFragment {
         } else {
             biliUserFollow.setText("关注");
         }
+        biliUserFollow.setOnClickListener(this);
 
         ImageView biliUserGender = findView(R.id.bili_user_gender);
         switch (biliUserInfo.gender) {
@@ -128,6 +132,9 @@ public class BiliUserFragment extends BaseSupportFragment {
 
         ((ExpandableTextView) findView(R.id.bili_user_sign))
                 .setText(biliUserInfo.sign == null ? context.getText(R.string.default_sign) : biliUserInfo.sign);
+
+        // 设置完基本信息后显示控件容器
+        findView(R.id.bili_user_info_container).setVisibility(View.VISIBLE);
 
         String[] tabLayoutTitles = {"视频", "音频", "专栏", "相簿"};
 
@@ -162,8 +169,14 @@ public class BiliUserFragment extends BaseSupportFragment {
             ((TextView) findView(R.id.bili_user_bili_user_verify_sign)).setText(verifySign + biliUserInfo.verifyDesc);
         }
 
-        ((TagView) findView(R.id.bili_user_following)).setLeftValue(ValueUtils.generateCN(status[0]));
-        ((TagView) findView(R.id.bili_user_fans)).setLeftValue(ValueUtils.generateCN(status[1]));
+        TagView biliUserFollowing = findView(R.id.bili_user_following);
+        biliUserFollowing.setLeftValue(ValueUtils.generateCN(status[0]));
+        biliUserFollowing.setOnClickListener(this);
+
+        TagView biliUserFans = findView(R.id.bili_user_fans);
+        biliUserFans.setLeftValue(ValueUtils.generateCN(status[1]));
+        biliUserFans.setOnClickListener(this);
+
         ((TagView) findView(R.id.bili_user_play)).setLeftValue(ValueUtils.generateCN(upStatus[0]));
         ((TagView) findView(R.id.bili_user_read)).setLeftValue(ValueUtils.generateCN(upStatus[1]));
         ((TagView) findView(R.id.bili_user_like)).setLeftValue(ValueUtils.generateCN(upStatus[2]));
@@ -214,6 +227,23 @@ public class BiliUserFragment extends BaseSupportFragment {
                 textView.setTypeface(Typeface.DEFAULT);
                 textView.setBackground(context.getDrawable(R.drawable.ripple_round_corners6dp_bg));
             }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bili_user_following:
+                start(FollowsFragment.getInstance(true, mid));
+                break;
+            case R.id.bili_user_fans:
+                start(FollowersFragment.getInstance(true, mid));
+                break;
+            case R.id.bili_user_follow:
+                SimpleSnackBar.make(v, getString(R.string.snackBarBuildingWarn), SimpleSnackBar.LENGTH_LONG).show();
+                break;
+            default:
+                break;
         }
     }
 }

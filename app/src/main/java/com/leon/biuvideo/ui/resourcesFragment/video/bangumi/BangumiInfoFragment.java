@@ -103,6 +103,7 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
     @Override
     protected void initView() {
         findView(R.id.video_info_container).setBackgroundResource(R.color.white);
+        findView(R.id.bangumi_info_detail).setOnClickListener(this);
 
         bangumiInfoOrder = findView(R.id.bangumi_info_order);
         bangumiInfoOrder.setOnClickListener(this);

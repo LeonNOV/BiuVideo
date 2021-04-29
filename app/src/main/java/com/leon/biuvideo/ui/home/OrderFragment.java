@@ -8,10 +8,10 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.otherAdapters.ViewPager2Adapter;
 import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.home.orderFragments.OrderBangumiFragment;
-import com.leon.biuvideo.ui.home.orderFragments.OrderSeriesFragment;
+import com.leon.biuvideo.ui.home.orderFragments.OrderDataFragment;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.ViewUtils;
+import com.leon.biuvideo.values.OrderType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +51,8 @@ public class OrderFragment extends BaseSupportFragment {
         });
 
         List<Fragment> viewPagerFragments = new ArrayList<>();
-        viewPagerFragments.add(new OrderBangumiFragment());
-        viewPagerFragments.add(new OrderSeriesFragment());
+        viewPagerFragments.add(new OrderDataFragment(OrderType.BANGUMI));
+        viewPagerFragments.add(new OrderDataFragment(OrderType.SERIES));
 
         /*viewPagerFragments.add(new OrderTagsFragment());*/
 

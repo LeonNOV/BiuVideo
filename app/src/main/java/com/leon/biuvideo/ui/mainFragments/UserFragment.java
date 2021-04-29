@@ -21,6 +21,11 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.beans.biliUserResourcesBeans.BiliUserArticle;
+import com.leon.biuvideo.beans.biliUserResourcesBeans.BiliUserVideo;
+import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteVideoFolder;
+import com.leon.biuvideo.beans.orderBeans.Order;
+import com.leon.biuvideo.beans.resourcesBeans.BiliUserInfo;
 import com.leon.biuvideo.beans.userBeans.UserInfo;
 import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
@@ -36,10 +41,14 @@ import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.PreferenceUtils;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
+import com.leon.biuvideo.utils.ValueUtils;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.BiliUserParser;
 import com.leon.biuvideo.utils.parseDataUtils.userDataParsers.UserInfoParser;
 import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.Role;
 
+import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -50,7 +59,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * @Desc 用户页面
  */
 public class UserFragment extends BaseSupportFragment {
-    private Handler handler;
     private UserDataView userDataView;
 
     private UserInfo userInfo;
@@ -66,17 +74,14 @@ public class UserFragment extends BaseSupportFragment {
         userDataView = new UserDataView();
         userDataView.initDataView();
 
-        handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
+        setOnLoadListener(new OnLoadListener() {
             @Override
-            public boolean handleMessage(@NonNull Message msg) {
-                // 刷新用户信息
+            public void onLoad(Message msg) {
                 userInfo = (UserInfo) msg.obj;
 
                 // 设置数据
                 userDataView.setVisibility(true);
                 userDataView.setData(userInfo);
-
-                return true;
             }
         });
         initBroadcastReceiver();
@@ -91,7 +96,7 @@ public class UserFragment extends BaseSupportFragment {
     }
 
     /**
-     * 使用单线程，获取用户数据
+     * 获取用户数据
      */
     private void getAccountInfo() {
         // 判断是否已登录
@@ -102,28 +107,32 @@ public class UserFragment extends BaseSupportFragment {
 
         userDataView.setVisibility(true);
 
-        // 获取用户数据
         UserInfoParser userInfoParser = new UserInfoParser(context);
-        userInfoParser.parseData();
         userInfoParser.setOnSuccessListener(new UserInfoParser.OnSuccessListener() {
             @Override
-            public void onCallback(UserInfo userInfo, String banner, int bCoins, Map<String, Integer> statMap) {
+            public void onCallback(UserInfo userInfo, String banner, int bCoins, int[] stat, int[] upStat) {
                 if (userInfo != null &&
                         banner != null &&
                         bCoins != -1 &&
-                        statMap != null) {
+                        stat != null &&
+                        upStat != null) {
                     userInfo.banner = banner;
                     userInfo.bCoinBalance = bCoins;
-                    userInfo.follows = statMap.get("following");
-                    userInfo.fans = statMap.get("follower");
-                    userInfo.dynamics = statMap.get("dynamicCount");
 
-                    Message message = handler.obtainMessage();
+                    userInfo.follows = stat[0];
+                    userInfo.fans = stat[1];
+                    userInfo.plays = upStat[0];
+                    userInfo.reads = upStat[1];
+                    userInfo.likes = upStat[2];
+
+
+                    Message message = receiveDataHandler.obtainMessage();
                     message.obj = userInfo;
-                    handler.sendMessage(message);
+                    receiveDataHandler.sendMessage(message);
                 }
             }
         });
+        userInfoParser.parseData();
     }
 
     /**
@@ -162,19 +171,21 @@ public class UserFragment extends BaseSupportFragment {
      */
     private class UserDataView implements View.OnClickListener {
         private ImageView userVipMark;
+
         private TagView userTopFollow;
         private TagView userTopFans;
+        private TagView userTopDynamic;
+
         private ImageView userBaseInfoVerifyMark;
         private TextView userBaseInfoVerifyTitle;
         private LinearLayout userBaseInfoLinearLayout;
         private LinearLayout userAccountInfoLinearLayout;
-        private LoadingRecyclerView userFavoriteLoadingRecyclerView;
-        private LoadingRecyclerView userBangumiLoadingRecyclerView;
-        private LoadingRecyclerView userCoinLoadingRecyclerView;
+
         private TagView userBaseInfoLevel;
         private TagView userBaseInfoGender;
         private TagView userBaseInfoName;
         private TagView userBaseInfoUid;
+
         private ImageView userBanner;
         private TextView userTopName;
         private CircleImageView userFace;
@@ -185,7 +196,6 @@ public class UserFragment extends BaseSupportFragment {
         private TextView userAccountInfoCoins;
         private ProgressBar userAccountInfExProgress;
         private TextView userAccountInfoEx;
-        private TagView userTopDynamic;
         private LinearLayout userBaseInfoVerify;
         private TextView userBaseInfoVerifyDesc;
 
@@ -196,7 +206,6 @@ public class UserFragment extends BaseSupportFragment {
             initTopViews();
             initBaseInfoViews();
             initAccountViews();
-            initLoadingRecyclerView();
 
             findView(R.id.user_logout).setOnClickListener(this);
 
@@ -215,29 +224,11 @@ public class UserFragment extends BaseSupportFragment {
             userVipMark = findView(R.id.user_vip_mark);
             userTopName = findView(R.id.user_top_name);
 
-            userTopFollow = findView(R.id.user_top_follow);
-            userTopFollow.setOnTagViewClickListener(new TagView.OnTagViewClickListener() {
-                @Override
-                public void onClick() {
-                    ((NavFragment) getParentFragment()).startBrotherFragment(FollowsFragment.getInstance());
-                }
-            });
+            userTopFollow = findView(R.id.user_top_following);
+            userTopFollow.setOnClickListener(this);
 
             userTopFans = findView(R.id.user_top_fans);
-            userTopFans.setOnTagViewClickListener(new TagView.OnTagViewClickListener() {
-                @Override
-                public void onClick() {
-                    ((NavFragment) getParentFragment()).startBrotherFragment(FollowersFragment.getInstance());
-                }
-            });
-
-            userTopDynamic = findView(R.id.user_top_dynamic);
-            userTopDynamic.setOnTagViewClickListener(new TagView.OnTagViewClickListener() {
-                @Override
-                public void onClick() {
-                    SimpleSnackBar.make(view, "该功能还未开发~", SimpleSnackBar.LENGTH_SHORT).show();
-                }
-            });
+            userTopFans.setOnClickListener(this);
         }
 
         /**
@@ -270,42 +261,15 @@ public class UserFragment extends BaseSupportFragment {
             userAccountInfoVipValid = findView(R.id.user_accountInf_vipValid);
         }
 
-        /**
-         * 初始化LoadingRecyclerView
-         */
-        private void initLoadingRecyclerView() {
-            CardTitle userFavoritesCardTitle = findView(R.id.user_favorite_cardTitle);
-            userFavoritesCardTitle.setOnClickActionListener(new CardTitle.OnClickActionListener() {
-                @Override
-                public void onClickAction() {
-                    ((NavFragment) getParentFragment()).startBrotherFragment(FavoritesFragment.getInstance());
-                }
-            });
-
-            CardTitle userBangumiCardTitle = findView(R.id.user_bangumi_cardTitle);
-            userBangumiCardTitle.setOnClickActionListener(new CardTitle.OnClickActionListener() {
-                @Override
-                public void onClickAction() {
-                    Toast.makeText(context, "订阅的番剧", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            CardTitle userCoinCardTitle = findView(R.id.user_coin_cardTitle);
-            userCoinCardTitle.setOnClickActionListener(new CardTitle.OnClickActionListener() {
-                @Override
-                public void onClickAction() {
-                    Toast.makeText(context, "最近投币的视频", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            userFavoriteLoadingRecyclerView = findView(R.id.user_favorite_loadingRecyclerView);
-            userBangumiLoadingRecyclerView = findView(R.id.user_bangumi_loadingRecyclerView);
-            userCoinLoadingRecyclerView = findView(R.id.user_coin_loadingRecyclerView);
-        }
-
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
+                case R.id.user_top_following:
+                    ((NavFragment) getParentFragment()).startBrotherFragment(FollowsFragment.getInstance(false, PreferenceUtils.getUserId()));
+                    break;
+                case R.id.user_top_fans:
+                    ((NavFragment) getParentFragment()).startBrotherFragment(FollowersFragment.getInstance(false, PreferenceUtils.getUserId()));
+                    break;
                 case R.id.user_baseInfo_check_all:
                     ((NavFragment) getParentFragment()).startBrotherFragment(new UserInfoFragment(userInfo));
                     break;
@@ -374,14 +338,6 @@ public class UserFragment extends BaseSupportFragment {
             userTopFollow.setLeftValue("0");
             userTopName.setText(R.string.no_login);
 
-            userCoinLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
-            userBangumiLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
-            userFavoriteLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
-
-            userCoinLoadingRecyclerView.recyclerView.removeAllViews();
-            userBangumiLoadingRecyclerView.recyclerView.removeAllViews();
-            userFavoriteLoadingRecyclerView.recyclerView.removeAllViews();
-
             setVisibility(false);
 
             SimpleSnackBar.make(view, "当前账户已退出~", SimpleSnackBar.LENGTH_LONG).show();
@@ -403,18 +359,17 @@ public class UserFragment extends BaseSupportFragment {
         public void setData(UserInfo userInfo) {
             // 如果未登录，则不设置数据
             if (PreferenceUtils.getLoginStatus()) {
-                userFavoriteLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-                userBangumiLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-                userCoinLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-
                 userVipMark.setVisibility(userInfo.isVip ? View.VISIBLE : View.GONE);
                 userTopName.setText(userInfo.userName);
                 Glide.with(context).load(userInfo.userFace).into(userFace);
                 Glide.with(context).load(userInfo.banner).into(userBanner);
                 Fuck.blue(userInfo.banner);
-                userTopFans.setLeftValue(String.valueOf(userInfo.fans));
-                userTopFollow.setLeftValue(String.valueOf(userInfo.follows));
-                userTopDynamic.setLeftValue(String.valueOf(userInfo.dynamics));
+
+                userTopFans.setLeftValue(ValueUtils.generateCN(userInfo.fans));
+                userTopFollow.setLeftValue(ValueUtils.generateCN(userInfo.follows));
+                ((TagView) findView(R.id.user_top_like)).setLeftValue(ValueUtils.generateCN(userInfo.likes));
+                ((TagView) findView(R.id.user_top_play)).setLeftValue(ValueUtils.generateCN(userInfo.plays));
+                ((TagView) findView(R.id.user_top_read)).setLeftValue(ValueUtils.generateCN(userInfo.reads));
 
                 if (userInfo.isVerify || userInfo.role != Role.NONE) {
                     userBaseInfoVerify.setVisibility(View.VISIBLE);
@@ -438,10 +393,6 @@ public class UserFragment extends BaseSupportFragment {
                 userAccountInfoVipValid.setText(userInfo.vipDueDate);
                 userAccountInfExProgress.setMax(userInfo.totalExp);
                 userAccountInfExProgress.setProgress(userInfo.currentExp,true);
-
-                userFavoriteLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
-                userBangumiLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
-                userCoinLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
             }
         }
 
