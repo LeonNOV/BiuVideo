@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 
 // GreenDaoPlugins
-apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 
 android {
@@ -96,9 +95,6 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jsoup/jsoup
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
 
-    // RxFFmpeg
-    implementation 'com.github.microshow:RxFFmpeg:4.9.0-lite'
-
     // EasySnackBar
     implementation 'com.sun.easysnackbar:easysnackbar:1.0.1'
 
@@ -138,6 +134,6 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.2.0'
 
     // aria
-//    implementation 'com.arialyy.aria:core:3.8.15'
-//    annotationProcessor 'com.arialyy.aria:compiler:3.8.15'
+    implementation 'com.arialyy.aria:core:3.8.15'
+    annotationProcessor 'com.arialyy.aria:compiler:3.8.15'
 }

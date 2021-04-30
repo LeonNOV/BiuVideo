@@ -29,10 +29,7 @@ import com.leon.biuvideo.ui.home.RecommendFragment;
 import com.leon.biuvideo.ui.home.SettingsFragment;
 import com.leon.biuvideo.ui.home.WatchLaterFragment;
 import com.leon.biuvideo.ui.mainFragments.homeModels.WeatherModelInterface;
-import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.ui.otherFragments.PopularFragment;
-import com.leon.biuvideo.ui.resourcesFragment.video.bangumi.BangumiFragment;
-import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
@@ -119,8 +116,8 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         homeRecommendLoadingRecyclerView = findView(R.id.home_recommend_loadingRecyclerView);
         homeWatchLaterLoadingRecyclerView = findView(R.id.home_watchLater_loadingRecyclerView);
 
-//        initHandler();
-//        initValue();
+        initHandler();
+        initValue();
     }
 
     private void initHandler() {

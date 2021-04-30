@@ -10,21 +10,19 @@ import android.view.MotionEvent;
 import android.view.WindowManager;
 
 import com.alibaba.fastjson.JSONObject;
+import com.arialyy.aria.core.Aria;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.service.WeatherService;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
-import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.Partitions;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import me.yokeyword.fragmentation.ISupportFragment;
 import me.yokeyword.fragmentation.SupportActivity;
-import me.yokeyword.fragmentation.SupportFragment;
 import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
@@ -44,6 +42,8 @@ public class MainActivity extends SupportActivity {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+
+//        Aria.download(this).register();
 
         if (findFragment(NavFragment.class) == null) {
             loadRootFragment(R.id.fl_container, NavFragment.newInstance());

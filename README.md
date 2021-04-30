@@ -19,6 +19,14 @@
 
 ## 📘开发日志
 
+### 2021/04/30
+- 加入了下载工具
+  - **在对项目进行`Rebuild Project`的时候可能会出现下面的错误，暂时还未找到解决办法**
+  - ``` text
+    Execution failed for task ':app:compileDebugJavaWithJavac'.
+    > java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
+    ```
+
 ### 2021/04/29
 - 完善了大部分的交互功能
 

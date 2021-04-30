@@ -1,9 +1,7 @@
 package com.leon.biuvideo.ui.mainFragments.partitionFragments;
 
-import android.os.Bundle;
 import android.os.Message;
 
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.adapters.homeAdapters.PartitionAdapter;

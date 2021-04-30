@@ -5,51 +5,34 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.beans.biliUserResourcesBeans.BiliUserArticle;
-import com.leon.biuvideo.beans.biliUserResourcesBeans.BiliUserVideo;
-import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteVideoFolder;
-import com.leon.biuvideo.beans.orderBeans.Order;
-import com.leon.biuvideo.beans.resourcesBeans.BiliUserInfo;
 import com.leon.biuvideo.beans.userBeans.UserInfo;
 import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.WarnDialog;
-import com.leon.biuvideo.ui.home.FavoritesFragment;
 import com.leon.biuvideo.ui.home.FollowsFragment;
 import com.leon.biuvideo.ui.otherFragments.LoginFragment;
 import com.leon.biuvideo.ui.user.FollowersFragment;
 import com.leon.biuvideo.ui.user.UserInfoFragment;
-import com.leon.biuvideo.ui.views.CardTitle;
-import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.PreferenceUtils;
-import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.BiliUserParser;
 import com.leon.biuvideo.utils.parseDataUtils.userDataParsers.UserInfoParser;
 import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.Role;
-
-import java.util.List;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -174,7 +157,9 @@ public class UserFragment extends BaseSupportFragment {
 
         private TagView userTopFollow;
         private TagView userTopFans;
-        private TagView userTopDynamic;
+        private TagView userTopLike;
+        private TagView userTopPlay;
+        private TagView userTopRead;
 
         private ImageView userBaseInfoVerifyMark;
         private TextView userBaseInfoVerifyTitle;
@@ -229,6 +214,10 @@ public class UserFragment extends BaseSupportFragment {
 
             userTopFans = findView(R.id.user_top_fans);
             userTopFans.setOnClickListener(this);
+
+            userTopLike = findView(R.id.user_top_like);
+            userTopPlay = findView(R.id.user_top_play);
+            userTopRead = findView(R.id.user_top_read);
         }
 
         /**
@@ -334,8 +323,11 @@ public class UserFragment extends BaseSupportFragment {
             userFace.setImageResource(R.drawable.user_default_face);
 
             userTopFans.setLeftValue("0");
-            userTopDynamic.setLeftValue("0");
             userTopFollow.setLeftValue("0");
+            userTopLike.setLeftValue("0");
+            userTopPlay.setLeftValue("0");
+            userTopRead.setLeftValue("0");
+
             userTopName.setText(R.string.no_login);
 
             setVisibility(false);
@@ -367,9 +359,9 @@ public class UserFragment extends BaseSupportFragment {
 
                 userTopFans.setLeftValue(ValueUtils.generateCN(userInfo.fans));
                 userTopFollow.setLeftValue(ValueUtils.generateCN(userInfo.follows));
-                ((TagView) findView(R.id.user_top_like)).setLeftValue(ValueUtils.generateCN(userInfo.likes));
-                ((TagView) findView(R.id.user_top_play)).setLeftValue(ValueUtils.generateCN(userInfo.plays));
-                ((TagView) findView(R.id.user_top_read)).setLeftValue(ValueUtils.generateCN(userInfo.reads));
+                userTopLike.setLeftValue(ValueUtils.generateCN(userInfo.likes));
+                userTopPlay.setLeftValue(ValueUtils.generateCN(userInfo.plays));
+                userTopRead.setLeftValue(ValueUtils.generateCN(userInfo.reads));
 
                 if (userInfo.isVerify || userInfo.role != Role.NONE) {
                     userBaseInfoVerify.setVisibility(View.VISIBLE);
