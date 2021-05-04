@@ -116,8 +116,8 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         homeRecommendLoadingRecyclerView = findView(R.id.home_recommend_loadingRecyclerView);
         homeWatchLaterLoadingRecyclerView = findView(R.id.home_watchLater_loadingRecyclerView);
 
-        initHandler();
-        initValue();
+//        initHandler();
+//        initValue();
     }
 
     private void initHandler() {

@@ -243,4 +243,12 @@
     <string name="qualityVipWarn">该清晰度需要 大会员 才能观看哦~</string>
     <string name="videoFailed">该视频已失效~</string>
     <string name="delete">删除</string>
+
+    <string name="downloadManagerPlayAll">全部开始</string>
+    <string name="downloadManagerPauseAll">全部暂停</string>
+    <string name="downloadManagerEdit">编辑</string>
+
+    <string name="downloadManagerSelectedAll">全选</string>
+    <string name="downloadManagerCancelSelectedAll">取消全选</string>
+    <string name="downloadManagerDelete">删除</string>
 </resources>

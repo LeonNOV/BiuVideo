@@ -19,12 +19,17 @@
 
 ## 📘开发日志
 
+### 2021/05/04
+- 上次提交的版本中出现的BUG已修复
+  - 是由`Aria`框架的注解所出现的问题，[解决方案(见'注解无效'部分)](https://aria.laoyuyu.me/aria_doc/other/annotaion_invalid.html)
+- 加入了`下载中`页面，其功能还未实现
+
 ### 2021/04/30
 - 加入了下载工具
-  - **在对项目进行`Rebuild Project`的时候可能会出现下面的错误，暂时还未找到解决办法**
+  - ~~**在对项目进行`Rebuild Project`的时候可能会出现下面的错误，暂时还未找到解决办法**~~
   - ``` text
-    Execution failed for task ':app:compileDebugJavaWithJavac'.
-    > java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
+    ~~Execution failed for task ':app:compileDebugJavaWithJavac'.
+    > java.lang.IndexOutOfBoundsException: Index: 0, Size: 0~~
     ```
 
 ### 2021/04/29

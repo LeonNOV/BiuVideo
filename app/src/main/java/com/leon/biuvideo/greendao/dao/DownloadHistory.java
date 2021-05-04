@@ -16,8 +16,11 @@ public class DownloadHistory {
     @Id(autoincrement = true)
     private Long id;
 
-    @ResourceDownloadTask.ResourcesType
     private int resType;
+
+    private long taskId;
+    private boolean isCompleted;
+    private boolean isFailed;
 
     private String resKey;
     private String resStreamUrl;
@@ -47,12 +50,16 @@ public class DownloadHistory {
      */
     private String danmakuFilePath;
 
-    @Generated(hash = 1869261758)
-    public DownloadHistory(Long id, int resType, String resKey, String resStreamUrl,
+    @Generated(hash = 198130773)
+    public DownloadHistory(Long id, int resType, long taskId, boolean isCompleted,
+            boolean isFailed, String resKey, String resStreamUrl,
             boolean isMultipleAnthology, String levelOneId, String levelTwoId,
             String title, String coverUrl, String resPath, String danmakuFilePath) {
         this.id = id;
         this.resType = resType;
+        this.taskId = taskId;
+        this.isCompleted = isCompleted;
+        this.isFailed = isFailed;
         this.resKey = resKey;
         this.resStreamUrl = resStreamUrl;
         this.isMultipleAnthology = isMultipleAnthology;
@@ -80,8 +87,32 @@ public class DownloadHistory {
         return this.resType;
     }
 
-    public void setResType(int resType) {
+    public void setResType(@ResourceDownloadTask.ResourcesType int resType) {
         this.resType = resType;
+    }
+
+    public long getTaskId() {
+        return this.taskId;
+    }
+
+    public void setTaskId(long taskId) {
+        this.taskId = taskId;
+    }
+
+    public boolean getIsCompleted() {
+        return this.isCompleted;
+    }
+
+    public void setIsCompleted(boolean isCompleted) {
+        this.isCompleted = isCompleted;
+    }
+
+    public boolean getIsFailed() {
+        return this.isFailed;
+    }
+
+    public void setIsFailed(boolean isFailed) {
+        this.isFailed = isFailed;
     }
 
     public String getResKey() {

@@ -1,21 +1,158 @@
 package com.leon.biuvideo.ui.home.downloadManagerFragments;
 
+import android.graphics.Color;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.arialyy.annotations.Download;
+import com.arialyy.aria.core.Aria;
+import com.arialyy.aria.core.download.DownloadEntity;
+import com.arialyy.aria.core.task.DownloadTask;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.adapters.otherAdapters.DownloadingAdapter;
+import com.leon.biuvideo.greendao.dao.DownloadHistory;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.views.LoadingRecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Author Leon
  * @Time 2021/3/7
  * @Desc 下载管理页面-下载中的资源
  */
-public class DownloadingFragment extends BaseSupportFragment {
+public class DownloadingFragment extends BaseSupportFragment implements View.OnClickListener {
+
+    private TextView downloadingAllStat;
+    private TextView downloadingEdit;
+    private LoadingRecyclerView downloadingAllRunningTask;
+    private FrameLayout downloadManagerEditContainer;
+    private TextView downloadingEditSelectAll;
+    private TextView downloadingEditRemove;
+    private DownloadingAdapter downloadingAdapter;
+
     @Override
     protected int setLayout() {
-        return R.layout.download_manager_downloading_fragment;
+        return R.layout.downloading_fragment;
     }
 
     @Override
     protected void initView() {
+        findView(R.id.downloading_container).setBackgroundColor(Color.WHITE);
 
+        downloadingAllStat = findView(R.id.downloading_all_stat);
+        downloadingAllStat.setOnClickListener(this);
+        downloadingAllStat.setText(R.string.downloadManagerPauseAll);
+        downloadingAllStat.setSelected(false);
+
+        downloadingEdit = findView(R.id.downloading_edit);
+        downloadingEdit.setOnClickListener(this);
+
+        downloadingAllRunningTask = findView(R.id.downloading_all_running_task);
+        downloadingAllRunningTask.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+
+        downloadManagerEditContainer = findView(R.id.download_manager_edit_container);
+
+        downloadingEditSelectAll = findView(R.id.downloading_edit_select_all);
+        downloadingEditSelectAll.setOnClickListener(this);
+
+        downloadingEditRemove = findView(R.id.downloading_edit_remove);
+        downloadingEditRemove.setOnClickListener(this);
+
+        List<DownloadHistory> downloadHistoryList = new ArrayList<>(5);
+
+        for (int i = 1; i <= 5; i++) {
+            DownloadHistory downloadHistory = new DownloadHistory();
+            downloadHistory.setTitle("Title" + i);
+
+            downloadHistoryList.add(downloadHistory);
+        }
+
+        downloadingAdapter = new DownloadingAdapter(downloadHistoryList, context);
+
+        downloadingAllRunningTask.setRecyclerViewAdapter(downloadingAdapter);
+        downloadingAllRunningTask.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
+
+        downloadingAllRunningTask.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+    }
+
+    /**
+     * 取消下载
+     */
+    @Download.onTaskCancel
+    void onCancel (DownloadTask downloadTask) {
+
+    }
+
+    /**
+     * 下载失败
+     */
+    @Download.onTaskFail
+    void onFail (DownloadTask downloadTask) {
+
+    }
+
+    /**
+     * 下载完成
+     */
+    @Download.onTaskComplete
+    void complete (DownloadTask downloadTask) {
+
+    }
+
+    /**
+     * 下载中
+     */
+    @Download.onTaskRunning
+    void onRunning (DownloadTask downloadTask) {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.downloading_all_stat:
+                boolean downloadingAllStatSelected = downloadingAllStat.isSelected();
+
+                downloadingAllStat.setSelected(!downloadingAllStatSelected);
+                if (downloadingAllStatSelected) {
+                    downloadingAllStat.setText(R.string.downloadManagerPlayAll);
+                } else {
+                    downloadingAllStat.setText(R.string.downloadManagerPauseAll);
+                }
+                break;
+            case R.id.downloading_edit:
+                int visibility = downloadManagerEditContainer.getVisibility();
+                if (visibility == View.GONE) {
+                    downloadManagerEditContainer.setVisibility(View.VISIBLE);
+                    downloadingEdit.setText(R.string.cancel);
+                } else if (visibility == View.VISIBLE) {
+                    downloadManagerEditContainer.setVisibility(View.GONE);
+                    downloadingEdit.setText(R.string.downloadManagerEdit);
+                }
+
+                downloadingAdapter.showAllSelect();
+                break;
+            case R.id.downloading_edit_select_all:
+                boolean downloadingEditSelectAllSelected = downloadingEditSelectAll.isSelected();
+
+                downloadingEditSelectAll.setSelected(!downloadingEditSelectAllSelected);
+                if (downloadingEditSelectAllSelected) {
+                    downloadingEditSelectAll.setText(R.string.downloadManagerSelectedAll);
+                } else {
+                    downloadingEditSelectAll.setText(R.string.downloadManagerCancelSelectedAll);
+                }
+
+                break;
+            case R.id.downloading_edit_remove:
+
+                break;
+            default:
+                break;
+        }
     }
 }

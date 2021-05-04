@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/downloading_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
+
+        <TextView
+            android:id="@+id/downloading_all_stat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ripple_round_corners6dp_bg"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/downloadManagerPlayAll"
+            android:textColor="@color/infoColor"
+            android:textSize="15sp"
+            app:drawableStartCompat="@drawable/download_manager_download_stat" />
+
+        <TextView
+            android:id="@+id/downloading_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@drawable/ripple_round_corners6dp_bg"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/downloadManagerEdit"
+            android:textColor="@color/infoColor"
+            android:textSize="15sp"
+            app:drawableStartCompat="@drawable/download_manager_edit" />
+
+    </FrameLayout>
+
+    <com.leon.biuvideo.ui.views.LoadingRecyclerView
+        android:id="@+id/downloading_all_running_task"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <FrameLayout
+        android:id="@+id/download_manager_edit_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/downloading_edit_select_all"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/ripple_round_corners6dp_bg"
+            android:drawablePadding="10dp"
+            android:text="@string/downloadManagerSelectedAll"
+            android:textColor="@color/infoColor"
+            android:textSize="15sp"
+            app:drawableStartCompat="@drawable/download_manager_select_stat" />
+
+        <TextView
+            android:id="@+id/downloading_edit_remove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:background="@drawable/ripple_round_corners6dp_bg"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/downloadManagerDelete"
+            android:textColor="@color/infoColor"
+            android:textSize="15sp"
+            app:drawableStartCompat="@drawable/download_remove" />
+    </FrameLayout>
+
+</LinearLayout>

@@ -1,25 +1,38 @@
 package com.leon.biuvideo.utils.downloadUtils;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 
 import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
 
 import com.arialyy.annotations.Download;
 import com.arialyy.aria.core.Aria;
 import com.arialyy.aria.core.common.HttpOption;
 import com.arialyy.aria.core.common.RequestEnum;
+import com.arialyy.aria.core.task.DownloadTask;
+import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.Bangumi;
+import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoInfo;
 import com.leon.biuvideo.greendao.dao.DaoBaseUtils;
 import com.leon.biuvideo.greendao.dao.DownloadHistory;
+import com.leon.biuvideo.greendao.dao.DownloadLevelOne;
+import com.leon.biuvideo.greendao.dao.DownloadLevelOneDao;
 import com.leon.biuvideo.greendao.daoutils.DownloadHistoryUtils;
+import com.leon.biuvideo.greendao.daoutils.DownloadLevelOneUtils;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.BangumiDetailParser;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoInfoParser;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
  * @Author Leon
  * @Time 2021/4/30
- * @Desc
+ * @Desc 单个下载任务
  */
 public class ResourceDownloadTask {
     public static final int RES_TYPE_VIDEO = 0;
@@ -41,7 +54,8 @@ public class ResourceDownloadTask {
      * 请求头信息
      */
     private Map<String, String> headers = HttpUtils.getAPIRequestHeader();
-    private long taskId;
+    private DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils;
+    private Handler handler;
 
     public ResourceDownloadTask(Context context, DownloadHistory downloadHistory) {
         this.context = context;
@@ -99,6 +113,35 @@ public class ResourceDownloadTask {
      * 创建任务并开始下载
      */
     private void startDownload() {
+        handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
+            @Override
+            public boolean handleMessage(@NonNull Message msg) {
+                Object obj = msg.obj;
+
+                DownloadLevelOne downloadLevelOne = new DownloadLevelOne();
+                downloadLevelOne.setLevelOneId(downloadHistory.getLevelOneId());
+                if (obj != null) {
+                    if (obj instanceof VideoInfo) {
+                        VideoInfo videoInfo = (VideoInfo) obj;
+                        downloadLevelOne.setTitle(videoInfo.title);
+                        downloadLevelOne.setCoverUrl(videoInfo.cover);
+                    } else {
+                        Bangumi bangumi = (Bangumi) obj;
+                        downloadLevelOne.setTitle(bangumi.title);
+                        downloadLevelOne.setCoverUrl(bangumi.cover);
+                    }
+
+                    new DownloadLevelOneUtils(context).getDownloadLevelOneDaoBaseUtils().insert(downloadLevelOne);
+                }
+
+
+                return true;
+            }
+        });
+
+        DownloadHistoryUtils downloadHistoryUtils = new DownloadHistoryUtils(context);
+        downloadHistoryDaoUtils = downloadHistoryUtils.getDownloadHistoryDaoUtils();
+
         HttpOption httpOption = new HttpOption();
 
         for (Map.Entry<String, String> headersEntry : headers.entrySet()) {
@@ -107,24 +150,77 @@ public class ResourceDownloadTask {
 
         httpOption.setRequestType(RequestEnum.GET);
 
-        taskId = Aria.download(context)
+        long taskId = Aria.download(context)
                 .load(downloadHistory.getResStreamUrl())
                 .setFilePath(savePath)
                 .option(httpOption)
                 .create();
-    }
 
-    /**
-     * 下载完成后将本条记录写入数据库
-     */
-    @Download.onTaskComplete
-    void complete () {
-        DownloadHistoryUtils downloadHistoryUtils = new DownloadHistoryUtils(context);
-        DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils = downloadHistoryUtils.getDownloadHistoryDaoUtils();
+        // 如果存在多个选集，则需要获取其视频信息
+        if (downloadHistory.getIsMultipleAnthology()) {
+            String levelOneId = downloadHistory.getLevelOneId();
 
-        downloadHistoryDaoUtils.insert(downloadHistory);
+            // 查询是否已存在'LevelOne'数据
+            List<DownloadHistory> downloadHistories = downloadHistoryDaoUtils.queryByQueryBuilder(DownloadLevelOneDao.Properties.LevelOneId.eq(levelOneId));
+            if (downloadHistories == null || downloadHistories.size() == 0) {
+                getVideoInfo(downloadHistory.getLevelOneId());
+            }
+        }
+
+        if (downloadHistory.getResType() != RES_TYPE_PICTURE) {
+            downloadHistory.setTaskId(taskId);
+            downloadHistoryDaoUtils.insert(downloadHistory);
+        }
     }
 
     @IntDef({RES_TYPE_VIDEO, RES_TYPE_AUDIO, RES_TYPE_PICTURE})
     public @interface ResourcesType{}
+
+    /**
+     * 取消下载
+     */
+    @Download.onTaskCancel
+    void onCancel (DownloadTask downloadTask) {
+        if (downloadTask.getEntity().getId() == downloadHistory.getTaskId()) {
+            downloadHistoryDaoUtils.delete(downloadHistory);
+        }
+    }
+
+    /**
+     * 下载失败
+     */
+    @Download.onTaskFail
+    void onFail (DownloadTask downloadTask) {
+        if (downloadTask.getEntity().getId() == downloadHistory.getTaskId()) {
+            downloadHistory.setIsFailed(true);
+            downloadHistoryDaoUtils.update(downloadHistory);
+        }
+    }
+
+    /**
+     * 下载完成
+     */
+    @Download.onTaskComplete
+    void complete (DownloadTask downloadTask) {
+        if (downloadTask.getEntity().getId() == downloadHistory.getTaskId()) {
+            downloadHistory.setIsCompleted(true);
+            downloadHistoryDaoUtils.update(downloadHistory);
+        }
+    }
+
+    /**
+     * 获取'LevelOne'数据
+     * @param levelOneId
+     */
+    private void getVideoInfo (String levelOneId) {
+        Message message = handler.obtainMessage();
+        // 是否为投稿视频
+        if (levelOneId.startsWith("BV")) {
+            message.obj = VideoInfoParser.parseData(downloadHistory.getLevelOneId());
+        } else {
+            message.obj = new BangumiDetailParser(levelOneId).parseData();
+        }
+
+        handler.sendMessage(message);
+    }
 }
