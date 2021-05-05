@@ -25,8 +25,8 @@ public class BottomSheetTopBar extends LinearLayout {
     private AttributeSet attrs;
 
     private String title = "";
-    private Drawable closeSrc = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_down, null);
     private LinearLayout parentLayout;
+    private TextView titleView;
 
     public BottomSheetTopBar(Context context) {
         super(context);
@@ -50,31 +50,13 @@ public class BottomSheetTopBar extends LinearLayout {
         initView();
     }
 
-    private OnCloseListener onCloseListener;
-
-    public interface OnCloseListener {
-        /**
-         * 关闭该弹窗
-         */
-        void onClose();
-    }
-
-    public void setOnCloseListener(OnCloseListener onCloseListener) {
-        this.onCloseListener = onCloseListener;
-    }
-
     private void initView() {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.BottomSheetTopBar);
         this.title = typedArray.getString(R.styleable.BottomSheetTopBar_bottomSheetTitle);
-        Drawable drawable = typedArray.getDrawable(R.styleable.BottomSheetTopBar_bottomSheetCloseSrc);
-        if (drawable != null) {
-            this.closeSrc = drawable;
-        }
         typedArray.recycle();
 
         addParent();
         addTopView();
-        addCloseView();
         addTitle();
     }
 
@@ -100,37 +82,13 @@ public class BottomSheetTopBar extends LinearLayout {
         LayoutParams topViewLayoutParams = (LayoutParams) topView.getLayoutParams();
         topViewLayoutParams.width = getResources().getDimensionPixelOffset(R.dimen.bottomSheet_topView_width);
         topViewLayoutParams.height = getResources().getDimensionPixelOffset(R.dimen.bottomSheet_topView_height);
-        topViewLayoutParams.setMargins(0, getResources().getDimensionPixelOffset(R.dimen.bottomSheetTopViewMarginTop), 0, 0);
+        topViewLayoutParams.setMargins(0, getResources().getDimensionPixelOffset(R.dimen.bottomSheetTopViewMarginTop), 0, getResources().getDimensionPixelOffset(R.dimen.cardMargin));
         topViewLayoutParams.gravity = Gravity.CENTER_HORIZONTAL;
         topView.setLayoutParams(topViewLayoutParams);
     }
 
-    private void addCloseView() {
-        ImageView closeView = new ImageView(context);
-        closeView.setImageDrawable(closeSrc);
-        closeView.setBackgroundResource(R.drawable.ripple_round_corners6dp_bg);
-        closeView.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.bg)));
-        closeView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onCloseListener != null) {
-                    onCloseListener.onClose();
-                }
-            }
-        });
-
-        parentLayout.addView(closeView);
-
-        LayoutParams closeViewLayoutParams = (LayoutParams) closeView.getLayoutParams();
-        closeViewLayoutParams.width = getResources().getDimensionPixelOffset(R.dimen.bottomSheetCloseViewWH);
-        closeViewLayoutParams.height = getResources().getDimensionPixelOffset(R.dimen.bottomSheetCloseViewWH);
-        closeViewLayoutParams.gravity = Gravity.END;
-
-        closeView.setLayoutParams(closeViewLayoutParams);
-    }
-
     private void addTitle() {
-        TextView titleView = new TextView(context);
+        titleView = new TextView(context);
         titleView.setText(title);
         titleView.setTextSize(17);
         titleView.setTextColor(getResources().getColor(R.color.black));
@@ -146,5 +104,7 @@ public class BottomSheetTopBar extends LinearLayout {
         titleView.setLayoutParams(titleLayoutParams);
     }
 
-
+    public void setTitle (String title) {
+        titleView.setText(title);
+    }
 }

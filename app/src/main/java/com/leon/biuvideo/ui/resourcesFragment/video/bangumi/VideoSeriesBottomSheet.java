@@ -65,13 +65,6 @@ public class VideoSeriesBottomSheet extends BottomSheetDialog {
             bottom.setBackgroundResource(android.R.color.transparent);
         }
 
-        ((BottomSheetTopBar) findViewById(R.id.video_series_list_topBar)).setOnCloseListener(new BottomSheetTopBar.OnCloseListener() {
-            @Override
-            public void onClose() {
-                dismiss();
-            }
-        });
-
         LoadingRecyclerView videoSeriesListData = findViewById(R.id.video_series_list_data);
         videoSeriesListData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 

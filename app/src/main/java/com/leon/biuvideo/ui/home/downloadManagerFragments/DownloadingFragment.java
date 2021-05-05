@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.arialyy.annotations.Download;
 import com.arialyy.aria.core.Aria;
-import com.arialyy.aria.core.download.DownloadEntity;
 import com.arialyy.aria.core.task.DownloadTask;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.otherAdapters.DownloadingAdapter;
@@ -29,10 +28,8 @@ public class DownloadingFragment extends BaseSupportFragment implements View.OnC
 
     private TextView downloadingAllStat;
     private TextView downloadingEdit;
-    private LoadingRecyclerView downloadingAllRunningTask;
     private FrameLayout downloadManagerEditContainer;
     private TextView downloadingEditSelectAll;
-    private TextView downloadingEditRemove;
     private DownloadingAdapter downloadingAdapter;
 
     @Override
@@ -52,7 +49,7 @@ public class DownloadingFragment extends BaseSupportFragment implements View.OnC
         downloadingEdit = findView(R.id.downloading_edit);
         downloadingEdit.setOnClickListener(this);
 
-        downloadingAllRunningTask = findView(R.id.downloading_all_running_task);
+        LoadingRecyclerView downloadingAllRunningTask = findView(R.id.downloading_all_running_task);
         downloadingAllRunningTask.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
         downloadManagerEditContainer = findView(R.id.download_manager_edit_container);
@@ -60,7 +57,7 @@ public class DownloadingFragment extends BaseSupportFragment implements View.OnC
         downloadingEditSelectAll = findView(R.id.downloading_edit_select_all);
         downloadingEditSelectAll.setOnClickListener(this);
 
-        downloadingEditRemove = findView(R.id.downloading_edit_remove);
+        TextView downloadingEditRemove = findView(R.id.downloading_edit_remove);
         downloadingEditRemove.setOnClickListener(this);
 
         List<DownloadHistory> downloadHistoryList = new ArrayList<>(5);
@@ -80,37 +77,37 @@ public class DownloadingFragment extends BaseSupportFragment implements View.OnC
         downloadingAllRunningTask.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
     }
 
-    /**
-     * 取消下载
-     */
-    @Download.onTaskCancel
-    void onCancel (DownloadTask downloadTask) {
-
-    }
-
-    /**
-     * 下载失败
-     */
-    @Download.onTaskFail
-    void onFail (DownloadTask downloadTask) {
-
-    }
-
-    /**
-     * 下载完成
-     */
-    @Download.onTaskComplete
-    void complete (DownloadTask downloadTask) {
-
-    }
-
-    /**
-     * 下载中
-     */
-    @Download.onTaskRunning
-    void onRunning (DownloadTask downloadTask) {
-
-    }
+//    /**
+//     * 取消下载
+//     */
+//    @Download.onTaskCancel
+//    void onCancel (DownloadTask downloadTask) {
+//
+//    }
+//
+//    /**
+//     * 下载失败
+//     */
+//    @Download.onTaskFail
+//    void onFail (DownloadTask downloadTask) {
+//
+//    }
+//
+//    /**
+//     * 下载完成
+//     */
+//    @Download.onTaskComplete
+//    void complete (DownloadTask downloadTask) {
+//
+//    }
+//
+//    /**
+//     * 下载中
+//     */
+//    @Download.onTaskRunning
+//    void onRunning (DownloadTask downloadTask) {
+//
+//    }
 
     @Override
     public void onClick(View v) {
@@ -121,8 +118,10 @@ public class DownloadingFragment extends BaseSupportFragment implements View.OnC
                 downloadingAllStat.setSelected(!downloadingAllStatSelected);
                 if (downloadingAllStatSelected) {
                     downloadingAllStat.setText(R.string.downloadManagerPlayAll);
+                    Aria.download(context).resumeAllTask();
                 } else {
                     downloadingAllStat.setText(R.string.downloadManagerPauseAll);
+                    Aria.download(context).stopAllTask();
                 }
                 break;
             case R.id.downloading_edit:
@@ -147,9 +146,10 @@ public class DownloadingFragment extends BaseSupportFragment implements View.OnC
                     downloadingEditSelectAll.setText(R.string.downloadManagerCancelSelectedAll);
                 }
 
+                downloadingAdapter.selectedAll(!downloadingEditSelectAllSelected);
                 break;
             case R.id.downloading_edit_remove:
-
+                downloadingAdapter.removeAllSelected();
                 break;
             default:
                 break;

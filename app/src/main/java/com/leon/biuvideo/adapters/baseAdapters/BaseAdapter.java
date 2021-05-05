@@ -98,7 +98,9 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
      */
     public void append (List<T> addOns) {
         this.beans.addAll(addOns);
-        notifyDataSetChanged();
+
+        int size = this.beans.size();
+        notifyItemRangeInserted(size - 1, (size - 1) + addOns.size());
     }
 
     /**
@@ -108,7 +110,8 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
      */
     public void append (T addOn) {
         this.beans.add(addOn);
-        notifyDataSetChanged();
+
+        notifyItemInserted(this.beans.size() - 1);
     }
 
     /**
@@ -117,8 +120,10 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
      * @param t     对象
      */
     public void remove(T t) {
-        this.beans.remove(t);
-        notifyDataSetChanged();
+        int index = this.beans.indexOf(t);
+
+        this.beans.remove(index);
+        notifyItemRemoved(index);
     }
 
     /**
@@ -127,7 +132,8 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     public void removeAll() {
         if (this.beans != null) {
             this.beans.clear();
-            notifyDataSetChanged();
+
+            notifyItemRangeRemoved(0, this.beans.size() - 1);
         }
     }
 

@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -15,6 +16,7 @@ import com.leon.biuvideo.adapters.homeAdapters.RecommendAdapter;
 import com.leon.biuvideo.beans.resourcesBeans.VideoRecommend;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoInfo;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.DownloadBottomSheet;
 import com.leon.biuvideo.ui.resourcesFragment.video.OnBottomSheetWithItemListener;
 import com.leon.biuvideo.ui.resourcesFragment.video.OnVideoAnthologyListener;
 import com.leon.biuvideo.ui.resourcesFragment.video.VideoAnthologyBottomSheet;
@@ -47,6 +49,9 @@ import okhttp3.Headers;
 public class VideoInfoFragment extends BaseSupportFragment implements View.OnClickListener {
     private final String bvid;
 
+    int easterEggSteps = 0;
+    String easterEggWarn = "🎉";
+
     private ImageView videoInfoFace;
     private TextView videoInfoFollow;
 
@@ -62,6 +67,8 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
     private int anthologyIndex = 0;
     private OnVideoAnthologyListener onVideoAnthologyListener;
     private VideoInfo videoInfo;
+    private LinearLayout videoInfoEasterEggContainer;
+    private TextView videoInfoDownloadedRecord;
 
     public VideoInfoFragment(String bvid) {
         this.bvid = bvid;
@@ -106,6 +113,12 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
         videoInfoRecommends = findView(R.id.video_info_recommends);
         videoInfoRecommends.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
+        videoInfoEasterEggContainer = findView(R.id.video_info_easterEgg_container);
+        videoInfoEasterEggContainer.setVisibility(View.VISIBLE);
+        videoInfoEasterEggContainer.setOnClickListener(this);
+
+        videoInfoDownloadedRecord = findView(R.id.video_info_downloaded_record);
+
         initHandler();
         getVideoInfo();
     }
@@ -130,7 +143,8 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
                                 .setText(R.id.video_info_play, ValueUtils.generateCN(videoInfo.videoStat.view))
                                 .setText(R.id.video_info_danmaku, ValueUtils.generateCN(videoInfo.videoStat.danmaku))
                                 .setText(R.id.video_info_pubTime, ValueUtils.generateTime(videoInfo.pubTime, "yyyy-MM-dd HH:mm", true))
-                                .setText(R.id.video_info_bvid, videoInfo.bvid);
+                                .setText(R.id.video_info_bvid, videoInfo.bvid)
+                                .setOnClickListener(R.id.video_info_bvid, VideoInfoFragment.this);
 
                         videoInfoLike.setText(ValueUtils.generateCN(videoInfo.videoStat.like));
                         videoInfoCoin.setText(ValueUtils.generateCN(videoInfo.videoStat.like));
@@ -270,6 +284,28 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
                     }
                 });
                 videoAnthologyBottomSheet.show();
+                break;
+            case R.id.video_info_bvid:
+                if (PreferenceUtils.getEasterEggStat()) {
+                    return;
+                }
+
+                if (easterEggSteps == 4) {
+                    Toast.makeText(context, "🎉🎉🎉Surprise!!! 请在视频信息界面找到不一样的地方!!!🎉🎉🎉", Toast.LENGTH_SHORT).show();
+                    easterEggWarn = null;
+                    return;
+                } else {
+                    Toast.makeText(context, easterEggWarn, Toast.LENGTH_SHORT).show();
+                    easterEggWarn += "🎉";
+
+                    easterEggSteps ++;
+                }
+
+                break;
+            case R.id.video_info_easterEgg_container:
+                DownloadBottomSheet downloadBottomSheet = new DownloadBottomSheet(context, videoInfo.videoAnthologyList);
+                downloadBottomSheet.show();
+
                 break;
             default:
                 break;

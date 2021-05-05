@@ -129,14 +129,6 @@ public class PopularWeeklyFragment extends BaseSupportFragment {
         View view = simpleBottomSheet.initView();
         BottomSheetDialog bottomSheetDialog = simpleBottomSheet.bottomSheetDialog;
 
-        BottomSheetTopBar popularWeeklyBeforeSeriesBottomSheetTopBar = view.findViewById(R.id.popular_weekly_before_series_bottom_sheet_topBar);
-        popularWeeklyBeforeSeriesBottomSheetTopBar.setOnCloseListener(new BottomSheetTopBar.OnCloseListener() {
-            @Override
-            public void onClose() {
-                bottomSheetDialog.dismiss();
-            }
-        });
-
         LoadingRecyclerView popularWeeklyBeforeSeriesBottomSheetLoadingRecyclerView = view.findViewById(R.id.popular_weekly_before_series_bottom_sheet_loadingRecyclerView);
         popularWeeklyBeforeSeriesBottomSheetLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
         PopularWeeklySeriesAdapter popularWeeklySeriesAdapter = new PopularWeeklySeriesAdapter(popularWeeklySeriesList, selectedPosition, context);

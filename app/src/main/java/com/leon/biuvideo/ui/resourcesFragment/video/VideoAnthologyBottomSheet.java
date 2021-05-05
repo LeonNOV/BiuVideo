@@ -75,13 +75,6 @@ public class VideoAnthologyBottomSheet extends BottomSheetDialog {
             bottom.setBackgroundResource(android.R.color.transparent);
         }
 
-        ((BottomSheetTopBar) findViewById(R.id.video_anthology_list_topBar)).setOnCloseListener(new BottomSheetTopBar.OnCloseListener() {
-            @Override
-            public void onClose() {
-                dismiss();
-            }
-        });
-
         LoadingRecyclerView videoAnthologyListData = findViewById(R.id.video_anthology_list_data);
         videoAnthologyListData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 

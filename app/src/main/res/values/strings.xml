@@ -12,6 +12,7 @@
     <string name="popular">热门</string>
     <string name="videoRecommend">推荐</string>
     <string name="downloadManager">下载管理</string>
+    <string name="download">下载</string>
 
     <string name="video">视频</string>
     <string name="bangumi">番剧</string>
@@ -56,8 +57,12 @@
     <string name="setting_recommend_span_count">设置推荐视图样式</string>
 
     <string name="setting_about">关于</string>
+    <string name="setting_play">播放</string>
     <string name="setting_open_source_license">开源许可</string>
     <string name="setting_thanksList">感谢列表</string>
+
+    <string name="setting_play_quality">默认播放画质</string>
+    <string name="setting_download_quality">默认下载画质</string>
 
     <string name="setting_feedBack">反馈</string>
     <string name="setting_submitFeedback">提交反馈</string>
@@ -94,6 +99,9 @@
 
     <string name="setting_default_location">北京,北京城区,东城区</string>
     <string name="setting_default_cacheSize">0.0B</string>
+
+    <string name="setting_default_quality">1080P 高清</string>
+
     <string name="description">description</string>
     <string name="no_login">点击上方头像即可登录</string>
 <!-- ========================================================================================== -->

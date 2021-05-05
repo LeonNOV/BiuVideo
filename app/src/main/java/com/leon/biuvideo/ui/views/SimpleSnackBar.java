@@ -1,11 +1,11 @@
 package com.leon.biuvideo.ui.views;
 
+import android.content.Context;
 import android.view.View;
+import android.view.accessibility.AccessibilityManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
-
-import androidx.annotation.LayoutRes;
 
 import com.leon.biuvideo.R;
 import com.sun.easysnackbar.EasySnackBar;
@@ -32,7 +32,7 @@ public class SimpleSnackBar {
      * @param duration  显示时长
      */
     public static EasySnackBar make(View view, CharSequence content, int duration) {
-        View convert = convertToContentView(view, R.layout.simple_snackbar_layout);
+        View convert = convertToContentView(view);
         ((TextView) convert.findViewById(R.id.simple_snackbar_content)).setText(content);
 
         return setAnimation(EasySnackBar.make(view, convert, duration, false));
@@ -62,26 +62,32 @@ public class SimpleSnackBar {
      * @param view  view
      * @return  返回自定义layout的view对象
      */
-    private static View convertToContentView(View view, @LayoutRes int layout) {
-        return EasySnackBar.convertToContentView(view, layout);
+    private static View convertToContentView(View view) {
+        return EasySnackBar.convertToContentView(view, R.layout.simple_snackbar_layout);
     }
 
     private static EasySnackBar setAnimation(EasySnackBar easySnackBar) {
-        Animation enterAnimation = AnimationUtils.loadAnimation(easySnackBar.getContext(), R.anim.simple_snackbar_anim_enter);
-        Animation exitAnimation = AnimationUtils.loadAnimation(easySnackBar.getContext(), R.anim.simple_snackbar_anim_exit);
+        // 由于EasySnackBar的父类BaseTransientBottomBar会检测无障碍服是否开启，该服务如果开启则没有动画，没有开启则有动画
+        // 此处则是如果开启无障碍，则使用此处的动画，未开启，则使用自带动画
+        AccessibilityManager mAccessibilityManager = (AccessibilityManager) easySnackBar.getContext().getSystemService(Context.ACCESSIBILITY_SERVICE);
+        boolean enabled = mAccessibilityManager.isEnabled();
+        if (enabled) {
+            Animation enterAnimation = AnimationUtils.loadAnimation(easySnackBar.getContext(), R.anim.simple_snackbar_anim_enter);
+            Animation exitAnimation = AnimationUtils.loadAnimation(easySnackBar.getContext(), R.anim.simple_snackbar_anim_exit);
 
-        View view = easySnackBar.getView();
-        easySnackBar.addCallback(new EasySnackBar.Callback() {
-            @Override
-            public void onShown(EasySnackBar sb) {
-                view.startAnimation(enterAnimation);
-            }
+            View view = easySnackBar.getView();
+            easySnackBar.addCallback(new EasySnackBar.Callback() {
+                @Override
+                public void onShown(EasySnackBar sb) {
+                    view.startAnimation(enterAnimation);
+                }
 
-            @Override
-            public void onDismissed(EasySnackBar transientBottomBar, int event) {
-                view.startAnimation(exitAnimation);
-            }
-        });
+                @Override
+                public void onDismissed(EasySnackBar transientBottomBar, int event) {
+                    view.startAnimation(exitAnimation);
+                }
+            });
+        }
 
         return easySnackBar;
     }

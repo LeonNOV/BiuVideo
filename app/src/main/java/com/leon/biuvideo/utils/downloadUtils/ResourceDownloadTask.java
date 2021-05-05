@@ -53,7 +53,7 @@ public class ResourceDownloadTask {
     /**
      * 请求头信息
      */
-    private Map<String, String> headers = HttpUtils.getAPIRequestHeader();
+    private final Map<String, String> headers = HttpUtils.getAPIRequestHeader();
     private DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils;
     private Handler handler;
 
@@ -62,16 +62,6 @@ public class ResourceDownloadTask {
         this.downloadHistory = downloadHistory;
 
         checkSaveDirectory();
-    }
-
-    public ResourceDownloadTask setHeaders (String key, String value) {
-        if (headers.containsKey(key)) {
-            headers.replace(key, value);
-        } else {
-            headers.put(key, value);
-        }
-
-        return this;
     }
 
     /**
@@ -112,7 +102,7 @@ public class ResourceDownloadTask {
     /**
      * 创建任务并开始下载
      */
-    private void startDownload() {
+    public void startDownload() {
         handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
             @Override
             public boolean handleMessage(@NonNull Message msg) {
@@ -210,7 +200,6 @@ public class ResourceDownloadTask {
 
     /**
      * 获取'LevelOne'数据
-     * @param levelOneId
      */
     private void getVideoInfo (String levelOneId) {
         Message message = handler.obtainMessage();

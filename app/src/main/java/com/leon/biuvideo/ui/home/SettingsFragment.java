@@ -11,8 +11,11 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Switch;
@@ -20,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.ListPopupWindow;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.alibaba.fastjson.JSONArray;
@@ -46,6 +50,7 @@ import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.FeaturesName;
+import com.leon.biuvideo.values.Quality;
 import com.leon.biuvideo.values.ThanksList;
 import com.leon.biuvideo.values.apis.AmapAPIs;
 import com.leon.biuvideo.values.apis.AmapKey;
@@ -53,6 +58,7 @@ import com.leon.biuvideo.values.apis.AmapKey;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -77,6 +83,9 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     private LocalBroadcastManager localBroadcastManager;
     private SetLocationBottomSheet setLocationBottomSheet;
     private SetRecommendColumnBottomSheet setRecommendColumnBottomSheet;
+
+    private TextView settingsFragmentPlayQuality;
+    private TextView settingsFragmentDownloadQuality;
 
     public static SettingsFragment getInstance() {
         return new SettingsFragment();
@@ -104,11 +113,19 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
             }
         });
 
+        settingsFragmentPlayQuality = findView(R.id.settings_fragment_play_quality);
+        settingsFragmentPlayQuality.setText(Quality.convertQuality(PreferenceUtils.getPlayQuality()));
+
+        settingsFragmentDownloadQuality = findView(R.id.settings_fragment_download_quality);
+        settingsFragmentDownloadQuality.setText(Quality.convertQuality(PreferenceUtils.getDownloadQuality()));
+
         bindingUtils
                 .setOnClickListener(R.id.settings_fragment_cleanCache, this)
                 .setOnClickListener(R.id.settings_fragment_setLocation, this)
                 .setOnClickListener(R.id.settings_fragment_imgOriginalMode, this)
                 .setOnClickListener(R.id.settings_fragment_weatherModel, this)
+                .setOnClickListener(R.id.settings_fragment_play_quality_container, this)
+                .setOnClickListener(R.id.settings_fragment_download_quality_container, this)
                 .setOnClickListener(R.id.settings_fragment_open_source_license, this)
                 .setOnClickListener(R.id.settings_fragment_thanks_list, this)
                 .setOnClickListener(R.id.settings_fragment_recommend_span_count, this)
@@ -165,6 +182,32 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
 
                 setLocationBottomSheet.showSetLocationBottomSheet();
                 break;
+            case R.id.settings_fragment_play_quality_container:
+                QualityBottomSheet playQualityBottomSheet = new QualityBottomSheet(context, true);
+                playQualityBottomSheet.setOnClickQualityItemListener(new QualityBottomSheet.QualityBottomSheetAdapter.OnClickQualityItemListener() {
+                    @Override
+                    public void onClick(String quality, int qualityCode) {
+                        PreferenceUtils.setPlayQuality(qualityCode);
+
+                        settingsFragmentPlayQuality.setText(quality);
+                        playQualityBottomSheet.dismiss();
+                    }
+                });
+                playQualityBottomSheet.show();
+                break;
+            case R.id.settings_fragment_download_quality_container:
+                QualityBottomSheet downloadQualityBottomSheet = new QualityBottomSheet(context, false);
+                downloadQualityBottomSheet.setOnClickQualityItemListener(new QualityBottomSheet.QualityBottomSheetAdapter.OnClickQualityItemListener() {
+                    @Override
+                    public void onClick(String quality, int qualityCode) {
+                        PreferenceUtils.setPlayQuality(qualityCode);
+
+                        settingsFragmentDownloadQuality.setText(quality);
+                        downloadQualityBottomSheet.dismiss();
+                    }
+                });
+                downloadQualityBottomSheet.show();
+                break;
             case R.id.settings_fragment_open_source_license:
                 // 跳转到开源许可页面
                 Intent licenseIntent = new Intent();
@@ -203,10 +246,14 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
         }
     }
 
+    private void showQualityBottomSheet(boolean isPlay) {
+
+    }
+
     /**
      * 设置开关空间
      *
-     * @param mSwitch   switch对象
+     * @param mSwitch      switch对象
      * @param featuresName {@link FeaturesName}
      */
     private void setSwitchStatus(@SuppressLint("UseSwitchCompatOrMaterialCode") Switch mSwitch, FeaturesName featuresName) {
@@ -270,7 +317,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     /**
      * 获取地址信息
      *
-     * @param keyword   搜索关键字
+     * @param keyword 搜索关键字
      */
     private void getDistrict(String keyword) {
         Map<String, String> params = new HashMap<>(3);
@@ -351,9 +398,9 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     /**
      * 定位权限回调
      *
-     * @param requestCode   请求码
-     * @param permissions   权限名称
-     * @param grantResults  授权结果
+     * @param requestCode  请求码
+     * @param permissions  权限名称
+     * @param grantResults 授权结果
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -461,13 +508,6 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 setLocationBottomSheetDialog = setLocationBottomSheet.bottomSheetDialog;
             }
 
-            ((BottomSheetTopBar) setLocationBottomSheetView.findViewById(R.id.set_location_topBar)).setOnCloseListener(new BottomSheetTopBar.OnCloseListener() {
-                @Override
-                public void onClose() {
-                    setLocationBottomSheetDialog.dismiss();
-                }
-            });
-
             setLocationKeyword = setLocationBottomSheetView.findViewById(R.id.set_location_keyword);
             loadingRecyclerView = setLocationBottomSheetView.findViewById(R.id.set_location_data);
 
@@ -548,14 +588,6 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 });
             }
 
-            BottomSheetTopBar setRecommendColumnTopBar = setRecommendColumnBottomSheetView.findViewById(R.id.set_recommend_column_topBar);
-            setRecommendColumnTopBar.setOnCloseListener(new BottomSheetTopBar.OnCloseListener() {
-                @Override
-                public void onClose() {
-                    setRecommendColumnBottomSheetDialog.dismiss();
-                }
-            });
-
             setRecommendColumnShowSingleColumn = setRecommendColumnBottomSheetView.findViewById(R.id.set_recommend_column_showSingleColumn);
             setRecommendColumnShowSingleColumn.setOnClickListener(this);
 
@@ -593,7 +625,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
             }
         }
 
-        private void setOptionsStyle (int recommendColumn) {
+        private void setOptionsStyle(int recommendColumn) {
             if (recommendColumn == SINGLE_COLUMN) {
                 setRecommendColumnShowSingleColumn.setBackground(SELECTED_BG);
                 setRecommendColumnShowDoubleColumn.setBackground(UNSELECTED_BG);

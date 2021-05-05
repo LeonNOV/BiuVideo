@@ -9,13 +9,16 @@
 
     <ImageView
         android:id="@+id/downloading_item_select"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_gravity="center_vertical"
         android:background="@drawable/ripple_round_corners6dp_bg"
+        android:backgroundTint="@android:color/transparent"
         android:contentDescription="@string/description"
         android:src="@drawable/download_manager_select_stat"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:layout_marginEnd="5dp"
+        tools:visibility="visible"/>
 
     <androidx.cardview.widget.CardView
         android:layout_width="@dimen/videoCoverWidth"
@@ -65,7 +68,17 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/infoColor"
                     android:textSize="13sp"
+                    android:visibility="gone"
                     tools:text="41%" />
+
+                <TextView
+                    android:id="@+id/downloading_item_now_speed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:textColor="@color/infoColor"
+                    android:textSize="13sp"
+                    tools:text="0.5mb/s" />
 
                 <TextView
                     android:id="@+id/downloading_item_now_size"
@@ -78,7 +91,6 @@
 
             </FrameLayout>
 
-
             <ProgressBar
                 android:id="@+id/downloading_item_progressBar"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -86,9 +98,9 @@
                 android:layout_height="5dp"
                 android:layout_gravity="bottom"
                 android:layout_marginTop="5dp"
-                android:max="1000"
+                android:max="100"
                 android:progressDrawable="@drawable/downloading_progress"
-                tools:progress="410" />
+                tools:progress="41" />
 
         </LinearLayout>
 

@@ -25,8 +25,12 @@ public class PreferenceUtils {
     public static final String LOCATION_SERVICE = "locationServiceStatus";
     public static final String MANUAL_SET_LOCATION = "manualSetLocationStatus";
     public static final String RECOMMEND_COLUMNS = "recommendColumns";
+    public static final String EASTER_RGG_STAT = "easterEggStat";
+    public static final String PLAY_QUALITY = "playQuality";
+    public static final String DOWNLOAD_QUALITY = "downloadQuality";
 
     public static SharedPreferences PREFERENCE;
+    private static final int DEF_QUALITY = 80;
 
     /**
      * 设置位置信息
@@ -239,5 +243,48 @@ public class PreferenceUtils {
     public static int getRecommendColumns() {
         int anInt = PREFERENCE.getInt(RECOMMEND_COLUMNS, 2);
         return anInt >= 2 ? 2 : 1;
+    }
+
+    /**
+     * @return  获取默认播放清晰度
+     */
+    public static int getPlayQuality () {
+        return PREFERENCE.getInt(PLAY_QUALITY, DEF_QUALITY);
+    }
+
+    /**
+     * 设置默认播放清晰度
+     *
+     * @param qualityCode   清晰度
+     */
+    public static void setPlayQuality (int qualityCode) {
+        SharedPreferences.Editor editor = PREFERENCE.edit();
+        editor.putInt(PLAY_QUALITY, qualityCode).apply();
+    }
+
+    /**
+     * @return  获取默认下载清晰度
+     */
+    public static int getDownloadQuality () {
+        return PREFERENCE.getInt(DOWNLOAD_QUALITY, DEF_QUALITY);
+    }
+
+    /**
+     * 设置默认下载清晰度
+     *
+     * @param qualityCode   清晰度
+     */
+    public static void setDownloadQuality (int qualityCode) {
+        SharedPreferences.Editor editor = PREFERENCE.edit();
+        editor.putInt(DOWNLOAD_QUALITY, qualityCode).apply();
+    }
+
+    public static boolean getEasterEggStat () {
+        return PREFERENCE.getBoolean(EASTER_RGG_STAT, false);
+    }
+
+    public static void setEasterEggStat () {
+        SharedPreferences.Editor editor = PREFERENCE.edit();
+        editor.putBoolean(EASTER_RGG_STAT, true).apply();
     }
 }

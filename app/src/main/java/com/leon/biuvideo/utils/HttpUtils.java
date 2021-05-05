@@ -3,14 +3,11 @@ package com.leon.biuvideo.utils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import okhttp3.Call;
 import okhttp3.Headers;
@@ -18,7 +15,6 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 /**
  * @Author Leon
@@ -176,47 +172,15 @@ public class HttpUtils {
      * 如果已登录账号，则会获取已存在的Cookie
      */
     public static Map<String, String> getAPIRequestHeader(String key, String value) {
-        Map<String, String> requestHeader = new HashMap<>(HttpUtils.getHeaders());
-        String cookie = PreferenceUtils.getCookie();
+        Map<String, String> requestHeader = new HashMap<>(getAPIRequestHeader());
 
-        if (cookie == null) {
-            Set<Map.Entry<String, String>> entries = requestHeader.entrySet();
-            for (Map.Entry<String, String> entry : entries) {
-                if (key.equals(entry.getKey())) {
-                    entry.setValue(value);
-                    break;
-                }
-            }
-            return requestHeader;
+        if (requestHeader.containsKey(key)) {
+            requestHeader.replace(key, value);
         } else {
-            requestHeader.put("Cookie", cookie);
+            requestHeader.put(key, value);
         }
 
         return requestHeader;
-    }
-
-    /**
-     * 该方法适用于在获取接口数据时调用
-     */
-    public static Map<String, String> getAPIRequestHeaderNoCookie() {
-        return HttpUtils.getHeaders();
-    }
-
-    /**
-     * 该方法适用于在获取接口数据时调用
-     */
-    public static Map<String, String> getAPIRequestHeaderNoCookie(String key, String value) {
-        HashMap<String, String> headers = HttpUtils.getHeaders();
-
-        Set<Map.Entry<String, String>> entries = headers.entrySet();
-        for (Map.Entry<String, String> entry : entries) {
-            if (key.equals(entry.getKey())) {
-                entry.setValue(value);
-                break;
-            }
-        }
-
-        return headers;
     }
 
     /**
