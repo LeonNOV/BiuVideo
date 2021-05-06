@@ -12,7 +12,9 @@ import com.arialyy.aria.core.Aria;
 import com.arialyy.aria.core.task.DownloadTask;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.otherAdapters.DownloadingAdapter;
+import com.leon.biuvideo.greendao.dao.DaoBaseUtils;
 import com.leon.biuvideo.greendao.dao.DownloadHistory;
+import com.leon.biuvideo.greendao.daoutils.DownloadHistoryUtils;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 
@@ -60,14 +62,9 @@ public class DownloadingFragment extends BaseSupportFragment implements View.OnC
         TextView downloadingEditRemove = findView(R.id.downloading_edit_remove);
         downloadingEditRemove.setOnClickListener(this);
 
-        List<DownloadHistory> downloadHistoryList = new ArrayList<>(5);
-
-        for (int i = 1; i <= 5; i++) {
-            DownloadHistory downloadHistory = new DownloadHistory();
-            downloadHistory.setTitle("Title" + i);
-
-            downloadHistoryList.add(downloadHistory);
-        }
+        DownloadHistoryUtils downloadHistoryUtils = new DownloadHistoryUtils(context);
+        DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils = downloadHistoryUtils.getDownloadHistoryDaoUtils();
+        List<DownloadHistory> downloadHistoryList = downloadHistoryDaoUtils.queryAll();
 
         downloadingAdapter = new DownloadingAdapter(downloadHistoryList, context);
 

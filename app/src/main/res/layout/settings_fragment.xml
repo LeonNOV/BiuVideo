@@ -229,6 +229,7 @@
                     android:id="@+id/settings_fragment_download_quality_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:background="@drawable/ripple_setting_item_bg">
 
                     <TextView

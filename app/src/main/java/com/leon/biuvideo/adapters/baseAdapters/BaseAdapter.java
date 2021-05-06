@@ -37,6 +37,9 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
 
     private final SupportActivity supportActivity;
 
+    /**
+     * 使用此 Constructor 需要调用append (List<T> addOns)添加数据
+     */
     public BaseAdapter(Context context) {
         this.beans = new ArrayList<>();
         this.context = context;

@@ -75,7 +75,7 @@ public class BangumiDetailParser {
             bangumi.title = result.getString("title");
             bangumi.link = result.getString("link");
 
-            bangumi.bangumiAnthologyList = getBangumiEps(result.getJSONArray("episodes"));
+            bangumi.bangumiAnthologyList = getBangumiEps(result.getJSONArray("episodes"), bangumi.seasonId);
             bangumi.bangumiSeasonList = getBangumiSeasons(result.getJSONArray("seasons"));
             bangumi.bangumiSectionList = getBangumiSections(result.getJSONArray("section"));
 
@@ -89,9 +89,10 @@ public class BangumiDetailParser {
      * 解析本季单集数据
      *
      * @param episodes  JSONArray
+     * @param seasonId  番剧Id
      * @return  BangumiEp集合
      */
-    private List<BangumiAnthology> getBangumiEps(JSONArray episodes) {
+    private List<BangumiAnthology> getBangumiEps(JSONArray episodes, String seasonId) {
         if (episodes == null) {
             return null;
         }
@@ -101,6 +102,7 @@ public class BangumiDetailParser {
             JSONObject jsonObject = (JSONObject) o;
             BangumiAnthology bangumiAnthology = new BangumiAnthology();
 
+            bangumiAnthology.seasonId = seasonId;
             bangumiAnthology.aid = jsonObject.getString("aid");
             bangumiAnthology.bvid = jsonObject.getString("bvid");
             bangumiAnthology.cid = jsonObject.getString("cid");

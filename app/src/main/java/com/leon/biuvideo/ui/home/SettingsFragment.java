@@ -116,8 +116,14 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
         settingsFragmentPlayQuality = findView(R.id.settings_fragment_play_quality);
         settingsFragmentPlayQuality.setText(Quality.convertQuality(PreferenceUtils.getPlayQuality()));
 
-        settingsFragmentDownloadQuality = findView(R.id.settings_fragment_download_quality);
-        settingsFragmentDownloadQuality.setText(Quality.convertQuality(PreferenceUtils.getDownloadQuality()));
+        if (PreferenceUtils.getEasterEggStat()) {
+            settingsFragmentDownloadQuality = findView(R.id.settings_fragment_download_quality);
+            settingsFragmentDownloadQuality.setText(Quality.convertQuality(PreferenceUtils.getDownloadQuality()));
+
+            FrameLayout settingsFragmentDownloadQualityContainer = findView(R.id.settings_fragment_download_quality_container);
+            settingsFragmentDownloadQualityContainer.setVisibility(View.VISIBLE);
+            settingsFragmentDownloadQualityContainer.setOnClickListener(this);
+        }
 
         bindingUtils
                 .setOnClickListener(R.id.settings_fragment_cleanCache, this)
@@ -125,7 +131,6 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 .setOnClickListener(R.id.settings_fragment_imgOriginalMode, this)
                 .setOnClickListener(R.id.settings_fragment_weatherModel, this)
                 .setOnClickListener(R.id.settings_fragment_play_quality_container, this)
-                .setOnClickListener(R.id.settings_fragment_download_quality_container, this)
                 .setOnClickListener(R.id.settings_fragment_open_source_license, this)
                 .setOnClickListener(R.id.settings_fragment_thanks_list, this)
                 .setOnClickListener(R.id.settings_fragment_recommend_span_count, this)
@@ -244,10 +249,6 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
             default:
                 break;
         }
-    }
-
-    private void showQualityBottomSheet(boolean isPlay) {
-
     }
 
     /**

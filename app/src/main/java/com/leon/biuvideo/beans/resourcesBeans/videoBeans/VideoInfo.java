@@ -1,5 +1,6 @@
 package com.leon.biuvideo.beans.resourcesBeans.videoBeans;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -18,6 +19,7 @@ public class VideoInfo {
     public long pubTime;
     public String desc;
 
+    public boolean isMultiAnthology;
     public UserInfo userInfo;
     public VideoStat videoStat;
 
@@ -39,11 +41,16 @@ public class VideoInfo {
         public int share;
     }
 
-    public static class VideoAnthology {
+    public static class VideoAnthology implements Serializable {
         public String mainId;
         public String cid;
         public String part;
         public String badge;
         public String duration;
+        public String cover;
+
+        // isDownloading和isDownloaded 不能同时为true
+        public boolean isDownloading;
+        public boolean isDownloaded;
     }
 }

@@ -1,5 +1,6 @@
 package com.leon.biuvideo.beans.resourcesBeans.videoBeans;
 
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  * @Time 2021/4/5
  * @Desc 单视频数据（flv方式）
  */
-public class VideoWithFlv {
+public class VideoWithFlv implements Serializable {
     public String cid;
     public int currentQualityId;
     public LinkedHashMap<Integer, String> qualityMap;

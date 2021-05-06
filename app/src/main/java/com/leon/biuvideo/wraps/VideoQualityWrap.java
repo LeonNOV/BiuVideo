@@ -3,7 +3,7 @@ package com.leon.biuvideo.wraps;
 /**
  * @Author Leon
  * @Time 2021/4/19
- * @Desc 视频画质事件
+ * @Desc 切换视频画质事件
  */
 public class VideoQualityWrap {
     public final int qualityId;

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
@@ -21,7 +22,7 @@ import okhttp3.Headers;
  */
 public class VideoWithFlvParser {
     /**
-     * 默认获取画质最高的视频
+     * 默认获取1080P清晰度
      * 分辨率代码
      * 6	240P 极速（仅mp4方式）
      * 16	360P 流畅
@@ -33,26 +34,40 @@ public class VideoWithFlvParser {
      * 116	1080P60 高清（大会员）
      * 120	4K 超清（大会员）
      */
-    public static final String DEFAULT_QUALITY = "120";
+    public static final String DEFAULT_QUALITY = "80";
 
     /**
      * 获取4K画质需要添加该参数，默认添加
      */
     private static final String FOURK = "1";
 
-    private String bvid;
-
-    public VideoWithFlvParser() {
-    }
+    private final String bvid;
 
     public VideoWithFlvParser(String bvid) {
         this.bvid = bvid;
     }
 
-    public VideoWithFlv parseData(String cid, String qualityId, boolean isBangumi) {
+    /**
+     * 获取视频流链接
+     *
+     * @param cid   选集ID
+     * @param qualityCode   清晰度代码，可为null
+     * @param isBangumi 是否为番剧
+     * @param isPlay    是否用于播放
+     * @return  VideoWithFlv
+     */
+    public VideoWithFlv parseData(String cid, String qualityCode, boolean isBangumi, boolean isPlay) {
         Map<String, String> params = new HashMap<>(3);
         params.put("cid", String.valueOf(cid));
-        params.put("qn", qualityId);
+
+        if (qualityCode == null) {
+            params.put("qn", isPlay ?
+                    String.valueOf(PreferenceUtils.getPlayQuality()) :
+                    String.valueOf(PreferenceUtils.getDownloadQuality()));
+        } else {
+            params.put("qn", DEFAULT_QUALITY);
+        }
+
         params.put("fourk", FOURK);
         if (!isBangumi) {
             params.put("bvid", String.valueOf(bvid));

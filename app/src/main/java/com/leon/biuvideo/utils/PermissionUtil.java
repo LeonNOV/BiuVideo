@@ -15,14 +15,8 @@ import com.leon.biuvideo.ui.views.WarnDialog;
  * 权限申请类
  */
 public class PermissionUtil {
-    private Fragment fragment;
-    private Activity activity;
+    private final Fragment fragment;
     private final Context context;
-
-    public PermissionUtil(Context context, Activity activity) {
-        this.context = context;
-        this.activity = activity;
-    }
 
     public PermissionUtil(Context context, Fragment fragment) {
         this.context = context;
@@ -51,30 +45,10 @@ public class PermissionUtil {
      * 申请读写权限
      */
     private void verifyIOPermission() {
-        //检查权限有没有获取
-        int permissionCheck = ContextCompat.checkSelfPermission(activity.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int permissionCheck = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            //如果应用之前请求过此权限但用户拒绝了请求，此方法将返回 true
-            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                WarnDialog warnDialog = new WarnDialog(activity, "读写权限", "由于保存资源文件时需要用到\"读写权限\"，否则将无法正常使用");
-                warnDialog.setOnWarnActionListener(new WarnDialog.OnWarnActionListener() {
-                    @Override
-                    public void onConfirm() {
-                        warnDialog.dismiss();
-                        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1024);
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        warnDialog.dismiss();
-                    }
-                });
-                warnDialog.show();
-            } else {
-                //申请读写权限
-                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1024);
-            }
+            fragment.requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1025);
         }
     }
 
@@ -82,10 +56,10 @@ public class PermissionUtil {
      * 申请定位权限
      */
     private void verifyLocationPermission() {
-        int access_coarse_location = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION);
-        int access_fine_location = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
+        int accessCoarseLocation = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION);
+        int accessFineLocation = ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION);
 
-        if (access_coarse_location != PackageManager.PERMISSION_GRANTED || access_fine_location != PackageManager.PERMISSION_GRANTED) {
+        if (accessCoarseLocation != PackageManager.PERMISSION_GRANTED || accessFineLocation != PackageManager.PERMISSION_GRANTED) {
             fragment.requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1025);
         }
     }
@@ -99,10 +73,12 @@ public class PermissionUtil {
      */
     public static boolean verifyPermission(Context context, Permission permission) {
         switch (permission) {
-            case LOCATION:  // 验证定位权限
+            // 验证定位权限
+            case LOCATION:
                 return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                         ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-            case RW:    // 验证读写权限
+            // 验证读写权限
+            case RW:
                 return ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
                         ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
             default:
@@ -111,8 +87,11 @@ public class PermissionUtil {
     }
 
     public enum Permission {
-        RW(0),  // 读写权限
-        LOCATION(1);    // 定位权限
+        // 读写权限
+        RW(0),
+
+        // 定位权限
+        LOCATION(1);
 
         public int value;
 

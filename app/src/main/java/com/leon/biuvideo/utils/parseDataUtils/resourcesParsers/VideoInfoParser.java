@@ -1,8 +1,13 @@
 package com.leon.biuvideo.utils.parseDataUtils.resourcesParsers;
 
+import android.content.Context;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoInfo;
+import com.leon.biuvideo.greendao.dao.DaoBaseUtils;
+import com.leon.biuvideo.greendao.dao.DownloadHistory;
+import com.leon.biuvideo.greendao.daoutils.DownloadHistoryUtils;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
@@ -26,7 +31,7 @@ public class VideoInfoParser {
      * @param bvid  视频bvid
      * @return  返回viewPage对象
      */
-    public static VideoInfo parseData(String bvid) {
+    public static VideoInfo parseData(String bvid, Context context) {
         Map<String, String> params = new HashMap<>(1);
         params.put("bvid", bvid);
 
@@ -36,10 +41,14 @@ public class VideoInfoParser {
         if (dataObject != null) {
             VideoInfo videoInfo = new VideoInfo();
 
+            DownloadHistoryUtils downloadHistoryUtils = new DownloadHistoryUtils(context);
+            DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils = downloadHistoryUtils.getDownloadHistoryDaoUtils();
+
             videoInfo.bvid = dataObject.getString("bvid");
             videoInfo.aid = dataObject.getString("aid");
             videoInfo.title = dataObject.getString("title");
             videoInfo.videos = dataObject.getIntValue("videos");
+            videoInfo.isMultiAnthology = videoInfo.videos > 0;
             videoInfo.tagId = dataObject.getIntValue("tid");
             videoInfo.tagName = dataObject.getString("tname");
             videoInfo.cover = dataObject.getString("pic");
@@ -70,9 +79,12 @@ public class VideoInfoParser {
 
                 videoAnthology.mainId = bvid;
                 videoAnthology.cid = jsonObject.getString("cid");
+
+
+
                 videoAnthology.part = jsonObject.getString("part");
                 videoAnthology.duration = ValueUtils.lengthGenerate(jsonObject.getIntValue("duration"));
-
+                videoAnthology.cover = videoInfo.cover;
                 videoInfo.videoAnthologyList.add(videoAnthology);
             }
 

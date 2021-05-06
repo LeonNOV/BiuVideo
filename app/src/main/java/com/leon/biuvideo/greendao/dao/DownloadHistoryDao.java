@@ -27,14 +27,14 @@ public class DownloadHistoryDao extends AbstractDao<DownloadHistory, Long> {
         public final static Property TaskId = new Property(2, long.class, "taskId", false, "TASK_ID");
         public final static Property IsCompleted = new Property(3, boolean.class, "isCompleted", false, "IS_COMPLETED");
         public final static Property IsFailed = new Property(4, boolean.class, "isFailed", false, "IS_FAILED");
-        public final static Property ResKey = new Property(5, String.class, "resKey", false, "RES_KEY");
-        public final static Property ResStreamUrl = new Property(6, String.class, "resStreamUrl", false, "RES_STREAM_URL");
-        public final static Property IsMultipleAnthology = new Property(7, boolean.class, "isMultipleAnthology", false, "IS_MULTIPLE_ANTHOLOGY");
-        public final static Property LevelOneId = new Property(8, String.class, "levelOneId", false, "LEVEL_ONE_ID");
-        public final static Property LevelTwoId = new Property(9, String.class, "levelTwoId", false, "LEVEL_TWO_ID");
-        public final static Property Title = new Property(10, String.class, "title", false, "TITLE");
+        public final static Property ResStreamUrl = new Property(5, String.class, "resStreamUrl", false, "RES_STREAM_URL");
+        public final static Property IsMultipleAnthology = new Property(6, boolean.class, "isMultipleAnthology", false, "IS_MULTIPLE_ANTHOLOGY");
+        public final static Property LevelOneId = new Property(7, String.class, "levelOneId", false, "LEVEL_ONE_ID");
+        public final static Property LevelTwoId = new Property(8, String.class, "levelTwoId", false, "LEVEL_TWO_ID");
+        public final static Property Title = new Property(9, String.class, "title", false, "TITLE");
+        public final static Property SubTitle = new Property(10, String.class, "subTitle", false, "SUB_TITLE");
         public final static Property CoverUrl = new Property(11, String.class, "coverUrl", false, "COVER_URL");
-        public final static Property ResPath = new Property(12, String.class, "resPath", false, "RES_PATH");
+        public final static Property SavePath = new Property(12, String.class, "savePath", false, "SAVE_PATH");
         public final static Property DanmakuFilePath = new Property(13, String.class, "danmakuFilePath", false, "DANMAKU_FILE_PATH");
     }
 
@@ -56,14 +56,14 @@ public class DownloadHistoryDao extends AbstractDao<DownloadHistory, Long> {
                 "\"TASK_ID\" INTEGER NOT NULL ," + // 2: taskId
                 "\"IS_COMPLETED\" INTEGER NOT NULL ," + // 3: isCompleted
                 "\"IS_FAILED\" INTEGER NOT NULL ," + // 4: isFailed
-                "\"RES_KEY\" TEXT," + // 5: resKey
-                "\"RES_STREAM_URL\" TEXT," + // 6: resStreamUrl
-                "\"IS_MULTIPLE_ANTHOLOGY\" INTEGER NOT NULL ," + // 7: isMultipleAnthology
-                "\"LEVEL_ONE_ID\" TEXT," + // 8: levelOneId
-                "\"LEVEL_TWO_ID\" TEXT," + // 9: levelTwoId
-                "\"TITLE\" TEXT," + // 10: title
+                "\"RES_STREAM_URL\" TEXT," + // 5: resStreamUrl
+                "\"IS_MULTIPLE_ANTHOLOGY\" INTEGER NOT NULL ," + // 6: isMultipleAnthology
+                "\"LEVEL_ONE_ID\" TEXT," + // 7: levelOneId
+                "\"LEVEL_TWO_ID\" TEXT," + // 8: levelTwoId
+                "\"TITLE\" TEXT," + // 9: title
+                "\"SUB_TITLE\" TEXT," + // 10: subTitle
                 "\"COVER_URL\" TEXT," + // 11: coverUrl
-                "\"RES_PATH\" TEXT," + // 12: resPath
+                "\"SAVE_PATH\" TEXT," + // 12: savePath
                 "\"DANMAKU_FILE_PATH\" TEXT);"); // 13: danmakuFilePath
     }
 
@@ -86,30 +86,30 @@ public class DownloadHistoryDao extends AbstractDao<DownloadHistory, Long> {
         stmt.bindLong(4, entity.getIsCompleted() ? 1L: 0L);
         stmt.bindLong(5, entity.getIsFailed() ? 1L: 0L);
  
-        String resKey = entity.getResKey();
-        if (resKey != null) {
-            stmt.bindString(6, resKey);
-        }
- 
         String resStreamUrl = entity.getResStreamUrl();
         if (resStreamUrl != null) {
-            stmt.bindString(7, resStreamUrl);
+            stmt.bindString(6, resStreamUrl);
         }
-        stmt.bindLong(8, entity.getIsMultipleAnthology() ? 1L: 0L);
+        stmt.bindLong(7, entity.getIsMultipleAnthology() ? 1L: 0L);
  
         String levelOneId = entity.getLevelOneId();
         if (levelOneId != null) {
-            stmt.bindString(9, levelOneId);
+            stmt.bindString(8, levelOneId);
         }
  
         String levelTwoId = entity.getLevelTwoId();
         if (levelTwoId != null) {
-            stmt.bindString(10, levelTwoId);
+            stmt.bindString(9, levelTwoId);
         }
  
         String title = entity.getTitle();
         if (title != null) {
-            stmt.bindString(11, title);
+            stmt.bindString(10, title);
+        }
+ 
+        String subTitle = entity.getSubTitle();
+        if (subTitle != null) {
+            stmt.bindString(11, subTitle);
         }
  
         String coverUrl = entity.getCoverUrl();
@@ -117,9 +117,9 @@ public class DownloadHistoryDao extends AbstractDao<DownloadHistory, Long> {
             stmt.bindString(12, coverUrl);
         }
  
-        String resPath = entity.getResPath();
-        if (resPath != null) {
-            stmt.bindString(13, resPath);
+        String savePath = entity.getSavePath();
+        if (savePath != null) {
+            stmt.bindString(13, savePath);
         }
  
         String danmakuFilePath = entity.getDanmakuFilePath();
@@ -141,30 +141,30 @@ public class DownloadHistoryDao extends AbstractDao<DownloadHistory, Long> {
         stmt.bindLong(4, entity.getIsCompleted() ? 1L: 0L);
         stmt.bindLong(5, entity.getIsFailed() ? 1L: 0L);
  
-        String resKey = entity.getResKey();
-        if (resKey != null) {
-            stmt.bindString(6, resKey);
-        }
- 
         String resStreamUrl = entity.getResStreamUrl();
         if (resStreamUrl != null) {
-            stmt.bindString(7, resStreamUrl);
+            stmt.bindString(6, resStreamUrl);
         }
-        stmt.bindLong(8, entity.getIsMultipleAnthology() ? 1L: 0L);
+        stmt.bindLong(7, entity.getIsMultipleAnthology() ? 1L: 0L);
  
         String levelOneId = entity.getLevelOneId();
         if (levelOneId != null) {
-            stmt.bindString(9, levelOneId);
+            stmt.bindString(8, levelOneId);
         }
  
         String levelTwoId = entity.getLevelTwoId();
         if (levelTwoId != null) {
-            stmt.bindString(10, levelTwoId);
+            stmt.bindString(9, levelTwoId);
         }
  
         String title = entity.getTitle();
         if (title != null) {
-            stmt.bindString(11, title);
+            stmt.bindString(10, title);
+        }
+ 
+        String subTitle = entity.getSubTitle();
+        if (subTitle != null) {
+            stmt.bindString(11, subTitle);
         }
  
         String coverUrl = entity.getCoverUrl();
@@ -172,9 +172,9 @@ public class DownloadHistoryDao extends AbstractDao<DownloadHistory, Long> {
             stmt.bindString(12, coverUrl);
         }
  
-        String resPath = entity.getResPath();
-        if (resPath != null) {
-            stmt.bindString(13, resPath);
+        String savePath = entity.getSavePath();
+        if (savePath != null) {
+            stmt.bindString(13, savePath);
         }
  
         String danmakuFilePath = entity.getDanmakuFilePath();
@@ -196,14 +196,14 @@ public class DownloadHistoryDao extends AbstractDao<DownloadHistory, Long> {
             cursor.getLong(offset + 2), // taskId
             cursor.getShort(offset + 3) != 0, // isCompleted
             cursor.getShort(offset + 4) != 0, // isFailed
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // resKey
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // resStreamUrl
-            cursor.getShort(offset + 7) != 0, // isMultipleAnthology
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // levelOneId
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // levelTwoId
-            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // title
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // resStreamUrl
+            cursor.getShort(offset + 6) != 0, // isMultipleAnthology
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // levelOneId
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // levelTwoId
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // title
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // subTitle
             cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // coverUrl
-            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // resPath
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // savePath
             cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13) // danmakuFilePath
         );
         return entity;
@@ -216,14 +216,14 @@ public class DownloadHistoryDao extends AbstractDao<DownloadHistory, Long> {
         entity.setTaskId(cursor.getLong(offset + 2));
         entity.setIsCompleted(cursor.getShort(offset + 3) != 0);
         entity.setIsFailed(cursor.getShort(offset + 4) != 0);
-        entity.setResKey(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setResStreamUrl(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setIsMultipleAnthology(cursor.getShort(offset + 7) != 0);
-        entity.setLevelOneId(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setLevelTwoId(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
-        entity.setTitle(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setResStreamUrl(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setIsMultipleAnthology(cursor.getShort(offset + 6) != 0);
+        entity.setLevelOneId(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setLevelTwoId(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setTitle(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setSubTitle(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
         entity.setCoverUrl(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setResPath(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setSavePath(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
         entity.setDanmakuFilePath(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
      }
     

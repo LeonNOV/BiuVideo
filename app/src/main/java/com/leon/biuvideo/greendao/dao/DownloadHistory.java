@@ -22,7 +22,6 @@ public class DownloadHistory {
     private boolean isCompleted;
     private boolean isFailed;
 
-    private String resKey;
     private String resStreamUrl;
 
     /**
@@ -41,33 +40,42 @@ public class DownloadHistory {
     private String levelTwoId;
 
     private String title;
+
+    /**
+     * 子标题
+     */
+    private String subTitle;
+
     private String coverUrl;
 
-    private String resPath;
+    /**
+     * 资源保存路径
+     */
+    private String savePath;
 
     /**
      * 弹幕文件路径
      */
     private String danmakuFilePath;
 
-    @Generated(hash = 198130773)
+    @Generated(hash = 1722890415)
     public DownloadHistory(Long id, int resType, long taskId, boolean isCompleted,
-            boolean isFailed, String resKey, String resStreamUrl,
-            boolean isMultipleAnthology, String levelOneId, String levelTwoId,
-            String title, String coverUrl, String resPath, String danmakuFilePath) {
+            boolean isFailed, String resStreamUrl, boolean isMultipleAnthology,
+            String levelOneId, String levelTwoId, String title, String subTitle,
+            String coverUrl, String savePath, String danmakuFilePath) {
         this.id = id;
         this.resType = resType;
         this.taskId = taskId;
         this.isCompleted = isCompleted;
         this.isFailed = isFailed;
-        this.resKey = resKey;
         this.resStreamUrl = resStreamUrl;
         this.isMultipleAnthology = isMultipleAnthology;
         this.levelOneId = levelOneId;
         this.levelTwoId = levelTwoId;
         this.title = title;
+        this.subTitle = subTitle;
         this.coverUrl = coverUrl;
-        this.resPath = resPath;
+        this.savePath = savePath;
         this.danmakuFilePath = danmakuFilePath;
     }
 
@@ -115,14 +123,6 @@ public class DownloadHistory {
         this.isFailed = isFailed;
     }
 
-    public String getResKey() {
-        return this.resKey;
-    }
-
-    public void setResKey(String resKey) {
-        this.resKey = resKey;
-    }
-
     public String getResStreamUrl() {
         return this.resStreamUrl;
     }
@@ -163,6 +163,14 @@ public class DownloadHistory {
         this.title = title;
     }
 
+    public String getSubTitle() {
+        return this.subTitle;
+    }
+
+    public void setSubTitle(String subTitle) {
+        this.subTitle = subTitle;
+    }
+
     public String getCoverUrl() {
         return this.coverUrl;
     }
@@ -171,12 +179,12 @@ public class DownloadHistory {
         this.coverUrl = coverUrl;
     }
 
-    public String getResPath() {
-        return this.resPath;
+    public String getSavePath() {
+        return this.savePath;
     }
 
-    public void setResPath(String resPath) {
-        this.resPath = resPath;
+    public void setSavePath(String savePath) {
+        this.savePath = savePath;
     }
 
     public String getDanmakuFilePath() {

@@ -126,7 +126,7 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
                 VideoInfoAndCommentsFragment.this.cid = cid;
                 VideoInfoAndCommentsFragment.this.title = title;
 
-                getVideoStreamUrl(VideoWithFlvParser.DEFAULT_QUALITY);
+                getVideoStreamUrl(null);
             }
         });
 
@@ -153,7 +153,7 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                VideoWithFlv videoWithFlv = videoWithFlvParser.parseData(cid, qualityId, false);
+                VideoWithFlv videoWithFlv = videoWithFlvParser.parseData(cid, qualityId, false, true);
 
                 Message message = receiveDataHandler.obtainMessage();
                 message.obj = videoWithFlv;

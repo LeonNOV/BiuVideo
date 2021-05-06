@@ -215,13 +215,14 @@
                 android:id="@+id/video_info_now_anthology"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 app:leftValue="@string/videoNowPlay" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
+                android:layout_gravity="end|center_vertical"
                 android:layout_marginStart="20dp"
                 android:text="@string/videoClickChangeAnthology"
                 android:textColor="@color/infoColor"
@@ -234,29 +235,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:visibility="gone"
             android:background="@drawable/ripple_round_corners6dp_bg"
             android:orientation="horizontal"
-            android:padding="@dimen/padding_10dp">
+            android:padding="@dimen/padding_10dp"
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/download"
-                android:textSize="15sp"
                 android:textColor="@color/black"
-                android:textStyle="bold"
-                android:layout_weight="1" />
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/video_info_downloaded_record"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
+                android:layout_gravity="end|center_vertical"
                 android:layout_marginStart="20dp"
-                tools:text="2/23"
                 android:textColor="@color/infoColor"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                tools:text="2/23" />
 
         </LinearLayout>
 

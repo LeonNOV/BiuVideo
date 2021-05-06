@@ -1,32 +1,26 @@
 package com.leon.biuvideo.utils.downloadUtils;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 
 import androidx.annotation.IntDef;
-import androidx.annotation.NonNull;
 
 import com.arialyy.annotations.Download;
 import com.arialyy.aria.core.Aria;
 import com.arialyy.aria.core.common.HttpOption;
 import com.arialyy.aria.core.common.RequestEnum;
 import com.arialyy.aria.core.task.DownloadTask;
-import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.Bangumi;
+import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiAnthology;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoInfo;
 import com.leon.biuvideo.greendao.dao.DaoBaseUtils;
 import com.leon.biuvideo.greendao.dao.DownloadHistory;
+import com.leon.biuvideo.greendao.dao.DownloadHistoryDao;
 import com.leon.biuvideo.greendao.dao.DownloadLevelOne;
-import com.leon.biuvideo.greendao.dao.DownloadLevelOneDao;
 import com.leon.biuvideo.greendao.daoutils.DownloadHistoryUtils;
 import com.leon.biuvideo.greendao.daoutils.DownloadLevelOneUtils;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.BangumiDetailParser;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoInfoParser;
 
 import java.io.File;
-import java.util.List;
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -55,23 +49,52 @@ public class ResourceDownloadTask {
      */
     private final Map<String, String> headers = HttpUtils.getAPIRequestHeader();
     private DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils;
-    private Handler handler;
 
-    public ResourceDownloadTask(Context context, DownloadHistory downloadHistory) {
+    private OnDownloadStatListener onDownloadStatListener;
+    private VideoInfo.VideoAnthology videoAnthology;
+    private BangumiAnthology bangumiAnthology;
+
+    public ResourceDownloadTask(Context context, DownloadHistory downloadHistory, Serializable serializable) {
         this.context = context;
         this.downloadHistory = downloadHistory;
 
+        if (serializable instanceof VideoInfo.VideoAnthology) {
+            videoAnthology = (VideoInfo.VideoAnthology) serializable;
+        } else if (serializable instanceof BangumiAnthology) {
+            bangumiAnthology = (BangumiAnthology) serializable;
+        } else {
+            throw new ClassCastException("serializable 类型必须是'VideoInfo.VideoAnthology'或'BangumiAnthology'");
+        }
+
         checkSaveDirectory();
+    }
+
+    public interface OnDownloadStatListener {
+        /**
+         * 下载完成
+         */
+        void onCompleted();
+
+        /**
+         * 取消任务
+         */
+        void onCancel();
+
+        /**
+         * 下载失败
+         */
+        void onFailed();
+    }
+
+    public void setOnDownloadStatListener(OnDownloadStatListener onDownloadStatListener) {
+        this.onDownloadStatListener = onDownloadStatListener;
     }
 
     /**
      * 检查/创建 资源保存路径
      */
     private void checkSaveDirectory() {
-        File resourcesPath = new File(context.getDataDir(), RESOURCE);
-        if (!resourcesPath.exists()) {
-            resourcesPath.mkdirs();
-        }
+        File resourcesPath = context.getExternalFilesDir(RESOURCE);
 
         File resSavePath;
         String resFileType;
@@ -93,42 +116,16 @@ public class ResourceDownloadTask {
         }
 
         if (!resSavePath.exists()) {
-            if (resSavePath.mkdirs()) {
-                this.savePath = new File(resSavePath, downloadHistory.getTitle() + "_" + downloadHistory.getResKey() + resFileType).getAbsolutePath();
-            }
+            resSavePath.mkdirs();
         }
+
+        this.savePath = new File(resSavePath, downloadHistory.getTitle() + "_" + downloadHistory.getSubTitle() + resFileType).getAbsolutePath();
     }
 
     /**
      * 创建任务并开始下载
      */
     public void startDownload() {
-        handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
-            @Override
-            public boolean handleMessage(@NonNull Message msg) {
-                Object obj = msg.obj;
-
-                DownloadLevelOne downloadLevelOne = new DownloadLevelOne();
-                downloadLevelOne.setLevelOneId(downloadHistory.getLevelOneId());
-                if (obj != null) {
-                    if (obj instanceof VideoInfo) {
-                        VideoInfo videoInfo = (VideoInfo) obj;
-                        downloadLevelOne.setTitle(videoInfo.title);
-                        downloadLevelOne.setCoverUrl(videoInfo.cover);
-                    } else {
-                        Bangumi bangumi = (Bangumi) obj;
-                        downloadLevelOne.setTitle(bangumi.title);
-                        downloadLevelOne.setCoverUrl(bangumi.cover);
-                    }
-
-                    new DownloadLevelOneUtils(context).getDownloadLevelOneDaoBaseUtils().insert(downloadLevelOne);
-                }
-
-
-                return true;
-            }
-        });
-
         DownloadHistoryUtils downloadHistoryUtils = new DownloadHistoryUtils(context);
         downloadHistoryDaoUtils = downloadHistoryUtils.getDownloadHistoryDaoUtils();
 
@@ -151,20 +148,19 @@ public class ResourceDownloadTask {
             String levelOneId = downloadHistory.getLevelOneId();
 
             // 查询是否已存在'LevelOne'数据
-            List<DownloadHistory> downloadHistories = downloadHistoryDaoUtils.queryByQueryBuilder(DownloadLevelOneDao.Properties.LevelOneId.eq(levelOneId));
-            if (downloadHistories == null || downloadHistories.size() == 0) {
-                getVideoInfo(downloadHistory.getLevelOneId());
+            if (downloadHistoryDaoUtils.isExists(DownloadHistoryDao.Properties.LevelOneId.eq(levelOneId))) {
+                new DownloadLevelOneUtils(context).getDownloadLevelOneDaoBaseUtils()
+                        .insert(new DownloadLevelOne(null, downloadHistory.getTitle(),
+                                downloadHistory.getLevelOneId(), downloadHistory.getCoverUrl()));
             }
         }
 
         if (downloadHistory.getResType() != RES_TYPE_PICTURE) {
             downloadHistory.setTaskId(taskId);
+            downloadHistory.setSavePath(savePath);
             downloadHistoryDaoUtils.insert(downloadHistory);
         }
     }
-
-    @IntDef({RES_TYPE_VIDEO, RES_TYPE_AUDIO, RES_TYPE_PICTURE})
-    public @interface ResourcesType{}
 
     /**
      * 取消下载
@@ -173,6 +169,10 @@ public class ResourceDownloadTask {
     void onCancel (DownloadTask downloadTask) {
         if (downloadTask.getEntity().getId() == downloadHistory.getTaskId()) {
             downloadHistoryDaoUtils.delete(downloadHistory);
+
+            if (onDownloadStatListener != null) {
+                onDownloadStatListener.onCancel();
+            }
         }
     }
 
@@ -180,10 +180,14 @@ public class ResourceDownloadTask {
      * 下载失败
      */
     @Download.onTaskFail
-    void onFail (DownloadTask downloadTask) {
+    void onFailed(DownloadTask downloadTask) {
         if (downloadTask.getEntity().getId() == downloadHistory.getTaskId()) {
             downloadHistory.setIsFailed(true);
             downloadHistoryDaoUtils.update(downloadHistory);
+
+            if (onDownloadStatListener != null) {
+                onDownloadStatListener.onFailed();
+            }
         }
     }
 
@@ -191,25 +195,25 @@ public class ResourceDownloadTask {
      * 下载完成
      */
     @Download.onTaskComplete
-    void complete (DownloadTask downloadTask) {
+    void onCompleted(DownloadTask downloadTask) {
         if (downloadTask.getEntity().getId() == downloadHistory.getTaskId()) {
             downloadHistory.setIsCompleted(true);
             downloadHistoryDaoUtils.update(downloadHistory);
+
+            if (onDownloadStatListener != null) {
+                onDownloadStatListener.onCompleted();
+            }
         }
     }
 
-    /**
-     * 获取'LevelOne'数据
-     */
-    private void getVideoInfo (String levelOneId) {
-        Message message = handler.obtainMessage();
-        // 是否为投稿视频
-        if (levelOneId.startsWith("BV")) {
-            message.obj = VideoInfoParser.parseData(downloadHistory.getLevelOneId());
-        } else {
-            message.obj = new BangumiDetailParser(levelOneId).parseData();
-        }
+    @IntDef({RES_TYPE_VIDEO, RES_TYPE_AUDIO, RES_TYPE_PICTURE})
+    public @interface ResourcesType{}
 
-        handler.sendMessage(message);
+    public VideoInfo.VideoAnthology getVideoAnthology() {
+        return videoAnthology;
+    }
+
+    public BangumiAnthology getBangumiAnthology() {
+        return bangumiAnthology;
     }
 }

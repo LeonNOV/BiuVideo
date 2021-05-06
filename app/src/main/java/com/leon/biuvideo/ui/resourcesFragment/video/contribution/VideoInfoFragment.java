@@ -1,12 +1,15 @@
 package com.leon.biuvideo.ui.resourcesFragment.video.contribution;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alibaba.fastjson.JSONObject;
@@ -15,6 +18,10 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.homeAdapters.RecommendAdapter;
 import com.leon.biuvideo.beans.resourcesBeans.VideoRecommend;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoInfo;
+import com.leon.biuvideo.greendao.dao.DaoBaseUtils;
+import com.leon.biuvideo.greendao.dao.DownloadHistory;
+import com.leon.biuvideo.greendao.dao.DownloadHistoryDao;
+import com.leon.biuvideo.greendao.daoutils.DownloadHistoryUtils;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.DownloadBottomSheet;
 import com.leon.biuvideo.ui.resourcesFragment.video.OnBottomSheetWithItemListener;
@@ -23,8 +30,10 @@ import com.leon.biuvideo.ui.resourcesFragment.video.VideoAnthologyBottomSheet;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
+import com.leon.biuvideo.ui.views.WarnDialog;
 import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.PermissionUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
@@ -69,6 +78,8 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
     private VideoInfo videoInfo;
     private LinearLayout videoInfoEasterEggContainer;
     private TextView videoInfoDownloadedRecord;
+    private int downloadedRecordCount = 0;
+    private DownloadBottomSheet<VideoInfo.VideoAnthology> downloadBottomSheet;
 
     public VideoInfoFragment(String bvid) {
         this.bvid = bvid;
@@ -114,10 +125,11 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
         videoInfoRecommends.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
         videoInfoEasterEggContainer = findView(R.id.video_info_easterEgg_container);
-        videoInfoEasterEggContainer.setVisibility(View.VISIBLE);
         videoInfoEasterEggContainer.setOnClickListener(this);
 
-        videoInfoDownloadedRecord = findView(R.id.video_info_downloaded_record);
+        if (PreferenceUtils.getEasterEggStat()) {
+            videoInfoEasterEggContainer.setVisibility(View.VISIBLE);
+        }
 
         initHandler();
         getVideoInfo();
@@ -142,7 +154,7 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
                                 .setText(R.id.video_info_title, videoInfo.title)
                                 .setText(R.id.video_info_play, ValueUtils.generateCN(videoInfo.videoStat.view))
                                 .setText(R.id.video_info_danmaku, ValueUtils.generateCN(videoInfo.videoStat.danmaku))
-                                .setText(R.id.video_info_pubTime, ValueUtils.generateTime(videoInfo.pubTime, "yyyy-MM-dd HH:mm", true))
+                                .setText(R.id.video_info_pubTime, ValueUtils.generateTime(videoInfo.pubTime, "yyyy-MM-dd", true))
                                 .setText(R.id.video_info_bvid, videoInfo.bvid)
                                 .setOnClickListener(R.id.video_info_bvid, VideoInfoFragment.this);
 
@@ -161,6 +173,22 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
                         if (onVideoAnthologyListener != null) {
                             VideoInfo.VideoAnthology videoAnthology = videoInfo.videoAnthologyList.get(anthologyIndex);
                             onVideoAnthologyListener.onAnthology(videoAnthology.cid, videoAnthology.part);
+                        }
+
+                        // 如果存在多个选集则获取已下载的选集数
+                        if (videoInfo.isMultiAnthology) {
+                            videoInfoDownloadedRecord = findView(R.id.video_info_downloaded_record);
+                            DownloadHistoryUtils downloadHistoryUtils = new DownloadHistoryUtils(context);
+                            DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils = downloadHistoryUtils.getDownloadHistoryDaoUtils();
+
+                            // 获取该视频已下载的选集数
+                            List<DownloadHistory> downloadHistoryList = downloadHistoryDaoUtils.
+                                    queryByQueryBuilder(DownloadHistoryDao.Properties.IsCompleted.eq(true),
+                                            DownloadHistoryDao.Properties.LevelOneId.eq(videoInfo.bvid));
+
+                            downloadedRecordCount = downloadHistoryList.size();
+                            String record = downloadedRecordCount + "/" + videoInfo.videos;
+                            videoInfoDownloadedRecord.setText(record);
                         }
 
                         getOtherData();
@@ -211,7 +239,7 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                VideoInfo videoInfo = VideoInfoParser.parseData(bvid);
+                VideoInfo videoInfo = VideoInfoParser.parseData(bvid, context);
 
                 Message message = receiveDataHandler.obtainMessage(0);
                 message.obj = videoInfo;
@@ -290,12 +318,14 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
                     return;
                 }
 
-                if (easterEggSteps == 4) {
-                    Toast.makeText(context, "🎉🎉🎉Surprise!!! 请在视频信息界面找到不一样的地方!!!🎉🎉🎉", Toast.LENGTH_SHORT).show();
+                if (easterEggSteps == 3) {
+                    videoInfoEasterEggContainer.setVisibility(View.VISIBLE);
+                    PreferenceUtils.setEasterEggStat();
+                    SimpleSnackBar.make(v, "🎉🎉🎉Surprise!!! 请在视频信息界面找到不一样的地方!!!🎉🎉🎉", SimpleSnackBar.LENGTH_SHORT).show();
                     easterEggWarn = null;
                     return;
                 } else {
-                    Toast.makeText(context, easterEggWarn, Toast.LENGTH_SHORT).show();
+                    SimpleSnackBar.make(v, easterEggWarn, SimpleSnackBar.LENGTH_SHORT).show();
                     easterEggWarn += "🎉";
 
                     easterEggSteps ++;
@@ -303,12 +333,84 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
 
                 break;
             case R.id.video_info_easterEgg_container:
-                DownloadBottomSheet downloadBottomSheet = new DownloadBottomSheet(context, videoInfo.videoAnthologyList);
-                downloadBottomSheet.show();
+                // 验证读写权限
+                if (!verifyIOPermission()) {
+                    requestIOPermission();
+                } else {
+                    downloadBottomSheet = new DownloadBottomSheet<>(context);
+                    downloadBottomSheet.setVideoAnthologyList(videoInfo.videoAnthologyList);
+                    downloadBottomSheet.setOnClickDownloadItemListener(new DownloadBottomSheet.OnClickDownloadItemListener() {
+                        @Override
+                        public void onClickItem() {
+                            downloadedRecordCount++;
 
+                            String record = downloadedRecordCount + "/" + videoInfo.videos;
+                            videoInfoDownloadedRecord.setText(record);
+                        }
+                    });
+                    downloadBottomSheet.show();
+                }
                 break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * 请求读写权限
+     */
+    private void requestIOPermission () {
+        WarnDialog warnDialog = new WarnDialog(context, "读写权限", "由于保存资源文件时需要用到'读写权限',否则将无法正常下载视频、音频等资源");
+        warnDialog.setOnWarnActionListener(new WarnDialog.OnWarnActionListener() {
+            @Override
+            public void onConfirm() {
+                warnDialog.dismiss();
+                PermissionUtil permissionUtil = new PermissionUtil(context, VideoInfoFragment.this);
+                permissionUtil.verifyPermission(PermissionUtil.Permission.RW);
+            }
+
+            @Override
+            public void onCancel() {
+                warnDialog.dismiss();
+            }
+        });
+        warnDialog.show();
+    }
+
+    /**
+     * 验证读写权限是否已授予
+     */
+    private boolean verifyIOPermission() {
+        return PermissionUtil.verifyPermission(context, PermissionUtil.Permission.RW);
+    }
+
+    /**
+     * 读写权限回调
+     *
+     * @param requestCode  请求码
+     * @param permissions  权限名称
+     * @param grantResults 授权结果
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1025) {
+            if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                downloadBottomSheet = new DownloadBottomSheet<>(context);
+                downloadBottomSheet.setVideoAnthologyList(videoInfo.videoAnthologyList);
+                downloadBottomSheet.setOnClickDownloadItemListener(new DownloadBottomSheet.OnClickDownloadItemListener() {
+                    @Override
+                    public void onClickItem() {
+                        downloadedRecordCount++;
+
+                        String record = downloadedRecordCount + "/" + videoInfo.videos;
+                        videoInfoDownloadedRecord.setText(record);
+                    }
+                });
+                downloadBottomSheet.show();
+            } else {
+                SimpleSnackBar.make(view, "请授予'读写权限',否则将不能下载~", SimpleSnackBar.LENGTH_SHORT).show();
+            }
         }
     }
 }

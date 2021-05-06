@@ -15,6 +15,7 @@ import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoP
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.VideoPlayerController;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoWithFlvParser;
 import com.leon.biuvideo.wraps.DanmakuWrap;
@@ -72,7 +73,7 @@ public class BangumiFragment extends BaseSupportFragment implements View.OnClick
                 BangumiFragment.this.cid = cid;
                 BangumiFragment.this.title = title;
 
-                getVideoStreamUrl(cid, VideoWithFlvParser.DEFAULT_QUALITY);
+                getVideoStreamUrl(cid, null);
             }
         });
 
@@ -153,7 +154,7 @@ public class BangumiFragment extends BaseSupportFragment implements View.OnClick
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                VideoWithFlv videoWithFlv = videoWithFlvParser.parseData(cid, qualityId, true);
+                VideoWithFlv videoWithFlv = videoWithFlvParser.parseData(cid, qualityId, true, true);
 
                 Message message = receiveDataHandler.obtainMessage();
                 message.obj = videoWithFlv;
