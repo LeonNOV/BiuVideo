@@ -443,16 +443,18 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
             handler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
                 @Override
                 public boolean handleMessage(@NonNull Message msg) {
-                    settingChoiceAddressAdapter.removeAll();
-                    if (msg.obj != null) {
-                        loadingRecyclerView.setRecyclerViewVisibility(View.VISIBLE);
-                        settingChoiceAddressAdapter.append((List<District>) msg.obj);
-                    } else {
-                        loadingRecyclerView.setImageViewVisibility(View.VISIBLE);
+                    if (settingChoiceAddressAdapter.getItemCount() > 0) {
+                        settingChoiceAddressAdapter.removeAll();
                     }
 
-                    // 设置完数据后隐藏ProgressBar
-                    loadingRecyclerView.setProgressBarVisibility(View.GONE);
+                    List<District> districtList = (List<District>) msg.obj;
+
+                    if (districtList != null && districtList.size() > 0) {
+                        settingChoiceAddressAdapter.append(districtList);
+                        loadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+                    } else {
+                        loadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
+                    }
 
                     return true;
                 }
@@ -467,9 +469,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                         keyword = s;
 
                         // 如果匹配成功就显示ProgressBar、隐藏NoData和recyclerView
-                        loadingRecyclerView.setProgressBarVisibility(View.VISIBLE);
-                        loadingRecyclerView.setImageViewVisibility(View.GONE);
-                        loadingRecyclerView.setRecyclerViewVisibility(View.GONE);
+                        loadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
                     } else {
                         Toast.makeText(context, "请输入正确的城市名称（不能含有中文以外的字符）", Toast.LENGTH_SHORT).show();
                         return;
@@ -514,7 +514,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
             if (settingChoiceAddressAdapter == null) {
                 List<District> districtList = new ArrayList<>();
                 settingChoiceAddressAdapter = new SettingChoiceAddressAdapter(districtList, context);
-                loadingRecyclerView.setRecyclerViewAdapter(settingChoiceAddressAdapter);
+                settingChoiceAddressAdapter.setHasStableIds(true);
                 settingChoiceAddressAdapter.setOnSettingChoiceAddressListener(new SettingChoiceAddressAdapter.OnSettingChoiceAddressListener() {
                     @Override
                     public void onSelectAddress(District district) {
@@ -533,11 +533,12 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                         // 显示已选择的位置
                         setAddress();
 
-                        Toast.makeText(context, "已手动设置位置为:" + district.address[0] + "," + district.address[1] + "," + district.address[2], Toast.LENGTH_SHORT).show();
+                        SimpleSnackBar.make(view, "已手动设置位置为:" + district.address[0] + "," + district.address[1] + "," + district.address[2], SimpleSnackBar.LENGTH_LONG).show();
 
                         setLocationBottomSheetDialog.dismiss();
                     }
                 });
+                loadingRecyclerView.setRecyclerViewAdapter(settingChoiceAddressAdapter);
             }
 
             // 设置底部透明

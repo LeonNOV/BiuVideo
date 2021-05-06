@@ -9,17 +9,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.ui.resourcesFragment.article.ArticleFragment;
 import com.leon.biuvideo.ui.resourcesFragment.picture.PictureFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.bangumi.BangumiFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoFragment;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.values.FragmentType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.yokeyword.fragmentation.SupportActivity;
@@ -38,13 +37,16 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
 
     private final SupportActivity supportActivity;
 
+    public BaseAdapter(Context context) {
+        this.beans = new ArrayList<>();
+        this.context = context;
+
+        this.supportActivity = (SupportActivity) context;
+    }
+
     public BaseAdapter(List<T> beans, Context context) {
         this.beans = beans;
         this.context = context;
-
-        if (context instanceof MainActivity) {
-            Fuck.blue("is MainActivity");
-        }
 
         this.supportActivity = (SupportActivity) context;
     }
@@ -97,10 +99,11 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
      * @param addOns    要加入的数据
      */
     public void append (List<T> addOns) {
+        int positionStart = this.beans.size();
+
         this.beans.addAll(addOns);
 
-        int size = this.beans.size();
-        notifyItemRangeInserted(size - 1, (size - 1) + addOns.size());
+        notifyItemRangeInserted(positionStart, addOns.size());
     }
 
     /**
@@ -131,9 +134,10 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
      */
     public void removeAll() {
         if (this.beans != null) {
+            int count = this.beans.size();
             this.beans.clear();
 
-            notifyItemRangeRemoved(0, this.beans.size() - 1);
+            notifyItemRangeRemoved(0, count);
         }
     }
 
