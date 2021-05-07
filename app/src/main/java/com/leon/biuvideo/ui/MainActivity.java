@@ -43,8 +43,6 @@ public class MainActivity extends SupportActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
-//        Aria.download(this).register();
-
         if (findFragment(NavFragment.class) == null) {
             loadRootFragment(R.id.fl_container, NavFragment.newInstance());
         }

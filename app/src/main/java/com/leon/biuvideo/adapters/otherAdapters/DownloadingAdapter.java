@@ -19,6 +19,7 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.greendao.dao.DownloadHistory;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.ArrayList;
@@ -63,8 +64,7 @@ public class DownloadingAdapter extends BaseAdapter<DownloadHistory> {
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         DownloadHistory downloadHistory = downloadHistoryList.get(position);
 
-
-        DownloadEntity downloadEntity = Aria.download(context).getDownloadEntity(downloadHistory.getTaskId());
+        DownloadEntity downloadEntity = Aria.download(context).load(downloadHistory.getTaskId()).getEntity();
 
         ImageView downloadingItemSelect = holder.findById(R.id.downloading_item_select);
         downloadingItemSelect.setOnClickListener(new View.OnClickListener() {
@@ -124,19 +124,28 @@ public class DownloadingAdapter extends BaseAdapter<DownloadHistory> {
                     String convertSpeed = downloadEntity.getConvertSpeed().replace("mb", "M");
                     downloadingItemNowSpeed.setText(convertSpeed);
 
+                    Fuck.blue("convertSpeed：" + convertSpeed);
+
                     int percent = downloadEntity.getPercent();
 
                     String percentStr = percent + "%";
                     downloadingItemProgress.setText(percentStr);
                     downloadingItemProgressBar.setProgress(percent);
+                    Fuck.blue("percent：" + percent);
 
-                    String fileSize = downloadEntity.getConvertFileSize().replace("mb", "M");
+                    String convertFileSize = downloadEntity.getConvertFileSize();
+                    String fileSize = convertFileSize.replace("mb", "M");
+                    Fuck.blue("convertFileSize1：" + convertFileSize);
+
                     long currentFileSize = downloadEntity.getCurrentProgress();
 
                     double currentFileSizeMb = ((double) (currentFileSize / 1000) / 1000);
 
                     String currentFileSizeMbStr = fileSize + "/" + currentFileSizeMb + "M";
                     downloadingItemNowSize.setText(currentFileSizeMbStr);
+
+                    Fuck.blue("currentFileSize2：" + currentFileSize);
+                    Fuck.blue("========================================================================");
                 }
             }
         }, 100, 500, TimeUnit.MILLISECONDS);

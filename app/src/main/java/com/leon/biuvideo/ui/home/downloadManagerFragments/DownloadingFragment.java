@@ -14,6 +14,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.otherAdapters.DownloadingAdapter;
 import com.leon.biuvideo.greendao.dao.DaoBaseUtils;
 import com.leon.biuvideo.greendao.dao.DownloadHistory;
+import com.leon.biuvideo.greendao.dao.DownloadHistoryDao;
 import com.leon.biuvideo.greendao.daoutils.DownloadHistoryUtils;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
@@ -64,7 +65,7 @@ public class DownloadingFragment extends BaseSupportFragment implements View.OnC
 
         DownloadHistoryUtils downloadHistoryUtils = new DownloadHistoryUtils(context);
         DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils = downloadHistoryUtils.getDownloadHistoryDaoUtils();
-        List<DownloadHistory> downloadHistoryList = downloadHistoryDaoUtils.queryAll();
+        List<DownloadHistory> downloadHistoryList = downloadHistoryDaoUtils.queryByQueryBuilder(DownloadHistoryDao.Properties.IsCompleted.eq(false));
 
         downloadingAdapter = new DownloadingAdapter(downloadHistoryList, context);
 

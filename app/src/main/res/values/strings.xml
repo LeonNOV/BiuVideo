@@ -259,4 +259,5 @@
     <string name="downloadManagerSelectedAll">全选</string>
     <string name="downloadManagerCancelSelectedAll">取消全选</string>
     <string name="downloadManagerDelete">删除</string>
+    <string name="downloadQualityWarn">注意：如果选择的画质不存在，则最终下载的是比选择画质低一阶的画质</string>
 </resources>

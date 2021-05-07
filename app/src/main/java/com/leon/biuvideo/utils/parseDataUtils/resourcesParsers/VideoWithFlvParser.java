@@ -22,21 +22,6 @@ import okhttp3.Headers;
  */
 public class VideoWithFlvParser {
     /**
-     * 默认获取1080P清晰度
-     * 分辨率代码
-     * 6	240P 极速（仅mp4方式）
-     * 16	360P 流畅
-     * 32	480P 清晰
-     * 64	720P 高清（登录）
-     * 74	720P60 高清（大会员）
-     * 80	1080P 高清（登录）
-     * 112	1080P+ 高清（大会员）
-     * 116	1080P60 高清（大会员）
-     * 120	4K 超清（大会员）
-     */
-    public static final String DEFAULT_QUALITY = "80";
-
-    /**
      * 获取4K画质需要添加该参数，默认添加
      */
     private static final String FOURK = "1";
@@ -65,7 +50,7 @@ public class VideoWithFlvParser {
                     String.valueOf(PreferenceUtils.getPlayQuality()) :
                     String.valueOf(PreferenceUtils.getDownloadQuality()));
         } else {
-            params.put("qn", DEFAULT_QUALITY);
+            params.put("qn", qualityCode);
         }
 
         params.put("fourk", FOURK);

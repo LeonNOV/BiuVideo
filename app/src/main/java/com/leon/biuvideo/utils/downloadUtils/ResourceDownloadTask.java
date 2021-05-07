@@ -17,6 +17,7 @@ import com.leon.biuvideo.greendao.dao.DownloadHistoryDao;
 import com.leon.biuvideo.greendao.dao.DownloadLevelOne;
 import com.leon.biuvideo.greendao.daoutils.DownloadHistoryUtils;
 import com.leon.biuvideo.greendao.daoutils.DownloadLevelOneUtils;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 
 import java.io.File;
@@ -47,7 +48,7 @@ public class ResourceDownloadTask {
     /**
      * 请求头信息
      */
-    private final Map<String, String> headers = HttpUtils.getAPIRequestHeader();
+    private final Map<String, String> headers = HttpUtils.getHeaders();
     private DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils;
 
     private OnDownloadStatListener onDownloadStatListener;
@@ -65,6 +66,8 @@ public class ResourceDownloadTask {
         } else {
             throw new ClassCastException("serializable 类型必须是'VideoInfo.VideoAnthology'或'BangumiAnthology'");
         }
+
+        Aria.download(this).register();
 
         checkSaveDirectory();
     }
@@ -148,7 +151,7 @@ public class ResourceDownloadTask {
             String levelOneId = downloadHistory.getLevelOneId();
 
             // 查询是否已存在'LevelOne'数据
-            if (downloadHistoryDaoUtils.isExists(DownloadHistoryDao.Properties.LevelOneId.eq(levelOneId))) {
+            if (!downloadHistoryDaoUtils.isExists(DownloadHistoryDao.Properties.LevelOneId.eq(levelOneId))) {
                 new DownloadLevelOneUtils(context).getDownloadLevelOneDaoBaseUtils()
                         .insert(new DownloadLevelOne(null, downloadHistory.getTitle(),
                                 downloadHistory.getLevelOneId(), downloadHistory.getCoverUrl()));
@@ -173,6 +176,8 @@ public class ResourceDownloadTask {
             if (onDownloadStatListener != null) {
                 onDownloadStatListener.onCancel();
             }
+
+            Aria.download(this).unRegister();
         }
     }
 
@@ -185,9 +190,13 @@ public class ResourceDownloadTask {
             downloadHistory.setIsFailed(true);
             downloadHistoryDaoUtils.update(downloadHistory);
 
+            Fuck.blue("task:" + downloadHistory.getTitle() + "下载失败");
+
             if (onDownloadStatListener != null) {
                 onDownloadStatListener.onFailed();
             }
+
+            Aria.download(this).unRegister();
         }
     }
 
@@ -200,9 +209,13 @@ public class ResourceDownloadTask {
             downloadHistory.setIsCompleted(true);
             downloadHistoryDaoUtils.update(downloadHistory);
 
+            Fuck.blue("task:" + downloadHistory.getTitle() + "下载完成");
+
             if (onDownloadStatListener != null) {
                 onDownloadStatListener.onCompleted();
             }
+
+            Aria.download(this).unRegister();
         }
     }
 
