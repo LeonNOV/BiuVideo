@@ -3,31 +3,22 @@ package com.leon.biuvideo.adapters.otherAdapters;
 import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.arialyy.annotations.Download;
 import com.arialyy.aria.core.Aria;
 import com.arialyy.aria.core.download.DownloadEntity;
-import com.arialyy.aria.core.download.DownloadReceiver;
 import com.arialyy.aria.core.download.target.HttpNormalTarget;
-import com.arialyy.aria.core.task.DownloadTask;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
+import com.leon.biuvideo.greendao.dao.DaoBaseUtils;
 import com.leon.biuvideo.greendao.dao.DownloadHistory;
-import com.leon.biuvideo.ui.views.SimpleSnackBar;
-import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.greendao.daoutils.DownloadHistoryUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @Author Leon
@@ -39,20 +30,11 @@ public class DownloadingAdapter extends BaseAdapter<DownloadHistory> {
     private final List<ImageView> downloadingItemSelectList;
 
     private boolean editState = false;
-    private final ScheduledExecutorService executorService;
 
     public DownloadingAdapter(List<DownloadHistory> beans, Context context) {
         super(beans, context);
         this.downloadHistoryList = beans;
         downloadingItemSelectList = new ArrayList<>(beans.size());
-
-        // 参数corePoolSize和aria配置文件中的最大的任务数相同
-        executorService = new ScheduledThreadPoolExecutor(5, new ThreadFactory() {
-            @Override
-            public Thread newThread(Runnable r) {
-                return new Thread(r, "downloadingTimer");
-            }
-        });
     }
 
     @Override
@@ -63,8 +45,6 @@ public class DownloadingAdapter extends BaseAdapter<DownloadHistory> {
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         DownloadHistory downloadHistory = downloadHistoryList.get(position);
-
-        DownloadEntity downloadEntity = Aria.download(context).load(downloadHistory.getTaskId()).getEntity();
 
         ImageView downloadingItemSelect = holder.findById(R.id.downloading_item_select);
         downloadingItemSelect.setOnClickListener(new View.OnClickListener() {
@@ -96,59 +76,12 @@ public class DownloadingAdapter extends BaseAdapter<DownloadHistory> {
                         }
                     }
                 });
-        TextView downloadingItemProgress = holder.findById(R.id.downloading_item_progress);
-        TextView downloadingItemNowSize = holder.findById(R.id.downloading_item_now_size);
-        ProgressBar downloadingItemProgressBar = holder.findById(R.id.downloading_item_progressBar);
-        TextView downloadingItemNowSpeed = holder.findById(R.id.downloading_item_now_speed);
 
-        addTimer(downloadEntity, downloadingItemNowSpeed, downloadingItemProgress, downloadingItemNowSize, downloadingItemProgressBar);
-    }
-
-    /**
-     * 添加计时器，用以更新下载进度、百分比进度、已下载大小
-     *
-     * @param downloadEntity    DownloadEntity
-     * @param downloadingItemNowSpeed   当前下载速度
-     * @param downloadingItemProgress   百分比进度
-     * @param downloadingItemNowSize    当前已下载大小
-     * @param downloadingItemProgressBar    下载进度条
-     */
-    private void addTimer(DownloadEntity downloadEntity, TextView downloadingItemNowSpeed,
-                          TextView downloadingItemProgress, TextView downloadingItemNowSize,
-                          ProgressBar downloadingItemProgressBar) {
-
-        executorService.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                if (downloadEntity.getState() == DownloadEntity.STATE_RUNNING) {
-                    String convertSpeed = downloadEntity.getConvertSpeed().replace("mb", "M");
-                    downloadingItemNowSpeed.setText(convertSpeed);
-
-                    Fuck.blue("convertSpeed：" + convertSpeed);
-
-                    int percent = downloadEntity.getPercent();
-
-                    String percentStr = percent + "%";
-                    downloadingItemProgress.setText(percentStr);
-                    downloadingItemProgressBar.setProgress(percent);
-                    Fuck.blue("percent：" + percent);
-
-                    String convertFileSize = downloadEntity.getConvertFileSize();
-                    String fileSize = convertFileSize.replace("mb", "M");
-                    Fuck.blue("convertFileSize1：" + convertFileSize);
-
-                    long currentFileSize = downloadEntity.getCurrentProgress();
-
-                    double currentFileSizeMb = ((double) (currentFileSize / 1000) / 1000);
-
-                    String currentFileSizeMbStr = fileSize + "/" + currentFileSizeMb + "M";
-                    downloadingItemNowSize.setText(currentFileSizeMbStr);
-
-                    Fuck.blue("currentFileSize2：" + currentFileSize);
-                    Fuck.blue("========================================================================");
-                }
-            }
-        }, 100, 500, TimeUnit.MILLISECONDS);
+        DownloadEntity downloadEntity = Aria.download(context).getDownloadEntity(downloadHistory.getTaskId());
+        String currentFileSizeAndCount = ((double) (downloadEntity.getCurrentProgress() / 1000 / 1000)) + "M/" +
+                (downloadEntity.getConvertFileSize().replace("mb", "M"));
+        holder.setText(R.id.downloading_item_current_size, currentFileSizeAndCount);
+        ((ImageView)holder.findById(R.id.downloading_item_stat)).setImageLevel(1);
     }
 
     /**
@@ -183,6 +116,9 @@ public class DownloadingAdapter extends BaseAdapter<DownloadHistory> {
      * 删除所有已选中的
      */
     public void removeAllSelected () {
+        DownloadHistoryUtils downloadHistoryUtils = new DownloadHistoryUtils(context);
+        DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils = downloadHistoryUtils.getDownloadHistoryDaoUtils();
+
         List<ImageView> selectedList = new ArrayList<>();
 
         for (int i = 0; i < downloadingItemSelectList.size(); i++) {
@@ -199,6 +135,7 @@ public class DownloadingAdapter extends BaseAdapter<DownloadHistory> {
 
             // 删除任务
             Aria.download(context).load(downloadHistory.getTaskId()).removeRecord();
+            downloadHistoryDaoUtils.delete(downloadHistory);
 
             downloadingItemSelectList.remove(imageView);
             remove(downloadHistory);

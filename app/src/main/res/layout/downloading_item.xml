@@ -9,16 +9,16 @@
 
     <ImageView
         android:id="@+id/downloading_item_select"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_gravity="center_vertical"
-        android:background="@drawable/ripple_round_corners6dp_bg"
-        android:backgroundTint="@android:color/transparent"
+        android:layout_marginEnd="5dp"
+        android:padding="5dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/description"
         android:src="@drawable/download_manager_select_stat"
         android:visibility="gone"
-        android:layout_marginEnd="5dp"
-        tools:visibility="visible"/>
+        tools:visibility="visible" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="@dimen/videoCoverWidth"
@@ -33,6 +33,20 @@
             android:contentDescription="@string/description"
             android:scaleType="centerCrop"
             tools:src="@drawable/user_default_banner" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#40000000" />
+
+        <ImageView
+            android:id="@+id/downloading_item_stat"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/description"
+            android:src="@drawable/downloading_item_stat" />
 
     </androidx.cardview.widget.CardView>
 
@@ -60,16 +74,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/downloading_item_progress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/infoColor"
-                    android:textSize="13sp"
-                    android:visibility="gone"
-                    tools:text="41%" />
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/downloading_item_now_speed"
@@ -78,10 +83,10 @@
                     android:layout_gravity="start"
                     android:textColor="@color/infoColor"
                     android:textSize="13sp"
-                    tools:text="0.5mb/s" />
+                    android:text="@string/downloadingPaused" />
 
                 <TextView
-                    android:id="@+id/downloading_item_now_size"
+                    android:id="@+id/downloading_item_current_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"

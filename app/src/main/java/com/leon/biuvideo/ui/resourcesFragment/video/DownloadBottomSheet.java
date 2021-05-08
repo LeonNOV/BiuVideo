@@ -16,10 +16,8 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.ListPopupWindow;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.arialyy.aria.core.Aria;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
@@ -45,6 +43,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * @Author Leon
@@ -198,7 +197,7 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
                     downloadHistory.setResStreamUrl(videoWithFlv.videoStreamInfoList.get(0).url);
 
                     ImageView imageView = (ImageView) msg.obj;
-                    ResourceDownloadTask resourceDownloadTask = new ResourceDownloadTask(context, downloadHistory, data.getSerializable("anthologyInfo"));
+                    ResourceDownloadTask resourceDownloadTask = new ResourceDownloadTask(context, this, downloadHistory, data.getSerializable("anthologyInfo"));
                     resourceDownloadTask.setOnDownloadStatListener(new ResourceDownloadTask.OnDownloadStatListener() {
                         @Override
                         public void onCompleted() {
@@ -219,13 +218,9 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
                         }
 
                         @Override
-                        public void onCancel() {
-                            imageView.setVisibility(View.INVISIBLE);
-                        }
-
-                        @Override
                         public void onFailed() {
                             imageView.setVisibility(View.INVISIBLE);
+                            SimpleSnackBar.make(view, context.getString(R.string.downloadError), SimpleSnackBar.LENGTH_LONG).show();
                         }
                     });
                     resourceDownloadTask.startDownload();
@@ -407,7 +402,5 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
                 }
             });
         }
-
-
     }
 }

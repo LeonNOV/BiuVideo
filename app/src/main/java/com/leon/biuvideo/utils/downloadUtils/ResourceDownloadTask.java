@@ -15,8 +15,10 @@ import com.leon.biuvideo.greendao.dao.DaoBaseUtils;
 import com.leon.biuvideo.greendao.dao.DownloadHistory;
 import com.leon.biuvideo.greendao.dao.DownloadHistoryDao;
 import com.leon.biuvideo.greendao.dao.DownloadLevelOne;
+import com.leon.biuvideo.greendao.dao.DownloadLevelOneDao;
 import com.leon.biuvideo.greendao.daoutils.DownloadHistoryUtils;
 import com.leon.biuvideo.greendao.daoutils.DownloadLevelOneUtils;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 
@@ -41,22 +43,20 @@ public class ResourceDownloadTask {
     private static final String AUDIOS = "audios";
 
     private final Context context;
+    private final Object object;
     private final DownloadHistory downloadHistory;
 
     private String savePath;
 
-    /**
-     * 请求头信息
-     */
-    private final Map<String, String> headers = HttpUtils.getHeaders();
     private DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils;
 
     private OnDownloadStatListener onDownloadStatListener;
     private VideoInfo.VideoAnthology videoAnthology;
     private BangumiAnthology bangumiAnthology;
 
-    public ResourceDownloadTask(Context context, DownloadHistory downloadHistory, Serializable serializable) {
+    public ResourceDownloadTask(Context context, Object object, DownloadHistory downloadHistory, Serializable serializable) {
         this.context = context;
+        this.object = object;
         this.downloadHistory = downloadHistory;
 
         if (serializable instanceof VideoInfo.VideoAnthology) {
@@ -64,10 +64,10 @@ public class ResourceDownloadTask {
         } else if (serializable instanceof BangumiAnthology) {
             bangumiAnthology = (BangumiAnthology) serializable;
         } else {
-            throw new ClassCastException("serializable 类型必须是'VideoInfo.VideoAnthology'或'BangumiAnthology'");
+            throw new ClassCastException("类型必须是'VideoInfo.VideoAnthology'或'BangumiAnthology'");
         }
 
-        Aria.download(this).register();
+        Aria.download(object).register();
 
         checkSaveDirectory();
     }
@@ -77,11 +77,6 @@ public class ResourceDownloadTask {
          * 下载完成
          */
         void onCompleted();
-
-        /**
-         * 取消任务
-         */
-        void onCancel();
 
         /**
          * 下载失败
@@ -133,14 +128,10 @@ public class ResourceDownloadTask {
         downloadHistoryDaoUtils = downloadHistoryUtils.getDownloadHistoryDaoUtils();
 
         HttpOption httpOption = new HttpOption();
-
-        for (Map.Entry<String, String> headersEntry : headers.entrySet()) {
-            httpOption.addHeader(headersEntry.getKey(), headersEntry.getValue());
-        }
-
+        httpOption.addHeader("Referer", "https://www.bilibili.com/");
         httpOption.setRequestType(RequestEnum.GET);
 
-        long taskId = Aria.download(context)
+        long taskId = Aria.download(object)
                 .load(downloadHistory.getResStreamUrl())
                 .setFilePath(savePath)
                 .option(httpOption)
@@ -151,10 +142,11 @@ public class ResourceDownloadTask {
             String levelOneId = downloadHistory.getLevelOneId();
 
             // 查询是否已存在'LevelOne'数据
-            if (!downloadHistoryDaoUtils.isExists(DownloadHistoryDao.Properties.LevelOneId.eq(levelOneId))) {
-                new DownloadLevelOneUtils(context).getDownloadLevelOneDaoBaseUtils()
-                        .insert(new DownloadLevelOne(null, downloadHistory.getTitle(),
-                                downloadHistory.getLevelOneId(), downloadHistory.getCoverUrl()));
+            DownloadLevelOneUtils downloadLevelOneUtils = new DownloadLevelOneUtils(context);
+            DaoBaseUtils<DownloadLevelOne> downloadLevelOneDaoBaseUtils = downloadLevelOneUtils.getDownloadLevelOneDaoBaseUtils();
+            if (!downloadLevelOneDaoBaseUtils.isExists(DownloadLevelOneDao.Properties.LevelOneId.eq(levelOneId))) {
+                downloadLevelOneDaoBaseUtils.insert(new DownloadLevelOne(null, downloadHistory.getTitle(),
+                        downloadHistory.getLevelOneId(), downloadHistory.getCoverUrl()));
             }
         }
 
@@ -166,37 +158,17 @@ public class ResourceDownloadTask {
     }
 
     /**
-     * 取消下载
-     */
-    @Download.onTaskCancel
-    void onCancel (DownloadTask downloadTask) {
-        if (downloadTask.getEntity().getId() == downloadHistory.getTaskId()) {
-            downloadHistoryDaoUtils.delete(downloadHistory);
-
-            if (onDownloadStatListener != null) {
-                onDownloadStatListener.onCancel();
-            }
-
-            Aria.download(this).unRegister();
-        }
-    }
-
-    /**
      * 下载失败
      */
     @Download.onTaskFail
     void onFailed(DownloadTask downloadTask) {
         if (downloadTask.getEntity().getId() == downloadHistory.getTaskId()) {
-            downloadHistory.setIsFailed(true);
-            downloadHistoryDaoUtils.update(downloadHistory);
-
-            Fuck.blue("task:" + downloadHistory.getTitle() + "下载失败");
-
             if (onDownloadStatListener != null) {
-                onDownloadStatListener.onFailed();
-            }
+                downloadHistoryDaoUtils.delete(downloadHistory);
 
-            Aria.download(this).unRegister();
+                onDownloadStatListener.onFailed();
+                Aria.download(object).unRegister();
+            }
         }
     }
 
@@ -206,16 +178,13 @@ public class ResourceDownloadTask {
     @Download.onTaskComplete
     void onCompleted(DownloadTask downloadTask) {
         if (downloadTask.getEntity().getId() == downloadHistory.getTaskId()) {
-            downloadHistory.setIsCompleted(true);
-            downloadHistoryDaoUtils.update(downloadHistory);
-
-            Fuck.blue("task:" + downloadHistory.getTitle() + "下载完成");
-
             if (onDownloadStatListener != null) {
-                onDownloadStatListener.onCompleted();
-            }
+                downloadHistory.setIsCompleted(true);
+                downloadHistoryDaoUtils.update(downloadHistory);
 
-            Aria.download(this).unRegister();
+                onDownloadStatListener.onCompleted();
+                Aria.download(object).unRegister();
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 package com.leon.biuvideo.greendao.dao;
 
 import org.greenrobot.greendao.AbstractDao;
+import org.greenrobot.greendao.Property;
 import org.greenrobot.greendao.query.QueryBuilder;
 import org.greenrobot.greendao.query.WhereCondition;
 

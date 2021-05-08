@@ -2,6 +2,7 @@ package com.leon.biuvideo;
 
 import android.app.Application;
 
+import com.arialyy.aria.core.Aria;
 import com.dueeeke.videoplayer.ijk.IjkPlayerFactory;
 import com.dueeeke.videoplayer.player.VideoViewConfig;
 import com.dueeeke.videoplayer.player.VideoViewManager;
@@ -31,6 +32,9 @@ public class App extends Application {
                     }
                 })
                 .install();
+
+        // 初始化Aria
+        Aria.init(this);
 
         VideoViewManager
                 .setConfig(VideoViewConfig

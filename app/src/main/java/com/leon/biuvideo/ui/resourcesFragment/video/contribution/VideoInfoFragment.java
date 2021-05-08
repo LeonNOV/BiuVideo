@@ -195,27 +195,33 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
                         break;
                     case 1:
                         JSONObject jsonObject = (JSONObject) msg.obj;
+                        if (jsonObject != null) {
+                            // 获取当前账户是否已关注当前UP主
+                            boolean attention = jsonObject.getBooleanValue("attention");
+                            videoInfoFollow.setSelected(attention);
+                            if (attention) {
+                                videoInfoFollow.setText("已关注");
+                            } else {
+                                videoInfoFollow.setText("关注");
+                            }
 
-                        // 获取当前账户是否已关注当前UP主
-                        boolean attention = jsonObject.getBooleanValue("attention");
-                        videoInfoFollow.setSelected(attention);
-                        if (attention) {
-                            videoInfoFollow.setText("已关注");
+                            // 获取投币状态
+                            boolean coin = jsonObject.getIntValue("coin") > 0;
+                            videoInfoCoin.setSelected(coin);
+
+                            // 获取收藏状态
+                            boolean favorite = jsonObject.getBooleanValue("favorite");
+                            videoInfoFavorite.setSelected(favorite);
+
+                            // 获取点赞状态
+                            boolean like = jsonObject.getBooleanValue("like");
+                            videoInfoLike.setSelected(like);
                         } else {
                             videoInfoFollow.setText("关注");
+                            videoInfoCoin.setSelected(false);
+                            videoInfoFavorite.setSelected(false);
+                            videoInfoLike.setSelected(false);
                         }
-
-                        // 获取投币状态
-                        boolean coin = jsonObject.getIntValue("coin") > 0;
-                        videoInfoCoin.setSelected(coin);
-
-                        // 获取收藏状态
-                        boolean favorite = jsonObject.getBooleanValue("favorite");
-                        videoInfoFavorite.setSelected(favorite);
-
-                        // 获取点赞状态
-                        boolean like = jsonObject.getBooleanValue("like");
-                        videoInfoLike.setSelected(like);
 
                         getComments();
                         break;
@@ -252,11 +258,15 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                // 获取当前视频与已登录用户的关系
-                Map<String, String> params = new HashMap<>(1);
-                params.put("bvid", videoInfo.bvid);
-                JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.VIDEO_STATUS, Headers.of(HttpUtils.getAPIRequestHeader()), params);
-                JSONObject data = response.getJSONObject("data");
+                JSONObject data = null;
+
+                if (PreferenceUtils.getLoginStatus()) {
+                    // 获取当前视频与已登录用户的关系
+                    Map<String, String> params = new HashMap<>(1);
+                    params.put("bvid", videoInfo.bvid);
+                    JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.VIDEO_STATUS, Headers.of(HttpUtils.getAPIRequestHeader()), params);
+                    data = response.getJSONObject("data");
+                }
 
                 Message message = receiveDataHandler.obtainMessage(1);
                 message.obj = data;
