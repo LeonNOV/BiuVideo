@@ -152,7 +152,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
      */
     protected void startPublicFragment (FragmentType fragmentType, String params) {
         if (!InternetUtils.checkNetwork(context)) {
-            SimpleSnackBar.make(supportActivity.getWindow().getDecorView(), R.string.networkWarn, SimpleSnackBar.LENGTH_SHORT).show();
+            SimpleSnackBar.make(supportActivity.getWindow().getDecorView(), context.getString(R.string.networkWarn), SimpleSnackBar.LENGTH_SHORT).show();
             return;
         }
 

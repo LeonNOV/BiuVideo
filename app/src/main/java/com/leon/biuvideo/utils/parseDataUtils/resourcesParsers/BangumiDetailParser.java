@@ -1,11 +1,17 @@
 package com.leon.biuvideo.utils.parseDataUtils.resourcesParsers;
 
+import android.content.Context;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.Bangumi;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiAnthology;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiSeason;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiSection;
+import com.leon.biuvideo.greendao.dao.DaoBaseUtils;
+import com.leon.biuvideo.greendao.dao.DownloadHistory;
+import com.leon.biuvideo.greendao.dao.DownloadHistoryDao;
+import com.leon.biuvideo.greendao.daoutils.DownloadHistoryUtils;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
@@ -28,7 +34,7 @@ public class BangumiDetailParser {
         this.seasonId = seasonId;
     }
 
-    public Bangumi parseData() {
+    public Bangumi parseData(Context context) {
         Map<String, String> params = new HashMap<>(1);
         params.put("season_id", seasonId);
 
@@ -75,9 +81,19 @@ public class BangumiDetailParser {
             bangumi.title = result.getString("title");
             bangumi.link = result.getString("link");
 
-            bangumi.bangumiAnthologyList = getBangumiEps(result.getJSONArray("episodes"), bangumi.seasonId);
+            bangumi.bangumiAnthologyList = getBangumiEps(result.getJSONArray("episodes"), bangumi.seasonId, context);
             bangumi.bangumiSeasonList = getBangumiSeasons(result.getJSONArray("seasons"));
             bangumi.bangumiSectionList = getBangumiSections(result.getJSONArray("section"));
+
+            if (bangumi.bangumiAnthologyList != null) {
+                bangumi.anthologyCount = bangumi.bangumiAnthologyList.size();
+                bangumi.isMultiAnthology = bangumi.anthologyCount > 1;
+            } else {
+                bangumi.anthologyCount = 0;
+                bangumi.isMultiAnthology = false;
+            }
+
+            bangumi.isFollow = getFollowStatus();
 
             return bangumi;
         } else {
@@ -92,10 +108,12 @@ public class BangumiDetailParser {
      * @param seasonId  番剧Id
      * @return  BangumiEp集合
      */
-    private List<BangumiAnthology> getBangumiEps(JSONArray episodes, String seasonId) {
+    private List<BangumiAnthology> getBangumiEps(JSONArray episodes, String seasonId, Context context) {
         if (episodes == null) {
             return null;
         }
+
+        DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils = new DownloadHistoryUtils(context).getDownloadHistoryDaoUtils();
 
         List<BangumiAnthology> bangumiAnthologies = new ArrayList<>(episodes.size());
         for (Object o : episodes) {
@@ -108,10 +126,33 @@ public class BangumiDetailParser {
             bangumiAnthology.cid = jsonObject.getString("cid");
             bangumiAnthology.id = jsonObject.getString("id");
 
+            List<DownloadHistory> downloadHistoryList = downloadHistoryDaoUtils.queryByQueryBuilder(DownloadHistoryDao.Properties.LevelOneId.eq(seasonId),
+                    DownloadHistoryDao.Properties.LevelTwoId.eq(bangumiAnthology.cid));
+
+            if (downloadHistoryList.size() > 0) {
+                DownloadHistory downloadHistory = downloadHistoryList.get(0);
+
+                if (downloadHistory.getIsCompleted()) {
+                    bangumiAnthology.isDownloaded = true;
+                }
+            }
+
             String badge = jsonObject.getString("badge");
             bangumiAnthology.badge = "".equals(badge) ? null : badge;
             bangumiAnthology.cover = jsonObject.getString("cover");
-            bangumiAnthology.longTitle = jsonObject.getString("long_title");
+
+            String title = jsonObject.getString("long_title");
+            if ("".equals(title)) {
+                String string = jsonObject.getString("title");
+                try {
+                    int i = Integer.parseInt(string);
+                    title = "第" + i + "话";
+                } catch (NumberFormatException e) {
+                    title = string;
+                }
+            }
+
+            bangumiAnthology.title = title;
             bangumiAnthology.pubTime = jsonObject.getLongValue("pub_time");
             bangumiAnthology.shortLink = jsonObject.getString("short_link");
             bangumiAnthology.subTitle = jsonObject.getString("subTitle");
@@ -210,5 +251,22 @@ public class BangumiDetailParser {
         }
 
         return bangumiSectionList;
+    }
+
+    /**
+     * 获取追番状态
+     *
+     * @return  true：已追番，false：未追番
+     */
+    private boolean getFollowStatus () {
+        Map<String, String> params = new HashMap<>(1);
+        params.put("season_id", seasonId);
+
+        JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.BANGUMI_STATUS, Headers.of(HttpUtils.getAPIRequestHeader()), params);
+        if (response.getIntValue("code") == 0) {
+            return response.getJSONObject("result").getIntValue("follow") != 0;
+        } else {
+            return false;
+        }
     }
 }

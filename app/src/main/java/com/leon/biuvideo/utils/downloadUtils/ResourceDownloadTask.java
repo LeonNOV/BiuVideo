@@ -18,13 +18,9 @@ import com.leon.biuvideo.greendao.dao.DownloadLevelOne;
 import com.leon.biuvideo.greendao.dao.DownloadLevelOneDao;
 import com.leon.biuvideo.greendao.daoutils.DownloadHistoryUtils;
 import com.leon.biuvideo.greendao.daoutils.DownloadLevelOneUtils;
-import com.leon.biuvideo.ui.views.SimpleSnackBar;
-import com.leon.biuvideo.utils.Fuck;
-import com.leon.biuvideo.utils.HttpUtils;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * @Author Leon
@@ -69,7 +65,7 @@ public class ResourceDownloadTask {
 
         Aria.download(object).register();
 
-        checkSaveDirectory();
+        this.savePath = checkSaveDirectory(context, downloadHistory.getResType(), downloadHistory.getTitle(), downloadHistory.getSubTitle()).getAbsolutePath();
     }
 
     public interface OnDownloadStatListener {
@@ -86,38 +82,6 @@ public class ResourceDownloadTask {
 
     public void setOnDownloadStatListener(OnDownloadStatListener onDownloadStatListener) {
         this.onDownloadStatListener = onDownloadStatListener;
-    }
-
-    /**
-     * 检查/创建 资源保存路径
-     */
-    private void checkSaveDirectory() {
-        File resourcesPath = context.getExternalFilesDir(RESOURCE);
-
-        File resSavePath;
-        String resFileType;
-        switch (downloadHistory.getResType()) {
-            case RES_TYPE_VIDEO:
-                resSavePath = new File(resourcesPath, VIDEOS);
-                resFileType = ".mp4";
-                break;
-            case RES_TYPE_AUDIO:
-                resSavePath = new File(resourcesPath, AUDIOS);
-                resFileType = ".mp3";
-                break;
-            case RES_TYPE_PICTURE:
-                resSavePath = new File(resourcesPath, PICTURES);
-                resFileType = ".jpg";
-                break;
-            default:
-                throw new RuntimeException("资源类型错误");
-        }
-
-        if (!resSavePath.exists()) {
-            resSavePath.mkdirs();
-        }
-
-        this.savePath = new File(resSavePath, downloadHistory.getTitle() + "_" + downloadHistory.getSubTitle() + resFileType).getAbsolutePath();
     }
 
     /**
@@ -154,6 +118,57 @@ public class ResourceDownloadTask {
             downloadHistory.setTaskId(taskId);
             downloadHistory.setSavePath(savePath);
             downloadHistoryDaoUtils.insert(downloadHistory);
+        }
+    }
+
+    /**
+     * 检查/创建 资源保存路径
+     */
+    public static File checkSaveDirectory(Context context, @ResourcesType int resType, String title, String subTitle) {
+        File resourcesPath = context.getExternalFilesDir(RESOURCE);
+
+        File resSavePath;
+        String resFileType;
+        switch (resType) {
+            case RES_TYPE_VIDEO:
+                resSavePath = new File(resourcesPath, VIDEOS);
+                resFileType = ".flv";
+                break;
+            case RES_TYPE_AUDIO:
+                resSavePath = new File(resourcesPath, AUDIOS);
+                resFileType = ".mp3";
+                break;
+            case RES_TYPE_PICTURE:
+                resSavePath = new File(resourcesPath, PICTURES);
+                resFileType = ".jpg";
+                break;
+            default:
+                throw new RuntimeException("资源类型错误");
+        }
+
+        if (!resSavePath.exists()) {
+            resSavePath.mkdirs();
+        }
+
+        return new File(resSavePath, (title + "_" + subTitle + resFileType));
+    }
+
+    /**
+     * 查询是否已下载
+     *
+     * @return 已存在返回true，不存在则返回false
+     */
+    public static boolean isExists(File savePath, Context context, String levelOnId, String levelTwoId, String subTitle) {
+        boolean exists = savePath.exists();
+
+        // 如果本地不存在，则查询数据库
+        if (!exists) {
+            DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils = new DownloadHistoryUtils(context).getDownloadHistoryDaoUtils();
+            return downloadHistoryDaoUtils.isExists(DownloadHistoryDao.Properties.LevelOneId.eq(levelOnId),
+                    DownloadHistoryDao.Properties.LevelTwoId.eq(levelTwoId),
+                    DownloadHistoryDao.Properties.SubTitle.eq(subTitle));
+        } else {
+            return true;
         }
     }
 

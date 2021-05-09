@@ -15,7 +15,6 @@ import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoP
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.VideoPlayerController;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoWithFlvParser;
 import com.leon.biuvideo.wraps.DanmakuWrap;
@@ -165,15 +164,9 @@ public class BangumiFragment extends BaseSupportFragment implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.video_danmaku_status:
-                boolean selected = videoDanmakuStatus.isSelected();
-                videoDanmakuStatus.setSelected(!selected);
-                EventBus.getDefault().post(DanmakuWrap.getInstance(!selected));
-                break;
-            default:
-                break;
-        }
+        boolean selected = videoDanmakuStatus.isSelected();
+        videoDanmakuStatus.setSelected(!selected);
+        EventBus.getDefault().post(DanmakuWrap.getInstance(!selected));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

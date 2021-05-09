@@ -147,7 +147,14 @@ public class DaoBaseUtils<T> {
      * 是否存在符合条件的条目
      */
     public boolean isExists (WhereCondition condition, WhereCondition ... conditionsMore) {
+        return count(condition, conditionsMore) > 0;
+    }
+
+    /**
+     * 获取符合条件的条目数
+     */
+    public Long count (WhereCondition condition, WhereCondition ... conditionsMore) {
         QueryBuilder<T> queryBuilder = daoSession.queryBuilder(entityClass);
-        return queryBuilder.where(condition, conditionsMore).count() > 0;
+        return queryBuilder.where(condition, conditionsMore).count();
     }
 }

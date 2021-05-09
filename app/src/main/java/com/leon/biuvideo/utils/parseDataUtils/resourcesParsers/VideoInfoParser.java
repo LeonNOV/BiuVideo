@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoInfo;
 import com.leon.biuvideo.greendao.dao.DaoBaseUtils;
 import com.leon.biuvideo.greendao.dao.DownloadHistory;
+import com.leon.biuvideo.greendao.dao.DownloadHistoryDao;
 import com.leon.biuvideo.greendao.daoutils.DownloadHistoryUtils;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.ValueUtils;
@@ -14,6 +15,7 @@ import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.Headers;
@@ -41,14 +43,13 @@ public class VideoInfoParser {
         if (dataObject != null) {
             VideoInfo videoInfo = new VideoInfo();
 
-            DownloadHistoryUtils downloadHistoryUtils = new DownloadHistoryUtils(context);
-            DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils = downloadHistoryUtils.getDownloadHistoryDaoUtils();
+            DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils = new DownloadHistoryUtils(context).getDownloadHistoryDaoUtils();
 
             videoInfo.bvid = dataObject.getString("bvid");
             videoInfo.aid = dataObject.getString("aid");
             videoInfo.title = dataObject.getString("title");
-            videoInfo.videos = dataObject.getIntValue("videos");
-            videoInfo.isMultiAnthology = videoInfo.videos > 0;
+            videoInfo.anthologyCount = dataObject.getIntValue("videos");
+            videoInfo.isMultiAnthology = videoInfo.anthologyCount > 0;
             videoInfo.tagId = dataObject.getIntValue("tid");
             videoInfo.tagName = dataObject.getString("tname");
             videoInfo.cover = dataObject.getString("pic");
@@ -80,7 +81,16 @@ public class VideoInfoParser {
                 videoAnthology.mainId = bvid;
                 videoAnthology.cid = jsonObject.getString("cid");
 
+                List<DownloadHistory> downloadHistoryList = downloadHistoryDaoUtils.queryByQueryBuilder(DownloadHistoryDao.Properties.LevelOneId.eq(bvid),
+                        DownloadHistoryDao.Properties.LevelTwoId.eq(videoAnthology.cid));
 
+                if (downloadHistoryList.size() > 0) {
+                    DownloadHistory downloadHistory = downloadHistoryList.get(0);
+
+                    if (downloadHistory.getIsCompleted()) {
+                        videoAnthology.isDownloaded = true;
+                    }
+                }
 
                 videoAnthology.part = jsonObject.getString("part");
                 videoAnthology.duration = ValueUtils.lengthGenerate(jsonObject.getIntValue("duration"));

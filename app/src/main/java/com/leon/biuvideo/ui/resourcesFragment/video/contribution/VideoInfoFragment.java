@@ -1,15 +1,14 @@
 package com.leon.biuvideo.ui.resourcesFragment.video.contribution;
 
-import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Message;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.alibaba.fastjson.JSONObject;
@@ -78,8 +77,7 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
     private VideoInfo videoInfo;
     private LinearLayout videoInfoEasterEggContainer;
     private TextView videoInfoDownloadedRecord;
-    private int downloadedRecordCount = 0;
-    private DownloadBottomSheet<VideoInfo.VideoAnthology> downloadBottomSheet;
+    private Long downloadedRecordCount = 0L;
 
     public VideoInfoFragment(String bvid) {
         this.bvid = bvid;
@@ -127,6 +125,8 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
         videoInfoEasterEggContainer = findView(R.id.video_info_easterEgg_container);
         videoInfoEasterEggContainer.setOnClickListener(this);
 
+        videoInfoDownloadedRecord = findView(R.id.video_info_downloaded_record);
+
         if (PreferenceUtils.getEasterEggStat()) {
             videoInfoEasterEggContainer.setVisibility(View.VISIBLE);
         }
@@ -135,104 +135,31 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
         getVideoInfo();
     }
 
+    /**
+     * 初始化Handler
+     */
     private void initHandler() {
         setOnLoadListener(new OnLoadListener() {
             @Override
             public void onLoad(Message msg) {
+                Object msgObj = msg.obj;
+                if (msgObj == null) {
+                    SimpleSnackBar.make(view, getString(R.string.snackBarDataErrorWarn), SimpleSnackBar.LENGTH_LONG).show();
+                    backPressed();
+                    return;
+                }
+
                 switch (msg.what) {
                     case 0:
-                        videoInfo = (VideoInfo) msg.obj;
-
-                        Glide
-                                .with(context)
-                                .load(videoInfo.userInfo.userFace += PreferenceUtils.getFeaturesStatus(FeaturesName.IMG_ORIGINAL_MODEL) ?
-                                        ImagePixelSize.FACE.value : "")
-                                .into(videoInfoFace);
-
-                        new BindingUtils(view, context)
-                                .setText(R.id.video_info_userName, videoInfo.userInfo.userName)
-                                .setText(R.id.video_info_title, videoInfo.title)
-                                .setText(R.id.video_info_play, ValueUtils.generateCN(videoInfo.videoStat.view))
-                                .setText(R.id.video_info_danmaku, ValueUtils.generateCN(videoInfo.videoStat.danmaku))
-                                .setText(R.id.video_info_pubTime, ValueUtils.generateTime(videoInfo.pubTime, "yyyy-MM-dd", true))
-                                .setText(R.id.video_info_bvid, videoInfo.bvid)
-                                .setOnClickListener(R.id.video_info_bvid, VideoInfoFragment.this);
-
-                        videoInfoLike.setText(ValueUtils.generateCN(videoInfo.videoStat.like));
-                        videoInfoCoin.setText(ValueUtils.generateCN(videoInfo.videoStat.like));
-                        videoInfoFavorite.setText(ValueUtils.generateCN(videoInfo.videoStat.like));
-                        videoInfoShare.setText(ValueUtils.generateCN(videoInfo.videoStat.like));
-
-                        if (videoInfo.videoAnthologyList.size() == 0) {
-                            videoInfoAnthologyContainer.setVisibility(View.GONE);
-                        } else {
-                            videoInfoNowAnthology.setRightValue(videoInfo.videoAnthologyList.get(anthologyIndex).part);
-                        }
-
-                        // 开始播放视频
-                        if (onVideoAnthologyListener != null) {
-                            VideoInfo.VideoAnthology videoAnthology = videoInfo.videoAnthologyList.get(anthologyIndex);
-                            onVideoAnthologyListener.onAnthology(videoAnthology.cid, videoAnthology.part);
-                        }
-
-                        // 如果存在多个选集则获取已下载的选集数
-                        if (videoInfo.isMultiAnthology) {
-                            videoInfoDownloadedRecord = findView(R.id.video_info_downloaded_record);
-                            DownloadHistoryUtils downloadHistoryUtils = new DownloadHistoryUtils(context);
-                            DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils = downloadHistoryUtils.getDownloadHistoryDaoUtils();
-
-                            // 获取该视频已下载的选集数
-                            List<DownloadHistory> downloadHistoryList = downloadHistoryDaoUtils.
-                                    queryByQueryBuilder(DownloadHistoryDao.Properties.IsCompleted.eq(true),
-                                            DownloadHistoryDao.Properties.LevelOneId.eq(videoInfo.bvid));
-
-                            downloadedRecordCount = downloadHistoryList.size();
-                            String record = downloadedRecordCount + "/" + videoInfo.videos;
-                            videoInfoDownloadedRecord.setText(record);
-                        }
-
+                        initInfo(msgObj);
                         getOtherData();
                         break;
                     case 1:
-                        JSONObject jsonObject = (JSONObject) msg.obj;
-                        if (jsonObject != null) {
-                            // 获取当前账户是否已关注当前UP主
-                            boolean attention = jsonObject.getBooleanValue("attention");
-                            videoInfoFollow.setSelected(attention);
-                            if (attention) {
-                                videoInfoFollow.setText("已关注");
-                            } else {
-                                videoInfoFollow.setText("关注");
-                            }
-
-                            // 获取投币状态
-                            boolean coin = jsonObject.getIntValue("coin") > 0;
-                            videoInfoCoin.setSelected(coin);
-
-                            // 获取收藏状态
-                            boolean favorite = jsonObject.getBooleanValue("favorite");
-                            videoInfoFavorite.setSelected(favorite);
-
-                            // 获取点赞状态
-                            boolean like = jsonObject.getBooleanValue("like");
-                            videoInfoLike.setSelected(like);
-                        } else {
-                            videoInfoFollow.setText("关注");
-                            videoInfoCoin.setSelected(false);
-                            videoInfoFavorite.setSelected(false);
-                            videoInfoLike.setSelected(false);
-                        }
-
+                        initStat(msgObj);
                         getComments();
                         break;
                     case 2:
-                        List<VideoRecommend> videoRecommendList = (List<VideoRecommend>) msg.obj;
-
-                        RecommendAdapter recommendAdapter = new RecommendAdapter(videoRecommendList, RecommendAdapter.SINGLE_COLUMN, context);
-                        recommendAdapter.setHasStableIds(true);
-                        videoInfoRecommends.setRecyclerViewAdapter(recommendAdapter);
-                        videoInfoRecommends.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
-                        videoInfoRecommends.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+                        initRecommend(msgObj);
                         break;
                     default:
                         break;
@@ -241,6 +168,108 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
         });
     }
 
+    /**
+     * 初始化基本信息
+     */
+    private void initInfo(Object msgObj) {
+        videoInfo = (VideoInfo) msgObj;
+
+        Glide
+                .with(context)
+                .load(videoInfo.userInfo.userFace += PreferenceUtils.getFeaturesStatus(FeaturesName.IMG_ORIGINAL_MODEL) ?
+                        ImagePixelSize.FACE.value : "")
+                .into(videoInfoFace);
+
+        new BindingUtils(view, context)
+                .setText(R.id.video_info_userName, videoInfo.userInfo.userName)
+                .setText(R.id.video_info_title, videoInfo.title)
+                .setText(R.id.video_info_play, ValueUtils.generateCN(videoInfo.videoStat.view))
+                .setText(R.id.video_info_danmaku, ValueUtils.generateCN(videoInfo.videoStat.danmaku))
+                .setText(R.id.video_info_pubTime, ValueUtils.generateTime(videoInfo.pubTime, "yyyy-MM-dd", true))
+                .setText(R.id.video_info_bvid, videoInfo.bvid)
+                .setOnClickListener(R.id.video_info_bvid, VideoInfoFragment.this);
+
+        videoInfoLike.setText(ValueUtils.generateCN(videoInfo.videoStat.like));
+        videoInfoCoin.setText(ValueUtils.generateCN(videoInfo.videoStat.like));
+        videoInfoFavorite.setText(ValueUtils.generateCN(videoInfo.videoStat.like));
+        videoInfoShare.setText(ValueUtils.generateCN(videoInfo.videoStat.like));
+
+        if (videoInfo.videoAnthologyList.size() == 0) {
+            videoInfoAnthologyContainer.setVisibility(View.GONE);
+        } else {
+            videoInfoNowAnthology.setRightValue(videoInfo.videoAnthologyList.get(anthologyIndex).part);
+        }
+
+        // 开始播放视频
+        if (onVideoAnthologyListener != null) {
+            VideoInfo.VideoAnthology videoAnthology = videoInfo.videoAnthologyList.get(anthologyIndex);
+            onVideoAnthologyListener.onAnthology(videoAnthology.cid, videoAnthology.part);
+        }
+
+        // 如果存在多个选集则获取已下载的选集数
+        if (videoInfo.isMultiAnthology) {
+            DownloadHistoryUtils downloadHistoryUtils = new DownloadHistoryUtils(context);
+            DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils = downloadHistoryUtils.getDownloadHistoryDaoUtils();
+
+            // 获取该视频已下载的选集数
+            downloadedRecordCount = downloadHistoryDaoUtils.count(DownloadHistoryDao.Properties.IsCompleted.eq(true),
+                    DownloadHistoryDao.Properties.LevelOneId.eq(bvid));
+
+            String record = downloadedRecordCount + "/" + videoInfo.anthologyCount;
+            videoInfoDownloadedRecord.setText(record);
+        }
+    }
+
+    /**
+     * 初始化状态数
+     */
+    private void initStat(Object msgObj) {
+        JSONObject jsonObject = (JSONObject) msgObj;
+        if (jsonObject != null) {
+            // 获取当前账户是否已关注当前UP主
+            boolean attention = jsonObject.getBooleanValue("attention");
+            videoInfoFollow.setSelected(attention);
+            if (attention) {
+                videoInfoFollow.setText("已关注");
+            } else {
+                videoInfoFollow.setText("关注");
+            }
+
+            // 获取投币状态
+            boolean coin = jsonObject.getIntValue("coin") > 0;
+            videoInfoCoin.setSelected(coin);
+
+            // 获取收藏状态
+            boolean favorite = jsonObject.getBooleanValue("favorite");
+            videoInfoFavorite.setSelected(favorite);
+
+            // 获取点赞状态
+            boolean like = jsonObject.getBooleanValue("like");
+            videoInfoLike.setSelected(like);
+        } else {
+            videoInfoFollow.setText("关注");
+            videoInfoCoin.setSelected(false);
+            videoInfoFavorite.setSelected(false);
+            videoInfoLike.setSelected(false);
+        }
+    }
+
+    /**
+     * 初始化推荐数据
+     */
+    private void initRecommend(Object msgObj) {
+        List<VideoRecommend> videoRecommendList = (List<VideoRecommend>) msgObj;
+
+        RecommendAdapter recommendAdapter = new RecommendAdapter(videoRecommendList, RecommendAdapter.SINGLE_COLUMN, context);
+        recommendAdapter.setHasStableIds(true);
+        videoInfoRecommends.setRecyclerViewAdapter(recommendAdapter);
+        videoInfoRecommends.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
+        videoInfoRecommends.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+    }
+
+    /**
+     * 获取视频基本信息
+     */
     private void getVideoInfo() {
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
@@ -254,6 +283,9 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
         });
     }
 
+    /**
+     * 获取其他数据
+     */
     private void getOtherData() {
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
@@ -275,6 +307,38 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
         });
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.video_info_face:
+                startPublicFragment(FragmentType.BILI_USER, videoInfo.userInfo.userMid);
+                break;
+            case R.id.video_info_follow:
+            case R.id.video_info_like:
+            case R.id.video_info_coin:
+            case R.id.video_info_favorite:
+            case R.id.video_info_share:
+                SimpleSnackBar.make(v, getString(R.string.snackBarBuildingWarn), SimpleSnackBar.LENGTH_LONG).show();
+                break;
+            case R.id.video_info_anthology_container:
+                showAnthologyBottomSheet();
+                break;
+            case R.id.video_info_bvid:
+                easterEgg(v);
+                break;
+            case R.id.video_info_easterEgg_container:
+                // 验证读写权限
+                if (!verifyIOPermission()) {
+                    requestIOPermission();
+                } else {
+                    showDownloadBottomSheet();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
     /**
      * 获取推荐视频
      */
@@ -291,79 +355,48 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
         });
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.video_info_face:
-                startPublicFragment(FragmentType.BILI_USER, videoInfo.userInfo.userMid);
-                break;
-            case R.id.video_info_follow:
-            case R.id.video_info_like:
-            case R.id.video_info_coin:
-            case R.id.video_info_favorite:
-            case R.id.video_info_share:
-                SimpleSnackBar.make(v, getString(R.string.snackBarBuildingWarn), SimpleSnackBar.LENGTH_LONG).show();
-                break;
-            case R.id.video_info_anthology_container:
-                VideoAnthologyBottomSheet videoAnthologyBottomSheet = new VideoAnthologyBottomSheet(context, anthologyIndex);
-                videoAnthologyBottomSheet.setVideoAnthologyList(videoInfo.videoAnthologyList);
-                videoAnthologyBottomSheet.setOnBottomSheetWithItemListener(new OnBottomSheetWithItemListener() {
-                    @Override
-                    public void onItem(int position) {
-                        if (onVideoAnthologyListener != null) {
-                            anthologyIndex = position;
-
-                            VideoInfo.VideoAnthology videoAnthology = videoInfo.videoAnthologyList.get(anthologyIndex);
-
-                            videoInfoNowAnthology.setRightValue(videoAnthology.part);
-                            onVideoAnthologyListener.onAnthology(videoAnthology.cid, videoAnthology.part);
-                            videoAnthologyBottomSheet.dismiss();
-                        }
-                    }
-                });
-                videoAnthologyBottomSheet.show();
-                break;
-            case R.id.video_info_bvid:
-                if (PreferenceUtils.getEasterEggStat()) {
-                    return;
-                }
-
-                if (easterEggSteps == 3) {
-                    videoInfoEasterEggContainer.setVisibility(View.VISIBLE);
-                    PreferenceUtils.setEasterEggStat();
-                    SimpleSnackBar.make(v, "🎉🎉🎉Surprise!!! 请在视频信息界面找到不一样的地方!!!🎉🎉🎉", SimpleSnackBar.LENGTH_SHORT).show();
-                    easterEggWarn = null;
-                    return;
-                } else {
-                    SimpleSnackBar.make(v, easterEggWarn, SimpleSnackBar.LENGTH_SHORT).show();
-                    easterEggWarn += "🎉";
-
-                    easterEggSteps ++;
-                }
-
-                break;
-            case R.id.video_info_easterEgg_container:
-                // 验证读写权限
-                if (!verifyIOPermission()) {
-                    requestIOPermission();
-                } else {
-                    downloadBottomSheet = new DownloadBottomSheet<>(context);
-                    downloadBottomSheet.setVideoAnthologyList(videoInfo.videoAnthologyList);
-                    downloadBottomSheet.setOnClickDownloadItemListener(new DownloadBottomSheet.OnClickDownloadItemListener() {
-                        @Override
-                        public void onClickItem() {
-                            downloadedRecordCount++;
-
-                            String record = downloadedRecordCount + "/" + videoInfo.videos;
-                            videoInfoDownloadedRecord.setText(record);
-                        }
-                    });
-                    downloadBottomSheet.show();
-                }
-                break;
-            default:
-                break;
+    /**
+     * 彩蛋部分
+     */
+    private void easterEgg(View v) {
+        if (PreferenceUtils.getEasterEggStat()) {
+            return;
         }
+
+        if (easterEggSteps == 3) {
+            videoInfoEasterEggContainer.setVisibility(View.VISIBLE);
+            PreferenceUtils.setEasterEggStat();
+            SimpleSnackBar.make(v, getString(R.string.easterEggWarn), Gravity.CENTER, SimpleSnackBar.LENGTH_SHORT).show();
+            easterEggWarn = null;
+        } else {
+            SimpleSnackBar.make(v, easterEggWarn, Gravity.CENTER, SimpleSnackBar.LENGTH_SHORT).show();
+            easterEggWarn += "🎉";
+
+            easterEggSteps ++;
+        }
+    }
+
+    /**
+     * 显示选集选择底部弹窗
+     */
+    private void showAnthologyBottomSheet() {
+        VideoAnthologyBottomSheet videoAnthologyBottomSheet = new VideoAnthologyBottomSheet(context, anthologyIndex);
+        videoAnthologyBottomSheet.setVideoAnthologyList(videoInfo.videoAnthologyList);
+        videoAnthologyBottomSheet.setOnBottomSheetWithItemListener(new OnBottomSheetWithItemListener() {
+            @Override
+            public void onItem(int position) {
+                if (onVideoAnthologyListener != null) {
+                    anthologyIndex = position;
+
+                    VideoInfo.VideoAnthology videoAnthology = videoInfo.videoAnthologyList.get(anthologyIndex);
+
+                    videoInfoNowAnthology.setRightValue(videoAnthology.part);
+                    onVideoAnthologyListener.onAnthology(videoAnthology.cid, videoAnthology.part);
+                    videoAnthologyBottomSheet.dismiss();
+                }
+            }
+        });
+        videoAnthologyBottomSheet.show();
     }
 
     /**
@@ -406,21 +439,28 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1025) {
             if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                downloadBottomSheet = new DownloadBottomSheet<>(context);
-                downloadBottomSheet.setVideoAnthologyList(videoInfo.videoAnthologyList);
-                downloadBottomSheet.setOnClickDownloadItemListener(new DownloadBottomSheet.OnClickDownloadItemListener() {
-                    @Override
-                    public void onClickItem() {
-                        downloadedRecordCount++;
-
-                        String record = downloadedRecordCount + "/" + videoInfo.videos;
-                        videoInfoDownloadedRecord.setText(record);
-                    }
-                });
-                downloadBottomSheet.show();
+                showDownloadBottomSheet();
             } else {
                 SimpleSnackBar.make(view, "请授予'读写权限',否则将不能下载~", SimpleSnackBar.LENGTH_SHORT).show();
             }
         }
+    }
+
+    /**
+     * 显示下载弹窗
+     */
+    private void showDownloadBottomSheet() {
+        DownloadBottomSheet<VideoInfo.VideoAnthology> downloadBottomSheet = new DownloadBottomSheet<>(context);
+        downloadBottomSheet.setVideoAnthologyList(videoInfo.videoAnthologyList);
+        downloadBottomSheet.setOnClickDownloadItemListener(new DownloadBottomSheet.OnClickDownloadItemListener() {
+            @Override
+            public void onClickItem() {
+                downloadedRecordCount++;
+
+                String record = downloadedRecordCount + "/" + videoInfo.anthologyCount;
+                videoInfoDownloadedRecord.setText(record);
+            }
+        });
+        downloadBottomSheet.show();
     }
 }

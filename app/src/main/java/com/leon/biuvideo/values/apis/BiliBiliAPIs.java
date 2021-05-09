@@ -340,6 +340,13 @@ public class BiliBiliAPIs {
     public static final String BANGUMI_SERIES_STAT = "https://api.bilibili.com/pgc/season/episode/web/info";
 
     /**
+     * 获取用户追番的状态（需要Cookie和Referer（默认值即可））
+     * 参数
+     *      season_id:seasonId
+     */
+    public static final String BANGUMI_STATUS = "https://api.bilibili.com/pgc/view/web/season/user/status";
+
+    /**
      * 获取分区的子分区数据
      * 参数
      *      main_ver：默认v3

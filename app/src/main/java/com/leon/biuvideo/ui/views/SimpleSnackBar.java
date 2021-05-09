@@ -1,6 +1,7 @@
 package com.leon.biuvideo.ui.views;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.view.animation.Animation;
@@ -20,8 +21,12 @@ public class SimpleSnackBar {
     public static final int LENGTH_SHORT = -1;
     public static final int LENGTH_INDEFINITE = -2;
 
-    public static EasySnackBar make(View view, int resId, int duration) {
-        return setAnimation(make(view, view.getResources().getText(resId).toString(), duration));
+    public static EasySnackBar make(View view, CharSequence content, int duration) {
+        return setAnimation(makeSimpleSnackBar(view, content, Gravity.START, duration));
+    }
+
+    public static EasySnackBar make(View view, CharSequence content, int contentGravity, int duration) {
+        return setAnimation(makeSimpleSnackBar(view, content, contentGravity, duration));
     }
 
     /**
@@ -31,9 +36,12 @@ public class SimpleSnackBar {
      * @param content   显示的文字内容
      * @param duration  显示时长
      */
-    public static EasySnackBar make(View view, CharSequence content, int duration) {
+    public static EasySnackBar makeSimpleSnackBar(View view, CharSequence content, int contentGravity, int duration) {
         View convert = convertToContentView(view);
-        ((TextView) convert.findViewById(R.id.simple_snackbar_content)).setText(content);
+
+        TextView simpleSnackbarContent = convert.findViewById(R.id.simple_snackbar_content);
+        simpleSnackbarContent.setText(content);
+        simpleSnackbarContent.setGravity(contentGravity);
 
         return setAnimation(EasySnackBar.make(view, convert, duration, false));
     }

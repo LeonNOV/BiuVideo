@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.ListPopupWindow;
@@ -35,15 +36,14 @@ import com.leon.biuvideo.utils.downloadUtils.ResourceDownloadTask;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoWithFlvParser;
 import com.leon.biuvideo.values.Quality;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * @Author Leon
@@ -78,6 +78,9 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
     }
 
     public interface OnClickDownloadItemListener {
+        /**
+         * 点击选集后的回调
+         */
         void onClickItem();
     }
 
@@ -119,7 +122,7 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
         }
 
         TagView tagView = findViewById(R.id.download_bottom_sheet_dialog_quality);
-        tagView.setRightValue(Quality.convertQuality(qualityCode));
+        tagView.setRightValue(quality);
         tagView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,14 +208,12 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
 
                             VideoInfo.VideoAnthology videoAnthology = resourceDownloadTask.getVideoAnthology();
                             if (videoAnthology != null) {
-                                videoAnthology.isDownloading = false;
                                 videoAnthology.isDownloaded = true;
                                 return;
                             }
 
                             BangumiAnthology bangumiAnthology = resourceDownloadTask.getBangumiAnthology();
                             if (bangumiAnthology != null) {
-                                bangumiAnthology.isDownloading = false;
                                 bangumiAnthology.isDownloaded = true;
                             }
                         }
@@ -220,7 +221,7 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
                         @Override
                         public void onFailed() {
                             imageView.setVisibility(View.INVISIBLE);
-                            SimpleSnackBar.make(view, context.getString(R.string.downloadError), SimpleSnackBar.LENGTH_LONG).show();
+                            Toast.makeText(context, context.getString(R.string.downloadError), Toast.LENGTH_SHORT).show();
                         }
                     });
                     resourceDownloadTask.startDownload();
@@ -249,43 +250,55 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
         @Override
         public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
             if (isBangumi) {
-                setBangumiAnthologyData(holder, bangumiAnthologyList.get(position), position);
+                setBangumiAnthologyData(holder, bangumiAnthologyList.get(position));
             } else {
-                setVideoAnthologyData(holder, videoAnthologyList.get(position), position);
+                setVideoAnthologyData(holder, videoAnthologyList.get(position));
             }
         }
 
-        private void setBangumiAnthologyData(BaseViewHolder holder, BangumiAnthology bangumiAnthology, int position) {
+        private void setBangumiAnthologyData(BaseViewHolder holder, BangumiAnthology bangumiAnthology) {
             ImageView downloadBottomSheetAnthologyDownloadStat = holder.findById(R.id.download_bottom_sheet_anthology_download_stat);
-            downloadBottomSheetAnthologyDownloadStat.setVisibility(bangumiAnthology.isDownloading || bangumiAnthology.isDownloaded ? View.VISIBLE : View.INVISIBLE);
+            downloadBottomSheetAnthologyDownloadStat.setVisibility((bangumiAnthology.isDownloading || bangumiAnthology.isDownloaded) ? View.VISIBLE : View.INVISIBLE);
             downloadBottomSheetAnthologyDownloadStat.setSelected(bangumiAnthology.isDownloading && bangumiAnthology.isDownloaded);
             holder
-                    .setText(R.id.download_bottom_sheet_anthology_item_title, bangumiAnthology.longTitle)
+                    .setText(R.id.download_bottom_sheet_anthology_item_title, bangumiAnthology.title)
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            // 如果未处于 下载完成/正在下载 状态，则进行下载
-                            if (bangumiAnthology.isDownloading || bangumiAnthology.isDownloaded) {
-                                return;
+                            String qualityTrim = quality.replace(" ", "");
+
+                            File file = ResourceDownloadTask.checkSaveDirectory(context, ResourceDownloadTask.RES_TYPE_VIDEO,
+                                    bangumiAnthology.title, qualityTrim);
+
+                            boolean exists = ResourceDownloadTask.isExists(file, context, bangumiAnthology.seasonId,
+                                    bangumiAnthology.cid, qualityTrim);
+
+                            if (exists) {
+                                Toast.makeText(context, context.getString(R.string.downloadExisted), Toast.LENGTH_LONG).show();
+                            } else {
+                                // 如果未处于 下载完成/正在下载 状态，则进行下载
+                                if (bangumiAnthology.isDownloading || bangumiAnthology.isDownloaded) {
+                                    return;
+                                }
+
+                                bangumiAnthology.isDownloading = true;
+
+                                downloadBottomSheetAnthologyDownloadStat.setVisibility(View.VISIBLE);
+                                downloadBottomSheetAnthologyDownloadStat.setSelected(false);
+
+                                if (onClickDownloadItemListener != null) {
+                                    onClickDownloadItemListener.onClickItem();
+                                }
+
+                                getBangumiDownloadInfo(bangumiAnthology, downloadBottomSheetAnthologyDownloadStat);
                             }
-
-                            bangumiAnthology.isDownloading = true;
-
-                            downloadBottomSheetAnthologyDownloadStat.setVisibility(View.VISIBLE);
-                            downloadBottomSheetAnthologyDownloadStat.setSelected(false);
-
-                            if (onClickDownloadItemListener != null) {
-                                onClickDownloadItemListener.onClickItem();
-                            }
-
-                            getBangumiDownloadInfo(bangumiAnthology, downloadBottomSheetAnthologyDownloadStat);
                         }
                     });
         }
 
-        private void setVideoAnthologyData(BaseViewHolder holder, VideoInfo.VideoAnthology videoAnthology, int position) {
+        private void setVideoAnthologyData(BaseViewHolder holder, VideoInfo.VideoAnthology videoAnthology) {
             ImageView downloadBottomSheetAnthologyDownloadStat = holder.findById(R.id.download_bottom_sheet_anthology_download_stat);
-            downloadBottomSheetAnthologyDownloadStat.setVisibility(videoAnthology.isDownloading || videoAnthology.isDownloaded ? View.VISIBLE : View.INVISIBLE);
+            downloadBottomSheetAnthologyDownloadStat.setVisibility((videoAnthology.isDownloading || videoAnthology.isDownloaded) ? View.VISIBLE : View.INVISIBLE);
             downloadBottomSheetAnthologyDownloadStat.setSelected(videoAnthology.isDownloading && videoAnthology.isDownloaded);
 
             holder
@@ -293,21 +306,33 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            // 如果未处于 下载完成/正在下载 状态，则进行下载
-                            if (videoAnthology.isDownloading || videoAnthology.isDownloaded) {
-                                return;
+                            String qualityTrim = quality.replace(" ", "");
+
+                            File file = ResourceDownloadTask.checkSaveDirectory(context, ResourceDownloadTask.RES_TYPE_VIDEO,
+                                    videoAnthology.part, qualityTrim);
+
+                            boolean exists = ResourceDownloadTask.isExists(file, context, videoAnthology.mainId,
+                                    videoAnthology.cid, qualityTrim);
+
+                            if (exists) {
+                                Toast.makeText(context, context.getString(R.string.downloadExisted), Toast.LENGTH_LONG).show();
+                            } else {
+                                // 如果未处于 下载完成/正在下载 状态，则进行下载
+                                if (videoAnthology.isDownloading || videoAnthology.isDownloaded) {
+                                    return;
+                                }
+
+                                videoAnthology.isDownloading = true;
+
+                                downloadBottomSheetAnthologyDownloadStat.setVisibility(View.VISIBLE);
+                                downloadBottomSheetAnthologyDownloadStat.setSelected(false);
+
+                                if (onClickDownloadItemListener != null) {
+                                    onClickDownloadItemListener.onClickItem();
+                                }
+
+                                getVideoDownloadInfo(videoAnthology, downloadBottomSheetAnthologyDownloadStat);
                             }
-
-                            videoAnthology.isDownloading = true;
-
-                            downloadBottomSheetAnthologyDownloadStat.setVisibility(View.VISIBLE);
-                            downloadBottomSheetAnthologyDownloadStat.setSelected(false);
-
-                            if (onClickDownloadItemListener != null) {
-                                onClickDownloadItemListener.onClickItem();
-                            }
-
-                            getVideoDownloadInfo(videoAnthology, downloadBottomSheetAnthologyDownloadStat);
                         }
                     });
         }
@@ -323,7 +348,7 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
             downloadHistory.setIsMultipleAnthology(true);
             downloadHistory.setLevelOneId(bangumiAnthology.seasonId);
             downloadHistory.setLevelTwoId(bangumiAnthology.cid);
-            downloadHistory.setTitle(bangumiAnthology.longTitle);
+            downloadHistory.setTitle(bangumiAnthology.title);
             downloadHistory.setCoverUrl(bangumiAnthology.cover);
 
             getVideoStreamUrl(bangumiAnthology, downloadBottomSheetAnthologyDownloadStat, bangumiAnthology.seasonId, bangumiAnthology.cid);

@@ -111,6 +111,8 @@ public class DownloadingFragment extends BaseSupportFragment implements View.OnC
 
         if (thisHistory != null) {
             updateItemInfo(DOWNLOAD_STAT_ERROR, downloadTask, thisHistory);
+            thisHistory.setIsFailed(true);
+            downloadHistoryDaoUtils.update(thisHistory);
         }
     }
 
@@ -123,6 +125,9 @@ public class DownloadingFragment extends BaseSupportFragment implements View.OnC
 
         if (thisHistory != null && thisHistory.getIsCompleted()) {
             downloadingAdapter.remove(thisHistory);
+
+            thisHistory.setIsCompleted(true);
+            downloadHistoryDaoUtils.update(thisHistory);
         }
     }
 
@@ -151,7 +156,7 @@ public class DownloadingFragment extends BaseSupportFragment implements View.OnC
     }
 
     /**
-     * 任务处于等待中
+     * 等待中
      */
     @Download.onWait
     void onWaiting (DownloadTask downloadTask) {

@@ -37,6 +37,7 @@ public class Bangumi {
      * 单集信息
      */
     public List<BangumiAnthology> bangumiAnthologyList;
+    public int anthologyCount;
 
     /**
      * 其他季数
@@ -62,4 +63,7 @@ public class Bangumi {
     public String subtitle;
     public String title;
     public String link;
+
+    public boolean isFollow;
+    public boolean isMultiAnthology;
 }

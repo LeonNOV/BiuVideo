@@ -261,7 +261,9 @@
     <string name="downloadManagerDelete">删除</string>
     <string name="downloadQualityWarn">注意：如果选择的画质不存在，则最终下载的是比选择画质低一阶的画质</string>
     <string name="downloadError">下载失败~ 可稍后尝试下载</string>
+    <string name="downloadExisted">该资源已下载过了,如果未在\'下载管理\'中,可查看保存路径的文件夹中是否存在</string>
     <string name="downloadingError">下载出错</string>
     <string name="downloadingWaiting">等待中</string>
     <string name="downloadingPaused">已暂停</string>
+    <string name="easterEggWarn">🎉🎉🎉\tSURPRISE\t🎉🎉🎉</string>
 </resources>

@@ -11,11 +11,8 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Switch;
@@ -23,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.ListPopupWindow;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.alibaba.fastjson.JSONArray;
@@ -32,11 +28,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.otherAdapters.SettingChoiceAddressAdapter;
-import com.leon.biuvideo.beans.AboutBean;
 import com.leon.biuvideo.beans.District;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.WarnDialog;
-import com.leon.biuvideo.ui.views.BottomSheetTopBar;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleBottomSheet;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
@@ -51,14 +45,12 @@ import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.FeaturesName;
 import com.leon.biuvideo.values.Quality;
-import com.leon.biuvideo.values.ThanksList;
 import com.leon.biuvideo.values.apis.AmapAPIs;
 import com.leon.biuvideo.values.apis.AmapKey;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 

@@ -16,7 +16,7 @@ public class BangumiAnthology implements Serializable {
 
     public String badge;
     public String cover;
-    public String longTitle;
+    public String title;
 
     public long pubTime;
     public String shortLink;

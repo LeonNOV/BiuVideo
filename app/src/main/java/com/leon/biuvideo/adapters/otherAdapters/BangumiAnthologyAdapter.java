@@ -13,7 +13,6 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiAnthology;
 import com.leon.biuvideo.ui.resourcesFragment.video.OnBottomSheetWithItemListener;
-import com.leon.biuvideo.ui.resourcesFragment.video.VideoAnthologyBottomSheet;
 
 import java.util.List;
 
@@ -47,7 +46,7 @@ public class BangumiAnthologyAdapter extends BaseAdapter<BangumiAnthology> {
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         BangumiAnthology bangumiAnthology = bangumiAnthologyList.get(position);
 
-        holder.setText(R.id.video_anthology_item_name, bangumiAnthology.longTitle);
+        holder.setText(R.id.video_anthology_item_name, bangumiAnthology.title);
         TextView videoAnthologyItemBadge = holder.findById(R.id.video_anthology_item_badge);
         if (bangumiAnthology.badge != null) {
             videoAnthologyItemBadge.setText(bangumiAnthology.badge);

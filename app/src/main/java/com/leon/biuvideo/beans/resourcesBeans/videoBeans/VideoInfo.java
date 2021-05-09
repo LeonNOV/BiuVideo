@@ -11,7 +11,7 @@ import java.util.List;
 public class VideoInfo {
     public String bvid;
     public String aid;
-    public int videos;
+    public int anthologyCount;
     public int tagId;
     public String tagName;
     public String cover;
