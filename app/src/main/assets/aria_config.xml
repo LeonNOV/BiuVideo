@@ -23,7 +23,7 @@
 
         <!--设置http下载获取文件大小是否使用Head请求。true：使用head请求，false：使用默认的get请求-->
         <!--只适用于3.8.11以上的版本-->
-        <useHeadRequest value="true"/>
+        <useHeadRequest value="false"/>
 
         <!--设置任务最大下载速度，0表示不限速，单位为：kb-->
         <maxSpeed value="0"/>

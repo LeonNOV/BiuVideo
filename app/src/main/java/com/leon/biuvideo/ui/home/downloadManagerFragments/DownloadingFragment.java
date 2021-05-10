@@ -19,9 +19,9 @@ import com.leon.biuvideo.greendao.dao.DaoBaseUtils;
 import com.leon.biuvideo.greendao.dao.DownloadHistory;
 import com.leon.biuvideo.greendao.dao.DownloadHistoryDao;
 import com.leon.biuvideo.greendao.daoutils.DownloadHistoryUtils;
+import com.leon.biuvideo.service.DownloadWatcher;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
-import com.leon.biuvideo.utils.Fuck;
 
 import java.util.List;
 
@@ -99,6 +99,7 @@ public class DownloadingFragment extends BaseSupportFragment implements View.OnC
         if (thisHistory != null && thisHistory.getIsCompleted()) {
             downloadingAdapter.remove(thisHistory);
             downloadHistoryDaoUtils.delete(thisHistory);
+            DownloadWatcher.remove(DownloadWatcher.findThisTask(downloadTask));
         }
     }
 
@@ -128,6 +129,7 @@ public class DownloadingFragment extends BaseSupportFragment implements View.OnC
 
             thisHistory.setIsCompleted(true);
             downloadHistoryDaoUtils.update(thisHistory);
+            DownloadWatcher.remove(DownloadWatcher.findThisTask(downloadTask));
         }
     }
 
@@ -248,7 +250,6 @@ public class DownloadingFragment extends BaseSupportFragment implements View.OnC
                 speedStr = getString(R.string.downloadingPaused);
             }
             downloadingItemNowSpeed.setText(speedStr);
-            Fuck.red(speedStr);
 
             downloadingItemStat.setImageLevel(stat);
         }

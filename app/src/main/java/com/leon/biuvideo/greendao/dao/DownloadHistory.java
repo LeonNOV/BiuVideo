@@ -5,7 +5,6 @@ import com.leon.biuvideo.utils.downloadUtils.ResourceDownloadTask;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.Transient;
 
 /**
  * @Author Leon
@@ -40,11 +39,7 @@ public class DownloadHistory {
      */
     private String levelTwoId;
 
-    private String title;
-
-    /**
-     * 子标题
-     */
+    private String mainTitle;
     private String subTitle;
 
     private String coverUrl;
@@ -59,10 +54,10 @@ public class DownloadHistory {
      */
     private String danmakuFilePath;
 
-    @Generated(hash = 1722890415)
+    @Generated(hash = 281597005)
     public DownloadHistory(Long id, int resType, long taskId, boolean isCompleted,
             boolean isFailed, String resStreamUrl, boolean isMultipleAnthology,
-            String levelOneId, String levelTwoId, String title, String subTitle,
+            String levelOneId, String levelTwoId, String mainTitle, String subTitle,
             String coverUrl, String savePath, String danmakuFilePath) {
         this.id = id;
         this.resType = resType;
@@ -73,7 +68,7 @@ public class DownloadHistory {
         this.isMultipleAnthology = isMultipleAnthology;
         this.levelOneId = levelOneId;
         this.levelTwoId = levelTwoId;
-        this.title = title;
+        this.mainTitle = mainTitle;
         this.subTitle = subTitle;
         this.coverUrl = coverUrl;
         this.savePath = savePath;
@@ -156,12 +151,12 @@ public class DownloadHistory {
         this.levelTwoId = levelTwoId;
     }
 
-    public String getTitle() {
-        return this.title;
+    public String getMainTitle() {
+        return this.mainTitle;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setMainTitle(String mainTitle) {
+        this.mainTitle = mainTitle;
     }
 
     public String getSubTitle() {

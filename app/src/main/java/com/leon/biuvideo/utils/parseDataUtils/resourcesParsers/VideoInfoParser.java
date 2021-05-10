@@ -79,6 +79,7 @@ public class VideoInfoParser {
                 JSONObject jsonObject = (JSONObject) object;
 
                 videoAnthology.mainId = bvid;
+                videoAnthology.mainTitle = videoInfo.title;
                 videoAnthology.cid = jsonObject.getString("cid");
 
                 List<DownloadHistory> downloadHistoryList = downloadHistoryDaoUtils.queryByQueryBuilder(DownloadHistoryDao.Properties.LevelOneId.eq(bvid),
@@ -90,9 +91,10 @@ public class VideoInfoParser {
                     if (downloadHistory.getIsCompleted()) {
                         videoAnthology.isDownloaded = true;
                     }
+                    videoAnthology.isDownloading = true;
                 }
 
-                videoAnthology.part = jsonObject.getString("part");
+                videoAnthology.subTitle = jsonObject.getString("part");
                 videoAnthology.duration = ValueUtils.lengthGenerate(jsonObject.getIntValue("duration"));
                 videoAnthology.cover = videoInfo.cover;
                 videoInfo.videoAnthologyList.add(videoAnthology);

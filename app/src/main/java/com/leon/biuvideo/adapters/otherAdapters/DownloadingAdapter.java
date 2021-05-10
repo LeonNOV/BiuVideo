@@ -57,7 +57,7 @@ public class DownloadingAdapter extends BaseAdapter<DownloadHistory> {
 
         holder
                 .setImage(R.id.downloading_item_cover, downloadHistory.getCoverUrl(), ImagePixelSize.COVER)
-                .setText(R.id.downloading_item_title, downloadHistory.getTitle())
+                .setText(R.id.downloading_item_title, downloadHistory.getSubTitle())
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -134,7 +134,7 @@ public class DownloadingAdapter extends BaseAdapter<DownloadHistory> {
             DownloadHistory downloadHistory = downloadHistoryList.get(index);
 
             // 删除任务
-            Aria.download(context).load(downloadHistory.getTaskId()).removeRecord();
+            Aria.download(context).load(downloadHistory.getTaskId()).cancel(true);
             downloadHistoryDaoUtils.delete(downloadHistory);
 
             downloadingItemSelectList.remove(imageView);

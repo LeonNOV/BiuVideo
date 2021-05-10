@@ -31,7 +31,7 @@ public class DownloadHistoryDao extends AbstractDao<DownloadHistory, Long> {
         public final static Property IsMultipleAnthology = new Property(6, boolean.class, "isMultipleAnthology", false, "IS_MULTIPLE_ANTHOLOGY");
         public final static Property LevelOneId = new Property(7, String.class, "levelOneId", false, "LEVEL_ONE_ID");
         public final static Property LevelTwoId = new Property(8, String.class, "levelTwoId", false, "LEVEL_TWO_ID");
-        public final static Property Title = new Property(9, String.class, "title", false, "TITLE");
+        public final static Property MainTitle = new Property(9, String.class, "mainTitle", false, "MAIN_TITLE");
         public final static Property SubTitle = new Property(10, String.class, "subTitle", false, "SUB_TITLE");
         public final static Property CoverUrl = new Property(11, String.class, "coverUrl", false, "COVER_URL");
         public final static Property SavePath = new Property(12, String.class, "savePath", false, "SAVE_PATH");
@@ -60,7 +60,7 @@ public class DownloadHistoryDao extends AbstractDao<DownloadHistory, Long> {
                 "\"IS_MULTIPLE_ANTHOLOGY\" INTEGER NOT NULL ," + // 6: isMultipleAnthology
                 "\"LEVEL_ONE_ID\" TEXT," + // 7: levelOneId
                 "\"LEVEL_TWO_ID\" TEXT," + // 8: levelTwoId
-                "\"TITLE\" TEXT," + // 9: title
+                "\"MAIN_TITLE\" TEXT," + // 9: mainTitle
                 "\"SUB_TITLE\" TEXT," + // 10: subTitle
                 "\"COVER_URL\" TEXT," + // 11: coverUrl
                 "\"SAVE_PATH\" TEXT," + // 12: savePath
@@ -102,9 +102,9 @@ public class DownloadHistoryDao extends AbstractDao<DownloadHistory, Long> {
             stmt.bindString(9, levelTwoId);
         }
  
-        String title = entity.getTitle();
-        if (title != null) {
-            stmt.bindString(10, title);
+        String mainTitle = entity.getMainTitle();
+        if (mainTitle != null) {
+            stmt.bindString(10, mainTitle);
         }
  
         String subTitle = entity.getSubTitle();
@@ -157,9 +157,9 @@ public class DownloadHistoryDao extends AbstractDao<DownloadHistory, Long> {
             stmt.bindString(9, levelTwoId);
         }
  
-        String title = entity.getTitle();
-        if (title != null) {
-            stmt.bindString(10, title);
+        String mainTitle = entity.getMainTitle();
+        if (mainTitle != null) {
+            stmt.bindString(10, mainTitle);
         }
  
         String subTitle = entity.getSubTitle();
@@ -200,7 +200,7 @@ public class DownloadHistoryDao extends AbstractDao<DownloadHistory, Long> {
             cursor.getShort(offset + 6) != 0, // isMultipleAnthology
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // levelOneId
             cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // levelTwoId
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // title
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // mainTitle
             cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // subTitle
             cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // coverUrl
             cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // savePath
@@ -220,7 +220,7 @@ public class DownloadHistoryDao extends AbstractDao<DownloadHistory, Long> {
         entity.setIsMultipleAnthology(cursor.getShort(offset + 6) != 0);
         entity.setLevelOneId(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setLevelTwoId(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setTitle(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setMainTitle(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
         entity.setSubTitle(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
         entity.setCoverUrl(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
         entity.setSavePath(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));

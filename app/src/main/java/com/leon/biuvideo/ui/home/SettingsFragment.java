@@ -197,7 +197,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 downloadQualityBottomSheet.setOnClickQualityItemListener(new QualityBottomSheet.QualityBottomSheetAdapter.OnClickQualityItemListener() {
                     @Override
                     public void onClick(String quality, int qualityCode) {
-                        PreferenceUtils.setPlayQuality(qualityCode);
+                        PreferenceUtils.setDownloadQuality(qualityCode);
 
                         settingsFragmentDownloadQuality.setText(quality);
                         downloadQualityBottomSheet.dismiss();

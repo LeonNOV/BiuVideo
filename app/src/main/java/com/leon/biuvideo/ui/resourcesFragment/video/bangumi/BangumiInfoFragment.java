@@ -223,7 +223,7 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
                 .setText(R.id.bangumi_info_play, ValueUtils.generateCN(bangumi.views) + "播放")
                 .setText(R.id.bangumi_info_orderTotal, ValueUtils.generateCN(bangumi.bangumiSeasonList.get(seriesIndex).seriesFollow) + "系列追番");
         if (bangumi.isMultiAnthology) {
-            bangumiInfoNowAnthology.setRightValue(bangumi.bangumiAnthologyList.get(anthologyIndex).title);
+            bangumiInfoNowAnthology.setRightValue(bangumi.bangumiAnthologyList.get(anthologyIndex).subTitle);
         } else {
             bangumiInfoAnthologyContainer.setVisibility(View.GONE);
         }
@@ -251,15 +251,14 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
         // 播放第一个视频
         if (onBangumiInfoListener != null) {
             BangumiAnthology bangumiAnthology = bangumi.bangumiAnthologyList.get(anthologyIndex);
-            onBangumiInfoListener.onBangumiAnthologyListener(bangumiAnthology.aid, bangumiAnthology.cid, bangumiAnthology.title);
+            onBangumiInfoListener.onBangumiAnthologyListener(bangumiAnthology.aid, bangumiAnthology.cid, bangumiAnthology.subTitle);
         }
 
         if (bangumi.isMultiAnthology) {
             DownloadHistoryUtils downloadHistoryUtils = new DownloadHistoryUtils(context);
             DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils = downloadHistoryUtils.getDownloadHistoryDaoUtils();
 
-            downloadedRecordCount = downloadHistoryDaoUtils.count(DownloadHistoryDao.Properties.IsCompleted.eq(true),
-                    DownloadHistoryDao.Properties.LevelOneId.eq(seasonId));
+            downloadedRecordCount = downloadHistoryDaoUtils.count(DownloadHistoryDao.Properties.LevelOneId.eq(seasonId));
 
             String record = downloadedRecordCount + "/" + bangumi.bangumiAnthologyList.size();
             bangumiInfoDownloadedRecord.setText(record);
@@ -417,8 +416,8 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
                     getBangumiStateAndRecommend();
 
                     BangumiAnthology bangumiAnthology = bangumi.bangumiAnthologyList.get(anthologyIndex);
-                    bangumiInfoNowAnthology.setRightValue(bangumiAnthology.title);
-                    onBangumiInfoListener.onBangumiAnthologyListener(bangumiAnthology.aid, bangumiAnthology.cid, bangumiAnthology.title);
+                    bangumiInfoNowAnthology.setRightValue(bangumiAnthology.subTitle);
+                    onBangumiInfoListener.onBangumiAnthologyListener(bangumiAnthology.aid, bangumiAnthology.cid, bangumiAnthology.subTitle);
 
                     videoAnthologyBottomSheet.dismiss();
                 }

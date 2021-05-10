@@ -27,6 +27,7 @@ import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiAnthology;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoInfo;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
 import com.leon.biuvideo.greendao.dao.DownloadHistory;
+import com.leon.biuvideo.service.DownloadWatcher;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
@@ -35,14 +36,13 @@ import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.downloadUtils.ResourceDownloadTask;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoWithFlvParser;
 import com.leon.biuvideo.values.Quality;
+import com.leon.biuvideo.values.Qualitys;
 
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -97,16 +97,7 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
     }
 
     private void initView() {
-        final Map<String, Integer> qualityMap = new LinkedHashMap<>();
-        qualityMap.put("4K 超清", 120);
-        qualityMap.put("1080P60 高清", 116);
-        qualityMap.put("1080P+ 高清", 112);
-        qualityMap.put("1080P 高清", 80);
-        qualityMap.put("720P60 高清", 74);
-        qualityMap.put("720P 高清", 64);
-        qualityMap.put("480P 清晰", 32);
-        qualityMap.put("360", 16);
-        qualityMap.put("240P 极速", 6);
+        final List<String[]> qualitys = Qualitys.getQUALITYS();
 
         Window window = getWindow();
 
@@ -126,10 +117,8 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
         tagView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<String> arrayList = new ArrayList<>(qualityMap.keySet());
-
                 ListPopupWindow listPopupWindow = new ListPopupWindow(context);
-                listPopupWindow.setAdapter(new ArrayAdapter<>(context, R.layout.search_result_menu_item, arrayList));
+                listPopupWindow.setAdapter(new ArrayAdapter<>(context, R.layout.search_result_menu_item, qualitys));
                 listPopupWindow.setWidth(ListPopupWindow.WRAP_CONTENT);
                 listPopupWindow.setHeight(ListPopupWindow.WRAP_CONTENT);
                 listPopupWindow.setBackgroundDrawable(context.getDrawable(R.drawable.round_corners6dp_bg));
@@ -138,9 +127,12 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
                 listPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        tagView.setRightValue(arrayList.get(position));
-                        quality = arrayList.get(position);
-                        qualityCode = qualityMap.get(arrayList.get(position));
+                        String[] qualityEntry = qualitys.get(position);
+
+                        quality = qualityEntry[1];
+                        tagView.setRightValue(quality);
+                        qualityCode = Integer.parseInt(qualityEntry[0]);
+
                         listPopupWindow.dismiss();
                     }
                 });
@@ -195,37 +187,12 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
                         return true;
                     }
 
-                    String nowQuality = videoWithFlv.qualityMap.get(videoWithFlv.currentQualityId);
-                    downloadHistory.setSubTitle(nowQuality.replace(" ", ""));
                     downloadHistory.setResStreamUrl(videoWithFlv.videoStreamInfoList.get(0).url);
 
-                    ImageView imageView = (ImageView) msg.obj;
                     ResourceDownloadTask resourceDownloadTask = new ResourceDownloadTask(context, this, downloadHistory, data.getSerializable("anthologyInfo"));
-                    resourceDownloadTask.setOnDownloadStatListener(new ResourceDownloadTask.OnDownloadStatListener() {
-                        @Override
-                        public void onCompleted() {
-                            imageView.setSelected(true);
-
-                            VideoInfo.VideoAnthology videoAnthology = resourceDownloadTask.getVideoAnthology();
-                            if (videoAnthology != null) {
-                                videoAnthology.isDownloaded = true;
-                                return;
-                            }
-
-                            BangumiAnthology bangumiAnthology = resourceDownloadTask.getBangumiAnthology();
-                            if (bangumiAnthology != null) {
-                                bangumiAnthology.isDownloaded = true;
-                            }
-                        }
-
-                        @Override
-                        public void onFailed() {
-                            imageView.setVisibility(View.INVISIBLE);
-                            Toast.makeText(context, context.getString(R.string.downloadError), Toast.LENGTH_SHORT).show();
-                        }
-                    });
                     resourceDownloadTask.startDownload();
-                    downloadHistory = null;
+
+                    DownloadWatcher.addTask(resourceDownloadTask);
 
                     return true;
                 }
@@ -261,17 +228,14 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
             downloadBottomSheetAnthologyDownloadStat.setVisibility((bangumiAnthology.isDownloading || bangumiAnthology.isDownloaded) ? View.VISIBLE : View.INVISIBLE);
             downloadBottomSheetAnthologyDownloadStat.setSelected(bangumiAnthology.isDownloading && bangumiAnthology.isDownloaded);
             holder
-                    .setText(R.id.download_bottom_sheet_anthology_item_title, bangumiAnthology.title)
+                    .setText(R.id.download_bottom_sheet_anthology_item_title, bangumiAnthology.subTitle)
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            String qualityTrim = quality.replace(" ", "");
-
                             File file = ResourceDownloadTask.checkSaveDirectory(context, ResourceDownloadTask.RES_TYPE_VIDEO,
-                                    bangumiAnthology.title, qualityTrim);
+                                    bangumiAnthology.mainTitle, bangumiAnthology.subTitle);
 
-                            boolean exists = ResourceDownloadTask.isExists(file, context, bangumiAnthology.seasonId,
-                                    bangumiAnthology.cid, qualityTrim);
+                            boolean exists = ResourceDownloadTask.isExists(file, context, bangumiAnthology.seasonId, bangumiAnthology.cid);
 
                             if (exists) {
                                 Toast.makeText(context, context.getString(R.string.downloadExisted), Toast.LENGTH_LONG).show();
@@ -302,17 +266,14 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
             downloadBottomSheetAnthologyDownloadStat.setSelected(videoAnthology.isDownloading && videoAnthology.isDownloaded);
 
             holder
-                    .setText(R.id.download_bottom_sheet_anthology_item_title, videoAnthology.part)
+                    .setText(R.id.download_bottom_sheet_anthology_item_title, videoAnthology.subTitle)
                     .setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            String qualityTrim = quality.replace(" ", "");
-
                             File file = ResourceDownloadTask.checkSaveDirectory(context, ResourceDownloadTask.RES_TYPE_VIDEO,
-                                    videoAnthology.part, qualityTrim);
+                                    videoAnthology.mainTitle, videoAnthology.subTitle);
 
-                            boolean exists = ResourceDownloadTask.isExists(file, context, videoAnthology.mainId,
-                                    videoAnthology.cid, qualityTrim);
+                            boolean exists = ResourceDownloadTask.isExists(file, context, videoAnthology.mainId, videoAnthology.cid);
 
                             if (exists) {
                                 Toast.makeText(context, context.getString(R.string.downloadExisted), Toast.LENGTH_LONG).show();
@@ -331,7 +292,7 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
                                     onClickDownloadItemListener.onClickItem();
                                 }
 
-                                getVideoDownloadInfo(videoAnthology, downloadBottomSheetAnthologyDownloadStat);
+                                getVideoDownloadInfo(videoAnthology);
                             }
                         }
                     });
@@ -348,16 +309,17 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
             downloadHistory.setIsMultipleAnthology(true);
             downloadHistory.setLevelOneId(bangumiAnthology.seasonId);
             downloadHistory.setLevelTwoId(bangumiAnthology.cid);
-            downloadHistory.setTitle(bangumiAnthology.title);
+            downloadHistory.setMainTitle(bangumiAnthology.mainTitle);
+            downloadHistory.setSubTitle(bangumiAnthology.subTitle);
             downloadHistory.setCoverUrl(bangumiAnthology.cover);
 
-            getVideoStreamUrl(bangumiAnthology, downloadBottomSheetAnthologyDownloadStat, bangumiAnthology.seasonId, bangumiAnthology.cid);
+            getVideoStreamUrl(bangumiAnthology, bangumiAnthology.seasonId, bangumiAnthology.cid);
         }
 
         /**
          * 获取视频下载信息
          */
-        private void getVideoDownloadInfo(VideoInfo.VideoAnthology videoAnthology, ImageView imageView) {
+        private void getVideoDownloadInfo(VideoInfo.VideoAnthology videoAnthology) {
             downloadHistory = new DownloadHistory();
             downloadHistory.setResType(ResourceDownloadTask.RES_TYPE_VIDEO);
             downloadHistory.setIsFailed(false);
@@ -365,21 +327,21 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
             downloadHistory.setIsMultipleAnthology(true);
             downloadHistory.setLevelOneId(videoAnthology.mainId);
             downloadHistory.setLevelTwoId(videoAnthology.cid);
-            downloadHistory.setTitle(videoAnthology.part);
+            downloadHistory.setMainTitle(videoAnthology.mainTitle);
+            downloadHistory.setSubTitle(videoAnthology.subTitle);
             downloadHistory.setCoverUrl(videoAnthology.cover);
 
-            getVideoStreamUrl(videoAnthology, imageView, videoAnthology.mainId, videoAnthology.cid);
+            getVideoStreamUrl(videoAnthology, videoAnthology.mainId, videoAnthology.cid);
         }
 
         /**
          * 获取视频流链接
          *
          * @param anthology                                选集数据
-         * @param downloadBottomSheetAnthologyDownloadStat ImageView
          * @param levelOneId                               levelOneId
          * @param cid                                      选集ID
          */
-        private void getVideoStreamUrl(Serializable anthology, ImageView downloadBottomSheetAnthologyDownloadStat, String levelOneId, String cid) {
+        private void getVideoStreamUrl(Serializable anthology, String levelOneId, String cid) {
             if (videoWithFlvParser == null) {
                 videoWithFlvParser = new VideoWithFlvParser(levelOneId);
             }
@@ -416,8 +378,6 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
                     }
 
                     Message message = handler.obtainMessage();
-                    message.obj = downloadBottomSheetAnthologyDownloadStat;
-
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("videoWithFlv", videoWithFlv);
                     bundle.putSerializable("anthologyInfo", anthology);

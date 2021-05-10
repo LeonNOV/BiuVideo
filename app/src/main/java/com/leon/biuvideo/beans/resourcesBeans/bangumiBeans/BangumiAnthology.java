@@ -16,11 +16,11 @@ public class BangumiAnthology implements Serializable {
 
     public String badge;
     public String cover;
-    public String title;
+    public String mainTitle;
+    public String subTitle;
 
     public long pubTime;
     public String shortLink;
-    public String subTitle;
 
     public boolean isDownloading;
     public boolean isDownloaded;

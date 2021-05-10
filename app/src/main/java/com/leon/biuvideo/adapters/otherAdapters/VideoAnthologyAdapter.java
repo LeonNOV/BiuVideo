@@ -44,7 +44,7 @@ public class VideoAnthologyAdapter extends BaseAdapter<VideoInfo.VideoAnthology>
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         VideoInfo.VideoAnthology videoAnthology = videoAnthologyList.get(position);
 
-        holder.setText(R.id.video_anthology_item_name, videoAnthology.part);
+        holder.setText(R.id.video_anthology_item_name, videoAnthology.subTitle);
         TextView videoAnthologyItemBadge = holder.findById(R.id.video_anthology_item_badge);
         if (videoAnthology.badge != null) {
             videoAnthologyItemBadge.setText(videoAnthology.badge);

@@ -10,8 +10,8 @@ import android.view.MotionEvent;
 import android.view.WindowManager;
 
 import com.alibaba.fastjson.JSONObject;
-import com.arialyy.aria.core.Aria;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.service.DownloadWatcher;
 import com.leon.biuvideo.service.WeatherService;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.Fuck;
@@ -51,6 +51,9 @@ public class MainActivity extends SupportActivity {
         weatherConnection = new WeatherConnection();
         weatherServiceIntent = new Intent(getApplicationContext(), WeatherService.class);
         bindService(weatherServiceIntent, weatherConnection, Context.BIND_AUTO_CREATE);
+
+        DownloadWatcher downloadWatcher = new DownloadWatcher();
+        downloadWatcher.init(getApplicationContext());
 
         // 初始化PreferenceUtil类中的PREFERENCE
         PreferenceUtils.PREFERENCE = getSharedPreferences(PreferenceUtils.PREFERENCE_NAME, Context.MODE_PRIVATE);

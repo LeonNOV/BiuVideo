@@ -46,7 +46,7 @@ public class BangumiAnthologyAdapter extends BaseAdapter<BangumiAnthology> {
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
         BangumiAnthology bangumiAnthology = bangumiAnthologyList.get(position);
 
-        holder.setText(R.id.video_anthology_item_name, bangumiAnthology.title);
+        holder.setText(R.id.video_anthology_item_name, bangumiAnthology.subTitle);
         TextView videoAnthologyItemBadge = holder.findById(R.id.video_anthology_item_badge);
         if (bangumiAnthology.badge != null) {
             videoAnthologyItemBadge.setText(bangumiAnthology.badge);

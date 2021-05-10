@@ -81,7 +81,7 @@ public class BangumiDetailParser {
             bangumi.title = result.getString("title");
             bangumi.link = result.getString("link");
 
-            bangumi.bangumiAnthologyList = getBangumiEps(result.getJSONArray("episodes"), bangumi.seasonId, context);
+            bangumi.bangumiAnthologyList = getBangumiEps(result.getJSONArray("episodes"), bangumi.seasonId, bangumi.title, context);
             bangumi.bangumiSeasonList = getBangumiSeasons(result.getJSONArray("seasons"));
             bangumi.bangumiSectionList = getBangumiSections(result.getJSONArray("section"));
 
@@ -108,7 +108,7 @@ public class BangumiDetailParser {
      * @param seasonId  番剧Id
      * @return  BangumiEp集合
      */
-    private List<BangumiAnthology> getBangumiEps(JSONArray episodes, String seasonId, Context context) {
+    private List<BangumiAnthology> getBangumiEps(JSONArray episodes, String seasonId, String mainTitle, Context context) {
         if (episodes == null) {
             return null;
         }
@@ -135,6 +135,7 @@ public class BangumiDetailParser {
                 if (downloadHistory.getIsCompleted()) {
                     bangumiAnthology.isDownloaded = true;
                 }
+                bangumiAnthology.isDownloading = true;
             }
 
             String badge = jsonObject.getString("badge");
@@ -152,10 +153,10 @@ public class BangumiDetailParser {
                 }
             }
 
-            bangumiAnthology.title = title;
+            bangumiAnthology.mainTitle = mainTitle;
+            bangumiAnthology.subTitle = title;
             bangumiAnthology.pubTime = jsonObject.getLongValue("pub_time");
             bangumiAnthology.shortLink = jsonObject.getString("short_link");
-            bangumiAnthology.subTitle = jsonObject.getString("subTitle");
 
             bangumiAnthologies.add(bangumiAnthology);
         }

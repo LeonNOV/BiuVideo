@@ -4,11 +4,9 @@ import android.content.Context;
 
 import androidx.annotation.IntDef;
 
-import com.arialyy.annotations.Download;
 import com.arialyy.aria.core.Aria;
 import com.arialyy.aria.core.common.HttpOption;
 import com.arialyy.aria.core.common.RequestEnum;
-import com.arialyy.aria.core.task.DownloadTask;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiAnthology;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoInfo;
 import com.leon.biuvideo.greendao.dao.DaoBaseUtils;
@@ -46,9 +44,9 @@ public class ResourceDownloadTask {
 
     private DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils;
 
-    private OnDownloadStatListener onDownloadStatListener;
     private VideoInfo.VideoAnthology videoAnthology;
     private BangumiAnthology bangumiAnthology;
+    private long taskId;
 
     public ResourceDownloadTask(Context context, Object object, DownloadHistory downloadHistory, Serializable serializable) {
         this.context = context;
@@ -63,25 +61,7 @@ public class ResourceDownloadTask {
             throw new ClassCastException("类型必须是'VideoInfo.VideoAnthology'或'BangumiAnthology'");
         }
 
-        Aria.download(object).register();
-
-        this.savePath = checkSaveDirectory(context, downloadHistory.getResType(), downloadHistory.getTitle(), downloadHistory.getSubTitle()).getAbsolutePath();
-    }
-
-    public interface OnDownloadStatListener {
-        /**
-         * 下载完成
-         */
-        void onCompleted();
-
-        /**
-         * 下载失败
-         */
-        void onFailed();
-    }
-
-    public void setOnDownloadStatListener(OnDownloadStatListener onDownloadStatListener) {
-        this.onDownloadStatListener = onDownloadStatListener;
+        this.savePath = checkSaveDirectory(context, downloadHistory.getResType(), downloadHistory.getMainTitle(), downloadHistory.getSubTitle()).getAbsolutePath();
     }
 
     /**
@@ -95,7 +75,7 @@ public class ResourceDownloadTask {
         httpOption.addHeader("Referer", "https://www.bilibili.com/");
         httpOption.setRequestType(RequestEnum.GET);
 
-        long taskId = Aria.download(object)
+        taskId = Aria.download(object)
                 .load(downloadHistory.getResStreamUrl())
                 .setFilePath(savePath)
                 .option(httpOption)
@@ -109,7 +89,7 @@ public class ResourceDownloadTask {
             DownloadLevelOneUtils downloadLevelOneUtils = new DownloadLevelOneUtils(context);
             DaoBaseUtils<DownloadLevelOne> downloadLevelOneDaoBaseUtils = downloadLevelOneUtils.getDownloadLevelOneDaoBaseUtils();
             if (!downloadLevelOneDaoBaseUtils.isExists(DownloadLevelOneDao.Properties.LevelOneId.eq(levelOneId))) {
-                downloadLevelOneDaoBaseUtils.insert(new DownloadLevelOne(null, downloadHistory.getTitle(),
+                downloadLevelOneDaoBaseUtils.insert(new DownloadLevelOne(null, downloadHistory.getMainTitle(),
                         downloadHistory.getLevelOneId(), downloadHistory.getCoverUrl()));
             }
         }
@@ -124,7 +104,7 @@ public class ResourceDownloadTask {
     /**
      * 检查/创建 资源保存路径
      */
-    public static File checkSaveDirectory(Context context, @ResourcesType int resType, String title, String subTitle) {
+    public static File checkSaveDirectory(Context context, @ResourcesType int resType, String mainTitle, String subTitle) {
         File resourcesPath = context.getExternalFilesDir(RESOURCE);
 
         File resSavePath;
@@ -150,7 +130,7 @@ public class ResourceDownloadTask {
             resSavePath.mkdirs();
         }
 
-        return new File(resSavePath, (title + "_" + subTitle + resFileType));
+        return new File(resSavePath, (mainTitle + "_" + subTitle + resFileType));
     }
 
     /**
@@ -158,49 +138,25 @@ public class ResourceDownloadTask {
      *
      * @return 已存在返回true，不存在则返回false
      */
-    public static boolean isExists(File savePath, Context context, String levelOnId, String levelTwoId, String subTitle) {
+    public static boolean isExists(File savePath, Context context, String levelOnId, String levelTwoId) {
         boolean exists = savePath.exists();
 
         // 如果本地不存在，则查询数据库
         if (!exists) {
             DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils = new DownloadHistoryUtils(context).getDownloadHistoryDaoUtils();
             return downloadHistoryDaoUtils.isExists(DownloadHistoryDao.Properties.LevelOneId.eq(levelOnId),
-                    DownloadHistoryDao.Properties.LevelTwoId.eq(levelTwoId),
-                    DownloadHistoryDao.Properties.SubTitle.eq(subTitle));
+                    DownloadHistoryDao.Properties.LevelTwoId.eq(levelTwoId));
         } else {
             return true;
         }
     }
 
-    /**
-     * 下载失败
-     */
-    @Download.onTaskFail
-    void onFailed(DownloadTask downloadTask) {
-        if (downloadTask.getEntity().getId() == downloadHistory.getTaskId()) {
-            if (onDownloadStatListener != null) {
-                downloadHistoryDaoUtils.delete(downloadHistory);
-
-                onDownloadStatListener.onFailed();
-                Aria.download(object).unRegister();
-            }
-        }
+    public long getTaskId() {
+        return taskId;
     }
 
-    /**
-     * 下载完成
-     */
-    @Download.onTaskComplete
-    void onCompleted(DownloadTask downloadTask) {
-        if (downloadTask.getEntity().getId() == downloadHistory.getTaskId()) {
-            if (onDownloadStatListener != null) {
-                downloadHistory.setIsCompleted(true);
-                downloadHistoryDaoUtils.update(downloadHistory);
-
-                onDownloadStatListener.onCompleted();
-                Aria.download(object).unRegister();
-            }
-        }
+    public void setTaskId(long taskId) {
+        this.taskId = taskId;
     }
 
     @IntDef({RES_TYPE_VIDEO, RES_TYPE_AUDIO, RES_TYPE_PICTURE})
@@ -212,5 +168,9 @@ public class ResourceDownloadTask {
 
     public BangumiAnthology getBangumiAnthology() {
         return bangumiAnthology;
+    }
+
+    public DownloadHistory getDownloadHistory() {
+        return downloadHistory;
     }
 }

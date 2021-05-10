@@ -44,7 +44,8 @@ public class VideoInfo {
     public static class VideoAnthology implements Serializable {
         public String mainId;
         public String cid;
-        public String part;
+        public String mainTitle;
+        public String subTitle;
         public String badge;
         public String duration;
         public String cover;

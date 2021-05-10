@@ -197,13 +197,13 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
         if (videoInfo.videoAnthologyList.size() == 0) {
             videoInfoAnthologyContainer.setVisibility(View.GONE);
         } else {
-            videoInfoNowAnthology.setRightValue(videoInfo.videoAnthologyList.get(anthologyIndex).part);
+            videoInfoNowAnthology.setRightValue(videoInfo.videoAnthologyList.get(anthologyIndex).subTitle);
         }
 
         // 开始播放视频
         if (onVideoAnthologyListener != null) {
             VideoInfo.VideoAnthology videoAnthology = videoInfo.videoAnthologyList.get(anthologyIndex);
-            onVideoAnthologyListener.onAnthology(videoAnthology.cid, videoAnthology.part);
+            onVideoAnthologyListener.onAnthology(videoAnthology.cid, videoAnthology.subTitle);
         }
 
         // 如果存在多个选集则获取已下载的选集数
@@ -390,8 +390,8 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
 
                     VideoInfo.VideoAnthology videoAnthology = videoInfo.videoAnthologyList.get(anthologyIndex);
 
-                    videoInfoNowAnthology.setRightValue(videoAnthology.part);
-                    onVideoAnthologyListener.onAnthology(videoAnthology.cid, videoAnthology.part);
+                    videoInfoNowAnthology.setRightValue(videoAnthology.subTitle);
+                    onVideoAnthologyListener.onAnthology(videoAnthology.cid, videoAnthology.subTitle);
                     videoAnthologyBottomSheet.dismiss();
                 }
             }
