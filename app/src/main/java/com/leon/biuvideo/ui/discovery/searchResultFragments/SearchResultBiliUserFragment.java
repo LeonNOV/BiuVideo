@@ -1,7 +1,6 @@
 package com.leon.biuvideo.ui.discovery.searchResultFragments;
 
 import android.animation.ObjectAnimator;
-import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -17,7 +16,7 @@ import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.ui.views.searchResultViews.SearchResultMenuAdapter;
 import com.leon.biuvideo.ui.views.searchResultViews.SearchResultMenuPopupWindow;
-import com.leon.biuvideo.utils.SimpleSingleThreadPool;
+import com.leon.biuvideo.utils.parseDataUtils.DataLoader;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.SearchResultBiliUserParser;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -47,7 +46,7 @@ public class SearchResultBiliUserFragment extends BaseLazySupportFragment implem
     private ObjectAnimator categoryImgWhirl;
     private SearchResultBiliUserAdapter searchResultBiliUserAdapter;
     private SmartRefreshRecyclerView<SearchResultBiliUser> searchResultBiliUserData;
-    private SearchResultBiliUserParser searchResultBiliUserParser;
+    private DataLoader<SearchResultBiliUser> searchResultBiliUserDataLoader;
 
     public SearchResultBiliUserFragment(String keyword) {
         this.keyword = keyword;
@@ -78,11 +77,7 @@ public class SearchResultBiliUserFragment extends BaseLazySupportFragment implem
         searchResultBiliUserData.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-                if (!searchResultBiliUserParser.dataStatus) {
-                    searchResultBiliUserData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                } else {
-                    getArticle(1);
-                }
+                searchResultBiliUserDataLoader.insertData(false);
             }
         });
 
@@ -91,62 +86,13 @@ public class SearchResultBiliUserFragment extends BaseLazySupportFragment implem
         searchResultBiliUserData.setRecyclerViewAdapter(searchResultBiliUserAdapter);
         searchResultBiliUserData.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
 
-        setOnLoadListener(new OnLoadListener() {
-            @Override
-            public void onLoad(Message msg) {
-                List<SearchResultBiliUser> searchResultBiliUsers = (List<SearchResultBiliUser>) msg.obj;
-
-                switch (msg.what) {
-                    case 0:
-                        if (searchResultBiliUsers == null || searchResultBiliUsers.size() == 0) {
-                            searchResultBiliUserData.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
-                            searchResultBiliUserData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                        } else {
-                            searchResultBiliUserAdapter.append(searchResultBiliUsers);
-                            searchResultBiliUserData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
-                        }
-                        break;
-                    case 1:
-                        if (searchResultBiliUsers != null && searchResultBiliUsers.size() > 0) {
-                            searchResultBiliUserAdapter.append(searchResultBiliUsers);
-                            searchResultBiliUserData.setSmartRefreshStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
-                        } else {
-                            searchResultBiliUserData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
+        searchResultBiliUserDataLoader = new DataLoader<>(new SearchResultBiliUserParser(keyword, order, orderSort, userType), searchResultBiliUserData, searchResultBiliUserAdapter, this);
     }
 
     @Override
     protected void onLazyLoad() {
         searchResultBiliUserData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-        getArticle(0);
-    }
-
-    private void getArticle(int what) {
-        if (searchResultBiliUserParser == null) {
-            searchResultBiliUserParser = new SearchResultBiliUserParser(keyword, order, orderSort, userType);
-        }
-
-        SimpleSingleThreadPool.executor(new Runnable() {
-            @Override
-            public void run() {
-                List<SearchResultBiliUser> searchResultBiliUsers = searchResultBiliUserParser.parseData();
-
-                Message message;
-                if (what == -1) {
-                    message = receiveDataHandler.obtainMessage(0);
-                } else {
-                    message = receiveDataHandler.obtainMessage(what);
-                }
-                message.obj = searchResultBiliUsers;
-                receiveDataHandler.sendMessage(message);
-            }
-        });
+        searchResultBiliUserDataLoader.insertData(true);
     }
 
     @Override
@@ -211,11 +157,9 @@ public class SearchResultBiliUserFragment extends BaseLazySupportFragment implem
      */
     private void reset() {
         searchResultBiliUserData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-
-        // 清空列表中的数据
         searchResultBiliUserAdapter.removeAll();
 
-        searchResultBiliUserParser = new SearchResultBiliUserParser(keyword, order, orderSort, userType);
-        getArticle(-1);
+        searchResultBiliUserDataLoader.setParserInterface(new SearchResultBiliUserParser(keyword, order, orderSort, userType));
+        searchResultBiliUserDataLoader.insertData(true);
     }
 }

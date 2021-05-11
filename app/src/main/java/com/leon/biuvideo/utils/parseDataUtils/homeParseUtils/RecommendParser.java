@@ -22,7 +22,7 @@ import okhttp3.Headers;
  * @Time 2021/3/10
  * @Desc 推荐数据解析类
  */
-public class RecommendParser implements ParserInterface<VideoRecommend> {
+public class RecommendParser extends ParserInterface<VideoRecommend> {
     private final String cookie;
 
     /**

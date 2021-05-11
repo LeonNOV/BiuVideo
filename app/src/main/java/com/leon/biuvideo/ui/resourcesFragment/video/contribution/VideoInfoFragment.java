@@ -206,18 +206,15 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
             onVideoAnthologyListener.onAnthology(videoAnthology.cid, videoAnthology.subTitle);
         }
 
-        // 如果存在多个选集则获取已下载的选集数
-        if (videoInfo.isMultiAnthology) {
-            DownloadHistoryUtils downloadHistoryUtils = new DownloadHistoryUtils(context);
-            DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils = downloadHistoryUtils.getDownloadHistoryDaoUtils();
+        DownloadHistoryUtils downloadHistoryUtils = new DownloadHistoryUtils(context);
+        DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils = downloadHistoryUtils.getDownloadHistoryDaoUtils();
 
-            // 获取该视频已下载的选集数
-            downloadedRecordCount = downloadHistoryDaoUtils.count(DownloadHistoryDao.Properties.IsCompleted.eq(true),
-                    DownloadHistoryDao.Properties.LevelOneId.eq(bvid));
+        // 获取该视频已下载的选集数
+        downloadedRecordCount = downloadHistoryDaoUtils.count(DownloadHistoryDao.Properties.IsCompleted.eq(true),
+                DownloadHistoryDao.Properties.LevelOneId.eq(bvid));
 
-            String record = downloadedRecordCount + "/" + videoInfo.anthologyCount;
-            videoInfoDownloadedRecord.setText(record);
-        }
+        String record = downloadedRecordCount + "/" + videoInfo.anthologyCount;
+        videoInfoDownloadedRecord.setText(record);
     }
 
     /**

@@ -18,16 +18,11 @@ import java.util.Map;
  * @Time 2020/11/22
  * @Desc 视频搜索结果解析类
  */
-public class SearchResultVideoParser implements ParserInterface<SearchResultVideo> {
+public class SearchResultVideoParser extends ParserInterface<SearchResultVideo> {
     /**
      * 页码数
      */
     private int pageNum = 1;
-
-    /**
-     * 数据状态
-     */
-    public boolean dataStatus = true;
 
     /**
      * 总页面数

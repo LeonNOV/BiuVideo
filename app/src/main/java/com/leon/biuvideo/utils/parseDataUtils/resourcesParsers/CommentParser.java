@@ -20,7 +20,7 @@ import java.util.Set;
  * @Time 2021/4/7
  * @Desc 评论解析类
  */
-public class CommentParser implements ParserInterface<Comment> {
+public class CommentParser extends ParserInterface<Comment> {
     /**
      * 按时间排序
      */
@@ -42,7 +42,6 @@ public class CommentParser implements ParserInterface<Comment> {
 
     public int pageNum = 1;
     public static final String PAGE_SIZE = "20";
-    public boolean dataStatus = true;
 
     public final String oid;
     public final int type;

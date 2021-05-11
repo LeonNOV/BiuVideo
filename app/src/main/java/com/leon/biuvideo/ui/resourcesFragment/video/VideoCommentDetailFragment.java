@@ -1,7 +1,6 @@
 package com.leon.biuvideo.ui.resourcesFragment.video;
 
 import android.graphics.drawable.Drawable;
-import android.os.Message;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -27,13 +26,13 @@ import com.leon.biuvideo.adapters.commentAdapters.CommentLevelOneAdapter;
 import com.leon.biuvideo.beans.resourcesBeans.Comment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoFragment;
-import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.ui.views.CardTitle;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
+import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.utils.PreferenceUtils;
-import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
+import com.leon.biuvideo.utils.parseDataUtils.DataLoader;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.CommentDetailParser;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.CommentParser;
 import com.leon.biuvideo.values.FeaturesName;
@@ -59,10 +58,9 @@ public class VideoCommentDetailFragment extends BaseSupportFragment {
     private final List<Comment> commentList = new ArrayList<>();
 
     private final Comment comment;
-    private CommentDetailParser commentDetailParser;
-    private CommentDetailAdapter commentDetailAdapter;
 
     private ImageSpan imageSpan;
+    private DataLoader<Comment> commentDataLoader;
 
     public VideoCommentDetailFragment(Comment comment) {
         this.comment = comment;
@@ -114,7 +112,7 @@ public class VideoCommentDetailFragment extends BaseSupportFragment {
                 .setVisibility(R.id.video_comment_detail_item_upAction, comment.upLike ? View.VISIBLE : View.GONE);
 
         SmartRefreshRecyclerView<Comment> videoCommentDetailList = findView(R.id.video_comment_detail_list);
-        commentDetailAdapter = new CommentDetailAdapter(commentList, context);
+        CommentDetailAdapter commentDetailAdapter = new CommentDetailAdapter(commentList, context);
         commentDetailAdapter.setHasStableIds(true);
         videoCommentDetailList.setRecyclerViewAdapter(commentDetailAdapter);
         videoCommentDetailList.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
@@ -122,72 +120,13 @@ public class VideoCommentDetailFragment extends BaseSupportFragment {
         videoCommentDetailList.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-                getCommentDetail(1);
+                commentDataLoader.insertData(false);
             }
         });
         videoCommentDetailList.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
-        setOnLoadListener(new OnLoadListener() {
-            @Override
-            public void onLoad(Message msg) {
-                List<Comment> commentList = (List<Comment>) msg.obj;
-
-                switch (msg.what) {
-                    case 0:
-                        if (commentList != null && commentList.size() > 0) {
-                            commentDetailAdapter.append(commentList);
-                            if (!commentDetailParser.dataStatus) {
-                                videoCommentDetailList.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                            }
-                        } else {
-                            videoCommentDetailList.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
-                            videoCommentDetailList.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                        }
-
-                        videoCommentDetailList.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
-                        break;
-                    case 1:
-                        if (commentList != null && commentList.size() > 0) {
-                            commentDetailAdapter.append(commentList);
-
-                            if (!commentDetailParser.dataStatus) {
-                                videoCommentDetailList.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                            }
-                        } else {
-                            videoCommentDetailList.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                        }
-
-                        videoCommentDetailList.setSmartRefreshStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
-
-        getCommentDetail(0);
-    }
-
-    /**
-     * 获取评论数据
-     *
-     * @param what  what
-     */
-    private void getCommentDetail(int what) {
-        if (commentDetailParser == null) {
-            commentDetailParser = new CommentDetailParser(CommentParser.TYPE_VIDEO, comment.oid, comment.rpid);
-        }
-
-        SimpleSingleThreadPool.executor(new Runnable() {
-            @Override
-            public void run() {
-                List<Comment> commentList = commentDetailParser.parseData();
-
-                Message message = receiveDataHandler.obtainMessage(what);
-                message.obj = commentList;
-                receiveDataHandler.sendMessage(message);
-            }
-        });
+        commentDataLoader = new DataLoader<>(new CommentDetailParser(CommentParser.TYPE_VIDEO, comment.oid, comment.rpid), videoCommentDetailList, commentDetailAdapter, this);
+        commentDataLoader.insertData(true);
     }
 
     /**

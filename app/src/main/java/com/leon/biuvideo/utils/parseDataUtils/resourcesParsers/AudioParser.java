@@ -26,6 +26,7 @@ public class AudioParser {
             Audio audio = new Audio();
 
             audio.title = data.getString("title");
+            audio.author = data.getString("author");
             audio.cover = data.getString("cover");
             audio.duration = data.getIntValue("duration");
 

@@ -20,10 +20,9 @@ import okhttp3.Headers;
  * @Time 2021/3/23
  * @Desc 获取综合热门数据
  */
-public class PopularHotListParser implements ParserInterface<PopularVideo> {
+public class PopularHotListParser extends ParserInterface<PopularVideo> {
     private static final int PAGE_SIZE = 20;
     private int pageNum = 1;
-    public boolean dataStatus = true;
 
     @Override
     public List<PopularVideo> parseData() {

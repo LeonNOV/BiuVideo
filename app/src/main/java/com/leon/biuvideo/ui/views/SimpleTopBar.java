@@ -7,7 +7,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -34,7 +33,6 @@ public class SimpleTopBar extends RelativeLayout implements View.OnClickListener
     private Drawable rightSrc;
     private String topBarTitle = "";
     private Typeface topBarTitleStyle = Typeface.DEFAULT_BOLD;
-    private int topBarTitleGravity = Gravity.CENTER_HORIZONTAL;
     private TextView topBarTitleView;
 
     public SimpleTopBar(Context context) {
@@ -63,7 +61,14 @@ public class SimpleTopBar extends RelativeLayout implements View.OnClickListener
     private OnSimpleTopBarListener onSimpleTopBarListener;
 
     public interface OnSimpleTopBarListener {
+        /**
+         * 左边控件点击事件
+         */
         void onLeft();
+
+        /**
+         * 右边控件点击事件
+         */
         void onRight();
     }
 
@@ -77,14 +82,12 @@ public class SimpleTopBar extends RelativeLayout implements View.OnClickListener
         this.leftSrc = typedArray.getDrawable(R.styleable.SimpleTopBar_leftSrc);
         this.rightSrc = typedArray.getDrawable(R.styleable.SimpleTopBar_rightSrc);
         this.topBarTitleStyle = typedArray.getInt(R.styleable.SimpleTopBar_topBarTitleStyle, 1) == 0 ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT;
-        this.topBarTitleGravity = typedArray.getInt(R.styleable.SimpleTopBar_topBarTitleGravity, Gravity.START);
         typedArray.recycle();
 
         relativeLayout = new RelativeLayout(context);
         relativeLayout.setGravity(RelativeLayout.CENTER_VERTICAL);
         relativeLayout.setPadding(30, 0, 30, 0);
         relativeLayout.setBackgroundResource(R.color.white);
-//        relativeLayout.setElevation(10);
 
         addView(relativeLayout);
 
@@ -141,7 +144,6 @@ public class SimpleTopBar extends RelativeLayout implements View.OnClickListener
         topBarTitleView.setMaxLines(1);
         topBarTitleView.setEllipsize(TextUtils.TruncateAt.END);
         topBarTitleView.setTypeface(topBarTitleStyle);
-        topBarTitleView.setGravity(topBarTitleGravity);
 
         relativeLayout.addView(topBarTitleView);
 

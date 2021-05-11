@@ -21,7 +21,7 @@ import okhttp3.Headers;
  * @Time 2020/12/14
  * @Desc 订阅数据解析类
  */
-public class OrderParser implements ParserInterface<Order> {
+public class OrderParser extends ParserInterface<Order> {
 
     /**
      * 初始页码
@@ -32,11 +32,6 @@ public class OrderParser implements ParserInterface<Order> {
      * 单页条目数
      */
     private static final int PAGE_SIZE = 15;
-
-    /**
-     * 数据状态
-     */
-    public boolean dataStatus = true;
 
     /**
      * 请求头信息
@@ -68,7 +63,7 @@ public class OrderParser implements ParserInterface<Order> {
         JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.ORDER_LIST, Headers.of(requestHeader), params);
         JSONObject data = responseObject.getJSONObject("data");
 
-        if (data != null) {
+        if (data != null && dataStatus) {
             return parseJSONArray(data.getJSONArray("list"));
         }
 

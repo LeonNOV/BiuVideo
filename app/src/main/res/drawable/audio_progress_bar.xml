@@ -3,7 +3,7 @@
     <item android:id="@android:id/background">
         <shape>
             <corners android:radius="@dimen/corner_6dp"/>
-            <solid android:color="#7FDFDFDF"/>
+            <solid android:color="#AAAAAA"/>
         </shape>
     </item>
 
@@ -22,7 +22,10 @@
         <clip>
             <shape>
                 <corners android:radius="@dimen/corner_6dp"/>
-                <solid android:color="#8F8F8F"/>
+                <gradient
+                    android:angle="180"
+                    android:endColor="#FBB5C9"
+                    android:startColor="@color/BiliBili_pink" />
             </shape>
         </clip>
     </item>

@@ -1,7 +1,6 @@
 package com.leon.biuvideo.ui.discovery.searchResultFragments;
 
 import android.animation.ObjectAnimator;
-import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -17,7 +16,7 @@ import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.ui.views.searchResultViews.SearchResultMenuAdapter;
 import com.leon.biuvideo.ui.views.searchResultViews.SearchResultMenuPopupWindow;
-import com.leon.biuvideo.utils.SimpleSingleThreadPool;
+import com.leon.biuvideo.utils.parseDataUtils.DataLoader;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.SearchResultVideoParser;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -49,9 +48,9 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
     private ObjectAnimator orderImgWhirl;
     private ObjectAnimator lengthImgWhirl;
     private ObjectAnimator partitionImgWhirl;
-    private SearchResultVideoParser searchResultVideoParser;
     private SmartRefreshRecyclerView<SearchResultVideo> searchResultVideoData;
     private SearchResultVideoAdapter searchResultVideoAdapter;
+    private DataLoader<SearchResultVideo> searchResultVideoDataLoader;
 
     public SearchResultVideoFragment (String keyword) {
         this.keyword = keyword;
@@ -91,57 +90,21 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
         searchResultVideoData.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-                if (!searchResultVideoParser.dataStatus) {
-                    searchResultVideoData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                } else {
-                    getVideo(1);
-                }
+                searchResultVideoDataLoader.insertData(false);
             }
         });
         searchResultVideoAdapter = new SearchResultVideoAdapter(searchResultVideoList, context);
         searchResultVideoAdapter.setHasStableIds(true);
         searchResultVideoData.setRecyclerViewAdapter(searchResultVideoAdapter);
         searchResultVideoData.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
-        setOnLoadListener(new OnLoadListener() {
-            @Override
-            public void onLoad(Message msg) {
-                List<SearchResultVideo> searchResultVideos = (List<SearchResultVideo>) msg.obj;
 
-                switch (msg.what) {
-                    case 0:
-                        if (searchResultVideos != null && searchResultVideos.size() > 0) {
-                            searchResultVideoAdapter.append(searchResultVideos);
-                            searchResultVideoData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
-                            if (!searchResultVideoParser.dataStatus) {
-                                searchResultVideoData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                            }
-                        } else {
-                            searchResultVideoData.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
-                            searchResultVideoData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                        }
-                        break;
-                    case 1:
-                        if (searchResultVideos != null && searchResultVideos.size() > 0) {
-                            searchResultVideoAdapter.append(searchResultVideos);
-                            searchResultVideoData.setSmartRefreshStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
-                            if (!searchResultVideoParser.dataStatus) {
-                                searchResultVideoData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                            }
-                        } else {
-                            searchResultVideoData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
+        searchResultVideoDataLoader = new DataLoader<>(new SearchResultVideoParser(keyword, order, length, partition), searchResultVideoData, searchResultVideoAdapter, this);
     }
 
     @Override
     protected void onLazyLoad() {
         searchResultVideoData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-        getVideo(0);
+        searchResultVideoDataLoader.insertData(true);
     }
 
     @Override
@@ -216,41 +179,13 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
     }
 
     /**
-     * 获取video数据
-     *
-     * @param what  what
-     */
-    private void getVideo(int what) {
-        if (searchResultVideoParser == null) {
-            searchResultVideoParser = new SearchResultVideoParser(keyword, order, length, partition);
-        }
-        SimpleSingleThreadPool.executor(new Runnable() {
-            @Override
-            public void run() {
-                List<SearchResultVideo> searchResultVideoList = searchResultVideoParser.parseData();
-
-                Message message;
-                if (what == -1) {
-                    message = receiveDataHandler.obtainMessage(0);
-                } else {
-                    message = receiveDataHandler.obtainMessage(what);
-                }
-                message.obj = searchResultVideoList;
-                receiveDataHandler.sendMessage(message);
-            }
-        });
-    }
-
-    /**
      *  重置当前所有的数据
      */
     private void reset() {
         searchResultVideoData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-
-        // 清空列表中的数据
         searchResultVideoAdapter.removeAll();
 
-        searchResultVideoParser = new SearchResultVideoParser(keyword, order, length, partition);
-        getVideo(-1);
+        searchResultVideoDataLoader.setParserInterface(new SearchResultVideoParser(keyword, order, length, partition));
+        searchResultVideoDataLoader.insertData(true);
     }
 }

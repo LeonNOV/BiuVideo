@@ -20,7 +20,7 @@ import okhttp3.Headers;
  * @Time 2021/3/14
  * @Desc 稍后观看解析类
  */
-public class WatchLaterParser implements ParserInterface<WatchLater> {
+public class WatchLaterParser extends ParserInterface<WatchLater> {
     @Override
     public List<WatchLater> parseData() {
         // 获取Cookie

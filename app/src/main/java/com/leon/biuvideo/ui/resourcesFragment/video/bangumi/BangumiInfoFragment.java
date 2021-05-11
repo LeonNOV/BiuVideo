@@ -222,11 +222,7 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
                 .setText(R.id.bangumi_info_score, bangumi.ratingScore + "分")
                 .setText(R.id.bangumi_info_play, ValueUtils.generateCN(bangumi.views) + "播放")
                 .setText(R.id.bangumi_info_orderTotal, ValueUtils.generateCN(bangumi.bangumiSeasonList.get(seriesIndex).seriesFollow) + "系列追番");
-        if (bangumi.isMultiAnthology) {
-            bangumiInfoNowAnthology.setRightValue(bangumi.bangumiAnthologyList.get(anthologyIndex).subTitle);
-        } else {
-            bangumiInfoAnthologyContainer.setVisibility(View.GONE);
-        }
+        bangumiInfoNowAnthology.setRightValue(bangumi.bangumiAnthologyList.get(anthologyIndex).subTitle);
 
         bangumiInfoOrder.setSelected(bangumi.isFollow);
 
@@ -254,15 +250,13 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
             onBangumiInfoListener.onBangumiAnthologyListener(bangumiAnthology.aid, bangumiAnthology.cid, bangumiAnthology.subTitle);
         }
 
-        if (bangumi.isMultiAnthology) {
-            DownloadHistoryUtils downloadHistoryUtils = new DownloadHistoryUtils(context);
-            DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils = downloadHistoryUtils.getDownloadHistoryDaoUtils();
+        DownloadHistoryUtils downloadHistoryUtils = new DownloadHistoryUtils(context);
+        DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils = downloadHistoryUtils.getDownloadHistoryDaoUtils();
 
-            downloadedRecordCount = downloadHistoryDaoUtils.count(DownloadHistoryDao.Properties.LevelOneId.eq(seasonId));
+        downloadedRecordCount = downloadHistoryDaoUtils.count(DownloadHistoryDao.Properties.LevelOneId.eq(seasonId));
 
-            String record = downloadedRecordCount + "/" + bangumi.bangumiAnthologyList.size();
-            bangumiInfoDownloadedRecord.setText(record);
-        }
+        String record = downloadedRecordCount + "/" + bangumi.bangumiAnthologyList.size();
+        bangumiInfoDownloadedRecord.setText(record);
     }
 
     /**

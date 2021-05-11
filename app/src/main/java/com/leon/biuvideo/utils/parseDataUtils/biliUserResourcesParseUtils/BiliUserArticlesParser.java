@@ -18,7 +18,7 @@ import java.util.Map;
  * @Time 2021/4/10
  * @Desc
  */
-public class BiliUserArticlesParser implements ParserInterface<BiliUserArticle> {
+public class BiliUserArticlesParser extends ParserInterface<BiliUserArticle> {
     /**
      * 最新发布
      */
@@ -38,7 +38,6 @@ public class BiliUserArticlesParser implements ParserInterface<BiliUserArticle> 
     private int pageNum = 1;
     private int total = -1;
     private int currentCount = 0;
-    public boolean dataStatus = true;
 
     private final String mid;
     private final String order;

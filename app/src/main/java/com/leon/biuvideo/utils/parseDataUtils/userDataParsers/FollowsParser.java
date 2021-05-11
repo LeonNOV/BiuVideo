@@ -7,7 +7,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.userBeans.Follow;
 import com.leon.biuvideo.utils.HttpUtils;
-import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.parseDataUtils.ParserInterface;
 import com.leon.biuvideo.values.Role;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
@@ -24,7 +23,7 @@ import okhttp3.Headers;
  * @Time 2021/1/22
  * @Desc 关注数据解析类
  */
-public class FollowsParser implements ParserInterface<Follow> {
+public class FollowsParser extends ParserInterface<Follow> {
     private static final String REFERER = "https://space.bilibili.com/";
     private final Context context;
     private final String mid;
@@ -38,11 +37,6 @@ public class FollowsParser implements ParserInterface<Follow> {
      * 条目数
      */
     private static final int PAGE_SIZE = 20;
-
-    /**
-     * 数据状态
-     */
-    public boolean dataStatus = true;
 
     public FollowsParser(Context context, String mid) {
         this.context = context;

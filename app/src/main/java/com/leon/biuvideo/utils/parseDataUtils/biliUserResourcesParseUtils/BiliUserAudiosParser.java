@@ -18,7 +18,7 @@ import java.util.Map;
  * @Time 2020/10/22
  * @Desc B站用户音频数据解析类
  */
-public class BiliUserAudiosParser implements ParserInterface<BiliUserAudio> {
+public class BiliUserAudiosParser extends ParserInterface<BiliUserAudio> {
     /**
      * 最新发布
      */
@@ -43,7 +43,6 @@ public class BiliUserAudiosParser implements ParserInterface<BiliUserAudio> {
 
     private int total = -1;
     private int currentCount = 0;
-    public boolean dataStatus = true;
 
     public BiliUserAudiosParser(String mid, int order) {
         this.mid = mid;

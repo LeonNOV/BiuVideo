@@ -31,6 +31,18 @@ public class DownloadWatcher {
     }
 
     /**
+     * 取消下载
+     */
+    @Download.onTaskCancel
+    void onCancel (DownloadTask downloadTask) {
+        ResourceDownloadTask thisTask = findThisTask(downloadTask);
+
+        if (thisTask != null) {
+            updateStat(thisTask, false);
+        }
+    }
+
+    /**
      * 下载失败
      */
     @Download.onTaskFail
@@ -60,17 +72,6 @@ public class DownloadWatcher {
 
         DownloadHistory downloadHistory = resourceDownloadTask.getDownloadHistory();
         if (isComplete) {
-            videoAnthology = resourceDownloadTask.getVideoAnthology();
-            bangumiAnthology = resourceDownloadTask.getBangumiAnthology();
-
-            if (videoAnthology != null) {
-                videoAnthology.isDownloaded = true;
-            }
-
-            if (bangumiAnthology != null) {
-                bangumiAnthology.isDownloaded = true;
-            }
-
             downloadHistory.setIsFailed(true);
             downloadHistoryDaoUtils.update(downloadHistory);
         }

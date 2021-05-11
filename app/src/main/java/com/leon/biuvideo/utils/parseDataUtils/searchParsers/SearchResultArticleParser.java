@@ -8,31 +8,21 @@ import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.parseDataUtils.ParserInterface;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import okhttp3.Headers;
 
 /**
  * @Author Leon
  * @Time 2020/11/22
  * @Desc 专栏搜索结果解析类
  */
-public class SearchResultArticleParser implements ParserInterface<SearchResultArticle> {
+public class SearchResultArticleParser extends ParserInterface<SearchResultArticle> {
     /**
      * 页码数
      */
     private int pageNum = 1;
-
-    /**
-     * 数据状态
-     */
-    public boolean dataStatus = true;
 
     /**
      * 总页面数

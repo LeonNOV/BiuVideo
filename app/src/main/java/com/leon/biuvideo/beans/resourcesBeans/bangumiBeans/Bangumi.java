@@ -65,5 +65,4 @@ public class Bangumi {
     public String link;
 
     public boolean isFollow;
-    public boolean isMultiAnthology;
 }

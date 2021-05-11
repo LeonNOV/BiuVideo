@@ -21,10 +21,9 @@ import okhttp3.Headers;
  * @Time 2020/12/9
  * @Desc 历史记录解析类
  */
-public class HistoryParser implements ParserInterface<History> {
+public class HistoryParser extends ParserInterface<History> {
     private long max = 0;
     private long viewAt = 0;
-    public boolean dataStatus = true;
 
     @Override
     public List<History> parseData() {

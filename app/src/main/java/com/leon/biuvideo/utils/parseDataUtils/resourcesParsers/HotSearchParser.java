@@ -18,7 +18,7 @@ import java.util.Map;
  * @Time 2021/3/14
  * @Desc 热搜榜数据解析类
  */
-public class HotSearchParser implements ParserInterface<HotSearch> {
+public class HotSearchParser extends ParserInterface<HotSearch> {
     @Override
     public List<HotSearch> parseData() {
         Map<String, String> params = new HashMap<>(2);

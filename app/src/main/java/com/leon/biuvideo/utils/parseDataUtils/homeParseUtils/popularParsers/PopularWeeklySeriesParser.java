@@ -17,7 +17,7 @@ import okhttp3.Headers;
  * @Time 2021/3/24
  * @Desc 每周必看往期数据解析类
  */
-public class PopularWeeklySeriesParser implements ParserInterface<PopularWeeklySeries> {
+public class PopularWeeklySeriesParser extends ParserInterface<PopularWeeklySeries> {
     @Override
     public List<PopularWeeklySeries> parseData() {
         JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.POPULAR_WEEKLY_SERIES, Headers.of(HttpUtils.getAPIRequestHeader()), null);

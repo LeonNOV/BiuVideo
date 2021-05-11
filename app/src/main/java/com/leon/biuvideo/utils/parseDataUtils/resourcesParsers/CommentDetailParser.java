@@ -20,11 +20,10 @@ import java.util.Set;
  * @Time 2021/4/8
  * @Desc 获取一级评论下所有二级评论
  */
-public class CommentDetailParser implements ParserInterface<Comment> {
+public class CommentDetailParser extends ParserInterface<Comment> {
     public static final String PAGE_SIZE = "20";
 
     public int pageNum = 1;
-    public boolean dataStatus = true;
     public int total = -1;
     public int currentCount = 0;
 

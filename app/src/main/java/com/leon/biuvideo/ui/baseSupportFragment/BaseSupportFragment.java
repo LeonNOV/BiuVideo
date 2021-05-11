@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.ui.resourcesFragment.article.ArticleFragment;
+import com.leon.biuvideo.ui.resourcesFragment.audio.AudioFragment;
 import com.leon.biuvideo.ui.resourcesFragment.picture.PictureFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoFragment;
 import com.leon.biuvideo.utils.BindingUtils;
@@ -40,7 +41,7 @@ public abstract class BaseSupportFragment extends SupportFragment {
      */
     protected Handler receiveDataHandler;
 
-    private OnLoadListener onLoadListener;
+    protected OnLoadListener onLoadListener;
 
     public interface OnLoadListener {
         /**
@@ -105,6 +106,10 @@ public abstract class BaseSupportFragment extends SupportFragment {
         return super.onBackPressedSupport();
     }
 
+    public Handler getReceiveDataHandler() {
+        return receiveDataHandler;
+    }
+
     /**
      * 启动一个“公共”Fragment
      *
@@ -122,7 +127,7 @@ public abstract class BaseSupportFragment extends SupportFragment {
                 topFragment.start(new VideoFragment(params));
                 break;
             case AUDIO:
-
+                topFragment.start(new AudioFragment(params));
                 break;
             case ARTICLE:
                 topFragment.start(new ArticleFragment(params));

@@ -87,10 +87,8 @@ public class BangumiDetailParser {
 
             if (bangumi.bangumiAnthologyList != null) {
                 bangumi.anthologyCount = bangumi.bangumiAnthologyList.size();
-                bangumi.isMultiAnthology = bangumi.anthologyCount > 1;
             } else {
                 bangumi.anthologyCount = 0;
-                bangumi.isMultiAnthology = false;
             }
 
             bangumi.isFollow = getFollowStatus();

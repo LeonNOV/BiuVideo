@@ -19,7 +19,7 @@ import okhttp3.Headers;
  * @Time 2020/12/15
  * @Desc 专栏收藏数据解析类
  */
-public class FavoriteArticleParser implements ParserInterface<FavoriteArticle> {
+public class FavoriteArticleParser extends ParserInterface<FavoriteArticle> {
     /**
      * 页码数
      */
@@ -29,11 +29,6 @@ public class FavoriteArticleParser implements ParserInterface<FavoriteArticle> {
      * 单页条目数
      */
     private static final int PAGE_SIZE = 16;
-
-    /**
-     * 数据状态
-     */
-    public boolean dataStatus = true;
 
     @Override
     public List<FavoriteArticle> parseData() {

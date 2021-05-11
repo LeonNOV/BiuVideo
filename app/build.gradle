@@ -142,4 +142,7 @@ dependencies {
     // aria
     implementation 'com.arialyy.aria:core:3.8.15'
     annotationProcessor 'com.arialyy.aria:compiler:3.8.15'
+
+    // An Android transformation library providing a variety of image transformations for Glide.
+    implementation 'jp.wasabeef:glide-transformations:4.3.0'
 }

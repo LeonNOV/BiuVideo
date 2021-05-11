@@ -7,6 +7,7 @@ package com.leon.biuvideo.beans.resourcesBeans;
  */
 public class Audio {
     public String title;
+    public String author;
     public String cover;
 
     public int duration;

@@ -1,7 +1,5 @@
 package com.leon.biuvideo.ui.home;
 
-import android.os.Message;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.R;
@@ -11,7 +9,7 @@ import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
-import com.leon.biuvideo.utils.SimpleSingleThreadPool;
+import com.leon.biuvideo.utils.parseDataUtils.DataLoader;
 import com.leon.biuvideo.utils.parseDataUtils.userDataParsers.HistoryParser;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -25,8 +23,8 @@ import java.util.List;
  * @Desc 历史记录页面
  */
 public class HistoryFragment extends BaseSupportFragment {
-    private HistoryParser historyParser;
     private final List<History> historyList = new ArrayList<>();
+    private DataLoader<History> historyDataLoader;
 
     public static HistoryFragment getInstance() {
         return new HistoryFragment();
@@ -55,11 +53,7 @@ public class HistoryFragment extends BaseSupportFragment {
         historyData.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-                if (!historyParser.dataStatus) {
-                    historyData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                } else {
-                    getHistory(1);
-                }
+                historyDataLoader.insertData(false);
             }
         });
         HistoryAdapter historyAdapter = new HistoryAdapter(historyList, context);
@@ -69,51 +63,7 @@ public class HistoryFragment extends BaseSupportFragment {
 
         historyData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
-        getHistory(0);
-        setOnLoadListener(new OnLoadListener() {
-            @Override
-            public void onLoad(Message msg) {
-                List<History> histories = (List<History>) msg.obj;
-
-                switch (msg.what) {
-                    case 0:
-                        if (histories == null || histories.size() == 0) {
-                            historyData.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
-                            historyData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                        } else {
-                            historyAdapter.append(histories);
-                            historyData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
-                        }
-                        break;
-                    case 1:
-                        if (histories != null && histories.size() > 0) {
-                            historyAdapter.append(histories);
-                            historyData.setSmartRefreshStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
-                        } else {
-                            historyData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
-    }
-
-    private void getHistory (int what) {
-        if (historyParser == null) {
-            historyParser = new HistoryParser();
-        }
-
-        SimpleSingleThreadPool.executor(new Runnable() {
-            @Override
-            public void run() {
-                List<History> historyList = historyParser.parseData();
-
-                Message message = receiveDataHandler.obtainMessage(what);
-                message.obj = historyList;
-                receiveDataHandler.sendMessage(message);
-            }
-        });
+        historyDataLoader = new DataLoader<>(new HistoryParser(), historyData, historyAdapter, this);
+        historyDataLoader.insertData(true);
     }
 }

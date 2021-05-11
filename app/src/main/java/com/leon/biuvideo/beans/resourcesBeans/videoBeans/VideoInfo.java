@@ -19,7 +19,6 @@ public class VideoInfo {
     public long pubTime;
     public String desc;
 
-    public boolean isMultiAnthology;
     public UserInfo userInfo;
     public VideoStat videoStat;
 

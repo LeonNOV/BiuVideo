@@ -18,16 +18,11 @@ import java.util.Map;
  * @Time 2021/3/30
  * @Desc 番剧搜索结果解析类
  */
-public class SearchResultBangumiParser implements ParserInterface<SearchResultBangumi> {
+public class SearchResultBangumiParser extends ParserInterface<SearchResultBangumi> {
     /**
      * 页码数
      */
     private int pageNum = 1;
-
-    /**
-     * 数据状态
-     */
-    public boolean dataStatus = true;
 
     /**
      * 总页面数

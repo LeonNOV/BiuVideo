@@ -20,7 +20,7 @@ import okhttp3.Headers;
  * @Time 2020/12/15
  * @Desc 获取用户所有收藏夹数据
  */
-public class FavoriteVideoFolderParser implements ParserInterface<FavoriteVideoFolder> {
+public class FavoriteVideoFolderParser extends ParserInterface<FavoriteVideoFolder> {
     @Override
     public List<FavoriteVideoFolder> parseData() {
         Map<String, String> params = new HashMap<>(1);

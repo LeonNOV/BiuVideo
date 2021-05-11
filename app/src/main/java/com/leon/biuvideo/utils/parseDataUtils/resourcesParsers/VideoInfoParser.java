@@ -49,7 +49,6 @@ public class VideoInfoParser {
             videoInfo.aid = dataObject.getString("aid");
             videoInfo.title = dataObject.getString("title");
             videoInfo.anthologyCount = dataObject.getIntValue("videos");
-            videoInfo.isMultiAnthology = videoInfo.anthologyCount > 0;
             videoInfo.tagId = dataObject.getIntValue("tid");
             videoInfo.tagName = dataObject.getString("tname");
             videoInfo.cover = dataObject.getString("pic");

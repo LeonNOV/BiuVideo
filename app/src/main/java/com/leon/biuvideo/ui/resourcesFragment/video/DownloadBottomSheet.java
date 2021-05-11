@@ -39,7 +39,6 @@ import com.leon.biuvideo.values.Quality;
 import com.leon.biuvideo.values.Qualitys;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -189,7 +188,7 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
 
                     downloadHistory.setResStreamUrl(videoWithFlv.videoStreamInfoList.get(0).url);
 
-                    ResourceDownloadTask resourceDownloadTask = new ResourceDownloadTask(context, this, downloadHistory, data.getSerializable("anthologyInfo"));
+                    ResourceDownloadTask resourceDownloadTask = new ResourceDownloadTask(context, this, downloadHistory);
                     resourceDownloadTask.startDownload();
 
                     DownloadWatcher.addTask(resourceDownloadTask);
@@ -254,7 +253,7 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
                                     onClickDownloadItemListener.onClickItem();
                                 }
 
-                                getBangumiDownloadInfo(bangumiAnthology, downloadBottomSheetAnthologyDownloadStat);
+                                getBangumiDownloadInfo(bangumiAnthology);
                             }
                         }
                     });
@@ -301,7 +300,7 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
         /**
          * 获取番剧下载信息
          */
-        private void getBangumiDownloadInfo(BangumiAnthology bangumiAnthology, ImageView downloadBottomSheetAnthologyDownloadStat) {
+        private void getBangumiDownloadInfo(BangumiAnthology bangumiAnthology) {
             downloadHistory = new DownloadHistory();
             downloadHistory.setResType(ResourceDownloadTask.RES_TYPE_VIDEO);
             downloadHistory.setIsFailed(false);
@@ -313,7 +312,7 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
             downloadHistory.setSubTitle(bangumiAnthology.subTitle);
             downloadHistory.setCoverUrl(bangumiAnthology.cover);
 
-            getVideoStreamUrl(bangumiAnthology, bangumiAnthology.seasonId, bangumiAnthology.cid);
+            getVideoStreamUrl(bangumiAnthology.seasonId, bangumiAnthology.cid);
         }
 
         /**
@@ -331,17 +330,16 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
             downloadHistory.setSubTitle(videoAnthology.subTitle);
             downloadHistory.setCoverUrl(videoAnthology.cover);
 
-            getVideoStreamUrl(videoAnthology, videoAnthology.mainId, videoAnthology.cid);
+            getVideoStreamUrl(videoAnthology.mainId, videoAnthology.cid);
         }
 
         /**
          * 获取视频流链接
          *
-         * @param anthology                                选集数据
          * @param levelOneId                               levelOneId
          * @param cid                                      选集ID
          */
-        private void getVideoStreamUrl(Serializable anthology, String levelOneId, String cid) {
+        private void getVideoStreamUrl(String levelOneId, String cid) {
             if (videoWithFlvParser == null) {
                 videoWithFlvParser = new VideoWithFlvParser(levelOneId);
             }
@@ -380,7 +378,6 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
                     Message message = handler.obtainMessage();
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("videoWithFlv", videoWithFlv);
-                    bundle.putSerializable("anthologyInfo", anthology);
 
                     message.setData(bundle);
                     handler.sendMessage(message);

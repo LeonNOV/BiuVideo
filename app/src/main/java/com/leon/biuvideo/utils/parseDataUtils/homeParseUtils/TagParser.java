@@ -20,7 +20,7 @@ import okhttp3.Headers;
  * @Time 2021/3/15
  * @Desc 订阅数据解析类
  */
-public class TagParser implements ParserInterface<Tag> {
+public class TagParser extends ParserInterface<Tag> {
     /**
      * API URL
      */
@@ -35,11 +35,6 @@ public class TagParser implements ParserInterface<Tag> {
      * 总条目数
      */
     private int dataCount;
-
-    /**
-     * 数据状态
-     */
-    private boolean dataStatus = true;
 
     /**
      * 请求头信息
@@ -65,7 +60,7 @@ public class TagParser implements ParserInterface<Tag> {
         JSONObject responseObject = HttpUtils.getResponse(API, Headers.of(requestHeader), params);
         JSONObject data = responseObject.getJSONObject("data");
 
-        if (data != null) {
+        if (data != null && dataStatus) {
             dataCount = data.getIntValue("total");
             JSONArray tags = data.getJSONArray("tags");
 

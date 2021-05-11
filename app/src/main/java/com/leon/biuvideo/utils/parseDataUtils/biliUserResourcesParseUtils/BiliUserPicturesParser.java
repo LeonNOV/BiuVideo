@@ -18,15 +18,13 @@ import java.util.Map;
  * @Time 2021/4/10
  * @Desc B站用户相簿数据
  */
-public class BiliUserPicturesParser implements ParserInterface<BiliUserPicture> {
+public class BiliUserPicturesParser extends ParserInterface<BiliUserPicture> {
     private final String mid;
 
     private final static String PAGE_SIZE = "30";
     private int pageNum = 0;
     private int total = -1;
     private int currentCount = 0;
-
-    public boolean dataStatus = true;
 
     public BiliUserPicturesParser(String mid) {
         this.mid = mid;

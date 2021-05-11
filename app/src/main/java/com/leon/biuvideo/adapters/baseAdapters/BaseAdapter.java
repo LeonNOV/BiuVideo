@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.ui.resourcesFragment.article.ArticleFragment;
+import com.leon.biuvideo.ui.resourcesFragment.audio.AudioFragment;
 import com.leon.biuvideo.ui.resourcesFragment.picture.PictureFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.bangumi.BangumiFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoFragment;
@@ -169,7 +170,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
                 topFragment.start(new BangumiFragment(params));
                 break;
             case AUDIO:
-
+                topFragment.start(new AudioFragment(params));
                 break;
             case ARTICLE:
                 topFragment.start(new ArticleFragment(params));

@@ -266,4 +266,5 @@
     <string name="downloadingWaiting">等待中</string>
     <string name="downloadingPaused">已暂停</string>
     <string name="easterEggWarn">🎉🎉🎉\tSURPRISE\t🎉🎉🎉</string>
+    <string name="downloadJoinQueue">已加入到下载队列中~</string>
 </resources>

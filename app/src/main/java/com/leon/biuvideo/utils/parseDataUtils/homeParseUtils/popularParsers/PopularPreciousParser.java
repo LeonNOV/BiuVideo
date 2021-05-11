@@ -18,7 +18,7 @@ import okhttp3.Headers;
  * @Time 2021/3/24
  * @Desc 入站必刷解析类
  */
-public class PopularPreciousParser implements ParserInterface<PopularVideo> {
+public class PopularPreciousParser extends ParserInterface<PopularVideo> {
     @Override
     public List<PopularVideo> parseData() {
         JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.POPULAR_PRECIOUS, Headers.of(HttpUtils.getAPIRequestHeader()), null);

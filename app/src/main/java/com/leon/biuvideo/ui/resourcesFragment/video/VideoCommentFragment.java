@@ -1,7 +1,5 @@
 package com.leon.biuvideo.ui.resourcesFragment.video;
 
-import android.os.Message;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.R;
@@ -11,7 +9,7 @@ import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoInfoAndCommentsFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
-import com.leon.biuvideo.utils.SimpleSingleThreadPool;
+import com.leon.biuvideo.utils.parseDataUtils.DataLoader;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.CommentParser;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -29,10 +27,9 @@ public class VideoCommentFragment extends BaseLazySupportFragment {
     private SmartRefreshRecyclerView<Comment> videoCommentCommentData;
 
     private final String avid;
-    private CommentParser commentParser;
-    private CommentLevelOneAdapter commentLevelOneAdapter;
 
     private VideoInfoAndCommentsFragment.ToCommentDetailFragment toCommentDetailFragment;
+    private DataLoader<Comment> commentDataLoader;
 
     public VideoCommentFragment(String avid) {
         this.avid = avid;
@@ -45,7 +42,7 @@ public class VideoCommentFragment extends BaseLazySupportFragment {
     @Override
     protected void onLazyLoad() {
         videoCommentCommentData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-        getComments(0);
+        commentDataLoader.insertData(true);
     }
 
     @Override
@@ -61,72 +58,16 @@ public class VideoCommentFragment extends BaseLazySupportFragment {
         videoCommentCommentData.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-                getComments(1);
+                commentDataLoader.insertData(false);
             }
         });
-        commentLevelOneAdapter = new CommentLevelOneAdapter(commentList, context);
+        CommentLevelOneAdapter commentLevelOneAdapter = new CommentLevelOneAdapter(commentList, context);
         commentLevelOneAdapter.setToCommentDetailFragment(toCommentDetailFragment);
         commentLevelOneAdapter.setHasStableIds(true);
         videoCommentCommentData.setRecyclerViewAdapter(commentLevelOneAdapter);
         videoCommentCommentData.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
 
-        setOnLoadListener(new OnLoadListener() {
-            @Override
-            public void onLoad(Message msg) {
-                List<Comment> commentList = (List<Comment>) msg.obj;
-
-                switch (msg.what) {
-                    case 0:
-                        if (commentList != null && commentList.size() > 0) {
-                            videoCommentCommentData.append(commentList);
-                            videoCommentCommentData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
-                            if (!commentParser.dataStatus) {
-                                videoCommentCommentData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                            }
-                        } else {
-                            videoCommentCommentData.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
-                            videoCommentCommentData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                        }
-
-                        videoCommentCommentData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
-                        break;
-                    case 1:
-                        if (commentList != null && commentList.size() > 0) {
-                            commentLevelOneAdapter.append(commentList);
-                            videoCommentCommentData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
-                            if (!commentParser.dataStatus) {
-                                videoCommentCommentData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                            }
-                        } else {
-                            videoCommentCommentData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
-    }
-
-    /**
-     * 获取评论数据
-     *
-     * @param what  what
-     */
-    private void getComments (int what) {
-        if (commentParser == null) {
-            commentParser = new CommentParser(avid, CommentParser.TYPE_VIDEO, CommentParser.SORT_REPLAY);
-        }
-
-        SimpleSingleThreadPool.executor(new Runnable() {
-            @Override
-            public void run() {
-                List<Comment> commentList = commentParser.parseData();
-
-                Message message = receiveDataHandler.obtainMessage(what);
-                message.obj = commentList;
-                receiveDataHandler.sendMessage(message);
-            }
-        });
+        commentDataLoader = new DataLoader<>(new CommentParser(avid, CommentParser.TYPE_VIDEO, CommentParser.SORT_REPLAY), videoCommentCommentData, commentLevelOneAdapter, this
+        );
     }
 }

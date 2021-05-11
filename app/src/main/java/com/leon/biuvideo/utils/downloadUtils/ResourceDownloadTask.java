@@ -7,8 +7,6 @@ import androidx.annotation.IntDef;
 import com.arialyy.aria.core.Aria;
 import com.arialyy.aria.core.common.HttpOption;
 import com.arialyy.aria.core.common.RequestEnum;
-import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiAnthology;
-import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoInfo;
 import com.leon.biuvideo.greendao.dao.DaoBaseUtils;
 import com.leon.biuvideo.greendao.dao.DownloadHistory;
 import com.leon.biuvideo.greendao.dao.DownloadHistoryDao;
@@ -18,7 +16,6 @@ import com.leon.biuvideo.greendao.daoutils.DownloadHistoryUtils;
 import com.leon.biuvideo.greendao.daoutils.DownloadLevelOneUtils;
 
 import java.io.File;
-import java.io.Serializable;
 
 /**
  * @Author Leon
@@ -44,22 +41,12 @@ public class ResourceDownloadTask {
 
     private DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils;
 
-    private VideoInfo.VideoAnthology videoAnthology;
-    private BangumiAnthology bangumiAnthology;
     private long taskId;
 
-    public ResourceDownloadTask(Context context, Object object, DownloadHistory downloadHistory, Serializable serializable) {
+    public ResourceDownloadTask(Context context, Object object, DownloadHistory downloadHistory) {
         this.context = context;
         this.object = object;
         this.downloadHistory = downloadHistory;
-
-        if (serializable instanceof VideoInfo.VideoAnthology) {
-            videoAnthology = (VideoInfo.VideoAnthology) serializable;
-        } else if (serializable instanceof BangumiAnthology) {
-            bangumiAnthology = (BangumiAnthology) serializable;
-        } else {
-            throw new ClassCastException("类型必须是'VideoInfo.VideoAnthology'或'BangumiAnthology'");
-        }
 
         this.savePath = checkSaveDirectory(context, downloadHistory.getResType(), downloadHistory.getMainTitle(), downloadHistory.getSubTitle()).getAbsolutePath();
     }
@@ -81,14 +68,11 @@ public class ResourceDownloadTask {
                 .option(httpOption)
                 .create();
 
-        // 如果存在多个选集，则需要获取其视频信息
-        if (downloadHistory.getIsMultipleAnthology()) {
-            String levelOneId = downloadHistory.getLevelOneId();
-
+        if (downloadHistory.getResType() != RES_TYPE_AUDIO) {
             // 查询是否已存在'LevelOne'数据
             DownloadLevelOneUtils downloadLevelOneUtils = new DownloadLevelOneUtils(context);
             DaoBaseUtils<DownloadLevelOne> downloadLevelOneDaoBaseUtils = downloadLevelOneUtils.getDownloadLevelOneDaoBaseUtils();
-            if (!downloadLevelOneDaoBaseUtils.isExists(DownloadLevelOneDao.Properties.LevelOneId.eq(levelOneId))) {
+            if (!downloadLevelOneDaoBaseUtils.isExists(DownloadLevelOneDao.Properties.LevelOneId.eq(downloadHistory.getLevelOneId()))) {
                 downloadLevelOneDaoBaseUtils.insert(new DownloadLevelOne(null, downloadHistory.getMainTitle(),
                         downloadHistory.getLevelOneId(), downloadHistory.getCoverUrl()));
             }
@@ -144,8 +128,13 @@ public class ResourceDownloadTask {
         // 如果本地不存在，则查询数据库
         if (!exists) {
             DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils = new DownloadHistoryUtils(context).getDownloadHistoryDaoUtils();
-            return downloadHistoryDaoUtils.isExists(DownloadHistoryDao.Properties.LevelOneId.eq(levelOnId),
-                    DownloadHistoryDao.Properties.LevelTwoId.eq(levelTwoId));
+
+            if (levelTwoId != null) {
+                return downloadHistoryDaoUtils.isExists(DownloadHistoryDao.Properties.LevelOneId.eq(levelOnId),
+                        DownloadHistoryDao.Properties.LevelTwoId.eq(levelTwoId));
+            } else {
+                return downloadHistoryDaoUtils.isExists(DownloadHistoryDao.Properties.LevelOneId.eq(levelOnId));
+            }
         } else {
             return true;
         }
@@ -161,14 +150,6 @@ public class ResourceDownloadTask {
 
     @IntDef({RES_TYPE_VIDEO, RES_TYPE_AUDIO, RES_TYPE_PICTURE})
     public @interface ResourcesType{}
-
-    public VideoInfo.VideoAnthology getVideoAnthology() {
-        return videoAnthology;
-    }
-
-    public BangumiAnthology getBangumiAnthology() {
-        return bangumiAnthology;
-    }
 
     public DownloadHistory getDownloadHistory() {
         return downloadHistory;

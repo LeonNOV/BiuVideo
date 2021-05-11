@@ -1,7 +1,6 @@
 package com.leon.biuvideo.ui.discovery.searchResultFragments;
 
 import android.animation.ObjectAnimator;
-import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -17,7 +16,7 @@ import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.ui.views.searchResultViews.SearchResultMenuAdapter;
 import com.leon.biuvideo.ui.views.searchResultViews.SearchResultMenuPopupWindow;
-import com.leon.biuvideo.utils.SimpleSingleThreadPool;
+import com.leon.biuvideo.utils.parseDataUtils.DataLoader;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.SearchResultArticleParser;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -46,9 +45,9 @@ public class SearchResultArticleFragment extends BaseLazySupportFragment impleme
     private TextView searchResultArticleMenuOrderText;
     private TextView searchResultArticleMenuCategoryText;
 
-    private SearchResultArticleParser searchResultArticleParser;
     private SmartRefreshRecyclerView<SearchResultArticle> searchResultArticleData;
     private SearchResultArticleAdapter searchResultArticleAdapter;
+    private DataLoader<SearchResultArticle> searchResultArticleDataLoader;
 
     public SearchResultArticleFragment(String keyword) {
         this.keyword = keyword;
@@ -81,11 +80,7 @@ public class SearchResultArticleFragment extends BaseLazySupportFragment impleme
         searchResultArticleData.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-                if (!searchResultArticleParser.dataStatus) {
-                    searchResultArticleData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                } else {
-                    getArticle(1);
-                }
+                searchResultArticleDataLoader.insertData(false);
             }
         });
         searchResultArticleAdapter = new SearchResultArticleAdapter(searchResultArticleList, context);
@@ -93,40 +88,14 @@ public class SearchResultArticleFragment extends BaseLazySupportFragment impleme
         searchResultArticleData.setRecyclerViewAdapter(searchResultArticleAdapter);
         searchResultArticleData.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
 
-        setOnLoadListener(new OnLoadListener() {
-            @Override
-            public void onLoad(Message msg) {
-                List<SearchResultArticle> searchResultArticles = (List<SearchResultArticle>) msg.obj;
-
-                switch (msg.what) {
-                    case 0:
-                        if (searchResultArticles == null || searchResultArticles.size() == 0) {
-                            searchResultArticleData.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
-                            searchResultArticleData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                        } else {
-                            searchResultArticleAdapter.append(searchResultArticles);
-                            searchResultArticleData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
-                        }
-                        break;
-                    case 1:
-                        if (searchResultArticles != null && searchResultArticles.size() > 0) {
-                            searchResultArticleAdapter.append(searchResultArticles);
-                            searchResultArticleData.setSmartRefreshStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
-                        } else {
-                            searchResultArticleData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
+        searchResultArticleDataLoader = new DataLoader<>(new SearchResultArticleParser(keyword, order, category), searchResultArticleData, searchResultArticleAdapter, this);
+        setOnLoadListener(searchResultArticleDataLoader);
     }
 
     @Override
     protected void onLazyLoad() {
         searchResultArticleData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-        getArticle(0);
+        searchResultArticleDataLoader.insertData(true);
     }
 
 
@@ -180,38 +149,14 @@ public class SearchResultArticleFragment extends BaseLazySupportFragment impleme
         }
     }
 
-    private void getArticle(int what) {
-        if (searchResultArticleParser == null) {
-            searchResultArticleParser = new SearchResultArticleParser(keyword, order, category);
-        }
-
-        SimpleSingleThreadPool.executor(new Runnable() {
-            @Override
-            public void run() {
-                List<SearchResultArticle> searchResultArticles = searchResultArticleParser.parseData();
-
-                Message message;
-                if (what == -1) {
-                    message = receiveDataHandler.obtainMessage(0);
-                } else {
-                    message = receiveDataHandler.obtainMessage(what);
-                }
-                message.obj = searchResultArticles;
-                receiveDataHandler.sendMessage(message);
-            }
-        });
-    }
-
     /**
      *  重置当前所有的数据
      */
     private void reset() {
         searchResultArticleData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-
-        // 清空列表中的数据
         searchResultArticleAdapter.removeAll();
 
-        searchResultArticleParser = new SearchResultArticleParser(keyword, order, category);
-        getArticle(-1);
+        searchResultArticleDataLoader.setParserInterface(new SearchResultArticleParser(keyword, order, category));
+        searchResultArticleDataLoader.insertData(true);
     }
 }

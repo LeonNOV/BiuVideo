@@ -26,31 +26,6 @@ public abstract class BaseSupportFragmentWithSrr<T> extends BaseLazySupportFragm
     protected BindingUtils bindingUtils;
     protected SmartRefreshRecyclerView<T> view;
 
-    /**
-     * 用于接收数据使用，并在主线程进行处理
-     */
-    protected Handler receiveDataHandler;
-
-    public interface OnLoadListener {
-        /**
-         * 实现该方法，用于在主线程中处理数据
-         *
-         * @param msg   data
-         */
-        void onLoad(Message msg);
-    }
-
-    private OnLoadListener onLoadListener;
-
-    /**
-     * 在主线程中处理初始数据/新获取到的数据
-     *
-     * @param onLoadListener    {@link OnLoadListener}
-     */
-    public void setOnLoadListener(OnLoadListener onLoadListener) {
-        this.onLoadListener = onLoadListener;
-    }
-
     @Override
     protected int setLayout() {
         return 0;

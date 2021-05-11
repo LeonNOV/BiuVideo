@@ -18,7 +18,7 @@ import java.util.Map;
  * @Time 2020/10/21
  * @Desc 用户投稿视频数据解析类
  */
-public class BiliUserVideoParser implements ParserInterface<BiliUserVideo> {
+public class BiliUserVideoParser extends ParserInterface<BiliUserVideo> {
     /**
      * 最新发布
      */
@@ -39,7 +39,6 @@ public class BiliUserVideoParser implements ParserInterface<BiliUserVideo> {
 
     private static final String PAGE_SIZE = "30";
     private int pageNum = 1;
-    public boolean dataStatus = true;
     private int total = -1;
     private int currentCount = 0;
 

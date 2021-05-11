@@ -1,8 +1,6 @@
 package com.leon.biuvideo.ui.otherFragments;
 
 import android.os.Bundle;
-import android.os.Message;
-import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,15 +9,13 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.homeAdapters.popularAdapters.PopularAdapter;
 import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularVideo;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragmentWithSrr;
 import com.leon.biuvideo.ui.otherFragments.popularFragments.PopularPreciousFragment;
 import com.leon.biuvideo.ui.otherFragments.popularFragments.PopularTopListFragment;
 import com.leon.biuvideo.ui.otherFragments.popularFragments.PopularWeeklyFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
-import com.leon.biuvideo.utils.SimpleSingleThreadPool;
-import com.leon.biuvideo.utils.ViewUtils;
+import com.leon.biuvideo.utils.parseDataUtils.DataLoader;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.popularParsers.PopularHotListParser;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -34,8 +30,8 @@ import java.util.List;
  */
 public class PopularFragment extends BaseSupportFragment {
     private final List<PopularVideo> popularVideoList = new ArrayList<>();
-    private PopularHotListParser popularHotListParser;
     private SmartRefreshRecyclerView<PopularVideo> popularHotList;
+    private DataLoader<PopularVideo> popularVideoDataLoader;
 
     public static PopularFragment getInstance() {
         return new PopularFragment();
@@ -85,42 +81,11 @@ public class PopularFragment extends BaseSupportFragment {
         popularHotList.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-                if (!popularHotListParser.dataStatus) {
-                    popularHotList.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                } else {
-                    getPopularHotList(1);
-                }
+                popularVideoDataLoader.insertData(false);
             }
         });
 
-        setOnLoadListener(new OnLoadListener() {
-            @Override
-            public void onLoad(Message msg) {
-                List<PopularVideo> popularVideos = (List<PopularVideo>) msg.obj;
-
-                switch (msg.what) {
-                    case 0:
-                        if (popularVideos == null || popularVideos.size() == 0) {
-                            popularHotList.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
-                            popularHotList.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                        } else {
-                            popularAdapter.append(popularVideos);
-                            popularHotList.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
-                        }
-                        break;
-                    case 1:
-                        if (popularVideos.size() > 0) {
-                            popularAdapter.append(popularVideos);
-                            popularHotList.setSmartRefreshStatus(SmartRefreshRecyclerView.LOADING_FINISHING);
-                        } else {
-                            popularHotList.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
+        popularVideoDataLoader = new DataLoader<>(new PopularHotListParser(), popularHotList, popularAdapter, this);
     }
 
     @Override
@@ -128,24 +93,6 @@ public class PopularFragment extends BaseSupportFragment {
         super.onLazyInitView(savedInstanceState);
 
         popularHotList.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-
-        getPopularHotList(0);
-    }
-
-    private void getPopularHotList(int what) {
-        if (popularHotListParser == null) {
-            popularHotListParser = new PopularHotListParser();
-        }
-
-        SimpleSingleThreadPool.executor(new Runnable() {
-            @Override
-            public void run() {
-                List<PopularVideo> popularVideos = popularHotListParser.parseData();
-
-                Message message = receiveDataHandler.obtainMessage(what);
-                message.obj = popularVideos;
-                receiveDataHandler.sendMessage(message);
-            }
-        });
+        popularVideoDataLoader.insertData(true);
     }
 }

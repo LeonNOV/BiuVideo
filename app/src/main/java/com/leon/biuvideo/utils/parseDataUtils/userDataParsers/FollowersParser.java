@@ -23,7 +23,7 @@ import okhttp3.Headers;
  * @Time 2021/3/18
  * @Desc 粉丝数据解析类
  */
-public class FollowersParser implements ParserInterface<Follower> {
+public class FollowersParser extends ParserInterface<Follower> {
     private final Context context;
     private final String mid;
 
@@ -36,11 +36,6 @@ public class FollowersParser implements ParserInterface<Follower> {
      * 每页条目数
      */
     private static final int PAGE_SIZE = 20;
-
-    /**
-     * 数据状态
-     */
-    public boolean dataStatus = true;
 
     public FollowersParser(Context context, String mid) {
         this.context = context;

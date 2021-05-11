@@ -1,6 +1,5 @@
 package com.leon.biuvideo.ui.otherFragments.biliUserFragments;
 
-import android.os.Message;
 import android.view.View;
 import android.widget.TextView;
 
@@ -10,7 +9,7 @@ import com.leon.biuvideo.beans.biliUserResourcesBeans.BiliUserAudio;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
-import com.leon.biuvideo.utils.SimpleSingleThreadPool;
+import com.leon.biuvideo.utils.parseDataUtils.DataLoader;
 import com.leon.biuvideo.utils.parseDataUtils.biliUserResourcesParseUtils.BiliUserAudiosParser;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -33,8 +32,8 @@ public class BiliUserAudiosFragment extends BaseLazySupportFragment implements V
     private SmartRefreshRecyclerView<BiliUserAudio> biliUserAudiosData;
 
     private int order = 1;
-    private BiliUserAudiosParser biliUserAudiosParser;
     private BiliUserAudioAdapter biliUserAudioAdapter;
+    private DataLoader<BiliUserAudio> biliUserAudioDataLoader;
 
     public BiliUserAudiosFragment(String mid) {
         this.mid = mid;
@@ -65,48 +64,17 @@ public class BiliUserAudiosFragment extends BaseLazySupportFragment implements V
         biliUserAudiosData.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-                getAudios(1);
+                biliUserAudioDataLoader.insertData(false);
             }
         });
 
-        setOnLoadListener(new OnLoadListener() {
-            @Override
-            public void onLoad(Message msg) {
-                List<BiliUserAudio> biliUserAudioList = (List<BiliUserAudio>) msg.obj;
-
-                switch (msg.what) {
-                    case 0:
-                        if (biliUserAudioList != null && biliUserAudioList.size() > 0) {
-                            biliUserAudioAdapter.append(biliUserAudioList);
-                            biliUserAudiosData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
-                        } else {
-                            biliUserAudiosData.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
-                            biliUserAudiosData.setSmartRefreshStatus(SmartRefreshRecyclerView.NO_DATA);
-                        }
-                        break;
-
-                    case 1:
-                        if (biliUserAudioList != null && biliUserAudioList.size() > 0) {
-                            biliUserAudioAdapter.append(biliUserAudioList);
-
-                            if (!biliUserAudiosParser.dataStatus) {
-                                biliUserAudiosData.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
-                            }
-                        } else {
-                            biliUserAudiosData.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
+        biliUserAudioDataLoader = new DataLoader<>(new BiliUserAudiosParser(mid, order), biliUserAudiosData, biliUserAudioAdapter, this);
     }
 
     @Override
     protected void onLazyLoad() {
         biliUserAudiosData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-        getAudios(0);
+        biliUserAudioDataLoader.insertData(true);
     }
 
     @Override
@@ -143,27 +111,11 @@ public class BiliUserAudiosFragment extends BaseLazySupportFragment implements V
         reset();
     }
 
-    private void getAudios(int what) {
-        if (biliUserAudiosParser == null) {
-            biliUserAudiosParser = new BiliUserAudiosParser(mid, order);
-        }
-
-        SimpleSingleThreadPool.executor(new Runnable() {
-            @Override
-            public void run() {
-                List<BiliUserAudio> biliUserAudioList = biliUserAudiosParser.parseData();
-
-                Message message = receiveDataHandler.obtainMessage(what);
-                message.obj = biliUserAudioList;
-                receiveDataHandler.sendMessage(message);
-            }
-        });
-    }
-
     private void reset () {
-        biliUserAudiosParser = new BiliUserAudiosParser(mid, order);
         biliUserAudiosData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
         biliUserAudioAdapter.removeAll();
-        getAudios(0);
+
+        biliUserAudioDataLoader.setParserInterface(new BiliUserAudiosParser(mid, order));
+        biliUserAudioDataLoader.insertData(true);
     }
 }

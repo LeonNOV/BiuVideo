@@ -8,13 +8,6 @@
             <enum name="bold" value="0"/>
             <enum name="normal" value="1"/>
         </attr>
-        <attr name="topBarTitleGravity" format="enum">
-            <enum name="start" value="8388611"/>
-            <enum name="end" value="8388613"/>
-            <enum name="center" value="17"/>
-            <enum name="center_vertical" value="16"/>
-            <enum name="center_horizontal" value="1"/>
-        </attr>
     </declare-styleable>
 
     <declare-styleable name="CircleImageView">
