@@ -46,7 +46,7 @@ import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.FeaturesName;
 import com.leon.biuvideo.values.Quality;
 import com.leon.biuvideo.values.apis.AmapAPIs;
-import com.leon.biuvideo.values.apis.AmapKey;
+import com.leon.biuvideo.values.apis.ApiKeys;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -314,7 +314,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
      */
     private void getDistrict(String keyword) {
         Map<String, String> params = new HashMap<>(3);
-        params.put("key", AmapKey.amapKey);
+        params.put("key", ApiKeys.AMAP_KEY);
         params.put("keywords", keyword);
         params.put("subdistrict", "0");
 

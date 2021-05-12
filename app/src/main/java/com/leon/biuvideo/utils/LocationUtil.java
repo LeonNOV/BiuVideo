@@ -14,9 +14,8 @@ import android.provider.Settings;
 import androidx.core.app.ActivityCompat;
 
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.values.apis.AmapAPIs;
-import com.leon.biuvideo.values.apis.AmapKey;
+import com.leon.biuvideo.values.apis.ApiKeys;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -156,7 +155,7 @@ public class LocationUtil {
      */
     public static String getAdcode(String[] address) {
         Map<String, String> params = new HashMap<>(3);
-        params.put("key", AmapKey.amapKey);
+        params.put("key", ApiKeys.AMAP_KEY);
         params.put("address", address[0] + address[1] + address[2]);
         params.put("city", address[2]);
 

@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.WindowManager;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baidu.mobstat.StatService;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.service.DownloadWatcher;
 import com.leon.biuvideo.service.WeatherService;
@@ -30,7 +31,7 @@ public class MainActivity extends SupportActivity {
     private WeatherConnection weatherConnection;
     private Intent weatherServiceIntent;
 
-    private List<OnTouchListener> onTouchListenerList = new ArrayList<>();
+    private final List<OnTouchListener> onTouchListenerList = new ArrayList<>();
 
     public interface OnTouchListener {
         void onTouch(MotionEvent event);
@@ -39,6 +40,8 @@ public class MainActivity extends SupportActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        StatService.start(this);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);

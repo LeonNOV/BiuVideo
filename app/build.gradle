@@ -115,7 +115,6 @@ dependencies {
     // 状态栏工具类
 //    implementation 'com.jaeger.statusbarutil:library:1.4.0'
 
-    testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
@@ -145,4 +144,7 @@ dependencies {
 
     // An Android transformation library providing a variety of image transformations for Glide.
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
+
+    // 百度统计
+    implementation 'com.baidu.mobstat:mtj-sdk:4.0.4.6'
 }

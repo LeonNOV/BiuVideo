@@ -7,7 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.Weather;
 import com.leon.biuvideo.values.apis.AmapAPIs;
-import com.leon.biuvideo.values.apis.AmapKey;
+import com.leon.biuvideo.values.apis.ApiKeys;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ public class WeatherUtil {
 
     private JSONObject getWeatherResponse (String cityCode, String extensions) {
         Map<String, String> params = new HashMap<>();
-        params.put("key", AmapKey.amapKey);
+        params.put("key", ApiKeys.AMAP_KEY);
         params.put("city", cityCode);
         params.put("extensions", extensions); //base/all
 

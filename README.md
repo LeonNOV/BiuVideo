@@ -4,20 +4,26 @@
 通过BiliBili接口获取数据，对视频、音频、图片等资源在线观看、收听、缓存等
 
 ## ⚠注意事项
-- 由于`V3`版本会用到高德提供的API，故因此需要`请求服务权限标识`，[申请Key](https://lbs.amap.com/dev/key)
-- 如果已经有了`Key`，请在`app/src/main/java/com/leon/biuvideo/values/apis`包下，创建一个名为`AmapKey`的Java文件，并将`Key`作为常量进行存放
+- 由于`V3`版本会用到高德提供的API和百度统计API，故因此需要`请求服务权限标识`
+  - [申请高德地图Key](https://lbs.amap.com/dev/key)
+  - [申请百度统计Key](https://mtj.baidu.com/web/help/article?id=16&type=0)
+- 如果已经有了`Key`，请在`app/src/main/java/com/leon/biuvideo/values/apis`包下，创建一个名为`ApiKeys`的Java文件，并将`Key`作为常量进行存放
   - 示例
   ``` java
       package com.leon.biuvideo.values.apis;
 
-      public class AmapKey {
-          public static String amapKey = "key";
+      public class ApiKeys {
+          public static final String AMAP_KEY = "AMAP_KEY";
+          public static final String BAIDU_KEY = "BAIDU_KEY";
       }
   ```
 - **该版本中所有弃用的文件均已删除**
   - **被删除的大部分都是上一版本留下的文件**
 
 ## 📘开发日志
+
+### 2021/05/12
+- 加入了百度统计
 
 ### 2021/05/11
 - 加入了音频下载功能
