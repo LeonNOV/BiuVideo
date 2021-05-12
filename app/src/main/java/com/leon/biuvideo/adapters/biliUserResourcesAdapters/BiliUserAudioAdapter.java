@@ -12,19 +12,14 @@ import com.leon.biuvideo.beans.biliUserResourcesBeans.BiliUserAudio;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
-import java.util.List;
-
 /**
  * @Author Leon
  * @Time 2021/4/10
  * @Desc B站用户音配数据适配器
  */
 public class BiliUserAudioAdapter extends BaseAdapter<BiliUserAudio> {
-    private final List<BiliUserAudio> biliUserAudioList;
-
-    public BiliUserAudioAdapter(List<BiliUserAudio> beans, Context context) {
-        super(beans, context);
-        this.biliUserAudioList = beans;
+    public BiliUserAudioAdapter(Context context) {
+        super(context);
     }
 
     @Override
@@ -34,7 +29,7 @@ public class BiliUserAudioAdapter extends BaseAdapter<BiliUserAudio> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        BiliUserAudio biliUserAudio = biliUserAudioList.get(position);
+        BiliUserAudio biliUserAudio = getAllData().get(position);
 
         holder
                 .setImage(R.id.bili_user_audio_item_cover, biliUserAudio.cover, ImagePixelSize.COVER)

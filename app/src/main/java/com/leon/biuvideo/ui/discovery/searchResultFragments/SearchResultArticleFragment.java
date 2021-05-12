@@ -6,23 +6,14 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.discoverAdapters.searchResultAdapters.SearchResultArticleAdapter;
 import com.leon.biuvideo.beans.searchResultBeans.SearchResultArticle;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
-import com.leon.biuvideo.ui.views.LoadingRecyclerView;
-import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.ui.views.searchResultViews.SearchResultMenuAdapter;
 import com.leon.biuvideo.ui.views.searchResultViews.SearchResultMenuPopupWindow;
 import com.leon.biuvideo.utils.parseDataUtils.DataLoader;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.SearchResultArticleParser;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @Author Leon
@@ -34,8 +25,6 @@ public class SearchResultArticleFragment extends BaseLazySupportFragment impleme
     private String order;
     private String category;
 
-    private final List<SearchResultArticle> searchResultArticleList = new ArrayList<>();
-
     private int orderSelectedPosition = 0;
     private int categorySelectedPosition = 0;
 
@@ -45,8 +34,6 @@ public class SearchResultArticleFragment extends BaseLazySupportFragment impleme
     private TextView searchResultArticleMenuOrderText;
     private TextView searchResultArticleMenuCategoryText;
 
-    private SmartRefreshRecyclerView<SearchResultArticle> searchResultArticleData;
-    private SearchResultArticleAdapter searchResultArticleAdapter;
     private DataLoader<SearchResultArticle> searchResultArticleDataLoader;
 
     public SearchResultArticleFragment(String keyword) {
@@ -76,25 +63,14 @@ public class SearchResultArticleFragment extends BaseLazySupportFragment impleme
         categoryImgWhirl = ObjectAnimator.ofFloat(searchResultArticleMenuCategoryImg, "rotation", 0.0f, 180.0f);
         categoryImgWhirl.setDuration(400);
 
-        searchResultArticleData = findView(R.id.search_result_article_data);
-        searchResultArticleData.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout refreshLayout) {
-                searchResultArticleDataLoader.insertData(false);
-            }
-        });
-        searchResultArticleAdapter = new SearchResultArticleAdapter(searchResultArticleList, context);
-        searchResultArticleAdapter.setHasStableIds(true);
-        searchResultArticleData.setRecyclerViewAdapter(searchResultArticleAdapter);
-        searchResultArticleData.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
-
-        searchResultArticleDataLoader = new DataLoader<>(new SearchResultArticleParser(keyword, order, category), searchResultArticleData, searchResultArticleAdapter, this);
-        setOnLoadListener(searchResultArticleDataLoader);
+        searchResultArticleDataLoader = new DataLoader<>(new SearchResultArticleParser(keyword, order, category),
+                R.id.search_result_article_data,
+                new SearchResultArticleAdapter(context),
+                this);
     }
 
     @Override
     protected void onLazyLoad() {
-        searchResultArticleData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
         searchResultArticleDataLoader.insertData(true);
     }
 
@@ -153,10 +129,6 @@ public class SearchResultArticleFragment extends BaseLazySupportFragment impleme
      *  重置当前所有的数据
      */
     private void reset() {
-        searchResultArticleData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-        searchResultArticleAdapter.removeAll();
-
-        searchResultArticleDataLoader.setParserInterface(new SearchResultArticleParser(keyword, order, category));
-        searchResultArticleDataLoader.insertData(true);
+        searchResultArticleDataLoader.reset(new SearchResultArticleParser(keyword, order, category));
     }
 }

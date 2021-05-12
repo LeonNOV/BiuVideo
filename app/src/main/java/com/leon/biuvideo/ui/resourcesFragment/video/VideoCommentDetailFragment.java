@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -27,8 +26,6 @@ import com.leon.biuvideo.beans.resourcesBeans.Comment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
-import com.leon.biuvideo.ui.views.LoadingRecyclerView;
-import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.ValueUtils;
@@ -38,11 +35,7 @@ import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.CommentParser;
 import com.leon.biuvideo.values.FeaturesName;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,12 +48,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * @Desc 查看评论详细页面
  */
 public class VideoCommentDetailFragment extends BaseSupportFragment {
-    private final List<Comment> commentList = new ArrayList<>();
-
     private final Comment comment;
 
     private ImageSpan imageSpan;
-    private DataLoader<Comment> commentDataLoader;
 
     public VideoCommentDetailFragment(Comment comment) {
         this.comment = comment;
@@ -111,21 +101,8 @@ public class VideoCommentDetailFragment extends BaseSupportFragment {
                 .setText(R.id.video_comment_detail_item_replayTotal, String.valueOf(comment.rcount))
                 .setVisibility(R.id.video_comment_detail_item_upAction, comment.upLike ? View.VISIBLE : View.GONE);
 
-        SmartRefreshRecyclerView<Comment> videoCommentDetailList = findView(R.id.video_comment_detail_list);
-        CommentDetailAdapter commentDetailAdapter = new CommentDetailAdapter(commentList, context);
-        commentDetailAdapter.setHasStableIds(true);
-        videoCommentDetailList.setRecyclerViewAdapter(commentDetailAdapter);
-        videoCommentDetailList.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
-
-        videoCommentDetailList.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout refreshLayout) {
-                commentDataLoader.insertData(false);
-            }
-        });
-        videoCommentDetailList.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-
-        commentDataLoader = new DataLoader<>(new CommentDetailParser(CommentParser.TYPE_VIDEO, comment.oid, comment.rpid), videoCommentDetailList, commentDetailAdapter, this);
+        DataLoader<Comment> commentDataLoader = new DataLoader<>(new CommentDetailParser(CommentParser.TYPE_VIDEO, comment.oid, comment.rpid),
+                R.id.video_comment_detail_list, new CommentDetailAdapter(context), this);
         commentDataLoader.insertData(true);
     }
 

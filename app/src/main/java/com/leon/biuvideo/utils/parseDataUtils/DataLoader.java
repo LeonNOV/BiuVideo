@@ -3,11 +3,18 @@ package com.leon.biuvideo.utils.parseDataUtils;
 import android.os.Handler;
 import android.os.Message;
 
+import androidx.annotation.IdRes;
+
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragmentWithSrr;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -25,13 +32,48 @@ public class DataLoader<T> implements BaseSupportFragment.OnLoadListener {
     private final BaseAdapter<T> baseAdapter;
     private final Handler receiveDataHandler;
 
-    public DataLoader(ParserInterface<T> parserInterface, SmartRefreshRecyclerView<T> smartRefreshRecyclerView, BaseAdapter<T> baseAdapter, BaseSupportFragment baseSupportFragment) {
+    public DataLoader(@NotNull ParserInterface<T> parserInterface, @NotNull BaseAdapter<T> baseAdapter, BaseSupportFragmentWithSrr<T> baseSupportFragmentWithSrr) {
         this.parserInterface = parserInterface;
-        this.smartRefreshRecyclerView = smartRefreshRecyclerView;
+        this.smartRefreshRecyclerView = baseSupportFragmentWithSrr.getSmartRefreshRecyclerView();
+
         this.baseAdapter = baseAdapter;
+        this.baseAdapter.setHasStableIds(true);
+
+        baseSupportFragmentWithSrr.setOnLoadListener(this);
+        this.receiveDataHandler = baseSupportFragmentWithSrr.getReceiveDataHandler();
+
+        initSmartRefreshRecyclerView();
+    }
+
+    public DataLoader(@NotNull ParserInterface<T> parserInterface, @IdRes int smartRefreshRecyclerView, @NotNull BaseAdapter<T> baseAdapter, BaseSupportFragment baseSupportFragment) {
+        this.parserInterface = parserInterface;
+        this.smartRefreshRecyclerView = baseSupportFragment.findView(smartRefreshRecyclerView);
+
+        this.baseAdapter = baseAdapter;
+        this.baseAdapter.setHasStableIds(true);
 
         baseSupportFragment.setOnLoadListener(this);
         this.receiveDataHandler = baseSupportFragment.getReceiveDataHandler();
+
+        initSmartRefreshRecyclerView();
+    }
+
+    /**
+     * 初始化SmartRefreshRecyclerView
+     * 对SmartRefreshRecyclerView设置Adapter和加载更多监听
+     */
+    private void initSmartRefreshRecyclerView() {
+        if (smartRefreshRecyclerView != null) {
+            this.smartRefreshRecyclerView.setRecyclerViewAdapter(baseAdapter);
+            this.smartRefreshRecyclerView.setOnLoadMoreListener(new OnLoadMoreListener() {
+                @Override
+                public void onLoadMore(RefreshLayout refreshLayout) {
+                    insertData(false);
+                }
+            });
+        } else {
+            throw new NullPointerException("SmartRefreshRecyclerView 为null");
+        }
     }
 
     /**
@@ -40,6 +82,9 @@ public class DataLoader<T> implements BaseSupportFragment.OnLoadListener {
      * @param isFirst   是否为第一次加载
      */
     public void insertData (boolean isFirst) {
+        if (isFirst) {
+            smartRefreshRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+        }
         getApiData(isFirst ? INIT_CODE : APPEND_CODE);
     }
 
@@ -66,10 +111,23 @@ public class DataLoader<T> implements BaseSupportFragment.OnLoadListener {
     }
 
     /**
+     * 对数据进行重置
+     *
+     * @param parserInterface   新的数据解析器
+     */
+    public void reset (@NotNull ParserInterface<T> parserInterface) {
+
+
+        baseAdapter.removeAll();
+        this.parserInterface = parserInterface;
+        insertData(true);
+    }
+
+    /**
      * 设置数据解析器
      * @param parserInterface   ParserInterface子类
      */
-    public void setParserInterface (ParserInterface<T> parserInterface) {
+    public void setParserInterface (@NotNull ParserInterface<T> parserInterface) {
         this.parserInterface = parserInterface;
     }
 

@@ -147,7 +147,7 @@ public abstract class BaseSupportFragment extends SupportFragment {
      * @param <T>   继承View类的控件
      * @return  返回控件对象
      */
-    protected  <T extends View> T findView(@IdRes int id) {
+    public <T extends View> T findView(@IdRes int id) {
         return view.findViewById(id);
     }
 }

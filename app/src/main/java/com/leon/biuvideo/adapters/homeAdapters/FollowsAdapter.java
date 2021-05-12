@@ -17,8 +17,6 @@ import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.values.Role;
 import com.mcxtzhang.swipemenulib.SwipeMenuLayout;
 
-import java.util.List;
-
 /**
  * @Author Leon
  * @Time 2020/10/25
@@ -26,11 +24,9 @@ import java.util.List;
  */
 public class FollowsAdapter extends BaseAdapter<Follow> {
     private final boolean isBiliUser;
-    private final List<Follow> follows;
 
-    public FollowsAdapter(List<Follow> follows, Context context, boolean isBiliUser) {
-        super(follows, context);
-        this.follows = follows;
+    public FollowsAdapter(Context context, boolean isBiliUser) {
+        super(context);
         this.isBiliUser = isBiliUser;
     }
 
@@ -41,7 +37,7 @@ public class FollowsAdapter extends BaseAdapter<Follow> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        Follow follow = follows.get(position);
+        Follow follow = getAllData().get(position);
 
         ((SwipeMenuLayout) holder.findById(R.id.follow_item_swipeLayout)).setSwipeEnable(!isBiliUser);
 

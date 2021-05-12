@@ -23,7 +23,6 @@ public class SmartRefreshRecyclerView<T> extends SmartRefreshLayout {
     public static final int LOADING_FINISHING = 1;
 
     private final Context context;
-    private ClassicsFooter classicsFooter;
     public LoadingRecyclerView loadingRecyclerView;
     private BaseAdapter<T> adapter;
 
@@ -72,7 +71,7 @@ public class SmartRefreshRecyclerView<T> extends SmartRefreshLayout {
      * 添加底部刷新控件
      */
     private void addClassicsFooter() {
-        classicsFooter = new ClassicsFooter(context);
+        ClassicsFooter classicsFooter = new ClassicsFooter(context);
         ClassicsFooter.REFRESH_FOOTER_RELEASE = "释放加载更多";
         addView(classicsFooter);
 

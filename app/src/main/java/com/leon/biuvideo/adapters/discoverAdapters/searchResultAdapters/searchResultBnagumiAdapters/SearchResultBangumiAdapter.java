@@ -14,20 +14,14 @@ import com.leon.biuvideo.beans.searchResultBeans.SearchResultBangumi;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
-import java.util.List;
-
 /**
  * @Author Leon
  * @Time 2021/3/31
  * @Desc 番剧搜索结果适配器
  */
 public class SearchResultBangumiAdapter extends BaseAdapter<SearchResultBangumi> {
-    private final List<SearchResultBangumi> searchResultBangumiList;
-
-    public SearchResultBangumiAdapter(List<SearchResultBangumi> beans, Context context) {
-        super(beans, context);
-
-        this.searchResultBangumiList = beans;
+    public SearchResultBangumiAdapter(Context context) {
+        super(context);
     }
 
     @Override
@@ -37,7 +31,7 @@ public class SearchResultBangumiAdapter extends BaseAdapter<SearchResultBangumi>
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        SearchResultBangumi searchResultBangumi = searchResultBangumiList.get(position);
+        SearchResultBangumi searchResultBangumi = getAllData().get(position);
 
         holder
                 .setImage(R.id.search_result_item_bangumi_cover, searchResultBangumi.cover, ImagePixelSize.COVER)

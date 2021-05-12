@@ -76,6 +76,11 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         return new BaseViewHolder(view, context);
     }
 
+
+    protected List<T> getAllData () {
+        return beans;
+    }
+
     /**
      * 获取数据总数
      *

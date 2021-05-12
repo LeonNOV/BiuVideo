@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Message;
 
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.homeAdapters.popularAdapters.PopularAdapter;
@@ -15,7 +14,6 @@ import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.popularParsers.PopularPreciousParser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +22,6 @@ import java.util.List;
  * @Desc 热门排行榜页面-入站必刷
  */
 public class PopularPreciousFragment extends BaseSupportFragment {
-    private final List<PopularVideo> popularVideoList = new ArrayList<>();
     private LoadingRecyclerView discoverPopularPreciousLoadingRecyclerView;
 
     @Override
@@ -34,8 +31,7 @@ public class PopularPreciousFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        SimpleTopBar popularPreciousTopBar = view.findViewById(R.id.popular_precious_topBar);
-        popularPreciousTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
+        ((SimpleTopBar) findView(R.id.popular_precious_topBar)).setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
                 backPressed();
@@ -47,12 +43,11 @@ public class PopularPreciousFragment extends BaseSupportFragment {
             }
         });
 
-        PopularAdapter popularAdapter = new PopularAdapter(popularVideoList, context, PopularAdapter.PRECIOUS);
+        PopularAdapter popularAdapter = new PopularAdapter(context, PopularAdapter.PRECIOUS, false);
         popularAdapter.setHasStableIds(true);
 
         discoverPopularPreciousLoadingRecyclerView = findView(R.id.discover_popular_precious_loadingRecyclerView);
         discoverPopularPreciousLoadingRecyclerView.setRecyclerViewAdapter(popularAdapter);
-        discoverPopularPreciousLoadingRecyclerView.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
 
         setOnLoadListener(new OnLoadListener() {
             @Override
@@ -69,9 +64,8 @@ public class PopularPreciousFragment extends BaseSupportFragment {
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
 
-//        discoverPopularPreciousLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-
-//        getPrecious();
+        discoverPopularPreciousLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+        getPrecious();
     }
 
     private void getPrecious() {

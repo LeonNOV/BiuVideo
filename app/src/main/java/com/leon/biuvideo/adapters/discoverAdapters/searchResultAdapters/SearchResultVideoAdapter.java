@@ -13,20 +13,14 @@ import com.leon.biuvideo.beans.searchResultBeans.SearchResultVideo;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
-import java.util.List;
-
 /**
  * @Author Leon
  * @Time 2021/3/30
  * @Desc 视频搜索结果适配器
  */
 public class SearchResultVideoAdapter extends BaseAdapter<SearchResultVideo> {
-    private final List<SearchResultVideo> searchResultVideoList;
-
-    public SearchResultVideoAdapter(List<SearchResultVideo> beans, Context context) {
-        super(beans, context);
-
-        this.searchResultVideoList = beans;
+    public SearchResultVideoAdapter(Context context) {
+        super(context);
     }
 
     @Override
@@ -36,7 +30,7 @@ public class SearchResultVideoAdapter extends BaseAdapter<SearchResultVideo> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        SearchResultVideo searchResultVideo = searchResultVideoList.get(position);
+        SearchResultVideo searchResultVideo = getAllData().get(position);
 
         holder
                 .setImage(R.id.search_result_item_video_cover, searchResultVideo.cover, ImagePixelSize.COVER)

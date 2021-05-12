@@ -11,12 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.adapters.otherAdapters.PopularWeeklySeriesAdapter;
 import com.leon.biuvideo.adapters.homeAdapters.popularAdapters.PopularAdapter;
-import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularWeeklySeries;
+import com.leon.biuvideo.adapters.otherAdapters.PopularWeeklySeriesAdapter;
 import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularVideo;
+import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularWeeklySeries;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.views.BottomSheetTopBar;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleBottomSheet;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
@@ -24,7 +23,6 @@ import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.popularParsers.PopularWeeklyDataParser;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.popularParsers.PopularWeeklySeriesParser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,8 +31,6 @@ import java.util.List;
  * @Desc 热门排行榜页面-每周必看
  */
 public class PopularWeeklyFragment extends BaseSupportFragment {
-    private final List<PopularVideo> popularVideoList = new ArrayList<>();
-
     private List<PopularWeeklySeries> popularWeeklySeriesList;
     private PopularWeeklySeriesParser popularWeeklySeriesParser;
     private LoadingRecyclerView popularWeeklyData;
@@ -79,7 +75,7 @@ public class PopularWeeklyFragment extends BaseSupportFragment {
         popularWeeklySelectSeries.setClickable(false);
 
         popularWeeklyData = findView(R.id.popular_weekly_data);
-        PopularAdapter popularAdapter = new PopularAdapter(popularVideoList, context, PopularAdapter.WEEKLY);
+        PopularAdapter popularAdapter = new PopularAdapter(context, PopularAdapter.WEEKLY, false);
         popularAdapter.setHasStableIds(true);
         popularWeeklyData.setRecyclerViewAdapter(popularAdapter);
         popularWeeklyData.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
@@ -119,9 +115,8 @@ public class PopularWeeklyFragment extends BaseSupportFragment {
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
 
-//        popularWeeklyData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-
-//        getData(0, -1);
+        popularWeeklyData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+        getData(0, -1);
     }
 
     private void showBottomSheet(List<PopularWeeklySeries> popularWeeklySeriesList, int selectedPosition) {

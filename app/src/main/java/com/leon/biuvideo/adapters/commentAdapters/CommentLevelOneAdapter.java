@@ -34,9 +34,7 @@ import com.leon.biuvideo.values.FeaturesName;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
-import java.util.List;
 import java.util.Map;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,14 +45,12 @@ import java.util.regex.Pattern;
  */
 public class CommentLevelOneAdapter extends BaseAdapter<Comment> {
     public static final int EMOJI_WH = 66;
-    private final List<Comment> commentList;
     private ImageSpan imageSpan;
 
     private VideoInfoAndCommentsFragment.ToCommentDetailFragment toCommentDetailFragment;
 
-    public CommentLevelOneAdapter(List<Comment> beans, Context context) {
-        super(beans, context);
-        this.commentList = beans;
+    public CommentLevelOneAdapter(Context context) {
+        super(context);
     }
 
     public void setToCommentDetailFragment(VideoInfoAndCommentsFragment.ToCommentDetailFragment toCommentDetailFragment) {
@@ -68,7 +64,7 @@ public class CommentLevelOneAdapter extends BaseAdapter<Comment> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        Comment comment = commentList.get(position);
+        Comment comment = getAllData().get(position);
 
         ImageView commentItemUserFace = holder.findById(R.id.comment_item_userFace);
         commentItemUserFace.setOnClickListener(new View.OnClickListener() {

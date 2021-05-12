@@ -6,23 +6,14 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.discoverAdapters.searchResultAdapters.SearchResultBiliUserAdapter;
 import com.leon.biuvideo.beans.searchResultBeans.SearchResultBiliUser;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
-import com.leon.biuvideo.ui.views.LoadingRecyclerView;
-import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.ui.views.searchResultViews.SearchResultMenuAdapter;
 import com.leon.biuvideo.ui.views.searchResultViews.SearchResultMenuPopupWindow;
 import com.leon.biuvideo.utils.parseDataUtils.DataLoader;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.SearchResultBiliUserParser;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @Author Leon
@@ -35,8 +26,6 @@ public class SearchResultBiliUserFragment extends BaseLazySupportFragment implem
     private String orderSort;
     private String userType;
 
-    private final List<SearchResultBiliUser> searchResultBiliUserList = new ArrayList<>();
-
     private int orderSelectedPosition = 0;
     private int categorySelectedPosition = 0;
 
@@ -44,8 +33,6 @@ public class SearchResultBiliUserFragment extends BaseLazySupportFragment implem
     private TextView searchResultBiliUserMenuCategoryText;
     private ObjectAnimator orderImgWhirl;
     private ObjectAnimator categoryImgWhirl;
-    private SearchResultBiliUserAdapter searchResultBiliUserAdapter;
-    private SmartRefreshRecyclerView<SearchResultBiliUser> searchResultBiliUserData;
     private DataLoader<SearchResultBiliUser> searchResultBiliUserDataLoader;
 
     public SearchResultBiliUserFragment(String keyword) {
@@ -73,25 +60,14 @@ public class SearchResultBiliUserFragment extends BaseLazySupportFragment implem
         categoryImgWhirl = ObjectAnimator.ofFloat(searchResultBiliUserMenuCategoryImg, "rotation", 0.0f, 180.0f);
         categoryImgWhirl.setDuration(400);
 
-        searchResultBiliUserData = findView(R.id.search_result_bili_user_data);
-        searchResultBiliUserData.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout refreshLayout) {
-                searchResultBiliUserDataLoader.insertData(false);
-            }
-        });
-
-        searchResultBiliUserAdapter = new SearchResultBiliUserAdapter(searchResultBiliUserList, context);
-        searchResultBiliUserAdapter.setHasStableIds(true);
-        searchResultBiliUserData.setRecyclerViewAdapter(searchResultBiliUserAdapter);
-        searchResultBiliUserData.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
-
-        searchResultBiliUserDataLoader = new DataLoader<>(new SearchResultBiliUserParser(keyword, order, orderSort, userType), searchResultBiliUserData, searchResultBiliUserAdapter, this);
+        searchResultBiliUserDataLoader = new DataLoader<>(new SearchResultBiliUserParser(keyword, order, orderSort, userType),
+                R.id.search_result_bili_user_data,
+                new SearchResultBiliUserAdapter(context),
+                this);
     }
 
     @Override
     protected void onLazyLoad() {
-        searchResultBiliUserData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
         searchResultBiliUserDataLoader.insertData(true);
     }
 
@@ -156,10 +132,6 @@ public class SearchResultBiliUserFragment extends BaseLazySupportFragment implem
      *  重置当前所有的数据
      */
     private void reset() {
-        searchResultBiliUserData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-        searchResultBiliUserAdapter.removeAll();
-
-        searchResultBiliUserDataLoader.setParserInterface(new SearchResultBiliUserParser(keyword, order, orderSort, userType));
-        searchResultBiliUserDataLoader.insertData(true);
+        searchResultBiliUserDataLoader.reset(new SearchResultBiliUserParser(keyword, order, orderSort, userType));
     }
 }

@@ -3,7 +3,6 @@ package com.leon.biuvideo.ui.otherFragments;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.homeAdapters.popularAdapters.PopularAdapter;
@@ -12,16 +11,9 @@ import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.otherFragments.popularFragments.PopularPreciousFragment;
 import com.leon.biuvideo.ui.otherFragments.popularFragments.PopularTopListFragment;
 import com.leon.biuvideo.ui.otherFragments.popularFragments.PopularWeeklyFragment;
-import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
-import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.utils.parseDataUtils.DataLoader;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.popularParsers.PopularHotListParser;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @Author Leon
@@ -29,8 +21,6 @@ import java.util.List;
  * @Desc 综合热门页面
  */
 public class PopularFragment extends BaseSupportFragment {
-    private final List<PopularVideo> popularVideoList = new ArrayList<>();
-    private SmartRefreshRecyclerView<PopularVideo> popularHotList;
     private DataLoader<PopularVideo> popularVideoDataLoader;
 
     public static PopularFragment getInstance() {
@@ -44,8 +34,7 @@ public class PopularFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        SimpleTopBar popularTopBar = view.findViewById(R.id.popular_topBar);
-        popularTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
+        ((SimpleTopBar) findView(R.id.popular_topBar)).setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
             @Override
             public void onLeft() {
                 backPressed();
@@ -57,7 +46,7 @@ public class PopularFragment extends BaseSupportFragment {
             }
         });
 
-        PopularAdapter popularAdapter = new PopularAdapter(popularVideoList, context, PopularAdapter.HOT_VIDEO);
+        PopularAdapter popularAdapter = new PopularAdapter(context, PopularAdapter.HOT_VIDEO, true);
         popularAdapter.setOnClickFirstItemListener(new PopularAdapter.OnClickFirstItemListener() {
             @Override
             public void onClickTopList() {
@@ -74,25 +63,15 @@ public class PopularFragment extends BaseSupportFragment {
                 start(new PopularPreciousFragment());
             }
         });
-        popularAdapter.setHasStableIds(true);
-        popularHotList = findView(R.id.popular_hot_list);
-        popularHotList.setRecyclerViewAdapter(popularAdapter);
-        popularHotList.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
-        popularHotList.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout refreshLayout) {
-                popularVideoDataLoader.insertData(false);
-            }
-        });
 
-        popularVideoDataLoader = new DataLoader<>(new PopularHotListParser(), popularHotList, popularAdapter, this);
+        popularVideoDataLoader = new DataLoader<>(new PopularHotListParser(), R.id.popular_hot_list,
+                popularAdapter, this);
     }
 
     @Override
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
 
-        popularHotList.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
         popularVideoDataLoader.insertData(true);
     }
 }

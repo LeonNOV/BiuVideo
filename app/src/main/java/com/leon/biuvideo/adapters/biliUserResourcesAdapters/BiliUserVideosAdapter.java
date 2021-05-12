@@ -12,19 +12,14 @@ import com.leon.biuvideo.beans.biliUserResourcesBeans.BiliUserVideo;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
-import java.util.List;
-
 /**
  * @Author Leon
  * @Time 2021/4/10
  * @Desc B站用户投稿视频适配器
  */
 public class BiliUserVideosAdapter extends BaseAdapter<BiliUserVideo> {
-    private final List<BiliUserVideo> biliUserVideoList;
-
-    public BiliUserVideosAdapter(List<BiliUserVideo> beans, Context context) {
-        super(beans, context);
-        this.biliUserVideoList = beans;
+    public BiliUserVideosAdapter(Context context) {
+        super(context);
     }
 
     @Override
@@ -34,7 +29,7 @@ public class BiliUserVideosAdapter extends BaseAdapter<BiliUserVideo> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        BiliUserVideo biliUserVideo = biliUserVideoList.get(position);
+        BiliUserVideo biliUserVideo = getAllData().get(position);
 
         holder
                 .setImage(R.id.bili_user_video_item_cover, biliUserVideo.cover, ImagePixelSize.COVER)

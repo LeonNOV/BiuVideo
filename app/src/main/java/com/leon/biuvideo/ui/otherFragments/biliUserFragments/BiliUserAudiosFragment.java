@@ -7,16 +7,10 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.biliUserResourcesAdapters.BiliUserAudioAdapter;
 import com.leon.biuvideo.beans.biliUserResourcesBeans.BiliUserAudio;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
-import com.leon.biuvideo.ui.views.LoadingRecyclerView;
-import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.utils.parseDataUtils.DataLoader;
 import com.leon.biuvideo.utils.parseDataUtils.biliUserResourcesParseUtils.BiliUserAudiosParser;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,13 +20,9 @@ import java.util.Map;
  */
 public class BiliUserAudiosFragment extends BaseLazySupportFragment implements View.OnClickListener {
     private final String mid;
-    private final List<BiliUserAudio> biliUserAudioList = new ArrayList<>();
     private final Map<Integer, TextView> textViewMap = new HashMap<>(3);
 
-    private SmartRefreshRecyclerView<BiliUserAudio> biliUserAudiosData;
-
     private int order = 1;
-    private BiliUserAudioAdapter biliUserAudioAdapter;
     private DataLoader<BiliUserAudio> biliUserAudioDataLoader;
 
     public BiliUserAudiosFragment(String mid) {
@@ -58,22 +48,12 @@ public class BiliUserAudiosFragment extends BaseLazySupportFragment implements V
         biliUserAudiosOrderStow.setOnClickListener(this);
         textViewMap.put(2, biliUserAudiosOrderStow);
 
-        biliUserAudioAdapter = new BiliUserAudioAdapter(biliUserAudioList, context);
-        biliUserAudioAdapter.setHasStableIds(true);
-        biliUserAudiosData = findView(R.id.bili_user_audios_data);
-        biliUserAudiosData.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout refreshLayout) {
-                biliUserAudioDataLoader.insertData(false);
-            }
-        });
-
-        biliUserAudioDataLoader = new DataLoader<>(new BiliUserAudiosParser(mid, order), biliUserAudiosData, biliUserAudioAdapter, this);
+        biliUserAudioDataLoader = new DataLoader<>(new BiliUserAudiosParser(mid, order), R.id.bili_user_audios_data,
+                new BiliUserAudioAdapter(context), this);
     }
 
     @Override
     protected void onLazyLoad() {
-        biliUserAudiosData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
         biliUserAudioDataLoader.insertData(true);
     }
 
@@ -112,10 +92,6 @@ public class BiliUserAudiosFragment extends BaseLazySupportFragment implements V
     }
 
     private void reset () {
-        biliUserAudiosData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-        biliUserAudioAdapter.removeAll();
-
-        biliUserAudioDataLoader.setParserInterface(new BiliUserAudiosParser(mid, order));
-        biliUserAudioDataLoader.insertData(true);
+        biliUserAudioDataLoader.reset(new BiliUserAudiosParser(mid, order));
     }
 }

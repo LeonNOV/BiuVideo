@@ -3,22 +3,14 @@ package com.leon.biuvideo.ui.otherFragments.biliUserFragments;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.biliUserResourcesAdapters.BiliUserVideosAdapter;
 import com.leon.biuvideo.beans.biliUserResourcesBeans.BiliUserVideo;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
-import com.leon.biuvideo.ui.views.LoadingRecyclerView;
-import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.utils.parseDataUtils.DataLoader;
 import com.leon.biuvideo.utils.parseDataUtils.biliUserResourcesParseUtils.BiliUserVideoParser;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,13 +20,9 @@ import java.util.Map;
  */
 public class BiliUserVideosFragment extends BaseLazySupportFragment implements View.OnClickListener {
     private final String mid;
-    private final List<BiliUserVideo> biliUserVideoList = new ArrayList<>();
     private final Map<Integer, TextView> textViewMap = new HashMap<>(3);
 
-    private SmartRefreshRecyclerView<BiliUserVideo> biliUserVideosData;
-
     private String order = BiliUserVideoParser.ORDER_DEFAULT;
-    private BiliUserVideosAdapter biliUserVideosAdapter;
     private DataLoader<BiliUserVideo> biliUserVideoDataLoader;
 
     public BiliUserVideosFragment(String mid) {
@@ -60,24 +48,14 @@ public class BiliUserVideosFragment extends BaseLazySupportFragment implements V
         biliUserVideosOrderStow.setOnClickListener(this);
         textViewMap.put(2, biliUserVideosOrderStow);
 
-        biliUserVideosAdapter = new BiliUserVideosAdapter(biliUserVideoList, context);
-        biliUserVideosAdapter.setHasStableIds(true);
-        biliUserVideosData = findView(R.id.bili_user_videos_data);
-        biliUserVideosData.setRecyclerViewAdapter(biliUserVideosAdapter);
-        biliUserVideosData.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
-        biliUserVideosData.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout refreshLayout) {
-                biliUserVideoDataLoader.insertData(false);
-            }
-        });
-
-        biliUserVideoDataLoader = new DataLoader<>(new BiliUserVideoParser(mid, order), biliUserVideosData, biliUserVideosAdapter, this);
+        biliUserVideoDataLoader = new DataLoader<>(new BiliUserVideoParser(mid, order),
+                R.id.bili_user_videos_data,
+                new BiliUserVideosAdapter(context),
+                this);
     }
 
     @Override
     protected void onLazyLoad() {
-        biliUserVideosData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
         biliUserVideoDataLoader.insertData(true);
     }
 
@@ -112,14 +90,6 @@ public class BiliUserVideosFragment extends BaseLazySupportFragment implements V
                 break;
         }
 
-        reset();
-    }
-
-    private void reset () {
-        biliUserVideosData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-        biliUserVideosAdapter.removeAll();
-
-        biliUserVideoDataLoader.setParserInterface(new BiliUserVideoParser(mid, order));
-        biliUserVideoDataLoader.insertData(true);
+        biliUserVideoDataLoader.reset(new BiliUserVideoParser(mid, order));
     }
 }

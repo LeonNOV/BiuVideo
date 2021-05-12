@@ -16,20 +16,14 @@ import com.leon.biuvideo.values.FeaturesName;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
-import java.util.List;
-
 /**
  * @Author Leon
  * @Time 2021/3/31
  * @Desc 专栏搜索结果适配器
  */
 public class SearchResultArticleAdapter extends BaseAdapter<SearchResultArticle> {
-    private final List<SearchResultArticle> searchResultArticleList;
-
-    public SearchResultArticleAdapter(List<SearchResultArticle> beans, Context context) {
-        super(beans, context);
-
-        this.searchResultArticleList = beans;
+    public SearchResultArticleAdapter(Context context) {
+        super(context);
     }
 
     @Override
@@ -39,7 +33,7 @@ public class SearchResultArticleAdapter extends BaseAdapter<SearchResultArticle>
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        SearchResultArticle searchResultArticle = searchResultArticleList.get(position);
+        SearchResultArticle searchResultArticle = getAllData().get(position);
 
         holder
                 .setText(R.id.search_result_item_article_title, searchResultArticle.title)

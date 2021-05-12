@@ -10,11 +10,9 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularVideo;
-import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.ValueUtils;
+import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
-
-import java.util.List;
 
 /**
  * @Author Leon
@@ -26,15 +24,15 @@ public class PopularAdapter extends BaseAdapter<PopularVideo> implements View.On
     public static final int WEEKLY = 1;
     public static final int PRECIOUS = 2;
 
-    private final List<PopularVideo> popularVideoList;
     private final int popularType;
+    private final boolean isNav;
 
     private OnClickFirstItemListener onClickFirstItemListener;
 
-    public PopularAdapter(List<PopularVideo> beans, Context context, int popularType) {
-        super(beans, context);
-        this.popularVideoList = beans;
+    public PopularAdapter(Context context, int popularType, boolean isNav) {
+        super(context);
         this.popularType = popularType;
+        this.isNav = isNav;
     }
 
     public interface OnClickFirstItemListener {
@@ -59,22 +57,29 @@ public class PopularAdapter extends BaseAdapter<PopularVideo> implements View.On
     }
 
     @Override
-    public int getLayout(int viewType) {
-        return viewType == 0 ? R.layout.popular_video_first_item : R.layout.popular_video_item;
+    public int getItemViewType(int position) {
+        if (isNav) {
+            return position == 0 ? R.layout.popular_video_first_item : R.layout.popular_video_item;
+        } else {
+            return R.layout.popular_video_item;
+        }
     }
 
     @Override
-    public int getItemViewType(int position) {
-        return position == 0 ? 0 : 1;
+    public int getLayout(int viewType) {
+        return viewType;
     }
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-
-        if (position == 0) {
-            initFirstItem(holder);
+        if (isNav) {
+            if (position == 0) {
+                initFirstItem(holder);
+            } else {
+                initVideoItem(holder, getAllData().get(position - 1));
+            }
         } else {
-            initVideoItem(holder, popularVideoList.get(position - 1), position);
+            initVideoItem(holder, getAllData().get(position));
         }
     }
 
@@ -85,7 +90,7 @@ public class PopularAdapter extends BaseAdapter<PopularVideo> implements View.On
                 .setOnClickListener(R.id.popular_precious, this);
     }
 
-    private void initVideoItem(BaseViewHolder holder, PopularVideo popularVideo, int position) {
+    private void initVideoItem(BaseViewHolder holder, PopularVideo popularVideo) {
         TextView popularHotListItemReason = holder.findById(R.id.popular_hot_list_item_reason);
         TextView popularWeeklyItemReason = holder.findById(R.id.popular_weekly_item_reason);
         TextView popularPreciousItemReason = holder.findById(R.id.popular_precious_item_reason);
@@ -122,7 +127,7 @@ public class PopularAdapter extends BaseAdapter<PopularVideo> implements View.On
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        SimpleSnackBar.make(v, "点击了第" + position + "个item", SimpleSnackBar.LENGTH_SHORT).show();
+                        startPublicFragment(FragmentType.VIDEO, popularVideo.bvid);
                     }
                 });
     }

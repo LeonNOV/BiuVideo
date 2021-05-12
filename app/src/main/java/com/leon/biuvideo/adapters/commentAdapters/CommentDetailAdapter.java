@@ -30,7 +30,6 @@ import com.leon.biuvideo.values.FeaturesName;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,13 +40,10 @@ import java.util.regex.Pattern;
  * @Desc 一级评论下所有评论的适配器
  */
 public class CommentDetailAdapter extends BaseAdapter<Comment> {
-    private final List<Comment> commentList;
-
     private ImageSpan imageSpan;
 
-    public CommentDetailAdapter(List<Comment> beans, Context context) {
-        super(beans, context);
-        this.commentList = beans;
+    public CommentDetailAdapter(Context context) {
+        super(context);
     }
 
     @Override
@@ -57,7 +53,7 @@ public class CommentDetailAdapter extends BaseAdapter<Comment> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        Comment comment = commentList.get(position);
+        Comment comment = getAllData().get(position);
 
         ImageView commentItemUserFace = holder.findById(R.id.comment_detail_item_userFace);
         commentItemUserFace.setOnClickListener(new View.OnClickListener() {

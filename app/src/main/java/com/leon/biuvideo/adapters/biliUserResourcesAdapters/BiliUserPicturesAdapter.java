@@ -13,19 +13,14 @@ import com.leon.biuvideo.beans.biliUserResourcesBeans.BiliUserPicture;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
-import java.util.List;
-
 /**
  * @Author Leon
  * @Time 2021/4/10
  * @Desc B站用户相簿数据适配器
  */
 public class BiliUserPicturesAdapter extends BaseAdapter<BiliUserPicture> {
-    private final List<BiliUserPicture> biliUserPictureList;
-
-    public BiliUserPicturesAdapter(List<BiliUserPicture> beans, Context context) {
-        super(beans, context);
-        this.biliUserPictureList = beans;
+    public BiliUserPicturesAdapter(Context context) {
+        super(context);
     }
 
     @Override
@@ -35,7 +30,7 @@ public class BiliUserPicturesAdapter extends BaseAdapter<BiliUserPicture> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        BiliUserPicture biliUserPicture = biliUserPictureList.get(position);
+        BiliUserPicture biliUserPicture = getAllData().get(position);
 
         TextView biliUserPictureItemCount = holder.findById(R.id.bili_user_picture_item_count);
         if (biliUserPicture.count == 1) {

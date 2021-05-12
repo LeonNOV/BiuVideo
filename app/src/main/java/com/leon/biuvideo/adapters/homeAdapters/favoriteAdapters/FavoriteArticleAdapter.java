@@ -2,7 +2,6 @@ package com.leon.biuvideo.adapters.homeAdapters.favoriteAdapters;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -15,20 +14,14 @@ import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
-import java.util.List;
-
 /**
  * @Author Leon
  * @Time 2020/12/15
  * @Desc 用户收藏的专栏列表适配器
  */
 public class FavoriteArticleAdapter extends BaseAdapter<FavoriteArticle> {
-    private final List<FavoriteArticle> favoriteArticles;
-
-    public FavoriteArticleAdapter(List<FavoriteArticle> favoriteArticles, Context context) {
-        super(favoriteArticles, context);
-
-        this.favoriteArticles = favoriteArticles;
+    public FavoriteArticleAdapter(Context context) {
+        super(context);
     }
 
     @Override
@@ -38,7 +31,7 @@ public class FavoriteArticleAdapter extends BaseAdapter<FavoriteArticle> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        FavoriteArticle favoriteArticle = favoriteArticles.get(position);
+        FavoriteArticle favoriteArticle = getAllData().get(position);
 
         TagView favoriteArticleItemAddTime = holder.findById(R.id.favorite_article_item_addTime);
         favoriteArticleItemAddTime.setRightValue(ValueUtils.generateTime(favoriteArticle.ctime, "yyyy-MM-dd HH:mm:ss", true));

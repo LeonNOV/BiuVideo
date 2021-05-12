@@ -18,19 +18,14 @@ import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
-import java.util.List;
-
 /**
  * @Author Leon
  * @Time 2021/3/5
  * @Desc 历史记录适配器
  */
 public class HistoryAdapter extends BaseAdapter<History> {
-    private final List<History> historyList;
-
-    public HistoryAdapter(List<History> beans, Context context) {
-        super(beans, context);
-        this.historyList = beans;
+    public HistoryAdapter(Context context) {
+        super(context);
     }
 
     @Override
@@ -44,7 +39,7 @@ public class HistoryAdapter extends BaseAdapter<History> {
 
     @Override
     public int getItemViewType(int position) {
-        History history = historyList.get(position);
+        History history = getAllData().get(position);
         if (history.historyType == HistoryType.ARTICLE) {
             return 1;
         } else {
@@ -54,7 +49,7 @@ public class HistoryAdapter extends BaseAdapter<History> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        History history = historyList.get(position);
+        History history = getAllData().get(position);
 
         if (history.historyType == HistoryType.ARTICLE) {
             initArticleItemView(holder, history);

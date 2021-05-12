@@ -16,20 +16,14 @@ import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.values.Role;
 
-import java.util.List;
-
 /**
  * @Author Leon
  * @Time 2021/3/31
  * @Desc 用户搜索结果适配器
  */
 public class SearchResultBiliUserAdapter extends BaseAdapter<SearchResultBiliUser> {
-    private final List<SearchResultBiliUser> searchResultBiliUserList;
-
-    public SearchResultBiliUserAdapter(List<SearchResultBiliUser> beans, Context context) {
-        super(beans, context);
-
-        this.searchResultBiliUserList = beans;
+    public SearchResultBiliUserAdapter(Context context) {
+        super(context);
     }
 
     @Override
@@ -39,7 +33,7 @@ public class SearchResultBiliUserAdapter extends BaseAdapter<SearchResultBiliUse
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        SearchResultBiliUser searchResultBiliUser = searchResultBiliUserList.get(position);
+        SearchResultBiliUser searchResultBiliUser = getAllData().get(position);
 
         ImageView searchResultItemBiliUserVerifyMark = holder.findById(R.id.search_result_item_bili_user_verify_mark);
 

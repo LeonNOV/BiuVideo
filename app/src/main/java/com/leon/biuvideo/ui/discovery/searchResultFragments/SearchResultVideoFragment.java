@@ -6,23 +6,14 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.discoverAdapters.searchResultAdapters.SearchResultVideoAdapter;
 import com.leon.biuvideo.beans.searchResultBeans.SearchResultVideo;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
-import com.leon.biuvideo.ui.views.LoadingRecyclerView;
-import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 import com.leon.biuvideo.ui.views.searchResultViews.SearchResultMenuAdapter;
 import com.leon.biuvideo.ui.views.searchResultViews.SearchResultMenuPopupWindow;
 import com.leon.biuvideo.utils.parseDataUtils.DataLoader;
 import com.leon.biuvideo.utils.parseDataUtils.searchParsers.SearchResultVideoParser;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @Author Leon
@@ -30,8 +21,6 @@ import java.util.List;
  * @Desc 视频搜索结果
  */
 public class SearchResultVideoFragment extends BaseLazySupportFragment implements View.OnClickListener {
-    private final List<SearchResultVideo> searchResultVideoList = new ArrayList<>();
-
     private final String keyword;
     private String order;
     private String length;
@@ -48,8 +37,6 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
     private ObjectAnimator orderImgWhirl;
     private ObjectAnimator lengthImgWhirl;
     private ObjectAnimator partitionImgWhirl;
-    private SmartRefreshRecyclerView<SearchResultVideo> searchResultVideoData;
-    private SearchResultVideoAdapter searchResultVideoAdapter;
     private DataLoader<SearchResultVideo> searchResultVideoDataLoader;
 
     public SearchResultVideoFragment (String keyword) {
@@ -86,24 +73,14 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
         partitionImgWhirl = ObjectAnimator.ofFloat(searchResultVideoMenuPartitionImg, "rotation", 0.0f, 180.0f);
         partitionImgWhirl.setDuration(400);
 
-        searchResultVideoData = findView(R.id.search_result_video_data);
-        searchResultVideoData.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout refreshLayout) {
-                searchResultVideoDataLoader.insertData(false);
-            }
-        });
-        searchResultVideoAdapter = new SearchResultVideoAdapter(searchResultVideoList, context);
-        searchResultVideoAdapter.setHasStableIds(true);
-        searchResultVideoData.setRecyclerViewAdapter(searchResultVideoAdapter);
-        searchResultVideoData.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
-
-        searchResultVideoDataLoader = new DataLoader<>(new SearchResultVideoParser(keyword, order, length, partition), searchResultVideoData, searchResultVideoAdapter, this);
+        searchResultVideoDataLoader = new DataLoader<>(new SearchResultVideoParser(keyword, order, length, partition),
+                R.id.search_result_video_data,
+                new SearchResultVideoAdapter(context),
+                this);
     }
 
     @Override
     protected void onLazyLoad() {
-        searchResultVideoData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
         searchResultVideoDataLoader.insertData(true);
     }
 
@@ -182,10 +159,6 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
      *  重置当前所有的数据
      */
     private void reset() {
-        searchResultVideoData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-        searchResultVideoAdapter.removeAll();
-
-        searchResultVideoDataLoader.setParserInterface(new SearchResultVideoParser(keyword, order, length, partition));
-        searchResultVideoDataLoader.insertData(true);
+        searchResultVideoDataLoader.reset(new SearchResultVideoParser(keyword, order, length, partition));
     }
 }

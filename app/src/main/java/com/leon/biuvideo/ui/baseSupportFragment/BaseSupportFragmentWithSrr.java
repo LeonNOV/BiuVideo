@@ -57,7 +57,12 @@ public abstract class BaseSupportFragmentWithSrr<T> extends BaseLazySupportFragm
         return view;
     }
 
-
+    /**
+     * 获取SmartRefreshRecyclerView
+     */
+    public SmartRefreshRecyclerView<T> getSmartRefreshRecyclerView() {
+        return view;
+    }
 
     /**
      * 初始化控件

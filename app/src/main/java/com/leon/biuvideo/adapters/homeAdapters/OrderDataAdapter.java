@@ -11,10 +11,8 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.orderBeans.Order;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
-import com.leon.biuvideo.values.OrderType;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * @Author Leon
@@ -22,12 +20,8 @@ import java.util.List;
  * @Desc 订阅数据适配器
  */
 public class OrderDataAdapter extends BaseAdapter<Order> {
-    private final List<Order> orders;
-
-    public OrderDataAdapter(List<Order> orders, Context context) {
-        super(orders, context);
-
-        this.orders = orders;
+    public OrderDataAdapter(Context context) {
+        super(context);
     }
 
     @Override
@@ -37,7 +31,7 @@ public class OrderDataAdapter extends BaseAdapter<Order> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        Order order = orders.get(position);
+        Order order = getAllData().get(position);
 
         if ("".equals(order.badgeType)) {
             holder.setVisibility(R.id.order_item_textView_badge, View.GONE);
