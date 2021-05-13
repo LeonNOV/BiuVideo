@@ -8,7 +8,6 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.homeAdapters.FollowsAdapter;
 import com.leon.biuvideo.beans.userBeans.Follow;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.parseDataUtils.DataLoader;
 import com.leon.biuvideo.utils.parseDataUtils.userDataParsers.FollowsParser;
 
@@ -39,9 +38,9 @@ public class FollowsFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        ((SimpleTopBar) findView(R.id.follows_topBar)).setBackListener(this::backPressed);
+        setTopBar(R.id.follows_topBar);
 
-        followDataLoader = new DataLoader<>(new FollowsParser(context, mid),
+        followDataLoader = new DataLoader<>(context, new FollowsParser(context, mid),
                 R.id.follows_smartRefreshLoadingRecyclerView,
                 new FollowsAdapter(context, isBiliUser),
                 this);

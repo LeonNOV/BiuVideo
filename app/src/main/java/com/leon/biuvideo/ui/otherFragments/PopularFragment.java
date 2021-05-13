@@ -53,7 +53,7 @@ public class PopularFragment extends BaseSupportFragment {
             }
         });
 
-        popularVideoDataLoader = new DataLoader<>(new PopularHotListParser(), R.id.popular_hot_list,
+        popularVideoDataLoader = new DataLoader<>(context, new PopularHotListParser(), R.id.popular_hot_list,
                 popularAdapter, this);
     }
 

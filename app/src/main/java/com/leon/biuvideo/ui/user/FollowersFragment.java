@@ -34,7 +34,7 @@ public class FollowersFragment extends BaseSupportFragment {
     protected void initView() {
         setTopBar(R.id.followers_topBar);
 
-        DataLoader<Follower> followerDataLoader = new DataLoader<>(new FollowersParser(context, mid), R.id.followers_smartRefreshLoadingRecyclerView,
+        DataLoader<Follower> followerDataLoader = new DataLoader<>(context, new FollowersParser(context, mid), R.id.followers_smartRefreshLoadingRecyclerView,
                 new FollowerAdapter(context, isBiliUser), this);
         followerDataLoader.insertData(true);
     }

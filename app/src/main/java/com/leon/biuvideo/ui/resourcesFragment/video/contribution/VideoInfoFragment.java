@@ -26,12 +26,13 @@ import com.leon.biuvideo.ui.resourcesFragment.video.DownloadBottomSheet;
 import com.leon.biuvideo.ui.resourcesFragment.video.OnBottomSheetWithItemListener;
 import com.leon.biuvideo.ui.resourcesFragment.video.OnVideoAnthologyListener;
 import com.leon.biuvideo.ui.resourcesFragment.video.VideoAnthologyBottomSheet;
+import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
-import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.WarnDialog;
 import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.PermissionUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
@@ -131,8 +132,10 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
             videoInfoEasterEggContainer.setVisibility(View.VISIBLE);
         }
 
-        initHandler();
-        getVideoInfo();
+        if (InternetUtils.checkNetwork(_mActivity.getWindow().getDecorView())) {
+            initHandler();
+            getVideoInfo();
+        }
     }
 
     /**
@@ -203,7 +206,7 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
         // 开始播放视频
         if (onVideoAnthologyListener != null) {
             VideoInfo.VideoAnthology videoAnthology = videoInfo.videoAnthologyList.get(anthologyIndex);
-            onVideoAnthologyListener.onAnthology(videoAnthology.cid, videoAnthology.subTitle);
+            onVideoAnthologyListener.onAnthology(videoAnthology.cid, videoAnthology.subTitle, videoInfo.isMovie);
         }
 
         DownloadHistoryUtils downloadHistoryUtils = new DownloadHistoryUtils(context);
@@ -308,7 +311,9 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.video_info_face:
-                startPublicFragment(FragmentType.BILI_USER, videoInfo.userInfo.userMid);
+                if (InternetUtils.checkNetwork(v)) {
+                    startPublicFragment(FragmentType.BILI_USER, videoInfo.userInfo.userMid);
+                }
                 break;
             case R.id.video_info_follow:
             case R.id.video_info_like:
@@ -318,7 +323,9 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
                 SimpleSnackBar.make(v, getString(R.string.snackBarBuildingWarn), SimpleSnackBar.LENGTH_LONG).show();
                 break;
             case R.id.video_info_anthology_container:
-                showAnthologyBottomSheet();
+                if (InternetUtils.checkNetwork(v)) {
+                    showAnthologyBottomSheet();
+                }
                 break;
             case R.id.video_info_bvid:
                 easterEgg(v);
@@ -328,7 +335,9 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
                 if (!verifyIOPermission()) {
                     requestIOPermission();
                 } else {
-                    showDownloadBottomSheet();
+                    if (InternetUtils.checkNetwork(v)) {
+                        showDownloadBottomSheet();
+                    }
                 }
                 break;
             default:
@@ -388,7 +397,7 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
                     VideoInfo.VideoAnthology videoAnthology = videoInfo.videoAnthologyList.get(anthologyIndex);
 
                     videoInfoNowAnthology.setRightValue(videoAnthology.subTitle);
-                    onVideoAnthologyListener.onAnthology(videoAnthology.cid, videoAnthology.subTitle);
+                    onVideoAnthologyListener.onAnthology(videoAnthology.cid, videoAnthology.subTitle, videoInfo.isMovie);
                     videoAnthologyBottomSheet.dismiss();
                 }
             }

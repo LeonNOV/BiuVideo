@@ -31,6 +31,7 @@ import com.leon.biuvideo.service.DownloadWatcher;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.downloadUtils.ResourceDownloadTask;
@@ -96,8 +97,6 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
     }
 
     private void initView() {
-        final List<String[]> qualitys = Qualitys.getQUALITYS();
-
         Window window = getWindow();
 
         WindowManager.LayoutParams attributes = window.getAttributes();
@@ -117,7 +116,7 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
             @Override
             public void onClick(View v) {
                 ListPopupWindow listPopupWindow = new ListPopupWindow(context);
-                listPopupWindow.setAdapter(new ArrayAdapter<>(context, R.layout.search_result_menu_item, qualitys));
+                listPopupWindow.setAdapter(new ArrayAdapter<>(context, R.layout.search_result_menu_item, Qualitys.getQualityStr()));
                 listPopupWindow.setWidth(ListPopupWindow.WRAP_CONTENT);
                 listPopupWindow.setHeight(ListPopupWindow.WRAP_CONTENT);
                 listPopupWindow.setBackgroundDrawable(context.getDrawable(R.drawable.round_corners6dp_bg));
@@ -126,11 +125,11 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
                 listPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        String[] qualityEntry = qualitys.get(position);
+                        int qualityCode = Qualitys.getQualityCodes().get(position);
 
-                        quality = qualityEntry[1];
+                        quality = Qualitys.getQualityStr().get(position);
                         tagView.setRightValue(quality);
-                        qualityCode = Integer.parseInt(qualityEntry[0]);
+                        DownloadBottomSheet.this.qualityCode = qualityCode;
 
                         listPopupWindow.dismiss();
                     }
@@ -239,21 +238,23 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
                             if (exists) {
                                 Toast.makeText(context, context.getString(R.string.downloadExisted), Toast.LENGTH_LONG).show();
                             } else {
-                                // 如果未处于 下载完成/正在下载 状态，则进行下载
-                                if (bangumiAnthology.isDownloading || bangumiAnthology.isDownloaded) {
-                                    return;
+                                if (InternetUtils.checkNetwork(v)) {
+                                    // 如果未处于 下载完成/正在下载 状态，则进行下载
+                                    if (bangumiAnthology.isDownloading || bangumiAnthology.isDownloaded) {
+                                        return;
+                                    }
+
+                                    bangumiAnthology.isDownloading = true;
+
+                                    downloadBottomSheetAnthologyDownloadStat.setVisibility(View.VISIBLE);
+                                    downloadBottomSheetAnthologyDownloadStat.setSelected(false);
+
+                                    if (onClickDownloadItemListener != null) {
+                                        onClickDownloadItemListener.onClickItem();
+                                    }
+
+                                    getBangumiDownloadInfo(bangumiAnthology);
                                 }
-
-                                bangumiAnthology.isDownloading = true;
-
-                                downloadBottomSheetAnthologyDownloadStat.setVisibility(View.VISIBLE);
-                                downloadBottomSheetAnthologyDownloadStat.setSelected(false);
-
-                                if (onClickDownloadItemListener != null) {
-                                    onClickDownloadItemListener.onClickItem();
-                                }
-
-                                getBangumiDownloadInfo(bangumiAnthology);
                             }
                         }
                     });
@@ -277,21 +278,23 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
                             if (exists) {
                                 Toast.makeText(context, context.getString(R.string.downloadExisted), Toast.LENGTH_LONG).show();
                             } else {
-                                // 如果未处于 下载完成/正在下载 状态，则进行下载
-                                if (videoAnthology.isDownloading || videoAnthology.isDownloaded) {
-                                    return;
+                                if (InternetUtils.checkNetwork(v)) {
+                                    // 如果未处于 下载完成/正在下载 状态，则进行下载
+                                    if (videoAnthology.isDownloading || videoAnthology.isDownloaded) {
+                                        return;
+                                    }
+
+                                    videoAnthology.isDownloading = true;
+
+                                    downloadBottomSheetAnthologyDownloadStat.setVisibility(View.VISIBLE);
+                                    downloadBottomSheetAnthologyDownloadStat.setSelected(false);
+
+                                    if (onClickDownloadItemListener != null) {
+                                        onClickDownloadItemListener.onClickItem();
+                                    }
+
+                                    getVideoDownloadInfo(videoAnthology);
                                 }
-
-                                videoAnthology.isDownloading = true;
-
-                                downloadBottomSheetAnthologyDownloadStat.setVisibility(View.VISIBLE);
-                                downloadBottomSheetAnthologyDownloadStat.setSelected(false);
-
-                                if (onClickDownloadItemListener != null) {
-                                    onClickDownloadItemListener.onClickItem();
-                                }
-
-                                getVideoDownloadInfo(videoAnthology);
                             }
                         }
                     });

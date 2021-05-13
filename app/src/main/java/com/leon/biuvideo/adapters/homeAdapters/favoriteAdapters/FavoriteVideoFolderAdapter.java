@@ -9,6 +9,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteVideoFolder;
+import com.leon.biuvideo.utils.InternetUtils;
 
 import java.util.List;
 
@@ -57,8 +58,10 @@ public class FavoriteVideoFolderAdapter extends BaseAdapter<FavoriteVideoFolder>
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (onClickVideoFolderListener != null) {
-                            onClickVideoFolderListener.onClick(favoriteVideoFolder.title, favoriteVideoFolder.id);
+                        if (InternetUtils.checkNetwork(v)) {
+                            if (onClickVideoFolderListener != null) {
+                                onClickVideoFolderListener.onClick(favoriteVideoFolder.title, favoriteVideoFolder.id);
+                            }
                         }
                     }
                 });

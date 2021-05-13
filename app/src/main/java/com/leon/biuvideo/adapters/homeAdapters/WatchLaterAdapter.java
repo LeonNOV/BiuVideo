@@ -3,7 +3,6 @@ package com.leon.biuvideo.adapters.homeAdapters;
 import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -13,6 +12,7 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.homeBeans.WatchLater;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.FeaturesName;
@@ -72,13 +72,14 @@ public class WatchLaterAdapter extends BaseAdapter<WatchLater> {
                 .setOnClickListener(R.id.watch_later_video_item_content, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (InternetUtils.checkNetwork(v)) {
+                            if (watchLater.isInvalid) {
+                                SimpleSnackBar.make(v, context.getString(R.string.videoFailed), SimpleSnackBar.LENGTH_SHORT).show();
+                                return;
+                            }
 
-                        if (watchLater.isInvalid) {
-                            Toast.makeText(context, "此视频已失效----position：" + position + "----bvid：" + watchLater.bvid, Toast.LENGTH_SHORT).show();
-                            return;
+                            startPublicFragment(FragmentType.VIDEO, watchLater.bvid);
                         }
-
-                        startPublicFragment(FragmentType.VIDEO, watchLater.bvid);
                     }
                 })
                 .setOnClickListener(R.id.watch_later_video_item_cover_remove, new View.OnClickListener() {

@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
@@ -19,6 +18,8 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularTopList;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.TagView;
+import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.List;
@@ -72,10 +73,12 @@ public class PopularTopListAdapter extends BaseAdapter<PopularTopList> {
                 .setImage(R.id.popular_top_list_item_cover, popularTopList.cover, ImagePixelSize.COVER)
                 .setText(R.id.popular_top_list_item_title, popularTopList.title)
                 .setText(R.id.popular_top_list_item_extra1, popularTopList.extra1)
-                .setOnClickListener(R.id.popular_top_list_item_content, new View.OnClickListener() {
+                .setOnClickListener(R.id.popular_top_list_item_container, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        if (InternetUtils.checkNetwork(v)) {
+                            startPublicFragment(FragmentType.VIDEO, popularTopList.bvid);
+                        }
                     }
                 });
 
@@ -87,7 +90,7 @@ public class PopularTopListAdapter extends BaseAdapter<PopularTopList> {
             popularTopListItemExtra2.setText(popularTopList.extra2);
         }
 
-        ((TagView)holder.findById(R.id.popular_top_list_item_score)).setRightValue(popularTopList.score);
+        ((TagView)holder.findById(R.id.popular_top_list_item_score)).clearBg().setRightValue(popularTopList.score);
 
         ImageView popularTopListItemRankBg = holder.findById(R.id.popular_top_list_item_rank_bg);
         TextView popularTopListItemRank = holder.findById(R.id.popular_top_list_item_rank);

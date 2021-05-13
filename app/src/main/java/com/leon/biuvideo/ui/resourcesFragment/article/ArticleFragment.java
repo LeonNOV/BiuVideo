@@ -18,6 +18,7 @@ import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.ArticleInfoParser;
@@ -281,15 +282,15 @@ public class ArticleFragment extends BaseSupportFragment implements View.OnClick
                 backPressed();
                 break;
             case R.id.article_face:
-                start(new BiliUserFragment(biliUserInfo.userMid));
+                if (InternetUtils.checkNetwork(v)) {
+                    start(new BiliUserFragment(biliUserInfo.userMid));
+                }
                 break;
             case R.id.article_user_follow:
-                break;
             case R.id.article_like_container:
-                break;
             case R.id.article_comment_container:
-                break;
             case R.id.article_favorite_container:
+                SimpleSnackBar.make(v, getString(R.string.snackBarBuildingWarn), SimpleSnackBar.LENGTH_SHORT).show();
                 break;
             default:
                 break;

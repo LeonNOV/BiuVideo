@@ -10,6 +10,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularVideo;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -134,24 +135,26 @@ public class PopularAdapter extends BaseAdapter<PopularVideo> implements View.On
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.popular_top_list:
-                if (onClickFirstItemListener != null) {
-                    onClickFirstItemListener.onClickTopList();
-                }
-                break;
-            case R.id.popular_weekly:
-                if (onClickFirstItemListener != null) {
-                    onClickFirstItemListener.onClickWeekly();
-                }
-                break;
-            case R.id.popular_precious:
-                if (onClickFirstItemListener != null) {
-                    onClickFirstItemListener.onClickPrecious();
-                }
-                break;
-            default:
-                break;
+        if (InternetUtils.checkNetwork(v)) {
+            switch (v.getId()) {
+                case R.id.popular_top_list:
+                    if (onClickFirstItemListener != null) {
+                        onClickFirstItemListener.onClickTopList();
+                    }
+                    break;
+                case R.id.popular_weekly:
+                    if (onClickFirstItemListener != null) {
+                        onClickFirstItemListener.onClickWeekly();
+                    }
+                    break;
+                case R.id.popular_precious:
+                    if (onClickFirstItemListener != null) {
+                        onClickFirstItemListener.onClickPrecious();
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

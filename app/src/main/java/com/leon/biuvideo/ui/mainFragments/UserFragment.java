@@ -20,14 +20,15 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.userBeans.UserInfo;
 import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.views.WarnDialog;
 import com.leon.biuvideo.ui.home.FollowsFragment;
 import com.leon.biuvideo.ui.otherFragments.LoginFragment;
 import com.leon.biuvideo.ui.user.FollowersFragment;
 import com.leon.biuvideo.ui.user.UserInfoFragment;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
+import com.leon.biuvideo.ui.views.WarnDialog;
 import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.parseDataUtils.userDataParsers.UserInfoParser;
@@ -35,6 +36,7 @@ import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.Role;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * @Author Leon
@@ -75,7 +77,11 @@ public class UserFragment extends BaseSupportFragment {
         super.onLazyInitView(savedInstanceState);
 
         // 获取用户数据
-        getAccountInfo();
+        if (InternetUtils.checkNetwork(_mActivity.getWindow().getDecorView())) {
+            getAccountInfo();
+        } else {
+            userDataView.setVisibility(false);
+        }
     }
 
     /**
@@ -252,18 +258,20 @@ public class UserFragment extends BaseSupportFragment {
 
         @Override
         public void onClick(View v) {
+            SupportFragment targetFragment = null;
+
             switch (v.getId()) {
                 case R.id.user_top_following:
-                    ((NavFragment) getParentFragment()).startBrotherFragment(FollowsFragment.getInstance(false, PreferenceUtils.getUserId()));
+                    targetFragment = FollowsFragment.getInstance(false, PreferenceUtils.getUserId());
                     break;
                 case R.id.user_top_fans:
-                    ((NavFragment) getParentFragment()).startBrotherFragment(FollowersFragment.getInstance(false, PreferenceUtils.getUserId()));
+                    targetFragment = FollowersFragment.getInstance(false, PreferenceUtils.getUserId());
                     break;
                 case R.id.user_baseInfo_check_all:
-                    ((NavFragment) getParentFragment()).startBrotherFragment(new UserInfoFragment(userInfo));
+                    targetFragment = new UserInfoFragment(userInfo);
                     break;
                 case R.id.user_face:
-                    ((NavFragment) getParentFragment()).startBrotherFragment(LoginFragment.getInstance());
+                    targetFragment = LoginFragment.getInstance();
                     break;
                 case R.id.user_logout:
                     WarnDialog warnDialog = new WarnDialog(context);
@@ -309,9 +317,15 @@ public class UserFragment extends BaseSupportFragment {
                     }
 
                     warnDialog.show();
-                    break;
+                    return;
                 default:
                     break;
+            }
+
+            if (InternetUtils.checkNetwork(v)) {
+                if (targetFragment != null) {
+                    ((NavFragment) getParentFragment()).startBrotherFragment(targetFragment);
+                }
             }
         }
 

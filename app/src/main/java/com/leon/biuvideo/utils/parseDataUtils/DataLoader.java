@@ -1,5 +1,6 @@
 package com.leon.biuvideo.utils.parseDataUtils;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 
@@ -11,6 +12,7 @@ import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragmentWithSrr;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
@@ -28,12 +30,14 @@ public class DataLoader<T> implements BaseSupportFragment.OnLoadListener {
     public static final int INIT_CODE = 0;
     public static final int APPEND_CODE = 1;
 
+    private final Context context;
     private ParserInterface<T> parserInterface;
     private final SmartRefreshRecyclerView<T> smartRefreshRecyclerView;
     private final BaseAdapter<T> baseAdapter;
     private final Handler receiveDataHandler;
 
-    public DataLoader(@NotNull ParserInterface<T> parserInterface, @NotNull BaseAdapter<T> baseAdapter, BaseSupportFragmentWithSrr<T> baseSupportFragmentWithSrr) {
+    public DataLoader(Context context, @NotNull ParserInterface<T> parserInterface, @NotNull BaseAdapter<T> baseAdapter, BaseSupportFragmentWithSrr<T> baseSupportFragmentWithSrr) {
+        this.context = context;
         this.parserInterface = parserInterface;
         this.smartRefreshRecyclerView = baseSupportFragmentWithSrr.getSmartRefreshRecyclerView();
 
@@ -46,7 +50,8 @@ public class DataLoader<T> implements BaseSupportFragment.OnLoadListener {
         initSmartRefreshRecyclerView();
     }
 
-    public DataLoader(@NotNull ParserInterface<T> parserInterface, @IdRes int smartRefreshRecyclerView, @NotNull BaseAdapter<T> baseAdapter, BaseSupportFragment baseSupportFragment) {
+    public DataLoader(Context context, @NotNull ParserInterface<T> parserInterface, @IdRes int smartRefreshRecyclerView, @NotNull BaseAdapter<T> baseAdapter, BaseSupportFragment baseSupportFragment) {
+        this.context = context;
         this.parserInterface = parserInterface;
         this.smartRefreshRecyclerView = baseSupportFragment.findView(smartRefreshRecyclerView);
 
@@ -59,8 +64,9 @@ public class DataLoader<T> implements BaseSupportFragment.OnLoadListener {
         initSmartRefreshRecyclerView();
     }
 
-    public DataLoader(@NotNull ParserInterface<T> parserInterface, @IdRes int smartRefreshRecyclerView, @NotNull BaseAdapter<T> baseAdapter, BaseSupportFragment baseSupportFragment, RecyclerView.LayoutManager layoutManager) {
+    public DataLoader(@NotNull ParserInterface<T> parserInterface, @IdRes int smartRefreshRecyclerView, @NotNull BaseAdapter<T> baseAdapter, BaseSupportFragment baseSupportFragment, RecyclerView.LayoutManager layoutManager, Context context) {
         this.parserInterface = parserInterface;
+        this.context = context;
         this.smartRefreshRecyclerView = baseSupportFragment.findView(smartRefreshRecyclerView);
 
         this.baseAdapter = baseAdapter;
@@ -113,16 +119,22 @@ public class DataLoader<T> implements BaseSupportFragment.OnLoadListener {
     }
 
     private void getApiData(int what) {
-        SimpleSingleThreadPool.executor(new Runnable() {
-            @Override
-            public void run() {
-                List<T> data = parserInterface.parseData();
+        if (InternetUtils.checkNetwork(context)) {
+            SimpleSingleThreadPool.executor(new Runnable() {
+                @Override
+                public void run() {
+                    List<T> data = parserInterface.parseData();
 
-                Message message = receiveDataHandler.obtainMessage(what);
-                message.obj = data;
-                receiveDataHandler.sendMessage(message);
-            }
-        });
+                    Message message = receiveDataHandler.obtainMessage(what);
+                    message.obj = data;
+                    receiveDataHandler.sendMessage(message);
+                }
+            });
+        } else {
+            Message message = receiveDataHandler.obtainMessage(what);
+            message.obj = null;
+            receiveDataHandler.sendMessage(message);
+        }
     }
 
     /**
@@ -131,8 +143,6 @@ public class DataLoader<T> implements BaseSupportFragment.OnLoadListener {
      * @param parserInterface   新的数据解析器
      */
     public void reset (@NotNull ParserInterface<T> parserInterface) {
-
-
         baseAdapter.removeAll();
         this.parserInterface = parserInterface;
         insertData(true);

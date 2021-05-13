@@ -2,18 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/popular_top_list_item_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/itemMarginBottom"
-    android:background="@drawable/round_corners6dp_bg"
+    android:background="@drawable/ripple_round_corners6dp_bg"
     android:orientation="vertical"
     android:padding="@dimen/itemPadding">
 
     <LinearLayout
-        android:id="@+id/popular_top_list_item_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/ripple_round_corners6dp_bg"
         android:orientation="horizontal">
 
         <androidx.cardview.widget.CardView
@@ -40,10 +39,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|start"
                     android:layout_margin="6dp"
-                    android:background="@drawable/round_corners6dp_bg"
-                    android:backgroundTint="#99000000"
+                    android:background="@drawable/video_length_bg"
                     android:gravity="center"
-                    android:padding="3dp"
                     android:textColor="@color/white"
                     android:textSize="13sp" />
 
@@ -53,9 +50,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_margin="5dp"
-                    android:background="@drawable/round_corners6dp_bg"
+                    android:background="@drawable/video_badge_bg"
                     android:backgroundTint="@color/BiliBili_pink"
-                    android:padding="3dp"
                     android:textColor="@color/white"
                     android:textSize="11sp"
                     tools:ignore="SmallSp" />
@@ -83,9 +79,9 @@
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle"
                     android:textColor="@color/black"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    tools:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle" />
 
                 <FrameLayout
                     android:layout_width="24dp"
@@ -137,7 +133,8 @@
                     android:id="@+id/popular_top_list_item_score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:leftValue="综合评分:"
+                    app:leftValue="@string/topListItemScore"
+                    app:rightValue="0"
                     app:tagMark="none" />
 
             </LinearLayout>

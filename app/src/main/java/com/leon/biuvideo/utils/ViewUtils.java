@@ -110,7 +110,7 @@ public class ViewUtils {
             private int startY = 0;
 
             @Override
-            public void onTouch(MotionEvent event) {
+            public void onTouchEvent(MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         startX = (int) event.getX();

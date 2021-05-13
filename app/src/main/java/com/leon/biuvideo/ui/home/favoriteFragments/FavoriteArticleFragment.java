@@ -21,7 +21,7 @@ public class FavoriteArticleFragment extends BaseSupportFragmentWithSrr<Favorite
 
     @Override
     protected void initView() {
-        favoriteArticleDataLoader = new DataLoader<>(new FavoriteArticleParser(),
+        favoriteArticleDataLoader = new DataLoader<>(context, new FavoriteArticleParser(),
                 new FavoriteArticleAdapter(context), this);
         favoriteArticleDataLoader.insertData(false);
     }

@@ -10,6 +10,7 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteVideoFolderDetail;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -61,7 +62,9 @@ public class FavoriteVideoFolderDetailAdapter extends BaseAdapter<FavoriteVideoF
                         if (media.isFailed) {
                             SimpleSnackBar.make(v, context.getString(R.string.videoFailed), SimpleSnackBar.LENGTH_LONG).show();
                         } else {
-                            startPublicFragment(FragmentType.VIDEO, media.bvid);
+                            if (InternetUtils.checkNetwork(v)) {
+                                startPublicFragment(FragmentType.VIDEO, media.bvid);
+                            }
                         }
                     }
                 });

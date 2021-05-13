@@ -13,5 +13,5 @@ public interface OnVideoAnthologyListener {
      * @param cid   选集ICD
      * @param title 选集标题
      */
-    void onAnthology(String cid, String title);
+    void onAnthology(String cid, String title, boolean isMovie);
 }

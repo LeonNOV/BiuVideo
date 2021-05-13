@@ -9,13 +9,12 @@ import com.leon.biuvideo.beans.homeBeans.PartitionVideo;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragmentWithSrr;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
-import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.PartitionParser;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,7 +25,6 @@ import java.util.List;
 public class PartitionSubBaseFragment extends BaseSupportFragmentWithSrr<PartitionVideo> {
     private final String id;
 
-    private final List<PartitionVideo> partitionVideos = new ArrayList<>();
     private PartitionParser partitionParser;
 
     public PartitionSubBaseFragment(String id) {
@@ -35,7 +33,7 @@ public class PartitionSubBaseFragment extends BaseSupportFragmentWithSrr<Partiti
 
     @Override
     protected void initView() {
-        PartitionAdapter partitionAdapter = new PartitionAdapter(partitionVideos, context);
+        PartitionAdapter partitionAdapter = new PartitionAdapter(context);
         partitionAdapter.setHasStableIds(true);
 
         view.setRecyclerViewAdapter(partitionAdapter);
@@ -86,23 +84,23 @@ public class PartitionSubBaseFragment extends BaseSupportFragmentWithSrr<Partiti
     }
 
     private void getPartitionResult(int what) {
-        if (partitionParser == null) {
-            partitionParser = new PartitionParser(id);
-        }
-
-        SimpleSingleThreadPool.executor(new Runnable() {
-            @Override
-            public void run() {
-                List<PartitionVideo> partitionVideoList = partitionParser.parseData(PartitionParser.ORDER_CLICK);
-                if (partitionVideoList == null) {
-                    Fuck.blue("null");
-                }
-
-                Message message = receiveDataHandler.obtainMessage(what);
-                message.obj = partitionVideoList;
-                receiveDataHandler.sendMessage(message);
+        if (InternetUtils.checkNetwork(_mActivity.getWindow().getDecorView())) {
+            if (partitionParser == null) {
+                partitionParser = new PartitionParser(id);
             }
-        });
+            SimpleSingleThreadPool.executor(new Runnable() {
+                @Override
+                public void run() {
+                    List<PartitionVideo> partitionVideoList = partitionParser.parseData(PartitionParser.ORDER_CLICK);
+
+                    Message message = receiveDataHandler.obtainMessage(what);
+                    message.obj = partitionVideoList;
+                    receiveDataHandler.sendMessage(message);
+                }
+            });
+        } else {
+            view.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
+        }
     }
 
     @Override

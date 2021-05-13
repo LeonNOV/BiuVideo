@@ -22,6 +22,7 @@ import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoFragment;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.WarnDialog;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.PermissionUtil;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.downloadUtils.ResourceDownloadTask;
@@ -124,7 +125,9 @@ public class AudioFragment extends BaseSupportFragment implements View.OnClickLi
             }
         });
 
-        getAudioInfo();
+        if (InternetUtils.checkNetwork(_mActivity.getWindow().getDecorView())) {
+            getAudioInfo();
+        }
     }
 
     /**
@@ -191,20 +194,26 @@ public class AudioFragment extends BaseSupportFragment implements View.OnClickLi
                 break;
             case R.id.audio_play_video:
                 if (audio.bvid != null) {
-                    start(new VideoFragment(audio.bvid));
+                    if (InternetUtils.checkNetwork(v)) {
+                        start(new VideoFragment(audio.bvid));
+                    }
                 } else {
                     SimpleSnackBar.make(v, "该音频没有对应的视频哎~", SimpleSnackBar.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.audio_link:
-                Intent intent = new Intent();
-                intent.setAction("android.intent.action.VIEW");
-                intent.setData(Uri.parse("https://m.bilibili.com/audio/au" + sid));
-                startActivity(intent);
+                if (InternetUtils.checkNetwork(v)) {
+                    Intent intent = new Intent();
+                    intent.setAction("android.intent.action.VIEW");
+                    intent.setData(Uri.parse("https://m.bilibili.com/audio/au" + sid));
+                    startActivity(intent);
+                }
                 break;
             case R.id.audio_download:
                 if (verifyIOPermission()) {
-                    downloadAudio();
+                    if (InternetUtils.checkNetwork(v)) {
+                        downloadAudio();
+                    }
                 } else {
                     requestIOPermission();
                 }

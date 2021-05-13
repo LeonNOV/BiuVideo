@@ -5,9 +5,10 @@ import android.view.View;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.ui.mainFragments.partitionFragments.PartitionBaseFragment;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
+import com.leon.biuvideo.utils.BindingUtils;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.values.Partitions;
 
 /**
@@ -49,72 +50,77 @@ public class PartitionFragment extends BaseSupportFragment implements View.OnCli
 
     @Override
     public void onClick(View v) {
+        Partitions partitions = null;
+
         switch (v.getId()) {
             case R.id.partition_anime:
-                jumpToPartitionBaseFragment(Partitions.ANIME);
+                partitions = Partitions.ANIME;
                 break;
             case R.id.partition_guochuang:
-                jumpToPartitionBaseFragment(Partitions.GUOCHUANG);
+                partitions = Partitions.GUOCHUANG;
                 break;
             case R.id.partition_douga:
-                jumpToPartitionBaseFragment(Partitions.DOUGA);
+                partitions = Partitions.DOUGA;
                 break;
             case R.id.partition_ent:
-                jumpToPartitionBaseFragment(Partitions.ENT);
+                partitions = Partitions.ENT;
                 break;
             case R.id.partition_article:
                 SimpleSnackBar.make(v, "该分区还在施工中~", SimpleSnackBar.LENGTH_LONG).show();
-//                jumpToPartitionBaseFragment(Partitions.ANIME);
-                break;
+                return;
             case R.id.partition_music:
-                jumpToPartitionBaseFragment(Partitions.MUSIC);
+                partitions = Partitions.MUSIC;
                 break;
             case R.id.partition_dance:
-                jumpToPartitionBaseFragment(Partitions.DANCE);
+                partitions = Partitions.DANCE;
                 break;
             case R.id.partition_documentary:
-                jumpToPartitionBaseFragment(Partitions.DOCUMENTARY);
+                partitions = Partitions.DOCUMENTARY;
                 break;
             case R.id.partition_game:
-                jumpToPartitionBaseFragment(Partitions.GAME);
+                partitions = Partitions.GAME;
                 break;
             case R.id.partition_technology:
-                jumpToPartitionBaseFragment(Partitions.TECHNOLOGY);
+                partitions = Partitions.TECHNOLOGY;
                 break;
             case R.id.partition_digital:
-                jumpToPartitionBaseFragment(Partitions.DIGITAL);
+                partitions = Partitions.DIGITAL;
                 break;
             case R.id.partition_life:
-                jumpToPartitionBaseFragment(Partitions.LIFE);
+                partitions = Partitions.LIFE;
                 break;
             case R.id.partition_food:
-                jumpToPartitionBaseFragment(Partitions.FOOD);
+                partitions = Partitions.FOOD;
                 break;
             case R.id.partition_animal:
-                jumpToPartitionBaseFragment(Partitions.ANIMAL);
+                partitions = Partitions.ANIMAL;
                 break;
             case R.id.partition_kichiku:
-                jumpToPartitionBaseFragment(Partitions.KICHIKU);
+                partitions = Partitions.KICHIKU;
                 break;
             case R.id.partition_fashion:
-                jumpToPartitionBaseFragment(Partitions.FASHION);
+                partitions = Partitions.FASHION;
                 break;
             case R.id.partition_cinephile:
-                jumpToPartitionBaseFragment(Partitions.CINEPHILE);
+                partitions = Partitions.CINEPHILE;
                 break;
             case R.id.partition_movie:
-                jumpToPartitionBaseFragment(Partitions.MOVIE);
+                partitions = Partitions.MOVIE;
                 break;
             case R.id.partition_teleplay:
-                jumpToPartitionBaseFragment(Partitions.TELEPLAY);
+                partitions = Partitions.TELEPLAY;
                 break;
             case R.id.partition_channel:
                 SimpleSnackBar.make(v, "该分区还在施工中~", SimpleSnackBar.LENGTH_LONG).show();
-//                jumpToPartitionBaseFragment(Partitions.);
-                break;
+                return;
             default:
                 break;
+        }
 
+        if (InternetUtils.checkNetwork(v)) {
+            if (partitions != null) {
+                jumpToPartitionBaseFragment(partitions);
+            }
         }
     }
 

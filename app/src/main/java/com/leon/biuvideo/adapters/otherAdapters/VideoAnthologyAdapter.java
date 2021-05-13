@@ -11,6 +11,7 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoInfo;
 import com.leon.biuvideo.ui.resourcesFragment.video.OnBottomSheetWithItemListener;
+import com.leon.biuvideo.utils.InternetUtils;
 
 import java.util.List;
 
@@ -57,12 +58,14 @@ public class VideoAnthologyAdapter extends BaseAdapter<VideoInfo.VideoAnthology>
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentIndex == position) {
-                    return;
-                }
+                if (InternetUtils.checkNetwork(v)) {
+                    if (currentIndex == position) {
+                        return;
+                    }
 
-                if (onBottomSheetWithItemListener != null) {
-                    onBottomSheetWithItemListener.onItem(position);
+                    if (onBottomSheetWithItemListener != null) {
+                        onBottomSheetWithItemListener.onItem(position);
+                    }
                 }
             }
         });

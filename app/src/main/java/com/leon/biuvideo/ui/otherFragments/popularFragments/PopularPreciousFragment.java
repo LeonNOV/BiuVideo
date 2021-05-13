@@ -10,6 +10,7 @@ import com.leon.biuvideo.adapters.homeAdapters.popularAdapters.PopularAdapter;
 import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularVideo;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.popularParsers.PopularPreciousParser;
 
@@ -54,7 +55,12 @@ public class PopularPreciousFragment extends BaseSupportFragment {
         super.onLazyInitView(savedInstanceState);
 
         discoverPopularPreciousLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-        getPrecious();
+
+        if (InternetUtils.checkNetwork(_mActivity.getWindow().getDecorView())) {
+            getPrecious();
+        } else {
+            discoverPopularPreciousLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
+        }
     }
 
     private void getPrecious() {

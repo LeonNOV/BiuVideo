@@ -43,7 +43,7 @@ public class VideoCommentFragment extends BaseLazySupportFragment {
 
         CommentLevelOneAdapter commentLevelOneAdapter = new CommentLevelOneAdapter(context);
         commentLevelOneAdapter.setToCommentDetailFragment(toCommentDetailFragment);
-        commentDataLoader = new DataLoader<>(new CommentParser(avid, CommentParser.TYPE_VIDEO, CommentParser.SORT_REPLAY),
+        commentDataLoader = new DataLoader<>(context, new CommentParser(avid, CommentParser.TYPE_VIDEO, CommentParser.SORT_REPLAY),
                 R.id.video_comment_commentData,
                 commentLevelOneAdapter,
                 this);

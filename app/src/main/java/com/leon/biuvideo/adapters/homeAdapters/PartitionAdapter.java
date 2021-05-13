@@ -9,11 +9,10 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.homeBeans.PartitionVideo;
-import com.leon.biuvideo.ui.views.SimpleSnackBar;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueUtils;
+import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
-
-import java.util.List;
 
 /**
  * @Author Leon
@@ -21,12 +20,8 @@ import java.util.List;
  * @Desc 子分区数据适配器
  */
 public class PartitionAdapter extends BaseAdapter<PartitionVideo> {
-    private final List<PartitionVideo> partitionVideoList;
-
-    public PartitionAdapter(List<PartitionVideo> beans, Context context) {
-        super(beans, context);
-
-        this.partitionVideoList = beans;
+    public PartitionAdapter(Context context) {
+        super(context);
     }
 
     @Override
@@ -36,7 +31,7 @@ public class PartitionAdapter extends BaseAdapter<PartitionVideo> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        PartitionVideo partitionVideo = partitionVideoList.get(position);
+        PartitionVideo partitionVideo = getAllData().get(position);
 
         holder
                 .setImage(R.id.video_item_cover, partitionVideo.pic, ImagePixelSize.COVER)
@@ -47,7 +42,9 @@ public class PartitionAdapter extends BaseAdapter<PartitionVideo> {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        SimpleSnackBar.make(v, "点击了第" + position + "个item", SimpleSnackBar.LENGTH_SHORT).show();
+                        if (InternetUtils.checkNetwork(v)) {
+                            startPublicFragment(FragmentType.VIDEO, partitionVideo.bvid);
+                        }
                     }
                 });
     }

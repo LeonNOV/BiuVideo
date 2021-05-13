@@ -55,6 +55,10 @@ public class VideoInfoParser {
             videoInfo.pubTime = dataObject.getLong("pubdate");
             videoInfo.desc = dataObject.getString("desc");
 
+            JSONObject rights = dataObject.getJSONObject("rights");
+            videoInfo.isMovie = rights.getIntValue("movie") == 1;
+            videoInfo.ispay = rights.getIntValue("pay") == 1;
+
             JSONObject owner = dataObject.getJSONObject("owner");
             videoInfo.userInfo = new VideoInfo.UserInfo();
             videoInfo.userInfo.userMid = owner.getString("mid");

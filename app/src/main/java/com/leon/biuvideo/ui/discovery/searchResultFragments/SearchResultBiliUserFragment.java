@@ -60,7 +60,7 @@ public class SearchResultBiliUserFragment extends BaseLazySupportFragment implem
         categoryImgWhirl = ObjectAnimator.ofFloat(searchResultBiliUserMenuCategoryImg, "rotation", 0.0f, 180.0f);
         categoryImgWhirl.setDuration(400);
 
-        searchResultBiliUserDataLoader = new DataLoader<>(new SearchResultBiliUserParser(keyword, order, orderSort, userType),
+        searchResultBiliUserDataLoader = new DataLoader<>(context, new SearchResultBiliUserParser(keyword, order, orderSort, userType),
                 R.id.search_result_bili_user_data,
                 new SearchResultBiliUserAdapter(context),
                 this);

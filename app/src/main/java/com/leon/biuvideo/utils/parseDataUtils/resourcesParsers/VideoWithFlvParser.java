@@ -65,48 +65,52 @@ public class VideoWithFlvParser {
                 params);
 
         JSONObject data;
-        if (isBangumi) {
-            data = response.getJSONObject("result");
-        } else {
-            data = response.getJSONObject("data");
-        }
-        if (data != null) {
-            VideoWithFlv videoWithFlv = new VideoWithFlv();
-            videoWithFlv.cid = cid;
 
-            JSONArray supportFormats = data.getJSONArray("support_formats");
-            videoWithFlv.qualityMap = new LinkedHashMap<>(supportFormats.size());
-            for (Object o : supportFormats) {
-                JSONObject jsonObject = (JSONObject) o;
-                int key = jsonObject.getIntValue("quality");
-                String value = jsonObject.getString("new_description");
-                videoWithFlv.qualityMap.put(key, value);
+        if (response.getIntValue("code") == 0) {
+
+            if (isBangumi) {
+                data = response.getJSONObject("result");
+            } else {
+                data = response.getJSONObject("data");
             }
+            if (data != null) {
+                VideoWithFlv videoWithFlv = new VideoWithFlv();
+                videoWithFlv.cid = cid;
 
-            videoWithFlv.currentQualityId = data.getIntValue("quality");
-
-            JSONArray jsonArray = data.getJSONArray("durl");
-            videoWithFlv.videoStreamInfoList = new ArrayList<>(jsonArray.size());
-
-            for (Object o : jsonArray) {
-                JSONObject jsonObject = (JSONObject) o;
-                VideoWithFlv.VideoStreamInfo videoStreamInfo = new VideoWithFlv.VideoStreamInfo();
-
-                videoStreamInfo.order = jsonObject.getIntValue("order");
-                videoStreamInfo.size = ValueUtils.sizeFormat(jsonObject.getIntValue("size"), true);
-                videoStreamInfo.url = jsonObject.getString("url");
-
-                JSONArray backupUrl = jsonObject.getJSONArray("backup_url");
-                videoStreamInfo.backupUrl = new String[backupUrl.size()];
-
-                for (int i = 0; i < backupUrl.size(); i++) {
-                    videoStreamInfo.backupUrl[i] = backupUrl.get(i).toString();
+                JSONArray supportFormats = data.getJSONArray("support_formats");
+                videoWithFlv.qualityMap = new LinkedHashMap<>(supportFormats.size());
+                for (Object o : supportFormats) {
+                    JSONObject jsonObject = (JSONObject) o;
+                    int key = jsonObject.getIntValue("quality");
+                    String value = jsonObject.getString("new_description");
+                    videoWithFlv.qualityMap.put(key, value);
                 }
 
-                videoWithFlv.videoStreamInfoList.add(videoStreamInfo);
-            }
+                videoWithFlv.currentQualityId = data.getIntValue("quality");
 
-            return videoWithFlv;
+                JSONArray jsonArray = data.getJSONArray("durl");
+                videoWithFlv.videoStreamInfoList = new ArrayList<>(jsonArray.size());
+
+                for (Object o : jsonArray) {
+                    JSONObject jsonObject = (JSONObject) o;
+                    VideoWithFlv.VideoStreamInfo videoStreamInfo = new VideoWithFlv.VideoStreamInfo();
+
+                    videoStreamInfo.order = jsonObject.getIntValue("order");
+                    videoStreamInfo.size = ValueUtils.sizeFormat(jsonObject.getIntValue("size"), true);
+                    videoStreamInfo.url = jsonObject.getString("url");
+
+                    JSONArray backupUrl = jsonObject.getJSONArray("backup_url");
+                    videoStreamInfo.backupUrl = new String[backupUrl.size()];
+
+                    for (int i = 0; i < backupUrl.size(); i++) {
+                        videoStreamInfo.backupUrl[i] = backupUrl.get(i).toString();
+                    }
+
+                    videoWithFlv.videoStreamInfoList.add(videoStreamInfo);
+                }
+
+                return videoWithFlv;
+            }
         }
 
         return null;

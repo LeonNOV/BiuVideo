@@ -28,7 +28,7 @@ public class HistoryFragment extends BaseSupportFragment {
     protected void initView() {
         setTopBar(R.id.history_topBar);
 
-        historyDataLoader = new DataLoader<>(new HistoryParser(),
+        historyDataLoader = new DataLoader<>(context, new HistoryParser(),
                 R.id.history_data, new HistoryAdapter(context), this);
         historyDataLoader.insertData(true);
     }

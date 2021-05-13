@@ -21,6 +21,7 @@ import com.leon.biuvideo.ui.home.FollowsFragment;
 import com.leon.biuvideo.ui.user.FollowersFragment;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.ValueUtils;
@@ -232,18 +233,20 @@ public class BiliUserFragment extends BaseSupportFragment implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.bili_user_following:
-                start(FollowsFragment.getInstance(true, mid));
-                break;
-            case R.id.bili_user_fans:
-                start(FollowersFragment.getInstance(true, mid));
-                break;
-            case R.id.bili_user_follow:
-                SimpleSnackBar.make(v, getString(R.string.snackBarBuildingWarn), SimpleSnackBar.LENGTH_LONG).show();
-                break;
-            default:
-                break;
+        if (InternetUtils.checkNetwork(v)) {
+            switch (v.getId()) {
+                case R.id.bili_user_following:
+                    start(FollowsFragment.getInstance(true, mid));
+                    break;
+                case R.id.bili_user_fans:
+                    start(FollowersFragment.getInstance(true, mid));
+                    break;
+                case R.id.bili_user_follow:
+                    SimpleSnackBar.make(v, getString(R.string.snackBarBuildingWarn), SimpleSnackBar.LENGTH_LONG).show();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

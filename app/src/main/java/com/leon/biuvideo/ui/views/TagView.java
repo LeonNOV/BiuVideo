@@ -6,8 +6,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.view.Gravity;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -140,5 +138,11 @@ public class TagView extends LinearLayout {
             rightView.setTypeface(Typeface.DEFAULT_BOLD);
             rightView.setTextColor(Color.BLACK);
         }
+    }
+
+    public TagView clearBg () {
+        setBackground(null);
+
+        return this;
     }
 }

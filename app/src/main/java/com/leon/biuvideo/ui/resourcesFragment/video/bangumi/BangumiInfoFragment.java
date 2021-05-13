@@ -36,6 +36,7 @@ import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.ui.views.WarnDialog;
 import com.leon.biuvideo.utils.BindingUtils;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.PermissionUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
@@ -165,8 +166,10 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
         bangumiInfoRecommends.setRecyclerViewAdapter(bangumiRecommendAdapter);
         bangumiInfoRecommends.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
 
-        initHandler();
-        getBangumiInfo();
+        if (InternetUtils.checkNetwork(_mActivity.getWindow().getDecorView())) {
+            initHandler();
+            getBangumiInfo();
+        }
     }
 
     /**
@@ -337,13 +340,19 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
                 SimpleSnackBar.make(v, getString(R.string.snackBarBuildingWarn), SimpleSnackBar.LENGTH_LONG).show();
                 break;
             case R.id.bangumi_info_comments_container:
-                startVideoCommentFragment();
+                if (InternetUtils.checkNetwork(v)) {
+                    startVideoCommentFragment();
+                }
                 break;
             case R.id.bangumi_info_anthology_container:
-                showAnthologyBottomSheet();
+                if (InternetUtils.checkNetwork(v)) {
+                    showAnthologyBottomSheet();
+                }
                 break;
             case R.id.bangumi_info_series_container:
-                showSeriesBottomSheet();
+                if (InternetUtils.checkNetwork(v)) {
+                    showSeriesBottomSheet();
+                }
                 break;
             case R.id.bangumi_info_easterEgg_container:
                 // 验证读写权限

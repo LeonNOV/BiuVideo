@@ -18,6 +18,7 @@ import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularWeeklySeries;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleBottomSheet;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.popularParsers.PopularWeeklyDataParser;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.popularParsers.PopularWeeklySeriesParser;
@@ -55,7 +56,9 @@ public class PopularWeeklyFragment extends BaseSupportFragment {
         popularWeeklySelectSeries.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showBottomSheet(popularWeeklySeriesList, selectedSeriesPosition);
+                if (InternetUtils.checkNetwork(v)) {
+                    showBottomSheet(popularWeeklySeriesList, selectedSeriesPosition);
+                }
             }
         });
 
@@ -112,19 +115,21 @@ public class PopularWeeklyFragment extends BaseSupportFragment {
         View view = simpleBottomSheet.initView();
         BottomSheetDialog bottomSheetDialog = simpleBottomSheet.bottomSheetDialog;
 
-        LoadingRecyclerView popularWeeklyBeforeSeriesBottomSheetLoadingRecyclerView = findView(R.id.popular_weekly_before_series_bottom_sheet_loadingRecyclerView);
+        LoadingRecyclerView popularWeeklyBeforeSeriesBottomSheetLoadingRecyclerView = view.findViewById(R.id.popular_weekly_before_series_bottom_sheet_loadingRecyclerView);
         popularWeeklyBeforeSeriesBottomSheetLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
         PopularWeeklySeriesAdapter popularWeeklySeriesAdapter = new PopularWeeklySeriesAdapter(popularWeeklySeriesList, selectedPosition, context);
         popularWeeklySeriesAdapter.setOnSeriesChangedListener(new PopularWeeklySeriesAdapter.OnSeriesChangedListener() {
             @Override
             public void onChanged(PopularWeeklySeries popularWeeklySeries, int position) {
-                selectedSeriesPosition = position;
+                if (InternetUtils.checkNetwork(_mActivity.getWindow().getDecorView())) {
+                    selectedSeriesPosition = position;
 
-                getData(1, popularWeeklySeries.number);
-                popularWeeklySelectedName.setText(popularWeeklySeries.name);
-                popularWeeklySelectedSubject.setText(popularWeeklySeries.subject);
+                    getData(1, popularWeeklySeries.number);
+                    popularWeeklySelectedName.setText(popularWeeklySeries.name);
+                    popularWeeklySelectedSubject.setText(popularWeeklySeries.subject);
 
-                bottomSheetDialog.dismiss();
+                    bottomSheetDialog.dismiss();
+                }
             }
         });
         popularWeeklySeriesAdapter.setHasStableIds(true);

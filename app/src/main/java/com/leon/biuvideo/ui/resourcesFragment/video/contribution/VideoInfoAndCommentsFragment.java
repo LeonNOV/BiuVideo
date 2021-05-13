@@ -47,6 +47,7 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
     private VideoWithFlvParser videoWithFlvParser;
     private String cid;
     private String title;
+    private boolean isMovie;
 
     private VideoStatListener videoStatListener;
     private MainActivity.OnTouchListener onTouchListener;
@@ -122,9 +123,10 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
         VideoInfoFragment videoInfoFragment = new VideoInfoFragment(bvid);
         videoInfoFragment.setOnVideoAnthologyListener(new OnVideoAnthologyListener() {
             @Override
-            public void onAnthology(String cid, String title) {
+            public void onAnthology(String cid, String title, boolean isMovie) {
                 VideoInfoAndCommentsFragment.this.cid = cid;
                 VideoInfoAndCommentsFragment.this.title = title;
+                VideoInfoAndCommentsFragment.this.isMovie = isMovie;
 
                 getVideoStreamUrl(null);
             }
@@ -153,7 +155,8 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
-                VideoWithFlv videoWithFlv = videoWithFlvParser.parseData(cid, qualityId, false, true);
+                // 根据isMovie来决定使用的接口链接
+                VideoWithFlv videoWithFlv = videoWithFlvParser.parseData(cid, qualityId, isMovie, true);
 
                 Message message = receiveDataHandler.obtainMessage();
                 message.obj = videoWithFlv;

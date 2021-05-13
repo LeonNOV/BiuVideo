@@ -10,6 +10,7 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteArticle;
 import com.leon.biuvideo.ui.views.TagView;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -43,7 +44,9 @@ public class FavoriteArticleAdapter extends BaseAdapter<FavoriteArticle> {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startPublicFragment(FragmentType.ARTICLE, String.valueOf(favoriteArticle.articleId));
+                        if (InternetUtils.checkNetwork(v)) {
+                            startPublicFragment(FragmentType.ARTICLE, String.valueOf(favoriteArticle.articleId));
+                        }
                     }
                 });
     }

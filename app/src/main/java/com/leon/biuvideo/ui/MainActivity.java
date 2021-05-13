@@ -34,7 +34,10 @@ public class MainActivity extends SupportActivity {
     private final List<OnTouchListener> onTouchListenerList = new ArrayList<>();
 
     public interface OnTouchListener {
-        void onTouch(MotionEvent event);
+        /**
+         * 触摸监听
+         */
+        void onTouchEvent(MotionEvent event);
     }
 
     @Override
@@ -126,7 +129,7 @@ public class MainActivity extends SupportActivity {
     public boolean dispatchTouchEvent(MotionEvent ev) {
         for (OnTouchListener onTouchListener : onTouchListenerList) {
             if (onTouchListener != null) {
-                onTouchListener.onTouch(ev);
+                onTouchListener.onTouchEvent(ev);
             }
         }
 

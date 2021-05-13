@@ -10,6 +10,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.ui.views.PictureViewer;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.List;
@@ -50,9 +51,11 @@ public class PictureListAdapter extends BaseAdapter<String[]> {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //创建图片查看器
-                        PictureViewer pictureViewer = new PictureViewer(context, position, pictureUrls);
-                        pictureViewer.showAtLocation(holder.getItemView(), Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
+                        if (InternetUtils.checkNetwork(v)) {
+                            //创建图片查看器
+                            PictureViewer pictureViewer = new PictureViewer(context, position, pictureUrls);
+                            pictureViewer.showAtLocation(holder.getItemView(), Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0);
+                        }
                     }
                 });
     }

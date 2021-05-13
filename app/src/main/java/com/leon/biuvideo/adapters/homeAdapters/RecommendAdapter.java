@@ -9,6 +9,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.resourcesBeans.VideoRecommend;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -56,7 +57,9 @@ public class RecommendAdapter extends BaseAdapter<VideoRecommend> {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startPublicFragment(FragmentType.VIDEO, videoRecommend.bvid);
+                        if (InternetUtils.checkNetwork(v)) {
+                            startPublicFragment(FragmentType.VIDEO, videoRecommend.bvid);
+                        }
                     }
                 });
     }

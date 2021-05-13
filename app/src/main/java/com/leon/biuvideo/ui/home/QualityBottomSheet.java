@@ -66,20 +66,20 @@ public class QualityBottomSheet extends BottomSheetDialog {
         ((BottomSheetTopBar) findViewById(R.id.settings_quality_list_topBar)).setTitle(isPlay ? "设置默认播放清晰度" : "设置默认下载清晰度");
 
         LoadingRecyclerView settingsQualityListData = findViewById(R.id.settings_quality_list_data);
-        QualityBottomSheetAdapter qualityBottomSheetAdapter = new QualityBottomSheetAdapter(Qualitys.getQUALITYS(), context);
+        QualityBottomSheetAdapter qualityBottomSheetAdapter = new QualityBottomSheetAdapter(context);
         qualityBottomSheetAdapter.setHasStableIds(true);
         qualityBottomSheetAdapter.setOnClickQualityItemListener(onClickQualityItemListener);
         settingsQualityListData.setRecyclerViewAdapter(qualityBottomSheetAdapter);
         settingsQualityListData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
     }
 
-    public static class QualityBottomSheetAdapter extends BaseAdapter<String[]> {
-        private final List<String[]> qualityList;
+    public static class QualityBottomSheetAdapter extends BaseAdapter<String> {
+        private final List<String> qualityList;
         private OnClickQualityItemListener onClickQualityItemListener;
 
-        public QualityBottomSheetAdapter(List<String[]> beans, Context context) {
-            super(beans, context);
-            this.qualityList = beans;
+        public QualityBottomSheetAdapter(Context context) {
+            super(Qualitys.getQualityStr(), context);
+            this.qualityList = Qualitys.getQualityStr();
         }
 
         public interface OnClickQualityItemListener {
@@ -98,7 +98,7 @@ public class QualityBottomSheet extends BottomSheetDialog {
         @Override
         public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
             TextView textView = holder.findById(android.R.id.text1);
-            textView.setText(qualityList.get(position)[1]);
+            textView.setText(Qualitys.getQualityCodes().get(position));
             textView.setTextColor(Color.BLACK);
             textView.setTextSize(15);
             textView.setPadding(0, 10, 0, 10);
@@ -108,8 +108,8 @@ public class QualityBottomSheet extends BottomSheetDialog {
                 @Override
                 public void onClick(View v) {
                     if (onClickQualityItemListener != null) {
-                        String[] quality = qualityList.get(position);
-                        onClickQualityItemListener.onClick(quality[1], Integer.parseInt(quality[0]));
+                        onClickQualityItemListener.onClick(Qualitys.getQualityStr().get(position),
+                                Qualitys.getQualityCodes().get(position));
                     }
                 }
             });

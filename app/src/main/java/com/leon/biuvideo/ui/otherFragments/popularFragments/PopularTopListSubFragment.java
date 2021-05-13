@@ -1,18 +1,15 @@
 package com.leon.biuvideo.ui.otherFragments.popularFragments;
 
-import android.os.Bundle;
 import android.os.Message;
 
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.homeAdapters.popularAdapters.PopularTopListAdapter;
 import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularTopList;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
-import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
-import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.popularParsers.PopularTopListParser;
 
@@ -67,15 +64,19 @@ public class PopularTopListSubFragment extends BaseLazySupportFragment {
     protected void onLazyLoad() {
         loadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
-        SimpleSingleThreadPool.executor(new Runnable() {
-            @Override
-            public void run() {
-                List<PopularTopList> popularTopListList = PopularTopListParser.parseData(params[1], params[2]);
+        if (InternetUtils.checkNetwork(_mActivity.getWindow().getDecorView())) {
+            SimpleSingleThreadPool.executor(new Runnable() {
+                @Override
+                public void run() {
+                    List<PopularTopList> popularTopListList = PopularTopListParser.parseData(params[1], params[2]);
 
-                Message message = receiveDataHandler.obtainMessage();
-                message.obj = popularTopListList;
-                receiveDataHandler.sendMessage(message);
-            }
-        });
+                    Message message = receiveDataHandler.obtainMessage();
+                    message.obj = popularTopListList;
+                    receiveDataHandler.sendMessage(message);
+                }
+            });
+        } else {
+            loadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
+        }
     }
 }

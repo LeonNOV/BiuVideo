@@ -11,6 +11,7 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiSeason;
 import com.leon.biuvideo.ui.resourcesFragment.video.OnBottomSheetWithItemListener;
+import com.leon.biuvideo.utils.InternetUtils;
 
 import java.util.List;
 
@@ -50,12 +51,14 @@ public class BangumiSeriesAdapter extends BaseAdapter<BangumiSeason> {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentPosition == position) {
-                    return;
-                }
+                if (InternetUtils.checkNetwork(v)) {
+                    if (currentPosition == position) {
+                        return;
+                    }
 
-                if (onBottomSheetWithItemListener != null) {
-                    onBottomSheetWithItemListener.onItem(position);
+                    if (onBottomSheetWithItemListener != null) {
+                        onBottomSheetWithItemListener.onItem(position);
+                    }
                 }
             }
         });

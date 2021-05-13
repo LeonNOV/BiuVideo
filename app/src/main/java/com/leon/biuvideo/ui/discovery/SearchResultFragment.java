@@ -15,6 +15,7 @@ import com.leon.biuvideo.ui.discovery.searchResultFragments.SearchResultArticleF
 import com.leon.biuvideo.ui.discovery.searchResultFragments.SearchResultBangumiFragment;
 import com.leon.biuvideo.ui.discovery.searchResultFragments.SearchResultBiliUserFragment;
 import com.leon.biuvideo.ui.discovery.searchResultFragments.SearchResultVideoFragment;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ViewUtils;
 
 import java.util.ArrayList;
@@ -77,7 +78,9 @@ public class SearchResultFragment extends BaseSupportFragment implements View.On
                 break;
             case R.id.search_result_search:
             case R.id.search_result_clear:
-                start(new SearchFragment());
+                if (InternetUtils.checkNetwork(v)) {
+                    start(new SearchFragment());
+                }
                 break;
             default:
                 break;

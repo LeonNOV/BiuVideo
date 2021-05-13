@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.utils.InternetUtils;
 
 public class CardTitle extends LinearLayout {
     private String title = "null";
@@ -117,8 +118,10 @@ public class CardTitle extends LinearLayout {
         actionView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onClickActionListener != null) {
-                    onClickActionListener.onClickAction();
+                if (InternetUtils.checkNetwork(v)) {
+                    if (onClickActionListener != null) {
+                        onClickActionListener.onClickAction();
+                    }
                 }
             }
         });

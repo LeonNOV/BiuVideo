@@ -28,6 +28,7 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.resourcesBeans.Comment;
 import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoInfoAndCommentsFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.FeaturesName;
@@ -70,7 +71,9 @@ public class CommentLevelOneAdapter extends BaseAdapter<Comment> {
         commentItemUserFace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startPublicFragment(FragmentType.BILI_USER, comment.biliUserInfo.userMid);
+                if (InternetUtils.checkNetwork(v)) {
+                    startPublicFragment(FragmentType.BILI_USER, comment.biliUserInfo.userMid);
+                }
             }
         });
 
@@ -125,8 +128,10 @@ public class CommentLevelOneAdapter extends BaseAdapter<Comment> {
             commentItemCheckAll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (toCommentDetailFragment != null) {
-                        toCommentDetailFragment.toCommentDetail(comment);
+                    if (InternetUtils.checkNetwork(v)) {
+                        if (toCommentDetailFragment != null) {
+                            toCommentDetailFragment.toCommentDetail(comment);
+                        }
                     }
                 }
             });
@@ -155,7 +160,9 @@ public class CommentLevelOneAdapter extends BaseAdapter<Comment> {
 
                     @Override
                     public void onClick(@NonNull View widget) {
-                        startPublicFragment(FragmentType.BILI_USER, stringEntry.getKey());
+                        if (InternetUtils.checkNetwork(view)) {
+                            startPublicFragment(FragmentType.BILI_USER, stringEntry.getKey());
+                        }
                     }
                 };
 

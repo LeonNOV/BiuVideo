@@ -22,6 +22,7 @@ import com.leon.biuvideo.ui.resourcesFragment.picture.PictureFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoFragment;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.BindingUtils;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.values.FragmentType;
 
 import me.yokeyword.fragmentation.SupportActivity;
@@ -104,26 +105,29 @@ public abstract class BaseSupportFragment extends SupportFragment {
      * @param params 参数
      */
     public void startPublicFragment (FragmentType fragmentType, String params) {
-        // 获取栈顶的SupportFragment
-        SupportFragment topFragment = (SupportFragment) ((SupportActivity) getActivity()).getTopFragment();
-        switch (fragmentType) {
-            case BILI_USER:
-                topFragment.start(new BiliUserFragment(params));
-                break;
-            case VIDEO:
-                topFragment.start(new VideoFragment(params));
-                break;
-            case AUDIO:
-                topFragment.start(new AudioFragment(params));
-                break;
-            case ARTICLE:
-                topFragment.start(new ArticleFragment(params));
-                break;
-            case PICTURE:
-                topFragment.start(new PictureFragment(params));
-                break;
-            default:
-                break;
+        if (InternetUtils.checkNetwork(_mActivity.getWindow().getDecorView())) {
+
+            // 获取栈顶的SupportFragment
+            SupportFragment topFragment = (SupportFragment) ((SupportActivity) getActivity()).getTopFragment();
+            switch (fragmentType) {
+                case BILI_USER:
+                    topFragment.start(new BiliUserFragment(params));
+                    break;
+                case VIDEO:
+                    topFragment.start(new VideoFragment(params));
+                    break;
+                case AUDIO:
+                    topFragment.start(new AudioFragment(params));
+                    break;
+                case ARTICLE:
+                    topFragment.start(new ArticleFragment(params));
+                    break;
+                case PICTURE:
+                    topFragment.start(new PictureFragment(params));
+                    break;
+                default:
+                    break;
+            }
         }
     }
 

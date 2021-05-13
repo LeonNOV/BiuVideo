@@ -5,8 +5,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
+import com.leon.biuvideo.R;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,6 +55,24 @@ public class InternetUtils {
         }
 
         return InternetState.INTERNET_NoAvailable;
+    }
+
+    /**
+     * 检查网络是否可用
+     *
+     * @return  true：可用状态；false：不可用状态
+     */
+    public static boolean checkNetwork(View view) {
+        Context context = view.getContext();
+
+        InternetState internetState = internetState(context);
+        boolean stat = internetState == InternetState.INTERNET_MOBILE || internetState == InternetState.INTERNET_WIFI;
+
+        if (!stat) {
+            SimpleSnackBar.make(view, context.getString(R.string.networkWarn), SimpleSnackBar.LENGTH_SHORT).show();
+        }
+
+        return stat;
     }
 
     /**

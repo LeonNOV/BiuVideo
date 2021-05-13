@@ -48,7 +48,7 @@ public class BiliUserVideosFragment extends BaseLazySupportFragment implements V
         biliUserVideosOrderStow.setOnClickListener(this);
         textViewMap.put(2, biliUserVideosOrderStow);
 
-        biliUserVideoDataLoader = new DataLoader<>(new BiliUserVideoParser(mid, order),
+        biliUserVideoDataLoader = new DataLoader<>(context, new BiliUserVideoParser(mid, order),
                 R.id.bili_user_videos_data,
                 new BiliUserVideosAdapter(context),
                 this);

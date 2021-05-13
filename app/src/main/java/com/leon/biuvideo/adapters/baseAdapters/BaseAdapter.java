@@ -8,14 +8,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.ui.resourcesFragment.article.ArticleFragment;
 import com.leon.biuvideo.ui.resourcesFragment.audio.AudioFragment;
 import com.leon.biuvideo.ui.resourcesFragment.picture.PictureFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.bangumi.BangumiFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoFragment;
-import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.values.FragmentType;
 
@@ -157,34 +155,31 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
      * @param params 参数
      */
     protected void startPublicFragment (FragmentType fragmentType, String params) {
-        if (!InternetUtils.checkNetwork(context)) {
-            SimpleSnackBar.make(supportActivity.getWindow().getDecorView(), context.getString(R.string.networkWarn), SimpleSnackBar.LENGTH_SHORT).show();
-            return;
-        }
-
-        // 获取栈顶的SupportFragment
-        SupportFragment topFragment = (SupportFragment) supportActivity.getTopFragment();
-        switch (fragmentType) {
-            case BILI_USER:
-                topFragment.start(new BiliUserFragment(params));
-                break;
-            case VIDEO:
-                topFragment.start(new VideoFragment(params));
-                break;
-            case BANGUMI:
-                topFragment.start(new BangumiFragment(params));
-                break;
-            case AUDIO:
-                topFragment.start(new AudioFragment(params));
-                break;
-            case ARTICLE:
-                topFragment.start(new ArticleFragment(params));
-                break;
-            case PICTURE:
-                topFragment.start(new PictureFragment(params));
-                break;
-            default:
-                break;
+        if (InternetUtils.checkNetwork(supportActivity.getWindow().getDecorView())) {
+            // 获取栈顶的SupportFragment
+            SupportFragment topFragment = (SupportFragment) supportActivity.getTopFragment();
+            switch (fragmentType) {
+                case BILI_USER:
+                    topFragment.start(new BiliUserFragment(params));
+                    break;
+                case VIDEO:
+                    topFragment.start(new VideoFragment(params));
+                    break;
+                case BANGUMI:
+                    topFragment.start(new BangumiFragment(params));
+                    break;
+                case AUDIO:
+                    topFragment.start(new AudioFragment(params));
+                    break;
+                case ARTICLE:
+                    topFragment.start(new ArticleFragment(params));
+                    break;
+                case PICTURE:
+                    topFragment.start(new PictureFragment(params));
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

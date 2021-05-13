@@ -1,7 +1,6 @@
 package com.leon.biuvideo.adapters.otherAdapters;
 
 import android.content.Context;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,6 +12,7 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiAnthology;
 import com.leon.biuvideo.ui.resourcesFragment.video.OnBottomSheetWithItemListener;
+import com.leon.biuvideo.utils.InternetUtils;
 
 import java.util.List;
 
@@ -59,20 +59,19 @@ public class BangumiAnthologyAdapter extends BaseAdapter<BangumiAnthology> {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentIndex == position) {
-                    return;
-                }
+                if (InternetUtils.checkNetwork(v)) {
+                    if (currentIndex == position) {
+                        return;
+                    }
 
-                if ("会员".equals(bangumiAnthology.badge)) {
-//                    SimpleSnackBar.make(view, "需要开通大会员才能进行观看哦~", SimpleSnackBar.LENGTH_LONG).show();
-                    Toast toast = Toast.makeText(context, "需要开通大会员才能进行观看哦~", Toast.LENGTH_SHORT);
-                    toast.setGravity(Gravity.BOTTOM, 0, 10);
-                    toast.show();
-                    return;
-                }
+                    if ("会员".equals(bangumiAnthology.badge)) {
+                        Toast.makeText(context, "需要开通大会员才能进行观看哦~", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                if (onBottomSheetWithItemListener != null) {
-                    onBottomSheetWithItemListener.onItem(position);
+                    if (onBottomSheetWithItemListener != null) {
+                        onBottomSheetWithItemListener.onItem(position);
+                    }
                 }
             }
         });

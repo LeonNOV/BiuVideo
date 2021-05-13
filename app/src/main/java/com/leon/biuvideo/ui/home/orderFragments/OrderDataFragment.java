@@ -27,7 +27,7 @@ public class OrderDataFragment extends BaseSupportFragmentWithSrr<Order> {
 
     @Override
     protected void initView() {
-        orderDataLoader = new DataLoader<>(new OrderParser(orderType),
+        orderDataLoader = new DataLoader<>(context, new OrderParser(orderType),
                 new OrderDataAdapter(context), this);
     }
 }

@@ -12,6 +12,7 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.userBeans.Follow;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.values.Role;
@@ -68,7 +69,9 @@ public class FollowsAdapter extends BaseAdapter<Follow> {
                 .setOnClickListener(R.id.follow_item_container, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startPublicFragment(FragmentType.BILI_USER, String.valueOf(follow.followerMid));
+                        if (InternetUtils.checkNetwork(v)) {
+                            startPublicFragment(FragmentType.BILI_USER, String.valueOf(follow.followerMid));
+                        }
                     }
                 });
 

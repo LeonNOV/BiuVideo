@@ -63,7 +63,7 @@ public class SearchResultArticleFragment extends BaseLazySupportFragment impleme
         categoryImgWhirl = ObjectAnimator.ofFloat(searchResultArticleMenuCategoryImg, "rotation", 0.0f, 180.0f);
         categoryImgWhirl.setDuration(400);
 
-        searchResultArticleDataLoader = new DataLoader<>(new SearchResultArticleParser(keyword, order, category),
+        searchResultArticleDataLoader = new DataLoader<>(context, new SearchResultArticleParser(keyword, order, category),
                 R.id.search_result_article_data,
                 new SearchResultArticleAdapter(context),
                 this);
@@ -73,7 +73,6 @@ public class SearchResultArticleFragment extends BaseLazySupportFragment impleme
     protected void onLazyLoad() {
         searchResultArticleDataLoader.insertData(true);
     }
-
 
     @Override
     public void onClick(View v) {

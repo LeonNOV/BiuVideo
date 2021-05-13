@@ -33,6 +33,7 @@ import com.leon.biuvideo.ui.otherFragments.PopularFragment;
 import com.leon.biuvideo.ui.views.CardTitle;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.LocationUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
@@ -45,6 +46,8 @@ import com.leon.biuvideo.values.FeaturesName;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * @Author Leon
@@ -116,8 +119,8 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         homeRecommendLoadingRecyclerView = findView(R.id.home_recommend_loadingRecyclerView);
         homeWatchLaterLoadingRecyclerView = findView(R.id.home_watchLater_loadingRecyclerView);
 
-//        initHandler();
-//        initValue();
+        initHandler();
+        initValue();
     }
 
     private void initHandler() {
@@ -171,47 +174,6 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         homeRecommendLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
         homeWatchLaterLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
-        // 开启单线程加载网络数据
-        SimpleSingleThreadPool.executor(new Runnable() {
-            @Override
-            public void run() {
-                // 获取推荐内容
-                videoRecommendList = getRecommendData();
-
-                // 获取稍后观看数据
-                watchLaterList = getWatchLaterData();
-
-                // 各获取前十个数据作为主页的数据
-                for (int i = 0; i < HOME_DATA_COUNT; i++) {
-                    homeVideoRecommendList.add(videoRecommendList.get(i));
-                    homeWatchLaterList.add(watchLaterList.get(i));
-                }
-
-                Message message = receiveDataHandler.obtainMessage(0);
-                receiveDataHandler.sendMessage(message);
-            }
-
-            /**
-             * 获取稍后再看数据数据
-             *
-             * @return  WatchLater集合
-             */
-            private List<WatchLater> getWatchLaterData() {
-                WatchLaterParser watchLaterParser = new WatchLaterParser();
-                return watchLaterParser.parseData();
-            }
-
-            /**
-             * 获取推荐数据
-             *
-             * @return  Recommend集合
-             */
-            private List<VideoRecommend> getRecommendData() {
-                RecommendParser recommendParser = new RecommendParser(null);
-                return recommendParser.parseData();
-            }
-        });
-
         weatherUtil = new WeatherUtil();
 
         // 初始化天气模块
@@ -220,13 +182,58 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
             weatherModel.onInitialize(view, context);
         }
 
-        SimpleSingleThreadPool.executor(new Runnable() {
-            @Override
-            public void run() {
-                // 获取当前天气
-                getCurrentWeather();
-            }
-        });
+        if (!InternetUtils.checkNetwork(_mActivity.getWindow().getDecorView())) {
+            homeRecommendLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
+            homeWatchLaterLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
+        } else {
+            SimpleSingleThreadPool.executor(new Runnable() {
+                @Override
+                public void run() {
+                    // 获取推荐内容
+                    videoRecommendList = getRecommendData();
+
+                    // 获取稍后观看数据
+                    watchLaterList = getWatchLaterData();
+
+                    // 各获取前十个数据作为主页的数据
+                    for (int i = 0; i < HOME_DATA_COUNT; i++) {
+                        homeVideoRecommendList.add(videoRecommendList.get(i));
+                        homeWatchLaterList.add(watchLaterList.get(i));
+                    }
+
+                    Message message = receiveDataHandler.obtainMessage(0);
+                    receiveDataHandler.sendMessage(message);
+                }
+
+                /**
+                 * 获取稍后再看数据数据
+                 *
+                 * @return  WatchLater集合
+                 */
+                private List<WatchLater> getWatchLaterData() {
+                    WatchLaterParser watchLaterParser = new WatchLaterParser();
+                    return watchLaterParser.parseData();
+                }
+
+                /**
+                 * 获取推荐数据
+                 *
+                 * @return  Recommend集合
+                 */
+                private List<VideoRecommend> getRecommendData() {
+                    RecommendParser recommendParser = new RecommendParser(null);
+                    return recommendParser.parseData();
+                }
+            });
+
+            SimpleSingleThreadPool.executor(new Runnable() {
+                @Override
+                public void run() {
+                    // 获取当前天气
+                    getCurrentWeather();
+                }
+            });
+        }
     }
 
     /**
@@ -259,30 +266,38 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
+        SupportFragment targetFragment = null;
+
         switch (v.getId()) {
             case R.id.home_my_orders:
-                ((NavFragment) getParentFragment()).startBrotherFragment(OrderFragment.getInstance());
+                targetFragment = OrderFragment.getInstance();
                 break;
             case R.id.home_my_favorites:
-                ((NavFragment) getParentFragment()).startBrotherFragment(FavoritesFragment.getInstance());
+                targetFragment = FavoritesFragment.getInstance();
                 break;
             case R.id.home_my_follows:
-                ((NavFragment) getParentFragment()).startBrotherFragment(FollowsFragment.getInstance(false, PreferenceUtils.getUserId()));
+                targetFragment = FollowsFragment.getInstance(false, PreferenceUtils.getUserId());
                 break;
             case R.id.home_my_history:
-                ((NavFragment) getParentFragment()).startBrotherFragment(HistoryFragment.getInstance());
+                targetFragment = HistoryFragment.getInstance();
                 break;
             case R.id.home_my_downloadManager:
                 ((NavFragment) getParentFragment()).startBrotherFragment(DownloadManagerFragment.getInstance());
-                break;
+                return;
             case R.id.home_setting:
                 ((NavFragment) getParentFragment()).startBrotherFragment(SettingsFragment.getInstance());
-                break;
+                return;
             case R.id.home_popular:
-                ((NavFragment) getParentFragment()).startBrotherFragment(PopularFragment.getInstance());
+                targetFragment = PopularFragment.getInstance();
                 break;
             default:
                 break;
+        }
+
+        if (InternetUtils.checkNetwork(_mActivity.getWindow().getDecorView())) {
+            if (targetFragment != null) {
+                ((NavFragment) getParentFragment()).startBrotherFragment(targetFragment);
+            }
         }
     }
 

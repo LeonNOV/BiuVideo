@@ -19,6 +19,16 @@ public class VideoInfo {
     public long pubTime;
     public String desc;
 
+    /**
+     * 是否为电影
+     */
+    public boolean isMovie;
+
+    /**
+     * 是否为付费资源
+     */
+    public boolean ispay;
+
     public UserInfo userInfo;
     public VideoStat videoStat;
 

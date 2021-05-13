@@ -22,6 +22,7 @@ import com.leon.biuvideo.greendao.daoutils.DownloadHistoryUtils;
 import com.leon.biuvideo.service.DownloadWatcher;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
+import com.leon.biuvideo.utils.InternetUtils;
 
 import java.util.List;
 
@@ -177,8 +178,10 @@ public class DownloadingFragment extends BaseSupportFragment implements View.OnC
 
                 downloadingAllStat.setSelected(!downloadingAllStatSelected);
                 if (downloadingAllStatSelected) {
-                    downloadingAllStat.setText(R.string.downloadManagerPlayAll);
-                    Aria.download(this).resumeAllTask();
+                    if (InternetUtils.checkNetwork(v)) {
+                        downloadingAllStat.setText(R.string.downloadManagerPlayAll);
+                        Aria.download(this).resumeAllTask();
+                    }
                 } else {
                     downloadingAllStat.setText(R.string.downloadManagerPauseAll);
                     Aria.download(this).stopAllTask();

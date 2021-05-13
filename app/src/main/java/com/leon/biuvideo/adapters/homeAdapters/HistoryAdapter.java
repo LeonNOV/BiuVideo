@@ -14,6 +14,7 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.userBeans.History;
 import com.leon.biuvideo.beans.userBeans.HistoryType;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -130,18 +131,20 @@ public class HistoryAdapter extends BaseAdapter<History> {
                 .setOnClickListener(R.id.history_item_video_container, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        switch (history.historyType) {
-                            case VIDEO:
-                                startPublicFragment(FragmentType.VIDEO, history.bvid);
-                                break;
-                            case BANGUMI:
-                                startPublicFragment(FragmentType.BANGUMI, history.seasonId);
-                                break;
-                            case LIVE:
-                                SimpleSnackBar.make(v, context.getString(R.string.snackBarBuildingWarn), SimpleSnackBar.LENGTH_LONG).show();
-                                break;
-                            default:
-                                break;
+                        if (InternetUtils.checkNetwork(v)) {
+                            switch (history.historyType) {
+                                case VIDEO:
+                                    startPublicFragment(FragmentType.VIDEO, history.bvid);
+                                    break;
+                                case BANGUMI:
+                                    startPublicFragment(FragmentType.BANGUMI, history.seasonId);
+                                    break;
+                                case LIVE:
+                                    SimpleSnackBar.make(v, context.getString(R.string.snackBarBuildingWarn), SimpleSnackBar.LENGTH_LONG).show();
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                     }
                 })
@@ -191,7 +194,9 @@ public class HistoryAdapter extends BaseAdapter<History> {
                 .setOnClickListener(R.id.history_item_article_container, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startPublicFragment(FragmentType.ARTICLE, history.articleId);
+                        if (InternetUtils.checkNetwork(v)) {
+                            startPublicFragment(FragmentType.ARTICLE, history.articleId);
+                        }
                     }
                 })
                 .setOnClickListener(R.id.history_item_article_operation, new View.OnClickListener() {

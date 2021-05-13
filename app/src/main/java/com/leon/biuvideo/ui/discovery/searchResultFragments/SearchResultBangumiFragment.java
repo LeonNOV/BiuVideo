@@ -28,7 +28,7 @@ public class SearchResultBangumiFragment extends BaseLazySupportFragment {
 
     @Override
     protected void initView() {
-        searchResultBangumiDataLoader = new DataLoader<>(new SearchResultBangumiParser(keyword),
+        searchResultBangumiDataLoader = new DataLoader<>(context, new SearchResultBangumiParser(keyword),
                 R.id.search_result_bangumi_data,
                 new SearchResultBangumiAdapter(context),
                 this);

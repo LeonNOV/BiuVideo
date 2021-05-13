@@ -73,7 +73,7 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
         partitionImgWhirl = ObjectAnimator.ofFloat(searchResultVideoMenuPartitionImg, "rotation", 0.0f, 180.0f);
         partitionImgWhirl.setDuration(400);
 
-        searchResultVideoDataLoader = new DataLoader<>(new SearchResultVideoParser(keyword, order, length, partition),
+        searchResultVideoDataLoader = new DataLoader<>(context, new SearchResultVideoParser(keyword, order, length, partition),
                 R.id.search_result_video_data,
                 new SearchResultVideoAdapter(context),
                 this);

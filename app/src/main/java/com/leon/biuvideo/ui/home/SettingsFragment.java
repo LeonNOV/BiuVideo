@@ -36,6 +36,7 @@ import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.WarnDialog;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.LocationUtil;
 import com.leon.biuvideo.utils.PermissionUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
@@ -161,11 +162,13 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 cleanCacheWarnDialog.show();
                 break;
             case R.id.settings_fragment_setLocation:
-                if (setLocationBottomSheet == null) {
-                    setLocationBottomSheet = new SetLocationBottomSheet();
-                }
+                if (InternetUtils.checkNetwork(_mActivity.getWindow().getDecorView())) {
+                    if (setLocationBottomSheet == null) {
+                        setLocationBottomSheet = new SetLocationBottomSheet();
+                    }
 
-                setLocationBottomSheet.showSetLocationBottomSheet();
+                    setLocationBottomSheet.showSetLocationBottomSheet();
+                }
                 break;
             case R.id.settings_fragment_play_quality_container:
                 QualityBottomSheet playQualityBottomSheet = new QualityBottomSheet(context, true);
@@ -194,11 +197,13 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 downloadQualityBottomSheet.show();
                 break;
             case R.id.settings_fragment_open_source_license:
-                // 跳转到开源许可页面
-                Intent licenseIntent = new Intent();
-                licenseIntent.setAction("android.intent.action.VIEW");
-                licenseIntent.setData(Uri.parse("https://gitee.com/leon_xf/biu-video/blob/master/LICENSE"));
-                startActivity(licenseIntent);
+                if (InternetUtils.checkNetwork(_mActivity.getWindow().getDecorView())) {
+                    // 跳转到开源许可页面
+                    Intent licenseIntent = new Intent();
+                    licenseIntent.setAction("android.intent.action.VIEW");
+                    licenseIntent.setData(Uri.parse("https://gitee.com/leon_xf/biu-video/blob/master/LICENSE"));
+                    startActivity(licenseIntent);
+                }
                 break;
             case R.id.settings_fragment_thanks_list:
                 //设置Dialog显示内容
@@ -444,30 +449,32 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
             setLocationBottomSheetView.findViewById(R.id.set_location_search).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String keyword;
-                    String s = setLocationKeyword.getText().toString().replaceAll(" ", "");
-                    if (s.matches("^[\\u4e00-\\u9fa5]*$") && s.length() > 0) {
-                        keyword = s;
+                    if (InternetUtils.checkNetwork(_mActivity.getWindow().getDecorView())) {
+                        String keyword;
+                        String s = setLocationKeyword.getText().toString().replaceAll(" ", "");
+                        if (s.matches("^[\\u4e00-\\u9fa5]*$") && s.length() > 0) {
+                            keyword = s;
 
-                        // 如果匹配成功就显示ProgressBar、隐藏NoData和recyclerView
-                        loadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
-                    } else {
-                        Toast.makeText(context, "请输入正确的城市名称（不能含有中文以外的字符）", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    // 获取结果
-                    SimpleSingleThreadPool.executor(new Runnable() {
-                        @Override
-                        public void run() {
-                            // 获取地址信息
-                            getDistrict(keyword);
+                            // 如果匹配成功就显示ProgressBar、隐藏NoData和recyclerView
+                            loadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+                        } else {
+                            Toast.makeText(context, "请输入正确的城市名称（不能含有中文以外的字符）", Toast.LENGTH_SHORT).show();
+                            return;
                         }
-                    });
 
-                    // 搜索完之后隐藏软键盘
-                    InputMethodManager imm = (InputMethodManager) setLocationBottomSheetView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(setLocationBottomSheetView.getWindowToken(), 0);
+                        // 获取结果
+                        SimpleSingleThreadPool.executor(new Runnable() {
+                            @Override
+                            public void run() {
+                                // 获取地址信息
+                                getDistrict(keyword);
+                            }
+                        });
+
+                        // 搜索完之后隐藏软键盘
+                        InputMethodManager imm = (InputMethodManager) setLocationBottomSheetView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(setLocationBottomSheetView.getWindowToken(), 0);
+                    }
                 }
             });
 

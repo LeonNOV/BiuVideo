@@ -49,7 +49,7 @@ public class BiliUserArticlesFragment extends BaseLazySupportFragment implements
         biliUserArticlesOrderFav.setOnClickListener(this);
         textViewMap.put(2, biliUserArticlesOrderFav);
 
-        biliUserArticleDataLoader = new DataLoader<>(new BiliUserArticlesParser(mid, order), R.id.bili_user_articles_data,
+        biliUserArticleDataLoader = new DataLoader<>(context, new BiliUserArticlesParser(mid, order), R.id.bili_user_articles_data,
                 new BiliUserArticlesAdapter(context), this);
     }
 

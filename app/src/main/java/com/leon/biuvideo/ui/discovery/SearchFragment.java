@@ -8,6 +8,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,6 +22,7 @@ import com.leon.biuvideo.greendao.daoutils.SearchHistoryUtils;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
+import com.leon.biuvideo.utils.InternetUtils;
 
 import java.util.Comparator;
 import java.util.List;
@@ -65,38 +67,42 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
         searchFragmentEditTextKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                //按下软键盘的搜索按钮会触发该方法
-                if (i == EditorInfo.IME_ACTION_SEARCH) {
-                    //获取输入内容
-                    String value = searchFragmentEditTextKeyword.getText().toString();
+                if (InternetUtils.checkNetwork(context)) {
+                    //按下软键盘的搜索按钮会触发该方法
+                    if (i == EditorInfo.IME_ACTION_SEARCH) {
+                        //获取输入内容
+                        String value = searchFragmentEditTextKeyword.getText().toString();
 
-                    if (!"".equals(value)) {
-                        // 生成唯一key
-                        long hashCode = value.hashCode();
+                        if (!"".equals(value)) {
+                            // 生成唯一key
+                            long hashCode = value.hashCode();
 
-                        List<SearchHistory> searchHistories = searchHistoryDaoUtils.queryByQueryBuilder(SearchHistoryDao.Properties.HashCode.eq(hashCode));
+                            List<SearchHistory> searchHistories = searchHistoryDaoUtils.queryByQueryBuilder(SearchHistoryDao.Properties.HashCode.eq(hashCode));
 
-                        for (SearchHistory searchHistory : searchHistories) {
-                            if (searchHistory.getHashCode() == hashCode) {
-                                searchHistoryDaoUtils.delete(searchHistory);
-                                break;
+                            for (SearchHistory searchHistory : searchHistories) {
+                                if (searchHistory.getHashCode() == hashCode) {
+                                    searchHistoryDaoUtils.delete(searchHistory);
+                                    break;
+                                }
                             }
+
+                            // 存放当前的关键词
+                            searchHistoryDaoUtils.insert(new SearchHistory(null, hashCode, value));
+
+                            // 将之前的搜索结果界面弹出
+                            popTo(SearchResultFragment.class, false);
+
+                            // 保证不会产生其他同类型对象
+                            searchResultFragment = new SearchResultFragment(value);
+
+                            // 启动目标Fragment并弹出自身
+                            startWithPop(searchResultFragment);
+
+                            hideSoftInput();
                         }
-
-                        // 存放当前的关键词
-                        searchHistoryDaoUtils.insert(new SearchHistory(null, hashCode, value));
-
-                        // 将之前的搜索结果界面弹出
-                        popTo(SearchResultFragment.class, false);
-
-                        // 保证不会产生其他同类型对象
-                        searchResultFragment = new SearchResultFragment(value);
-
-                        // 启动目标Fragment并弹出自身
-                        startWithPop(searchResultFragment);
-
-                        hideSoftInput();
                     }
+                } else {
+                    Toast.makeText(context, getString(R.string.networkWarn), Toast.LENGTH_SHORT).show();
                 }
 
                 return false;
@@ -138,7 +144,8 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
                 @Override
                 public void onDelete(SearchHistory searchHistory) {
                     searchHistoryDaoUtils.delete(searchHistory);
-                    searchHistoryAdapter.remove(searchHistory);
+                    searchHistoryList.remove(searchHistory);
+                    searchHistoryAdapter.notifyDataSetChanged();
                     if (searchHistoryAdapter.getItemCount() == 0) {
                         searchFragmentHistoryList.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
                     }
