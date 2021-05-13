@@ -30,11 +30,10 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.otherAdapters.SettingChoiceAddressAdapter;
 import com.leon.biuvideo.beans.District;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.views.WarnDialog;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleBottomSheet;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
-import com.leon.biuvideo.ui.views.SimpleTopBar;
+import com.leon.biuvideo.ui.views.WarnDialog;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.HttpUtils;
 import com.leon.biuvideo.utils.LocationUtil;
@@ -92,18 +91,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
     protected void initView() {
         SharedPreferences preferences = context.getSharedPreferences(PreferenceUtils.PREFERENCE_NAME, Context.MODE_PRIVATE);
 
-        SimpleTopBar settingsFragmentTopBar = findView(R.id.settings_fragment_topBar);
-        settingsFragmentTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
-            @Override
-            public void onLeft() {
-                backPressed();
-            }
-
-            @Override
-            public void onRight() {
-
-            }
-        });
+        setTopBar(R.id.settings_fragment_topBar);
 
         settingsFragmentPlayQuality = findView(R.id.settings_fragment_play_quality);
         settingsFragmentPlayQuality.setText(Quality.convertQuality(PreferenceUtils.getPlayQuality()));

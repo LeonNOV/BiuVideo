@@ -16,7 +16,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
-import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.values.Actions;
 
@@ -28,7 +27,7 @@ import java.util.Map;
  * @Time 2021/3/7
  * @Desc 登录界面
  */
-public class LoginFragment extends BaseSupportFragment {
+public class LoginFragment extends BaseSupportFragment implements View.OnClickListener {
     private static final String ORIGINAL_URL = "https://passport.bilibili.com/login?gourl=https://m.bilibili.com/index.html";
     private static final int PROGRESS_MAX = 100;
 
@@ -47,18 +46,8 @@ public class LoginFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        SimpleTopBar loginTopBar = findView(R.id.login_topBar);
-        loginTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
-            @Override
-            public void onLeft() {
-                backPressed();
-            }
-
-            @Override
-            public void onRight() {
-                loginWebView.reload();
-            }
-        });
+        findView(R.id.login_back).setOnClickListener(this);
+        findView(R.id.login_refresh).setOnClickListener(this);
 
         loginWebView = findView(R.id.login_webView);
         loginProgress = findView(R.id.login_progress);
@@ -194,5 +183,19 @@ public class LoginFragment extends BaseSupportFragment {
         loginWebView.destroy();
 
         super.onDestroy();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.login_back:
+                backPressed();
+                break;
+            case R.id.login_refresh:
+                loginWebView.reload();
+                break;
+            default:
+                break;
+        }
     }
 }

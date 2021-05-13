@@ -10,7 +10,6 @@ import com.leon.biuvideo.adapters.homeAdapters.popularAdapters.PopularAdapter;
 import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularVideo;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
-import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.popularParsers.PopularPreciousParser;
 
@@ -31,17 +30,7 @@ public class PopularPreciousFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        ((SimpleTopBar) findView(R.id.popular_precious_topBar)).setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
-            @Override
-            public void onLeft() {
-                backPressed();
-            }
-
-            @Override
-            public void onRight() {
-
-            }
-        });
+        setTopBar(R.id.popular_precious_topBar);
 
         PopularAdapter popularAdapter = new PopularAdapter(context, PopularAdapter.PRECIOUS, false);
         popularAdapter.setHasStableIds(true);

@@ -10,7 +10,6 @@ import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.home.downloadManagerFragments.DownloadedFragment;
 import com.leon.biuvideo.ui.home.downloadManagerFragments.DownloadingFragment;
-import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.ViewUtils;
 
 import java.util.ArrayList;
@@ -35,17 +34,7 @@ public class DownloadManagerFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        SimpleTopBar downloadManagerFragmentTopBar = findView(R.id.downloadManager_fragment_topBar);
-        downloadManagerFragmentTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
-            @Override
-            public void onLeft() {
-                backPressed();
-            }
-
-            @Override
-            public void onRight() {
-            }
-        });
+        setTopBar(R.id.downloadManager_fragment_topBar);
 
         List<Fragment> viewPagerFragments = new ArrayList<>();
         viewPagerFragments.add(new DownloadingFragment());

@@ -3,7 +3,6 @@ package com.leon.biuvideo.ui.user;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.userBeans.UserInfo;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.ui.views.TagView;
 
 /**
@@ -25,24 +24,13 @@ public class UserInfoFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        SimpleTopBar userInfoFragmentTopBar = view.findViewById(R.id.user_info_fragment_topBar);
-        userInfoFragmentTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
-            @Override
-            public void onLeft() {
-                backPressed();
-            }
+        setTopBar(R.id.user_info_fragment_topBar);
 
-            @Override
-            public void onRight() {
-
-            }
-        });
-
-        ((TagView)view.findViewById(R.id.user_info_fragment_tagView_id)).setRightValue(String.valueOf(userInfo.mid));
-        ((TagView)view.findViewById(R.id.user_info_fragment_tagView_name)).setRightValue(String.valueOf(userInfo.userName));
-        ((TagView)view.findViewById(R.id.user_info_fragment_tagView_sex)).setRightValue(String.valueOf(userInfo.sex));
-        ((TagView)view.findViewById(R.id.user_info_fragment_tagView_level)).setRightValue(String.valueOf(userInfo.currentLevel));
-        ((TagView)view.findViewById(R.id.user_info_fragment_tagView_birthday)).setRightValue(String.valueOf(userInfo.birthday));
-        ((TagView)view.findViewById(R.id.user_info_fragment_tagView_flag)).setRightValue(String.valueOf(userInfo.sign));
+        ((TagView)findView(R.id.user_info_fragment_tagView_id)).setRightValue(String.valueOf(userInfo.mid));
+        ((TagView)findView(R.id.user_info_fragment_tagView_name)).setRightValue(String.valueOf(userInfo.userName));
+        ((TagView)findView(R.id.user_info_fragment_tagView_sex)).setRightValue(String.valueOf(userInfo.sex));
+        ((TagView)findView(R.id.user_info_fragment_tagView_level)).setRightValue(String.valueOf(userInfo.currentLevel));
+        ((TagView)findView(R.id.user_info_fragment_tagView_birthday)).setRightValue(String.valueOf(userInfo.birthday));
+        ((TagView)findView(R.id.user_info_fragment_tagView_flag)).setRightValue(String.valueOf(userInfo.sign));
     }
 }

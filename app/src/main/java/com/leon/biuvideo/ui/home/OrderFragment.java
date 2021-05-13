@@ -9,7 +9,6 @@ import com.leon.biuvideo.adapters.otherAdapters.ViewPager2Adapter;
 import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.home.orderFragments.OrderDataFragment;
-import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.ViewUtils;
 import com.leon.biuvideo.values.OrderType;
 
@@ -38,17 +37,7 @@ public class OrderFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        SimpleTopBar orderFragmentTopBar = findView(R.id.order_fragment_topBar);
-        orderFragmentTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
-            @Override
-            public void onLeft() {
-                backPressed();
-            }
-
-            @Override
-            public void onRight() {
-            }
-        });
+        setTopBar(R.id.order_fragment_topBar);
 
         List<Fragment> viewPagerFragments = new ArrayList<>();
         viewPagerFragments.add(new OrderDataFragment(OrderType.BANGUMI));

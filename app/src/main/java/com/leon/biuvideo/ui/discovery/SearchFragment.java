@@ -56,20 +56,12 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
 
     @Override
     protected void initView() {
-        SimpleTopBar searchFragmentTopBar = view.findViewById(R.id.search_fragment_topBar);
-        searchFragmentTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
-            @Override
-            public void onLeft() {
-                hideSoftInput();
-                backPressed();
-            }
-
-            @Override
-            public void onRight() {
-            }
+        ((SimpleTopBar) findView(R.id.search_fragment_topBar)).setBackListener(() -> {
+            hideSoftInput();
+            backPressed();
         });
 
-        searchFragmentEditTextKeyword = view.findViewById(R.id.search_fragment_editText_keyword);
+        searchFragmentEditTextKeyword = findView(R.id.search_fragment_editText_keyword);
         searchFragmentEditTextKeyword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -112,13 +104,13 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
         });
         showSoftInput(searchFragmentEditTextKeyword);
 
-        ImageView searchFragmentImageViewClearKeyword = view.findViewById(R.id.search_fragment_imageView_clearKeyword);
+        ImageView searchFragmentImageViewClearKeyword = findView(R.id.search_fragment_imageView_clearKeyword);
         searchFragmentImageViewClearKeyword.setOnClickListener(this);
 
-        TextView searchFragmentTextViewClearHistory = view.findViewById(R.id.search_fragment_textView_clearHistory);
+        TextView searchFragmentTextViewClearHistory = findView(R.id.search_fragment_textView_clearHistory);
         searchFragmentTextViewClearHistory.setOnClickListener(this);
 
-        searchFragmentHistoryList = view.findViewById(R.id.search_fragment_historyList);
+        searchFragmentHistoryList = findView(R.id.search_fragment_historyList);
         searchFragmentHistoryList.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
     }
 

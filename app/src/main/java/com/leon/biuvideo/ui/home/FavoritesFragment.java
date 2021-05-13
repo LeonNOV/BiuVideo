@@ -1,7 +1,5 @@
 package com.leon.biuvideo.ui.home;
 
-import android.widget.Toast;
-
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -12,7 +10,6 @@ import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.home.favoriteFragments.FavoriteArticleFragment;
 import com.leon.biuvideo.ui.home.favoriteFragments.favoriteVideo.FavoriteVideoFolderFragment;
-import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.ViewUtils;
 
 import java.util.ArrayList;
@@ -38,20 +35,10 @@ public class FavoritesFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        SimpleTopBar favoritesFragmentTopBar = view.findViewById(R.id.favorites_fragment_topBar);
-        favoritesFragmentTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
-            @Override
-            public void onLeft() {
-                backPressed();
-            }
+        setTopBar(R.id.favorites_fragment_topBar);
 
-            @Override
-            public void onRight() {
-                Toast.makeText(_mActivity, "more", Toast.LENGTH_SHORT).show();
-            }
-        });
-        TabLayout favoritesFragmentTabLayout = view.findViewById(R.id.favorites_fragment_tabLayout);
-        ViewPager2 favoritesFragmentViewPager = view.findViewById(R.id.favorites_fragment_viewPager);
+        TabLayout favoritesFragmentTabLayout = findView(R.id.favorites_fragment_tabLayout);
+        ViewPager2 favoritesFragmentViewPager = findView(R.id.favorites_fragment_viewPager);
 
         List<Fragment> viewPagerFragments = new ArrayList<>();
         viewPagerFragments.add(new FavoriteVideoFolderFragment());

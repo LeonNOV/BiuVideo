@@ -1,5 +1,7 @@
 package com.leon.biuvideo.ui.otherFragments.biliUserFragments;
 
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.biliUserResourcesAdapters.BiliUserPicturesAdapter;
 import com.leon.biuvideo.beans.biliUserResourcesBeans.BiliUserPicture;
@@ -28,7 +30,7 @@ public class BiliUserPicturesFragment extends BaseLazySupportFragment {
     @Override
     protected void initView() {
         biliUserPictureDataLoader = new DataLoader<>(new BiliUserPicturesParser(mid), R.id.bili_user_pictures_data,
-                new BiliUserPicturesAdapter(context), this);
+                new BiliUserPicturesAdapter(context), this, new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
     }
 
     @Override

@@ -10,7 +10,6 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.otherAdapters.ViewPager2Adapter;
 import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.ViewUtils;
 
@@ -32,18 +31,7 @@ public class PopularTopListFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        SimpleTopBar popularTopList = view.findViewById(R.id.popular_top_list);
-        popularTopList.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
-            @Override
-            public void onLeft() {
-                backPressed();
-            }
-
-            @Override
-            public void onRight() {
-
-            }
-        });
+        setTopBar(R.id.popular_top_list);
 
         List<String[]> topList = getTopList();
 

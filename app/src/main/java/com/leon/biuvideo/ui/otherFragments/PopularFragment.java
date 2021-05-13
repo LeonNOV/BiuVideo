@@ -11,7 +11,6 @@ import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.otherFragments.popularFragments.PopularPreciousFragment;
 import com.leon.biuvideo.ui.otherFragments.popularFragments.PopularTopListFragment;
 import com.leon.biuvideo.ui.otherFragments.popularFragments.PopularWeeklyFragment;
-import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.parseDataUtils.DataLoader;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.popularParsers.PopularHotListParser;
 
@@ -34,17 +33,7 @@ public class PopularFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        ((SimpleTopBar) findView(R.id.popular_topBar)).setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
-            @Override
-            public void onLeft() {
-                backPressed();
-            }
-
-            @Override
-            public void onRight() {
-
-            }
-        });
+        setTopBar(R.id.popular_topBar);
 
         PopularAdapter popularAdapter = new PopularAdapter(context, PopularAdapter.HOT_VIDEO, true);
         popularAdapter.setOnClickFirstItemListener(new PopularAdapter.OnClickFirstItemListener() {

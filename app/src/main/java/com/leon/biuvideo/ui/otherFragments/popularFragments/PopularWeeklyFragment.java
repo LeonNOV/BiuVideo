@@ -18,7 +18,6 @@ import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularWeeklySeries;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleBottomSheet;
-import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.popularParsers.PopularWeeklyDataParser;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.popularParsers.PopularWeeklySeriesParser;
@@ -47,18 +46,7 @@ public class PopularWeeklyFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        SimpleTopBar popularWeeklyTopBar = view.findViewById(R.id.popular_weekly_topBar);
-        popularWeeklyTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
-            @Override
-            public void onLeft() {
-                backPressed();
-            }
-
-            @Override
-            public void onRight() {
-
-            }
-        });
+        setTopBar(R.id.popular_weekly_topBar);
 
         popularWeeklySelectedName = findView(R.id.popular_weekly_selected_name);
         popularWeeklySelectedSubject = findView(R.id.popular_weekly_selected_subject);
@@ -124,7 +112,7 @@ public class PopularWeeklyFragment extends BaseSupportFragment {
         View view = simpleBottomSheet.initView();
         BottomSheetDialog bottomSheetDialog = simpleBottomSheet.bottomSheetDialog;
 
-        LoadingRecyclerView popularWeeklyBeforeSeriesBottomSheetLoadingRecyclerView = view.findViewById(R.id.popular_weekly_before_series_bottom_sheet_loadingRecyclerView);
+        LoadingRecyclerView popularWeeklyBeforeSeriesBottomSheetLoadingRecyclerView = findView(R.id.popular_weekly_before_series_bottom_sheet_loadingRecyclerView);
         popularWeeklyBeforeSeriesBottomSheetLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
         PopularWeeklySeriesAdapter popularWeeklySeriesAdapter = new PopularWeeklySeriesAdapter(popularWeeklySeriesList, selectedPosition, context);
         popularWeeklySeriesAdapter.setOnSeriesChangedListener(new PopularWeeklySeriesAdapter.OnSeriesChangedListener() {

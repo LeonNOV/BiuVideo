@@ -1,7 +1,6 @@
 package com.leon.biuvideo.ui.home;
 
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -40,17 +39,7 @@ public class FollowsFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        ((SimpleTopBar) findView(R.id.follows_topBar)).setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
-            @Override
-            public void onLeft() {
-                backPressed();
-            }
-
-            @Override
-            public void onRight() {
-                Toast.makeText(context, "more", Toast.LENGTH_SHORT).show();
-            }
-        });
+        ((SimpleTopBar) findView(R.id.follows_topBar)).setBackListener(this::backPressed);
 
         followDataLoader = new DataLoader<>(new FollowsParser(context, mid),
                 R.id.follows_smartRefreshLoadingRecyclerView,

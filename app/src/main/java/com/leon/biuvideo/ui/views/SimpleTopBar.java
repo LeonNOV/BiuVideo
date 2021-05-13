@@ -4,12 +4,13 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -21,19 +22,14 @@ import com.leon.biuvideo.R;
  * @Time 2021/3/7
  * @Desc 一个带有返回键、标题和更多按钮的自定义TopBar
  */
-public class SimpleTopBar extends RelativeLayout implements View.OnClickListener {
+public class SimpleTopBar extends FrameLayout implements View.OnClickListener {
     private final Context context;
     private AttributeSet attrs;
 
-    private RelativeLayout relativeLayout;
-    private ImageView leftView;
-    private ImageView rightView;
-
-    private Drawable leftSrc;
-    private Drawable rightSrc;
     private String topBarTitle = "";
     private Typeface topBarTitleStyle = Typeface.DEFAULT_BOLD;
     private TextView topBarTitleView;
+    private LinearLayout linearLayout;
 
     public SimpleTopBar(Context context) {
         super(context);
@@ -58,78 +54,62 @@ public class SimpleTopBar extends RelativeLayout implements View.OnClickListener
         initView();
     }
 
-    private OnSimpleTopBarListener onSimpleTopBarListener;
+    private OnBackListener onBackListener;
 
-    public interface OnSimpleTopBarListener {
+    public interface OnBackListener {
         /**
          * 左边控件点击事件
          */
-        void onLeft();
-
-        /**
-         * 右边控件点击事件
-         */
-        void onRight();
+        void onBack();
     }
 
-    public void setOnSimpleTopBarListener(OnSimpleTopBarListener onSimpleTopBarListener) {
-        this.onSimpleTopBarListener = onSimpleTopBarListener;
+    public void setBackListener(OnBackListener onBackListener) {
+        this.onBackListener = onBackListener;
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     private void initView() {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SimpleTopBar);
         this.topBarTitle = typedArray.getString(R.styleable.SimpleTopBar_topBarTitle);;
-        this.leftSrc = typedArray.getDrawable(R.styleable.SimpleTopBar_leftSrc);
-        this.rightSrc = typedArray.getDrawable(R.styleable.SimpleTopBar_rightSrc);
         this.topBarTitleStyle = typedArray.getInt(R.styleable.SimpleTopBar_topBarTitleStyle, 1) == 0 ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT;
         typedArray.recycle();
 
-        relativeLayout = new RelativeLayout(context);
-        relativeLayout.setGravity(RelativeLayout.CENTER_VERTICAL);
-        relativeLayout.setPadding(30, 0, 30, 0);
-        relativeLayout.setBackgroundResource(R.color.white);
+        linearLayout = new LinearLayout(context);
+        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayout.setBackgroundResource(R.color.white);
+        linearLayout.setGravity(Gravity.CENTER_VERTICAL);
 
-        addView(relativeLayout);
+        addView(linearLayout);
 
-        LayoutParams relativeLayoutParams = (LayoutParams) relativeLayout.getLayoutParams();
-        relativeLayoutParams.width = LayoutParams.MATCH_PARENT;
-        relativeLayoutParams.height = getResources().getDimensionPixelOffset(R.dimen.topBar_height);
-        relativeLayoutParams.addRule(RelativeLayout.ALIGN_TOP);
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) linearLayout.getLayoutParams();
+        layoutParams.width = LayoutParams.MATCH_PARENT;
+        layoutParams.height = getResources().getDimensionPixelOffset(R.dimen.topBar_height);
+        linearLayout.setLayoutParams(layoutParams);
 
-        relativeLayout.setLayoutParams(relativeLayoutParams);
-
+        addBackView();
         addTitle();
-
-        if (leftSrc == null) {
-            this.leftSrc = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_back, null);
-        }
-
-        addLeftView();
-
-        if (rightSrc != null) {
-            addRightView();
-        }
     }
 
     /**
      * 添加左侧按键
      */
-    private void addLeftView() {
-        leftView = new ImageView(context);
-        leftView.setId(R.id.simple_topBar_leftView);
-        leftView.setImageDrawable(leftSrc);
-        leftView.setBackgroundResource(R.drawable.ripple_round_corners6dp_bg);
-        leftView.setOnClickListener(this);
+    private void addBackView() {
+        ImageView backView = new ImageView(context);
+        backView.setId(R.id.simple_topBar_backView);
+        backView.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_back, null));
+        backView.setBackgroundResource(R.drawable.ripple_round_corners6dp_bg);
+        backView.setOnClickListener(this);
 
-        relativeLayout.addView(leftView);
-
-        LayoutParams backViewLayoutParams = (LayoutParams) leftView.getLayoutParams();
-        backViewLayoutParams.width = LayoutParams.WRAP_CONTENT;
-        backViewLayoutParams.height = LayoutParams.WRAP_CONTENT;
-        backViewLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_START);
-        backViewLayoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
-
-        leftView.setLayoutParams(backViewLayoutParams);
+        linearLayout.addView(backView);
+        LinearLayout.LayoutParams backViewLayoutParams = (LinearLayout.LayoutParams) backView.getLayoutParams();
+        backViewLayoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        backViewLayoutParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        backViewLayoutParams.setMarginStart(getResources().getDimensionPixelOffset(R.dimen.topBar_backView_margin_start));
+        backView.setLayoutParams(backViewLayoutParams);
     }
 
     /**
@@ -145,38 +125,14 @@ public class SimpleTopBar extends RelativeLayout implements View.OnClickListener
         topBarTitleView.setEllipsize(TextUtils.TruncateAt.END);
         topBarTitleView.setTypeface(topBarTitleStyle);
 
-        relativeLayout.addView(topBarTitleView);
+        linearLayout.addView(topBarTitleView);
 
-        LayoutParams topBarTitleViewParams = (LayoutParams) topBarTitleView.getLayoutParams();
-        topBarTitleViewParams.width = LayoutParams.WRAP_CONTENT;
-        topBarTitleViewParams.height = LayoutParams.WRAP_CONTENT;
-        topBarTitleViewParams.addRule(RelativeLayout.END_OF, R.id.simple_topBar_leftView);
-        topBarTitleViewParams.addRule(RelativeLayout.CENTER_VERTICAL);
+        LinearLayout.LayoutParams topBarTitleViewParams = (LinearLayout.LayoutParams) topBarTitleView.getLayoutParams();
+        topBarTitleViewParams.width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        topBarTitleViewParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
         topBarTitleViewParams.setMarginStart(getResources().getDimensionPixelOffset(R.dimen.topBar_title_margin_start));
         topBarTitleViewParams.setMarginEnd(getResources().getDimensionPixelOffset(R.dimen.topBar_title_margin_start));
-
         topBarTitleView.setLayoutParams(topBarTitleViewParams);
-    }
-
-    /**
-     * 添加右侧按键
-     */
-    private void addRightView() {
-        rightView = new ImageView(context);
-        rightView.setId(R.id.simple_topBar_rightView);
-        rightView.setImageDrawable(rightSrc);
-        rightView.setBackgroundResource(R.drawable.ripple_round_corners6dp_bg);
-        rightView.setOnClickListener(this);
-
-        relativeLayout.addView(rightView);
-
-        LayoutParams moreViewLayoutParams = (LayoutParams) rightView.getLayoutParams();
-        moreViewLayoutParams.width = LayoutParams.WRAP_CONTENT;
-        moreViewLayoutParams.height = LayoutParams.WRAP_CONTENT;
-        moreViewLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
-        moreViewLayoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
-
-        rightView.setLayoutParams(moreViewLayoutParams);
     }
 
     /**
@@ -184,25 +140,15 @@ public class SimpleTopBar extends RelativeLayout implements View.OnClickListener
      *
      * @param title 标题
      */
-    public void setTopBarTitle(String title) {
+    public SimpleTopBar setTopBarTitle(String title) {
         this.topBarTitleView.setText(title);
+        return this;
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.simple_topBar_leftView:
-                if (onSimpleTopBarListener != null) {
-                    onSimpleTopBarListener.onLeft();
-                }
-                break;
-            case R.id.simple_topBar_rightView:
-                if (onSimpleTopBarListener != null) {
-                    onSimpleTopBarListener.onRight();
-                }
-                break;
-            default:
-                break;
+        if (onBackListener != null) {
+            onBackListener.onBack();
         }
     }
 }

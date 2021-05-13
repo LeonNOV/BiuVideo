@@ -48,7 +48,7 @@ public class FavoriteVideoFolderFragment extends BaseSupportFragmentWithSrr<Favo
             public void onLoad(Message msg) {
                 List<FavoriteVideoFolder> favoriteVideoFolders = (List<FavoriteVideoFolder>) msg.obj;
 
-                if (favoriteVideoFolders.size() > 0) {
+                if (favoriteVideoFolders != null && favoriteVideoFolders.size() > 0) {
                     favoriteVideoFolderAdapter.append(favoriteVideoFolders);
                     view.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
                 } else {

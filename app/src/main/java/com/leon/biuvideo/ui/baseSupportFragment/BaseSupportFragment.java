@@ -20,6 +20,7 @@ import com.leon.biuvideo.ui.resourcesFragment.article.ArticleFragment;
 import com.leon.biuvideo.ui.resourcesFragment.audio.AudioFragment;
 import com.leon.biuvideo.ui.resourcesFragment.picture.PictureFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoFragment;
+import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.values.FragmentType;
 
@@ -92,20 +93,6 @@ public abstract class BaseSupportFragment extends SupportFragment {
      */
     protected abstract void initView();
 
-    /**
-     * 返回方法，用于fragment的返回
-     */
-    protected void backPressed() {
-        _mActivity.onBackPressed();
-        onDestroy();
-    }
-
-    @Override
-    public boolean onBackPressedSupport() {
-        onDestroy();
-        return super.onBackPressedSupport();
-    }
-
     public Handler getReceiveDataHandler() {
         return receiveDataHandler;
     }
@@ -149,5 +136,26 @@ public abstract class BaseSupportFragment extends SupportFragment {
      */
     public <T extends View> T findView(@IdRes int id) {
         return view.findViewById(id);
+    }
+
+    /**
+     * 为SimpleTopBar设置返回事件
+     */
+    protected void setTopBar(@IdRes int topBarId) {
+        ((SimpleTopBar) findView(topBarId)).setBackListener(this::backPressed);
+    }
+
+    /**
+     * 返回方法，用于fragment的返回
+     */
+    protected void backPressed() {
+        _mActivity.onBackPressed();
+        onDestroy();
+    }
+
+    @Override
+    public boolean onBackPressedSupport() {
+        onDestroy();
+        return super.onBackPressedSupport();
     }
 }

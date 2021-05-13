@@ -2,7 +2,6 @@ package com.leon.biuvideo.ui.home;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 
@@ -11,7 +10,6 @@ import com.leon.biuvideo.adapters.homeAdapters.RecommendAdapter;
 import com.leon.biuvideo.beans.resourcesBeans.VideoRecommend;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
-import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.PreferenceUtils;
 
 import java.util.List;
@@ -36,20 +34,9 @@ public class RecommendFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        SimpleTopBar recommendTopBar = view.findViewById(R.id.recommend_topBar);
-        recommendTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
-            @Override
-            public void onLeft() {
-                backPressed();
-            }
+        setTopBar(R.id.recommend_topBar);
 
-            @Override
-            public void onRight() {
-                Toast.makeText(context, "点击了more", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        recommendLoadingRecyclerView = view.findViewById(R.id.recommend_loadingRecyclerView);
+        recommendLoadingRecyclerView = findView(R.id.recommend_loadingRecyclerView);
 
         initValues();
     }

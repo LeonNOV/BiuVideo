@@ -2,8 +2,6 @@
 <resources>
     <declare-styleable name="SimpleTopBar">
         <attr name="topBarTitle" format="string" localization="suggested"/>
-        <attr name="leftSrc" format="reference"/>
-        <attr name="rightSrc" format="reference"/>
         <attr name="topBarTitleStyle" format="enum">
             <enum name="bold" value="0"/>
             <enum name="normal" value="1"/>

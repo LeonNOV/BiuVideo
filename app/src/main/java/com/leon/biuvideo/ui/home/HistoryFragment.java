@@ -4,7 +4,6 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.homeAdapters.HistoryAdapter;
 import com.leon.biuvideo.beans.userBeans.History;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.parseDataUtils.DataLoader;
 import com.leon.biuvideo.utils.parseDataUtils.userDataParsers.HistoryParser;
 
@@ -27,16 +26,7 @@ public class HistoryFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        ((SimpleTopBar) findView(R.id.history_topBar)).setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
-            @Override
-            public void onLeft() {
-                backPressed();
-            }
-
-            @Override
-            public void onRight() {
-            }
-        });
+        setTopBar(R.id.history_topBar);
 
         historyDataLoader = new DataLoader<>(new HistoryParser(),
                 R.id.history_data, new HistoryAdapter(context), this);

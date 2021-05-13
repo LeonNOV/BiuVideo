@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import androidx.annotation.IdRes;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
@@ -56,6 +57,20 @@ public class DataLoader<T> implements BaseSupportFragment.OnLoadListener {
         this.receiveDataHandler = baseSupportFragment.getReceiveDataHandler();
 
         initSmartRefreshRecyclerView();
+    }
+
+    public DataLoader(@NotNull ParserInterface<T> parserInterface, @IdRes int smartRefreshRecyclerView, @NotNull BaseAdapter<T> baseAdapter, BaseSupportFragment baseSupportFragment, RecyclerView.LayoutManager layoutManager) {
+        this.parserInterface = parserInterface;
+        this.smartRefreshRecyclerView = baseSupportFragment.findView(smartRefreshRecyclerView);
+
+        this.baseAdapter = baseAdapter;
+        this.baseAdapter.setHasStableIds(true);
+
+        baseSupportFragment.setOnLoadListener(this);
+        this.receiveDataHandler = baseSupportFragment.getReceiveDataHandler();
+
+        initSmartRefreshRecyclerView();
+        this.smartRefreshRecyclerView.setRecyclerViewLayoutManager(layoutManager);
     }
 
     /**

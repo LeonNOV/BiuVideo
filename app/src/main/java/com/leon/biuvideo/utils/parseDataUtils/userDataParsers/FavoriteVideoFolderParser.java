@@ -36,7 +36,7 @@ public class FavoriteVideoFolderParser extends ParserInterface<FavoriteVideoFold
             JSONObject jsonObject = (JSONObject) o;
             FavoriteVideoFolder favoriteVideoFolder = new FavoriteVideoFolder();
 
-            favoriteVideoFolder.id  = jsonObject.getLongValue("id");
+            favoriteVideoFolder.id = jsonObject.getLongValue("id");
             favoriteVideoFolder.count = jsonObject.getIntValue("media_count");
             favoriteVideoFolder.mid = jsonObject.getLongValue("mid");
             favoriteVideoFolder.title = jsonObject.getString("title");

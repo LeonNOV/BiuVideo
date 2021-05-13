@@ -9,7 +9,6 @@ import com.leon.biuvideo.beans.resourcesBeans.PictureDetail;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.layoutManager.PictureGridLayoutManager;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
-import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
@@ -44,18 +43,7 @@ public class PictureFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        SimpleTopBar pictureTopBar = findView(R.id.picture_topBar);
-        pictureTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
-            @Override
-            public void onLeft() {
-                backPressed();
-            }
-
-            @Override
-            public void onRight() {
-
-            }
-        });
+        setTopBar(R.id.picture_topBar);
 
         pictureUserFollow = findView(R.id.picture_user_follow);
         pictureData = findView(R.id.picture_data);

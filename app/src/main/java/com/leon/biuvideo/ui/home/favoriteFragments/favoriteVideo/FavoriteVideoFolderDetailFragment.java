@@ -54,19 +54,9 @@ public class FavoriteVideoFolderDetailFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        SimpleTopBar favoriteVideoFolderDetailTopBar = findView(R.id.favorite_video_folder_detail_topBar);
-        favoriteVideoFolderDetailTopBar.setTopBarTitle(title);
-        favoriteVideoFolderDetailTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
-            @Override
-            public void onLeft() {
-                backPressed();
-            }
-
-            @Override
-            public void onRight() {
-
-            }
-        });
+        ((SimpleTopBar) findView(R.id.favorite_video_folder_detail_topBar))
+                .setTopBarTitle(title)
+                .setBackListener(this::backPressed);
 
         SmartRefreshRecyclerView<FavoriteVideoFolderDetail.Media> favoritesVideoFolderDetailSmartRefreshRecyclerView = findView(R.id.favorites_video_folder_detail_smartRefreshRecyclerView);
         favoritesVideoFolderDetailSmartRefreshRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);

@@ -7,8 +7,6 @@ import com.leon.biuvideo.adapters.homeAdapters.WatchLaterAdapter;
 import com.leon.biuvideo.beans.homeBeans.WatchLater;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
-import com.leon.biuvideo.ui.views.SimpleTopBar;
-import com.leon.biuvideo.utils.ViewUtils;
 
 import java.util.List;
 
@@ -31,18 +29,7 @@ public class WatchLaterFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
-        SimpleTopBar watchLaterFragmentTopBar = findView(R.id.watch_later_fragment_topBar);
-        watchLaterFragmentTopBar.setOnSimpleTopBarListener(new SimpleTopBar.OnSimpleTopBarListener() {
-            @Override
-            public void onLeft() {
-                backPressed();
-            }
-
-            @Override
-            public void onRight() {
-
-            }
-        });
+        setTopBar(R.id.watch_later_fragment_topBar);
 
         LoadingRecyclerView watchLaterFragmentLoadingRecyclerView = findView(R.id.watch_later_fragment_loadingRecyclerView);
 
