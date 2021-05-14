@@ -13,7 +13,6 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.resourcesBeans.ArticleInfo;
 import com.leon.biuvideo.beans.resourcesBeans.BiliUserInfo;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.utils.FileUtils;
@@ -24,6 +23,7 @@ import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.ArticleInfoParser;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.BiliUserParser;
 import com.leon.biuvideo.values.FeaturesName;
+import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
@@ -283,7 +283,7 @@ public class ArticleFragment extends BaseSupportFragment implements View.OnClick
                 break;
             case R.id.article_face:
                 if (InternetUtils.checkNetwork(v)) {
-                    start(new BiliUserFragment(biliUserInfo.userMid));
+                    startPublicFragment(FragmentType.BILI_USER, biliUserInfo.userMid);
                 }
                 break;
             case R.id.article_user_follow:

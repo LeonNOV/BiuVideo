@@ -264,7 +264,6 @@ public class AudioFragment extends BaseSupportFragment implements View.OnClickLi
             downloadHistory.setResType(ResourceDownloadTask.RES_TYPE_AUDIO);
             downloadHistory.setIsFailed(false);
             downloadHistory.setIsCompleted(false);
-            downloadHistory.setIsMultipleAnthology(false);
             downloadHistory.setLevelOneId(sid);
             downloadHistory.setLevelTwoId(null);
             downloadHistory.setMainTitle(audio.title);

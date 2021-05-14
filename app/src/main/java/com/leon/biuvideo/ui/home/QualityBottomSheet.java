@@ -19,8 +19,6 @@ import com.leon.biuvideo.ui.views.BottomSheetTopBar;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.values.Qualitys;
 
-import java.util.List;
-
 /**
  * @Author Leon
  * @Time 2021/5/5
@@ -74,12 +72,10 @@ public class QualityBottomSheet extends BottomSheetDialog {
     }
 
     public static class QualityBottomSheetAdapter extends BaseAdapter<String> {
-        private final List<String> qualityList;
         private OnClickQualityItemListener onClickQualityItemListener;
 
         public QualityBottomSheetAdapter(Context context) {
             super(Qualitys.getQualityStr(), context);
-            this.qualityList = Qualitys.getQualityStr();
         }
 
         public interface OnClickQualityItemListener {

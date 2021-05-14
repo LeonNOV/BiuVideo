@@ -130,11 +130,7 @@
 
     <string name="choose_quality_str">选择要缓存的清晰度</string>
 
-    <string name="downloaded_check_str">查看已缓存音频</string>
-    <string name="downloaded_check_fail_str">查看缓存失败的媒体资源</string>
-
-    <!-- hero尺寸 -->
-    <!-- hero尺寸 -->
+    <string name="downloadedAudio">查看已缓存音频</string>
 
     <string name="cancel">取消</string>
     <string name="confirm">确定</string>
@@ -268,4 +264,7 @@
     <string name="easterEggWarn">🎉🎉🎉\tSURPRISE\t🎉🎉🎉</string>
     <string name="downloadJoinQueue">已加入到下载队列中~</string>
     <string name="topListItemScore">综合评分</string>
+
+    <string name="downloadedAll">显示所有</string>
+    <string name="downloadedMultiple">只显示多选集</string>
 </resources>

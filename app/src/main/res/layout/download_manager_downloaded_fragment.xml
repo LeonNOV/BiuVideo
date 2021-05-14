@@ -1,15 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/downloading_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:background="@color/white"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.leon.biuvideo.ui.views.LoadingRecyclerView
+        android:id="@+id/downloaded_data"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="@dimen/recyclerViewPadding" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/downloaded_check_audio"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textSize="20sp"
+        android:layout_marginStart="@dimen/padding_10dp"
+        android:layout_marginEnd="@dimen/padding_10dp"
+        android:layout_marginBottom="@dimen/padding_10dp"
+        android:background="@drawable/ripple_round_corners6dp_bg"
+        android:backgroundTint="@color/tabLayoutIndicatorColor"
+        android:gravity="center"
+        android:padding="15dp"
+        android:text="@string/downloadedAudio"
         android:textColor="@color/black"
-        android:text="This is a Downloaded Fragment"/>
+        android:textSize="15sp" />
 
-</FrameLayout>
+</LinearLayout>

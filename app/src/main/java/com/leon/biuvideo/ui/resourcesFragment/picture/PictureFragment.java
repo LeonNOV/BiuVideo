@@ -43,6 +43,7 @@ public class PictureFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
+        findView(R.id.picture_container).setBackgroundResource(R.color.white);
         setTopBar(R.id.picture_topBar);
 
         pictureUserFollow = findView(R.id.picture_user_follow);

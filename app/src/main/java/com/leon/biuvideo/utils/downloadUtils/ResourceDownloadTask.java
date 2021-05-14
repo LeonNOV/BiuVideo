@@ -37,9 +37,7 @@ public class ResourceDownloadTask {
     private final Object object;
     private final DownloadHistory downloadHistory;
 
-    private String savePath;
-
-    private DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils;
+    private final String savePath;
 
     private long taskId;
 
@@ -56,7 +54,7 @@ public class ResourceDownloadTask {
      */
     public void startDownload() {
         DownloadHistoryUtils downloadHistoryUtils = new DownloadHistoryUtils(context);
-        downloadHistoryDaoUtils = downloadHistoryUtils.getDownloadHistoryDaoUtils();
+        DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils = downloadHistoryUtils.getDownloadHistoryDaoUtils();
 
         HttpOption httpOption = new HttpOption();
         httpOption.addHeader("Referer", "https://www.bilibili.com/");
@@ -68,6 +66,7 @@ public class ResourceDownloadTask {
                 .option(httpOption)
                 .create();
 
+        // 存放至'索引表'
         if (downloadHistory.getResType() != RES_TYPE_AUDIO) {
             // 查询是否已存在'LevelOne'数据
             DownloadLevelOneUtils downloadLevelOneUtils = new DownloadLevelOneUtils(context);

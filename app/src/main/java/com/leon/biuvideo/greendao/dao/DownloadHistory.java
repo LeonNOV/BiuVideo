@@ -25,11 +25,6 @@ public class DownloadHistory {
     private String resStreamUrl;
 
     /**
-     * 是否为多个选集
-     */
-    private boolean isMultipleAnthology;
-
-    /**
      * 一级ID（bvid、seasonId等）
      */
     private String levelOneId;
@@ -48,30 +43,31 @@ public class DownloadHistory {
      * 资源保存路径
      */
     private String savePath;
+    private long fileSize;
 
     /**
      * 弹幕文件路径
      */
     private String danmakuFilePath;
 
-    @Generated(hash = 281597005)
+    @Generated(hash = 1814762193)
     public DownloadHistory(Long id, int resType, long taskId, boolean isCompleted,
-            boolean isFailed, String resStreamUrl, boolean isMultipleAnthology,
-            String levelOneId, String levelTwoId, String mainTitle, String subTitle,
-            String coverUrl, String savePath, String danmakuFilePath) {
+            boolean isFailed, String resStreamUrl, String levelOneId,
+            String levelTwoId, String mainTitle, String subTitle, String coverUrl,
+            String savePath, long fileSize, String danmakuFilePath) {
         this.id = id;
         this.resType = resType;
         this.taskId = taskId;
         this.isCompleted = isCompleted;
         this.isFailed = isFailed;
         this.resStreamUrl = resStreamUrl;
-        this.isMultipleAnthology = isMultipleAnthology;
         this.levelOneId = levelOneId;
         this.levelTwoId = levelTwoId;
         this.mainTitle = mainTitle;
         this.subTitle = subTitle;
         this.coverUrl = coverUrl;
         this.savePath = savePath;
+        this.fileSize = fileSize;
         this.danmakuFilePath = danmakuFilePath;
     }
 
@@ -127,14 +123,6 @@ public class DownloadHistory {
         this.resStreamUrl = resStreamUrl;
     }
 
-    public boolean getIsMultipleAnthology() {
-        return this.isMultipleAnthology;
-    }
-
-    public void setIsMultipleAnthology(boolean isMultipleAnthology) {
-        this.isMultipleAnthology = isMultipleAnthology;
-    }
-
     public String getLevelOneId() {
         return this.levelOneId;
     }
@@ -181,6 +169,14 @@ public class DownloadHistory {
 
     public void setSavePath(String savePath) {
         this.savePath = savePath;
+    }
+
+    public long getFileSize() {
+        return this.fileSize;
+    }
+
+    public void setFileSize(long fileSize) {
+        this.fileSize = fileSize;
     }
 
     public String getDanmakuFilePath() {

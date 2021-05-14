@@ -308,7 +308,6 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
             downloadHistory.setResType(ResourceDownloadTask.RES_TYPE_VIDEO);
             downloadHistory.setIsFailed(false);
             downloadHistory.setIsCompleted(false);
-            downloadHistory.setIsMultipleAnthology(true);
             downloadHistory.setLevelOneId(bangumiAnthology.seasonId);
             downloadHistory.setLevelTwoId(bangumiAnthology.cid);
             downloadHistory.setMainTitle(bangumiAnthology.mainTitle);
@@ -326,7 +325,6 @@ public class DownloadBottomSheet<T> extends BottomSheetDialog {
             downloadHistory.setResType(ResourceDownloadTask.RES_TYPE_VIDEO);
             downloadHistory.setIsFailed(false);
             downloadHistory.setIsCompleted(false);
-            downloadHistory.setIsMultipleAnthology(true);
             downloadHistory.setLevelOneId(videoAnthology.mainId);
             downloadHistory.setLevelTwoId(videoAnthology.cid);
             downloadHistory.setMainTitle(videoAnthology.mainTitle);

@@ -129,6 +129,9 @@ public class DownloadingFragment extends BaseSupportFragment implements View.OnC
             downloadingAdapter.remove(thisHistory);
 
             thisHistory.setIsCompleted(true);
+
+            // 记录文件总大小
+            thisHistory.setFileSize(downloadTask.getFileSize());
             downloadHistoryDaoUtils.update(thisHistory);
             DownloadWatcher.remove(DownloadWatcher.findThisTask(downloadTask));
         }
@@ -176,15 +179,16 @@ public class DownloadingFragment extends BaseSupportFragment implements View.OnC
             case R.id.downloading_all_stat:
                 boolean downloadingAllStatSelected = downloadingAllStat.isSelected();
 
-                downloadingAllStat.setSelected(!downloadingAllStatSelected);
                 if (downloadingAllStatSelected) {
+                    downloadingAllStat.setSelected(false);
+                    downloadingAllStat.setText(R.string.downloadManagerPlayAll);
+                    Aria.download(this).stopAllTask();
+                } else {
                     if (InternetUtils.checkNetwork(v)) {
-                        downloadingAllStat.setText(R.string.downloadManagerPlayAll);
+                        downloadingAllStat.setSelected(true);
+                        downloadingAllStat.setText(R.string.downloadManagerPauseAll);
                         Aria.download(this).resumeAllTask();
                     }
-                } else {
-                    downloadingAllStat.setText(R.string.downloadManagerPauseAll);
-                    Aria.download(this).stopAllTask();
                 }
                 break;
             case R.id.downloading_edit:

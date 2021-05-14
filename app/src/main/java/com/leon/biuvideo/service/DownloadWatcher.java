@@ -5,8 +5,6 @@ import android.content.Context;
 import com.arialyy.annotations.Download;
 import com.arialyy.aria.core.Aria;
 import com.arialyy.aria.core.task.DownloadTask;
-import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiAnthology;
-import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoInfo;
 import com.leon.biuvideo.greendao.dao.DaoBaseUtils;
 import com.leon.biuvideo.greendao.dao.DownloadHistory;
 import com.leon.biuvideo.greendao.daoutils.DownloadHistoryUtils;
@@ -38,7 +36,7 @@ public class DownloadWatcher {
         ResourceDownloadTask thisTask = findThisTask(downloadTask);
 
         if (thisTask != null) {
-            updateStat(thisTask, false);
+            updateStat(downloadTask, thisTask, false);
         }
     }
 
@@ -50,7 +48,7 @@ public class DownloadWatcher {
         ResourceDownloadTask thisTask = findThisTask(downloadTask);
 
         if (thisTask != null) {
-            updateStat(thisTask, false);
+            updateStat(downloadTask, thisTask, false);
         }
     }
 
@@ -62,17 +60,15 @@ public class DownloadWatcher {
         ResourceDownloadTask thisTask = findThisTask(downloadTask);
 
         if (thisTask != null) {
-            updateStat(thisTask, true);
+            updateStat(downloadTask, thisTask, true);
         }
     }
 
-    private void updateStat (ResourceDownloadTask resourceDownloadTask, boolean isComplete) {
-        VideoInfo.VideoAnthology videoAnthology;
-        BangumiAnthology bangumiAnthology;
-
+    private void updateStat (DownloadTask downloadTask, ResourceDownloadTask resourceDownloadTask, boolean isComplete) {
         DownloadHistory downloadHistory = resourceDownloadTask.getDownloadHistory();
         if (isComplete) {
-            downloadHistory.setIsFailed(true);
+            downloadHistory.setFileSize(downloadTask.getFileSize());
+            downloadHistory.setIsFailed(false);
             downloadHistoryDaoUtils.update(downloadHistory);
         }
 
