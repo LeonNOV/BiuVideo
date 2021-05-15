@@ -18,8 +18,8 @@ import com.leon.biuvideo.adapters.otherAdapters.BangumiSectionContainerAdapter;
 import com.leon.biuvideo.beans.resourcesBeans.BangumiRecommend;
 import com.leon.biuvideo.beans.resourcesBeans.Comment;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.Bangumi;
-import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiAnthologyStat;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiAnthology;
+import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiAnthologyStat;
 import com.leon.biuvideo.greendao.dao.DaoBaseUtils;
 import com.leon.biuvideo.greendao.dao.DownloadHistory;
 import com.leon.biuvideo.greendao.dao.DownloadHistoryDao;
@@ -162,7 +162,7 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
         }
 
         bangumiInfoRecommends = findView(R.id.bangumi_info_recommends);
-        bangumiRecommendAdapter = new BangumiRecommendAdapter(bangumiRecommendList, context);
+        bangumiRecommendAdapter = new BangumiRecommendAdapter(bangumiRecommendList, getMainActivity(), context);
         bangumiInfoRecommends.setRecyclerViewAdapter(bangumiRecommendAdapter);
         bangumiInfoRecommends.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
 
@@ -238,7 +238,7 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
         if (bangumi.bangumiSectionList == null || bangumi.bangumiSectionList.size() < 2) {
             bangumiInfoSectionContainerList.setVisibility(View.GONE);
         } else {
-            BangumiSectionContainerAdapter bangumiSectionContainerAdapter = new BangumiSectionContainerAdapter(bangumi.bangumiSectionList, context);
+            BangumiSectionContainerAdapter bangumiSectionContainerAdapter = new BangumiSectionContainerAdapter(bangumi.bangumiSectionList, getMainActivity(), context);
             bangumiSectionContainerAdapter.setHasStableIds(true);
             bangumiInfoSectionContainerList.setAdapter(bangumiSectionContainerAdapter);
         }

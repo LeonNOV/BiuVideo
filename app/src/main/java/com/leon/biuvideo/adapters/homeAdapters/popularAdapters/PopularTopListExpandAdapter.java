@@ -9,7 +9,9 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularTopList;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.views.TagView;
+import com.leon.biuvideo.values.FragmentType;
 
 import java.util.List;
 
@@ -20,11 +22,13 @@ import java.util.List;
  */
 public class PopularTopListExpandAdapter extends BaseAdapter<PopularTopList.OtherVideo> {
     private final List<PopularTopList.OtherVideo> otherVideoList;
+    private final MainActivity mainActivity;
 
-    public PopularTopListExpandAdapter(List<PopularTopList.OtherVideo> beans, Context context) {
+    public PopularTopListExpandAdapter(List<PopularTopList.OtherVideo> beans, MainActivity mainActivity, Context context) {
         super(beans, context);
 
         this.otherVideoList = beans;
+        this.mainActivity = mainActivity;
     }
 
     @Override
@@ -41,7 +45,7 @@ public class PopularTopListExpandAdapter extends BaseAdapter<PopularTopList.Othe
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        startPublicFragment(mainActivity, FragmentType.VIDEO, otherVideo.bvid);
                     }
                 });
 

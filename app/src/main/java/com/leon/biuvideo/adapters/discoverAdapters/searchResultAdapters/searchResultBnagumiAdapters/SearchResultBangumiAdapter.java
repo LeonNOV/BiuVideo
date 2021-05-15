@@ -11,6 +11,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.searchResultBeans.SearchResultBangumi;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
@@ -20,8 +21,11 @@ import com.leon.biuvideo.values.ImagePixelSize;
  * @Desc 番剧搜索结果适配器
  */
 public class SearchResultBangumiAdapter extends BaseAdapter<SearchResultBangumi> {
-    public SearchResultBangumiAdapter(Context context) {
+    private final MainActivity mainActivity;
+
+    public SearchResultBangumiAdapter(MainActivity mainActivity, Context context) {
         super(context);
+        this.mainActivity = mainActivity;
     }
 
     @Override
@@ -44,7 +48,7 @@ public class SearchResultBangumiAdapter extends BaseAdapter<SearchResultBangumi>
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startPublicFragment(FragmentType.VIDEO, searchResultBangumi.seasonId);
+                        startPublicFragment(mainActivity, FragmentType.VIDEO, searchResultBangumi.seasonId);
                     }
                 });
 

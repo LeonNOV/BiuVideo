@@ -67,7 +67,7 @@ public class FavoriteVideoFolderDetailFragment extends BaseSupportFragment {
             }
         });
 
-        favoriteVideoFolderDetailAdapter = new FavoriteVideoFolderDetailAdapter(mediaList, context);
+        favoriteVideoFolderDetailAdapter = new FavoriteVideoFolderDetailAdapter(mediaList, getMainActivity(), context);
         favoriteVideoFolderDetailAdapter.setHasStableIds(true);
         favoritesVideoFolderDetailSmartRefreshRecyclerView.setRecyclerViewAdapter(favoriteVideoFolderDetailAdapter);
         favoritesVideoFolderDetailSmartRefreshRecyclerView.setRecyclerViewLayoutManager(new LinearLayoutManager(context));

@@ -9,6 +9,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteVideoFolderDetail;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueUtils;
@@ -27,10 +28,12 @@ import java.util.Locale;
  */
 public class FavoriteVideoFolderDetailAdapter extends BaseAdapter<FavoriteVideoFolderDetail.Media> {
     private final List<FavoriteVideoFolderDetail.Media> favoriteVideoFolderDetail;
+    private final MainActivity mainActivity;
 
-    public FavoriteVideoFolderDetailAdapter(List<FavoriteVideoFolderDetail.Media> favoriteVideoFolderDetail, Context context) {
+    public FavoriteVideoFolderDetailAdapter(List<FavoriteVideoFolderDetail.Media> favoriteVideoFolderDetail, MainActivity mainActivity, Context context) {
         super(favoriteVideoFolderDetail, context);
         this.favoriteVideoFolderDetail = favoriteVideoFolderDetail;
+        this.mainActivity = mainActivity;
     }
 
     @Override
@@ -63,7 +66,7 @@ public class FavoriteVideoFolderDetailAdapter extends BaseAdapter<FavoriteVideoF
                             SimpleSnackBar.make(v, context.getString(R.string.videoFailed), SimpleSnackBar.LENGTH_LONG).show();
                         } else {
                             if (InternetUtils.checkNetwork(v)) {
-                                startPublicFragment(FragmentType.VIDEO, media.bvid);
+                                startPublicFragment(mainActivity, FragmentType.VIDEO, media.bvid);
                             }
                         }
                     }

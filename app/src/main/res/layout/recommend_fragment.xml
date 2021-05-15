@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="@color/white"
+    android:id="@+id/recommend_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <com.leon.biuvideo.ui.views.SimpleTopBar
         android:id="@+id/recommend_topBar"
@@ -12,16 +12,10 @@
         android:layout_height="wrap_content"
         app:topBarTitle="@string/videoRecommend" />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <com.leon.biuvideo.ui.views.LoadingRecyclerView
+        android:id="@+id/recommend_loadingRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.leon.biuvideo.ui.views.LoadingRecyclerView
-            android:id="@+id/recommend_loadingRecyclerView"
-            android:padding="@dimen/recyclerViewPadding"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        android:layout_height="match_parent"
+        android:padding="@dimen/recyclerViewPadding" />
 
 </LinearLayout>

@@ -11,6 +11,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.searchResultBeans.SearchResultBiliUser;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -22,8 +23,11 @@ import com.leon.biuvideo.values.Role;
  * @Desc 用户搜索结果适配器
  */
 public class SearchResultBiliUserAdapter extends BaseAdapter<SearchResultBiliUser> {
-    public SearchResultBiliUserAdapter(Context context) {
+    private final MainActivity mainActivity;
+
+    public SearchResultBiliUserAdapter(MainActivity mainActivity, Context context) {
         super(context);
+        this.mainActivity = mainActivity;
     }
 
     @Override
@@ -62,7 +66,7 @@ public class SearchResultBiliUserAdapter extends BaseAdapter<SearchResultBiliUse
                 .setOnClickListener(R.id.search_result_item_bili_user_content, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startPublicFragment(FragmentType.BILI_USER, searchResultBiliUser.mid);
+                        startPublicFragment(mainActivity, FragmentType.BILI_USER, searchResultBiliUser.mid);
                     }
                 });
         TextView searchResultItemBiliUserOperation = holder.findById(R.id.search_result_item_bili_user_operation);

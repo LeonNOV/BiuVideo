@@ -15,18 +15,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.ui.MainActivity;
+import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.ui.resourcesFragment.article.ArticleFragment;
 import com.leon.biuvideo.ui.resourcesFragment.audio.AudioFragment;
 import com.leon.biuvideo.ui.resourcesFragment.picture.PictureFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.bangumi.BangumiFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoFragment;
 import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.values.FragmentType;
+import com.weikaiyun.fragmentation.SupportFragment;
 
-import me.yokeyword.fragmentation.SupportActivity;
-import me.yokeyword.fragmentation.SupportFragment;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @Author Leon
@@ -58,6 +61,12 @@ public abstract class BaseSupportFragment extends SupportFragment {
         this.onLoadListener = onLoadListener;
     }
 
+    @Override
+    public void onAttach(@NotNull Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
     /**
      * 设置LayoutId
      *
@@ -68,9 +77,16 @@ public abstract class BaseSupportFragment extends SupportFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.context = getContext();
         this.view = inflater.inflate(setLayout(), container, false);
         this.view.setBackgroundColor(context.getColor(R.color.bg));
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         this.bindingUtils = new BindingUtils(view, context);
 
         receiveDataHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
@@ -85,8 +101,10 @@ public abstract class BaseSupportFragment extends SupportFragment {
         });
 
         initView();
+    }
 
-        return view;
+    public MainActivity getMainActivity () {
+        return (MainActivity) _mActivity;
     }
 
     /**
@@ -106,24 +124,25 @@ public abstract class BaseSupportFragment extends SupportFragment {
      */
     public void startPublicFragment (FragmentType fragmentType, String params) {
         if (InternetUtils.checkNetwork(_mActivity.getWindow().getDecorView())) {
-
-            // 获取栈顶的SupportFragment
-            SupportFragment topFragment = (SupportFragment) ((SupportActivity) getActivity()).getTopFragment();
+            NavFragment navFragment = getMainActivity().findFragment(NavFragment.class);
             switch (fragmentType) {
                 case BILI_USER:
-                    topFragment.start(new BiliUserFragment(params));
+                    navFragment.startBrotherFragment(new BiliUserFragment(params));
                     break;
                 case VIDEO:
-                    topFragment.start(new VideoFragment(params));
+                    navFragment.startBrotherFragment(new VideoFragment(params));
+                    break;
+                case BANGUMI:
+                    navFragment.startBrotherFragment(new BangumiFragment(params));
                     break;
                 case AUDIO:
-                    topFragment.start(new AudioFragment(params));
+                    navFragment.startBrotherFragment(new AudioFragment(params));
                     break;
                 case ARTICLE:
-                    topFragment.start(new ArticleFragment(params));
+                    navFragment.startBrotherFragment(new ArticleFragment(params));
                     break;
                 case PICTURE:
-                    topFragment.start(new PictureFragment(params));
+                    navFragment.startBrotherFragment(new PictureFragment(params));
                     break;
                 default:
                     break;

@@ -10,6 +10,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.searchResultBeans.SearchResultVideo;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
@@ -19,8 +20,11 @@ import com.leon.biuvideo.values.ImagePixelSize;
  * @Desc 视频搜索结果适配器
  */
 public class SearchResultVideoAdapter extends BaseAdapter<SearchResultVideo> {
-    public SearchResultVideoAdapter(Context context) {
+    private final MainActivity mainActivity;
+
+    public SearchResultVideoAdapter(MainActivity mainActivity, Context context) {
         super(context);
+        this.mainActivity = mainActivity;
     }
 
     @Override
@@ -42,7 +46,7 @@ public class SearchResultVideoAdapter extends BaseAdapter<SearchResultVideo> {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startPublicFragment(FragmentType.VIDEO, searchResultVideo.bvid);
+                        startPublicFragment(mainActivity, FragmentType.VIDEO, searchResultVideo.bvid);
                     }
                 });
     }

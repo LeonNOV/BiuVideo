@@ -11,7 +11,9 @@ import com.leon.biuvideo.values.ImagePixelSize;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 /**
- * 用于绑定Fragment中控件的资源
+ * @Author Leon
+ * @Time 2020/12/9
+ * @Desc 用于绑定Fragment中控件的资源
  */
 public class BindingUtils {
     private final View view;

@@ -30,7 +30,7 @@ public class BiliUserPicturesFragment extends BaseLazySupportFragment {
     @Override
     protected void initView() {
         biliUserPictureDataLoader = new DataLoader<>(new BiliUserPicturesParser(mid), R.id.bili_user_pictures_data,
-                new BiliUserPicturesAdapter(context), this, new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL), context);
+                new BiliUserPicturesAdapter(getMainActivity(), context), this, new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL), context);
     }
 
     @Override

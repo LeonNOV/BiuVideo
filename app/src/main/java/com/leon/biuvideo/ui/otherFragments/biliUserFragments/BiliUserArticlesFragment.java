@@ -50,7 +50,7 @@ public class BiliUserArticlesFragment extends BaseLazySupportFragment implements
         textViewMap.put(2, biliUserArticlesOrderFav);
 
         biliUserArticleDataLoader = new DataLoader<>(context, new BiliUserArticlesParser(mid, order), R.id.bili_user_articles_data,
-                new BiliUserArticlesAdapter(context), this);
+                new BiliUserArticlesAdapter(getMainActivity(), context), this);
     }
 
     @Override

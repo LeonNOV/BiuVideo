@@ -36,25 +36,6 @@
                     android:layout_height="wrap_content"
                     app:card_title="@string/setting_baseSetting" />
 
-                <TextView
-                    android:id="@+id/settings_fragment_import"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ripple_setting_item_bg"
-                    android:text="@string/setting_import"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
-
-                <TextView
-                    android:id="@+id/settings_fragment_setTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ripple_setting_item_bg"
-                    android:text="@string/setting_setThemeColor"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    app:drawableEndCompat="@drawable/ic_enter" />
-
                 <RelativeLayout
                     android:id="@+id/settings_fragment_imgOriginalMode"
                     android:layout_width="match_parent"
@@ -107,15 +88,6 @@
 
                 </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/settings_fragment_cleanUserData"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ripple_setting_item_bg"
-                    android:text="@string/setting_clear"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
-
                 <FrameLayout
                     android:id="@+id/settings_fragment_cleanCache"
                     android:layout_width="match_parent"
@@ -165,15 +137,6 @@
                         android:textSize="14sp" />
 
                 </FrameLayout>
-
-                <TextView
-                    android:id="@+id/settings_fragment_restore"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ripple_setting_item_bg"
-                    android:text="@string/setting_restoreBackup"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/settings_fragment_recommend_span_count"
@@ -266,6 +229,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:card_title="@string/setting_about" />
+
+                <TextView
+                    android:id="@+id/settings_fragment_about"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_setting_item_bg"
+                    android:text="@string/setting_about_me"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/settings_fragment_open_source_license"

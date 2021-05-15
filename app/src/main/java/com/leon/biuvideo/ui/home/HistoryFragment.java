@@ -29,7 +29,7 @@ public class HistoryFragment extends BaseSupportFragment {
         setTopBar(R.id.history_topBar);
 
         historyDataLoader = new DataLoader<>(context, new HistoryParser(),
-                R.id.history_data, new HistoryAdapter(context), this);
+                R.id.history_data, new HistoryAdapter(getMainActivity(), context), this);
         historyDataLoader.insertData(true);
     }
 }

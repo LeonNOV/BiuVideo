@@ -11,6 +11,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.userBeans.Follow;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.values.FragmentType;
@@ -24,10 +25,12 @@ import com.mcxtzhang.swipemenulib.SwipeMenuLayout;
  * @Desc 关注数据适配器
  */
 public class FollowsAdapter extends BaseAdapter<Follow> {
+    private final MainActivity mainActivity;
     private final boolean isBiliUser;
 
-    public FollowsAdapter(Context context, boolean isBiliUser) {
+    public FollowsAdapter(MainActivity mainActivity, Context context, boolean isBiliUser) {
         super(context);
+        this.mainActivity = mainActivity;
         this.isBiliUser = isBiliUser;
     }
 
@@ -70,7 +73,7 @@ public class FollowsAdapter extends BaseAdapter<Follow> {
                     @Override
                     public void onClick(View v) {
                         if (InternetUtils.checkNetwork(v)) {
-                            startPublicFragment(FragmentType.BILI_USER, String.valueOf(follow.followerMid));
+                            startPublicFragment(mainActivity, FragmentType.BILI_USER, String.valueOf(follow.followerMid));
                         }
                     }
                 });

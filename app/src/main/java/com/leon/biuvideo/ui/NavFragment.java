@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.leon.biuvideo.R;
@@ -14,8 +13,7 @@ import com.leon.biuvideo.ui.mainFragments.DiscoveryFragment;
 import com.leon.biuvideo.ui.mainFragments.HomeFragment;
 import com.leon.biuvideo.ui.mainFragments.PartitionFragment;
 import com.leon.biuvideo.ui.mainFragments.UserFragment;
-
-import me.yokeyword.fragmentation.SupportFragment;
+import com.weikaiyun.fragmentation.SupportFragment;
 
 /**
  * @Author Leon
@@ -35,8 +33,8 @@ public class NavFragment extends BaseSupportFragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void lazyInit() {
+        super.lazyInit();
         SupportFragment homeFragment = findChildFragment(HomeFragment.class);
 
         if (homeFragment == null) {

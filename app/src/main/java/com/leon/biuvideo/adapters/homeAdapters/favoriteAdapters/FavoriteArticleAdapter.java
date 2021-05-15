@@ -9,6 +9,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteArticle;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueUtils;
@@ -21,8 +22,11 @@ import com.leon.biuvideo.values.ImagePixelSize;
  * @Desc 用户收藏的专栏列表适配器
  */
 public class FavoriteArticleAdapter extends BaseAdapter<FavoriteArticle> {
-    public FavoriteArticleAdapter(Context context) {
+    private final MainActivity mainActivity;
+
+    public FavoriteArticleAdapter(MainActivity mainActivity, Context context) {
         super(context);
+        this.mainActivity = mainActivity;
     }
 
     @Override
@@ -45,7 +49,7 @@ public class FavoriteArticleAdapter extends BaseAdapter<FavoriteArticle> {
                     @Override
                     public void onClick(View v) {
                         if (InternetUtils.checkNetwork(v)) {
-                            startPublicFragment(FragmentType.ARTICLE, String.valueOf(favoriteArticle.articleId));
+                            startPublicFragment(mainActivity, FragmentType.ARTICLE, String.valueOf(favoriteArticle.articleId));
                         }
                     }
                 });

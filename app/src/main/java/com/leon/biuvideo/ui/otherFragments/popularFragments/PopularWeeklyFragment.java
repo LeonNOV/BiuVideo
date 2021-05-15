@@ -1,12 +1,10 @@
 package com.leon.biuvideo.ui.otherFragments.popularFragments;
 
-import android.os.Bundle;
 import android.os.Message;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -66,7 +64,7 @@ public class PopularWeeklyFragment extends BaseSupportFragment {
         popularWeeklySelectSeries.setClickable(false);
 
         popularWeeklyData = findView(R.id.popular_weekly_data);
-        PopularAdapter popularAdapter = new PopularAdapter(context, PopularAdapter.WEEKLY, false);
+        PopularAdapter popularAdapter = new PopularAdapter(getMainActivity(), context, PopularAdapter.WEEKLY, false);
         popularAdapter.setHasStableIds(true);
         popularWeeklyData.setRecyclerViewAdapter(popularAdapter);
         popularWeeklyData.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
@@ -103,8 +101,8 @@ public class PopularWeeklyFragment extends BaseSupportFragment {
     }
 
     @Override
-    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
-        super.onLazyInitView(savedInstanceState);
+    public void lazyInit() {
+        super.lazyInit();
 
         popularWeeklyData.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
         getData(0, -1);

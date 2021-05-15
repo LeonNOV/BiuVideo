@@ -1,8 +1,5 @@
 package com.leon.biuvideo.ui.home;
 
-import android.os.Handler;
-import android.os.Looper;
-
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.leon.biuvideo.R;
@@ -34,6 +31,7 @@ public class RecommendFragment extends BaseSupportFragment {
 
     @Override
     protected void initView() {
+        findView(R.id.recommend_container).setBackgroundResource(R.color.white);
         setTopBar(R.id.recommend_topBar);
 
         recommendLoadingRecyclerView = findView(R.id.recommend_loadingRecyclerView);
@@ -42,21 +40,14 @@ public class RecommendFragment extends BaseSupportFragment {
     }
 
     private void initValues() {
-        // 设置数据
-        Handler mHandler = new Handler(Looper.getMainLooper());
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                recommendLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+        recommendLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
-                int recommendColumns = PreferenceUtils.getRecommendColumns();
+        int recommendColumns = PreferenceUtils.getRecommendColumns();
 
-                recommendLoadingRecyclerView.setRecyclerViewLayoutManager(new GridLayoutManager(context, recommendColumns));
-                recommendLoadingRecyclerView.setRecyclerViewAdapter(new RecommendAdapter(videoRecommendList, recommendColumns == 1 ? RecommendAdapter.SINGLE_COLUMN : RecommendAdapter.DOUBLE_COLUMN, context));
+        recommendLoadingRecyclerView.setRecyclerViewLayoutManager(new GridLayoutManager(context, recommendColumns));
+        recommendLoadingRecyclerView.setRecyclerViewAdapter(new RecommendAdapter(videoRecommendList, recommendColumns == 1 ? RecommendAdapter.SINGLE_COLUMN : RecommendAdapter.DOUBLE_COLUMN, getMainActivity(), context));
 
-                // 设置状态为已完成加载数据
-                recommendLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
-            }
-        });
+        // 设置状态为已完成加载数据
+        recommendLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
     }
 }

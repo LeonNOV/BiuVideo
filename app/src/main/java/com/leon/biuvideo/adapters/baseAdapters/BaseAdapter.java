@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.leon.biuvideo.ui.MainActivity;
+import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
 import com.leon.biuvideo.ui.resourcesFragment.article.ArticleFragment;
 import com.leon.biuvideo.ui.resourcesFragment.audio.AudioFragment;
@@ -20,9 +22,6 @@ import com.leon.biuvideo.values.FragmentType;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.yokeyword.fragmentation.SupportActivity;
-import me.yokeyword.fragmentation.SupportFragment;
-
 /**
  * @Author Leon
  * @Time 2020/11/16
@@ -34,23 +33,17 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     public View view;
     protected ViewGroup parent;
 
-    private final SupportActivity supportActivity;
-
     /**
      * 使用此 Constructor 需要调用append (List<T> addOns)添加数据
      */
     public BaseAdapter(Context context) {
         this.beans = new ArrayList<>();
         this.context = context;
-
-        this.supportActivity = (SupportActivity) context;
     }
 
     public BaseAdapter(List<T> beans, Context context) {
         this.beans = beans;
         this.context = context;
-
-        this.supportActivity = (SupportActivity) context;
     }
 
     /**
@@ -154,28 +147,27 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
      * @param fragmentType  FragmentType
      * @param params 参数
      */
-    protected void startPublicFragment (FragmentType fragmentType, String params) {
-        if (InternetUtils.checkNetwork(supportActivity.getWindow().getDecorView())) {
-            // 获取栈顶的SupportFragment
-            SupportFragment topFragment = (SupportFragment) supportActivity.getTopFragment();
+    protected void startPublicFragment (MainActivity activity, FragmentType fragmentType, String params) {
+        if (InternetUtils.checkNetwork(activity.getWindow().getDecorView())) {
+            NavFragment navFragment = activity.findFragment(NavFragment.class);
             switch (fragmentType) {
                 case BILI_USER:
-                    topFragment.start(new BiliUserFragment(params));
+                    navFragment.startBrotherFragment(new BiliUserFragment(params));
                     break;
                 case VIDEO:
-                    topFragment.start(new VideoFragment(params));
+                    navFragment.startBrotherFragment(new VideoFragment(params));
                     break;
                 case BANGUMI:
-                    topFragment.start(new BangumiFragment(params));
+                    navFragment.startBrotherFragment(new BangumiFragment(params));
                     break;
                 case AUDIO:
-                    topFragment.start(new AudioFragment(params));
+                    navFragment.startBrotherFragment(new AudioFragment(params));
                     break;
                 case ARTICLE:
-                    topFragment.start(new ArticleFragment(params));
+                    navFragment.startBrotherFragment(new ArticleFragment(params));
                     break;
                 case PICTURE:
-                    topFragment.start(new PictureFragment(params));
+                    navFragment.startBrotherFragment(new PictureFragment(params));
                     break;
                 default:
                     break;

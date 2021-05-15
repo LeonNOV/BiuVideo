@@ -93,7 +93,6 @@ dependencies {
     //SmartRefreshLayout
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.5.1'//没有使用特殊Header，可以不加这行
-    implementation 'androidx.appcompat:appcompat:1.2.0'//版本 23以上（必须）
 
     // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.0'
@@ -105,9 +104,9 @@ dependencies {
     implementation 'com.sun.easysnackbar:easysnackbar:1.0.1'
 
     // 单Activity框架
-    implementation 'me.xuexuan:fragmentationx:1.0.6'
+    implementation 'com.github.weikaiyun.SFragmentation:fragmentation:1.8.0'
+//    implementation 'me.xuexuan:fragmentationx:1.0.6'
 //    implementation 'me.yokeyword:fragmentationx:1.0.1'
-//    implementation 'me.yokeyword:fragmentation-swipeback:1.0.1'
 
     // Item侧滑控件
     implementation "com.github.mcxtzhang:SwipeDelMenuLayout:V1.3.0"

@@ -1,9 +1,6 @@
 package com.leon.biuvideo.ui.otherFragments.popularFragments;
 
-import android.os.Bundle;
 import android.os.Message;
-
-import androidx.annotation.Nullable;
 
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.homeAdapters.popularAdapters.PopularAdapter;
@@ -33,7 +30,7 @@ public class PopularPreciousFragment extends BaseSupportFragment {
     protected void initView() {
         setTopBar(R.id.popular_precious_topBar);
 
-        PopularAdapter popularAdapter = new PopularAdapter(context, PopularAdapter.PRECIOUS, false);
+        PopularAdapter popularAdapter = new PopularAdapter(getMainActivity(), context, PopularAdapter.PRECIOUS, false);
         popularAdapter.setHasStableIds(true);
 
         discoverPopularPreciousLoadingRecyclerView = findView(R.id.discover_popular_precious_loadingRecyclerView);
@@ -51,8 +48,8 @@ public class PopularPreciousFragment extends BaseSupportFragment {
     }
 
     @Override
-    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
-        super.onLazyInitView(savedInstanceState);
+    public void lazyInit() {
+        super.lazyInit();
 
         discoverPopularPreciousLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 

@@ -50,7 +50,7 @@ public class BiliUserVideosFragment extends BaseLazySupportFragment implements V
 
         biliUserVideoDataLoader = new DataLoader<>(context, new BiliUserVideoParser(mid, order),
                 R.id.bili_user_videos_data,
-                new BiliUserVideosAdapter(context),
+                new BiliUserVideosAdapter(getMainActivity(), context),
                 this);
     }
 

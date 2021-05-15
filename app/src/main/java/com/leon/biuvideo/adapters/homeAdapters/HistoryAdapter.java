@@ -13,6 +13,7 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.userBeans.History;
 import com.leon.biuvideo.beans.userBeans.HistoryType;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueUtils;
@@ -25,8 +26,11 @@ import com.leon.biuvideo.values.ImagePixelSize;
  * @Desc 历史记录适配器
  */
 public class HistoryAdapter extends BaseAdapter<History> {
-    public HistoryAdapter(Context context) {
+    private final MainActivity mainActivity;
+
+    public HistoryAdapter(MainActivity mainActivity, Context context) {
         super(context);
+        this.mainActivity = mainActivity;
     }
 
     @Override
@@ -134,10 +138,10 @@ public class HistoryAdapter extends BaseAdapter<History> {
                         if (InternetUtils.checkNetwork(v)) {
                             switch (history.historyType) {
                                 case VIDEO:
-                                    startPublicFragment(FragmentType.VIDEO, history.bvid);
+                                    startPublicFragment(mainActivity, FragmentType.VIDEO, history.bvid);
                                     break;
                                 case BANGUMI:
-                                    startPublicFragment(FragmentType.BANGUMI, history.seasonId);
+                                    startPublicFragment(mainActivity, FragmentType.BANGUMI, history.seasonId);
                                     break;
                                 case LIVE:
                                     SimpleSnackBar.make(v, context.getString(R.string.snackBarBuildingWarn), SimpleSnackBar.LENGTH_LONG).show();
@@ -195,7 +199,7 @@ public class HistoryAdapter extends BaseAdapter<History> {
                     @Override
                     public void onClick(View v) {
                         if (InternetUtils.checkNetwork(v)) {
-                            startPublicFragment(FragmentType.ARTICLE, history.articleId);
+                            startPublicFragment(mainActivity, FragmentType.ARTICLE, history.articleId);
                         }
                     }
                 })

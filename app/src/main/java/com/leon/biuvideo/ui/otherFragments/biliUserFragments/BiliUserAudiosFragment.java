@@ -49,7 +49,7 @@ public class BiliUserAudiosFragment extends BaseLazySupportFragment implements V
         textViewMap.put(2, biliUserAudiosOrderStow);
 
         biliUserAudioDataLoader = new DataLoader<>(context, new BiliUserAudiosParser(mid, order), R.id.bili_user_audios_data,
-                new BiliUserAudioAdapter(context), this);
+                new BiliUserAudioAdapter(getMainActivity(), context), this);
     }
 
     @Override

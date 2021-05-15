@@ -65,7 +65,7 @@ public class SearchResultArticleFragment extends BaseLazySupportFragment impleme
 
         searchResultArticleDataLoader = new DataLoader<>(context, new SearchResultArticleParser(keyword, order, category),
                 R.id.search_result_article_data,
-                new SearchResultArticleAdapter(context),
+                new SearchResultArticleAdapter(getMainActivity(), context),
                 this);
     }
 

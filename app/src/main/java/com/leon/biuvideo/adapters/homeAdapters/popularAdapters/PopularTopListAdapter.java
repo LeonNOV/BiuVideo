@@ -16,6 +16,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularTopList;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.utils.InternetUtils;
@@ -31,11 +32,13 @@ import java.util.List;
  */
 public class PopularTopListAdapter extends BaseAdapter<PopularTopList> {
     private final List<PopularTopList> popularTopLists;
+    private final MainActivity mainActivity;
 
-    public PopularTopListAdapter(List<PopularTopList> beans, Context context) {
+    public PopularTopListAdapter(List<PopularTopList> beans, MainActivity mainActivity, Context context) {
         super(beans, context);
 
         this.popularTopLists = beans;
+        this.mainActivity = mainActivity;
     }
 
     @Override
@@ -77,7 +80,7 @@ public class PopularTopListAdapter extends BaseAdapter<PopularTopList> {
                     @Override
                     public void onClick(View v) {
                         if (InternetUtils.checkNetwork(v)) {
-                            startPublicFragment(FragmentType.VIDEO, popularTopList.bvid);
+                            startPublicFragment(mainActivity, FragmentType.VIDEO, popularTopList.bvid);
                         }
                     }
                 });
@@ -148,7 +151,7 @@ public class PopularTopListAdapter extends BaseAdapter<PopularTopList> {
                         if (!isInitExpand) {
 
                             // popularTopListItemExpandOtherVideos设置Adapter
-                            PopularTopListExpandAdapter popularTopListExpandAdapter = new PopularTopListExpandAdapter(popularTopList.otherVideoList, context);
+                            PopularTopListExpandAdapter popularTopListExpandAdapter = new PopularTopListExpandAdapter(popularTopList.otherVideoList, mainActivity, context);
                             popularTopListExpandAdapter.setHasStableIds(true);
                             popularTopListItemExpandOtherVideos.setRecyclerViewAdapter(popularTopListExpandAdapter);
                             popularTopListItemExpandOtherVideos.setRecyclerViewLayoutManager(new LinearLayoutManager(context));

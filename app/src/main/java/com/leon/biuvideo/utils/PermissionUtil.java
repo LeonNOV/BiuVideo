@@ -1,7 +1,6 @@
 package com.leon.biuvideo.utils;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 
@@ -9,10 +8,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.leon.biuvideo.ui.views.WarnDialog;
-
 /**
- * 权限申请类
+ * @Author Leon
+ * @Time 2021/3/2
+ * @Desc 权限申请类
  */
 public class PermissionUtil {
     private final Fragment fragment;

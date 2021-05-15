@@ -33,7 +33,7 @@ public class PartitionSubBaseFragment extends BaseSupportFragmentWithSrr<Partiti
 
     @Override
     protected void initView() {
-        PartitionAdapter partitionAdapter = new PartitionAdapter(context);
+        PartitionAdapter partitionAdapter = new PartitionAdapter(getMainActivity(), context);
         partitionAdapter.setHasStableIds(true);
 
         view.setRecyclerViewAdapter(partitionAdapter);

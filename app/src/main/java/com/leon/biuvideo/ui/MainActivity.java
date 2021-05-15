@@ -19,23 +19,25 @@ import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.values.Partitions;
+import com.weikaiyun.fragmentation.SupportActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import me.yokeyword.fragmentation.SupportActivity;
-import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator;
-import me.yokeyword.fragmentation.anim.FragmentAnimator;
-
+/**
+ * @Author Leon
+ * @Time 2021/3/1
+ * @Desc 主Activity用于承载所有的SupportFragment
+ */
 public class MainActivity extends SupportActivity {
     private WeatherConnection weatherConnection;
     private Intent weatherServiceIntent;
 
-    private final List<OnTouchListener> onTouchListenerList = new ArrayList<>();
+    private static final List<OnTouchListener> ON_TOUCH_LISTENER_LIST = new ArrayList<>();
 
     public interface OnTouchListener {
         /**
-         * 触摸监听
+         * 触摸监听,防止在ViewPager中上下滑动时出现切换页面的情况
          */
         void onTouchEvent(MotionEvent event);
     }
@@ -121,13 +123,8 @@ public class MainActivity extends SupportActivity {
     }
 
     @Override
-    public FragmentAnimator onCreateFragmentAnimator() {
-        return new DefaultHorizontalAnimator();
-    }
-
-    @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        for (OnTouchListener onTouchListener : onTouchListenerList) {
+        for (OnTouchListener onTouchListener : ON_TOUCH_LISTENER_LIST) {
             if (onTouchListener != null) {
                 onTouchListener.onTouchEvent(ev);
             }
@@ -141,9 +138,9 @@ public class MainActivity extends SupportActivity {
      *
      * @param onTouchListener   onTouchListener
      */
-    public void registerTouchEvenListener (OnTouchListener onTouchListener) {
-        onTouchListenerList.add(onTouchListener);
-        Fuck.blue("Add Complete，OnTouchListenerList Now Size：" + onTouchListenerList.size());
+    public static void registerTouchEvenListener (OnTouchListener onTouchListener) {
+        ON_TOUCH_LISTENER_LIST.add(onTouchListener);
+        Fuck.blue("Add Complete，OnTouchListenerList Now Size：" + ON_TOUCH_LISTENER_LIST.size());
     }
 
     /**
@@ -151,8 +148,8 @@ public class MainActivity extends SupportActivity {
      *
      * @param onTouchListener   onTouchListener
      */
-    public void unregisterTouchEvenListener (OnTouchListener onTouchListener) {
-        onTouchListenerList.remove(onTouchListener);
-        Fuck.blue("Removal Complete，OnTouchListenerList Now Size：" + onTouchListenerList.size());
+    public static void unregisterTouchEvenListener (OnTouchListener onTouchListener) {
+        ON_TOUCH_LISTENER_LIST.remove(onTouchListener);
+        Fuck.blue("Removal Complete，OnTouchListenerList Now Size：" + ON_TOUCH_LISTENER_LIST.size());
     }
 }

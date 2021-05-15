@@ -10,6 +10,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularVideo;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.FragmentType;
@@ -30,8 +31,11 @@ public class PopularAdapter extends BaseAdapter<PopularVideo> implements View.On
 
     private OnClickFirstItemListener onClickFirstItemListener;
 
-    public PopularAdapter(Context context, int popularType, boolean isNav) {
+    private final MainActivity mainActivity;
+
+    public PopularAdapter(MainActivity mainActivity, Context context, int popularType, boolean isNav) {
         super(context);
+        this.mainActivity = mainActivity;
         this.popularType = popularType;
         this.isNav = isNav;
     }
@@ -128,7 +132,7 @@ public class PopularAdapter extends BaseAdapter<PopularVideo> implements View.On
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startPublicFragment(FragmentType.VIDEO, popularVideo.bvid);
+                        startPublicFragment(mainActivity, FragmentType.VIDEO, popularVideo.bvid);
                     }
                 });
     }

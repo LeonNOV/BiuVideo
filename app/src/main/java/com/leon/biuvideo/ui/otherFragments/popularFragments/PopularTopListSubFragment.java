@@ -40,7 +40,7 @@ public class PopularTopListSubFragment extends BaseLazySupportFragment {
     protected void initView() {
         loadingRecyclerView = (LoadingRecyclerView) view;
 
-        PopularTopListAdapter popularTopListAdapter = new PopularTopListAdapter(popularTopLists, context);
+        PopularTopListAdapter popularTopListAdapter = new PopularTopListAdapter(popularTopLists, getMainActivity(), context);
         popularTopListAdapter.setHasStableIds(true);
         loadingRecyclerView.setRecyclerViewAdapter(popularTopListAdapter);
         loadingRecyclerView.setRecyclerViewLayoutManager(new LinearLayoutManager(context));

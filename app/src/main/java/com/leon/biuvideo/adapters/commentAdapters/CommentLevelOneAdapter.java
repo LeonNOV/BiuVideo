@@ -26,6 +26,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.resourcesBeans.Comment;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoInfoAndCommentsFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.utils.InternetUtils;
@@ -45,13 +46,15 @@ import java.util.regex.Pattern;
  * @Desc 一级评论适配器
  */
 public class CommentLevelOneAdapter extends BaseAdapter<Comment> {
+    private final MainActivity mainActivity;
     public static final int EMOJI_WH = 66;
     private ImageSpan imageSpan;
 
     private VideoInfoAndCommentsFragment.ToCommentDetailFragment toCommentDetailFragment;
 
-    public CommentLevelOneAdapter(Context context) {
+    public CommentLevelOneAdapter(MainActivity mainActivity, Context context) {
         super(context);
+        this.mainActivity = mainActivity;
     }
 
     public void setToCommentDetailFragment(VideoInfoAndCommentsFragment.ToCommentDetailFragment toCommentDetailFragment) {
@@ -72,7 +75,7 @@ public class CommentLevelOneAdapter extends BaseAdapter<Comment> {
             @Override
             public void onClick(View v) {
                 if (InternetUtils.checkNetwork(v)) {
-                    startPublicFragment(FragmentType.BILI_USER, comment.biliUserInfo.userMid);
+                    startPublicFragment(mainActivity, FragmentType.BILI_USER, comment.biliUserInfo.userMid);
                 }
             }
         });
@@ -118,7 +121,7 @@ public class CommentLevelOneAdapter extends BaseAdapter<Comment> {
 
             commentItemReplays.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
 
-            CommentLevelTwoAdapter commentLevelTwoAdapter = new CommentLevelTwoAdapter(comment.levelTwoCommentList, context);
+            CommentLevelTwoAdapter commentLevelTwoAdapter = new CommentLevelTwoAdapter(comment.levelTwoCommentList, mainActivity, context);
             commentLevelTwoAdapter.setHasStableIds(true);
             commentItemReplays.setRecyclerViewAdapter(commentLevelTwoAdapter);
             commentItemReplays.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
@@ -161,7 +164,7 @@ public class CommentLevelOneAdapter extends BaseAdapter<Comment> {
                     @Override
                     public void onClick(@NonNull View widget) {
                         if (InternetUtils.checkNetwork(view)) {
-                            startPublicFragment(FragmentType.BILI_USER, stringEntry.getKey());
+                            startPublicFragment(mainActivity, FragmentType.BILI_USER, stringEntry.getKey());
                         }
                     }
                 };

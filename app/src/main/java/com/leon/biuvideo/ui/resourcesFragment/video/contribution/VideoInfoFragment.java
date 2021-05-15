@@ -260,7 +260,7 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
     private void initRecommend(Object msgObj) {
         List<VideoRecommend> videoRecommendList = (List<VideoRecommend>) msgObj;
 
-        RecommendAdapter recommendAdapter = new RecommendAdapter(videoRecommendList, RecommendAdapter.SINGLE_COLUMN, context);
+        RecommendAdapter recommendAdapter = new RecommendAdapter(videoRecommendList, RecommendAdapter.SINGLE_COLUMN, getMainActivity(), context);
         recommendAdapter.setHasStableIds(true);
         videoInfoRecommends.setRecyclerViewAdapter(recommendAdapter);
         videoInfoRecommends.setRecyclerViewLayoutManager(new LinearLayoutManager(context));

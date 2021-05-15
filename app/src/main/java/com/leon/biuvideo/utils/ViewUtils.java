@@ -94,17 +94,16 @@ public class ViewUtils {
         });
 
         // 设置ViewPager2灵敏度
-        return setViewPagerSensitivity(activity, viewPager2);
+        return setViewPagerSensitivity(viewPager2);
     }
 
     /**
      * 设置ViewPager2灵敏度
      *
-     * @param activity  activity
      * @param viewPager2    viewPager2
      * @return  MainActivity.OnTouchListener
      */
-    private static MainActivity.OnTouchListener setViewPagerSensitivity(Activity activity, ViewPager2 viewPager2) {
+    private static MainActivity.OnTouchListener setViewPagerSensitivity(ViewPager2 viewPager2) {
         MainActivity.OnTouchListener onTouchListener = new MainActivity.OnTouchListener() {
             private int startX = 0;
             private int startY = 0;
@@ -140,7 +139,7 @@ public class ViewUtils {
         };
 
         // 注册Touch事件
-        ((MainActivity) activity).registerTouchEvenListener(onTouchListener);
+        MainActivity.registerTouchEvenListener(onTouchListener);
 
         return onTouchListener;
     }

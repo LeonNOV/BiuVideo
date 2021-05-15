@@ -75,7 +75,7 @@ public class SearchResultVideoFragment extends BaseLazySupportFragment implement
 
         searchResultVideoDataLoader = new DataLoader<>(context, new SearchResultVideoParser(keyword, order, length, partition),
                 R.id.search_result_video_data,
-                new SearchResultVideoAdapter(context),
+                new SearchResultVideoAdapter(getMainActivity(), context),
                 this);
     }
 

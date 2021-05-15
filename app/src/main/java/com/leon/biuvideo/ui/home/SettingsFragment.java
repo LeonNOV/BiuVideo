@@ -30,6 +30,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.otherAdapters.SettingChoiceAddressAdapter;
 import com.leon.biuvideo.beans.District;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.dialogs.ThankListDialog;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleBottomSheet;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
@@ -207,18 +208,8 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 break;
             case R.id.settings_fragment_thanks_list:
                 //设置Dialog显示内容
-                /*ArrayList<AboutBean> aboutBeans = new ArrayList<>();
-                for (int i = 0; i < ThanksList.titles.length; i++) {
-                    AboutBean aboutBean = new AboutBean();
-                    aboutBean.title = ThanksList.titles[i];
-                    aboutBean.desc = ThanksList.desc[i];
-                    aboutBean.orgUrl = ThanksList.orgUrl[i];
-                    aboutBeans.add(aboutBean);
-                }
-
-                //显示Dialog
-                ThanksListDialog thanksListDialog = new ThanksListDialog(context, aboutBeans);
-                thanksListDialog.show();*/
+                ThankListDialog thankListDialog = new ThankListDialog(context);
+                thankListDialog.show();
                 break;
             case R.id.settings_fragment_recommend_span_count:
                 if (setRecommendColumnBottomSheet == null) {

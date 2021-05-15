@@ -193,6 +193,6 @@ public class VideoInfoAndCommentsFragment extends BaseSupportFragment implements
         super.onDestroy();
 
         // 取消注册Touch事件
-        ((MainActivity) getActivity()).unregisterTouchEvenListener(onTouchListener);
+        MainActivity.unregisterTouchEvenListener(onTouchListener);
     }
 }

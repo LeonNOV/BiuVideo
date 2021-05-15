@@ -10,6 +10,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.biliUserResourcesBeans.BiliUserPicture;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -20,8 +21,11 @@ import com.leon.biuvideo.values.ImagePixelSize;
  * @Desc B站用户相簿数据适配器
  */
 public class BiliUserPicturesAdapter extends BaseAdapter<BiliUserPicture> {
-    public BiliUserPicturesAdapter(Context context) {
+    private final MainActivity mainActivity;
+
+    public BiliUserPicturesAdapter(MainActivity mainActivity, Context context) {
         super(context);
+        this.mainActivity = mainActivity;
     }
 
     @Override
@@ -49,7 +53,7 @@ public class BiliUserPicturesAdapter extends BaseAdapter<BiliUserPicture> {
                     @Override
                     public void onClick(View v) {
                         if (InternetUtils.checkNetwork(v)) {
-                            startPublicFragment(FragmentType.PICTURE, biliUserPicture.id);
+                            startPublicFragment(mainActivity, FragmentType.PICTURE, biliUserPicture.id);
                         }
                     }
                 });

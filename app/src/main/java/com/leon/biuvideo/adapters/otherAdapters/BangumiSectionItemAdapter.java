@@ -2,19 +2,14 @@ package com.leon.biuvideo.adapters.otherAdapters;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiSection;
-import com.leon.biuvideo.utils.Fuck;
-import com.leon.biuvideo.utils.PreferenceUtils;
-import com.leon.biuvideo.values.FeaturesName;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
@@ -27,10 +22,12 @@ import java.util.List;
  */
 public class BangumiSectionItemAdapter extends BaseAdapter<BangumiSection.Episode> {
     private final List<BangumiSection.Episode> episodeList;
+    private final MainActivity mainActivity;
 
-    public BangumiSectionItemAdapter(List<BangumiSection.Episode> beans, Context context) {
+    public BangumiSectionItemAdapter(List<BangumiSection.Episode> beans, MainActivity mainActivity, Context context) {
         super(beans, context);
         this.episodeList = beans;
+        this.mainActivity = mainActivity;
     }
 
     @Override
@@ -48,7 +45,7 @@ public class BangumiSectionItemAdapter extends BaseAdapter<BangumiSection.Episod
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startPublicFragment(FragmentType.VIDEO, episode.bvid);
+                        startPublicFragment(mainActivity, FragmentType.VIDEO, episode.bvid);
                     }
                 });
     }

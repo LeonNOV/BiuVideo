@@ -11,6 +11,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.homeBeans.WatchLater;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.PreferenceUtils;
@@ -28,12 +29,14 @@ import java.util.List;
  */
 public class WatchLaterAdapter extends BaseAdapter<WatchLater> {
     private final List<WatchLater> watchLaterList;
+    private final MainActivity mainActivity;
     private final Context context;
 
-    public WatchLaterAdapter(List<WatchLater> beans, Context context) {
+    public WatchLaterAdapter(List<WatchLater> beans, MainActivity mainActivity, Context context) {
         super(beans, context);
 
         this.watchLaterList = beans;
+        this.mainActivity = mainActivity;
         this.context = context;
     }
 
@@ -78,7 +81,7 @@ public class WatchLaterAdapter extends BaseAdapter<WatchLater> {
                                 return;
                             }
 
-                            startPublicFragment(FragmentType.VIDEO, watchLater.bvid);
+                            startPublicFragment(mainActivity, FragmentType.VIDEO, watchLater.bvid);
                         }
                     }
                 })

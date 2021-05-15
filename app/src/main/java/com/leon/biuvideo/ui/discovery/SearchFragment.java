@@ -121,8 +121,8 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
     }
 
     @Override
-    public void onEnterAnimationEnd(Bundle savedInstanceState) {
-        super.onEnterAnimationEnd(savedInstanceState);
+    public void lazyInit() {
+        super.lazyInit();
 
         SearchHistoryUtils searchHistoryUtils = new SearchHistoryUtils(context);
         searchHistoryDaoUtils = searchHistoryUtils.getSearchHistoryDaoUtils();

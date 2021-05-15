@@ -43,11 +43,10 @@ import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.RecommendParser;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.WatchLaterParser;
 import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.FeaturesName;
+import com.weikaiyun.fragmentation.SupportFragment;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * @Author Leon
@@ -132,14 +131,14 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                         // 设置推荐数据
                         int recommendColumns = PreferenceUtils.getRecommendColumns();
                         homeRecommendLoadingRecyclerView.setRecyclerViewLayoutManager(new GridLayoutManager(context, recommendColumns));
-                        RecommendAdapter recommendAdapter = new RecommendAdapter(homeVideoRecommendList, recommendColumns == 1 ? RecommendAdapter.SINGLE_COLUMN : RecommendAdapter.DOUBLE_COLUMN, context);
+                        RecommendAdapter recommendAdapter = new RecommendAdapter(homeVideoRecommendList, recommendColumns == 1 ? RecommendAdapter.SINGLE_COLUMN : RecommendAdapter.DOUBLE_COLUMN, getMainActivity(), context);
                         recommendAdapter.setHasStableIds(true);
                         homeRecommendLoadingRecyclerView.setRecyclerViewAdapter(recommendAdapter);
                         homeRecommendLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
 
                         // 设置稍后再看数据
                         homeWatchLaterLoadingRecyclerView.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
-                        WatchLaterAdapter watchLaterAdapter = new WatchLaterAdapter(homeWatchLaterList, context);
+                        WatchLaterAdapter watchLaterAdapter = new WatchLaterAdapter(homeWatchLaterList, getMainActivity(), context);
                         watchLaterAdapter.setHasStableIds(true);
                         homeWatchLaterLoadingRecyclerView.setRecyclerViewAdapter(watchLaterAdapter);
                         homeWatchLaterLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
@@ -372,7 +371,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                     // 刷新推荐试图样式
                     int recommendColumns = intent.getIntExtra("recommendColumns", 2);
 
-                    homeRecommendLoadingRecyclerView.setRecyclerViewAdapter(new RecommendAdapter(homeVideoRecommendList, recommendColumns == 1 ? RecommendAdapter.SINGLE_COLUMN : RecommendAdapter.DOUBLE_COLUMN, context));
+                    homeRecommendLoadingRecyclerView.setRecyclerViewAdapter(new RecommendAdapter(homeVideoRecommendList, recommendColumns == 1 ? RecommendAdapter.SINGLE_COLUMN : RecommendAdapter.DOUBLE_COLUMN, getMainActivity(), context));
                     homeRecommendLoadingRecyclerView.setRecyclerViewLayoutManager(new GridLayoutManager(context, recommendColumns));
 
                     // 设置状态为已完成加载数据

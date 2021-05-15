@@ -9,6 +9,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.resourcesBeans.VideoRecommend;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.FragmentType;
@@ -25,14 +26,16 @@ public class RecommendAdapter extends BaseAdapter<VideoRecommend> {
     public static final int SINGLE_COLUMN = 1;
     public static final int DOUBLE_COLUMN = 2;
 
+    private final MainActivity mainActivity;
     private final List<VideoRecommend> videoRecommendList;
     private final int columns;
 
-    public RecommendAdapter(List<VideoRecommend> beans, int columns, Context context) {
+    public RecommendAdapter(List<VideoRecommend> beans, int columns, MainActivity mainActivity, Context context) {
         super(beans, context);
 
         this.columns = columns;
         this.videoRecommendList = beans;
+        this.mainActivity = mainActivity;
     }
 
     @Override
@@ -58,7 +61,7 @@ public class RecommendAdapter extends BaseAdapter<VideoRecommend> {
                     @Override
                     public void onClick(View v) {
                         if (InternetUtils.checkNetwork(v)) {
-                            startPublicFragment(FragmentType.VIDEO, videoRecommend.bvid);
+                            startPublicFragment(mainActivity, FragmentType.VIDEO, videoRecommend.bvid);
                         }
                     }
                 });

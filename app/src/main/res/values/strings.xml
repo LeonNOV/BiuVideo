@@ -46,18 +46,15 @@
     <string name="search_clear">清空搜索历史</string>
 
     <string name="setting_baseSetting">基本设置</string>
-    <string name="setting_import">导入外部数据</string>
-    <string name="setting_setThemeColor">设置主题颜色</string>
-    <string name="setting_imgOriginalMode">开启原图模式</string>
-    <string name="setting_weatherModel">开启天气模块</string>
-    <string name="setting_clear">清空数据</string>
+    <string name="setting_imgOriginalMode">原图模式</string>
+    <string name="setting_weatherModel">天气模块</string>
     <string name="setting_clearCache">清空缓存</string>
     <string name="setting_setLocation">设置位置</string>
-    <string name="setting_restoreBackup">恢复备份</string>
     <string name="setting_recommend_span_count">设置推荐视图样式</string>
 
     <string name="setting_about">关于</string>
     <string name="setting_play">播放</string>
+    <string name="setting_about_me">关于作者</string>
     <string name="setting_open_source_license">开源许可</string>
     <string name="setting_thanksList">感谢列表</string>
 
@@ -267,4 +264,5 @@
 
     <string name="downloadedAll">显示所有</string>
     <string name="downloadedMultiple">只显示多选集</string>
+    <string name="thanksListStr">以下均为本APP使用到的第三方开源项目</string>
 </resources>

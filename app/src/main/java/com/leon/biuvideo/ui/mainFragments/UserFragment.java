@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
+import android.content.SharedPreferences;
 import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.bumptech.glide.Glide;
@@ -27,16 +26,15 @@ import com.leon.biuvideo.ui.user.UserInfoFragment;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.ui.views.WarnDialog;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.parseDataUtils.userDataParsers.UserInfoParser;
 import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.Role;
+import com.weikaiyun.fragmentation.SupportFragment;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * @Author Leon
@@ -73,8 +71,8 @@ public class UserFragment extends BaseSupportFragment {
     }
 
     @Override
-    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
-        super.onLazyInitView(savedInstanceState);
+    public void lazyInit() {
+        super.lazyInit();
 
         // 获取用户数据
         if (InternetUtils.checkNetwork(_mActivity.getWindow().getDecorView())) {
@@ -113,7 +111,6 @@ public class UserFragment extends BaseSupportFragment {
                     userInfo.plays = upStat[0];
                     userInfo.reads = upStat[1];
                     userInfo.likes = upStat[2];
-
 
                     Message message = receiveDataHandler.obtainMessage();
                     message.obj = userInfo;
@@ -348,13 +345,13 @@ public class UserFragment extends BaseSupportFragment {
 
             SimpleSnackBar.make(view, "当前账户已退出~", SimpleSnackBar.LENGTH_LONG).show();
 
-//            SharedPreferences.Editor editor = PreferenceUtils.PREFERENCE.edit();
-//            editor
-//                    .remove(PreferenceUtils.COOKIE)
-//                    .remove(PreferenceUtils.USER_ID)
-//                    .remove(PreferenceUtils.VIP_STATUS)
-//                    .remove(PreferenceUtils.LOGIN_STATUS)
-//                    .apply();
+            SharedPreferences.Editor editor = PreferenceUtils.PREFERENCE.edit();
+            editor
+                    .remove(PreferenceUtils.COOKIE)
+                    .remove(PreferenceUtils.USER_ID)
+                    .remove(PreferenceUtils.VIP_STATUS)
+                    .remove(PreferenceUtils.LOGIN_STATUS)
+                    .apply();
         }
 
         /**
@@ -369,7 +366,6 @@ public class UserFragment extends BaseSupportFragment {
                 userTopName.setText(userInfo.userName);
                 Glide.with(context).load(userInfo.userFace).into(userFace);
                 Glide.with(context).load(userInfo.banner).into(userBanner);
-                Fuck.blue(userInfo.banner);
 
                 userTopFans.setLeftValue(ValueUtils.generateCN(userInfo.fans));
                 userTopFollow.setLeftValue(ValueUtils.generateCN(userInfo.follows));

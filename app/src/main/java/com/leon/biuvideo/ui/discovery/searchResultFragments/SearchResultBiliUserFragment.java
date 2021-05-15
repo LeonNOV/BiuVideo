@@ -62,7 +62,7 @@ public class SearchResultBiliUserFragment extends BaseLazySupportFragment implem
 
         searchResultBiliUserDataLoader = new DataLoader<>(context, new SearchResultBiliUserParser(keyword, order, orderSort, userType),
                 R.id.search_result_bili_user_data,
-                new SearchResultBiliUserAdapter(context),
+                new SearchResultBiliUserAdapter(getMainActivity(), context),
                 this);
     }
 

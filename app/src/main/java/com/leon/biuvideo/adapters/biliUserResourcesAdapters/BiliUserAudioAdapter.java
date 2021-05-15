@@ -9,6 +9,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.biliUserResourcesBeans.BiliUserAudio;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -19,8 +20,11 @@ import com.leon.biuvideo.values.ImagePixelSize;
  * @Desc B站用户音配数据适配器
  */
 public class BiliUserAudioAdapter extends BaseAdapter<BiliUserAudio> {
-    public BiliUserAudioAdapter(Context context) {
+    private final MainActivity mainActivity;
+
+    public BiliUserAudioAdapter(MainActivity mainActivity, Context context) {
         super(context);
+        this.mainActivity = mainActivity;
     }
 
     @Override
@@ -42,7 +46,7 @@ public class BiliUserAudioAdapter extends BaseAdapter<BiliUserAudio> {
                     @Override
                     public void onClick(View v) {
                         if (InternetUtils.checkNetwork(v)) {
-                            startPublicFragment(FragmentType.AUDIO, biliUserAudio.id);
+                            startPublicFragment(mainActivity, FragmentType.AUDIO, biliUserAudio.id);
                         }
                     }
                 });

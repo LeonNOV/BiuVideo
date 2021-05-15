@@ -9,6 +9,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiSection;
+import com.leon.biuvideo.ui.MainActivity;
 
 import java.util.List;
 
@@ -19,10 +20,12 @@ import java.util.List;
  */
 public class BangumiSectionContainerAdapter extends BaseAdapter<BangumiSection> {
     private final List<BangumiSection> bangumiSectionList;
+    private final MainActivity mainActivity;
 
-    public BangumiSectionContainerAdapter(List<BangumiSection> beans, Context context) {
+    public BangumiSectionContainerAdapter(List<BangumiSection> beans, MainActivity mainActivity, Context context) {
         super(beans, context);
         this.bangumiSectionList = beans;
+        this.mainActivity = mainActivity;
     }
 
     @Override
@@ -38,7 +41,7 @@ public class BangumiSectionContainerAdapter extends BaseAdapter<BangumiSection> 
                 .setText(R.id.bangumi_section_container_item_title, bangumiSection.title)
                 .findById(R.id.bangumi_section_container_item_data);
 
-        BangumiSectionItemAdapter bangumiSectionItemAdapter = new BangumiSectionItemAdapter(bangumiSection.episodeList, context);
+        BangumiSectionItemAdapter bangumiSectionItemAdapter = new BangumiSectionItemAdapter(bangumiSection.episodeList, mainActivity, context);
         bangumiSectionItemAdapter.setHasStableIds(true);
         bangumiSectionContainerItemData.setAdapter(bangumiSectionItemAdapter);
     }

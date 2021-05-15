@@ -23,6 +23,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.resourcesBeans.Comment;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.values.FragmentType;
 
 import java.util.List;
@@ -36,12 +37,14 @@ import java.util.regex.Pattern;
  * @Desc 二级评论适配器
  */
 public class CommentLevelTwoAdapter extends BaseAdapter<Comment.LevelTwoComment> {
+    private final MainActivity mainActivity;
     private final List<Comment.LevelTwoComment> levelTwoCommentList;
     private ImageSpan imageSpan;
 
-    public CommentLevelTwoAdapter(List<Comment.LevelTwoComment> beans, Context context) {
+    public CommentLevelTwoAdapter(List<Comment.LevelTwoComment> beans, MainActivity mainActivity, Context context) {
         super(beans, context);
         this.levelTwoCommentList = beans;
+        this.mainActivity = mainActivity;
     }
 
     @Override
@@ -86,7 +89,7 @@ public class CommentLevelTwoAdapter extends BaseAdapter<Comment.LevelTwoComment>
 
             @Override
             public void onClick(@NonNull View widget) {
-                startPublicFragment(FragmentType.BILI_USER, levelTwoComment.levelTowMid);
+                startPublicFragment(mainActivity, FragmentType.BILI_USER, levelTwoComment.levelTowMid);
             }
         };
 
@@ -104,7 +107,7 @@ public class CommentLevelTwoAdapter extends BaseAdapter<Comment.LevelTwoComment>
 
                     @Override
                     public void onClick(@NonNull View widget) {
-                        startPublicFragment(FragmentType.BILI_USER, stringEntry.getKey());
+                        startPublicFragment(mainActivity, FragmentType.BILI_USER, stringEntry.getKey());
                     }
                 };
 

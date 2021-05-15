@@ -30,7 +30,7 @@ public class SearchResultBangumiFragment extends BaseLazySupportFragment {
     protected void initView() {
         searchResultBangumiDataLoader = new DataLoader<>(context, new SearchResultBangumiParser(keyword),
                 R.id.search_result_bangumi_data,
-                new SearchResultBangumiAdapter(context),
+                new SearchResultBangumiAdapter(getMainActivity(), context),
                 this);
     }
 

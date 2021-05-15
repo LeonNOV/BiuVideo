@@ -10,6 +10,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.resourcesBeans.BangumiRecommend;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
@@ -22,10 +23,12 @@ import java.util.List;
  */
 public class BangumiRecommendAdapter extends BaseAdapter<BangumiRecommend> {
     private final List<BangumiRecommend> bangumiRecommendList;
+    private final MainActivity mainActivity;
 
-    public BangumiRecommendAdapter(List<BangumiRecommend> beans, Context context) {
+    public BangumiRecommendAdapter(List<BangumiRecommend> beans, MainActivity mainActivity, Context context) {
         super(beans, context);
         this.bangumiRecommendList = beans;
+        this.mainActivity = mainActivity;
     }
 
     @Override
@@ -56,7 +59,7 @@ public class BangumiRecommendAdapter extends BaseAdapter<BangumiRecommend> {
         holder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startPublicFragment(FragmentType.BANGUMI, bangumiRecommend.seasonId);
+                startPublicFragment(mainActivity, FragmentType.BANGUMI, bangumiRecommend.seasonId);
             }
         });
     }

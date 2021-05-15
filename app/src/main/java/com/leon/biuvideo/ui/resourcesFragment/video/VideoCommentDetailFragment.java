@@ -102,7 +102,7 @@ public class VideoCommentDetailFragment extends BaseSupportFragment {
                 .setVisibility(R.id.video_comment_detail_item_upAction, comment.upLike ? View.VISIBLE : View.GONE);
 
         DataLoader<Comment> commentDataLoader = new DataLoader<>(context, new CommentDetailParser(CommentParser.TYPE_VIDEO, comment.oid, comment.rpid),
-                R.id.video_comment_detail_list, new CommentDetailAdapter(context), this);
+                R.id.video_comment_detail_list, new CommentDetailAdapter(getMainActivity(), context), this);
         commentDataLoader.insertData(true);
     }
 

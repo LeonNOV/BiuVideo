@@ -1,9 +1,5 @@
 package com.leon.biuvideo.ui.otherFragments;
 
-import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.homeAdapters.popularAdapters.PopularAdapter;
 import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularVideo;
@@ -35,7 +31,7 @@ public class PopularFragment extends BaseSupportFragment {
     protected void initView() {
         setTopBar(R.id.popular_topBar);
 
-        PopularAdapter popularAdapter = new PopularAdapter(context, PopularAdapter.HOT_VIDEO, true);
+        PopularAdapter popularAdapter = new PopularAdapter(getMainActivity(), context, PopularAdapter.HOT_VIDEO, true);
         popularAdapter.setOnClickFirstItemListener(new PopularAdapter.OnClickFirstItemListener() {
             @Override
             public void onClickTopList() {
@@ -58,8 +54,8 @@ public class PopularFragment extends BaseSupportFragment {
     }
 
     @Override
-    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
-        super.onLazyInitView(savedInstanceState);
+    public void lazyInit() {
+        super.lazyInit();
 
         popularVideoDataLoader.insertData(true);
     }

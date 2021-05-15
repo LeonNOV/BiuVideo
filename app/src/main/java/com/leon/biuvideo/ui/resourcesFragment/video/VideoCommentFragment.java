@@ -41,7 +41,7 @@ public class VideoCommentFragment extends BaseLazySupportFragment {
     protected void initView() {
         findView(R.id.video_comment_container).setBackgroundResource(R.color.white);
 
-        CommentLevelOneAdapter commentLevelOneAdapter = new CommentLevelOneAdapter(context);
+        CommentLevelOneAdapter commentLevelOneAdapter = new CommentLevelOneAdapter(getMainActivity(), context);
         commentLevelOneAdapter.setToCommentDetailFragment(toCommentDetailFragment);
         commentDataLoader = new DataLoader<>(context, new CommentParser(avid, CommentParser.TYPE_VIDEO, CommentParser.SORT_REPLAY),
                 R.id.video_comment_commentData,

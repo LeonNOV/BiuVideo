@@ -11,6 +11,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.userBeans.Follower;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
@@ -23,10 +24,12 @@ import com.mcxtzhang.swipemenulib.SwipeMenuLayout;
  * @Desc 粉丝数据适配器
  */
 public class FollowerAdapter extends BaseAdapter<Follower> {
+    private final MainActivity mainActivity;
     private final boolean isBiliUser;
 
-    public FollowerAdapter(Context context, boolean isBiliUser) {
+    public FollowerAdapter(MainActivity mainActivity, Context context, boolean isBiliUser) {
         super(context);
+        this.mainActivity = mainActivity;
         this.isBiliUser = isBiliUser;
     }
 
@@ -68,7 +71,7 @@ public class FollowerAdapter extends BaseAdapter<Follower> {
                 .setOnClickListener(R.id.followers_item_container, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startPublicFragment(FragmentType.BILI_USER, String.valueOf(follower.followerMid));
+                        startPublicFragment(mainActivity, FragmentType.BILI_USER, String.valueOf(follower.followerMid));
                     }
                 });
 

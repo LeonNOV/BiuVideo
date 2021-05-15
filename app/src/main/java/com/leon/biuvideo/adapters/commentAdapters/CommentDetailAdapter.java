@@ -24,6 +24,7 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.resourcesBeans.Comment;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.values.FeaturesName;
@@ -40,10 +41,12 @@ import java.util.regex.Pattern;
  * @Desc 一级评论下所有评论的适配器
  */
 public class CommentDetailAdapter extends BaseAdapter<Comment> {
+    private final MainActivity mainActivity;
     private ImageSpan imageSpan;
 
-    public CommentDetailAdapter(Context context) {
+    public CommentDetailAdapter(MainActivity mainActivity, Context context) {
         super(context);
+        this.mainActivity = mainActivity;
     }
 
     @Override
@@ -59,7 +62,7 @@ public class CommentDetailAdapter extends BaseAdapter<Comment> {
         commentItemUserFace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startPublicFragment(FragmentType.BILI_USER, comment.biliUserInfo.userMid);
+                startPublicFragment(mainActivity, FragmentType.BILI_USER, comment.biliUserInfo.userMid);
             }
         });
 
@@ -116,7 +119,7 @@ public class CommentDetailAdapter extends BaseAdapter<Comment> {
 
                     @Override
                     public void onClick(@NonNull View widget) {
-                        startPublicFragment(FragmentType.BILI_USER, stringEntry.getKey());
+                        startPublicFragment(mainActivity, FragmentType.BILI_USER, stringEntry.getKey());
                     }
                 };
 

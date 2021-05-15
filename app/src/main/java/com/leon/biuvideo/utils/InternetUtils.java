@@ -14,6 +14,11 @@ import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @Author Leon
+ * @Time 2020/10/25
+ * @Desc 网络状态工具类
+ */
 public class InternetUtils {
 
     /**

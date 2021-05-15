@@ -1,11 +1,9 @@
 package com.leon.biuvideo.ui.mainFragments;
 
-import android.os.Bundle;
 import android.os.Message;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.leon.biuvideo.R;
@@ -73,8 +71,8 @@ public class DiscoveryFragment extends BaseSupportFragment implements View.OnCli
     }
 
     @Override
-    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
-        super.onLazyInitView(savedInstanceState);
+    public void lazyInit() {
+        super.lazyInit();
 
         if (InternetUtils.checkNetwork(_mActivity.getWindow().getDecorView())) {
             SimpleSingleThreadPool.executor(new Runnable() {
