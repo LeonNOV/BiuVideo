@@ -20,6 +20,7 @@ import com.leon.biuvideo.beans.homeBeans.WatchLater;
 import com.leon.biuvideo.beans.resourcesBeans.VideoRecommend;
 import com.leon.biuvideo.ui.NavFragment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.dialogs.OpenScreenDialog;
 import com.leon.biuvideo.ui.home.DownloadManagerFragment;
 import com.leon.biuvideo.ui.home.FavoritesFragment;
 import com.leon.biuvideo.ui.home.FollowsFragment;
@@ -114,6 +115,12 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 ((NavFragment) getParentFragment()).startBrotherFragment(new WatchLaterFragment(watchLaterList));
             }
         });
+
+        // 开屏弹窗
+        if (PreferenceUtils.getFirstOpenStatus()) {
+            OpenScreenDialog openScreenDialog = new OpenScreenDialog(context);
+            openScreenDialog.show();
+        }
 
         homeRecommendLoadingRecyclerView = findView(R.id.home_recommend_loadingRecyclerView);
         homeWatchLaterLoadingRecyclerView = findView(R.id.home_watchLater_loadingRecyclerView);

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/cardMargin"
+    android:background="@drawable/round_corners6dp_bg"
+    android:padding="@dimen/padding_10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/padding_10dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/round_corners6dp_bg"
+            android:elevation="5dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/padding_10dp"
+            android:paddingBottom="@dimen/padding_10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textColor="@color/BiliBili_pink"
+                android:textSize="35sp"
+                android:textStyle="bold" />
+
+            <com.leon.biuvideo.ui.views.TagView
+                android:id="@+id/about_app_version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                app:leftValue="Version:"
+                app:rightValue="3.0.0-beta" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_10dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/round_corners6dp_bg"
+            android:elevation="5dp"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_10dp"
+                android:layout_marginBottom="@dimen/padding_10dp"
+                android:text="@string/aboutAppSummaryTitle"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_10dp"
+                android:padding="@dimen/padding_10dp"
+                android:text="@string/aboutAppSummary"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_10dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/round_corners6dp_bg"
+            android:elevation="5dp"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_10dp"
+                android:layout_marginBottom="@dimen/padding_10dp"
+                android:text="@string/aboutAppOpenSourceProject"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_10dp"
+                android:paddingStart="50dp"
+                android:paddingEnd="50dp">
+
+                <ImageView
+                    android:id="@+id/about_app_gitee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_round_corners6dp_bg"
+                    android:contentDescription="@string/description"
+                    android:padding="@dimen/padding_10dp"
+                    android:src="@drawable/about_app_gitee" />
+
+                <ImageView
+                    android:id="@+id/about_app_github"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:background="@drawable/ripple_round_corners6dp_bg"
+                    android:contentDescription="@string/description"
+                    android:padding="@dimen/padding_10dp"
+                    android:src="@drawable/about_app_github" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_10dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/round_corners6dp_bg"
+            android:elevation="5dp"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_10dp"
+                android:text="@string/aboutAppJoinGroupChat"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/about_app_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/padding_10dp"
+                android:background="@drawable/ripple_round_corners6dp_bg"
+                android:contentDescription="@string/description"
+                android:src="@drawable/ic_qq_group_chat" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_10dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/round_corners6dp_bg"
+            android:elevation="5dp"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/aboutAppCopyrightNotice"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_10dp"
+                android:text="@string/aboutAppCopyrightDesc"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/about_app_close"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_10dp"
+            android:background="@drawable/ripple_round_corners6dp_bg"
+            android:backgroundTint="@color/tabLayoutIndicatorColor"
+            android:elevation="3dp"
+            android:gravity="center_horizontal"
+            android:padding="15dp"
+            android:text="@string/close"
+            android:textColor="@color/black"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

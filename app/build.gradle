@@ -74,6 +74,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation "org.mockito:mockito-core:1.9.5"
 
+
     // https://mvnrepository.com/artifact/com.alibaba/fastjson
     implementation group: 'com.alibaba', name: 'fastjson', version: '1.2.74'
 
@@ -146,4 +147,7 @@ dependencies {
 
     // 百度统计
     implementation 'com.baidu.mobstat:mtj-sdk:4.0.4.6'
+
+    // 捐赠
+    implementation 'com.github.didikee:AndroidDonate:0.1.0'
 }

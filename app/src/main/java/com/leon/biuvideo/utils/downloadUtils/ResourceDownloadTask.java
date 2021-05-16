@@ -27,11 +27,11 @@ public class ResourceDownloadTask {
     public static final int RES_TYPE_PICTURE = 1;
     public static final int RES_TYPE_AUDIO = 2;
 
-    private static final String RESOURCE = "resources";
+    public static final String RESOURCE = "resources";
 
-    private static final String PICTURES = "pictures";
-    private static final String VIDEOS = "videos";
-    private static final String AUDIOS = "audios";
+    public static final String PICTURES = "pictures";
+    public static final String VIDEOS = "videos";
+    public static final String AUDIOS = "audios";
 
     private final Context context;
     private final Object object;

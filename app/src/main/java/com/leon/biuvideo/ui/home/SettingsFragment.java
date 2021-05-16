@@ -30,6 +30,8 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.otherAdapters.SettingChoiceAddressAdapter;
 import com.leon.biuvideo.beans.District;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.dialogs.AboutAppDialog;
+import com.leon.biuvideo.ui.dialogs.DonationBottomSheet;
 import com.leon.biuvideo.ui.dialogs.ThankListDialog;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleBottomSheet;
@@ -115,6 +117,8 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 .setOnClickListener(R.id.settings_fragment_play_quality_container, this)
                 .setOnClickListener(R.id.settings_fragment_open_source_license, this)
                 .setOnClickListener(R.id.settings_fragment_thanks_list, this)
+                .setOnClickListener(R.id.settings_fragment_about, this)
+                .setOnClickListener(R.id.settings_fragment_donation, this)
                 .setOnClickListener(R.id.settings_fragment_recommend_span_count, this)
                 .setOnClickListener(R.id.settings_fragment_feedback, this);
 
@@ -208,8 +212,36 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 break;
             case R.id.settings_fragment_thanks_list:
                 //设置Dialog显示内容
-                ThankListDialog thankListDialog = new ThankListDialog(context);
-                thankListDialog.show();
+                new ThankListDialog(context).show();
+                break;
+            case R.id.settings_fragment_about:
+                new AboutAppDialog(context).show();
+                break;
+            case R.id.settings_fragment_donation:
+                DonationBottomSheet donationBottomSheet = new DonationBottomSheet(context, getMainActivity());
+                donationBottomSheet.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        if (donationBottomSheet.isDonation()) {
+                            WarnDialog warnDialog = new WarnDialog(context, "完成捐赠", "是否已完成捐赠？");
+                            warnDialog.setOnWarnActionListener(new WarnDialog.OnWarnActionListener() {
+                                @Override
+                                public void onConfirm() {
+                                    SimpleSnackBar.make(v, "感谢你的捐赠，你的捐赠就是作者维护下去的动力！", SimpleSnackBar.LENGTH_LONG).show();
+                                    warnDialog.dismiss();
+                                }
+
+                                @Override
+                                public void onCancel() {
+                                    SimpleSnackBar.make(v, "如果觉得那些地方做的不好，可以反馈给作者~", SimpleSnackBar.LENGTH_LONG).show();
+                                    warnDialog.dismiss();
+                                }
+                            });
+                            warnDialog.show();
+                        }
+                    }
+                });
+                donationBottomSheet.show();
                 break;
             case R.id.settings_fragment_recommend_span_count:
                 if (setRecommendColumnBottomSheet == null) {
@@ -218,9 +250,13 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
                 setRecommendColumnBottomSheet.showSetRecommendColumnBottomSheet();
                 break;
             case R.id.settings_fragment_feedback:
-                //显示反馈提交界面
-//                FeedbackDialog feedbackDialog = new FeedbackDialog(context);
-//                feedbackDialog.show();
+                Intent intent = new Intent();
+                intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26jump_from%3Dwebapi%26k%3D" + "f7iJCgrDQnvPELv8QrJizOtBYTymrh5c"));
+                try {
+                    context.startActivity(intent);
+                } catch (Exception e) {
+                    SimpleSnackBar.make(v, "调起QQ失败，请检查QQ是否为最新版或是否已安装QQ", SimpleSnackBar.LENGTH_SHORT).show();
+                }
                 break;
             default:
                 break;

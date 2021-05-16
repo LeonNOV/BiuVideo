@@ -94,7 +94,7 @@ public class QualityBottomSheet extends BottomSheetDialog {
         @Override
         public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
             TextView textView = holder.findById(android.R.id.text1);
-            textView.setText(Qualitys.getQualityCodes().get(position));
+            textView.setText(Qualitys.getQualityStr().get(position));
             textView.setTextColor(Color.BLACK);
             textView.setTextSize(15);
             textView.setPadding(0, 10, 0, 10);

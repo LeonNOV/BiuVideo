@@ -28,6 +28,7 @@ public class PreferenceUtils {
     public static final String EASTER_RGG_STAT = "easterEggStat";
     public static final String PLAY_QUALITY = "playQuality";
     public static final String DOWNLOAD_QUALITY = "downloadQuality";
+    public static final String FIRST_OPEN_STATUS = "firstOpenStatus";
 
     public static SharedPreferences PREFERENCE;
     private static final int DEF_QUALITY = 80;
@@ -286,5 +287,20 @@ public class PreferenceUtils {
     public static void setEasterEggStat () {
         SharedPreferences.Editor editor = PREFERENCE.edit();
         editor.putBoolean(EASTER_RGG_STAT, true).apply();
+    }
+
+    /**
+     * 首次打开状态
+     *
+     * @return  true：首次；false：不是首次
+     */
+    public static boolean getFirstOpenStatus() {
+        boolean status = PREFERENCE.getBoolean(FIRST_OPEN_STATUS, true);
+        if (status) {
+            SharedPreferences.Editor editor = PREFERENCE.edit();
+            editor.putBoolean(FIRST_OPEN_STATUS, false).apply();
+        }
+
+        return status;
     }
 }

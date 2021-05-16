@@ -192,8 +192,8 @@
                     android:id="@+id/settings_fragment_download_quality_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:background="@drawable/ripple_setting_item_bg">
+                    android:background="@drawable/ripple_setting_item_bg"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -235,7 +235,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_setting_item_bg"
-                    android:text="@string/setting_about_me"
+                    android:text="@string/setting_about_app"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/settings_fragment_donation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_setting_item_bg"
+                    android:text="@string/setting_donation"
                     android:textColor="@color/black"
                     android:textSize="15sp" />
 

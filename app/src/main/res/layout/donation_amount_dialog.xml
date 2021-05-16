@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/round_corners6dp_bg"
+    android:orientation="vertical"
+    android:padding="@dimen/cardPadding">
+
+    <com.leon.biuvideo.ui.views.BottomSheetTopBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:bottomSheetTitle="@string/setting_donation" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/donationDesc"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="50dp"
+        android:paddingEnd="50dp">
+
+        <ImageView
+            android:id="@+id/donation_aliPay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ripple_round_corners6dp_bg"
+            android:contentDescription="@string/description"
+            android:padding="@dimen/padding_10dp"
+            android:src="@drawable/donation_amount_alipay" />
+
+        <ImageView
+            android:id="@+id/donation_wechatPay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@drawable/ripple_round_corners6dp_bg"
+            android:contentDescription="@string/description"
+            android:padding="@dimen/padding_10dp"
+            android:src="@drawable/donation_amount_wechatpay" />
+
+    </FrameLayout>
+
+</LinearLayout>

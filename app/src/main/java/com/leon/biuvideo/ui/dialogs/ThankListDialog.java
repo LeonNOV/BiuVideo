@@ -29,7 +29,6 @@ import java.util.List;
  * @Desc 感谢列表弹窗
  */
 public class ThankListDialog extends AlertDialog {
-    private Window window;
     private final Context context;
 
     public ThankListDialog(@NonNull Context context) {
@@ -43,7 +42,8 @@ public class ThankListDialog extends AlertDialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.thanks_list_dialog);
 
-        window = getWindow();
+        Window window = getWindow();
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         window.setWindowAnimations(R.style.paning_anim_style);
         window.setBackgroundDrawableResource(android.R.color.transparent);
 
