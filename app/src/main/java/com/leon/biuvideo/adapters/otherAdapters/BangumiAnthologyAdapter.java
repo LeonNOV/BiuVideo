@@ -13,6 +13,7 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.resourcesBeans.bangumiBeans.BangumiAnthology;
 import com.leon.biuvideo.ui.resourcesFragment.video.OnBottomSheetWithItemListener;
 import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.PreferenceUtils;
 
 import java.util.List;
 
@@ -65,12 +66,13 @@ public class BangumiAnthologyAdapter extends BaseAdapter<BangumiAnthology> {
                     }
 
                     if ("会员".equals(bangumiAnthology.badge)) {
-                        Toast.makeText(context, "需要开通大会员才能进行观看哦~", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    if (onBottomSheetWithItemListener != null) {
-                        onBottomSheetWithItemListener.onItem(position);
+                        if (PreferenceUtils.getVipStatus()) {
+                            if (onBottomSheetWithItemListener != null) {
+                                onBottomSheetWithItemListener.onItem(position);
+                            }
+                        } else {
+                            Toast.makeText(context, "需要开通大会员才能进行观看哦~", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             }

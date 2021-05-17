@@ -135,20 +135,24 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
             public void onLoad(Message msg) {
                 switch (msg.what) {
                     case 0:
-                        // 设置推荐数据
-                        int recommendColumns = PreferenceUtils.getRecommendColumns();
-                        homeRecommendLoadingRecyclerView.setRecyclerViewLayoutManager(new GridLayoutManager(context, recommendColumns));
-                        RecommendAdapter recommendAdapter = new RecommendAdapter(homeVideoRecommendList, recommendColumns == 1 ? RecommendAdapter.SINGLE_COLUMN : RecommendAdapter.DOUBLE_COLUMN, getMainActivity(), context);
-                        recommendAdapter.setHasStableIds(true);
-                        homeRecommendLoadingRecyclerView.setRecyclerViewAdapter(recommendAdapter);
-                        homeRecommendLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+                            // 设置推荐数据
+                            int recommendColumns = PreferenceUtils.getRecommendColumns();
+                            homeRecommendLoadingRecyclerView.setRecyclerViewLayoutManager(new GridLayoutManager(context, recommendColumns));
+                            RecommendAdapter recommendAdapter = new RecommendAdapter(homeVideoRecommendList, recommendColumns == 1 ? RecommendAdapter.SINGLE_COLUMN : RecommendAdapter.DOUBLE_COLUMN, getMainActivity(), context);
+                            recommendAdapter.setHasStableIds(true);
+                            homeRecommendLoadingRecyclerView.setRecyclerViewAdapter(recommendAdapter);
+                            homeRecommendLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
 
-                        // 设置稍后再看数据
-                        homeWatchLaterLoadingRecyclerView.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
-                        WatchLaterAdapter watchLaterAdapter = new WatchLaterAdapter(homeWatchLaterList, getMainActivity(), context);
-                        watchLaterAdapter.setHasStableIds(true);
-                        homeWatchLaterLoadingRecyclerView.setRecyclerViewAdapter(watchLaterAdapter);
-                        homeWatchLaterLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+                        if (watchLaterList != null) {
+                            // 设置稍后再看数据
+                            homeWatchLaterLoadingRecyclerView.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
+                            WatchLaterAdapter watchLaterAdapter = new WatchLaterAdapter(homeWatchLaterList, getMainActivity(), context);
+                            watchLaterAdapter.setHasStableIds(true);
+                            homeWatchLaterLoadingRecyclerView.setRecyclerViewAdapter(watchLaterAdapter);
+                            homeWatchLaterLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+                        } else {
+                            homeWatchLaterLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
+                        }
                         break;
                     case 1:
                         Bundle data = msg.getData();
@@ -200,11 +204,17 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
 
                     // 获取稍后观看数据
                     watchLaterList = getWatchLaterData();
+                    if (watchLaterList != null && watchLaterList.size() == 0) {
+                        watchLaterList = null;
+                    }
 
                     // 各获取前十个数据作为主页的数据
                     for (int i = 0; i < HOME_DATA_COUNT; i++) {
                         homeVideoRecommendList.add(videoRecommendList.get(i));
-                        homeWatchLaterList.add(watchLaterList.get(i));
+
+                        if (watchLaterList != null) {
+                            homeWatchLaterList.add(watchLaterList.get(i));
+                        }
                     }
 
                     Message message = receiveDataHandler.obtainMessage(0);

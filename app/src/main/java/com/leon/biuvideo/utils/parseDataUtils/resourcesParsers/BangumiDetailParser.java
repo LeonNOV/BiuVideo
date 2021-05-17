@@ -140,9 +140,9 @@ public class BangumiDetailParser {
             bangumiAnthology.badge = "".equals(badge) ? null : badge;
             bangumiAnthology.cover = jsonObject.getString("cover");
 
-            String title = jsonObject.getString("long_title");
+            String title = jsonObject.getString("long_title").trim();
             if ("".equals(title)) {
-                String string = jsonObject.getString("title");
+                String string = jsonObject.getString("title").trim();
                 try {
                     int i = Integer.parseInt(string);
                     title = "第" + i + "话";

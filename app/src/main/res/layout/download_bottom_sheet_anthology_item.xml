@@ -6,20 +6,32 @@
     android:layout_marginBottom="@dimen/itemMarginBottom"
     android:background="@drawable/ripple_round_corners6dp_bg"
     android:gravity="center_vertical"
+    android:orientation="horizontal"
     android:paddingStart="@dimen/padding_10dp"
-    android:paddingEnd="@dimen/padding_10dp"
-    android:orientation="horizontal">
+    android:paddingEnd="@dimen/padding_10dp">
+
+    <TextView
+        android:id="@+id/download_bottom_sheet_anthology_item_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/video_badge_bg"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:visibility="gone"
+        tools:text="会员"
+        tools:visibility="visible"/>
 
     <TextView
         android:id="@+id/download_bottom_sheet_anthology_item_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/padding_10dp"
         android:layout_weight="1"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="@color/black"
         android:textSize="15sp"
-        android:layout_marginEnd="@dimen/padding_10dp"
         tools:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle" />
 
     <ImageView

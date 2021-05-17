@@ -11,6 +11,7 @@ import com.leon.biuvideo.ui.resourcesFragment.video.VideoStatListener;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerTitleView;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.VideoPlayerController;
+import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.HttpUtils;
 
 /**
@@ -49,14 +50,19 @@ public class VideoFragment extends BaseSupportFragment {
                     isFirstVideo = false;
                 } else {
                     videoPlayerContent.release();
-                    videoPlayerContent.setUrl(videoWithFlv.videoStreamInfoList.get(videoStreamIndex).url, HttpUtils.getHeaders());
+                    videoPlayerContent.setUrl(videoWithFlv.videoStreamInfoList.get(videoStreamIndex).url, HttpUtils.getVideoPlayHeaders(false, bvid));
 
                     // 重新设置弹幕
                     videoPlayerController.resetDanmaku(videoWithFlv.cid);
                     videoPlayerContent.start();
                 }
 
-                videoPlayerController.setTitle(title);
+                try {
+                    videoPlayerController.setTitle(title);
+                } catch (NullPointerException e) {
+                    Fuck.red("bvid----" + bvid);
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -98,7 +104,8 @@ public class VideoFragment extends BaseSupportFragment {
             backPressed();
             return;
         }
-        videoPlayerContent.setUrl(videoWithFlv.videoStreamInfoList.get(0).url, HttpUtils.getHeaders());
+
+        videoPlayerContent.setUrl(videoWithFlv.videoStreamInfoList.get(0).url, HttpUtils.getVideoPlayHeaders(false, bvid));
         videoPlayerController = new VideoPlayerController(context, videoWithFlv);
         videoPlayerController.setOnBackListener(new VideoPlayerTitleView.OnBackListener() {
             @Override

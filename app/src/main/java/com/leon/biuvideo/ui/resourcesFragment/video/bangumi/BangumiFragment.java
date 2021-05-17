@@ -32,6 +32,7 @@ import org.greenrobot.eventbus.ThreadMode;
 public class BangumiFragment extends BaseSupportFragment implements View.OnClickListener {
     private final String seasonId;
     private boolean isInitialize = false;
+    private String epId;
     private String cid;
     private String title;
 
@@ -68,7 +69,8 @@ public class BangumiFragment extends BaseSupportFragment implements View.OnClick
         BangumiInfoFragment bangumiInfoFragment = new BangumiInfoFragment(seasonId);
         bangumiInfoFragment.setOnBangumiInfoListener(new BangumiInfoFragment.OnBangumiInfoListener() {
             @Override
-            public void onBangumiAnthologyListener(String aid, String cid, String title) {
+            public void onBangumiAnthologyListener(String epId, String aid, String cid, String title) {
+                BangumiFragment.this.epId = epId;
                 BangumiFragment.this.cid = cid;
                 BangumiFragment.this.title = title;
 
@@ -96,7 +98,7 @@ public class BangumiFragment extends BaseSupportFragment implements View.OnClick
                     isInitialize = true;
                 } else {
                     videoPlayerContent.release();
-                    videoPlayerContent.setUrl(videoWithFlv.videoStreamInfoList.get(0).url, HttpUtils.getHeaders());
+                    videoPlayerContent.setUrl(videoWithFlv.videoStreamInfoList.get(0).url, HttpUtils.getVideoPlayHeaders(true, epId));
 
                     // 重新设置弹幕
                     videoPlayerController.resetDanmaku(videoWithFlv.cid);
@@ -114,7 +116,7 @@ public class BangumiFragment extends BaseSupportFragment implements View.OnClick
      * @param videoWithFlv 视频画质信息
      */
     private void initVideoPlayer(VideoWithFlv videoWithFlv) {
-        videoPlayerContent.setUrl(videoWithFlv.videoStreamInfoList.get(0).url, HttpUtils.getHeaders());
+        videoPlayerContent.setUrl(videoWithFlv.videoStreamInfoList.get(0).url, HttpUtils.getVideoPlayHeaders(true, epId));
         videoPlayerController = new VideoPlayerController(context, videoWithFlv);
         videoPlayerController.setOnBackListener(new VideoPlayerTitleView.OnBackListener() {
             @Override

@@ -21,7 +21,6 @@ import com.dueeeke.videoplayer.controller.IGestureComponent;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.dueeeke.videoplayer.util.PlayerUtils;
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.utils.Fuck;
 
 /**
  * @Author Leon
@@ -50,17 +49,14 @@ public class VideoPlayerGestureView extends FrameLayout implements IGestureCompo
 
     public VideoPlayerGestureView(Context context) {
         super(context);
-        initView();
     }
 
     public VideoPlayerGestureView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        initView();
     }
 
     public VideoPlayerGestureView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initView();
     }
 
     public interface OnDraggingListener {
@@ -77,7 +73,7 @@ public class VideoPlayerGestureView extends FrameLayout implements IGestureCompo
         this.onDraggingListener = onDraggingListener;
     }
 
-    private void initView() {
+    {
         setVisibility(GONE);
         LayoutInflater.from(getContext()).inflate(R.layout.video_player_gesture_view, this, true);
 
@@ -105,7 +101,7 @@ public class VideoPlayerGestureView extends FrameLayout implements IGestureCompo
     @Override
     public void onPlayStateChanged(int playState) {
 
-        if (playState == VideoView.STATE_IDLE
+        /*if (playState == VideoView.STATE_IDLE
                 || playState == VideoView.STATE_START_ABORT
                 || playState == VideoView.STATE_PREPARING
                 || playState == VideoView.STATE_PREPARED
@@ -115,6 +111,21 @@ public class VideoPlayerGestureView extends FrameLayout implements IGestureCompo
         } else {
             // 解决第一次打开视频播放界面，会显示手势控制视图的问题
             // 注意：第一次使用手势控制不会显示，后面再使用才能显示
+            if (playState == VideoView.STATE_PLAYING && isFirstPlayingState) {
+                setVisibility(GONE);
+                isFirstPlayingState = false;
+            } else {
+                setVisibility(VISIBLE);
+            }
+        }*/
+        if (playState == VideoView.STATE_IDLE
+                || playState == VideoView.STATE_START_ABORT
+                || playState == VideoView.STATE_PREPARING
+                || playState == VideoView.STATE_PREPARED
+                || playState == VideoView.STATE_ERROR
+                || playState == VideoView.STATE_PLAYBACK_COMPLETED) {
+            setVisibility(GONE);
+        } else {
             if (playState == VideoView.STATE_PLAYING && isFirstPlayingState) {
                 setVisibility(GONE);
                 isFirstPlayingState = false;

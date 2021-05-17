@@ -184,6 +184,25 @@ public class HttpUtils {
     }
 
     /**
+     * 解决视频播放失败的问题
+     *
+     * @param isBangumi 是否为番剧
+     * @param id    视频bvid/番剧选集epId
+     * @return  视频播放请求头
+     */
+    public static HashMap<String, String> getVideoPlayHeaders (boolean isBangumi, String id) {
+        HashMap<String, String> headers = getHeaders();
+
+        if (isBangumi) {
+            headers.replace("Referer", "https://www.bilibili.com/bangumi/play/ep" + id);
+        } else {
+            headers.replace("Referer", "https://www.bilibili.com/video/" + id);
+        }
+
+        return headers;
+    }
+
+    /**
      * 设置头信息
      *
      * @return  返回头信息

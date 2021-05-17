@@ -312,7 +312,7 @@
                             android:drawablePadding="10dp"
                             android:textColor="@color/black"
                             android:textSize="15sp"
-                            app:drawableStartCompat="@drawable/ic_coin1" />
+                            app:drawableStartCompat="@drawable/ic_coin_a" />
 
                         <TextView
                             android:id="@+id/user_accountInf_coin"
@@ -324,7 +324,7 @@
                             android:drawablePadding="10dp"
                             android:textColor="@color/black"
                             android:textSize="15sp"
-                            app:drawableStartCompat="@drawable/ic_coin2" />
+                            app:drawableStartCompat="@drawable/ic_b_coin" />
 
                         <TextView
                             android:id="@+id/user_accountInf_vipMark"

@@ -50,7 +50,6 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
     private ImageView videoPlayerBottomPlayButton;
     public ImageView videoPlayerBottomControlDanmakuControl;
     private EditText videoPlayerBottomControlDanmakuEditText;
-    private TextView videoPlayerBottomControlSpeed;
     private TextView videoPlayerBottomControlQuality;
     private ProgressBar videoPlayerBottomControlProgressBar;
 
@@ -108,7 +107,7 @@ public class VideoPlayerBottomControlView extends FrameLayout implements IContro
         videoPlayerBottomControlDanmakuControl.setOnClickListener(this);
 
         videoPlayerBottomControlDanmakuEditText = findViewById(R.id.video_player_bottom_control_danmaku_editText);
-        videoPlayerBottomControlSpeed = findViewById(R.id.video_player_bottom_control_speed);
+        TextView videoPlayerBottomControlSpeed = findViewById(R.id.video_player_bottom_control_speed);
         videoPlayerBottomControlSpeed.setOnClickListener(this);
 
         videoPlayerBottomControlQuality = findViewById(R.id.video_player_bottom_control_quality);

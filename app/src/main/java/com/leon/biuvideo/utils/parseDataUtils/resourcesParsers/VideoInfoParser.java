@@ -77,6 +77,8 @@ public class VideoInfoParser {
 
             JSONArray pages = dataObject.getJSONArray("pages");
             videoInfo.videoAnthologyList = new ArrayList<>(pages.size());
+            
+            int anthologyIndex = 1;
             for (Object object : pages) {
                 VideoInfo.VideoAnthology videoAnthology = new VideoInfo.VideoAnthology();
                 JSONObject jsonObject = (JSONObject) object;
@@ -97,7 +99,14 @@ public class VideoInfoParser {
                     videoAnthology.isDownloading = true;
                 }
 
-                videoAnthology.subTitle = jsonObject.getString("part");
+                String part = jsonObject.getString("part").trim();
+
+                if ("".equals(part)) {
+                    part = "第" + anthologyIndex + "集";
+                    anthologyIndex ++;
+                }
+
+                videoAnthology.subTitle = part;
                 videoAnthology.duration = ValueUtils.lengthGenerate(jsonObject.getIntValue("duration"));
                 videoAnthology.cover = videoInfo.cover;
                 videoInfo.videoAnthologyList.add(videoAnthology);

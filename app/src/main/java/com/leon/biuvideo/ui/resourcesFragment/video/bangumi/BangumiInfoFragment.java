@@ -104,7 +104,7 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
          * @param cid   视频cid
          * @param title 视频标题
          */
-        void onBangumiAnthologyListener (String aid, String cid, String title);
+        void onBangumiAnthologyListener (String epId, String aid, String cid, String title);
     }
 
     public void setOnBangumiInfoListener(OnBangumiInfoListener onBangumiInfoListener) {
@@ -180,7 +180,7 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
             @Override
             public void onLoad(Message msg) {
                 Object msgObj = msg.obj;
-                if (msgObj == null) {
+                if (msgObj == null && msg.what != 1) {
                     SimpleSnackBar.make(view, getString(R.string.snackBarDataErrorWarn), SimpleSnackBar.LENGTH_LONG).show();
                     backPressed();
                     return;
@@ -229,13 +229,17 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
 
         bangumiInfoOrder.setSelected(bangumi.isFollow);
 
-        if (bangumi.bangumiSeasonList == null || bangumi.bangumiSeasonList.size() < 2) {
+        if (bangumi.anthologyCount > 1) {
+            bangumiInfoAnthologyContainer.setVisibility(View.VISIBLE);
+        }
+
+        if (bangumi.bangumiSeasonList == null || bangumi.bangumiSeasonList.size() == 1) {
             bangumiInfoSeriesContainer.setVisibility(View.GONE);
         } else {
             bangumiInfoNowSeries.setRightValue(bangumi.bangumiSeasonList.get(seriesIndex).seasonTitle);
         }
 
-        if (bangumi.bangumiSectionList == null || bangumi.bangumiSectionList.size() < 2) {
+        if (bangumi.bangumiSectionList == null || bangumi.bangumiSectionList.size() == 1) {
             bangumiInfoSectionContainerList.setVisibility(View.GONE);
         } else {
             BangumiSectionContainerAdapter bangumiSectionContainerAdapter = new BangumiSectionContainerAdapter(bangumi.bangumiSectionList, getMainActivity(), context);
@@ -250,7 +254,8 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
         // 播放第一个视频
         if (onBangumiInfoListener != null) {
             BangumiAnthology bangumiAnthology = bangumi.bangumiAnthologyList.get(anthologyIndex);
-            onBangumiInfoListener.onBangumiAnthologyListener(bangumiAnthology.aid, bangumiAnthology.cid, bangumiAnthology.subTitle);
+            onBangumiInfoListener.onBangumiAnthologyListener(bangumiAnthology.id, bangumiAnthology.aid,
+                    bangumiAnthology.cid, bangumiAnthology.subTitle);
         }
 
         DownloadHistoryUtils downloadHistoryUtils = new DownloadHistoryUtils(context);
@@ -420,7 +425,8 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
 
                     BangumiAnthology bangumiAnthology = bangumi.bangumiAnthologyList.get(anthologyIndex);
                     bangumiInfoNowAnthology.setRightValue(bangumiAnthology.subTitle);
-                    onBangumiInfoListener.onBangumiAnthologyListener(bangumiAnthology.aid, bangumiAnthology.cid, bangumiAnthology.subTitle);
+                    onBangumiInfoListener.onBangumiAnthologyListener(bangumiAnthology.id, bangumiAnthology.aid,
+                            bangumiAnthology.cid, bangumiAnthology.subTitle);
 
                     videoAnthologyBottomSheet.dismiss();
                 }
@@ -499,15 +505,16 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
      * 显示下载弹窗
      */
     private void showDownloadBottomSheet () {
-        DownloadBottomSheet<BangumiAnthology> downloadBottomSheet = new DownloadBottomSheet<>(context);
-        downloadBottomSheet.setBangumiAnthologyList(bangumi.bangumiAnthologyList);
-        downloadBottomSheet.setOnClickDownloadItemListener(new DownloadBottomSheet.OnClickDownloadItemListener() {
+        DownloadBottomSheet<BangumiAnthology> downloadBottomSheet = new DownloadBottomSheet<>(context, bangumi.bangumiAnthologyList);
+        downloadBottomSheet.setOnClickDownloadItemListener(new DownloadBottomSheet.OnClickDownloadItemListener<BangumiAnthology>() {
             @Override
-            public void onClickItem() {
+            public boolean onClickItem(BangumiAnthology bangumiAnthology) {
                 downloadedRecordCount++;
 
                 String record = downloadedRecordCount + "/" + bangumi.anthologyCount;
                 bangumiInfoDownloadedRecord.setText(record);
+
+                return false;
             }
         });
         downloadBottomSheet.show();

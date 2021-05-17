@@ -146,7 +146,7 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
             @Override
             public void onLoad(Message msg) {
                 Object msgObj = msg.obj;
-                if (msgObj == null) {
+                if (msgObj == null && msg.what != 1) {
                     SimpleSnackBar.make(view, getString(R.string.snackBarDataErrorWarn), SimpleSnackBar.LENGTH_LONG).show();
                     backPressed();
                     return;
@@ -197,9 +197,8 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
         videoInfoFavorite.setText(ValueUtils.generateCN(videoInfo.videoStat.like));
         videoInfoShare.setText(ValueUtils.generateCN(videoInfo.videoStat.like));
 
-        if (videoInfo.videoAnthologyList.size() == 0) {
-            videoInfoAnthologyContainer.setVisibility(View.GONE);
-        } else {
+        if (videoInfo.videoAnthologyList.size() > 1) {
+            videoInfoAnthologyContainer.setVisibility(View.VISIBLE);
             videoInfoNowAnthology.setRightValue(videoInfo.videoAnthologyList.get(anthologyIndex).subTitle);
         }
 
@@ -456,15 +455,18 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
      * 显示下载弹窗
      */
     private void showDownloadBottomSheet() {
-        DownloadBottomSheet<VideoInfo.VideoAnthology> downloadBottomSheet = new DownloadBottomSheet<>(context);
-        downloadBottomSheet.setVideoAnthologyList(videoInfo.videoAnthologyList);
-        downloadBottomSheet.setOnClickDownloadItemListener(new DownloadBottomSheet.OnClickDownloadItemListener() {
+        DownloadBottomSheet<VideoInfo.VideoAnthology> downloadBottomSheet = new DownloadBottomSheet<>(context, videoInfo.videoAnthologyList);
+        downloadBottomSheet.setOnClickDownloadItemListener(new DownloadBottomSheet.OnClickDownloadItemListener<VideoInfo.VideoAnthology>() {
             @Override
-            public void onClickItem() {
+            public boolean onClickItem(VideoInfo.VideoAnthology videoAnthology) {
+
+
                 downloadedRecordCount++;
 
                 String record = downloadedRecordCount + "/" + videoInfo.anthologyCount;
                 videoInfoDownloadedRecord.setText(record);
+
+                return false;
             }
         });
         downloadBottomSheet.show();

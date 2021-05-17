@@ -10,6 +10,10 @@ import java.util.List;
  * @Desc 单视频数据（flv方式）
  */
 public class VideoWithFlv implements Serializable {
+    public boolean isBangumi;
+    public boolean isMovie;
+    public String referer;
+
     public String cid;
     public int currentQualityId;
     public LinkedHashMap<Integer, String> qualityMap;

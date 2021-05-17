@@ -115,9 +115,9 @@ public class VideoPlayerPrepareView extends FrameLayout implements IControlCompo
                 videoPlayerPrepareControl.setVisibility(VISIBLE);
                 break;
 
-            // 播放中止，在移动网络下
+            // 在移动网络下播放中止，隐藏准备页面
             case VideoView.STATE_START_ABORT:
-                setVisibility(VISIBLE);
+                setVisibility(GONE);
                 videoPlayerPrepareNetWarning.setVisibility(VISIBLE);
                 videoPlayerPrepareNetWarning.bringToFront();
                 break;

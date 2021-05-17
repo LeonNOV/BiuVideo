@@ -213,7 +213,9 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/ripple_round_corners6dp_bg"
             android:orientation="horizontal"
-            android:padding="@dimen/padding_10dp">
+            android:padding="@dimen/padding_10dp"
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <com.leon.biuvideo.ui.views.TagView
                 android:id="@+id/bangumi_info_now_anthology"
