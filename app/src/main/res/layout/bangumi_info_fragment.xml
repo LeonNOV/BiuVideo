@@ -46,15 +46,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/bangumi_info_badge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:textColor="@color/infoColor"
-                android:textSize="14sp"
-                tools:text="会员专享" />
-
-            <TextView
                 android:id="@+id/bangumi_info_state"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -192,13 +183,14 @@
                 android:id="@+id/bangumi_info_comments"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 app:leftValue="@string/videoComment" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
+                android:layout_gravity="end|center_vertical"
                 android:layout_marginStart="20dp"
                 android:text="@string/videoClickCheck"
                 android:textColor="@color/infoColor"
@@ -221,13 +213,14 @@
                 android:id="@+id/bangumi_info_now_anthology"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 app:leftValue="@string/videoNowPlay" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
+                android:layout_gravity="end|center_vertical"
                 android:layout_marginStart="20dp"
                 android:text="@string/videoClickChangeAnthology"
                 android:textColor="@color/infoColor"
@@ -242,19 +235,22 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/ripple_round_corners6dp_bg"
             android:orientation="horizontal"
-            android:padding="@dimen/padding_10dp">
+            android:padding="@dimen/padding_10dp"
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <com.leon.biuvideo.ui.views.TagView
                 android:id="@+id/bangumi_info_nowSeries"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 app:leftValue="@string/bangumiNowSeries" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
+                android:layout_gravity="end|center_vertical"
                 android:layout_marginStart="20dp"
                 android:text="@string/videoClickChangeAnthology"
                 android:textColor="@color/infoColor"
@@ -276,6 +272,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_marginStart="5dp"
                 android:layout_weight="1"
                 android:text="@string/download"
@@ -305,7 +302,9 @@
             android:focusable="false"
             android:orientation="vertical"
             android:overScrollMode="never"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:visibility="visible" />
 
         <com.leon.biuvideo.ui.views.LoadingRecyclerView
             android:id="@+id/bangumi_info_recommends"

@@ -13,8 +13,4 @@ public class BangumiSeason {
     public String seasonId;
 
     public String seasonTitle;
-
-    public int favorites;
-    public int seriesFollow;
-    public int views;
 }

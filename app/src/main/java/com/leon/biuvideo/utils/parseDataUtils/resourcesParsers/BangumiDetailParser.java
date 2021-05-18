@@ -13,6 +13,7 @@ import com.leon.biuvideo.greendao.dao.DownloadHistory;
 import com.leon.biuvideo.greendao.dao.DownloadHistoryDao;
 import com.leon.biuvideo.greendao.daoutils.DownloadHistoryUtils;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
@@ -52,11 +53,8 @@ public class BangumiDetailParser {
 
             JSONObject newEp = result.getJSONObject("new_ep");
             bangumi.newEpDesc = newEp.getString("desc");
-            bangumi.newEpIsNew = newEp.getIntValue("is_new") == 1;
 
             JSONObject publish = result.getJSONObject("publish");
-            bangumi.isFinished = publish.getIntValue("is_finish") == 1;
-            bangumi.isStarted = publish.getIntValue("is_started") == 1;
             bangumi.pubTime = publish.getString("pub_time");
             bangumi.pubTimeShow = publish.getString("pub_time_show");
 
@@ -140,14 +138,24 @@ public class BangumiDetailParser {
             bangumiAnthology.badge = "".equals(badge) ? null : badge;
             bangumiAnthology.cover = jsonObject.getString("cover");
 
-            String title = jsonObject.getString("long_title").trim();
-            if ("".equals(title)) {
+            String title;
+            if (jsonObject.containsKey("toast_title")) {
+                title = jsonObject.getString("toast_title");
+            } else {
+
+                String longTitle = jsonObject.getString("long_title");
                 String string = jsonObject.getString("title").trim();
                 try {
                     int i = Integer.parseInt(string);
                     title = "第" + i + "话";
                 } catch (NumberFormatException e) {
                     title = string;
+                }
+
+                if (longTitle != null) {
+                    if (!"".equals(longTitle)) {
+                        title += longTitle;
+                    }
                 }
             }
 
@@ -184,11 +192,6 @@ public class BangumiDetailParser {
             bangumiSeason.mediaId = jsonObject.getString("media_id");
             bangumiSeason.seasonId = jsonObject.getString("season_id");
             bangumiSeason.seasonTitle = jsonObject.getString("season_title");
-
-            JSONObject stat = jsonObject.getJSONObject("stat");
-            bangumiSeason.favorites = stat.getIntValue("favorites");
-            bangumiSeason.seriesFollow = stat.getIntValue("series_follow");
-            bangumiSeason.views = stat.getIntValue("views");
 
             bangumiSeasonList.add(bangumiSeason);
         }
@@ -229,19 +232,15 @@ public class BangumiDetailParser {
                 episode1.cid = jsonObject1.getString("cid");
                 episode1.cover = jsonObject1.getString("cover");
 
-                episode1.title = jsonObject1.getString("title");
-                episode1.longTitle = jsonObject1.getString("long_title");
-                episode1.pubTime = jsonObject1.getLongValue("pub_time");
-                episode1.shortLink = jsonObject1.getString("short_link");
-
-                JSONObject stat = jsonObject1.getJSONObject("stat");
-                episode1.coin = stat.getIntValue("coin");
-                episode1.danmaku = stat.getIntValue("danmakus");
-                episode1.likes = stat.getIntValue("likes");
-                episode1.play = stat.getIntValue("play");
-                episode1.reply = stat.getIntValue("reply");
+                if (jsonObject1.containsKey("toast_title")) {
+                    episode1.title = jsonObject1.getString("toast_title");
+                } else {
+                    episode1.title = jsonObject1.getString("title");
+                }
 
                 episode1.subTitle = jsonObject1.getString("subtitle");
+                episode1.pubTime = jsonObject1.getLongValue("pub_time");
+                episode1.shortLink = jsonObject1.getString("short_link");
 
                 bangumiSection.episodeList.add(episode1);
             }
@@ -258,12 +257,16 @@ public class BangumiDetailParser {
      * @return  true：已追番，false：未追番
      */
     private boolean getFollowStatus () {
-        Map<String, String> params = new HashMap<>(1);
-        params.put("season_id", seasonId);
+        if (PreferenceUtils.getLoginStatus()) {
+            Map<String, String> params = new HashMap<>(1);
+            params.put("season_id", seasonId);
 
-        JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.BANGUMI_STATUS, Headers.of(HttpUtils.getAPIRequestHeader()), params);
-        if (response.getIntValue("code") == 0) {
-            return response.getJSONObject("result").getIntValue("follow") != 0;
+            JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.BANGUMI_STATUS, Headers.of(HttpUtils.getAPIRequestHeader()), params);
+            if (response.getIntValue("code") == 0) {
+                return response.getJSONObject("result").getIntValue("follow") != 0;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }

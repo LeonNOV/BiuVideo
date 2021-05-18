@@ -52,7 +52,7 @@ android {
 
 greendao {
     // 数据库版本号
-    schemaVersion 1
+    schemaVersion 2
 
     // 生成数据库文件的目录
     targetGenDir 'src/main/java'

@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -83,6 +84,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
      */
     private final List<VideoRecommend> homeVideoRecommendList = new ArrayList<>(10);
     private final List<WatchLater> homeWatchLaterList = new ArrayList<>(10);
+    private TextView homeMyDownloadManager;
 
     @Override
     protected int setLayout() {
@@ -96,11 +98,13 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 .setOnClickListener(R.id.home_my_favorites, this)
                 .setOnClickListener(R.id.home_my_follows, this)
                 .setOnClickListener(R.id.home_my_history, this)
-                .setOnClickListener(R.id.home_my_downloadManager, this)
                 .setOnClickListener(R.id.home_setting, this)
                 .setOnClickListener(R.id.home_popular, this)
                 .setText(R.id.home_weekday, ValueUtils.getWeekday())
                 .setText(R.id.home_date, ValueUtils.generateTime(System.currentTimeMillis(), "MM/dd", false));
+
+        homeMyDownloadManager = findView(R.id.home_my_downloadManager);
+        homeMyDownloadManager.setOnClickListener(this);
 
         ((CardTitle) findView(R.id.home_cardTitle_recommend)).setOnClickActionListener(new CardTitle.OnClickActionListener() {
             @Override
@@ -127,6 +131,17 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
 
         initHandler();
         initValue();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (homeMyDownloadManager.getVisibility() == View.GONE) {
+            if (PreferenceUtils.getEasterEggStat()) {
+                homeMyDownloadManager.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     private void initHandler() {

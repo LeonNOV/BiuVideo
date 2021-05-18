@@ -33,10 +33,12 @@ public class DownloadWatcher {
      */
     @Download.onTaskCancel
     void onCancel (DownloadTask downloadTask) {
-        ResourceDownloadTask thisTask = findThisTask(downloadTask);
+        if (downloadTask != null) {
+            ResourceDownloadTask thisTask = findThisTask(downloadTask);
 
-        if (thisTask != null) {
-            updateStat(downloadTask, thisTask, false);
+            if (thisTask != null) {
+                updateStat(downloadTask, thisTask, false);
+            }
         }
     }
 
@@ -45,10 +47,12 @@ public class DownloadWatcher {
      */
     @Download.onTaskFail
     void onFailed(DownloadTask downloadTask) {
-        ResourceDownloadTask thisTask = findThisTask(downloadTask);
+        if (downloadTask != null) {
+            ResourceDownloadTask thisTask = findThisTask(downloadTask);
 
-        if (thisTask != null) {
-            updateStat(downloadTask, thisTask, false);
+            if (thisTask != null) {
+                updateStat(downloadTask, thisTask, false);
+            }
         }
     }
 
@@ -57,10 +61,12 @@ public class DownloadWatcher {
      */
     @Download.onTaskComplete
     void onCompleted(DownloadTask downloadTask) {
-        ResourceDownloadTask thisTask = findThisTask(downloadTask);
+        if (downloadTask != null) {
+            ResourceDownloadTask thisTask = findThisTask(downloadTask);
 
-        if (thisTask != null) {
-            updateStat(downloadTask, thisTask, true);
+            if (thisTask != null) {
+                updateStat(downloadTask, thisTask, true);
+            }
         }
     }
 

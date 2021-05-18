@@ -87,6 +87,7 @@
                 android:layout_gravity="right|bottom"
                 android:background="@android:color/transparent"
                 android:padding="16dp" />
+
         </com.ms.square.android.expandabletextview.ExpandableTextView>
 
         <LinearLayout

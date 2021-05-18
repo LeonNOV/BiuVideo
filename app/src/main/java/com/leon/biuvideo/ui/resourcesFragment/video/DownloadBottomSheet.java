@@ -41,10 +41,7 @@ import com.leon.biuvideo.values.Qualitys;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @Author Leon
@@ -401,33 +398,7 @@ public class DownloadBottomSheet<T extends Serializable> extends BottomSheetDial
             SimpleSingleThreadPool.executor(new Runnable() {
                 @Override
                 public void run() {
-                    VideoWithFlv videoWithFlv;
-
-                    videoWithFlv = videoWithFlvParser.parseData(cid, String.valueOf(qualityCode), isBangumi, false);
-
-                    // 判断选择清晰度是否与获取的的清晰度相同,如果不相同,则获取与选择清晰度最接近的清晰度
-                    if (qualityCode != videoWithFlv.currentQualityId) {
-                        // 获取所有能‘获取’的清晰度
-                        Set<Integer> keySet = videoWithFlv.qualityMap.keySet();
-                        keySet.add(qualityCode);
-                        ArrayList<Integer> integers = new ArrayList<>(keySet);
-                        Collections.sort(integers);
-
-                        // 以选择的画质为中点，分别获取上一个和下一个清晰度
-                        int midpoint = integers.indexOf(qualityCode);
-
-                        int pre = midpoint - 1;
-                        int next = midpoint + 1;
-
-                        // 默认获取下一个清晰度，如果没有，则获取上一个
-                        // 如果都不符合，则下载第一次获取的视频流
-                        if (next < integers.size()) {
-                            videoWithFlv = videoWithFlvParser.parseData(cid, String.valueOf(integers.get(next)), isBangumi, false);
-                        }
-//                        else if (pre >= 0) {
-//                            videoWithFlv = videoWithFlvParser.parseData(cid, String.valueOf(integers.get(pre)), isBangumi, false);
-//                        }
-                    }
+                    VideoWithFlv videoWithFlv = videoWithFlvParser.parseData(cid, String.valueOf(qualityCode), isBangumi, false);
 
                     Message message = handler.obtainMessage();
                     Bundle bundle = new Bundle();

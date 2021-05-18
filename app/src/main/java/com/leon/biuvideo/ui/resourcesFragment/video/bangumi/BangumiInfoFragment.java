@@ -214,17 +214,11 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
 
         bangumiInfoTitle.setText(bangumi.title);
 
-        if (bangumi.bangumiSeasonList.get(seriesIndex).badge != null) {
-            bindingUtils.setText(R.id.bangumi_info_badge, bangumi.bangumiSeasonList.get(seriesIndex).badge);
-        } else {
-            bindingUtils.setVisibility(R.id.bangumi_info_badge, View.GONE);
-        }
-
         bindingUtils
                 .setText(R.id.bangumi_info_state, bangumi.newEpDesc)
                 .setText(R.id.bangumi_info_score, bangumi.ratingScore + "分")
                 .setText(R.id.bangumi_info_play, ValueUtils.generateCN(bangumi.views) + "播放")
-                .setText(R.id.bangumi_info_orderTotal, ValueUtils.generateCN(bangumi.bangumiSeasonList.get(seriesIndex).seriesFollow) + "系列追番");
+                .setText(R.id.bangumi_info_orderTotal, ValueUtils.generateCN(bangumi.favorites) + "系列订阅");
         bangumiInfoNowAnthology.setRightValue(bangumi.bangumiAnthologyList.get(anthologyIndex).subTitle);
 
         bangumiInfoOrder.setSelected(bangumi.isFollow);
@@ -233,15 +227,13 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
             bangumiInfoAnthologyContainer.setVisibility(View.VISIBLE);
         }
 
-        if (bangumi.bangumiSeasonList == null || bangumi.bangumiSeasonList.size() == 1) {
-            bangumiInfoSeriesContainer.setVisibility(View.GONE);
-        } else {
+        if (bangumi.bangumiSeasonList != null && bangumi.bangumiSeasonList.size() > 1) {
+            bangumiInfoSeriesContainer.setVisibility(View.VISIBLE);
             bangumiInfoNowSeries.setRightValue(bangumi.bangumiSeasonList.get(seriesIndex).seasonTitle);
         }
 
-        if (bangumi.bangumiSectionList == null || bangumi.bangumiSectionList.size() == 1) {
-            bangumiInfoSectionContainerList.setVisibility(View.GONE);
-        } else {
+        if (bangumi.bangumiSectionList != null && bangumi.bangumiSectionList.size() > 1) {
+            bangumiInfoSectionContainerList.setVisibility(View.VISIBLE);
             BangumiSectionContainerAdapter bangumiSectionContainerAdapter = new BangumiSectionContainerAdapter(bangumi.bangumiSectionList, getMainActivity(), context);
             bangumiSectionContainerAdapter.setHasStableIds(true);
             bangumiInfoSectionContainerList.setAdapter(bangumiSectionContainerAdapter);

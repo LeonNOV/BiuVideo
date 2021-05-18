@@ -113,6 +113,7 @@
                     android:textColor="@color/black"
                     android:textSize="15sp"
                     android:textStyle="bold"
+                    android:visibility="gone"
                     app:drawableStartCompat="@drawable/ic_my_downloadeds" />
 
                 <TextView

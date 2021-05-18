@@ -15,17 +15,6 @@ public class Bangumi {
     public String desc;
 
     public String newEpDesc;
-    public boolean newEpIsNew;
-
-    /**
-     * 是否已完结
-     */
-    public boolean isFinished;
-
-    /**
-     * 是否已发布
-     */
-    public boolean isStarted;
 
     public String pubTime;
     public String pubTimeShow;

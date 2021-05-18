@@ -24,12 +24,6 @@ public class BangumiSection {
         public long pubTime;
         public String shortLink;
 
-        public int coin;
-        public int danmaku;
-        public int likes;
-        public int play;
-        public int reply;
-
         public String subTitle;
     }
 }
