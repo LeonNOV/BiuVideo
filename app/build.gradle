@@ -147,7 +147,4 @@ dependencies {
 
     // 百度统计
     implementation 'com.baidu.mobstat:mtj-sdk:4.0.4.6'
-
-    // 捐赠
-    implementation 'com.github.didikee:AndroidDonate:0.1.0'
 }

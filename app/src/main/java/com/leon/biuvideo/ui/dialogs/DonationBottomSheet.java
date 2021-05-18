@@ -2,18 +2,19 @@ package com.leon.biuvideo.ui.dialogs;
 
 import android.app.Activity;
 import android.content.Context;
-import android.didikee.donate.AlipayDonate;
-import android.didikee.donate.WeiXinDonate;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.utils.downloadUtils.ResourceDownloadTask;
+import com.leon.biuvideo.utils.pay.AliDonationUtils;
+import com.leon.biuvideo.utils.pay.WeChatDonationUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -65,9 +66,9 @@ public class DonationBottomSheet extends BottomSheetDialog implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.donation_aliPay:
-                boolean status = AlipayDonate.hasInstalledAlipayClient(getContext());
+                boolean status = AliDonationUtils.hasInstalledAlipayClient(getContext());
                 if (status) {
-                    AlipayDonate.startAlipayClient(activity, "a6x01339a0oa09cw0ds024b");
+                    AliDonationUtils.startAlipayClient(activity, "a6x01339a0oa09cw0ds024b");
                     isDonation = true;
                 }
                 break;
@@ -81,9 +82,10 @@ public class DonationBottomSheet extends BottomSheetDialog implements View.OnCli
                     picturesPath.mkdirs();
                 }
 
-                String qrPath = new File(picturesPath, "WeChatDonation.png").getAbsolutePath();
-                WeiXinDonate.saveDonateQrImage2SDCard(qrPath, BitmapFactory.decodeStream(weChatPayQrcode));
-                WeiXinDonate.donateViaWeiXin(activity, qrPath);
+                File qrCodeFile = new File(picturesPath, "WeChatDonation.png");
+                WeChatDonationUtils.saveDonateQrImage2SDCard(qrCodeFile.getAbsolutePath(), BitmapFactory.decodeStream(weChatPayQrcode));
+                Toast.makeText(activity, "正在跳转中，请不要进行任何操作", Toast.LENGTH_SHORT).show();
+                WeChatDonationUtils.donateViaWeiXin(activity, qrCodeFile);
                 isDonation = true;
 
                 break;
