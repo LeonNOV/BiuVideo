@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -18,8 +19,9 @@ import com.dueeeke.videoplayer.player.VideoView;
 import com.dueeeke.videoplayer.util.PlayerUtils;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoWithFlv;
-import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoDanmakuView;
+import com.leon.biuvideo.ui.MainActivity;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.OnDanmakuListener;
+import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoDanmakuView;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerBottomControlView;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerCompleteView;
 import com.leon.biuvideo.ui.resourcesFragment.video.videoControlComonents.VideoPlayerErrorView;
@@ -41,15 +43,18 @@ public class VideoPlayerController extends GestureVideoController implements OnD
     private VideoPlayerBottomControlView videoPlayerBottomControlView;
 
     private VideoWithFlv videoWithFlv;
+    private MainActivity activity;
+
     private VideoPlayerTitleView videoPlayerTitleView;
 
     public void setOnBackListener(VideoPlayerTitleView.OnBackListener onBackListener) {
         this.onBackListener = onBackListener;
     }
 
-    public VideoPlayerController(@NonNull Context context, VideoWithFlv videoWithFlv) {
+    public VideoPlayerController(@NonNull Context context, VideoWithFlv videoWithFlv, MainActivity activity) {
         super(context);
         this.videoWithFlv = videoWithFlv;
+        this.activity = activity;
     }
 
     public VideoPlayerController(@NonNull Context context, @Nullable AttributeSet attrs) {
@@ -167,6 +172,9 @@ public class VideoPlayerController extends GestureVideoController implements OnD
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT));
                 videoPlayerControllerLock.setVisibility(GONE);
+
+                // 退出全屏后，隐藏状态栏
+                activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
                 break;
             case VideoView.PLAYER_FULL_SCREEN:
                 videoPlayerControllerLock.setVisibility(isShowing() ? VISIBLE : GONE);
@@ -216,6 +224,9 @@ public class VideoPlayerController extends GestureVideoController implements OnD
                 videoPlayerControllerLoading.setVisibility(GONE);
                 videoPlayerControllerLock.setVisibility(GONE);
                 videoPlayerControllerLock.setSelected(false);
+            case VideoView.STATE_START_ABORT:
+                videoPlayerControllerLoading.setVisibility(GONE);
+                videoPlayerControllerLock.setVisibility(GONE);
                 break;
             default:
                 break;

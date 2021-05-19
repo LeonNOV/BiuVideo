@@ -11,16 +11,12 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteVideoFolder;
 import com.leon.biuvideo.utils.InternetUtils;
 
-import java.util.List;
-
 /**
  * @Author Leon
  * @Time 2021/3/19
  * @Desc 用户视频收藏夹适配器
  */
 public class FavoriteVideoFolderAdapter extends BaseAdapter<FavoriteVideoFolder> {
-    private final List<FavoriteVideoFolder> favoriteVideoFolders;
-
     private OnClickVideoFolderListener onClickVideoFolderListener;
 
     public interface OnClickVideoFolderListener {
@@ -37,10 +33,8 @@ public class FavoriteVideoFolderAdapter extends BaseAdapter<FavoriteVideoFolder>
         this.onClickVideoFolderListener = onClickVideoFolderListener;
     }
 
-    public FavoriteVideoFolderAdapter(List<FavoriteVideoFolder> beans, Context context) {
-        super(beans, context);
-
-        this.favoriteVideoFolders = beans;
+    public FavoriteVideoFolderAdapter(Context context) {
+        super(context);
     }
 
     @Override
@@ -50,7 +44,7 @@ public class FavoriteVideoFolderAdapter extends BaseAdapter<FavoriteVideoFolder>
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        FavoriteVideoFolder favoriteVideoFolder = favoriteVideoFolders.get(position);
+        FavoriteVideoFolder favoriteVideoFolder = getAllData().get(position);
 
         holder
                 .setText(R.id.favorite_video_folder_item_name, favoriteVideoFolder.title)

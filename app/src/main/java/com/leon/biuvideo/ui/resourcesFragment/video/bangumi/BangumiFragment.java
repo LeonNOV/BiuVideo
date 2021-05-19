@@ -31,6 +31,8 @@ import org.greenrobot.eventbus.ThreadMode;
  */
 public class BangumiFragment extends BaseSupportFragment implements View.OnClickListener {
     private final String seasonId;
+    private final int position;
+
     private boolean isInitialize = false;
     private String epId;
     private String cid;
@@ -41,8 +43,9 @@ public class BangumiFragment extends BaseSupportFragment implements View.OnClick
 
     private VideoWithFlvParser videoWithFlvParser;
 
-    public BangumiFragment(String seasonId) {
+    public BangumiFragment(String seasonId, String position) {
         this.seasonId = seasonId;
+        this.position = position == null ? 0 : Integer.parseInt(position);
     }
 
     private VideoView<IjkPlayer> videoPlayerContent;
@@ -66,7 +69,7 @@ public class BangumiFragment extends BaseSupportFragment implements View.OnClick
         videoDanmakuStatus.setSelected(true);
         videoDanmakuStatus.setOnClickListener(this);
 
-        BangumiInfoFragment bangumiInfoFragment = new BangumiInfoFragment(seasonId);
+        BangumiInfoFragment bangumiInfoFragment = new BangumiInfoFragment(seasonId, position);
         bangumiInfoFragment.setOnBangumiInfoListener(new BangumiInfoFragment.OnBangumiInfoListener() {
             @Override
             public void onBangumiAnthologyListener(String epId, String aid, String cid, String title) {
@@ -117,7 +120,7 @@ public class BangumiFragment extends BaseSupportFragment implements View.OnClick
      */
     private void initVideoPlayer(VideoWithFlv videoWithFlv) {
         videoPlayerContent.setUrl(videoWithFlv.videoStreamInfoList.get(0).url, HttpUtils.getVideoPlayHeaders(true, epId));
-        videoPlayerController = new VideoPlayerController(context, videoWithFlv);
+        videoPlayerController = new VideoPlayerController(context, videoWithFlv, getMainActivity());
         videoPlayerController.setOnBackListener(new VideoPlayerTitleView.OnBackListener() {
             @Override
             public void onBack() {
@@ -149,7 +152,7 @@ public class BangumiFragment extends BaseSupportFragment implements View.OnClick
      */
     public void getVideoStreamUrl (String cid, String qualityId) {
         if (videoWithFlvParser == null) {
-            videoWithFlvParser = new VideoWithFlvParser(seasonId);
+            videoWithFlvParser = new VideoWithFlvParser();
         }
 
         SimpleSingleThreadPool.executor(new Runnable() {

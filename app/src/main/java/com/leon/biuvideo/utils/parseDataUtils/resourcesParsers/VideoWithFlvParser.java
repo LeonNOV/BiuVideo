@@ -26,7 +26,10 @@ public class VideoWithFlvParser {
      */
     private static final String FOURK = "1";
 
-    private final String bvid;
+    private String bvid;
+
+    public VideoWithFlvParser() {
+    }
 
     public VideoWithFlvParser(String bvid) {
         this.bvid = bvid;
@@ -54,8 +57,8 @@ public class VideoWithFlvParser {
         }
 
         params.put("fourk", FOURK);
-        if (!isBangumi) {
-            params.put("bvid", String.valueOf(bvid));
+        if (!isBangumi && bvid != null) {
+            params.put("bvid", bvid);
         }
 
         JSONObject response = HttpUtils.getResponse(isBangumi ?

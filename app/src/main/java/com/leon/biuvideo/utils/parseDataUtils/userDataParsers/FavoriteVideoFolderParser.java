@@ -23,27 +23,32 @@ import okhttp3.Headers;
 public class FavoriteVideoFolderParser extends ParserInterface<FavoriteVideoFolder> {
     @Override
     public List<FavoriteVideoFolder> parseData() {
-        Map<String, String> params = new HashMap<>(1);
-        params.put("up_mid", PreferenceUtils.getUserId());
+        if (PreferenceUtils.getLoginStatus()) {
 
-        JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.USER_FAV_FOLDER, Headers.of(HttpUtils.getAPIRequestHeader()), params);
-        JSONObject data = responseObject.getJSONObject("data");
+            Map<String, String> params = new HashMap<>(1);
+            params.put("up_mid", PreferenceUtils.getUserId());
 
-        JSONArray list = data.getJSONArray("list");
-        List<FavoriteVideoFolder> favoriteVideoFolders = new ArrayList<>(list.size());
+            JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.USER_FAV_FOLDER, Headers.of(HttpUtils.getAPIRequestHeader()), params);
+            JSONObject data = responseObject.getJSONObject("data");
 
-        for (Object o : list) {
-            JSONObject jsonObject = (JSONObject) o;
-            FavoriteVideoFolder favoriteVideoFolder = new FavoriteVideoFolder();
+            JSONArray list = data.getJSONArray("list");
+            List<FavoriteVideoFolder> favoriteVideoFolders = new ArrayList<>(list.size());
 
-            favoriteVideoFolder.id = jsonObject.getLongValue("id");
-            favoriteVideoFolder.count = jsonObject.getIntValue("media_count");
-            favoriteVideoFolder.mid = jsonObject.getLongValue("mid");
-            favoriteVideoFolder.title = jsonObject.getString("title");
+            for (Object o : list) {
+                JSONObject jsonObject = (JSONObject) o;
+                FavoriteVideoFolder favoriteVideoFolder = new FavoriteVideoFolder();
 
-            favoriteVideoFolders.add(favoriteVideoFolder);
+                favoriteVideoFolder.id = jsonObject.getLongValue("id");
+                favoriteVideoFolder.count = jsonObject.getIntValue("media_count");
+                favoriteVideoFolder.mid = jsonObject.getLongValue("mid");
+                favoriteVideoFolder.title = jsonObject.getString("title");
+
+                favoriteVideoFolders.add(favoriteVideoFolder);
+            }
+
+            return favoriteVideoFolders;
+        } else {
+            return null;
         }
-
-        return favoriteVideoFolders;
     }
 }

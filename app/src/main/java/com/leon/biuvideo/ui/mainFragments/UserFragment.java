@@ -175,8 +175,8 @@ public class UserFragment extends BaseSupportFragment {
         private TagView userBaseInfoUid;
 
         private ImageView userBanner;
-        private TextView userTopName;
         private CircleImageView userFace;
+        private TextView userTopName;
         private TextView userAccountInfoLevel;
         private TextView userAccountInfoVipValid;
         private TextView userAccountInfoVipMark;
@@ -186,6 +186,7 @@ public class UserFragment extends BaseSupportFragment {
         private TextView userAccountInfoEx;
         private LinearLayout userBaseInfoVerify;
         private TextView userBaseInfoVerifyDesc;
+        private TextView userLoginOption;
 
         /**
          * 初始化所有控件
@@ -195,7 +196,8 @@ public class UserFragment extends BaseSupportFragment {
             initBaseInfoViews();
             initAccountViews();
 
-            findView(R.id.user_logout).setOnClickListener(this);
+            userLoginOption = findView(R.id.user_login_option);
+            userLoginOption.setOnClickListener(this);
 
             userBaseInfoLinearLayout = findView(R.id.user_baseInfo_linearLayout);
             userAccountInfoLinearLayout = findView(R.id.user_accountInfo_linearLayout);
@@ -206,8 +208,8 @@ public class UserFragment extends BaseSupportFragment {
          */
         private void initTopViews() {
             userBanner = findView(R.id.user_banner);
+
             userFace = findView(R.id.user_face);
-            userFace.setOnClickListener(this);
 
             userVipMark = findView(R.id.user_vip_mark);
             userTopName = findView(R.id.user_top_name);
@@ -259,21 +261,25 @@ public class UserFragment extends BaseSupportFragment {
 
             switch (v.getId()) {
                 case R.id.user_top_following:
-                    targetFragment = FollowsFragment.getInstance(false, PreferenceUtils.getUserId());
+                    if (PreferenceUtils.getLoginStatus()) {
+                        targetFragment = FollowsFragment.getInstance(false, PreferenceUtils.getUserId());
+                    } else {
+                        SimpleSnackBar.make(v, getString(R.string.no_login), SimpleSnackBar.LENGTH_LONG).show();
+                    }
                     break;
                 case R.id.user_top_fans:
-                    targetFragment = FollowersFragment.getInstance(false, PreferenceUtils.getUserId());
+                    if (PreferenceUtils.getLoginStatus()) {
+                        targetFragment = FollowersFragment.getInstance(false, PreferenceUtils.getUserId());
+                    } else {
+                        SimpleSnackBar.make(v, getString(R.string.no_login), SimpleSnackBar.LENGTH_LONG).show();
+                    }
                     break;
                 case R.id.user_baseInfo_check_all:
                     targetFragment = new UserInfoFragment(userInfo);
                     break;
-                case R.id.user_face:
-                    targetFragment = LoginFragment.getInstance();
-                    break;
-                case R.id.user_logout:
-                    WarnDialog warnDialog = new WarnDialog(context);
-
+                case R.id.user_login_option:
                     if (PreferenceUtils.getLoginStatus()) {
+                        WarnDialog warnDialog = new WarnDialog(context);
                         warnDialog.setTitle("提示");
                         warnDialog.setContent("是否要退出当前账户？");
                         warnDialog.setOnWarnActionListener(new WarnDialog.OnWarnActionListener() {
@@ -296,25 +302,11 @@ public class UserFragment extends BaseSupportFragment {
                                 warnDialog.dismiss();
                             }
                         });
-
+                        warnDialog.show();
                     } else {
-                        warnDialog.setTitle("提示");
-                        warnDialog.setContent("还未进行登录，是否要登录账户？");
-                        warnDialog.setOnWarnActionListener(new WarnDialog.OnWarnActionListener() {
-                            @Override
-                            public void onConfirm() {
-                                ((NavFragment) getParentFragment()).startBrotherFragment(LoginFragment.getInstance());
-                            }
-
-                            @Override
-                            public void onCancel() {
-                                warnDialog.dismiss();
-                            }
-                        });
+                        targetFragment = LoginFragment.getInstance();
                     }
-
-                    warnDialog.show();
-                    return;
+                    break;
                 default:
                     break;
             }
@@ -340,6 +332,7 @@ public class UserFragment extends BaseSupportFragment {
             userTopRead.setLeftValue("0");
 
             userTopName.setText(R.string.no_login);
+            userLoginOption.setText(R.string.login_account);
 
             setVisibility(false);
 
@@ -364,8 +357,8 @@ public class UserFragment extends BaseSupportFragment {
             if (PreferenceUtils.getLoginStatus()) {
                 userVipMark.setVisibility(userInfo.isVip ? View.VISIBLE : View.GONE);
                 userTopName.setText(userInfo.userName);
-                Glide.with(context).load(userInfo.userFace).into(userFace);
-                Glide.with(context).load(userInfo.banner).into(userBanner);
+                Glide.with(getContext()).load(userInfo.userFace).into(userFace);
+                Glide.with(getContext()).load(userInfo.banner).into(userBanner);
 
                 userTopFans.setLeftValue(ValueUtils.generateCN(userInfo.fans));
                 userTopFollow.setLeftValue(ValueUtils.generateCN(userInfo.follows));
@@ -395,6 +388,8 @@ public class UserFragment extends BaseSupportFragment {
                 userAccountInfoVipValid.setText(userInfo.vipDueDate);
                 userAccountInfExProgress.setMax(userInfo.totalExp);
                 userAccountInfExProgress.setProgress(userInfo.currentExp,true);
+
+                userLoginOption.setText(R.string.logout_account);
             }
         }
 

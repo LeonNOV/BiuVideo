@@ -101,7 +101,7 @@
     <string name="setting_default_quality">1080P 高清</string>
 
     <string name="description">description</string>
-    <string name="no_login">点击上方头像即可登录</string>
+    <string name="no_login">还未进行登录哦~</string>
 <!-- ========================================================================================== -->
 
     <string name="preference">initValues</string>
@@ -161,7 +161,7 @@
     <string name="loading">加载数据中</string>
     <string name="exporting">导出数据中</string>
     <string name="login_account">登录账户</string>
-    <string name="Logout">退出当前账户</string>
+    <string name="logout_account">退出当前账户</string>
 
     <!-- 分区 -->
     <string name="partition_anime">番剧</string>

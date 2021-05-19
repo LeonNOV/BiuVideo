@@ -6,7 +6,8 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/topBar_height">
+        android:layout_height="@dimen/topBar_height"
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/login_back"

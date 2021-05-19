@@ -106,7 +106,7 @@ public class VideoFragment extends BaseSupportFragment {
         }
 
         videoPlayerContent.setUrl(videoWithFlv.videoStreamInfoList.get(0).url, HttpUtils.getVideoPlayHeaders(false, bvid));
-        videoPlayerController = new VideoPlayerController(context, videoWithFlv);
+        videoPlayerController = new VideoPlayerController(context, videoWithFlv, getMainActivity());
         videoPlayerController.setOnBackListener(new VideoPlayerTitleView.OnBackListener() {
             @Override
             public void onBack() {

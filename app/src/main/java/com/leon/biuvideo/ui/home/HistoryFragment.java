@@ -30,6 +30,11 @@ public class HistoryFragment extends BaseSupportFragment {
 
         historyDataLoader = new DataLoader<>(context, new HistoryParser(),
                 R.id.history_data, new HistoryAdapter(getMainActivity(), context), this);
+    }
+
+    @Override
+    public void lazyInit() {
+        super.lazyInit();
         historyDataLoader.insertData(true);
     }
 }

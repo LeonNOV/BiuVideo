@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.beans.userBeans.History;
 import com.leon.biuvideo.beans.userBeans.HistoryType;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.parseDataUtils.ParserInterface;
 import com.leon.biuvideo.values.HistoryPlatformType;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
@@ -27,40 +28,42 @@ public class HistoryParser extends ParserInterface<History> {
 
     @Override
     public List<History> parseData() {
-        Map<String, String> params = new HashMap<>(2);
-        params.put("max", String.valueOf(max));
-        params.put("view_at", String.valueOf(viewAt));
+        if (PreferenceUtils.getLoginStatus()) {
+            Map<String, String> params = new HashMap<>(2);
+            params.put("max", String.valueOf(max));
+            params.put("view_at", String.valueOf(viewAt));
 
-        if (dataStatus) {
-            JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.history, Headers.of(HttpUtils.getAPIRequestHeader()), params);
+            if (dataStatus) {
+                JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.history, Headers.of(HttpUtils.getAPIRequestHeader()), params);
 
-            int code = responseObject.getIntValue("code");
-            if (code == 0) {
-                JSONObject data = responseObject.getJSONObject("data");
+                int code = responseObject.getIntValue("code");
+                if (code == 0) {
+                    JSONObject data = responseObject.getJSONObject("data");
 
-                JSONObject cursor = data.getJSONObject("cursor");
-                this.max = cursor.getLongValue("max");
-                this.viewAt = cursor.getLongValue("view_at");
-                if (this.max == 0 && this.viewAt == 0) {
-                    this.dataStatus = false;
-                }
-
-                JSONArray list = data.getJSONArray("list");
-                List<History> historyList = new ArrayList<>(list.size());
-
-                if (list.size() == 0) {
-                    return null;
-                }
-
-                for (Object o : list) {
-                    History history = parseArrayElement((JSONObject) o);
-
-                    if (history != null) {
-                        historyList.add(history);
+                    JSONObject cursor = data.getJSONObject("cursor");
+                    this.max = cursor.getLongValue("max");
+                    this.viewAt = cursor.getLongValue("view_at");
+                    if (this.max == 0 && this.viewAt == 0) {
+                        this.dataStatus = false;
                     }
-                }
 
-                return historyList;
+                    JSONArray list = data.getJSONArray("list");
+                    List<History> historyList = new ArrayList<>(list.size());
+
+                    if (list.size() == 0) {
+                        return null;
+                    }
+
+                    for (Object o : list) {
+                        History history = parseArrayElement((JSONObject) o);
+
+                        if (history != null) {
+                            historyList.add(history);
+                        }
+                    }
+
+                    return historyList;
+                }
             }
         }
 

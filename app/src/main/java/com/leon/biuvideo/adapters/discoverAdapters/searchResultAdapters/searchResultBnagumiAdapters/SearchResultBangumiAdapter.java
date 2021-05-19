@@ -48,7 +48,7 @@ public class SearchResultBangumiAdapter extends BaseAdapter<SearchResultBangumi>
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startPublicFragment(mainActivity, FragmentType.VIDEO, searchResultBangumi.seasonId);
+                        startPublicFragment(mainActivity, FragmentType.BANGUMI, searchResultBangumi.seasonId);
                     }
                 });
 
@@ -63,7 +63,8 @@ public class SearchResultBangumiAdapter extends BaseAdapter<SearchResultBangumi>
 
         RecyclerView searchResultItemBangumiEps = holder.findById(R.id.search_result_item_bangumi_eps);
 
-        SearchResultBangumiEpAdapter searchResultBangumiEpAdapter = new SearchResultBangumiEpAdapter(searchResultBangumi.searchResultBangumiEpList, context);
+        SearchResultBangumiEpAdapter searchResultBangumiEpAdapter = new SearchResultBangumiEpAdapter(searchResultBangumi.seasonId,
+                searchResultBangumi.searchResultBangumiEpList, mainActivity, context);
         searchResultBangumiEpAdapter.setHasStableIds(true);
         searchResultItemBangumiEps.setAdapter(searchResultBangumiEpAdapter);
     }

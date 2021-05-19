@@ -122,27 +122,31 @@ public abstract class BaseSupportFragment extends SupportFragment {
      * @param fragmentType  FragmentType
      * @param params 参数
      */
-    public void startPublicFragment (FragmentType fragmentType, String params) {
+    public void startPublicFragment (FragmentType fragmentType, String ... params) {
         if (InternetUtils.checkNetwork(_mActivity.getWindow().getDecorView())) {
             NavFragment navFragment = getMainActivity().findFragment(NavFragment.class);
             switch (fragmentType) {
                 case BILI_USER:
-                    navFragment.startBrotherFragment(new BiliUserFragment(params));
+                    navFragment.startBrotherFragment(new BiliUserFragment(params[0]));
                     break;
                 case VIDEO:
-                    navFragment.startBrotherFragment(new VideoFragment(params));
+                    navFragment.startBrotherFragment(new VideoFragment(params[0]));
                     break;
                 case BANGUMI:
-                    navFragment.startBrotherFragment(new BangumiFragment(params));
+                    if (params.length > 1) {
+                        navFragment.startBrotherFragment(new BangumiFragment(params[0], params[1]));
+                    } else {
+                        navFragment.startBrotherFragment(new BangumiFragment(params[0], null));
+                    }
                     break;
                 case AUDIO:
-                    navFragment.startBrotherFragment(new AudioFragment(params));
+                    navFragment.startBrotherFragment(new AudioFragment(params[0]));
                     break;
                 case ARTICLE:
-                    navFragment.startBrotherFragment(new ArticleFragment(params));
+                    navFragment.startBrotherFragment(new ArticleFragment(params[0]));
                     break;
                 case PICTURE:
-                    navFragment.startBrotherFragment(new PictureFragment(params));
+                    navFragment.startBrotherFragment(new PictureFragment(params[0]));
                     break;
                 default:
                     break;

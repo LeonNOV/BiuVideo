@@ -429,7 +429,7 @@
                 </LinearLayout>-->
 
                 <TextView
-                    android:id="@+id/user_logout"
+                    android:id="@+id/user_login_option"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/cardMargin"
@@ -440,7 +440,7 @@
                     android:gravity="center"
                     android:paddingTop="@dimen/cardPadding"
                     android:paddingBottom="@dimen/cardPadding"
-                    android:text="@string/Logout"
+                    android:text="@string/login_account"
                     android:textColor="@color/white"
                     android:textSize="15sp"
                     android:textStyle="bold" />
