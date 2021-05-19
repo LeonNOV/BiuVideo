@@ -69,7 +69,7 @@ public class VideoInfoParser {
             videoInfo.videoStat = new VideoInfo.VideoStat();
             videoInfo.videoStat.view = stat.getIntValue("view");
             videoInfo.videoStat.danmaku = stat.getIntValue("danmaku");
-            videoInfo.videoStat.comment = stat.getIntValue("replay");
+            videoInfo.videoStat.comment = stat.getIntValue("reply");
             videoInfo.videoStat.favorite = stat.getIntValue("favorite");
             videoInfo.videoStat.like = stat.getIntValue("like");
             videoInfo.videoStat.coin = stat.getIntValue("coin");

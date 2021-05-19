@@ -2,15 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/bg"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_height="match_parent">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/topBar_height"
         android:background="@color/white"
         android:paddingStart="10dp"
+        app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
         android:paddingEnd="10dp">
 
         <TextView
@@ -32,14 +32,15 @@
 
     </FrameLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/bg">
 
-        <LinearLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:background="@color/bg">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -49,7 +50,8 @@
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/round_corners6dp_bg"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:padding="10dp"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -161,30 +163,32 @@
 
             </LinearLayout>
 
-            <LinearLayout
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:background="@drawable/round_corners6dp_bg"
+            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <com.leon.biuvideo.ui.views.CardTitle
+                android:id="@+id/video_comment_detail_cardTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp" />
+
+            <com.leon.biuvideo.ui.views.SmartRefreshRecyclerView
+                android:id="@+id/video_comment_detail_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="20dp"
-                android:background="@drawable/round_corners6dp_bg"
-                android:orientation="vertical">
-
-                <com.leon.biuvideo.ui.views.CardTitle
-                    android:id="@+id/video_comment_detail_cardTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp" />
-
-                <com.leon.biuvideo.ui.views.SmartRefreshRecyclerView
-                    android:id="@+id/video_comment_detail_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/recyclerViewPadding" />
-
-            </LinearLayout>
+                android:padding="@dimen/recyclerViewPadding" />
 
         </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </LinearLayout>
+

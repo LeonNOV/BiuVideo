@@ -119,6 +119,12 @@ public class BangumiFragment extends BaseSupportFragment implements View.OnClick
      * @param videoWithFlv 视频画质信息
      */
     private void initVideoPlayer(VideoWithFlv videoWithFlv) {
+        if (videoWithFlv == null) {
+            SimpleSnackBar.make(getActivity().getWindow().getDecorView(), "获取数据失败", SimpleSnackBar.LENGTH_LONG).show();
+            backPressed();
+            return;
+        }
+
         videoPlayerContent.setUrl(videoWithFlv.videoStreamInfoList.get(0).url, HttpUtils.getVideoPlayHeaders(true, epId));
         videoPlayerController = new VideoPlayerController(context, videoWithFlv, getMainActivity());
         videoPlayerController.setOnBackListener(new VideoPlayerTitleView.OnBackListener() {

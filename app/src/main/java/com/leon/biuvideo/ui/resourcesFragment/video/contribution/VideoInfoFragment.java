@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.homeAdapters.RecommendAdapter;
+import com.leon.biuvideo.beans.resourcesBeans.Comment;
 import com.leon.biuvideo.beans.resourcesBeans.VideoRecommend;
 import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoInfo;
 import com.leon.biuvideo.greendao.dao.DaoBaseUtils;
@@ -26,6 +27,8 @@ import com.leon.biuvideo.ui.resourcesFragment.video.DownloadBottomSheet;
 import com.leon.biuvideo.ui.resourcesFragment.video.OnBottomSheetWithItemListener;
 import com.leon.biuvideo.ui.resourcesFragment.video.OnVideoAnthologyListener;
 import com.leon.biuvideo.ui.resourcesFragment.video.VideoAnthologyBottomSheet;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoCommentDetailFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoCommentFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
@@ -79,6 +82,7 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
     private LinearLayout videoInfoEasterEggContainer;
     private TextView videoInfoDownloadedRecord;
     private Long downloadedRecordCount = 0L;
+    private TagView videoInfoComments;
 
     public VideoInfoFragment(String bvid) {
         this.bvid = bvid;
@@ -114,6 +118,11 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
 
         videoInfoShare = findView(R.id.video_info_share);
         videoInfoShare.setOnClickListener(this);
+
+        LinearLayout videoInfoCommentsContainer = findView(R.id.video_info_comments_container);
+        videoInfoCommentsContainer.setOnClickListener(this);
+
+        videoInfoComments = findView(R.id.video_info_comments);
 
         videoInfoAnthologyContainer = findView(R.id.video_info_anthology_container);
         videoInfoAnthologyContainer.setOnClickListener(this);
@@ -196,6 +205,8 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
         videoInfoCoin.setText(ValueUtils.generateCN(videoInfo.videoStat.like));
         videoInfoFavorite.setText(ValueUtils.generateCN(videoInfo.videoStat.like));
         videoInfoShare.setText(ValueUtils.generateCN(videoInfo.videoStat.like));
+
+        videoInfoComments.setRightValue(ValueUtils.generateCN(videoInfo.videoStat.comment));
 
         if (videoInfo.videoAnthologyList.size() > 1) {
             videoInfoAnthologyContainer.setVisibility(View.VISIBLE);
@@ -306,6 +317,21 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
         });
     }
 
+    /**
+     * 跳转至评论页面
+     */
+    private void startVideoCommentFragment() {
+        VideoCommentFragment videoCommentFragment = new VideoCommentFragment(videoInfo.aid);
+        videoCommentFragment.setToCommentDetailFragment(new VideoInfoAndCommentsFragment.ToCommentDetailFragment() {
+            @Override
+            public void toCommentDetail(Comment comment) {
+                start(new VideoCommentDetailFragment(comment));
+            }
+        });
+
+        start(videoCommentFragment);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -328,6 +354,11 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
                 break;
             case R.id.video_info_bvid:
                 easterEgg(v);
+                break;
+            case R.id.video_info_comments_container:
+                if (InternetUtils.checkNetwork(v)) {
+                    startVideoCommentFragment();
+                }
                 break;
             case R.id.video_info_easterEgg_container:
                 // 验证读写权限

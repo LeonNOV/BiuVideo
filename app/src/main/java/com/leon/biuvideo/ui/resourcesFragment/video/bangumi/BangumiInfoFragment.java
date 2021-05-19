@@ -36,7 +36,6 @@ import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
 import com.leon.biuvideo.ui.views.WarnDialog;
 import com.leon.biuvideo.utils.BindingUtils;
-import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.PermissionUtil;
 import com.leon.biuvideo.utils.PreferenceUtils;
@@ -190,7 +189,6 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
                 Object msgObj = msg.obj;
                 if (msgObj == null && msg.what != 1) {
                     SimpleSnackBar.make(view, getString(R.string.snackBarDataErrorWarn), SimpleSnackBar.LENGTH_LONG).show();
-                    Fuck.red("setOnLoadListener----" + msg.what);
                     backPressed();
                     return;
                 }
