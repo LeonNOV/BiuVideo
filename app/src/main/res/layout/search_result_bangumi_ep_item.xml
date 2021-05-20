@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="55dp"
     android:layout_gravity="center"
@@ -8,7 +9,7 @@
     <TextView
         android:id="@+id/search_result_item_bangumi_ep_title"
         android:layout_width="64dp"
-        android:layout_height="wrap_content"
+        android:layout_height="32dp"
         android:layout_gravity="center"
         android:background="@drawable/ripple_white_wire_frame_bg"
         android:gravity="center"
@@ -17,6 +18,7 @@
         android:paddingTop="3dp"
         android:paddingEnd="7dp"
         android:paddingBottom="3dp"
+        tools:text="test"
         android:textColor="@color/black"
         android:textSize="13sp" />
 
@@ -25,13 +27,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"
-        android:layout_marginStart="35dp"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="3dp"
         android:background="@drawable/round_corners6dp_bg"
         android:backgroundTint="@color/BiliBili_pink"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
         android:textColor="@color/white"
-        android:textSize="13sp" />
+        android:textSize="13sp"
+        tools:text="test" />
 
 </FrameLayout>

@@ -14,15 +14,6 @@
     <string name="downloadManager">下载管理</string>
     <string name="download">下载</string>
 
-    <string name="video">视频</string>
-    <string name="bangumi">番剧</string>
-    <string name="series">剧集</string>
-    <string name="tag">标签</string>
-    <string name="favoriteArticle">专栏</string>
-    <string name="searchBiliUser">用户</string>
-    <string name="audio">音频</string>
-    <string name="picture">相簿</string>
-    <string name="live">直播</string>
     <string name="hotSearch">热门搜索排行榜</string>
 
     <string name="home_nav_home">首页</string>
@@ -86,14 +77,10 @@
     <string name="user_level">等级：</string>
     <string name="user_birthday">出生日期：</string>
     <string name="user_flag">个性签名：</string>
-    <string name="user_coin">最近投币的视频</string>
 
-    <string name="vip">大会员</string>
     <string name="checkAll">查看全部</string>
-    <string name="checkMore">查看更多</string>
 
     <string name="remove">移除</string>
-    <string name="cancelOrder">取消订阅</string>
 
     <string name="setting_default_location">北京,北京城区,东城区</string>
     <string name="setting_default_cacheSize">0.0B</string>
@@ -104,62 +91,27 @@
     <string name="no_login">还未进行登录哦~</string>
 <!-- ========================================================================================== -->
 
-    <string name="preference">initValues</string>
-
-    <string name="main_button_start">开始获取</string>
-    <string name="main_editText_hint1">输入关键词进行搜索</string>
-    <string name="main_editText_hint2">输入链接或id</string>
-    <array name="home_spinner">
-        <item>综合</item>
-        <item>视频</item>
-        <item>UP主</item>
-    </array>
-
-    <string name="navigation_userName">点击头像即可登录哦</string>
-    <string name="navigation_nothing">--</string>
-    <string name="navigation_vip_due_date">登录即可查看VIP到期时间</string>
-
     <string name="cancel_follow">取消关注</string>
     <string name="remove_follower">移除粉丝</string>
     <string name="is_mutual_follower">已互粉</string>
     <string name="follow">关注</string>
-    <string name="followed">已关注</string>
     <string name="default_sign">这家伙也忒懒了，连个介绍都没有</string>
-
-    <string name="choose_quality_str">选择要缓存的清晰度</string>
 
     <string name="downloadedAudio">查看已缓存音频</string>
 
     <string name="cancel">取消</string>
-    <string name="confirm">确定</string>
-    <string name="save">保存</string>
     <string name="close">关闭</string>
-    <string name="noneData">啥都没有哎~~~</string>
 
     <!-- 无网络提示 -->
     <string name="networkWarn">网络貌似有点问题哎~</string>
 
     <!-- 加入/删除提示 -->
-    <string name="addFavoriteSign">已加入到本地订阅中</string>
-    <string name="remFavoriteSign">已从本地订阅中删除</string>
-
-    <string name="saveSuccess">保存成功</string>
-    <string name="saveFail">保存失败</string>
-
-    <string name="isPlaying">选择的视频已经在播放了~</string>
-    <string name="isDownloading">已加入到缓存队列~</string>
-    <string name="isDone">只有这么多数据了~</string>
 
     <!-- 帮助链接 -->
-    <string name="help_link">https://www.yuque.com/books/share/0544c9b3-9de9-4d3b-ad1e-0d7defd7e8be?# 《BiuVideo帮助文档》</string>
-    <string name="anthologyHelpLink">https://www.yuque.com/docs/share/0e9613b0-a9e2-4969-b0a4-97432be7b586?# 《关于选集下载的主要问题》</string>
 
     <!-- 下载页面 -->
 
     <!-- 加载数据中显示的默认文字 -->
-    <string name="defaultStr">--</string>
-    <string name="loading">加载数据中</string>
-    <string name="exporting">导出数据中</string>
     <string name="login_account">登录账户</string>
     <string name="logout_account">退出当前账户</string>
 
@@ -189,7 +141,6 @@
     <string name="partition_movie">电影</string>
     <string name="partition_teleplay">电视剧</string>
     <string name="partition_channel">频道</string>
-    <string name="popular_weekly_before">往期每周必看</string>
 
     <string name="popular_precious">入站必刷</string>
     <string name="popular_weekly">每周必看</string>
@@ -254,7 +205,6 @@
     <string name="downloadManagerCancelSelectedAll">取消全选</string>
     <string name="downloadManagerDelete">删除</string>
     <string name="downloadQualityWarn">注意：如果选择的画质不存在，则最终下载的是比选择画质低一阶的画质</string>
-    <string name="downloadError">下载失败~ 可稍后尝试下载</string>
     <string name="downloadExisted">该资源已下载过了,如果未在\'下载管理\'中,可查看保存路径的文件夹中是否存在</string>
     <string name="downloadingError">下载出错</string>
     <string name="downloadingWaiting">等待中</string>
@@ -262,9 +212,6 @@
     <string name="easterEggWarn">🎉🎉🎉\tSURPRISE\t🎉🎉🎉</string>
     <string name="downloadJoinQueue">已加入到下载队列中~</string>
     <string name="topListItemScore">综合评分</string>
-
-    <string name="downloadedAll">显示所有</string>
-    <string name="downloadedMultiple">只显示多选集</string>
 
     <string name="thanksListStr">以下均为本APP使用到的第三方开源项目</string>
     <string name="openScreenTitle">使用须知</string>
@@ -280,4 +227,7 @@
     <string name="aboutAppCopyrightNotice">版权声明</string>
     <string name="aboutAppCopyrightDesc">「BiuVideo」该APP的初衷是打造一款轻量级的B站第三方客户端，该APP含有
         资源缓存功能，请合理使用，资源版权归属于原作者，请不要用于商业用途，否则一切后果自负。</string>
+    <string name="videoPlayerDanmakuHint">来一发~~~</string>
+    <string name="downloadVideo">视频下载</string>
+    <string name="downloadNowQuality">当前已选择画质</string>
 </resources>

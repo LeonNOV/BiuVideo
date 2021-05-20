@@ -177,6 +177,8 @@ public class UserInfoParser {
                 userInfo.vipLabel = "普通会员";
             }
 
+            PreferenceUtils.setVipStatus(userInfo.isVip);
+
             JSONObject official = data.getJSONObject("official");
             userInfo.isVerify = official.getIntValue("type") == 0;
             int role = official.getIntValue("role");

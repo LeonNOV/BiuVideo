@@ -1,5 +1,10 @@
 package com.leon.biuvideo.values;
 
+/**
+ * @Author Leon
+ * @Time 2020/12/1
+ * @Desc 感谢列表数据
+ */
 public class ThanksList {
     public static final String[] THANKS_LIST_TITLES = {
             "Fastjson",
@@ -10,7 +15,7 @@ public class ThanksList {
             "Glide",
             "Jsoup",
             "EasySnackBar",
-            "SFragmentation",
+            "Fragmentation",
             "SwipeDelMenuLayout",
             "GreenDao",
             "DKPlayer",
@@ -30,7 +35,7 @@ public class ThanksList {
             "\t该工具提供了加载网络图片的功能；Glide is a fast and efficient open source media management and image loading framework for Android that wraps media decoding, memory and disk caching, and resource pooling into a simple and easy to use interface.",
             "\t用来解析网络HTML数据；jsoup is a Java library for working with real-world HTML. It provides a very convenient API for fetching URLs and extracting and manipulating data, using the best of HTML5 DOM methods and CSS selectors.",
             "\t实现自定义SnackBar；A SnackBar can show at top and bottom with a custom layout.This a SnackBar focuse on show custom layout,so it will not provide the same interface as the Google'Snackbar.",
-            "\t该框架实现了本APP的单Activity架构；为\"单Activity ＋ 多Fragment\",\"多模块Activity + 多Fragment\"架构而生，简化开发，轻松解决动画、嵌套、事务相关等问题。A powerful library that manage Fragment for Android!\nSFragmentation是基于Fragmentation开发的Fragment框架",
+            "\t该框架实现了本APP的单Activity架构；为\"单Activity ＋ 多Fragment\",\"多模块Activity + 多Fragment\"架构而生，简化开发，轻松解决动画、嵌套、事务相关等问题。A powerful library that manage Fragment for Android!",
             "\t用于实现控件的侧滑菜单；~史上最简单侧滑菜单，0耦合，支持任意ViewGroup。一步集成侧滑(删除)菜单，高仿QQ、IOS。~",
             "\tSQLite数据库框架，用于处理本地数据；greenDAO is a light & fast ORM solution for Android that maps objects to SQLite databases.",
             "\t视频播放功能均来自与此框架；Android Video Player. 安卓视频播放器，封装MediaPlayer、ExoPlayer、IjkPlayer。模仿抖音并实现预加载，列表播放，悬浮播放，广告播放，弹幕",

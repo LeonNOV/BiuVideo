@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.mcxtzhang.swipemenulib.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/itemMarginBottom"
@@ -51,10 +52,10 @@
                 android:id="@+id/search_result_item_bili_user_name"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
-                android:text="name"
                 android:textColor="@color/black"
                 android:textSize="17sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="name" />
 
             <TextView
                 android:id="@+id/search_result_item_bili_user_sign"
@@ -63,9 +64,9 @@
                 android:layout_marginTop="10dp"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="descdescdescdescdescdesc"
                 android:textColor="@color/infoColor"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                tools:text="descdescdescdescdescdesc" />
 
         </LinearLayout>
 

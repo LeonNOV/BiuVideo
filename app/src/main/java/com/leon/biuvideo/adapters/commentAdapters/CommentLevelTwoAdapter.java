@@ -76,6 +76,7 @@ public class CommentLevelTwoAdapter extends BaseAdapter<Comment.LevelTwoComment>
      *
      * @param msg   消息
      * @param levelTwoComment    LevelTwoComment
+     * @param commentLevel2ItemMessage commentLevel2ItemMessage
      */
     private void createClickAndEmoji (String msg, Comment.LevelTwoComment levelTwoComment, TextView commentLevel2ItemMessage) {
         // 对评论者添加点击事件

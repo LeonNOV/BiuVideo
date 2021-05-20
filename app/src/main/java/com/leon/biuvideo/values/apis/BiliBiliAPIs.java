@@ -15,6 +15,13 @@ public class BiliBiliAPIs {
     public static final String VIDEO_DETAIL_INFO = "https://api.bilibili.com/x/web-interface/view";
 
     /**
+     * 获取VIP状态
+     *
+     * 只需Cookie
+     */
+    public static final String USER_VIP_STAT = "https://api.bilibili.com/x/vip/web/user/info";
+
+    /**
      * 获取视频tag(频道)
      * 参数
      *      aid：aid/bvid任选其一
@@ -298,20 +305,11 @@ public class BiliBiliAPIs {
     public static final String ORDER_TAG = "https://api.bilibili.com/x/space/tag/sub/list";
 
     /**
-     * 获取番剧观看数、投币数、弹幕数等信息<br/>
-     *
-     * 参数
-     *      season_id:seasonId，必须
-     *
-     */
-    public static String bangumiState = "https://api.bilibili.com/pgc/web/season/stat";
-
-    /**
      * 获取番剧状态信息
      * 参数
      *      后跟番剧MID(MediaId)
      */
-    public static String bangumiStateWhiteMid = "https://www.bilibili.com/bangumi/media/md";
+    public static final String BANGUMI_STATE_WHITE_MID = "https://www.bilibili.com/bangumi/media/md";
 
     /**
      * 获取番剧各选集cid
@@ -320,7 +318,7 @@ public class BiliBiliAPIs {
      *      season_id：seasonId/sid，必须
      *
      */
-    public static String bangumiEpCid = "https://api.bilibili.com/pgc/web/season/section";
+    public static final String BANGUMI_EP_CID = "https://api.bilibili.com/pgc/web/season/section";
 
     /**
      * 获取 番剧/电影/电视剧/纪录片/综艺 详细信息
@@ -415,11 +413,6 @@ public class BiliBiliAPIs {
     public static final String USER_CARD = "http://api.bilibili.com/x/web-interface/card";
 
     /**
-     * 获取用户动态数、关注数、粉丝数（只需Cookie）
-     */
-    public static final String USER_STAT = "https://api.bilibili.com/x/web-interface/nav/stat";
-
-    /**
      * B币、贝壳查询接口（需要Cookie）
      * 使用默认参数
      */
@@ -458,7 +451,7 @@ public class BiliBiliAPIs {
      *              live：直播
      *              article：专栏
      */
-    public static String history = "https://api.bilibili.com/x/web-interface/history/cursor";
+    public static String HISTORY = "https://api.bilibili.com/x/web-interface/history/cursor";
 
     /**
      * 获取用户收藏的所有专栏<br/>
@@ -502,44 +495,6 @@ public class BiliBiliAPIs {
      *
      */
     public static final String RECOMMEND = "https://www.bilibili.com/index/ding.json";
-
-
-    public static final String TYPE_LIST = "268435455";
-
-    /**
-     * 获取动态数据接口（未登录情况下）
-     *
-     * 参数：
-     *      fake_uid：一个随机的六位数字
-     *      hot_offset：下一页数据的索引值，第一页默认为0（获取第二页数据时，需要获取到第一页数据最后一条dynamic_id_str的值）
-     *
-     */
-    public static final String DYNAMIC_UN_LOGIN = "unlogin_dynamics";
-
-    /**
-     * 获取第一页动态数据接口（已登录情况下使用）
-     *
-     * 参数：
-     *      uid：用户ID（可选，但Cookie必须添加）
-     *      type_list/type：常量{@value TYPE_LIST}
-     *      其他参数不需要
-     */
-    public static final String DYNAMIC_LOGIN = "dynamic_new";
-
-    /**
-     * 获取下一页动态数据（已登录情况下）
-     *
-     * 参数：
-     *      type_list：同上{@value DYNAMIC_LOGIN}
-     *      offset：该值为第一页最后一条数据dynamic_id_str的值
-     *
-     */
-    public static final String DYNAMIC_LOGIN_NEXT = "dynamic_history";
-
-    /**
-     * 获取动态数据基本连接，配合{@value DYNAMIC_UN_LOGIN}、{@value DYNAMIC_LOGIN}、{@value DYNAMIC_LOGIN_NEXT}使用
-     */
-    public static final String DYNAMIC_BASE_PATH = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/";
 
     /**
      * 热搜榜接口

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.mcxtzhang.swipemenulib.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
@@ -51,9 +52,9 @@
                     android:background="@drawable/video_length_bg"
                     android:gravity="center"
                     android:padding="3dp"
-                    android:text="00:00"
                     android:textColor="@color/white"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"
+                    tools:text="00:00" />
 
             </FrameLayout>
 
@@ -82,8 +83,8 @@
                 android:layout_below="@id/watch_later_video_item_title"
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="10dp"
-                android:text="已看0%"
-                android:textColor="@color/infoColor" />
+                android:textColor="@color/infoColor"
+                tools:text="已看0%" />
 
             <TextView
                 android:id="@+id/watch_later_video_item_pubName"

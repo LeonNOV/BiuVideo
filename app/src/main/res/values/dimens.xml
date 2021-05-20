@@ -2,8 +2,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <dimen name="corner_6dp">6dp</dimen>
 
-    <dimen name="fixed_height_bottom_padding">5dp</dimen>
-
     <dimen name="topBar_backView_margin_start">15dp</dimen>
     <dimen name="topBar_height">50dp</dimen>
     <dimen name="topBar_title_margin_start">15dp</dimen>
@@ -20,10 +18,8 @@
 
     <dimen name="bottomSheet_topView_width">70dp</dimen>
     <dimen name="bottomSheet_topView_height">5dp</dimen>
-    <dimen name="bottomSheetCloseViewWH">34dp</dimen>
     <dimen name="bottomSheetTopViewMarginTop">10dp</dimen>
 
-    <dimen name="loadingRecyclerViewHeight">300dp</dimen>
     <dimen name="loadingRecyclerViewProgressBarHW">60dp</dimen>
 
     <dimen name="face_border_width">1dp</dimen>
@@ -45,8 +41,6 @@
     <dimen name="partition_title_size">15sp</dimen>
 
     <dimen name="tabLayout_size">16sp</dimen>
-    <dimen name="navTextMarginTop">5dp</dimen>
-    <dimen name="navBottomTextSize">13sp</dimen>
 
     <dimen name="qualityDialogWidth">200dp</dimen>
 
@@ -57,7 +51,6 @@
     <dimen name="videoCoverWidth">126dp</dimen>
     <dimen name="videoCoverHeight">96dp</dimen>
     <dimen name="videoCoverRadius">5dp</dimen>
-    <dimen name="videoLengthSize">12sp</dimen>
 
     <dimen name="small_view_w_h">40dp</dimen>
     <dimen name="padding_10dp">10dp</dimen>

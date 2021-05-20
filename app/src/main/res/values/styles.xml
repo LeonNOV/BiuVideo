@@ -13,11 +13,6 @@
         <item name="android:windowExitAnimation">@anim/picture_viewer_exit</item>
     </style>
 
-    <style name="CustomSwitchCompat" parent="Theme.AppCompat.Light">
-        <item name="colorControlActivated">@color/BiliBili_pink</item>
-        <item name="colorSwitchThumbNormal">#E6E6E6</item>
-    </style>
-
     <style name="CustomEditText" parent="Theme.AppCompat.Light">
         <item name="colorControlNormal">#000000</item>
         <item name="colorControlActivated">#000000</item>

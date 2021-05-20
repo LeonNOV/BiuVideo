@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/ripple_round_corners6dp_bg"
     android:layout_marginBottom="@dimen/itemMarginBottom"
+    android:background="@drawable/ripple_round_corners6dp_bg"
     android:orientation="vertical">
 
     <LinearLayout
@@ -21,9 +22,9 @@
                 android:id="@+id/search_result_item_bangumi_cover"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:contentDescription="@string/description"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher_background"
-                android:contentDescription="@string/description" />
+                android:src="@drawable/ic_launcher_background" />
         </androidx.cardview.widget.CardView>
 
         <LinearLayout
@@ -39,10 +40,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="2"
-                android:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle"
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -54,9 +55,9 @@
                     android:id="@+id/search_result_item_bangumi_pubTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2019"
                     android:textColor="@color/infoColor"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    tools:text="2019" />
 
                 <View
                     android:layout_width="3dp"
@@ -69,9 +70,9 @@
                     android:id="@+id/search_result_item_bangumi_areas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="日本"
                     android:textColor="@color/infoColor"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    tools:text="日本" />
 
             </LinearLayout>
 
@@ -80,9 +81,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:text="小说改/穿越/架空/科幻/冒险/战斗"
                 android:textColor="@color/gray"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                tools:text="小说改/穿越/架空/科幻/冒险/战斗" />
 
             <TextView
                 android:id="@+id/search_result_item_bangumi_angleTitle"
@@ -95,9 +96,9 @@
                 android:paddingTop="3dp"
                 android:paddingEnd="7dp"
                 android:paddingBottom="3dp"
-                android:text="会员专享"
                 android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                tools:text="会员专享" />
 
 
         </LinearLayout>
@@ -118,10 +119,10 @@
                     android:id="@+id/search_result_item_bangumi_score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="9.1"
                     android:textColor="@color/blue"
                     android:textSize="25sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:text="9.1" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -136,9 +137,9 @@
                 android:id="@+id/search_result_item_bangumi_reviews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="5.2万人点评"
                 android:textColor="@color/black"
-                android:textSize="10sp" />
+                android:textSize="10sp"
+                tools:text="5.2万人点评" />
 
         </LinearLayout>
 

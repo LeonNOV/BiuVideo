@@ -10,7 +10,7 @@ import com.leon.biuvideo.greendao.dao.DownloadLevelOneDao;
 /**
  * @Author Leon
  * @Time 2021/5/4
- * @Desc
+ * @Desc 一级下载记录工具类
  */
 public class DownloadLevelOneUtils {
     private final DaoBaseUtils<DownloadLevelOne> downloadLevelOneDaoBaseUtils;

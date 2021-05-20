@@ -43,10 +43,11 @@ import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.RecommendParser;
 import com.leon.biuvideo.utils.parseDataUtils.homeParseUtils.WatchLaterParser;
 import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.FeaturesName;
-import com.weikaiyun.fragmentation.SupportFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * @Author Leon
@@ -418,6 +419,9 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                     getWatchLater();
                     break;
                 case Actions.USER_LOGOUT:
+                    watchLaterList.clear();
+                    homeVideoRecommendList.clear();
+
                     watchLaterAdapter.removeAll();
                     homeWatchLaterLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
                     break;

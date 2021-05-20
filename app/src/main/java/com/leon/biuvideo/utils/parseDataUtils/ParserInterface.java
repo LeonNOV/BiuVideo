@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * @Author Leon
  * @Time 2021/3/10
- * @Desc 所有的解析工具类都应实现该接口，用于解析请求到的JSON数据
+ * @Desc 以集合形式返回的解析工具类都应实现该接口，用于解析请求到的JSON数据
  */
 public abstract class ParserInterface<T> {
     /**

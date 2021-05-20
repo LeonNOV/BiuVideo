@@ -338,7 +338,7 @@ public class SettingsFragment extends BaseSupportFragment implements View.OnClic
         params.put("keywords", keyword);
         params.put("subdistrict", "0");
 
-        JSONArray districts = HttpUtils.getResponse(AmapAPIs.amapDistrict, params).getJSONArray("districts");
+        JSONArray districts = HttpUtils.getResponse(AmapAPIs.AMAP_DISTRICT, params).getJSONArray("districts");
         List<District> districtListTemp = new ArrayList<>(districts.size());
         for (Object object : districts) {
             JSONObject jsonObject = (JSONObject) object;

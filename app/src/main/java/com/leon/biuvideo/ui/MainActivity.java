@@ -17,13 +17,18 @@ import com.leon.biuvideo.service.WeatherService;
 import com.leon.biuvideo.ui.dialogs.OpenScreenDialog;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.values.Partitions;
-import com.weikaiyun.fragmentation.SupportActivity;
+import com.leon.biuvideo.values.apis.BiliBiliAPIs;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import me.yokeyword.fragmentation.SupportActivity;
+import okhttp3.Headers;
 
 /**
  * @Author Leon
@@ -80,6 +85,30 @@ public class MainActivity extends SupportActivity {
             OpenScreenDialog openScreenDialog = new OpenScreenDialog(this);
             openScreenDialog.show();
         }
+
+        // 刷新VIP状态
+        if (PreferenceUtils.getLoginStatus() && InternetUtils.checkNetwork(this)) {
+            refreshUserInfo();
+        }
+    }
+
+    /**
+     * 刷新用户数据
+     */
+    private void refreshUserInfo() {
+        SimpleSingleThreadPool.executor(new Runnable() {
+            @Override
+            public void run() {
+                JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.USER_VIP_STAT, Headers.of(HttpUtils.getAPIRequestHeader()), null);
+                if (response.getIntValue("code") == 0) {
+                    JSONObject data = response.getJSONObject("data");
+                    PreferenceUtils.setVipStatus(data.getIntValue("vip_status") == 1);
+                    PreferenceUtils.setLoginStatus(true);
+                } else {
+                    PreferenceUtils.setVipStatus(false);
+                }
+            }
+        });
     }
 
     @Override

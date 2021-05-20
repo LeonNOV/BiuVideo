@@ -161,7 +161,7 @@ public class LocationUtil {
         params.put("address", address[0] + address[1] + address[2]);
         params.put("city", address[2]);
 
-        JSONObject response = HttpUtils.getResponse(AmapAPIs.amapGeocode, params);
+        JSONObject response = HttpUtils.getResponse(AmapAPIs.AMAP_GEOCODE, params);
         if ("1".equals(response.getString("status"))) {
             JSONObject geocode = (JSONObject) response.getJSONArray("geocodes").get(0);
 

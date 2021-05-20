@@ -1,5 +1,9 @@
 package com.leon.biuvideo.ui.otherFragments;
 
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.homeAdapters.popularAdapters.PopularAdapter;
 import com.leon.biuvideo.beans.homeBeans.popularBeans.PopularVideo;
@@ -54,8 +58,8 @@ public class PopularFragment extends BaseSupportFragment {
     }
 
     @Override
-    public void lazyInit() {
-        super.lazyInit();
+    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
+        super.onLazyInitView(savedInstanceState);
 
         popularVideoDataLoader.insertData(true);
     }

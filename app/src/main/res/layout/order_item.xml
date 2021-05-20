@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/ripple_round_corners6dp_bg"
-    android:padding="10dp"
     android:layout_marginBottom="@dimen/itemMarginBottom"
-    android:orientation="horizontal">
+    android:background="@drawable/ripple_round_corners6dp_bg"
+    android:orientation="horizontal"
+    android:padding="10dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="130dp"
@@ -30,12 +31,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_margin="5dp"
                 android:background="@drawable/video_badge_bg"
                 android:backgroundTint="@color/BiliBili_pink"
-                android:layout_margin="5dp"
-                android:text="限时免费"
                 android:textColor="@color/white"
-                android:textSize="@dimen/badgeSize" />
+                android:textSize="@dimen/badgeSize"
+                tools:text="限时免费" />
 
         </RelativeLayout>
 
@@ -53,10 +54,10 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitle"
             android:textColor="@color/black"
             android:textSize="17sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitle" />
 
         <TextView
             android:id="@+id/order_item_textView_subtitle"
@@ -65,9 +66,9 @@
             android:layout_marginTop="10dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="SubTitleSubTitleSubTitleSubTitleSubTitleSubTitleSubTitle"
             android:textColor="@color/gray"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:text="SubTitleSubTitleSubTitleSubTitleSubTitleSubTitleSubTitle" />
 
         <TextView
             android:id="@+id/order_item_textView_desc"
@@ -76,9 +77,9 @@
             android:layout_marginTop="10dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="DescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDesc"
             android:textColor="@color/gray"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            tools:text="DescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDesc" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -90,8 +91,8 @@
                 android:id="@+id/order_item_textView_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="番剧"
-                android:textColor="@color/gray" />
+                android:textColor="@color/gray"
+                tools:text="番剧" />
 
             <ImageView
                 android:layout_width="3dp"
@@ -106,8 +107,8 @@
                 android:id="@+id/order_item_textView_area"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="日本"
-                android:textColor="@color/gray" />
+                android:textColor="@color/gray"
+                tools:text="日本" />
 
         </LinearLayout>
 
@@ -121,8 +122,8 @@
                 android:id="@+id/order_item_textView_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="看到第一话 7:13"
-                android:textColor="@color/gray" />
+                android:textColor="@color/gray"
+                tools:text="看到第一话 7:13" />
 
             <ImageView
                 android:layout_width="3dp"
@@ -137,8 +138,8 @@
                 android:id="@+id/order_item_textView_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="全12话"
-                android:textColor="@color/gray" />
+                android:textColor="@color/gray"
+                tools:text="全12话" />
 
         </LinearLayout>
 

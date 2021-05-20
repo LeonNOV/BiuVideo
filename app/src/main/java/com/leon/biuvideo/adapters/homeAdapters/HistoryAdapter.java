@@ -59,7 +59,7 @@ public class HistoryAdapter extends BaseAdapter<History> {
         if (history.historyType == HistoryType.ARTICLE) {
             initArticleItemView(holder, history);
         } else {
-            initVideoItemView(holder, history,  position);
+            initVideoItemView(holder, history);
         }
     }
 
@@ -67,9 +67,8 @@ public class HistoryAdapter extends BaseAdapter<History> {
      * 初始化video条目
      * @param holder    holder
      * @param history   history
-     * @param position  position
      */
-    private void initVideoItemView(BaseViewHolder holder, History history, int position) {
+    private void initVideoItemView(BaseViewHolder holder, History history) {
         ImageView historyItemVideoPlatform = holder.findById(R.id.history_item_video_platform);
         switch (history.historyPlatformType) {
             case PHOTO:

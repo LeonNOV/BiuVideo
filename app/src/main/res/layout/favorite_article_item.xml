@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/itemMarginBottom"
-    android:padding="@dimen/cardPadding"
     android:background="@drawable/ripple_round_corners6dp_bg"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="@dimen/cardPadding">
 
     <TextView
         android:id="@+id/favorite_article_item_title"
@@ -14,10 +15,10 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="2"
-        android:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle"
         android:textColor="@color/black"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -43,9 +44,9 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="3"
-        android:text="DescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDesc"
         android:textColor="@color/infoColor"
-        android:textSize="17sp" />
+        android:textSize="17sp"
+        tools:text="DescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDescDesc" />
 
     <com.leon.biuvideo.ui.views.TagView
         android:id="@+id/favorite_article_item_addTime"

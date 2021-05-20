@@ -44,8 +44,8 @@
         android:id="@+id/downloading_all_running_task"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:padding="@dimen/recyclerViewPadding"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:padding="@dimen/recyclerViewPadding" />
 
     <FrameLayout
         android:id="@+id/download_manager_edit_container"

@@ -17,7 +17,7 @@ import okhttp3.Headers;
 /**
  * @Author Leon
  * @Time 2021/3/23
- * @Desc
+ * @Desc 分区数据解析类
  */
 public class PartitionParser {
     /**

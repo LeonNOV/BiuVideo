@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
@@ -35,9 +36,9 @@
                 android:backgroundTint="#99000000"
                 android:gravity="center"
                 android:padding="3dp"
-                android:text="02:49"
                 android:textColor="@color/white"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                tools:text="02:49" />
 
         </FrameLayout>
 
@@ -56,9 +57,9 @@
             android:layout_gravity="top"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="介绍介绍介绍介介绍介绍绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介介绍介绍绍介绍介绍介绍介绍介绍介绍介绍介绍"
             android:textColor="@color/black"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            tools:text="介绍介绍介绍介介绍介绍绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介介绍介绍绍介绍介绍介绍介绍介绍介绍介绍介绍" />
 
         <TextView
             android:id="@+id/search_result_item_video_userName"
@@ -66,10 +67,10 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/search_result_item_video_stat"
             android:drawablePadding="5dp"
-            android:text="啊吴大维达瓦的"
             android:textColor="@color/infoColor"
             android:textSize="15sp"
-            app:drawableStartCompat="@drawable/ic_up_user" />
+            app:drawableStartCompat="@drawable/ic_up_user"
+            tools:text="啊吴大维达瓦的" />
 
         <LinearLayout
             android:id="@+id/search_result_item_video_stat"
@@ -83,10 +84,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawablePadding="5dp"
-                android:text="4.7万"
                 android:textColor="@color/infoColor"
                 android:textSize="15sp"
-                app:drawableStartCompat="@drawable/ic_video_play" />
+                app:drawableStartCompat="@drawable/ic_video_play"
+                tools:text="4.7万" />
 
             <TextView
                 android:id="@+id/search_result_item_video_danmaku"
@@ -94,10 +95,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:drawablePadding="5dp"
-                android:text="106"
                 android:textColor="@color/infoColor"
                 android:textSize="15sp"
-                app:drawableStartCompat="@drawable/ic_danmaku" />
+                app:drawableStartCompat="@drawable/ic_danmaku"
+                tools:text="106" />
 
         </LinearLayout>
 

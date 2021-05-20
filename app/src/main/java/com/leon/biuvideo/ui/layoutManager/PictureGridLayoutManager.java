@@ -4,6 +4,11 @@ import android.content.Context;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 
+/**
+ * @Author Leon
+ * @Time 2021/4/13
+ * @Desc 相簿布局管理器
+ */
 public class PictureGridLayoutManager extends GridLayoutManager {
     public PictureGridLayoutManager(Context context, int spanCount) {
         super(context, spanCount);

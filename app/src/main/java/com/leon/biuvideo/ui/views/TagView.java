@@ -13,6 +13,11 @@ import androidx.annotation.Nullable;
 
 import com.leon.biuvideo.R;
 
+/**
+ * @Author Leon
+ * @Time 2021/3/10
+ * @Desc 标签View，可动态设置标签名称和值
+ */
 public class TagView extends LinearLayout {
     private String rightValue = null;
     private String leftValue = null;

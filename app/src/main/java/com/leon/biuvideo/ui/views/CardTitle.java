@@ -15,6 +15,11 @@ import androidx.annotation.Nullable;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.utils.InternetUtils;
 
+/**
+ * @Author Leon
+ * @Time 2021/3/1
+ * @Desc 卡片式标题控件
+ */
 public class CardTitle extends LinearLayout {
     private String title = "null";
     private String action = "null";

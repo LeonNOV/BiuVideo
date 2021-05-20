@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:layout_margin="10dp"
@@ -16,9 +17,9 @@
         android:layout_weight="1"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="阿瓦达瓦达瓦达瓦"
         android:textColor="@color/black"
-        android:textSize="13sp" />
+        android:textSize="13sp"
+        tools:text="阿瓦达瓦达瓦达瓦" />
 
     <TextView
         android:id="@+id/video_anthology_item_badge"
@@ -27,8 +28,8 @@
         android:background="@drawable/round_corners6dp_bg"
         android:backgroundTint="@color/BiliBili_pink"
         android:padding="5dp"
-        android:text="限时免费"
         android:textColor="@color/white"
-        android:textSize="13sp" />
+        android:textSize="13sp"
+        tools:text="限时免费" />
 
 </LinearLayout>

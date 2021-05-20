@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * @Author Leon
  * @Time 2020/10/21
- * @Desc 用户投稿视频数据解析类
+ * @Desc B站用户投稿视频数据解析类
  */
 public class BiliUserVideoParser extends ParserInterface<BiliUserVideo> {
     /**

@@ -9,7 +9,8 @@ import com.dueeeke.videoplayer.ijk.IjkPlayerFactory;
 import com.dueeeke.videoplayer.player.VideoViewConfig;
 import com.dueeeke.videoplayer.player.VideoViewManager;
 import com.leon.biuvideo.values.apis.ApiKeys;
-import com.weikaiyun.fragmentation.Fragmentation;
+
+import me.yokeyword.fragmentation.Fragmentation;
 
 /**
  * @Author Leon
@@ -27,8 +28,7 @@ public class App extends Application {
                 .stackViewMode(Fragmentation.BUBBLE)
 
                 // 实际场景建议.debug(BuildConfig.DEBUG)
-                .debug(true)
-                .animation(R.anim.v_fragment_enter, R.anim.v_fragment_pop_exit, R.anim.v_fragment_pop_enter, R.anim.v_fragment_exit)
+                .debug(BuildConfig.DEBUG)
                 .install();
 
         // 视频在线播放配置

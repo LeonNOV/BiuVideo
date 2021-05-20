@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * @Author Leon
  * @Time 2021/5/11
- * @Desc 列表数据加载器
+ * @Desc 列表数据加载器（适用于{@link SmartRefreshRecyclerView}）
  */
 public class DataLoader<T> implements BaseSupportFragment.OnLoadListener {
     public static final int INIT_CODE = 0;

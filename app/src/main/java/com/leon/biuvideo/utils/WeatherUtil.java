@@ -30,7 +30,7 @@ public class WeatherUtil {
         //base/all
         params.put("extensions", extensions);
 
-        return HttpUtils.getResponse(AmapAPIs.amapWeather, params);
+        return HttpUtils.getResponse(AmapAPIs.AMAP_WEATHER, params);
     }
 
     /**

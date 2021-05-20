@@ -26,9 +26,10 @@ import com.leon.biuvideo.ui.views.SimpleTopBar;
 import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.values.FragmentType;
-import com.weikaiyun.fragmentation.SupportFragment;
 
 import org.jetbrains.annotations.NotNull;
+
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * @Author Leon

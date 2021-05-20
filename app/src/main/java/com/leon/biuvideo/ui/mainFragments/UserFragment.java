@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.bumptech.glide.Glide;
@@ -32,9 +34,9 @@ import com.leon.biuvideo.utils.ValueUtils;
 import com.leon.biuvideo.utils.parseDataUtils.userDataParsers.UserInfoParser;
 import com.leon.biuvideo.values.Actions;
 import com.leon.biuvideo.values.Role;
-import com.weikaiyun.fragmentation.SupportFragment;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * @Author Leon
@@ -71,8 +73,8 @@ public class UserFragment extends BaseSupportFragment {
     }
 
     @Override
-    public void lazyInit() {
-        super.lazyInit();
+    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
+        super.onLazyInitView(savedInstanceState);
 
         // 获取用户数据
         if (InternetUtils.checkNetwork(_mActivity.getWindow().getDecorView())) {

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/picture_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,7 +10,7 @@
     <com.leon.biuvideo.ui.views.SimpleTopBar
         android:id="@+id/picture_topBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -39,18 +40,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="awdwdawd"
                 android:textColor="@color/black"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                tools:text="awdwdawd" />
 
             <TextView
                 android:id="@+id/picture_pubTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="2021-04-12 17:08"
                 android:textColor="@color/infoColor"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                tools:text="2021-04-12 17:08" />
 
         </LinearLayout>
 
@@ -78,9 +79,9 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:textSize="17sp"
         android:textColor="@color/black"
-        android:text="awdawdawdwadawdawdawdawdawdadadadawdadad" />
+        android:textSize="17sp"
+        tools:text="awdawdawdwadawdawdawdawdawdadadadawdadad" />
 
     <com.leon.biuvideo.ui.views.LoadingRecyclerView
         android:id="@+id/picture_data"
@@ -92,25 +93,25 @@
 
     <FrameLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="10dp"
-        android:layout_height="wrap_content">
+        android:layout_marginEnd="10dp">
 
         <com.leon.biuvideo.ui.views.TagView
             android:id="@+id/picture_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:rightValue="13"
-            app:leftValue="评论"/>
+            app:leftValue="评论"
+            app:rightValue="0" />
 
         <com.leon.biuvideo.ui.views.TagView
             android:id="@+id/picture_like"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            app:rightValue="20"
-            app:leftValue="赞"/>
+            app:leftValue="赞"
+            app:rightValue="0" />
 
     </FrameLayout>
 

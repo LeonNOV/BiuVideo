@@ -1,5 +1,10 @@
 package com.leon.biuvideo.values.apis;
 
+/**
+ * @Author Leon
+ * @Time 2021/3/1
+ * @Desc 高度API
+ */
 public class AmapAPIs {
 
     /**
@@ -11,7 +16,7 @@ public class AmapAPIs {
      *          base:返回实况天气
      *          all:返回预报天气
      */
-    public static String amapWeather = "https://restapi.amap.com/v3/weather/weatherInfo";
+    public static final String AMAP_WEATHER = "https://restapi.amap.com/v3/weather/weatherInfo";
 
     /**
      * 高德行政区域查询接口：https://developer.amap.com/api/webservice/guide/api/district
@@ -38,7 +43,7 @@ public class AmapAPIs {
      *      center：区域中心点
      *      street:街道（该项目不需要该结果）
      */
-    public static String amapDistrict = "https://restapi.amap.com/v3/config/district";
+    public static final String AMAP_DISTRICT = "https://restapi.amap.com/v3/config/district";
 
     /**
      * 高德地理编码API:https://developer.amap.com/api/webservice/guide/api/georegeo
@@ -51,5 +56,5 @@ public class AmapAPIs {
      *              可选输入内容包括：指定城市的中文（如北京）、指定城市的中文全拼（beijing）、citycode（010）、adcode（110000）
      *              不支持县级市。当指定城市查询内容为空时，会进行全国范围内的地址转换检索。
      */
-    public static String amapGeocode = "https://restapi.amap.com/v3/geocode/geo";
+    public static final String AMAP_GEOCODE = "https://restapi.amap.com/v3/geocode/geo";
 }

@@ -4,21 +4,20 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
 
 import com.leon.biuvideo.R;
 
 /**
- * 自定义BottomSheet（从底部弹出的Dialog）使用的顶部栏
+ * @Author Leon
+ * @Time 2021/3/1
+ * @Desc 自定义BottomSheet（从底部弹出的Dialog）使用的顶部栏
  */
 public class BottomSheetTopBar extends LinearLayout {
     private Context context;

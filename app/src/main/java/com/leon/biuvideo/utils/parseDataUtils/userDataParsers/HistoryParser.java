@@ -34,7 +34,7 @@ public class HistoryParser extends ParserInterface<History> {
             params.put("view_at", String.valueOf(viewAt));
 
             if (dataStatus) {
-                JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.history, Headers.of(HttpUtils.getAPIRequestHeader()), params);
+                JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.HISTORY, Headers.of(HttpUtils.getAPIRequestHeader()), params);
 
                 int code = responseObject.getIntValue("code");
                 if (code == 0) {

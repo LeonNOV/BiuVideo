@@ -11,6 +11,11 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.zip.Inflater;
 
+/**
+ * @Author Leon
+ * @Time 2020/10/27
+ * @Desc 数值工具类
+ */
 public class ValueUtils {
     /**
      * 生成以万结尾的字符串，小于1万则直接返回

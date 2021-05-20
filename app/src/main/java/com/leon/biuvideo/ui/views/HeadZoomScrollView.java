@@ -9,6 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 
+/**
+ * @Author Leon
+ * @Time 2021/3/1
+ * @Desc 带回弹效果的顶部控件（适用于Banner）
+ */
 public class HeadZoomScrollView extends ScrollView {
     public HeadZoomScrollView(Context context) {
         super(context);

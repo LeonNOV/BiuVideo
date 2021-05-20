@@ -13,9 +13,9 @@
         android:layout_height="30dp"
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="5dp"
-        android:padding="5dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/description"
+        android:padding="5dp"
         android:src="@drawable/download_manager_select_stat"
         android:visibility="gone"
         tools:visibility="visible" />
@@ -81,9 +81,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
+                    android:text="@string/downloadingPaused"
                     android:textColor="@color/infoColor"
-                    android:textSize="13sp"
-                    android:text="@string/downloadingPaused" />
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/downloading_item_current_size"

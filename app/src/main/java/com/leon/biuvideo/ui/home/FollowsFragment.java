@@ -1,5 +1,9 @@
 package com.leon.biuvideo.ui.home;
 
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.homeAdapters.FollowsAdapter;
 import com.leon.biuvideo.beans.userBeans.Follow;
@@ -43,8 +47,8 @@ public class FollowsFragment extends BaseSupportFragment {
     }
 
     @Override
-    public void lazyInit() {
-        super.lazyInit();
+    public void onLazyInitView(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onLazyInitView(savedInstanceState);
         followDataLoader.insertData(true);
     }
 }

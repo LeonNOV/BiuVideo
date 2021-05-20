@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
     android:layout_margin="5dp"
+    android:layout_marginBottom="10dp"
     android:background="@drawable/ripple_round_corners6dp_bg"
     android:orientation="vertical"
     android:paddingStart="10dp"
@@ -38,9 +39,9 @@
                 android:backgroundTint="@color/video_length_bg"
                 android:gravity="center"
                 android:padding="3dp"
-                android:text="4P"
                 android:textColor="@color/white"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                tools:text="4P" />
 
         </FrameLayout>
 
@@ -58,9 +59,9 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="介绍介绍介绍介介绍介绍绍介绍介绍介绍介绍介绍介绍介绍介绍"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:text="介绍介绍介绍介介绍介绍绍介绍介绍介绍介绍介绍介绍介绍介绍" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -74,10 +75,10 @@
                 android:layout_height="wrap_content"
                 android:drawablePadding="5dp"
                 android:gravity="center_vertical"
-                android:text="1903.6万"
                 android:textColor="@color/infoColor"
                 android:textSize="12sp"
-                app:drawableStartCompat="@drawable/ic_view" />
+                app:drawableStartCompat="@drawable/ic_view"
+                tools:text="1903.6万" />
 
             <TextView
                 android:id="@+id/bili_user_picture_item_like"
@@ -86,10 +87,10 @@
                 android:layout_marginStart="10dp"
                 android:drawablePadding="5dp"
                 android:gravity="center_vertical"
-                android:text="1903.6万"
                 android:textColor="@color/infoColor"
                 android:textSize="12sp"
-                app:drawableStartCompat="@drawable/ic_like" />
+                app:drawableStartCompat="@drawable/ic_like"
+                tools:text="1903.6万" />
 
         </LinearLayout>
 

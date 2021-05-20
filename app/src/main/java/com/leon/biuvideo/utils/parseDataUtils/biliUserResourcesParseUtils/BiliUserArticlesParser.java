@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * @Author Leon
  * @Time 2021/4/10
- * @Desc
+ * @Desc B站用户专栏数据解析类
  */
 public class BiliUserArticlesParser extends ParserInterface<BiliUserArticle> {
     /**

@@ -11,10 +11,9 @@
     android:paddingBottom="@dimen/cardPadding">
 
     <com.leon.biuvideo.ui.views.BottomSheetTopBar
-        android:id="@+id/download_bottom_sheet_dialog_topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:bottomSheetTitle="视频下载" />
+        app:bottomSheetTitle="@string/downloadVideo" />
 
     <TextView
         android:layout_width="match_parent"
@@ -30,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        app:leftValue="当前已选择画质" />
+        app:leftValue="@string/downloadNowQuality" />
 
     <com.leon.biuvideo.ui.views.LoadingRecyclerView
         android:id="@+id/download_bottom_sheet_dialog_anthology_data"

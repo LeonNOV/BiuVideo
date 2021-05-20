@@ -10,7 +10,6 @@
     android:paddingBottom="@dimen/cardPadding">
 
     <com.leon.biuvideo.ui.views.BottomSheetTopBar
-        android:id="@+id/video_anthology_list_topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:bottomSheetTitle="@string/videoChangeAnthology" />

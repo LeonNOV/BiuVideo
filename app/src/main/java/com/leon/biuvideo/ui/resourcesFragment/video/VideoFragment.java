@@ -26,6 +26,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+/**
+ * @Author Leon
+ * @Time 2021/4/23
+ * @Desc 视频播放界面
+ */
 public class VideoFragment extends BaseSupportFragment implements View.OnClickListener {
     private final boolean isBangumi;
 

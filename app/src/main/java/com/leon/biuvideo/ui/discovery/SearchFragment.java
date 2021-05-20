@@ -121,8 +121,8 @@ public class SearchFragment extends BaseSupportFragment implements View.OnClickL
     }
 
     @Override
-    public void lazyInit() {
-        super.lazyInit();
+    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
+        super.onLazyInitView(savedInstanceState);
 
         SearchHistoryUtils searchHistoryUtils = new SearchHistoryUtils(context);
         searchHistoryDaoUtils = searchHistoryUtils.getSearchHistoryDaoUtils();

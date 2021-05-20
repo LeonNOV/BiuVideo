@@ -11,8 +11,8 @@ android {
         applicationId "com.leon.biuvideo"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 10
-        versionName "2.7.7-beta"
+        versionCode 11
+        versionName "3.0.0-beta"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -27,7 +27,7 @@ android {
              * 如果需要支持平板，则需要加上x86或x86_64
              * x86_64支持新上市的平板，向下兼容x86
              */
-            abiFilters "armeabi-v7a", "x86"
+            abiFilters "armeabi-v7a"
         }
 
         javaCompileOptions {
@@ -105,8 +105,8 @@ dependencies {
     implementation 'com.sun.easysnackbar:easysnackbar:1.0.1'
 
     // 单Activity框架
-    implementation 'com.github.weikaiyun.SFragmentation:fragmentation:1.8.0'
-//    implementation 'me.xuexuan:fragmentationx:1.0.6'
+//    implementation 'com.github.weikaiyun.SFragmentation:fragmentation:1.8.0'
+    implementation 'me.xuexuan:fragmentationx:1.0.6'
 //    implementation 'me.yokeyword:fragmentationx:1.0.1'
 
     // Item侧滑控件

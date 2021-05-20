@@ -2,20 +2,6 @@
 <resources>
     <color name="ic_biu_video_background">#000000</color>
 
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-
-    <color name="colorPrimary">#FFFFFF</color>
-    <color name="colorPrimaryDark">#FFFFFF</color>
-    <color name="colorAccent">#FFFFFF</color>
-
-    <color name="red">#D50000</color>
-    <color name="light_gray">#707070</color>
-    <color name="preference_item">#2B2B2B</color>
-
     <color name="blue">#2196f3</color>
     <color name="BiliBili_pink">#FB7299</color>
     <color name="gray">#545555</color>
@@ -23,9 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="bg">#f5f5f5</color>
     <color name="tabTextColor">#888888</color>
-    <color name="bg_app">#F1F1F1</color>
-    <color name="tab_unselect">#c9c9c9</color>
-    <color name="bg_btn">#dadada</color>
     <color name="hintColor">#a4a4a4</color>
     <color name="bottomSheet_topView_bg">#DCDCDC</color>
 
@@ -49,16 +32,6 @@
     <color name="popular_top_list_third_text_color">#a28671</color>
     <color name="popular_top_list_other_text_color">#c0c0c0</color>
     <color name="infoColor">#686868</color>
-    <color name="navBottomUnselectedColor">#7E7E7E</color>
-
-    <color name="tagColor">#00a1d6</color>
-
-    <color name="level1">#bebebe</color>
-    <color name="level2">#96dfb5</color>
-    <color name="level3">#93cfe6</color>
-    <color name="level4">#fbb481</color>
-    <color name="level5">#ff6e00</color>
-    <color name="level6">#fc0000</color>
 
     <color name="qualityBg">#80000000</color>
 </resources>
