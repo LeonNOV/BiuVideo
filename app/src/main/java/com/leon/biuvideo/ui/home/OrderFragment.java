@@ -22,7 +22,6 @@ import java.util.List;
  * @Desc 订阅页面
  */
 public class OrderFragment extends BaseSupportFragment {
-
     private MainActivity.OnTouchListener onTouchListener;
 
     public static SupportFragment getInstance() {
@@ -38,15 +37,14 @@ public class OrderFragment extends BaseSupportFragment {
     protected void initView() {
         setTopBar(R.id.order_fragment_topBar);
 
+        TabLayout orderFragmentTabLayout = findView(R.id.order_fragment_tabLayout);
+        ViewPager2 orderFragmentViewPager = findView(R.id.order_fragment_viewPager);
+
         List<Fragment> viewPagerFragments = new ArrayList<>();
         viewPagerFragments.add(new OrderDataFragment(OrderType.BANGUMI));
         viewPagerFragments.add(new OrderDataFragment(OrderType.SERIES));
 
-        /*viewPagerFragments.add(new OrderTagsFragment());*/
-
         String[] titles = {"番剧", "剧集"};
-        TabLayout orderFragmentTabLayout = findView(R.id.order_fragment_tabLayout);
-        ViewPager2 orderFragmentViewPager = findView(R.id.order_fragment_viewPager);
         orderFragmentViewPager.setAdapter(new ViewPager2Adapter(this, viewPagerFragments));
 
         // 初始化ViewPager2和TabLayout
@@ -56,8 +54,8 @@ public class OrderFragment extends BaseSupportFragment {
     @Override
     public void onDestroyView() {
         // 取消注册Touch事件
-        ((MainActivity) getActivity()).unregisterTouchEvenListener(onTouchListener);
 
+        MainActivity.unregisterTouchEvenListener(onTouchListener);
         super.onDestroyView();
     }
 }

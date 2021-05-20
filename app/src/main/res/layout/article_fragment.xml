@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -98,9 +99,9 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="10dp"
                         android:layout_toEndOf="@id/article_face"
-                        android:text="awdwdawd"
                         android:textColor="@color/black"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        tools:text="awdwdawd" />
 
                     <TextView
                         android:id="@+id/article_user_follow"
@@ -178,9 +179,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:text="597"
                         android:textColor="@color/infoColor"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"
+                        tools:text="597" />
 
                 </LinearLayout>
 
@@ -203,9 +204,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:text="597"
                         android:textColor="@color/infoColor"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"
+                        tools:text="597" />
 
                 </LinearLayout>
 
@@ -229,9 +230,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:text="597"
                         android:textColor="@color/infoColor"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"
+                        tools:text="597" />
 
                 </LinearLayout>
 

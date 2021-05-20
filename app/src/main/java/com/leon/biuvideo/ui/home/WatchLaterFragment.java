@@ -35,7 +35,10 @@ public class WatchLaterFragment extends BaseSupportFragment {
 
         watchLaterFragmentLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
         watchLaterFragmentLoadingRecyclerView.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
-        watchLaterFragmentLoadingRecyclerView.setRecyclerViewAdapter(new WatchLaterAdapter(watchLaterList, getMainActivity(), context));
+        WatchLaterAdapter watchLaterAdapter = new WatchLaterAdapter(getMainActivity(), context);
+        watchLaterAdapter.setHasStableIds(true);
+        watchLaterAdapter.append(watchLaterList);
+        watchLaterFragmentLoadingRecyclerView.setRecyclerViewAdapter(watchLaterAdapter);
         watchLaterFragmentLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
     }
 }

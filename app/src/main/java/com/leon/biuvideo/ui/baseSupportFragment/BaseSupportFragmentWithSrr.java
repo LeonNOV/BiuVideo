@@ -1,6 +1,5 @@
 package com.leon.biuvideo.ui.baseSupportFragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -13,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.utils.BindingUtils;
 import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
 
 /**
@@ -22,8 +20,6 @@ import com.leon.biuvideo.ui.views.SmartRefreshRecyclerView;
  * @Desc 基本的LazySupportFragment，该Fragment默认设置{@link com.leon.biuvideo.ui.views.SmartRefreshRecyclerView}为布局,所以不用指定布局文件
  */
 public abstract class BaseSupportFragmentWithSrr<T> extends BaseLazySupportFragment {
-    protected Context context;
-    protected BindingUtils bindingUtils;
     protected SmartRefreshRecyclerView<T> view;
 
     @Override
@@ -34,12 +30,10 @@ public abstract class BaseSupportFragmentWithSrr<T> extends BaseLazySupportFragm
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.context = getContext();
         this.view = new SmartRefreshRecyclerView<>(context);
         int padding = context.getResources().getDimensionPixelOffset(R.dimen.recyclerViewPadding);
         this.view.setBackgroundColor(context.getColor(R.color.bg));
         this.view.setPadding(padding, padding, padding, padding);
-        this.bindingUtils = new BindingUtils(view, context);
 
         receiveDataHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
             @Override

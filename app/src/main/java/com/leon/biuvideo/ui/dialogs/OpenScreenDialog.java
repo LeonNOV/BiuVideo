@@ -9,6 +9,7 @@ import android.util.Base64;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import androidx.annotation.NonNull;
@@ -52,6 +53,11 @@ public class OpenScreenDialog extends AlertDialog {
 
     private void initView() {
         WebView openScreenDesc = findViewById(R.id.open_screen_desc);
+        WebSettings settings = openScreenDesc.getSettings();
+        settings.setUseWideViewPort(true);
+        settings.setLoadWithOverviewMode(true);
+        settings.setDefaultTextEncodingName("utf-8");
+
         findViewById(R.id.open_screen_close).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

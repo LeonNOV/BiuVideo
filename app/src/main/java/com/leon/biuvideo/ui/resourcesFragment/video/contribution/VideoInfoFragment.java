@@ -202,9 +202,9 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
                 .setOnClickListener(R.id.video_info_bvid, VideoInfoFragment.this);
 
         videoInfoLike.setText(ValueUtils.generateCN(videoInfo.videoStat.like));
-        videoInfoCoin.setText(ValueUtils.generateCN(videoInfo.videoStat.like));
-        videoInfoFavorite.setText(ValueUtils.generateCN(videoInfo.videoStat.like));
-        videoInfoShare.setText(ValueUtils.generateCN(videoInfo.videoStat.like));
+        videoInfoCoin.setText(ValueUtils.generateCN(videoInfo.videoStat.coin));
+        videoInfoFavorite.setText(ValueUtils.generateCN(videoInfo.videoStat.favorite));
+        videoInfoShare.setText(ValueUtils.generateCN(videoInfo.videoStat.share));
 
         videoInfoComments.setRightValue(ValueUtils.generateCN(videoInfo.videoStat.comment));
 
@@ -322,7 +322,7 @@ public class VideoInfoFragment extends BaseSupportFragment implements View.OnCli
      */
     private void startVideoCommentFragment() {
         VideoCommentFragment videoCommentFragment = new VideoCommentFragment(videoInfo.aid);
-        videoCommentFragment.setToCommentDetailFragment(new VideoInfoAndCommentsFragment.ToCommentDetailFragment() {
+        videoCommentFragment.setToCommentDetailFragment(new VideoCommentFragment.ToCommentDetailFragment() {
             @Override
             public void toCommentDetail(Comment comment) {
                 start(new VideoCommentDetailFragment(comment));

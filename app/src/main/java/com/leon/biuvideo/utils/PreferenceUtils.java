@@ -53,9 +53,9 @@ public class PreferenceUtils {
      */
     public static String[] getAddress() {
         String[] address = new String[3];
-        address[0] = PREFERENCE.getString(PROVINCE, null);
-        address[1] = PREFERENCE.getString(CITY, null);
-        address[2] = PREFERENCE.getString(DISTRICT, null);
+        address[0] = PREFERENCE.getString(PROVINCE, "?");
+        address[1] = PREFERENCE.getString(CITY, "?");
+        address[2] = PREFERENCE.getString(DISTRICT, "?");
 
         return address;
     }

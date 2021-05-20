@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.beans.userBeans.Follower;
 import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.PreferenceUtils;
 import com.leon.biuvideo.utils.parseDataUtils.ParserInterface;
 import com.leon.biuvideo.values.Role;
 import com.leon.biuvideo.values.apis.BiliBiliAPIs;
@@ -21,7 +22,7 @@ import okhttp3.Headers;
 /**
  * @Author Leon
  * @Time 2021/3/18
- * @Desc 粉丝数据解析类
+ * @Desc 粉丝数据解析类 (如果是查看其他用户的粉丝数据，则最多只能获取100条数据)
  */
 public class FollowersParser extends ParserInterface<Follower> {
     private final Context context;
@@ -37,9 +38,19 @@ public class FollowersParser extends ParserInterface<Follower> {
      */
     private static final int PAGE_SIZE = 20;
 
+    private int total = 100;
+    private int currentTotal;
+
     public FollowersParser(Context context, String mid) {
         this.context = context;
         this.mid = mid;
+
+        String userId = PreferenceUtils.getUserId();
+        if (userId != null) {
+            if (!userId.equals(mid)) {
+                total = -1;
+            }
+        }
     }
 
     @Override
@@ -76,6 +87,11 @@ public class FollowersParser extends ParserInterface<Follower> {
                 follower.vipStatus = vip.getIntValue("vipStatus") == 1;
 
                 followerList.add(follower);
+            }
+
+            this.currentTotal += followerList.size();
+            if (currentTotal == total) {
+                dataStatus = false;
             }
 
             if (followerList.size() < PAGE_SIZE) {

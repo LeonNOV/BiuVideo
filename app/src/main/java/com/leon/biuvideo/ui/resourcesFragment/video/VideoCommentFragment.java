@@ -4,7 +4,6 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.commentAdapters.CommentLevelOneAdapter;
 import com.leon.biuvideo.beans.resourcesBeans.Comment;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseLazySupportFragment;
-import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoInfoAndCommentsFragment;
 import com.leon.biuvideo.utils.parseDataUtils.DataLoader;
 import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.CommentParser;
 
@@ -16,15 +15,19 @@ import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.CommentParser;
 public class VideoCommentFragment extends BaseLazySupportFragment {
     private final String avid;
 
-    private VideoInfoAndCommentsFragment.ToCommentDetailFragment toCommentDetailFragment;
+    private ToCommentDetailFragment toCommentDetailFragment;
     private DataLoader<Comment> commentDataLoader;
 
     public VideoCommentFragment(String avid) {
         this.avid = avid;
     }
 
-    public void setToCommentDetailFragment(VideoInfoAndCommentsFragment.ToCommentDetailFragment toCommentDetailFragment) {
+    public void setToCommentDetailFragment(ToCommentDetailFragment toCommentDetailFragment) {
         this.toCommentDetailFragment = toCommentDetailFragment;
+    }
+
+    public interface ToCommentDetailFragment {
+        void toCommentDetail(Comment comment);
     }
 
     @Override

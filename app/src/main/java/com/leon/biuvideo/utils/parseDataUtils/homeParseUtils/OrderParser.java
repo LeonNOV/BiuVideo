@@ -131,9 +131,7 @@ public class OrderParser extends ParserInterface<Order> {
         // 每获取一次，页数+1
         pageNum ++;
 
-        /**
-         * 如果当前获取的条目数小于{@value PAGE_SIZE},则表示当前页为最后一页数据
-         */
+        // 如果当前获取的条目数小于{@value PAGE_SIZE},则表示当前页为最后一页数据
         if (orders.size() < PAGE_SIZE) {
             dataStatus = false;
         }

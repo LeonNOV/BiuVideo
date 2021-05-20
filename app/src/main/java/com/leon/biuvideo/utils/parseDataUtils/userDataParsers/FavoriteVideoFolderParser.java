@@ -21,6 +21,9 @@ import okhttp3.Headers;
  * @Desc 获取用户所有收藏夹数据
  */
 public class FavoriteVideoFolderParser extends ParserInterface<FavoriteVideoFolder> {
+    private int total = -1;
+    private int currentTotal = 0;
+
     @Override
     public List<FavoriteVideoFolder> parseData() {
         if (PreferenceUtils.getLoginStatus()) {
@@ -30,6 +33,10 @@ public class FavoriteVideoFolderParser extends ParserInterface<FavoriteVideoFold
 
             JSONObject responseObject = HttpUtils.getResponse(BiliBiliAPIs.USER_FAV_FOLDER, Headers.of(HttpUtils.getAPIRequestHeader()), params);
             JSONObject data = responseObject.getJSONObject("data");
+
+            if (total == -1) {
+                total = data.getIntValue("count");
+            }
 
             JSONArray list = data.getJSONArray("list");
             List<FavoriteVideoFolder> favoriteVideoFolders = new ArrayList<>(list.size());
@@ -44,6 +51,11 @@ public class FavoriteVideoFolderParser extends ParserInterface<FavoriteVideoFold
                 favoriteVideoFolder.title = jsonObject.getString("title");
 
                 favoriteVideoFolders.add(favoriteVideoFolder);
+            }
+
+            this.currentTotal += favoriteVideoFolders.size();
+            if (total == currentTotal) {
+                this.dataStatus = false;
             }
 
             return favoriteVideoFolders;

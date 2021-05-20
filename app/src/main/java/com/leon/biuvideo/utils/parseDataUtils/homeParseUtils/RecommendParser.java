@@ -23,15 +23,6 @@ import okhttp3.Headers;
  * @Desc 推荐数据解析类
  */
 public class RecommendParser extends ParserInterface<VideoRecommend> {
-    private final String cookie;
-
-    /**
-     * @param cookie    如果为null，则获取系统推荐的内容，不为null则获取个人推荐内容
-     */
-    public RecommendParser(String cookie) {
-        this.cookie = cookie;
-    }
-
     /**
      * 解析所有推荐的数据
      *

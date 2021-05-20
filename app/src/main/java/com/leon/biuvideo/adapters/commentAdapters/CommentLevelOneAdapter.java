@@ -27,7 +27,7 @@ import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.resourcesBeans.Comment;
 import com.leon.biuvideo.ui.MainActivity;
-import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoInfoAndCommentsFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoCommentFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.utils.InternetUtils;
 import com.leon.biuvideo.utils.PreferenceUtils;
@@ -50,14 +50,14 @@ public class CommentLevelOneAdapter extends BaseAdapter<Comment> {
     public static final int EMOJI_WH = 66;
     private ImageSpan imageSpan;
 
-    private VideoInfoAndCommentsFragment.ToCommentDetailFragment toCommentDetailFragment;
+    private VideoCommentFragment.ToCommentDetailFragment toCommentDetailFragment;
 
     public CommentLevelOneAdapter(MainActivity mainActivity, Context context) {
         super(context);
         this.mainActivity = mainActivity;
     }
 
-    public void setToCommentDetailFragment(VideoInfoAndCommentsFragment.ToCommentDetailFragment toCommentDetailFragment) {
+    public void setToCommentDetailFragment(VideoCommentFragment.ToCommentDetailFragment toCommentDetailFragment) {
         this.toCommentDetailFragment = toCommentDetailFragment;
     }
 

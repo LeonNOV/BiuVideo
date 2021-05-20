@@ -13,6 +13,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @Author Leon
+ * @Time 2021/3/1
+ * @Desc 天气工具类
+ */
 public class WeatherUtil {
 
     private Weather weather;
@@ -21,12 +26,16 @@ public class WeatherUtil {
         Map<String, String> params = new HashMap<>();
         params.put("key", ApiKeys.AMAP_KEY);
         params.put("city", cityCode);
-        params.put("extensions", extensions); //base/all
+
+        //base/all
+        params.put("extensions", extensions);
 
         return HttpUtils.getResponse(AmapAPIs.amapWeather, params);
     }
 
-    // 获取实时天气
+    /**
+     * 获取实时天气
+     */
     public Weather getCurrentWeather (String cityCode) {
         JSONObject weatherResponse = getWeatherResponse(cityCode, "base");
 
@@ -45,7 +54,12 @@ public class WeatherUtil {
         return weather;
     }
 
-    // 获取当天、第二天、第三天的预报数据
+    /**
+     * 获取当天、第二天、第三天的预报数据
+     *
+     * @param cityCode  城市编码
+     * @return  Weather
+     */
     public Weather getWeatherInfos(String cityCode) {
         JSONObject weatherResponse = getWeatherResponse(cityCode, "all");
 

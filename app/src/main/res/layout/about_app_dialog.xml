@@ -13,12 +13,13 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/about_app_version_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="@dimen/padding_10dp"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/round_corners6dp_bg"
+            android:background="@drawable/ripple_round_corners6dp_bg"
             android:elevation="5dp"
             android:gravity="center_horizontal"
             android:orientation="vertical"
@@ -33,13 +34,13 @@
                 android:textSize="35sp"
                 android:textStyle="bold" />
 
-            <com.leon.biuvideo.ui.views.TagView
+            <TextView
                 android:id="@+id/about_app_version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                app:leftValue="Version:"
-                app:rightValue="3.0.0-beta" />
+                android:textSize="15sp"
+                android:textColor="@color/infoColor"
+                android:text="@string/versionName"/>
 
         </LinearLayout>
 

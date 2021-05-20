@@ -23,6 +23,6 @@ public class FavoriteVideoFolderFragment extends BaseSupportFragmentWithSrr<Favo
     @Override
     protected void initView() {
         dataLoader = new DataLoader<>(context, new FavoriteVideoFolderParser(),
-                new FavoriteVideoFolderAdapter(context), this);
+                new FavoriteVideoFolderAdapter(getMainActivity(), context), this);
     }
 }

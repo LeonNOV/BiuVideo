@@ -22,7 +22,7 @@ import okhttp3.Headers;
 /**
  * @Author Leon
  * @Time 2021/1/22
- * @Desc 关注数据解析类
+ * @Desc 关注数据解析类 (如果是查看其他用户的关注数据，则最多只能获取100条数据)
  */
 public class FollowsParser extends ParserInterface<Follow> {
     private static final String REFERER = "https://space.bilibili.com/";
@@ -39,9 +39,19 @@ public class FollowsParser extends ParserInterface<Follow> {
      */
     private static final int PAGE_SIZE = 20;
 
+    private int total = 100;
+    private int currentTotal;
+
     public FollowsParser(Context context, String mid) {
         this.context = context;
         this.mid = mid;
+
+        String userId = PreferenceUtils.getUserId();
+        if (userId != null) {
+            if (!userId.equals(mid)) {
+                total = -1;
+            }
+        }
     }
 
     @Override
@@ -79,6 +89,11 @@ public class FollowsParser extends ParserInterface<Follow> {
                     follow.vipStatus = vip.getIntValue("vipStatus") == 1;
 
                     followingList.add(follow);
+                }
+
+                this.currentTotal += followingList.size();
+                if (currentTotal == total) {
+                    dataStatus = false;
                 }
 
                 if (followingList.size() < PAGE_SIZE) {

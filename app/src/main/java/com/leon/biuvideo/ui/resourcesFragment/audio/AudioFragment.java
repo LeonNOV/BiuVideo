@@ -19,7 +19,7 @@ import com.leon.biuvideo.beans.resourcesBeans.Audio;
 import com.leon.biuvideo.greendao.dao.DownloadHistory;
 import com.leon.biuvideo.service.DownloadWatcher;
 import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
-import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoFragment;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.WarnDialog;
 import com.leon.biuvideo.utils.InternetUtils;
@@ -172,6 +172,7 @@ public class AudioFragment extends BaseSupportFragment implements View.OnClickLi
                         audioControl.setSelected(true);
 
                         break;
+                    case AudioController.FINISHED:
                     case AudioController.PAUSED:
                         audioControl.setSelected(false);
 
@@ -254,7 +255,7 @@ public class AudioFragment extends BaseSupportFragment implements View.OnClickLi
     /**
      * 下载音频
      */
-    private void downloadAudio () {
+    private void downloadAudio() {
         File file = ResourceDownloadTask.checkSaveDirectory(context, ResourceDownloadTask.RES_TYPE_VIDEO,
                 audio.title, audio.author);
         boolean exists = ResourceDownloadTask.isExists(file, context, sid, null);
@@ -284,7 +285,7 @@ public class AudioFragment extends BaseSupportFragment implements View.OnClickLi
     /**
      * 请求读写权限
      */
-    private void requestIOPermission () {
+    private void requestIOPermission() {
         WarnDialog warnDialog = new WarnDialog(context, "读写权限", "由于保存资源文件时需要用到'读写权限',否则将无法正常下载视频、音频等资源");
         warnDialog.setOnWarnActionListener(new WarnDialog.OnWarnActionListener() {
             @Override

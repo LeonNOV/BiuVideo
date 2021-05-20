@@ -7,12 +7,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
 import com.leon.biuvideo.R;
-import com.leon.biuvideo.ui.views.TagView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +48,8 @@ public class AboutAppDialog extends AlertDialog implements View.OnClickListener 
     }
 
     private void initView() {
-        ((TagView) findViewById(R.id.about_app_version)).setRightValue(getContext().getString(R.string.versionName));
+        ((TextView) findViewById(R.id.about_app_version)).setText(getContext().getString(R.string.versionName));
+        findViewById(R.id.about_app_version_container).setOnClickListener(this);
         findViewById(R.id.about_app_gitee).setOnClickListener(this);
         findViewById(R.id.about_app_github).setOnClickListener(this);
         findViewById(R.id.about_app_group).setOnClickListener(this);
@@ -60,6 +61,11 @@ public class AboutAppDialog extends AlertDialog implements View.OnClickListener 
         Intent intent;
 
         switch (v.getId()) {
+            case R.id.about_app_version_container:
+                OpenScreenDialog openScreenDialog = new OpenScreenDialog(getContext());
+                openScreenDialog.show();
+                dismiss();
+                break;
             case R.id.about_app_gitee:
                 intent = new Intent();
                 intent.setAction("android.intent.action.VIEW");

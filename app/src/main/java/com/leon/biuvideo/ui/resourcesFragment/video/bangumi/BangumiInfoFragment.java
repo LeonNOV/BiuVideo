@@ -30,7 +30,6 @@ import com.leon.biuvideo.ui.resourcesFragment.video.OnBottomSheetWithItemListene
 import com.leon.biuvideo.ui.resourcesFragment.video.VideoAnthologyBottomSheet;
 import com.leon.biuvideo.ui.resourcesFragment.video.VideoCommentDetailFragment;
 import com.leon.biuvideo.ui.resourcesFragment.video.VideoCommentFragment;
-import com.leon.biuvideo.ui.resourcesFragment.video.contribution.VideoInfoAndCommentsFragment;
 import com.leon.biuvideo.ui.views.LoadingRecyclerView;
 import com.leon.biuvideo.ui.views.SimpleSnackBar;
 import com.leon.biuvideo.ui.views.TagView;
@@ -397,7 +396,7 @@ public class BangumiInfoFragment extends BaseSupportFragment implements View.OnC
      */
     private void startVideoCommentFragment() {
         VideoCommentFragment videoCommentFragment = new VideoCommentFragment(bangumi.bangumiAnthologyList.get(anthologyIndex).aid);
-        videoCommentFragment.setToCommentDetailFragment(new VideoInfoAndCommentsFragment.ToCommentDetailFragment() {
+        videoCommentFragment.setToCommentDetailFragment(new VideoCommentFragment.ToCommentDetailFragment() {
             @Override
             public void toCommentDetail(Comment comment) {
                 start(new VideoCommentDetailFragment(comment));

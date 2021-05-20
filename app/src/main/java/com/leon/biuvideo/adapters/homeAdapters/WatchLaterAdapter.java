@@ -20,22 +20,18 @@ import com.leon.biuvideo.values.FeaturesName;
 import com.leon.biuvideo.values.FragmentType;
 import com.leon.biuvideo.values.ImagePixelSize;
 
-import java.util.List;
-
 /**
  * @Author Leon
  * @Time 2021/3/14
  * @Desc 稍后观看适配器
  */
 public class WatchLaterAdapter extends BaseAdapter<WatchLater> {
-    private final List<WatchLater> watchLaterList;
     private final MainActivity mainActivity;
     private final Context context;
 
-    public WatchLaterAdapter(List<WatchLater> beans, MainActivity mainActivity, Context context) {
-        super(beans, context);
+    public WatchLaterAdapter(MainActivity mainActivity, Context context) {
+        super(context);
 
-        this.watchLaterList = beans;
         this.mainActivity = mainActivity;
         this.context = context;
     }
@@ -47,7 +43,7 @@ public class WatchLaterAdapter extends BaseAdapter<WatchLater> {
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
-        WatchLater watchLater = watchLaterList.get(position);
+        WatchLater watchLater = getAllData().get(position);
 
         // 如果为观看过该视频，则不显示进度
         if (watchLater.progress > 0) {

@@ -14,6 +14,7 @@ import com.baidu.mobstat.StatService;
 import com.leon.biuvideo.R;
 import com.leon.biuvideo.service.DownloadWatcher;
 import com.leon.biuvideo.service.WeatherService;
+import com.leon.biuvideo.ui.dialogs.OpenScreenDialog;
 import com.leon.biuvideo.utils.FileUtils;
 import com.leon.biuvideo.utils.Fuck;
 import com.leon.biuvideo.utils.PreferenceUtils;
@@ -73,6 +74,12 @@ public class MainActivity extends SupportActivity {
                 Partitions.PARTITION = JSONObject.parseObject(FileUtils.getAssetsContent(getApplicationContext(), "partition.json"));
             }
         });
+
+        // 开屏弹窗
+        if (PreferenceUtils.getFirstOpenStatus()) {
+            OpenScreenDialog openScreenDialog = new OpenScreenDialog(this);
+            openScreenDialog.show();
+        }
     }
 
     @Override

@@ -9,6 +9,9 @@ import com.leon.biuvideo.R;
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.leon.biuvideo.adapters.baseAdapters.BaseViewHolder;
 import com.leon.biuvideo.beans.homeBeans.favoriteBeans.FavoriteVideoFolder;
+import com.leon.biuvideo.ui.MainActivity;
+import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.home.favoriteFragments.favoriteVideo.FavoriteVideoFolderDetailFragment;
 import com.leon.biuvideo.utils.InternetUtils;
 
 /**
@@ -17,24 +20,11 @@ import com.leon.biuvideo.utils.InternetUtils;
  * @Desc 用户视频收藏夹适配器
  */
 public class FavoriteVideoFolderAdapter extends BaseAdapter<FavoriteVideoFolder> {
-    private OnClickVideoFolderListener onClickVideoFolderListener;
+    private final MainActivity mainActivity;
 
-    public interface OnClickVideoFolderListener {
-        /**
-         * 点击事件，跳转至FavoriteVideoFolderDetailFragment
-         *
-         * @param title 收藏夹标题
-         * @param folderId 收藏夹ID
-         */
-        void onClick(String title, long folderId);
-    }
-
-    public void setOnClickVideoFolderListener(OnClickVideoFolderListener onClickVideoFolderListener) {
-        this.onClickVideoFolderListener = onClickVideoFolderListener;
-    }
-
-    public FavoriteVideoFolderAdapter(Context context) {
+    public FavoriteVideoFolderAdapter(MainActivity mainActivity, Context context) {
         super(context);
+        this.mainActivity = mainActivity;
     }
 
     @Override
@@ -53,9 +43,7 @@ public class FavoriteVideoFolderAdapter extends BaseAdapter<FavoriteVideoFolder>
                     @Override
                     public void onClick(View v) {
                         if (InternetUtils.checkNetwork(v)) {
-                            if (onClickVideoFolderListener != null) {
-                                onClickVideoFolderListener.onClick(favoriteVideoFolder.title, favoriteVideoFolder.id);
-                            }
+                            ((BaseSupportFragment)mainActivity.getTopFragment()).start(new FavoriteVideoFolderDetailFragment(favoriteVideoFolder.title, favoriteVideoFolder.id));
                         }
                     }
                 });

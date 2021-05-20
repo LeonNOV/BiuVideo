@@ -54,8 +54,8 @@ public class FavoritesFragment extends BaseSupportFragment {
     @Override
     public void onDestroyView() {
         // 取消注册Touch事件
-        ((MainActivity) getActivity()).unregisterTouchEvenListener(onTouchListener);
 
+        MainActivity.unregisterTouchEvenListener(onTouchListener);
         super.onDestroyView();
     }
 }
