@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/search_result_menu_item_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:padding="10dp"
+    android:layout_margin="5dp"
+    android:layout_weight="1"
+    android:textColor="@color/black"
+    android:layout_gravity="center_horizontal"
+    android:background="@drawable/search_result_menu_status"
+    android:orientation="vertical"/>

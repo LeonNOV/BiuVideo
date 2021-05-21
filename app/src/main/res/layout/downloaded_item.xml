@@ -1,53 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/ripple_item_bilibili_lite"
-    android:orientation="horizontal"
-    android:padding="@dimen/item_padding">
+    android:layout_marginBottom="@dimen/itemMarginBottom"
+    android:background="@drawable/ripple_round_corners6dp_bg"
+    android:orientation="horizontal">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="@dimen/cover_width"
-        android:layout_height="@dimen/cover_height"
-        app:cardCornerRadius="@dimen/corner_6dp">
+        android:layout_width="@dimen/videoCoverWidth"
+        android:layout_height="@dimen/videoCoverHeight"
+        app:cardCornerRadius="@dimen/videoCoverRadius"
+        app:cardMaxElevation="0dp">
 
-        <RelativeLayout
+        <ImageView
+            android:id="@+id/downloaded_item_cover"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:contentDescription="@string/description"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/user_default_banner" />
 
-            <ImageView
-                android:id="@+id/downloaded_item_imageView_cover"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@color/gray" />
-
-            <TextView
-                android:id="@+id/downloaded_item_textView_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="5dp"
-                android:background="@drawable/round_gray_with_media_length_bg"
-                android:textColor="@color/white"
-                android:textSize="13sp"
-                android:visibility="gone" />
-
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/downloaded_item_epCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="5dp"
+            android:background="@drawable/video_length_bg"
+            android:visibility="gone" />
 
     </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/downloaded_item_textView_title"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:ellipsize="end"
-        android:maxLines="5"
-        android:textColor="@color/black"
-        android:textSize="15sp" />
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/downloaded_item_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            tools:text="阿瓦达瓦达瓦达瓦达瓦阿瓦达瓦达瓦达瓦达瓦阿瓦达瓦达瓦达瓦达瓦阿瓦达瓦达瓦达瓦达瓦" />
+
+        <TextView
+            android:id="@+id/downloaded_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:layout_gravity="bottom"
+            android:textColor="@color/infoColor"
+            tools:text="155.5M"/>
+    </FrameLayout>
 
 </LinearLayout>

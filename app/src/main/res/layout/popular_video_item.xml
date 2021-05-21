@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/itemMarginBottom"
+    android:background="@drawable/ripple_round_corners6dp_bg"
+    android:orientation="vertical"
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp">
+
+    <TextView
+        android:id="@+id/popular_precious_item_reason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/round_corners6dp_bg"
+        android:backgroundTint="#FFF8ED"
+        android:drawablePadding="5dp"
+        android:padding="10dp"
+        android:textColor="#ED994E"
+        android:textSize="15sp"
+        android:visibility="gone"
+        app:drawableStartCompat="@drawable/ic_achievement" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="136dp"
+            android:layout_height="106dp"
+            app:cardCornerRadius="6dp"
+            app:cardElevation="0dp">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/popular_video_item_cover"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/description"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_launcher_background" />
+
+                <TextView
+                    android:id="@+id/popular_video_item_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|start"
+                    android:layout_margin="6dp"
+                    android:background="@drawable/round_corners6dp_bg"
+                    android:backgroundTint="#99000000"
+                    android:gravity="center"
+                    android:padding="3dp"
+                    android:textColor="@color/white"
+                    android:textSize="13sp" />
+
+            </FrameLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/popular_video_item_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/popular_hot_list_item_reason"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/popular_video_item_stat"
+                android:background="@drawable/round_corners6dp_bg"
+                android:backgroundTint="#fff1ed"
+                android:padding="5dp"
+                android:textColor="#f63000"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/popular_video_item_stat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/popular_video_item_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:textColor="@color/infoColor"
+                    android:textSize="15sp"
+                    app:drawableStartCompat="@drawable/ic_video_play" />
+
+                <TextView
+                    android:id="@+id/popular_video_item_danmaku"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:drawablePadding="5dp"
+                    android:textColor="@color/infoColor"
+                    android:textSize="15sp"
+                    app:drawableStartCompat="@drawable/ic_danmaku" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/popular_weekly_item_reason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/round_corners6dp_bg"
+        android:backgroundTint="#f9f9f9"
+        android:drawablePadding="5dp"
+        android:padding="5dp"
+        android:textColor="#9f9f9f"
+        android:visibility="gone"
+        app:drawableStartCompat="@drawable/ic_quotation_marks" />
+
+</LinearLayout>

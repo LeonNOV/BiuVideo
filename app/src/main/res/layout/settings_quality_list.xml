@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bottom_sheet_background"
+    android:backgroundTint="@color/white"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/cardPadding"
+    android:paddingEnd="@dimen/cardPadding"
+    android:paddingBottom="@dimen/cardPadding">
+
+    <com.leon.biuvideo.ui.views.BottomSheetTopBar
+        android:id="@+id/settings_quality_list_topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.leon.biuvideo.ui.views.LoadingRecyclerView
+        android:id="@+id/settings_quality_list_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp" />
+
+</LinearLayout>

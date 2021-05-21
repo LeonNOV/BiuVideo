@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="theme_red">#f44236</color><!--魅力红-->
-    <color name="theme_origin2">#f74200</color><!--淘宝橙-->
-    <color name="theme_origin1">#ff9700</color><!--基情橙-->
-    <color name="theme_yellow">#fec107</color><!--咸蛋黄-->
-    <color name="theme_green1">#109d58</color><!--基安绿-->
-    <color name="theme_green3">#80109D58</color><!--基安绿-->
-    <color name="theme_green2">#8bc24a</color><!--草苗绿-->
-    <color name="theme_blue1">#3f51b5</color><!-- 赛车蓝 -->
+    <!--魅力红-->
+    <!--淘宝橙-->
+    <!--基情橙-->
+    <!--咸蛋黄-->
+    <!--基安绿-->
+    <!--基安绿-->
+    <!--草苗绿-->
+    <!-- 赛车蓝 -->
     <color name="theme_blue2">#2196f3</color><!--宝石蓝-->
-    <color name="theme_cyan">#009788</color><!--淡雅青-->
-    <color name="theme_purple2">#9c28b1</color><!--初恋紫-->
-    <color name="theme_purple1">#673bb7</color><!--全员恶人紫-->
-    <color name="theme_brown">#795547</color><!--HotCoffee棕-->
-    <color name="theme_pink">#fa7298</color><!--哔哩粉-->
-    <color name="theme_gray">#607d8b</color><!--灰不溜秋的灰-->
+    <!--淡雅青-->
+    <!--初恋紫-->
+    <!--全员恶人紫-->
+    <!--HotCoffee棕-->
+    <!--哔哩粉-->
+    <!--灰不溜秋的灰-->
 </resources>

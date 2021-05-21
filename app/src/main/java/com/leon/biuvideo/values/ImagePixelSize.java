@@ -1,7 +1,9 @@
 package com.leon.biuvideo.values;
 
 /**
- * 图片像素大小值
+ * @Author Leon
+ * @Time 2020/11/14
+ * @Desc 图片像素大小值
  */
 public enum ImagePixelSize {
     //头像大小

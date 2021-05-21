@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="feed_back_dialog_text">由于未设置统一反馈路径，此处的提交并不会起任何作用，反馈信息请到对应下载平台下进行评论反馈。&#x000D;敬请理解!</string>
-    <string name="feed_back_dialog_hint">在此输入反馈信息，如应用改进、BUG、一些好的想法等</string>
-    <string name="feed_back_dialog_submit">提交</string>
-</resources>

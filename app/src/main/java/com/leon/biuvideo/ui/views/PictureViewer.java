@@ -15,26 +15,28 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.leon.biuvideo.R;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
 import com.leon.biuvideo.values.ImagePixelSize;
-import com.leon.biuvideo.utils.downloadUtils.ResourceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 图片查看器
+ * @Author Leon
+ * @Time 2021/4/13
+ * @Desc 图片查看器
  */
 public class PictureViewer extends PopupWindow implements View.OnClickListener, ViewPager.OnPageChangeListener {
     private final int selectedPosition;
-    private final List<String> pictures;
+    private final List<String[]> pictures;
     private final Context context;
 
     private List<ImageView> imageViews;
     private View pictureViewerView;
-    private ViewPager picture_viewer_viewPager;
-    private TextView picture_viewer_textView_index;
+    private ViewPager pictureViewerViewPager;
+    private TextView pictureViewerTextViewIndex;
 
-    public PictureViewer(Context context, int selectedPosition, List<String> pictures) {
+    public PictureViewer(Context context, int selectedPosition, List<String[]> pictures) {
         super(context);
         this.context = context;
         this.selectedPosition = selectedPosition;
@@ -56,27 +58,24 @@ public class PictureViewer extends PopupWindow implements View.OnClickListener, 
     private void initView() {
         pictureViewerView = LayoutInflater.from(context).inflate(R.layout.picture_viewer, null);
 
-        ImageView picture_viewer_imageView_back = pictureViewerView.findViewById(R.id.picture_viewer_imageView_back);
-        picture_viewer_imageView_back.setOnClickListener(this);
+        pictureViewerView.findViewById(R.id.picture_viewer_imageView_back).setOnClickListener(this);
+        pictureViewerView.findViewById(R.id.picture_viewer_imageView_savePic).setOnClickListener(this);
 
-        ImageView picture_viewer_imageView_savePic = pictureViewerView.findViewById(R.id.picture_viewer_imageView_savePic);
-        picture_viewer_imageView_savePic.setOnClickListener(this);
+        pictureViewerViewPager = pictureViewerView.findViewById(R.id.picture_viewer_viewPager);
+        pictureViewerViewPager.addOnPageChangeListener(this);
 
-        picture_viewer_viewPager = pictureViewerView.findViewById(R.id.picture_viewer_viewPager);
-        picture_viewer_viewPager.addOnPageChangeListener(this);
-
-        picture_viewer_textView_index = pictureViewerView.findViewById(R.id.picture_viewer_textView_index);
-        picture_viewer_textView_index.setOnClickListener(this);
+        pictureViewerTextViewIndex = pictureViewerView.findViewById(R.id.picture_viewer_textView_index);
+        pictureViewerTextViewIndex.setOnClickListener(this);
     }
 
     private void initValue() {
         String indexStr = (selectedPosition + 1) + "/" + pictures.size();
-        picture_viewer_textView_index.setText(indexStr);
+        pictureViewerTextViewIndex.setText(indexStr);
 
         PictureViewerAdapter pictureViewerAdapter = new PictureViewerAdapter(context, pictures, imageViews);
-        picture_viewer_viewPager.setAdapter(pictureViewerAdapter);
-        picture_viewer_viewPager.setCurrentItem(selectedPosition);
-        picture_viewer_viewPager.setPageMargin(40);
+        pictureViewerViewPager.setAdapter(pictureViewerAdapter);
+        pictureViewerViewPager.setCurrentItem(selectedPosition);
+        pictureViewerViewPager.setPageMargin(40);
 
         this.setContentView(pictureViewerView);
         this.setWidth(ViewGroup.MarginLayoutParams.MATCH_PARENT);
@@ -84,7 +83,7 @@ public class PictureViewer extends PopupWindow implements View.OnClickListener, 
         this.setFocusable(true);
         this.setOutsideTouchable(true);
         this.setBackgroundDrawable(new ColorDrawable(0xfff));
-        this.setAnimationStyle(R.style.picture_viewer_anim_style);
+        this.setAnimationStyle(R.style.paning_anim_style);
     }
 
     @Override
@@ -95,14 +94,12 @@ public class PictureViewer extends PopupWindow implements View.OnClickListener, 
                 break;
             case R.id.picture_viewer_imageView_savePic:
 
-                new Thread(new Runnable() {
+                SimpleSingleThreadPool.executor(new Runnable() {
                     @Override
                     public void run() {
-                        boolean saveState = ResourceUtils.savePicture(context, pictures.get(picture_viewer_viewPager.getCurrentItem()));
 
-                        SimpleSnackBar.make(getContentView(), saveState ? R.string.saveSuccess : R.string.saveFail, SimpleSnackBar.LENGTH_SHORT).show();
                     }
-                }).start();
+                });
 
                 break;
             default:
@@ -113,7 +110,7 @@ public class PictureViewer extends PopupWindow implements View.OnClickListener, 
     @Override
     public void onPageSelected(int position) {
         String indexStr = (position + 1) + "/" + pictures.size();
-        picture_viewer_textView_index.setText(indexStr);
+        pictureViewerTextViewIndex.setText(indexStr);
     }
 
     @Override
@@ -128,12 +125,12 @@ public class PictureViewer extends PopupWindow implements View.OnClickListener, 
     /**
      * PictureViewer适配器
      */
-    static class PictureViewerAdapter extends PagerAdapter {
+    private static class PictureViewerAdapter extends PagerAdapter {
         private final Context context;
-        private final List<String> pictures;
+        private final List<String[]> pictures;
         private final List<ImageView> imageViews;
 
-        public PictureViewerAdapter(Context context, List<String> pictures, List<ImageView> imageViews) {
+        public PictureViewerAdapter(Context context, List<String[]> pictures, List<ImageView> imageViews) {
             this.context = context;
             this.pictures = pictures;
             this.imageViews = imageViews;
@@ -143,7 +140,7 @@ public class PictureViewer extends PopupWindow implements View.OnClickListener, 
         @Override
         public Object instantiateItem(@NonNull ViewGroup container, int position) {
             container.addView(imageViews.get(position));
-            Glide.with(context).load(pictures.get(position) + ImagePixelSize.VIEWER.value).into(imageViews.get(position));
+            Glide.with(context).load(pictures.get(position)[0] + ImagePixelSize.VIEWER.value).into(imageViews.get(position));
 
             return imageViews.get(position);
         }

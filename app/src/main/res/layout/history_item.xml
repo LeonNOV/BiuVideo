@@ -1,160 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="110dp"
-    android:layout_gravity="center"
-    android:background="?android:selectableItemBackground"
-    android:orientation="horizontal"
-    android:padding="8dp">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/itemMarginBottom"
+    android:background="@drawable/ripple_round_corners6dp_bg"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="160dp"
+    <TextView
+        android:id="@+id/history_item_keyword"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        app:cardCornerRadius="@dimen/corner_6dp">
+        android:layout_marginStart="20dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/black"
+        android:textSize="17sp" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center">
-
-            <ImageView
-                android:id="@+id/history_item_imageView_cover"
-                android:layout_width="160dp"
-                android:layout_height="110dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher_background" />
-
-            <ImageView
-                android:id="@+id/history_item_imageView_live_state"
-                android:layout_width="48dp"
-                android:layout_height="20dp"
-                android:layout_alignParentEnd="true"
-                android:layout_margin="5dp"
-                android:src="@drawable/icon_not_live" />
-
-            <TextView
-                android:id="@+id/history_item_textView_badge"
-                android:layout_width="48dp"
-                android:layout_height="20dp"
-                android:layout_alignParentEnd="true"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:layout_margin="5dp"
-                android:text="**"
-                android:background="@drawable/round_bilibili_pink_bg" />
-
-            <TextView
-                android:id="@+id/history_item_textView_length"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@id/history_item_progress"
-                android:layout_alignEnd="@id/history_item_imageView_cover"
-                android:layout_margin="5dp"
-                android:background="@drawable/round_gray_with_media_length_bg"
-                android:text="已看完"
-                android:textColor="@color/white" />
-
-            <ProgressBar
-                android:id="@+id/history_item_progress"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="180dp"
-                android:layout_height="5dp"
-                android:layout_alignBottom="@id/history_item_imageView_cover"
-                android:progressTint="@color/BiliBili_pink" />
-
-
-        </RelativeLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp">
-
-        <TextView
-            android:id="@+id/history_item_textView_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:ellipsize="end"
-            android:maxLines="3"
-            android:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/history_item_textView_progress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="看到第28话 宣战布告"
-                android:textColor="@color/black"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/history_item_textView_newDesc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="更新至第182话"
-                android:textColor="@color/black"
-                android:textSize="12sp" />
-
-            <LinearLayout
-                android:id="@+id/history_item_linearLayout_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="3dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/icon_video_time" />
-
-                <TextView
-                    android:id="@+id/history_item_textView_view_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="7dp"
-                    android:text="2020/12/09 21:58"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/history_item_linearLayout_upName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/icon_up" />
-
-                <TextView
-                    android:id="@+id/history_item_textView_uname"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="7dp"
-                    android:text="UpName"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </FrameLayout>
+    <ImageView
+        android:id="@+id/history_item_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/ripple_round_corners6dp_bg"
+        android:contentDescription="@string/description"
+        android:src="@drawable/ic_clear" />
 
 </LinearLayout>

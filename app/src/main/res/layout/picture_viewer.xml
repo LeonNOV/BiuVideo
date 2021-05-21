@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black">
@@ -19,8 +20,9 @@
                 android:layout_width="@dimen/small_view_w_h"
                 android:layout_height="@dimen/small_view_w_h"
                 android:background="?selectableItemBackgroundBorderless"
-                android:padding="@dimen/small_view_padding_10dp"
-                android:src="@drawable/icon_close"
+                android:contentDescription="@string/description"
+                android:padding="@dimen/padding_10dp"
+                android:src="@drawable/ic_close"
                 app:tint="#505050" />
 
             <ImageView
@@ -30,7 +32,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="20dp"
                 android:background="?selectableItemBackgroundBorderless"
-                android:padding="@dimen/small_view_padding_10dp"
+                android:contentDescription="@string/description"
+                android:padding="@dimen/padding_10dp"
                 android:src="@drawable/icon_download"
                 app:tint="#505050" />
 
@@ -54,8 +57,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
-        android:text="1/4"
         android:textColor="#505050"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        tools:text="1/4" />
 
 </RelativeLayout>

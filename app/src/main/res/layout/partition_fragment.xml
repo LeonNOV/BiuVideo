@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="@color/bg"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/partition_anime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_round_corners6dp_partition_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/partition_anime"
+            android:textColor="@color/black"
+            android:textSize="@dimen/partition_title_size"
+            app:drawableTopCompat="@drawable/partition_anime" />
+
+        <TextView
+            android:id="@+id/partition_guochuang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_round_corners6dp_partition_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/partition_guochuang"
+            android:textColor="@color/black"
+            android:textSize="@dimen/partition_title_size"
+            app:drawableTopCompat="@drawable/partition_guochuang" />
+
+        <TextView
+            android:id="@+id/partition_douga"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_round_corners6dp_partition_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/partition_douga"
+            android:textColor="@color/black"
+            android:textSize="@dimen/partition_title_size"
+            app:drawableTopCompat="@drawable/partition_douga" />
+
+        <TextView
+            android:id="@+id/partition_ent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_round_corners6dp_partition_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/partition_ent"
+            android:textColor="@color/black"
+            android:textSize="@dimen/partition_title_size"
+            app:drawableTopCompat="@drawable/partition_ent" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/partition_article"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_round_corners6dp_partition_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/partition_article"
+            android:textColor="@color/black"
+            android:textSize="@dimen/partition_title_size"
+            app:drawableTopCompat="@drawable/partition_article" />
+
+        <TextView
+            android:id="@+id/partition_music"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_round_corners6dp_partition_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/partition_music"
+            android:textColor="@color/black"
+            android:textSize="@dimen/partition_title_size"
+            app:drawableTopCompat="@drawable/partition_music" />
+
+        <TextView
+            android:id="@+id/partition_dance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_round_corners6dp_partition_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/partition_dance"
+            android:textColor="@color/black"
+            android:textSize="@dimen/partition_title_size"
+            app:drawableTopCompat="@drawable/partition_dance" />
+
+        <TextView
+            android:id="@+id/partition_documentary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_round_corners6dp_partition_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/partition_documentary"
+            android:textColor="@color/black"
+            android:textSize="@dimen/partition_title_size"
+            app:drawableTopCompat="@drawable/partition_documentary" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/partition_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_round_corners6dp_partition_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/partition_game"
+            android:textColor="@color/black"
+            android:textSize="@dimen/partition_title_size"
+            app:drawableTopCompat="@drawable/partition_game" />
+
+        <TextView
+            android:id="@+id/partition_technology"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_round_corners6dp_partition_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/partition_technology"
+            android:textColor="@color/black"
+            android:textSize="@dimen/partition_title_size"
+            app:drawableTopCompat="@drawable/partition_technology" />
+
+        <TextView
+            android:id="@+id/partition_digital"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_round_corners6dp_partition_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/partition_digital"
+            android:textColor="@color/black"
+            android:textSize="@dimen/partition_title_size"
+            app:drawableTopCompat="@drawable/partition_digital" />
+
+        <TextView
+            android:id="@+id/partition_life"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_round_corners6dp_partition_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/partition_life"
+            android:textColor="@color/black"
+            android:textSize="@dimen/partition_title_size"
+            app:drawableTopCompat="@drawable/partition_life" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/partition_food"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_round_corners6dp_partition_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/partition_food"
+            android:textColor="@color/black"
+            android:textSize="@dimen/partition_title_size"
+            app:drawableTopCompat="@drawable/partition_food" />
+
+        <TextView
+            android:id="@+id/partition_animal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_round_corners6dp_partition_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/partition_animal"
+            android:textColor="@color/black"
+            android:textSize="@dimen/partition_title_size"
+            app:drawableTopCompat="@drawable/partition_animal" />
+
+        <TextView
+            android:id="@+id/partition_kichiku"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_round_corners6dp_partition_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/partition_kichiku"
+            android:textColor="@color/black"
+            android:textSize="@dimen/partition_title_size"
+            app:drawableTopCompat="@drawable/partition_kichiku" />
+
+        <TextView
+            android:id="@+id/partition_fashion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_round_corners6dp_partition_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/partition_fashion"
+            android:textColor="@color/black"
+            android:textSize="@dimen/partition_title_size"
+            app:drawableTopCompat="@drawable/partition_fashion" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/partition_cinephile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_round_corners6dp_partition_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/partition_cinephile"
+            android:textColor="@color/black"
+            android:textSize="@dimen/partition_title_size"
+            app:drawableTopCompat="@drawable/partition_cinephile" />
+
+        <TextView
+            android:id="@+id/partition_movie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_round_corners6dp_partition_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/partition_movie"
+            android:textColor="@color/black"
+            android:textSize="@dimen/partition_title_size"
+            app:drawableTopCompat="@drawable/partition_movie" />
+
+        <TextView
+            android:id="@+id/partition_teleplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_round_corners6dp_partition_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/partition_teleplay"
+            android:textColor="@color/black"
+            android:textSize="@dimen/partition_title_size"
+            app:drawableTopCompat="@drawable/partition_teleplay" />
+
+        <TextView
+            android:id="@+id/partition_channel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ripple_round_corners6dp_partition_bg"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="@string/partition_channel"
+            android:textColor="@color/black"
+            android:textSize="@dimen/partition_title_size"
+            app:drawableTopCompat="@drawable/partition_channel" />
+
+    </TableRow>
+
+</TableLayout>

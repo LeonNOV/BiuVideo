@@ -1,43 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/ripple_item_bilibili_lite"
+    android:layout_marginBottom="@dimen/itemMarginBottom"
+    android:background="@drawable/ripple_round_corners6dp_bg"
     android:orientation="horizontal"
-    android:padding="@dimen/item_padding">
+    android:padding="@dimen/itemPadding">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="@dimen/cover_width"
-        android:layout_height="@dimen/cover_height"
+        android:layout_width="@dimen/videoCoverWidth"
+        android:layout_height="@dimen/videoCoverHeight"
         app:cardCornerRadius="@dimen/corner_6dp">
 
-        <RelativeLayout
+        <ImageView
+            android:id="@+id/favorite_video_imageView_cover"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_background" />
 
-            <ImageView
-                android:id="@+id/favorite_video_imageView_cover"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher_background" />
-
-            <TextView
-                android:id="@+id/favorite_video_textView_duration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="10dp"
-                android:background="@drawable/round_gray_with_media_length_bg"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
-                android:text="06:12"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
-
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/favorite_video_textView_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:layout_margin="6dp"
+            android:background="@drawable/video_length_bg"
+            android:gravity="center"
+            android:padding="3dp"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            tools:text="06:12" />
 
     </androidx.cardview.widget.CardView>
 
@@ -53,17 +48,17 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="TitleTitleTitleTitleTitleTitleTitle"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:text="TitleTitleTitleTitleTitleTitleTitle" />
 
         <TextView
             android:id="@+id/favorite_video_textView_ftime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="收藏于2020/12/24 20:20"
             android:textColor="@color/gray"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            tools:text="收藏于2020/12/24 20:20" />
 
     </LinearLayout>
 

@@ -1,12 +1,29 @@
 package com.leon.biuvideo.beans.userBeans;
 
 /**
- * 观看历史分类
+ * @Author Leon
+ * @Time 2020/12/9
+ * @Desc 历史记录类型
  */
 public enum HistoryType {
+    /**
+     * 视频/稿件
+     */
     VIDEO("archive"),
+
+    /**
+     * 番剧/影视
+     */
     BANGUMI("bangumi"),
+
+    /**
+     * 文章/文集
+     */
     ARTICLE("article"),
+
+    /**
+     * 直播
+     */
     LIVE("live");
 
     public String value;

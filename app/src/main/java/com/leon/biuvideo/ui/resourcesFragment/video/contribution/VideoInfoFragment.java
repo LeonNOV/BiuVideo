@@ -1,0 +1,505 @@
+package com.leon.biuvideo.ui.resourcesFragment.video.contribution;
+
+import android.content.pm.PackageManager;
+import android.os.Message;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.alibaba.fastjson.JSONObject;
+import com.bumptech.glide.Glide;
+import com.leon.biuvideo.R;
+import com.leon.biuvideo.adapters.homeAdapters.RecommendAdapter;
+import com.leon.biuvideo.beans.resourcesBeans.Comment;
+import com.leon.biuvideo.beans.resourcesBeans.VideoRecommend;
+import com.leon.biuvideo.beans.resourcesBeans.videoBeans.VideoInfo;
+import com.leon.biuvideo.greendao.dao.DaoBaseUtils;
+import com.leon.biuvideo.greendao.dao.DownloadHistory;
+import com.leon.biuvideo.greendao.dao.DownloadHistoryDao;
+import com.leon.biuvideo.greendao.daoutils.DownloadHistoryUtils;
+import com.leon.biuvideo.ui.baseSupportFragment.BaseSupportFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.DownloadBottomSheet;
+import com.leon.biuvideo.ui.resourcesFragment.video.OnBottomSheetWithItemListener;
+import com.leon.biuvideo.ui.resourcesFragment.video.OnVideoAnthologyListener;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoAnthologyBottomSheet;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoCommentDetailFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoCommentFragment;
+import com.leon.biuvideo.ui.views.LoadingRecyclerView;
+import com.leon.biuvideo.ui.views.SimpleSnackBar;
+import com.leon.biuvideo.ui.views.TagView;
+import com.leon.biuvideo.ui.views.WarnDialog;
+import com.leon.biuvideo.utils.BindingUtils;
+import com.leon.biuvideo.utils.HttpUtils;
+import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.utils.PermissionUtil;
+import com.leon.biuvideo.utils.PreferenceUtils;
+import com.leon.biuvideo.utils.SimpleSingleThreadPool;
+import com.leon.biuvideo.utils.ValueUtils;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoInfoParser;
+import com.leon.biuvideo.utils.parseDataUtils.resourcesParsers.VideoRecommendParser;
+import com.leon.biuvideo.values.FeaturesName;
+import com.leon.biuvideo.values.FragmentType;
+import com.leon.biuvideo.values.ImagePixelSize;
+import com.leon.biuvideo.values.apis.BiliBiliAPIs;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import okhttp3.Headers;
+
+/**
+ * @Author Leon
+ * @Time 2021/4/6
+ * @Desc 视频介绍页面
+ */
+public class VideoInfoFragment extends BaseSupportFragment implements View.OnClickListener {
+    private final String bvid;
+
+    int easterEggSteps = 0;
+    String easterEggWarn = "🎉";
+
+    private ImageView videoInfoFace;
+    private TextView videoInfoFollow;
+
+    private TextView videoInfoLike;
+    private TextView videoInfoCoin;
+    private TextView videoInfoFavorite;
+    private TextView videoInfoShare;
+
+    private LinearLayout videoInfoAnthologyContainer;
+    private TagView videoInfoNowAnthology;
+    private LoadingRecyclerView videoInfoRecommends;
+
+    private int anthologyIndex = 0;
+    private OnVideoAnthologyListener onVideoAnthologyListener;
+    private VideoInfo videoInfo;
+    private LinearLayout videoInfoEasterEggContainer;
+    private TextView videoInfoDownloadedRecord;
+    private Long downloadedRecordCount = 0L;
+    private TagView videoInfoComments;
+
+    public VideoInfoFragment(String bvid) {
+        this.bvid = bvid;
+    }
+
+    public void setOnVideoAnthologyListener(OnVideoAnthologyListener onVideoAnthologyListener) {
+        this.onVideoAnthologyListener = onVideoAnthologyListener;
+    }
+
+    @Override
+    protected int setLayout() {
+        return R.layout.video_info_fragment;
+    }
+
+    @Override
+    protected void initView() {
+        findView(R.id.video_fragment_container).setBackgroundResource(R.color.white);
+        
+        videoInfoFace = findView(R.id.video_info_face);
+        videoInfoFace.setOnClickListener(this);
+
+        videoInfoFollow = findView(R.id.video_info_follow);
+        videoInfoFollow.setOnClickListener(this);
+
+        videoInfoLike = findView(R.id.video_info_like);
+        videoInfoLike.setOnClickListener(this);
+
+        videoInfoCoin = findView(R.id.video_info_coin);
+        videoInfoCoin.setOnClickListener(this);
+
+        videoInfoFavorite = findView(R.id.video_info_favorite);
+        videoInfoFavorite.setOnClickListener(this);
+
+        videoInfoShare = findView(R.id.video_info_share);
+        videoInfoShare.setOnClickListener(this);
+
+        LinearLayout videoInfoCommentsContainer = findView(R.id.video_info_comments_container);
+        videoInfoCommentsContainer.setOnClickListener(this);
+
+        videoInfoComments = findView(R.id.video_info_comments);
+
+        videoInfoAnthologyContainer = findView(R.id.video_info_anthology_container);
+        videoInfoAnthologyContainer.setOnClickListener(this);
+
+        videoInfoNowAnthology = findView(R.id.video_info_now_anthology);
+
+        videoInfoRecommends = findView(R.id.video_info_recommends);
+        videoInfoRecommends.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING);
+
+        videoInfoEasterEggContainer = findView(R.id.video_info_easterEgg_container);
+        videoInfoEasterEggContainer.setOnClickListener(this);
+
+        videoInfoDownloadedRecord = findView(R.id.video_info_downloaded_record);
+
+        if (PreferenceUtils.getEasterEggStat()) {
+            videoInfoEasterEggContainer.setVisibility(View.VISIBLE);
+        }
+
+        if (InternetUtils.checkNetwork(_mActivity.getWindow().getDecorView())) {
+            initHandler();
+            getVideoInfo();
+        }
+    }
+
+    /**
+     * 初始化Handler
+     */
+    private void initHandler() {
+        setOnLoadListener(new OnLoadListener() {
+            @Override
+            public void onLoad(Message msg) {
+                Object msgObj = msg.obj;
+                if (msgObj == null && msg.what != 1) {
+                    SimpleSnackBar.make(view, getString(R.string.snackBarDataErrorWarn), SimpleSnackBar.LENGTH_LONG).show();
+                    backPressed();
+                    return;
+                }
+
+                switch (msg.what) {
+                    case 0:
+                        initInfo(msgObj);
+                        getOtherData();
+                        break;
+                    case 1:
+                        initStat(msgObj);
+                        getComments();
+                        break;
+                    case 2:
+                        initRecommend(msgObj);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+    }
+
+    /**
+     * 初始化基本信息
+     */
+    private void initInfo(Object msgObj) {
+        videoInfo = (VideoInfo) msgObj;
+
+        Glide
+                .with(context)
+                .load(videoInfo.userInfo.userFace += PreferenceUtils.getFeaturesStatus(FeaturesName.IMG_ORIGINAL_MODEL) ?
+                        ImagePixelSize.FACE.value : "")
+                .into(videoInfoFace);
+
+        new BindingUtils(view, context)
+                .setText(R.id.video_info_userName, videoInfo.userInfo.userName)
+                .setText(R.id.video_info_title, videoInfo.title)
+                .setText(R.id.video_info_play, ValueUtils.generateCN(videoInfo.videoStat.view))
+                .setText(R.id.video_info_danmaku, ValueUtils.generateCN(videoInfo.videoStat.danmaku))
+                .setText(R.id.video_info_pubTime, ValueUtils.generateTime(videoInfo.pubTime, "yyyy-MM-dd", true))
+                .setText(R.id.video_info_bvid, videoInfo.bvid)
+                .setOnClickListener(R.id.video_info_bvid, VideoInfoFragment.this);
+
+        videoInfoLike.setText(ValueUtils.generateCN(videoInfo.videoStat.like));
+        videoInfoCoin.setText(ValueUtils.generateCN(videoInfo.videoStat.coin));
+        videoInfoFavorite.setText(ValueUtils.generateCN(videoInfo.videoStat.favorite));
+        videoInfoShare.setText(ValueUtils.generateCN(videoInfo.videoStat.share));
+
+        videoInfoComments.setRightValue(ValueUtils.generateCN(videoInfo.videoStat.comment));
+
+        if (videoInfo.videoAnthologyList.size() > 1) {
+            videoInfoAnthologyContainer.setVisibility(View.VISIBLE);
+            videoInfoNowAnthology.setRightValue(videoInfo.videoAnthologyList.get(anthologyIndex).subTitle);
+        }
+
+        // 开始播放视频
+        if (onVideoAnthologyListener != null) {
+            VideoInfo.VideoAnthology videoAnthology = videoInfo.videoAnthologyList.get(anthologyIndex);
+            onVideoAnthologyListener.onAnthology(videoAnthology.cid, videoAnthology.subTitle, videoInfo.isMovie);
+        }
+
+        DownloadHistoryUtils downloadHistoryUtils = new DownloadHistoryUtils(context);
+        DaoBaseUtils<DownloadHistory> downloadHistoryDaoUtils = downloadHistoryUtils.getDownloadHistoryDaoUtils();
+
+        // 获取该视频已下载的选集数
+        downloadedRecordCount = downloadHistoryDaoUtils.count(DownloadHistoryDao.Properties.IsCompleted.eq(true),
+                DownloadHistoryDao.Properties.LevelOneId.eq(bvid));
+
+        String record = downloadedRecordCount + "/" + videoInfo.anthologyCount;
+        videoInfoDownloadedRecord.setText(record);
+    }
+
+    /**
+     * 初始化状态数
+     */
+    private void initStat(Object msgObj) {
+        JSONObject jsonObject = (JSONObject) msgObj;
+        if (jsonObject != null) {
+            // 获取当前账户是否已关注当前UP主
+            boolean attention = jsonObject.getBooleanValue("attention");
+            videoInfoFollow.setSelected(attention);
+            if (attention) {
+                videoInfoFollow.setText("已关注");
+            } else {
+                videoInfoFollow.setText("关注");
+            }
+
+            // 获取投币状态
+            boolean coin = jsonObject.getIntValue("coin") > 0;
+            videoInfoCoin.setSelected(coin);
+
+            // 获取收藏状态
+            boolean favorite = jsonObject.getBooleanValue("favorite");
+            videoInfoFavorite.setSelected(favorite);
+
+            // 获取点赞状态
+            boolean like = jsonObject.getBooleanValue("like");
+            videoInfoLike.setSelected(like);
+        } else {
+            videoInfoFollow.setText("关注");
+            videoInfoCoin.setSelected(false);
+            videoInfoFavorite.setSelected(false);
+            videoInfoLike.setSelected(false);
+        }
+    }
+
+    /**
+     * 初始化推荐数据
+     */
+    private void initRecommend(Object msgObj) {
+        List<VideoRecommend> videoRecommendList = (List<VideoRecommend>) msgObj;
+
+        RecommendAdapter recommendAdapter = new RecommendAdapter(videoRecommendList, RecommendAdapter.SINGLE_COLUMN, getMainActivity(), context);
+        recommendAdapter.setHasStableIds(true);
+        videoInfoRecommends.setRecyclerViewAdapter(recommendAdapter);
+        videoInfoRecommends.setRecyclerViewLayoutManager(new LinearLayoutManager(context));
+        videoInfoRecommends.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
+    }
+
+    /**
+     * 获取视频基本信息
+     */
+    private void getVideoInfo() {
+        SimpleSingleThreadPool.executor(new Runnable() {
+            @Override
+            public void run() {
+                VideoInfo videoInfo = VideoInfoParser.parseData(bvid, context);
+
+                Message message = receiveDataHandler.obtainMessage(0);
+                message.obj = videoInfo;
+                receiveDataHandler.sendMessage(message);
+            }
+        });
+    }
+
+    /**
+     * 获取其他数据
+     */
+    private void getOtherData() {
+        SimpleSingleThreadPool.executor(new Runnable() {
+            @Override
+            public void run() {
+                JSONObject data = null;
+
+                if (PreferenceUtils.getLoginStatus()) {
+                    // 获取当前视频与已登录用户的关系
+                    Map<String, String> params = new HashMap<>(1);
+                    params.put("bvid", videoInfo.bvid);
+                    JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.VIDEO_STATUS, Headers.of(HttpUtils.getAPIRequestHeader()), params);
+                    data = response.getJSONObject("data");
+                }
+
+                Message message = receiveDataHandler.obtainMessage(1);
+                message.obj = data;
+                receiveDataHandler.sendMessage(message);
+            }
+        });
+    }
+
+    /**
+     * 跳转至评论页面
+     */
+    private void startVideoCommentFragment() {
+        VideoCommentFragment videoCommentFragment = new VideoCommentFragment(videoInfo.aid);
+        videoCommentFragment.setToCommentDetailFragment(new VideoCommentFragment.ToCommentDetailFragment() {
+            @Override
+            public void toCommentDetail(Comment comment) {
+                start(new VideoCommentDetailFragment(comment));
+            }
+        });
+
+        start(videoCommentFragment);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.video_info_face:
+                if (InternetUtils.checkNetwork(v)) {
+                    startPublicFragment(FragmentType.BILI_USER, videoInfo.userInfo.userMid);
+                }
+                break;
+            case R.id.video_info_follow:
+            case R.id.video_info_like:
+            case R.id.video_info_coin:
+            case R.id.video_info_favorite:
+            case R.id.video_info_share:
+                SimpleSnackBar.make(v, getString(R.string.snackBarBuildingWarn), SimpleSnackBar.LENGTH_LONG).show();
+                break;
+            case R.id.video_info_anthology_container:
+                if (InternetUtils.checkNetwork(v)) {
+                    showAnthologyBottomSheet();
+                }
+                break;
+            case R.id.video_info_bvid:
+                easterEgg(v);
+                break;
+            case R.id.video_info_comments_container:
+                if (InternetUtils.checkNetwork(v)) {
+                    startVideoCommentFragment();
+                }
+                break;
+            case R.id.video_info_easterEgg_container:
+                // 验证读写权限
+                if (!verifyIOPermission()) {
+                    requestIOPermission();
+                } else {
+                    if (InternetUtils.checkNetwork(v)) {
+                        showDownloadBottomSheet();
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 获取推荐视频
+     */
+    private void getComments() {
+        SimpleSingleThreadPool.executor(new Runnable() {
+            @Override
+            public void run() {
+                List<VideoRecommend> videoRecommendList = VideoRecommendParser.parseData(videoInfo.bvid);
+
+                Message message = receiveDataHandler.obtainMessage(2);
+                message.obj = videoRecommendList;
+                receiveDataHandler.sendMessage(message);
+            }
+        });
+    }
+
+    /**
+     * 彩蛋部分
+     */
+    private void easterEgg(View v) {
+        if (PreferenceUtils.getEasterEggStat()) {
+            return;
+        }
+
+        if (easterEggSteps == 3) {
+            videoInfoEasterEggContainer.setVisibility(View.VISIBLE);
+            PreferenceUtils.setEasterEggStat();
+            SimpleSnackBar.make(v, getString(R.string.easterEggWarn), Gravity.CENTER, SimpleSnackBar.LENGTH_SHORT).show();
+            easterEggWarn = null;
+        } else {
+            SimpleSnackBar.make(v, easterEggWarn, Gravity.CENTER, SimpleSnackBar.LENGTH_SHORT).show();
+            easterEggWarn += "🎉";
+
+            easterEggSteps ++;
+        }
+    }
+
+    /**
+     * 显示选集选择底部弹窗
+     */
+    private void showAnthologyBottomSheet() {
+        VideoAnthologyBottomSheet videoAnthologyBottomSheet = new VideoAnthologyBottomSheet(context, anthologyIndex);
+        videoAnthologyBottomSheet.setVideoAnthologyList(videoInfo.videoAnthologyList);
+        videoAnthologyBottomSheet.setOnBottomSheetWithItemListener(new OnBottomSheetWithItemListener() {
+            @Override
+            public void onItem(int position) {
+                if (onVideoAnthologyListener != null) {
+                    anthologyIndex = position;
+
+                    VideoInfo.VideoAnthology videoAnthology = videoInfo.videoAnthologyList.get(anthologyIndex);
+
+                    videoInfoNowAnthology.setRightValue(videoAnthology.subTitle);
+                    onVideoAnthologyListener.onAnthology(videoAnthology.cid, videoAnthology.subTitle, videoInfo.isMovie);
+                    videoAnthologyBottomSheet.dismiss();
+                }
+            }
+        });
+        videoAnthologyBottomSheet.show();
+    }
+
+    /**
+     * 请求读写权限
+     */
+    private void requestIOPermission () {
+        WarnDialog warnDialog = new WarnDialog(context, "读写权限", "由于保存资源文件时需要用到'读写权限',否则将无法正常下载视频、音频等资源");
+        warnDialog.setOnWarnActionListener(new WarnDialog.OnWarnActionListener() {
+            @Override
+            public void onConfirm() {
+                warnDialog.dismiss();
+                PermissionUtil permissionUtil = new PermissionUtil(context, VideoInfoFragment.this);
+                permissionUtil.verifyPermission(PermissionUtil.Permission.RW);
+            }
+
+            @Override
+            public void onCancel() {
+                warnDialog.dismiss();
+            }
+        });
+        warnDialog.show();
+    }
+
+    /**
+     * 验证读写权限是否已授予
+     */
+    private boolean verifyIOPermission() {
+        return PermissionUtil.verifyPermission(context, PermissionUtil.Permission.RW);
+    }
+
+    /**
+     * 读写权限回调
+     *
+     * @param requestCode  请求码
+     * @param permissions  权限名称
+     * @param grantResults 授权结果
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1025) {
+            if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                showDownloadBottomSheet();
+            } else {
+                SimpleSnackBar.make(view, "请授予'读写权限',否则将不能下载~", SimpleSnackBar.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    /**
+     * 显示下载弹窗
+     */
+    private void showDownloadBottomSheet() {
+        DownloadBottomSheet<VideoInfo.VideoAnthology> downloadBottomSheet = new DownloadBottomSheet<>(context, videoInfo.videoAnthologyList);
+        downloadBottomSheet.setOnClickDownloadItemListener(new DownloadBottomSheet.OnClickDownloadItemListener<VideoInfo.VideoAnthology>() {
+            @Override
+            public boolean onClickItem(VideoInfo.VideoAnthology videoAnthology) {
+
+
+                downloadedRecordCount++;
+
+                String record = downloadedRecordCount + "/" + videoInfo.anthologyCount;
+                videoInfoDownloadedRecord.setText(record);
+
+                return false;
+            }
+        });
+        downloadBottomSheet.show();
+    }
+}

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bottom_sheet_background"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/cardPadding"
+    android:paddingEnd="@dimen/cardPadding"
+    android:paddingBottom="@dimen/cardPadding">
+
+    <com.leon.biuvideo.ui.views.BottomSheetTopBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:bottomSheetTitle="@string/setting_set_location_title" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/cardMargin"
+        android:layout_marginBottom="@dimen/cardMargin"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="100dp"
+            android:background="@drawable/ripple_round_corners6dp_bg"
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
+
+            <EditText
+                android:id="@+id/set_location_keyword"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="15dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="@string/setting_set_location_hint"
+                android:inputType="text"
+                android:textColor="@color/black"
+                android:textColorHint="@color/hintColor" />
+
+            <ImageView
+                android:id="@+id/set_location_clearKeyword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/ripple_round_corners6dp_bg"
+                android:clickable="true"
+                android:contentDescription="@string/description"
+                android:focusable="true"
+                android:padding="5dp"
+                android:src="@drawable/ic_clear" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/set_location_search"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/ripple_round_corners6dp_bg"
+            android:backgroundTint="#42A5F5"
+            android:gravity="center"
+            android:text="@string/search"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_corners6dp_bg"
+        android:orientation="vertical"
+        android:padding="@dimen/cardPadding">
+
+        <com.leon.biuvideo.ui.views.CardTitle
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:card_title="@string/setting_set_location_choose_location" />
+
+        <com.leon.biuvideo.ui.views.LoadingRecyclerView
+            android:id="@+id/set_location_data"
+            android:layout_width="match_parent"
+            android:layout_height="300dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

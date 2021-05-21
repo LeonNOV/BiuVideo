@@ -1,2 +1,6 @@
 /build
 /release
+/src/main/java/com/leon/biuvideo/values/apis/AmapKey.java
+/src/main/java/com/leon/biuvideo/ui/resourcesFragment/BiuVideoPlayerWithAudio.java
+/src/main/java/com/leon/biuvideo/ui/resourcesFragment/BiuVideoPlayerFactory.java
+/src/main/java/com/leon/biuvideo/ui/resourcesFragment/VideoPlayerView.java

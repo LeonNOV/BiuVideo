@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.leon.biuvideo.ui.views.SimpleTopBar
+        android:id="@+id/watch_later_fragment_topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:topBarTitle="@string/home_card_title_watch_later" />
+
+    <com.leon.biuvideo.ui.views.LoadingRecyclerView
+        android:id="@+id/watch_later_fragment_loadingRecyclerView"
+        android:padding="@dimen/recyclerViewPadding"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

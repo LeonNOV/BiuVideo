@@ -10,17 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.leon.biuvideo.utils.InitValueUtils;
+import com.leon.biuvideo.ui.views.TagView;
+import com.leon.biuvideo.utils.PreferenceUtils;
+import com.leon.biuvideo.values.FeaturesName;
 import com.leon.biuvideo.values.ImagePixelSize;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 基本的ViewHolder
- * 该类提供了一些常用的绑定数据方法，可自行根据需要添加
- * <br/>
- * <strong>注意：设置点击事件时请注意该类中两个不同参数的setOnClickListener()方法，具体使用可看方法的注释</strong>
+ * @Author Leon
+ * @Time 2020/11/16
+ * @Desc 基本的ViewHolder,该类提供了一些常用的绑定数据方法，可自行根据需要添加<br/><strong>注意：设置点击事件时请注意该类中两个不同参数的setOnClickListener()方法，具体使用可看方法的注释</strong>
  */
 public class BaseViewHolder extends RecyclerView.ViewHolder {
     private final Map<Integer, View> views;
@@ -30,7 +31,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     public BaseViewHolder(@NonNull View itemView, Context context) {
         super(itemView);
 
-        this.imgOriginalMode = InitValueUtils.isImgOriginalMode(context);
+        this.imgOriginalMode = PreferenceUtils.getFeaturesStatus(FeaturesName.IMG_ORIGINAL_MODEL);
         this.views = new HashMap<>();
         this.context = context;
     }
@@ -68,6 +69,20 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     }
 
     /**
+     * 用于设置控件的text
+     *
+     * @param id    控件ID
+     * @param charSequence  设置的文本
+     * @return  返回this
+     */
+    public BaseViewHolder setText(int id, CharSequence charSequence) {
+        TextView view = findById(id);
+        view.setText(charSequence);
+
+        return this;
+    }
+
+    /**
      * 用于设置控件的image(网络图片)
      *
      * @param id    控件ID
@@ -78,7 +93,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     public BaseViewHolder setImage(int id, String url, ImagePixelSize imagePixelSize) {
         ImageView imageView = findById(id);
 
-        Glide.with(context).load(imgOriginalMode ? url : url + imagePixelSize.value).into(imageView);
+        Glide.with(context).load(imgOriginalMode ? url : imagePixelSize != null ? url + imagePixelSize.value : url).into(imageView);
 
         return this;
     }
@@ -145,6 +160,9 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     public BaseViewHolder setVisibility (int id, int visibility) {
         View view = findById(id);
         view.setVisibility(visibility);
+
+
+
 
         return this;
     }

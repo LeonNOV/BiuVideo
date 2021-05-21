@@ -1,0 +1,114 @@
+{
+    "apis":[
+        {
+            "name": "全站",
+            "type": 0,
+            "url": "https://api.bilibili.com/x/web-interface/ranking/v2?rid=0&type=all"
+        },
+        {
+            "name": "番剧",
+            "type": 2,
+            "url": "https://api.bilibili.com/pgc/web/rank/list?day=3&season_type=1"
+        },
+        {
+            "name": "国产动画",
+            "type": 1,
+            "url": "https://api.bilibili.com/pgc/season/rank/web/list?day=3&season_type=4"
+        },
+        {
+            "name": "国创相关",
+            "type": 0,
+            "url": "https://api.bilibili.com/x/web-interface/ranking/v2?rid=168&type=all"
+        },
+        {
+            "name": "纪录片",
+            "type": 1,
+            "url": "https://api.bilibili.com/pgc/season/rank/web/list?day=3&season_type=3"
+        },
+        {
+            "name": "动画",
+            "type": 0,
+            "url": "https://api.bilibili.com/x/web-interface/ranking/v2?rid=1&type=all"
+        },
+        {
+            "name": "音乐",
+            "type": 0,
+            "url": "https://api.bilibili.com/x/web-interface/ranking/v2?rid=3&type=all"
+        },
+        {
+            "name": "舞蹈",
+            "type": 0,
+            "url": "https://api.bilibili.com/x/web-interface/ranking/v2?rid=129&type=all"
+        },
+        {
+            "name": "游戏",
+            "type": 0,
+            "url": "https://api.bilibili.com/x/web-interface/ranking/v2?rid=4&type=all"
+        },
+        {
+            "name": "知识",
+            "type": 0,
+            "url": "https://api.bilibili.com/x/web-interface/ranking/v2?rid=36&type=all"
+        },
+        {
+            "name": "数码",
+            "type": 0,
+            "url": "https://api.bilibili.com/x/web-interface/ranking/v2?rid=188&type=all"
+        },
+        {
+            "name": "生活",
+            "type": 0,
+            "url": "https://api.bilibili.com/x/web-interface/ranking/v2?rid=160&type=all"
+        },
+        {
+            "name": "美食",
+            "type": 0,
+            "url": "https://api.bilibili.com/x/web-interface/ranking/v2?rid=211&type=all"
+        },
+        {
+            "name": "动物圈",
+            "type": 0,
+            "url": "https://api.bilibili.com/x/web-interface/ranking/v2?rid=217&type=all"
+        },
+        {
+            "name": "鬼畜",
+            "type": 0,
+            "url": "https://api.bilibili.com/x/web-interface/ranking/v2?rid=119&type=all"
+        },
+        {
+            "name": "时尚",
+            "type": 0,
+            "url": "https://api.bilibili.com/x/web-interface/ranking/v2?rid=155&type=all"
+        },
+        {
+            "name": "娱乐",
+            "type": 0,
+            "url": "https://api.bilibili.com/x/web-interface/ranking/v2?rid=5&type=all"
+        },
+        {
+            "name": "影视",
+            "type": 0,
+            "url": "https://api.bilibili.com/x/web-interface/ranking/v2?rid=181&type=all"
+        },
+        {
+            "name": "电影",
+            "type": 1,
+            "url": "https://api.bilibili.com/pgc/season/rank/web/list?day=3&season_type=2"
+        },
+        {
+            "name": "电视剧",
+            "type": 1,
+            "url": "https://api.bilibili.com/pgc/season/rank/web/list?day=3&season_type=5"
+        },
+        {
+            "name": "原创",
+            "type": 0,
+            "url": "https://api.bilibili.com/x/web-interface/ranking/v2?rid=0&type=origin"
+        },
+        {
+            "name": "新人",
+            "type": 0,
+            "url": "https://api.bilibili.com/x/web-interface/ranking/v2?rid=0&type=rookie"
+        }
+    ]
+}

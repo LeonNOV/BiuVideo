@@ -2,15 +2,18 @@ package com.leon.biuvideo.utils;
 
 import android.util.Log;
 
+/**
+ * @Author Leon
+ * @Time 2020/11/8
+ * @Desc Fuck!!!
+ */
 public class Fuck {
-    public static String red = "Fuck-red";
+    public static final String TAG = "Fuck";
 
     public static void red(String msg) {
-        Log.d(red, msg);
+        Log.w(TAG, msg);
     }
-
-    public static String blue = "Fuck-blue";
     public static void blue(String msg) {
-        Log.d(blue, msg);
+        Log.d(TAG, msg);
     }
 }

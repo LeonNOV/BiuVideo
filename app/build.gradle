@@ -1,15 +1,18 @@
 apply plugin: 'com.android.application'
 
+// GreenDaoPlugins
+apply plugin: 'org.greenrobot.greendao'
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "com.leon.biuvideo"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 30
-        versionCode 10
-        versionName "2.7.7-beta"
+        versionCode 11
+        versionName "3.0.0-beta"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -24,7 +27,13 @@ android {
              * 如果需要支持平板，则需要加上x86或x86_64
              * x86_64支持新上市的平板，向下兼容x86
              */
-            abiFilters "arm64-v8a"
+            abiFilters "armeabi-v7a"
+        }
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath true
+            }
         }
     }
 
@@ -34,24 +43,37 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
+greendao {
+    // 数据库版本号
+    schemaVersion 2
+
+    // 生成数据库文件的目录
+    targetGenDir 'src/main/java'
+
+    // 生成的数据库相关文件的包名
+    daoPackage 'com.leon.biuvideo.greendao.dao'
+}
+
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.navigation:navigation-fragment:2.3.0'
-    implementation 'androidx.navigation:navigation-ui:2.3.0'
+    implementation 'androidx.navigation:navigation-fragment:2.3.2'
+    implementation 'androidx.navigation:navigation-ui:2.3.2'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'com.android.support:multidex:1.0.3'
     testImplementation 'junit:junit:4.12'
     testImplementation "org.mockito:mockito-core:1.9.5"
+
 
     // https://mvnrepository.com/artifact/com.alibaba/fastjson
     implementation group: 'com.alibaba', name: 'fastjson', version: '1.2.74'
@@ -62,6 +84,8 @@ dependencies {
     //加载网络图片
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation 'androidx.preference:preference:1.1.1'
+
+    api 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     //折叠TextView
@@ -70,7 +94,6 @@ dependencies {
     //SmartRefreshLayout
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.5.1'//没有使用特殊Header，可以不加这行
-    implementation 'androidx.appcompat:appcompat:1.2.0'//版本 23以上（必须）
 
     // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.0'
@@ -78,15 +101,50 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jsoup/jsoup
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
 
-    // RxFFmpeg
-    implementation 'com.github.microshow:RxFFmpeg:4.9.0-lite'
-
     // EasySnackBar
     implementation 'com.sun.easysnackbar:easysnackbar:1.0.1'
 
-    testImplementation 'junit:junit:4.12'
+    // 单Activity框架
+//    implementation 'com.github.weikaiyun.SFragmentation:fragmentation:1.8.0'
+    implementation 'me.xuexuan:fragmentationx:1.0.6'
+//    implementation 'me.yokeyword:fragmentationx:1.0.1'
+
+    // Item侧滑控件
+    implementation "com.github.mcxtzhang:SwipeDelMenuLayout:V1.3.0"
+
+    // 状态栏工具类
+//    implementation 'com.jaeger.statusbarutil:library:1.4.0'
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation 'androidx.palette:palette:1.0.0'
+    // GreenDao
+    implementation 'org.greenrobot:greendao:3.3.0'
+
+    // DKPlayer
+    implementation 'com.github.dueeeke.dkplayer:dkplayer-java:3.2.6'
+    implementation 'com.github.dueeeke.dkplayer:dkplayer-ui:3.2.6'
+    implementation 'com.github.dueeeke.dkplayer:player-ijk:3.2.6'
+
+    // 自定义时使用
+//    implementation project(path: ':dkplayer-java')
+//    implementation project(path: ':dkplayer-ui')
+//    implementation project(path: ':dkplayer-ijk')
+
+    // 烈焰弹幕使
+    implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
+    implementation 'com.github.ctiao:ndkbitmap-armv7a:0.9.21'
+
+    // EventBus
+    implementation 'org.greenrobot:eventbus:3.2.0'
+
+    // aria
+    implementation 'com.arialyy.aria:core:3.8.15'
+    annotationProcessor 'com.arialyy.aria:compiler:3.8.15'
+
+    // An Android transformation library providing a variety of image transformations for Glide.
+    implementation 'jp.wasabeef:glide-transformations:4.3.0'
+
+    // 百度统计
+    implementation 'com.baidu.mobstat:mtj-sdk:4.0.4.6'
 }

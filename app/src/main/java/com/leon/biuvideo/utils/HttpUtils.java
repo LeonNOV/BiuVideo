@@ -1,12 +1,7 @@
 package com.leon.biuvideo.utils;
 
-import android.content.Context;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.leon.biuvideo.beans.videoBean.play.Play;
-import com.leon.biuvideo.utils.parseDataUtils.mediaParseUtils.MediaParser;
-import com.leon.biuvideo.utils.parseDataUtils.resourcesParseUtils.MusicUrlParser;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -21,6 +16,11 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+/**
+ * @Author Leon
+ * @Time 2020/10/18
+ * @Desc 网络数据请求工具类
+ */
 public class HttpUtils {
     private final String url;
     private final Headers headers;
@@ -69,6 +69,19 @@ public class HttpUtils {
     }
 
     /**
+     * @return  获取响应体字节码数据
+     */
+    public byte[] getByteArray () {
+        try {
+            return getInstance().body().bytes();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
      * 获取实例对象
      *
      * @return  返回Response对象
@@ -88,7 +101,6 @@ public class HttpUtils {
         }
 
         try {
-
             if (headers != null) {
                 requestBuilder.headers(headers);
             } else {
@@ -139,36 +151,55 @@ public class HttpUtils {
     }
 
     /**
-     * 获取媒体资源链接
-     *
-     * @param mainId    主ID（bvid， sid）
-     * @param subId 子ID（cid）
-     * @return  返回资源链接
-     * <br/>
-     * 如果为视频，则索引0为视频连接，索引1为音频链接
-     * <br/>
-     * 如果为音频，则索引0就是音频链接
+     * 该方法适用于在获取接口数据时调用<br/>
+     * 如果已登录账号，则会获取已存在的Cookie
      */
-    public static String[] reacquireMediaUrl(Context context, String mainId, long subId, int qualityId, boolean isBangumi) {
-        String[] urls;
-        if (subId != 0) {
-            urls = new String[2];
+    public static Map<String, String> getAPIRequestHeader() {
+        Map<String, String> requestHeader = new HashMap<>(HttpUtils.getHeaders());
+        String cookie = PreferenceUtils.getCookie();
 
-            MediaParser mediaParser = new MediaParser(context);
-            Play play = mediaParser.parseMedia(mainId, subId, isBangumi);
-
-            if (play != null) {
-                urls[0] = play.videos.get(qualityId).baseUrl;
-                urls[1] = play.audioEntries().get(0).getValue().baseUrl;
-            }
-
+        if (cookie == null) {
+            return requestHeader;
         } else {
-            urls = new String[1];
-            MusicUrlParser musicUrlParser = new MusicUrlParser(context);
-            urls[0] = musicUrlParser.parseMusicUrl(mainId);;
+            requestHeader.put("Cookie", cookie);
         }
 
-        return urls;
+        return requestHeader;
+    }
+
+    /**
+     * 该方法适用于在获取接口数据时调用<br/>
+     * 如果已登录账号，则会获取已存在的Cookie
+     */
+    public static Map<String, String> getAPIRequestHeader(String key, String value) {
+        Map<String, String> requestHeader = new HashMap<>(getAPIRequestHeader());
+
+        if (requestHeader.containsKey(key)) {
+            requestHeader.replace(key, value);
+        } else {
+            requestHeader.put(key, value);
+        }
+
+        return requestHeader;
+    }
+
+    /**
+     * 解决视频播放失败的问题
+     *
+     * @param isBangumi 是否为番剧
+     * @param id    视频bvid/番剧选集epId
+     * @return  视频播放请求头
+     */
+    public static HashMap<String, String> getVideoPlayHeaders (boolean isBangumi, String id) {
+        HashMap<String, String> headers = getHeaders();
+
+        if (isBangumi) {
+            headers.replace("Referer", "https://www.bilibili.com/bangumi/play/ep" + id);
+        } else {
+            headers.replace("Referer", "https://www.bilibili.com/video/" + id);
+        }
+
+        return headers;
     }
 
     /**
@@ -177,7 +208,7 @@ public class HttpUtils {
      * @return  返回头信息
      */
     public static HashMap<String, String> getHeaders() {
-        HashMap<String, String> headers = new HashMap<>();
+        HashMap<String, String> headers = new HashMap<>(3);
         headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36 Edg/86.0.622.51");
         headers.put("Connection", "keep-alive");
         headers.put("Referer", "https://www.bilibili.com/");

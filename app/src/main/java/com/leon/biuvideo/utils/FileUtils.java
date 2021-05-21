@@ -1,30 +1,29 @@
 package com.leon.biuvideo.utils;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.pm.PackageManager;
+import android.content.Context;
 import android.os.Environment;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import com.leon.biuvideo.ui.dialogs.WarnDialog;
-
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
 /**
- * 关于文件操作的工具类
+ * @Author Leon
+ * @Time 2020/10/28
+ * @Desc 关于文件操作的工具类
  */
 public class FileUtils {
 
     /**
      * 创建文件夹，默认在系统根目录中创建
      *
-     * @param folderName    子文件夹名称
+     * @param folderName 子文件夹名称
      */
     public static String createFolder(ResourcesFolder folderName) {
         String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/BiuVideo";
@@ -42,7 +41,7 @@ public class FileUtils {
     /**
      * 创建文件夹，默认在系统根目录中创建
      *
-     * @param folderName    子文件夹名称
+     * @param folderName 子文件夹名称
      */
     public static String createFolder(String folderName) {
         String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/BiuVideo";
@@ -57,43 +56,10 @@ public class FileUtils {
     }
 
     /**
-     * 每次保存需要提前检查读写权限
-     *
-     * @param activity  申请权限的Activity
-     */
-    public static void verifyPermissions(Activity activity) {
-        //检查权限有没有获取
-        int permissionCheck = ContextCompat.checkSelfPermission(activity.getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            //如果应用之前请求过此权限但用户拒绝了请求，此方法将返回 true
-            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                WarnDialog warnDialog = new WarnDialog(activity, "读写权限", "由于保存资源文件时需要用到\"读写权限\"，否则将无法正常使用");
-                warnDialog.setOnClickListener(new WarnDialog.OnClickListener() {
-                    @Override
-                    public void onConfirm() {
-                        warnDialog.dismiss();
-                        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1024);
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        warnDialog.dismiss();
-                    }
-                });
-                warnDialog.show();
-            } else {
-                //申请读写权限
-                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1024);
-            }
-        }
-    }
-
-    /**
      * 生成一个随机的文件名
      *
-     * @param baseName  基本名称
-     * @return  返回一个文件名
+     * @param baseName 基本名称
+     * @return 返回一个文件名
      */
     public static String generateFileName(String baseName) {
         SimpleDateFormat ymd = new SimpleDateFormat("yyyyMMddHHmm", Locale.CHINA);
@@ -102,6 +68,76 @@ public class FileUtils {
         String uuid = UUID.randomUUID().toString().replace("-", "").substring(0, 5);
 
         return baseName + "-" + uuid + "-" + format;
+    }
+
+    /**
+     * 获取缓存文件大小
+     *
+     * @param cacheFile 应用cache文件夹路径
+     * @return 返回cache文件夹大小(byte)
+     */
+    public static long getCacheSize(File cacheFile) {
+        long size = 0;
+
+        File[] files = cacheFile.listFiles();
+        for (File file : files) {
+
+            //判断是否还存在有文件夹
+            if (file.isDirectory()) {
+                size += getCacheSize(file);
+            } else {
+                size += file.length();
+            }
+        }
+
+        return size;
+    }
+
+    /**
+     * 删除缓存
+     *
+     * @param cacheFile 缓存路径
+     */
+    public static void cleanCache(File cacheFile) {
+        if (cacheFile.isDirectory()) {
+            String[] list = cacheFile.list();
+
+            for (String s : list) {
+                cleanCache(new File(cacheFile, s));
+            }
+        } else {
+            cacheFile.delete();
+        }
+    }
+
+    /**
+     * 获取Assets文件内容
+     *
+     * @param context   context
+     * @param assetsName    assets文件名称
+     * @return  内容
+     */
+    public static String getAssetsContent(Context context, String assetsName) {
+        try {
+            InputStream inputStream = context.getAssets().open(assetsName);
+
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+            String temp;
+            StringBuilder stringBuilder = new StringBuilder();
+            while ((temp = bufferedReader.readLine()) != null) {
+                stringBuilder.append(temp);
+            }
+
+            bufferedReader.close();
+            inputStream.close();
+
+            return stringBuilder.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public enum ResourcesFolder {

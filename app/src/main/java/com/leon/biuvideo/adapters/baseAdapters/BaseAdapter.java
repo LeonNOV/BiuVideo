@@ -8,21 +8,37 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.leon.biuvideo.utils.Fuck;
+import com.leon.biuvideo.ui.MainActivity;
+import com.leon.biuvideo.ui.NavFragment;
+import com.leon.biuvideo.ui.otherFragments.biliUserFragments.BiliUserFragment;
+import com.leon.biuvideo.ui.resourcesFragment.article.ArticleFragment;
+import com.leon.biuvideo.ui.resourcesFragment.audio.AudioFragment;
+import com.leon.biuvideo.ui.resourcesFragment.picture.PictureFragment;
+import com.leon.biuvideo.ui.resourcesFragment.video.VideoFragment;
+import com.leon.biuvideo.utils.InternetUtils;
+import com.leon.biuvideo.values.FragmentType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 基本的RecyclerViewAdapter
- * 为RecyclerView创建适配器时最好使用该抽象类进行创建
- * ViewHolder为同包下的BaseViewHolder
- *
- * @param <T>   实体类型
+ * @Author Leon
+ * @Time 2020/11/16
+ * @Desc 基本的RecyclerViewAdapter为RecyclerView创建适配器时最好使用该抽象类进行创建ViewHolder为同包下的BaseViewHolder
  */
 public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder> {
     private final List<T> beans;
-    private final Context context;
+    public final Context context;
+    public View view;
     protected ViewGroup parent;
+
+    /**
+     * 使用此 Constructor 需要调用append (List<T> addOns)添加数据
+     */
+    public BaseAdapter(Context context) {
+        this.beans = new ArrayList<>();
+        this.context = context;
+    }
 
     public BaseAdapter(List<T> beans, Context context) {
         this.beans = beans;
@@ -46,8 +62,13 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     @Override
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         this.parent = parent;
-        View view = LayoutInflater.from(context).inflate(getLayout(viewType), parent, false);
+        this.view = LayoutInflater.from(context).inflate(getLayout(viewType), parent, false);
         return new BaseViewHolder(view, context);
+    }
+
+
+    protected List<T> getAllData () {
+        return beans;
     }
 
     /**
@@ -61,13 +82,27 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     }
 
     /**
+     * 重写该方法，防止数据出现错乱的问题
+     *
+     * @param position  position
+     * @return  position
+     */
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    /**
      * 刷新加载数据
      *
      * @param addOns    要加入的数据
      */
     public void append (List<T> addOns) {
+        int positionStart = this.beans.size();
+
         this.beans.addAll(addOns);
-        notifyDataSetChanged();
+
+        notifyItemRangeInserted(positionStart, addOns.size());
     }
 
     /**
@@ -77,7 +112,8 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
      */
     public void append (T addOn) {
         this.beans.add(addOn);
-        notifyDataSetChanged();
+
+        notifyItemInserted(this.beans.size() - 1);
     }
 
     /**
@@ -86,18 +122,10 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
      * @param t     对象
      */
     public void remove(T t) {
-        this.beans.remove(t);
-        notifyDataSetChanged();
-    }
+        int index = this.beans.indexOf(t);
 
-    /**
-     * 根据索引进行删除
-     *
-     * @param index 索引值
-     */
-    public void remove(int index) {
         this.beans.remove(index);
-        notifyDataSetChanged();
+        notifyItemRemoved(index);
     }
 
     /**
@@ -105,15 +133,48 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
      */
     public void removeAll() {
         if (this.beans != null) {
+            int count = this.beans.size();
             this.beans.clear();
-            notifyDataSetChanged();
+
+            notifyItemRangeRemoved(0, count);
         }
     }
 
     /**
-     * 刷新方法,使用时，必须对其进行重写
+     * 启动一个“公共”Fragment
+     *
+     * @param fragmentType  FragmentType
+     * @param params 参数
      */
-    public void refresh(String str) {
-
+    protected void startPublicFragment (MainActivity activity, FragmentType fragmentType, String ... params) {
+        if (InternetUtils.checkNetwork(activity.getWindow().getDecorView())) {
+            NavFragment navFragment = activity.findFragment(NavFragment.class);
+            switch (fragmentType) {
+                case BILI_USER:
+                    navFragment.startBrotherFragment(new BiliUserFragment(params[0]));
+                    break;
+                case VIDEO:
+                    navFragment.startBrotherFragment(new VideoFragment(params[0]));
+                    break;
+                case BANGUMI:
+                    if (params.length > 1) {
+                        navFragment.startBrotherFragment(new VideoFragment(params[0], params[1]));
+                    } else {
+                        navFragment.startBrotherFragment(new VideoFragment(params[0], null));
+                    }
+                    break;
+                case AUDIO:
+                    navFragment.startBrotherFragment(new AudioFragment(params[0]));
+                    break;
+                case ARTICLE:
+                    navFragment.startBrotherFragment(new ArticleFragment(params[0]));
+                    break;
+                case PICTURE:
+                    navFragment.startBrotherFragment(new PictureFragment(params[0]));
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }

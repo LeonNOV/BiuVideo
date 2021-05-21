@@ -1,99 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.mcxtzhang.swipemenulib.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="@dimen/corner_6dp"
-    app:cardUseCompatPadding="true">
+    android:layout_marginBottom="@dimen/itemMarginBottom"
+    android:orientation="horizontal"
+    app:barrierMargin="10dp">
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/search_result_item_bili_user_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/ripple_item_bilibili_lite"
-        android:orientation="horizontal">
+        android:background="@drawable/ripple_round_corners6dp_bg"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/search_bili_user_face"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_marginStart="10dp"
+        <FrameLayout
+            android:layout_width="82dp"
+            android:layout_height="82dp"
             android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:src="@drawable/ic_launcher_background"
-            app:civ_border_color="#000"
-            app:civ_border_width="1dp" />
+            android:layout_marginBottom="15dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/search_result_item_bili_user_face"
+                android:layout_width="@dimen/BiliUserFaceWH"
+                android:layout_height="@dimen/BiliUserFaceWH"
+                android:src="@color/gray"
+                app:civ_border_color="@color/black"
+                app:civ_border_width="1dp" />
+
+            <ImageView
+                android:id="@+id/search_result_item_bili_user_verify_mark"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="bottom|end"
+                android:contentDescription="@string/description"
+                android:src="@drawable/ic_person_verify" />
+
+        </FrameLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_toEndOf="@id/search_bili_user_face"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/search_bili_user_textView_name"
+                android:id="@+id/search_result_item_bili_user_name"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="我是name爱我多久啦我的骄傲未来的"
                 android:textColor="@color/black"
                 android:textSize="17sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="name" />
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/search_result_item_bili_user_sign"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/search_bili_user_textView_works"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="稿件：173"
-                    android:textColor="@color/black" />
-
-                <TextView
-                    android:id="@+id/search_bili_user_textView_fans"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="粉丝：70.2万"
-                    android:textColor="@color/black" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/search_bili_user_textView_sign"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍介绍"
-                android:textColor="@color/black"
-                android:textSize="12sp" />
+                android:textColor="@color/infoColor"
+                android:textSize="12sp"
+                tools:text="descdescdescdescdescdesc" />
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/search_bili_user_button_follow"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="70dp"
-            android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="6dp"
-            android:layout_marginEnd="6dp"
-            android:background="@drawable/ripple_rectangle_bilibbili_pink"
-            android:text="关注"
-            android:textColor="@color/black"
-            android:textSize="13sp" />
+    </LinearLayout>
 
-    </RelativeLayout>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/swipeMenuPaddingStartEnd"
+        android:paddingEnd="@dimen/swipeMenuPaddingStartEnd">
 
-</androidx.cardview.widget.CardView>
+        <TextView
+            android:id="@+id/search_result_item_bili_user_operation"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/ripple_round_corners6dp_bg"
+            android:backgroundTint="@color/operation_color"
+            android:gravity="center"
+            android:text="@string/follow"
+            android:textColor="@color/white" />
+
+    </FrameLayout>
+
+</com.mcxtzhang.swipemenulib.SwipeMenuLayout>

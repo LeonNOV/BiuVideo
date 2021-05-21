@@ -1,56 +1,44 @@
 package com.leon.biuvideo.values;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @Author Leon
+ * @Time 2021/5/5
+ * @Desc
+ */
 public class Qualitys {
-    public static final int F16 = 16;   //流畅 360P
-    public static final int F32 = 32;   //清晰 480P
-    public static final int F64 = 64;   //高清 720P/720P60
-    public static final int F80 = 80;   //高清 1080P
-    public static final int F112 = 112; //高清 1080P+/1080P高码率
-    public static final int F116 = 116; //高清 1080P60
-    public static final int F120 = 120; //超清 4K
+    private static final List<Integer> QUALITY_CODES = new ArrayList<>();
+    private static final List<String> QUALITY_STR = new ArrayList<>();
 
-    /**
-     * 获取对应ID的清晰度字符串
-     *
-     * @param id    清晰度ID
-     * @param frameRate 帧率
-     * @return  返回清晰度字符串
-     */
-    public static String getQualityStr(int id, String frameRate) {
-        switch (id) {
-            case F16:
-                return "流畅 360P";
-            case F32:
-                return "清晰 480P";
-            case F64:
-                String quality = "高清 720P";
+    static {
+        QUALITY_CODES.add(6);
+        QUALITY_CODES.add(16);
+        QUALITY_CODES.add(32);
+        QUALITY_CODES.add(64);
+        QUALITY_CODES.add(74);
+        QUALITY_CODES.add(80);
+        QUALITY_CODES.add(112);
+        QUALITY_CODES.add(116);
+        QUALITY_CODES.add(120);
 
-                // 判断是否为720P 60帧
+        QUALITY_STR.add("240P 极速");
+        QUALITY_STR.add("360P 流畅");
+        QUALITY_STR.add("480P 清晰");
+        QUALITY_STR.add("720P 高清");
+        QUALITY_STR.add("720P60 高清");
+        QUALITY_STR.add("1080P 高清");
+        QUALITY_STR.add("1080P+ 高清");
+        QUALITY_STR.add( "1080P60 高清");
+        QUALITY_STR.add( "4K 超清");
+    }
 
-                if (frameRate != null) {
-                    String[] split = frameRate.split("/");
-                    if (split.length >= 2) {
-                        int var1 = Integer.parseInt(split[0]);
-                        int var2 = Integer.parseInt(split[1]);
+    public static List<Integer> getQualityCodes() {
+        return QUALITY_CODES;
+    }
 
-                        if (var1 / var2 > 60) {
-                            quality = "高清 720P60";
-                        }
-                    } else if (Integer.parseInt(frameRate) > 30) {
-                        quality = "高清 720P60";
-                    }
-                }
-                return quality;
-            case F80:
-                return "高清 1080P";
-            case F112:
-                return "高清 1080P高码率";
-            case F116:
-                return "高清 1080P60";
-            case F120:
-                return "超清 4K";
-            default:
-                return null;
-        }
+    public static List<String> getQualityStr() {
+        return QUALITY_STR;
     }
 }

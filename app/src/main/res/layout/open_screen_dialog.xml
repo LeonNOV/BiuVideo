@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/cardMargin"
+    android:background="@drawable/round_corners6dp_bg"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="@string/openScreenTitle"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <WebView
+        android:id="@+id/open_screen_desc"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/open_screen_close"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@drawable/ripple_round_corners6dp_bg"
+        android:backgroundTint="@color/tabLayoutIndicatorColor"
+        android:elevation="3dp"
+        android:gravity="center_horizontal"
+        android:padding="15dp"
+        android:text="@string/openScreenOk"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+</LinearLayout>

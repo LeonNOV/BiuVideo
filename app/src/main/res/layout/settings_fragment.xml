@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:orientation="vertical">
+
+    <com.leon.biuvideo.ui.views.SimpleTopBar
+        android:id="@+id/settings_fragment_topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:topBarTitle="@string/settings" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/cardMargin"
+                android:background="@drawable/round_corners6dp_bg"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <com.leon.biuvideo.ui.views.CardTitle
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:card_title="@string/setting_baseSetting" />
+
+                <RelativeLayout
+                    android:id="@+id/settings_fragment_imgOriginalMode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_setting_item_bg">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/setting_imgOriginalMode"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                    <Switch
+                        android:id="@+id/settings_fragment_imgOriginalModel_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:checked="false"
+                        android:clickable="false"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/settings_fragment_weatherModel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_setting_item_bg">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/setting_weatherModel"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                    <Switch
+                        android:id="@+id/settings_fragment_weatherModel_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:checked="false"
+                        android:clickable="false"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:id="@+id/settings_fragment_cleanCache"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_setting_item_bg">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:text="@string/setting_clearCache"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/settings_fragment_cacheSize"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:clickable="false"
+                        android:text="@string/setting_default_cacheSize"
+                        android:textColor="@color/gray"
+                        android:textSize="15sp" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/settings_fragment_setLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_setting_item_bg">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/setting_setLocation"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/settings_fragment_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:text="@string/setting_default_location"
+                        android:textColor="@color/gray"
+                        android:textSize="14sp" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/settings_fragment_recommend_span_count"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_setting_item_bg"
+                    android:text="@string/setting_recommend_span_count"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/cardMargin"
+                android:layout_marginEnd="@dimen/cardMargin"
+                android:layout_marginBottom="@dimen/cardMargin"
+                android:background="@drawable/round_corners6dp_bg"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <com.leon.biuvideo.ui.views.CardTitle
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:card_title="@string/setting_play" />
+
+                <FrameLayout
+                    android:id="@+id/settings_fragment_play_quality_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_setting_item_bg">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/setting_play_quality"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/settings_fragment_play_quality"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:text="@string/setting_default_quality"
+                        android:textColor="@color/gray"
+                        android:textSize="14sp" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/settings_fragment_download_quality_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_setting_item_bg"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/setting_download_quality"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/settings_fragment_download_quality"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:text="@string/setting_default_quality"
+                        android:textColor="@color/gray"
+                        android:textSize="14sp" />
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/cardMargin"
+                android:layout_marginEnd="@dimen/cardMargin"
+                android:layout_marginBottom="@dimen/cardMargin"
+                android:background="@drawable/round_corners6dp_bg"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <com.leon.biuvideo.ui.views.CardTitle
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:card_title="@string/setting_about" />
+
+                <TextView
+                    android:id="@+id/settings_fragment_about"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_setting_item_bg"
+                    android:text="@string/setting_about_app"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/settings_fragment_donation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_setting_item_bg"
+                    android:text="@string/setting_donation"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/settings_fragment_open_source_license"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_setting_item_bg"
+                    android:text="@string/setting_open_source_license"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/settings_fragment_thanks_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_setting_item_bg"
+                    android:text="@string/setting_thanksList"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/cardMargin"
+                android:layout_marginEnd="@dimen/cardMargin"
+                android:layout_marginBottom="@dimen/cardMargin"
+                android:background="@drawable/round_corners6dp_bg"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <com.leon.biuvideo.ui.views.CardTitle
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:card_title="@string/setting_feedBack" />
+
+                <TextView
+                    android:id="@+id/settings_fragment_feedback"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_setting_item_bg"
+                    android:text="@string/setting_submitFeedback"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

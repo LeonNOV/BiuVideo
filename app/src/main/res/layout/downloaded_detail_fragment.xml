@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.leon.biuvideo.ui.views.SimpleTopBar
+        android:id="@+id/downloaded_detail_topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.leon.biuvideo.ui.views.LoadingRecyclerView
+        android:id="@+id/downloaded_detail_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/recyclerViewPadding" />
+
+</LinearLayout>
