@@ -53,6 +53,7 @@ public class SearchResultArticleParser extends ParserInterface<SearchResultArtic
     public List<SearchResultArticle> parseData() {
         Map<String, String> params = new HashMap<>(2);
         params.put("keyword", keyword);
+        params.put("page", String.valueOf(pageNum));
         params.put("order", order);
         params.put("category_id", categoryId);
         params.put("search_type", "article");

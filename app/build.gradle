@@ -11,8 +11,8 @@ android {
         applicationId "com.leon.biuvideo"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 11
-        versionName "3.0.0-beta"
+        versionCode 12
+        versionName "3.0.1-beta"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -93,7 +93,6 @@ dependencies {
 
     //SmartRefreshLayout
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
-    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.5.1'//没有使用特殊Header，可以不加这行
 
     // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.0'

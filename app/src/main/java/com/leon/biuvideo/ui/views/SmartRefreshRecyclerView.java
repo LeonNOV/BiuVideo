@@ -9,9 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.leon.biuvideo.adapters.baseAdapters.BaseAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
-
-import java.util.List;
 
 /**
  * @Author Leon
@@ -24,7 +21,6 @@ public class SmartRefreshRecyclerView<T> extends SmartRefreshLayout {
 
     private final Context context;
     public LoadingRecyclerView loadingRecyclerView;
-    private BaseAdapter<T> adapter;
 
     public SmartRefreshRecyclerView(@NonNull Context context) {
         super(context);
@@ -61,24 +57,9 @@ public class SmartRefreshRecyclerView<T> extends SmartRefreshLayout {
         setEnableAutoLoadMore(false);
         
         addLoadingRecyclerView();
-        addClassicsFooter();
 
         // 默认关闭加载功能，在第一次加载数据后开启(需要调用setLoadingRecyclerViewStatus)
         setEnableLoadMore(false);
-    }
-
-    /**
-     * 添加底部刷新控件
-     */
-    private void addClassicsFooter() {
-        ClassicsFooter classicsFooter = new ClassicsFooter(context);
-        ClassicsFooter.REFRESH_FOOTER_RELEASE = "释放加载更多";
-        addView(classicsFooter);
-
-        SmartRefreshLayout.LayoutParams layoutParams = (SmartRefreshLayout.LayoutParams) classicsFooter.getLayoutParams();
-        layoutParams.width = SmartRefreshLayout.LayoutParams.MATCH_PARENT;
-        layoutParams.height = SmartRefreshLayout.LayoutParams.WRAP_CONTENT;
-        classicsFooter.setLayoutParams(layoutParams);
     }
 
     /**
@@ -108,7 +89,6 @@ public class SmartRefreshRecyclerView<T> extends SmartRefreshLayout {
     }
 
     public void setRecyclerViewAdapter(BaseAdapter<T> adapter) {
-        this.adapter = adapter;
         this.loadingRecyclerView.recyclerView.setAdapter(adapter);
     }
 
@@ -123,21 +103,11 @@ public class SmartRefreshRecyclerView<T> extends SmartRefreshLayout {
         loadingRecyclerView.setLoadingRecyclerViewStatus(status);
     }
 
-    /**
-     * 追加数据
-     *
-     * @param appends  追加的数据
-     */
-    public void append(List<T> appends) {
-        if (adapter != null) {
-            adapter.append(appends);
-        }
-    }
-
     public void setSmartRefreshStatus(int status) {
         if (NO_DATA == status) {
-            finishLoadMore();
+            finishLoadMore(true);
             setEnableLoadMore(false);
+            finishLoadMoreWithNoMoreData();
         } else if (LOADING_FINISHING == status) {
             finishLoadMore(true);
         }
