@@ -99,6 +99,8 @@ public class MainActivity extends SupportActivity {
         SimpleSingleThreadPool.executor(new Runnable() {
             @Override
             public void run() {
+                PreferenceUtils.setCsrf(null);
+
                 JSONObject response = HttpUtils.getResponse(BiliBiliAPIs.USER_VIP_STAT, Headers.of(HttpUtils.getAPIRequestHeader()), null);
                 if (response.getIntValue("code") == 0) {
                     JSONObject data = response.getJSONObject("data");

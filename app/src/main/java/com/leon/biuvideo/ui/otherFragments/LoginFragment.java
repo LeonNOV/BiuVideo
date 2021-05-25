@@ -129,6 +129,7 @@ public class LoginFragment extends BaseSupportFragment implements View.OnClickLi
 
                     PreferenceUtils.setCookie(cookieStr);
                     PreferenceUtils.setUserId(cookieMap.get("DedeUserID"));
+                    PreferenceUtils.setCsrf(cookieMap.get("bili_jct"));
                     PreferenceUtils.setLoginStatus(true);
 
                     // 登录成功，发送广播

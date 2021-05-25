@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.Call;
+import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -24,6 +25,10 @@ import okhttp3.Response;
 public class HttpUtils {
     private final String url;
     private final Headers headers;
+
+    /**
+     * 可为参数也可为表单数据
+     */
     private final Map<String, String> params;
 
     public HttpUtils(String url, Map<String, String> params) {
@@ -45,7 +50,7 @@ public class HttpUtils {
      */
     public String parseShortUrl() {
         try {
-            return getInstance().request().url().url().toURI().getPath();
+            return getOperation().request().url().url().toURI().getPath();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -60,7 +65,7 @@ public class HttpUtils {
      */
     public String getData() {
         try {
-            return getInstance().body().string();
+            return getOperation().body().string();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -73,7 +78,7 @@ public class HttpUtils {
      */
     public byte[] getByteArray () {
         try {
-            return getInstance().body().bytes();
+            return getOperation().body().bytes();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,7 +91,7 @@ public class HttpUtils {
      *
      * @return  返回Response对象
      */
-    private Response getInstance () {
+    private Response getOperation() {
         Request request;
         OkHttpClient okHttpClient = new OkHttpClient();
 
@@ -108,6 +113,46 @@ public class HttpUtils {
             }
 
             request = requestBuilder.url(urlBuilder.build()).get().build();
+
+            Call call = okHttpClient.newCall(request);
+            Response response = call.execute();
+
+            //判断是否响应成功
+            if (response.code() == HttpURLConnection.HTTP_OK) {
+                return response;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * POST操作
+     *
+     * @return  返回响应数据
+     */
+    private Response postOperation () {
+        Request request;
+        OkHttpClient okHttpClient = new OkHttpClient();
+
+        Request.Builder requestBuilder = new Request.Builder();
+
+        FormBody.Builder formBody = new FormBody.Builder();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            formBody.add(entry.getKey(), entry.getValue());
+        }
+
+        try {
+            if (headers != null) {
+                requestBuilder.headers(headers);
+            } else {
+                requestBuilder.headers(Headers.of(getHeaders()));
+            }
+
+            request = requestBuilder.url(HttpUrl.parse(url)).post(formBody.build()).build();
 
             Call call = okHttpClient.newCall(request);
             Response response = call.execute();

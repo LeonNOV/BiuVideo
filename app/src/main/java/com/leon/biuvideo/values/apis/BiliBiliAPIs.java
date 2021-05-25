@@ -201,6 +201,15 @@ public class BiliBiliAPIs {
     public static final String BILI_USER_PICTURE_TOTAL = "https://api.vc.bilibili.com/link_draw/v1/doc/upload_count";
 
     /**
+     * 获取用户创建的所有频道
+     *
+     * 参数
+     *      mid:用户ID
+     *      guest:默认为false
+     */
+    public static final String BILI_USER_CHANNEL_LIST = "https://api.bilibili.com/x/space/channel/list";
+
+    /**
      * 获取<strong>单个专栏<strong/>的信息
      *
      *      参数：
@@ -440,6 +449,15 @@ public class BiliBiliAPIs {
      *
      */
     public static final String USER_FOLLOWINGS = "https://api.bilibili.com/x/relation/followings";
+
+    /**
+     * 获取用户所有的关注分组
+     *
+     * 参数
+     *      无参数，只需Cookie
+     *
+     */
+    public static final String USER_FOLLOWING_TAG_LIST = "https://api.bilibili.com/x/relation/tags";
 
     /**
      * 获取用户历史记录,默认为20条

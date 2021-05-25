@@ -29,6 +29,7 @@ public class PreferenceUtils {
     public static final String PLAY_QUALITY = "playQuality";
     public static final String DOWNLOAD_QUALITY = "downloadQuality";
     public static final String FIRST_OPEN_STATUS = "firstOpenStatus";
+    public static final String CSRF = "csrf";
 
     public static SharedPreferences PREFERENCE;
     private static final int DEF_QUALITY = 80;
@@ -302,5 +303,38 @@ public class PreferenceUtils {
         }
 
         return status;
+    }
+
+    /**
+     * 设置csrf
+     */
+    public static void setCsrf (String csrf) {
+        if (getLoginStatus()) {
+            if (csrf != null) {
+                PREFERENCE.edit().putString(CSRF, csrf).apply();
+            } else {
+
+                String[] cookieArray = getCookie().split("; ");
+
+                for (String s : cookieArray) {
+                    String[] split = s.split("=");
+                    if ("bili_jct".equals(split[0])) {
+                        PREFERENCE.edit().putString(CSRF, split[1]).apply();
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 获取csrf
+     */
+    public static String getCsrf () {
+        if (PREFERENCE.contains(CSRF)) {
+            return PREFERENCE.getString(CSRF, null);
+        }
+
+        return null;
     }
 }
