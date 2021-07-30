@@ -290,7 +290,7 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 }
 
                 for (int i = 0; i < HOME_DATA_COUNT; i++) {
-                    if (watchLaterList != null) {
+                    if (watchLaterList != null && watchLaterList.size() >= (i + 1)) {
                         homeWatchLaterList.add(watchLaterList.get(i));
                     } else {
                         break;
