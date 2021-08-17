@@ -81,8 +81,8 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
     /**
      * 主页显示的推荐内容
      */
-    private final List<VideoRecommend> homeVideoRecommendList = new ArrayList<>(10);
-    private final List<WatchLater> homeWatchLaterList = new ArrayList<>(10);
+    private final List<VideoRecommend> homeVideoRecommendList = new ArrayList<>(HOME_DATA_COUNT);
+
     private TextView homeMyDownloadManager;
     private WatchLaterAdapter watchLaterAdapter;
 
@@ -116,7 +116,11 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
         ((CardTitle) findView(R.id.home_cardTitle_watchLater)).setOnClickActionListener(new CardTitle.OnClickActionListener() {
             @Override
             public void onClickAction() {
-                ((NavFragment) getParentFragment()).startBrotherFragment(new WatchLaterFragment(watchLaterList));
+                if (watchLaterList != null) {
+                    ((NavFragment) getParentFragment()).startBrotherFragment(new WatchLaterFragment(watchLaterList));
+                } else {
+                    SimpleSnackBar.make(view, getString(R.string.no_data_str), SimpleSnackBar.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -179,7 +183,14 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                                 watchLaterAdapter.removeAll();
                             }
 
-                            watchLaterAdapter.append(homeWatchLaterList);
+                            if (watchLaterList.size() > HOME_DATA_COUNT) {
+                                for (WatchLater watchLater : watchLaterList) {
+                                    watchLaterAdapter.append(watchLater);
+                                }
+                            } else {
+                                watchLaterAdapter.append(watchLaterList);
+                            }
+
                             homeWatchLaterLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.LOADING_FINISH);
                         } else {
                             homeWatchLaterLoadingRecyclerView.setLoadingRecyclerViewStatus(LoadingRecyclerView.NO_DATA);
@@ -270,7 +281,6 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
                 receiveDataHandler.sendMessage(message);
             }
         });
-
     }
 
     /**
@@ -285,17 +295,6 @@ public class HomeFragment extends BaseSupportFragment implements View.OnClickLis
             public void run() {
                 // 获取稍后观看数据
                 watchLaterList = watchLaterParser.parseData();
-                if (watchLaterList != null && watchLaterList.size() == 0) {
-                    watchLaterList = null;
-                }
-
-                for (int i = 0; i < HOME_DATA_COUNT; i++) {
-                    if (watchLaterList != null && watchLaterList.size() >= (i + 1)) {
-                        homeWatchLaterList.add(watchLaterList.get(i));
-                    } else {
-                        break;
-                    }
-                }
 
                 Message message = receiveDataHandler.obtainMessage(2);
                 receiveDataHandler.sendMessage(message);

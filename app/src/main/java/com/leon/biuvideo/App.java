@@ -11,6 +11,7 @@ import com.dueeeke.videoplayer.player.VideoViewManager;
 import com.leon.biuvideo.values.apis.ApiKeys;
 
 import me.yokeyword.fragmentation.Fragmentation;
+import me.yokeyword.fragmentation_components.BuildConfig;
 
 /**
  * @Author Leon

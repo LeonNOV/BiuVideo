@@ -21,6 +21,7 @@
     <string name="home_nav_discover">发现</string>
     <string name="home_nav_user">我的</string>
 
+    <string name="no_data_str">什么都没有哎~</string>
     <string name="see_more">查看更多</string>
 
     <string name="home_card_title_recommend">推荐</string>
