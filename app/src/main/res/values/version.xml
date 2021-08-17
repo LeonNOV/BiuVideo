@@ -2,6 +2,6 @@
 <resources>
 
     <!-- 根据上一次的发布版本进行调整 -->
-    <string name="versionName">3.0.1-beta</string>
+    <string name="versionName">3.0.2-beta</string>
 
 </resources>
