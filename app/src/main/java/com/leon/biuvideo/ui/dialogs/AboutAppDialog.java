@@ -2,6 +2,7 @@ package com.leon.biuvideo.ui.dialogs;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -48,7 +49,15 @@ public class AboutAppDialog extends AlertDialog implements View.OnClickListener 
     }
 
     private void initView() {
-        ((TextView) findViewById(R.id.about_app_version)).setText(getContext().getString(R.string.versionName));
+        String versionName = "Undefined";
+
+        try {
+            versionName = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        ((TextView) findViewById(R.id.about_app_version)).setText(versionName);
         findViewById(R.id.about_app_version_container).setOnClickListener(this);
         findViewById(R.id.about_app_gitee).setOnClickListener(this);
         findViewById(R.id.about_app_github).setOnClickListener(this);

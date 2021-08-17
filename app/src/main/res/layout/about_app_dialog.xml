@@ -2,6 +2,7 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="@dimen/cardMargin"
     android:background="@drawable/round_corners6dp_bg"
     android:padding="@dimen/padding_10dp">
@@ -39,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
                 android:textColor="@color/infoColor"
-                android:text="@string/versionName"/>
+                tools:text="3.0.0-beta"/>
 
         </LinearLayout>
 
